@@ -1,0 +1,479 @@
+[
+{
+    "pk": 1,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Accounting",
+      "slug": "accounting",
+      "suggested": true
+    }
+  },
+{
+    "pk": 2,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Agriculture",
+      "slug": "agriculture",
+      "suggested": true
+    }
+  },
+{
+    "pk": 3,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Anthropology",
+      "slug": "anthropology",
+      "suggested": true
+    }
+  },
+{
+    "pk": 4,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Archaeology",
+      "slug": "archaeology",
+      "suggested": true
+    }
+  },
+{
+    "pk": 5,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Architecture",
+      "slug": "architecture",
+      "suggested": true
+    }
+  },
+{
+    "pk": 6,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Art History",
+      "slug": "art-history",
+      "suggested": true
+    }
+  },
+{
+    "pk": 7,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Astronomy",
+      "slug": "astronomy",
+      "suggested": true
+    }
+  },
+{
+    "pk": 8,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Biology",
+      "slug": "biology",
+      "suggested": true
+    }
+  },
+{
+    "pk": 9,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Business Law",
+      "slug": "business-law",
+      "suggested": true
+    }
+  },
+{
+    "pk": 10,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Chemistry",
+      "slug": "chemistry",
+      "suggested": true
+    }
+  },
+{
+    "pk": 11,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Cinema",
+      "slug": "cinema",
+      "suggested": true
+    }
+  },
+{
+    "pk": 12,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Communication Studies",
+      "slug": "communication-studies",
+      "suggested": true
+    }
+  },
+{
+    "pk": 13,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Computer Sciences",
+      "slug": "computer-sciences",
+      "suggested": true
+    }
+  },
+{
+    "pk": 14,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Criminal Justice",
+      "slug": "criminal-justice",
+      "suggested": true
+    }
+  },
+{
+    "pk": 15,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Dance",
+      "slug": "dance",
+      "suggested": true
+    }
+  },
+{
+    "pk": 16,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Digital Media",
+      "slug": "digital-media",
+      "suggested": true
+    }
+  },
+{
+    "pk": 17,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "E-Commerce",
+      "slug": "e-commerce",
+      "suggested": true
+    }
+  },
+{
+    "pk": 18,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Economics",
+      "slug": "economics",
+      "suggested": true
+    }
+  },
+{
+    "pk": 19,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Education",
+      "slug": "education",
+      "suggested": true
+    }
+  },
+{
+    "pk": 20,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Engineering",
+      "slug": "engineering",
+      "suggested": true
+    }
+  },
+{
+    "pk": 21,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Environmental",
+      "slug": "environmental",
+      "suggested": true
+    }
+  },
+{
+    "pk": 22,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Finance",
+      "slug": "finance",
+      "suggested": true
+    }
+  },
+{
+    "pk": 23,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Fine Arts",
+      "slug": "fine-arts",
+      "suggested": true
+    }
+  },
+{
+    "pk": 24,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Gender Studies",
+      "slug": "gender-studies",
+      "suggested": true
+    }
+  },
+{
+    "pk": 25,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Geography",
+      "slug": "geography",
+      "suggested": true
+    }
+  },
+{
+    "pk": 26,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Geology",
+      "slug": "geology",
+      "suggested": true
+    }
+  },
+{
+    "pk": 27,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Health Policy",
+      "slug": "health-policy",
+      "suggested": true
+    }
+  },
+{
+    "pk": 28,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Health Sciences",
+      "slug": "health-sciences",
+      "suggested": true
+    }
+  },
+{
+    "pk": 29,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "History",
+      "slug": "history",
+      "suggested": true
+    }
+  },
+{
+    "pk": 30,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Information Technology",
+      "slug": "information-technology",
+      "suggested": true
+    }
+  },
+{
+    "pk": 31,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "International Business",
+      "slug": "international-business",
+      "suggested": true
+    }
+  },
+{
+    "pk": 32,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Language and Literature",
+      "slug": "language-and-literature",
+      "suggested": true
+    }
+  },
+{
+    "pk": 33,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Law",
+      "slug": "law",
+      "suggested": true
+    }
+  },
+{
+    "pk": 34,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Library and Information Studies",
+      "slug": "library-and-information-studies",
+      "suggested": true
+    }
+  },
+{
+    "pk": 35,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Linguistics",
+      "slug": "linguistics",
+      "suggested": true
+    }
+  },
+{
+    "pk": 36,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Management",
+      "slug": "management",
+      "suggested": true
+    }
+  },
+{
+    "pk": 37,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Marketing",
+      "slug": "marketing",
+      "suggested": true
+    }
+  },
+{
+    "pk": 38,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Mathematics",
+      "slug": "mathematics",
+      "suggested": true
+    }
+  },
+{
+    "pk": 39,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Music",
+      "slug": "music",
+      "suggested": true
+    }
+  },
+{
+    "pk": 40,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Nanotechnology",
+      "slug": "nanotechnology",
+      "suggested": true
+    }
+  },
+{
+    "pk": 41,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Philosophy",
+      "slug": "philosophy",
+      "suggested": true
+    }
+  },
+{
+    "pk": 42,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Photography",
+      "slug": "photography",
+      "suggested": true
+    }
+  },
+{
+    "pk": 43,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Physics",
+      "slug": "physics",
+      "suggested": true
+    }
+  },
+{
+    "pk": 44,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Political Science",
+      "slug": "political-science",
+      "suggested": true
+    }
+  },
+{
+    "pk": 45,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Psychiatry",
+      "slug": "psychiatry",
+      "suggested": true
+    }
+  },
+{
+    "pk": 46,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Psychology",
+      "slug": "psychology",
+      "suggested": true
+    }
+  },
+{
+    "pk": 47,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Religion",
+      "slug": "religion",
+      "suggested": true
+    }
+  },
+{
+    "pk": 48,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Rhetoric",
+      "slug": "rhetoric",
+      "suggested": true
+    }
+  },
+{
+    "pk": 49,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Sociology",
+      "slug": "sociology",
+      "suggested": true
+    }
+  },
+{
+    "pk": 50,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Statistics and Probability",
+      "slug": "statistics-and-probability",
+      "suggested": true
+    }
+  },
+{
+    "pk": 51,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Theatre",
+      "slug": "theatre",
+      "suggested": true
+    }
+  },
+{
+    "pk": 52,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "World Languages",
+      "slug": "world-languages",
+      "suggested": true
+    }
+  },
+{
+    "pk": 53,
+    "model": "materials.keyword",
+    "fields": {
+      "name": "Writing",
+      "slug": "writing",
+      "suggested": true
+    }
+  }
+]

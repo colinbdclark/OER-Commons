@@ -1,0 +1,13 @@
+{% load compress %}
+
+{% compress css %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}blueprint/reset.css" media="screen, projection" />
+
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/base.css" media="screen, projection" />
+
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}blueprint/print.css" media="print" />
+
+<!--[if lt IE 8]>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}blueprint/ie.css" media="screen, projection" />
+<![endif]-->
+{% endcompress %}

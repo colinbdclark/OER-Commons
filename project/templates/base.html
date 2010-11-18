@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ request.LANGUAGE_CODE }}" lang="{{ request.LANGUAGE_CODE }}">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{% block title %}{% endblock %}</title>
+    {% block meta_description %}{% endblock %}
+    <link rel="icon" href="{{MEDIA_URL}}images/favicon.ico"/>
+    {% include "include/js.html" %}
+    {% block extra-js %}{% endblock %}
+    {% include "include/css.html" %}
+    {% block extra-css %}{% endblock %}
+  </head>
+  <body>
+    <div class="container">
+    {% include "include/header.html" %}
+    <div id="content">
+      
+      {% include "include/status-messages.html" %}
+      
+      {% block left-siderbar %}
+      {% endblock %}
+      
+      {% block content %}
+      {% endblock %}
+
+      {% block right-sidebar %}
+      {% endblock %}
+      
+    </div>
+    {% block footer %}{% include "include/footer.html" %}{% endblock %}
+    </div>
+  </body>
+</html>

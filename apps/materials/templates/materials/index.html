@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% for result in results %}
+    {% with result.object as object %}
+    <h3>{{ result.object }}</h3>
+    {% endwith %}
+  {% endfor %}
+{% endblock %}

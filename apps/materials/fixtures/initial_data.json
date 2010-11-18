@@ -1,0 +1,4040 @@
+[
+  {
+    "pk": 1, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Afghanistan", 
+      "slug": "afghanistan"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Albania", 
+      "slug": "albania"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Algeria", 
+      "slug": "algeria"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "American Samoa", 
+      "slug": "american-samoa"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Andorra", 
+      "slug": "andorra"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Angola", 
+      "slug": "angola"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Anguilla", 
+      "slug": "anguilla"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Antarctica", 
+      "slug": "antarctica"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Antigua Barbuda", 
+      "slug": "antigua-barbuda"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Argentina", 
+      "slug": "argentina"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Armenia", 
+      "slug": "armenia"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Aruba", 
+      "slug": "aruba"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Australia", 
+      "slug": "australia"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Austria", 
+      "slug": "austria"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Azerbaijan", 
+      "slug": "azerbaijan"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Bahamas", 
+      "slug": "bahamas"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Bahrain", 
+      "slug": "bahrain"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Bangladesh", 
+      "slug": "bangladesh"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Barbados", 
+      "slug": "barbados"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Belarus", 
+      "slug": "belarus"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Belgium", 
+      "slug": "belgium"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Belize", 
+      "slug": "belize"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Benin", 
+      "slug": "benin"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Bermuda", 
+      "slug": "bermuda"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Bhutan", 
+      "slug": "bhutan"
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Bolivia", 
+      "slug": "bolivia"
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Bosnia Herzegovina", 
+      "slug": "bosnia-herzegovina"
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Botswana", 
+      "slug": "botswana"
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Bouvet Island", 
+      "slug": "bouvet-island"
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Brazil", 
+      "slug": "brazil"
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "British Indian Ocean Territory", 
+      "slug": "british-indian-ocean-territory"
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Brunei Darussalam", 
+      "slug": "brunei-darussalam"
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Bulgaria", 
+      "slug": "bulgaria"
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Burkina Faso", 
+      "slug": "burkina-faso"
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Burundi", 
+      "slug": "burundi"
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Cambodia", 
+      "slug": "cambodia"
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Cameroon", 
+      "slug": "cameroon"
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Canada", 
+      "slug": "canada"
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Cape Verde", 
+      "slug": "cape-verde"
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Cayman Islands", 
+      "slug": "cayman-islands"
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Central African Republic", 
+      "slug": "central-african-republic"
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Chad", 
+      "slug": "chad"
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Chile", 
+      "slug": "chile"
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "China", 
+      "slug": "china"
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Christmas Island", 
+      "slug": "christmas-island"
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Cocos (Keeling) Islands", 
+      "slug": "cocos-keeling-islands"
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Colombia", 
+      "slug": "colombia"
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Comoros", 
+      "slug": "comoros"
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Congo", 
+      "slug": "congo"
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Congo, Democratic Republic", 
+      "slug": "congo-democratic-republic"
+    }
+  }, 
+  {
+    "pk": 51, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Cook Islands", 
+      "slug": "cook-islands"
+    }
+  }, 
+  {
+    "pk": 52, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Costa Rica", 
+      "slug": "costa-rica"
+    }
+  }, 
+  {
+    "pk": 53, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Cote D'Ivoire", 
+      "slug": "cote-d-ivoire"
+    }
+  }, 
+  {
+    "pk": 54, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Croatia", 
+      "slug": "croatia"
+    }
+  }, 
+  {
+    "pk": 55, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Cuba", 
+      "slug": "cuba"
+    }
+  }, 
+  {
+    "pk": 56, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Cyprus", 
+      "slug": "cyprus"
+    }
+  }, 
+  {
+    "pk": 57, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Czech Republic", 
+      "slug": "czech-republic"
+    }
+  }, 
+  {
+    "pk": 58, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Denmark", 
+      "slug": "denmark"
+    }
+  }, 
+  {
+    "pk": 59, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Djibouti", 
+      "slug": "djibouti"
+    }
+  }, 
+  {
+    "pk": 60, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Dominica", 
+      "slug": "dominica"
+    }
+  }, 
+  {
+    "pk": 61, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Dominican Republic", 
+      "slug": "dominican-republic"
+    }
+  }, 
+  {
+    "pk": 62, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Ecuador", 
+      "slug": "ecuador"
+    }
+  }, 
+  {
+    "pk": 63, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Egypt", 
+      "slug": "egypt"
+    }
+  }, 
+  {
+    "pk": 64, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "El Salvador", 
+      "slug": "el-salvador"
+    }
+  }, 
+  {
+    "pk": 65, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Equatorial Guinea", 
+      "slug": "equatorial-guinea"
+    }
+  }, 
+  {
+    "pk": 66, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Eritrea", 
+      "slug": "eritrea"
+    }
+  }, 
+  {
+    "pk": 67, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Estonia", 
+      "slug": "estonia"
+    }
+  }, 
+  {
+    "pk": 68, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Ethiopia", 
+      "slug": "ethiopia"
+    }
+  }, 
+  {
+    "pk": 69, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Falkland Islands (Malvinas)", 
+      "slug": "falkland-islands-malvinas"
+    }
+  }, 
+  {
+    "pk": 70, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Faroe Islands", 
+      "slug": "faroe-islands"
+    }
+  }, 
+  {
+    "pk": 71, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Fiji", 
+      "slug": "fiji"
+    }
+  }, 
+  {
+    "pk": 72, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Finland", 
+      "slug": "finland"
+    }
+  }, 
+  {
+    "pk": 73, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "France", 
+      "slug": "france"
+    }
+  }, 
+  {
+    "pk": 74, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "French Guiana", 
+      "slug": "french-guiana"
+    }
+  }, 
+  {
+    "pk": 75, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "French Polynesia", 
+      "slug": "french-polynesia"
+    }
+  }, 
+  {
+    "pk": 76, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "French Southern Territories", 
+      "slug": "french-southern-territories"
+    }
+  }, 
+  {
+    "pk": 77, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Gabon", 
+      "slug": "gabon"
+    }
+  }, 
+  {
+    "pk": 78, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Gambia", 
+      "slug": "gambia"
+    }
+  }, 
+  {
+    "pk": 79, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Georgia", 
+      "slug": "georgia"
+    }
+  }, 
+  {
+    "pk": 80, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Germany", 
+      "slug": "germany"
+    }
+  }, 
+  {
+    "pk": 81, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Ghana", 
+      "slug": "ghana"
+    }
+  }, 
+  {
+    "pk": 82, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Gibraltar", 
+      "slug": "gibraltar"
+    }
+  }, 
+  {
+    "pk": 83, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Greece", 
+      "slug": "greece"
+    }
+  }, 
+  {
+    "pk": 84, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Greenland", 
+      "slug": "greenland"
+    }
+  }, 
+  {
+    "pk": 85, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Grenada", 
+      "slug": "grenada"
+    }
+  }, 
+  {
+    "pk": 86, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Guadeloupe", 
+      "slug": "guadeloupe"
+    }
+  }, 
+  {
+    "pk": 87, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Guam", 
+      "slug": "guam"
+    }
+  }, 
+  {
+    "pk": 88, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Guatemala", 
+      "slug": "guatemala"
+    }
+  }, 
+  {
+    "pk": 89, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Guinea", 
+      "slug": "guinea"
+    }
+  }, 
+  {
+    "pk": 90, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Guinea-Bissau", 
+      "slug": "guinea-bissau"
+    }
+  }, 
+  {
+    "pk": 91, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Guyana", 
+      "slug": "guyana"
+    }
+  }, 
+  {
+    "pk": 92, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Haiti", 
+      "slug": "haiti"
+    }
+  }, 
+  {
+    "pk": 93, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Heard Island Mcdonald Islands", 
+      "slug": "heard-island-mcdonald-islands"
+    }
+  }, 
+  {
+    "pk": 94, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Holy See (Vatican City State)", 
+      "slug": "holy-see-vatican-city-state"
+    }
+  }, 
+  {
+    "pk": 95, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Honduras", 
+      "slug": "honduras"
+    }
+  }, 
+  {
+    "pk": 96, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Hong Kong", 
+      "slug": "hong-kong"
+    }
+  }, 
+  {
+    "pk": 97, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Hungary", 
+      "slug": "hungary"
+    }
+  }, 
+  {
+    "pk": 98, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Iceland", 
+      "slug": "iceland"
+    }
+  }, 
+  {
+    "pk": 99, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "India", 
+      "slug": "india"
+    }
+  }, 
+  {
+    "pk": 100, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Indonesia", 
+      "slug": "indonesia"
+    }
+  }, 
+  {
+    "pk": 101, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Iran, Islamic Republic", 
+      "slug": "iran-islamic-republic"
+    }
+  }, 
+  {
+    "pk": 102, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Iraq", 
+      "slug": "iraq"
+    }
+  }, 
+  {
+    "pk": 103, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Ireland", 
+      "slug": "ireland"
+    }
+  }, 
+  {
+    "pk": 104, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Israel", 
+      "slug": "israel"
+    }
+  }, 
+  {
+    "pk": 105, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Italy", 
+      "slug": "italy"
+    }
+  }, 
+  {
+    "pk": 106, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Jamaica", 
+      "slug": "jamaica"
+    }
+  }, 
+  {
+    "pk": 107, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Japan", 
+      "slug": "japan"
+    }
+  }, 
+  {
+    "pk": 108, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Jordan", 
+      "slug": "jordan"
+    }
+  }, 
+  {
+    "pk": 109, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Kazakhstan", 
+      "slug": "kazakhstan"
+    }
+  }, 
+  {
+    "pk": 110, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Kenya", 
+      "slug": "kenya"
+    }
+  }, 
+  {
+    "pk": 111, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Kiribati", 
+      "slug": "kiribati"
+    }
+  }, 
+  {
+    "pk": 112, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Korea, Democratic People's Republic", 
+      "slug": "korea-democratic-people-s-republic"
+    }
+  }, 
+  {
+    "pk": 113, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Korea, Republic", 
+      "slug": "korea-republic"
+    }
+  }, 
+  {
+    "pk": 114, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Kuwait", 
+      "slug": "kuwait"
+    }
+  }, 
+  {
+    "pk": 115, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Kyrgyzstan", 
+      "slug": "kyrgyzstan"
+    }
+  }, 
+  {
+    "pk": 116, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Lao People's Democratic Republic", 
+      "slug": "lao-people-s-democratic-republic"
+    }
+  }, 
+  {
+    "pk": 117, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Latvia", 
+      "slug": "latvia"
+    }
+  }, 
+  {
+    "pk": 118, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Lebanon", 
+      "slug": "lebanon"
+    }
+  }, 
+  {
+    "pk": 119, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Lesotho", 
+      "slug": "lesotho"
+    }
+  }, 
+  {
+    "pk": 120, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Liberia", 
+      "slug": "liberia"
+    }
+  }, 
+  {
+    "pk": 121, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Libyan Arab Jamahiriya", 
+      "slug": "libyan-arab-jamahiriya"
+    }
+  }, 
+  {
+    "pk": 122, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Liechtenstein", 
+      "slug": "liechtenstein"
+    }
+  }, 
+  {
+    "pk": 123, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Lithuania", 
+      "slug": "lithuania"
+    }
+  }, 
+  {
+    "pk": 124, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Luxembourg", 
+      "slug": "luxembourg"
+    }
+  }, 
+  {
+    "pk": 125, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Macao", 
+      "slug": "macao"
+    }
+  }, 
+  {
+    "pk": 126, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Macedonia, Former Yugoslav Republic", 
+      "slug": "macedonia-former-yugoslav-republic"
+    }
+  }, 
+  {
+    "pk": 127, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Madagascar", 
+      "slug": "madagascar"
+    }
+  }, 
+  {
+    "pk": 128, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Malawi", 
+      "slug": "malawi"
+    }
+  }, 
+  {
+    "pk": 129, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Malaysia", 
+      "slug": "malaysia"
+    }
+  }, 
+  {
+    "pk": 130, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Maldives", 
+      "slug": "maldives"
+    }
+  }, 
+  {
+    "pk": 131, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Mali", 
+      "slug": "mali"
+    }
+  }, 
+  {
+    "pk": 132, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Malta", 
+      "slug": "malta"
+    }
+  }, 
+  {
+    "pk": 133, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Marshall Islands", 
+      "slug": "marshall-islands"
+    }
+  }, 
+  {
+    "pk": 134, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Martinique", 
+      "slug": "martinique"
+    }
+  }, 
+  {
+    "pk": 135, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Mauritania", 
+      "slug": "mauritania"
+    }
+  }, 
+  {
+    "pk": 136, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Mauritius", 
+      "slug": "mauritius"
+    }
+  }, 
+  {
+    "pk": 137, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Mayotte", 
+      "slug": "mayotte"
+    }
+  }, 
+  {
+    "pk": 138, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Mexico", 
+      "slug": "mexico"
+    }
+  }, 
+  {
+    "pk": 139, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Micronesia, Federated States", 
+      "slug": "micronesia-federated-states"
+    }
+  }, 
+  {
+    "pk": 140, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Moldova, Republic", 
+      "slug": "moldova-republic"
+    }
+  }, 
+  {
+    "pk": 141, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Monaco", 
+      "slug": "monaco"
+    }
+  }, 
+  {
+    "pk": 142, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Mongolia", 
+      "slug": "mongolia"
+    }
+  }, 
+  {
+    "pk": 143, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Montserrat", 
+      "slug": "montserrat"
+    }
+  }, 
+  {
+    "pk": 144, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Morocco", 
+      "slug": "morocco"
+    }
+  }, 
+  {
+    "pk": 145, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Mozambique", 
+      "slug": "mozambique"
+    }
+  }, 
+  {
+    "pk": 146, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Myanmar", 
+      "slug": "myanmar"
+    }
+  }, 
+  {
+    "pk": 147, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Namibia", 
+      "slug": "namibia"
+    }
+  }, 
+  {
+    "pk": 148, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Nauru", 
+      "slug": "nauru"
+    }
+  }, 
+  {
+    "pk": 149, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Nepal", 
+      "slug": "nepal"
+    }
+  }, 
+  {
+    "pk": 150, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Netherlands", 
+      "slug": "netherlands"
+    }
+  }, 
+  {
+    "pk": 151, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Netherlands Antilles", 
+      "slug": "netherlands-antilles"
+    }
+  }, 
+  {
+    "pk": 152, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "New Caledonia", 
+      "slug": "new-caledonia"
+    }
+  }, 
+  {
+    "pk": 153, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "New Zealand", 
+      "slug": "new-zealand"
+    }
+  }, 
+  {
+    "pk": 154, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Nicaragua", 
+      "slug": "nicaragua"
+    }
+  }, 
+  {
+    "pk": 155, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Niger", 
+      "slug": "niger"
+    }
+  }, 
+  {
+    "pk": 156, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Nigeria", 
+      "slug": "nigeria"
+    }
+  }, 
+  {
+    "pk": 157, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Niue", 
+      "slug": "niue"
+    }
+  }, 
+  {
+    "pk": 158, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Norfolk Island", 
+      "slug": "norfolk-island"
+    }
+  }, 
+  {
+    "pk": 159, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Northern Mariana Islands", 
+      "slug": "northern-mariana-islands"
+    }
+  }, 
+  {
+    "pk": 160, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Norway", 
+      "slug": "norway"
+    }
+  }, 
+  {
+    "pk": 161, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Oman", 
+      "slug": "oman"
+    }
+  }, 
+  {
+    "pk": 162, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Pakistan", 
+      "slug": "pakistan"
+    }
+  }, 
+  {
+    "pk": 163, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Palau", 
+      "slug": "palau"
+    }
+  }, 
+  {
+    "pk": 164, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Palestinian Territory, Occupied", 
+      "slug": "palestinian-territory-occupied"
+    }
+  }, 
+  {
+    "pk": 165, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Panama", 
+      "slug": "panama"
+    }
+  }, 
+  {
+    "pk": 166, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Papua New Guinea", 
+      "slug": "papua-new-guinea"
+    }
+  }, 
+  {
+    "pk": 167, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Paraguay", 
+      "slug": "paraguay"
+    }
+  }, 
+  {
+    "pk": 168, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Peru", 
+      "slug": "peru"
+    }
+  }, 
+  {
+    "pk": 169, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Philippines", 
+      "slug": "philippines"
+    }
+  }, 
+  {
+    "pk": 170, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Pitcairn", 
+      "slug": "pitcairn"
+    }
+  }, 
+  {
+    "pk": 171, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Poland", 
+      "slug": "poland"
+    }
+  }, 
+  {
+    "pk": 172, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Portugal", 
+      "slug": "portugal"
+    }
+  }, 
+  {
+    "pk": 173, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Puerto Rico", 
+      "slug": "puerto-rico"
+    }
+  }, 
+  {
+    "pk": 174, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Qatar", 
+      "slug": "qatar"
+    }
+  }, 
+  {
+    "pk": 175, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Reunion", 
+      "slug": "reunion"
+    }
+  }, 
+  {
+    "pk": 176, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Romania", 
+      "slug": "romania"
+    }
+  }, 
+  {
+    "pk": 177, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Russian Federation", 
+      "slug": "russian-federation"
+    }
+  }, 
+  {
+    "pk": 178, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Rwanda", 
+      "slug": "rwanda"
+    }
+  }, 
+  {
+    "pk": 179, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Saint Helena", 
+      "slug": "saint-helena"
+    }
+  }, 
+  {
+    "pk": 180, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Saint Kitts Nevis", 
+      "slug": "saint-kitts-nevis"
+    }
+  }, 
+  {
+    "pk": 181, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Saint Lucia", 
+      "slug": "saint-lucia"
+    }
+  }, 
+  {
+    "pk": 182, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Saint Pierre Miquelon", 
+      "slug": "saint-pierre-miquelon"
+    }
+  }, 
+  {
+    "pk": 183, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Saint Vincent Grenadines", 
+      "slug": "saint-vincent-grenadines"
+    }
+  }, 
+  {
+    "pk": 184, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Samoa", 
+      "slug": "samoa"
+    }
+  }, 
+  {
+    "pk": 185, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "San Marino", 
+      "slug": "san-marino"
+    }
+  }, 
+  {
+    "pk": 186, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Sao Tome Principe", 
+      "slug": "sao-tome-principe"
+    }
+  }, 
+  {
+    "pk": 187, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Saudi Arabia", 
+      "slug": "saudi-arabia"
+    }
+  }, 
+  {
+    "pk": 188, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Senegal", 
+      "slug": "senegal"
+    }
+  }, 
+  {
+    "pk": 189, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Serbia Montenegro", 
+      "slug": "serbia-montenegro"
+    }
+  }, 
+  {
+    "pk": 190, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Seychelles", 
+      "slug": "seychelles"
+    }
+  }, 
+  {
+    "pk": 191, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Sierra Leone", 
+      "slug": "sierra-leone"
+    }
+  }, 
+  {
+    "pk": 192, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Singapore", 
+      "slug": "singapore"
+    }
+  }, 
+  {
+    "pk": 193, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Slovakia", 
+      "slug": "slovakia"
+    }
+  }, 
+  {
+    "pk": 194, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Slovenia", 
+      "slug": "slovenia"
+    }
+  }, 
+  {
+    "pk": 195, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Solomon Islands", 
+      "slug": "solomon-islands"
+    }
+  }, 
+  {
+    "pk": 196, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Somalia", 
+      "slug": "somalia"
+    }
+  }, 
+  {
+    "pk": 197, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "South Africa", 
+      "slug": "south-africa"
+    }
+  }, 
+  {
+    "pk": 198, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "South Georgia South Sandwich Islands", 
+      "slug": "south-georgia-south-sandwich-islands"
+    }
+  }, 
+  {
+    "pk": 199, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Spain", 
+      "slug": "spain"
+    }
+  }, 
+  {
+    "pk": 200, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Sri Lanka", 
+      "slug": "sri-lanka"
+    }
+  }, 
+  {
+    "pk": 201, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Sudan", 
+      "slug": "sudan"
+    }
+  }, 
+  {
+    "pk": 202, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Suriname", 
+      "slug": "suriname"
+    }
+  }, 
+  {
+    "pk": 203, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Svalbard Jan Mayen", 
+      "slug": "svalbard-jan-mayen"
+    }
+  }, 
+  {
+    "pk": 204, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Swaziland", 
+      "slug": "swaziland"
+    }
+  }, 
+  {
+    "pk": 205, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Sweden", 
+      "slug": "sweden"
+    }
+  }, 
+  {
+    "pk": 206, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Switzerland", 
+      "slug": "switzerland"
+    }
+  }, 
+  {
+    "pk": 207, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Syrian Arab Republic", 
+      "slug": "syrian-arab-republic"
+    }
+  }, 
+  {
+    "pk": 208, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Taiwan, Province China", 
+      "slug": "taiwan-province-china"
+    }
+  }, 
+  {
+    "pk": 209, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Tajikistan", 
+      "slug": "tajikistan"
+    }
+  }, 
+  {
+    "pk": 210, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Tanzania, United Republic", 
+      "slug": "tanzania-united-republic"
+    }
+  }, 
+  {
+    "pk": 211, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Thailand", 
+      "slug": "thailand"
+    }
+  }, 
+  {
+    "pk": 212, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Timor-Leste", 
+      "slug": "timor-leste"
+    }
+  }, 
+  {
+    "pk": 213, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Togo", 
+      "slug": "togo"
+    }
+  }, 
+  {
+    "pk": 214, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Tokelau", 
+      "slug": "tokelau"
+    }
+  }, 
+  {
+    "pk": 215, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Tonga", 
+      "slug": "tonga"
+    }
+  }, 
+  {
+    "pk": 216, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Trinidad Tobago", 
+      "slug": "trinidad-tobago"
+    }
+  }, 
+  {
+    "pk": 217, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Tunisia", 
+      "slug": "tunisia"
+    }
+  }, 
+  {
+    "pk": 218, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Turkey", 
+      "slug": "turkey"
+    }
+  }, 
+  {
+    "pk": 219, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Turkmenistan", 
+      "slug": "turkmenistan"
+    }
+  }, 
+  {
+    "pk": 220, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Turks Caicos Islands", 
+      "slug": "turks-caicos-islands"
+    }
+  }, 
+  {
+    "pk": 221, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Tuvalu", 
+      "slug": "tuvalu"
+    }
+  }, 
+  {
+    "pk": 222, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Uganda", 
+      "slug": "uganda"
+    }
+  }, 
+  {
+    "pk": 223, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Ukraine", 
+      "slug": "ukraine"
+    }
+  }, 
+  {
+    "pk": 224, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "United Arab Emirates", 
+      "slug": "united-arab-emirates"
+    }
+  }, 
+  {
+    "pk": 225, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "United Kingdom", 
+      "slug": "united-kingdom"
+    }
+  }, 
+  {
+    "pk": 226, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "United States", 
+      "slug": "united-states"
+    }
+  }, 
+  {
+    "pk": 227, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "United States Minor Outlying Islands", 
+      "slug": "united-states-minor-outlying-islands"
+    }
+  }, 
+  {
+    "pk": 228, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Uruguay", 
+      "slug": "uruguay"
+    }
+  }, 
+  {
+    "pk": 229, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Uzbekistan", 
+      "slug": "uzbekistan"
+    }
+  }, 
+  {
+    "pk": 230, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Vanuatu", 
+      "slug": "vanuatu"
+    }
+  }, 
+  {
+    "pk": 231, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Venezuela", 
+      "slug": "venezuela"
+    }
+  }, 
+  {
+    "pk": 232, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Vietnam", 
+      "slug": "vietnam"
+    }
+  }, 
+  {
+    "pk": 233, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Virgin Islands, British", 
+      "slug": "virgin-islands-british"
+    }
+  }, 
+  {
+    "pk": 234, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Virgin Islands, U.S.", 
+      "slug": "virgin-islands-u-s"
+    }
+  }, 
+  {
+    "pk": 235, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Wallis Futuna", 
+      "slug": "wallis-futuna"
+    }
+  }, 
+  {
+    "pk": 236, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Western Sahara", 
+      "slug": "western-sahara"
+    }
+  }, 
+  {
+    "pk": 237, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Yemen", 
+      "slug": "yemen"
+    }
+  }, 
+  {
+    "pk": 238, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Zambia", 
+      "slug": "zambia"
+    }
+  }, 
+  {
+    "pk": 239, 
+    "model": "materials.country", 
+    "fields": {
+      "name": "Zimbabwe", 
+      "slug": "zimbabwe"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Accounting", 
+      "slug": "accounting"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Agriculture", 
+      "slug": "agriculture"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Anthropology", 
+      "slug": "anthropology"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Archaeology", 
+      "slug": "archaeology"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Architecture", 
+      "slug": "architecture"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Art History", 
+      "slug": "art-history"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Astronomy", 
+      "slug": "astronomy"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Biology", 
+      "slug": "biology"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Business Law", 
+      "slug": "business-law"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Chemistry", 
+      "slug": "chemistry"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Cinema", 
+      "slug": "cinema"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Communication Studies", 
+      "slug": "communication-studies"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Computer Sciences", 
+      "slug": "computer-sciences"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Criminal Justice", 
+      "slug": "criminal-justice"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Dance", 
+      "slug": "dance"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Digital Media", 
+      "slug": "digital-media"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "E-Commerce", 
+      "slug": "e-commerce"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Economics", 
+      "slug": "economics"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Education", 
+      "slug": "education"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Engineering", 
+      "slug": "engineering"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Environmental", 
+      "slug": "environmental"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Finance", 
+      "slug": "finance"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Fine Arts", 
+      "slug": "fine-arts"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Gender Studies", 
+      "slug": "gender-studies"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Geography", 
+      "slug": "geography"
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Geology", 
+      "slug": "geology"
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Health Policy", 
+      "slug": "health-policy"
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Health Sciences", 
+      "slug": "health-sciences"
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "History", 
+      "slug": "history"
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Information Technology", 
+      "slug": "information-technology"
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "International Business", 
+      "slug": "international-business"
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Language and Literature", 
+      "slug": "language-and-literature"
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Law", 
+      "slug": "law"
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Library and Information Studies", 
+      "slug": "library-and-information-studies"
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Linguistics", 
+      "slug": "linguistics"
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Management", 
+      "slug": "management"
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Marketing", 
+      "slug": "marketing"
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Mathematics", 
+      "slug": "mathematics"
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Music", 
+      "slug": "music"
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Nanotechnology", 
+      "slug": "nanotechnology"
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Philosophy", 
+      "slug": "philosophy"
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Photography", 
+      "slug": "photography"
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Physics", 
+      "slug": "physics"
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Political Science", 
+      "slug": "political-science"
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Psychiatry", 
+      "slug": "psychiatry"
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Psychology", 
+      "slug": "psychology"
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Religion", 
+      "slug": "religion"
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Rhetoric", 
+      "slug": "rhetoric"
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Sociology", 
+      "slug": "sociology"
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Statistics and Probability", 
+      "slug": "statistics-and-probability"
+    }
+  }, 
+  {
+    "pk": 51, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Theatre", 
+      "slug": "theatre"
+    }
+  }, 
+  {
+    "pk": 52, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "World Languages", 
+      "slug": "world-languages"
+    }
+  }, 
+  {
+    "pk": 53, 
+    "model": "materials.keyword", 
+    "fields": {
+      "suggested": true, 
+      "name": "Writing", 
+      "slug": "writing"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.generalsubject", 
+    "fields": {
+      "description": "Art, History, Cinema, Dance, Fine Arts, Music, Photography, Theatre, Visual Arts", 
+      "name": "Arts", 
+      "slug": "arts"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.generalsubject", 
+    "fields": {
+      "description": "Accounting, E-Commerce, Economics, Finance, International Business, Management, Marketing", 
+      "name": "Business", 
+      "slug": "business"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.generalsubject", 
+    "fields": {
+      "description": "History, Language and Literature, Library and Information Studies, Linguistics, Philosophy, Religion, Rhetoric, World Languages, Writing, Language Arts, Debate, Grammar, Journalism, Phonics, Reading, Speaking, Spelling, Storytelling, Vocabulary", 
+      "name": "Humanities", 
+      "slug": "humanities"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "materials.generalsubject", 
+    "fields": {
+      "description": "Mathematics, Statistics and Probability, Algebra, Arithmetic, Calculus, Geometry, Measurement, Number theory, Trigonometry", 
+      "name": "Mathematics and Statistics", 
+      "slug": "mathematics-and-statistics"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "materials.generalsubject", 
+    "fields": {
+      "description": "Agriculture, Architecture, Astronomy, Biology, Chemistry, Computer Sciences, Digital Media, Engineering, Environmental, Geology, Health Policy, Health Sciences, Information Technology, Nanotechnology, Physics, Psychiatry, Physical Education, Sports and Fitness, Life Sciences, Earth Science, Ecology, Meteorology, Oceanography, Paleontology, Pharmacology, Physical Sciences, Space Sciences", 
+      "name": "Science and Technology", 
+      "slug": "science-and-technology"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "materials.generalsubject", 
+    "fields": {
+      "description": "Anthropology, Archaeology, Business Law, Communication Studies, Criminal Justice, Education, Gender Studies, Geography, Law, Political Science, Psychology, Sociology, Social Studies, Civics, Current Events, Human Behavior, Human Relations, Social Work, State History, United States History, Urban Studies u", 
+      "name": "Social Sciences", 
+      "slug": "social-sciences"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.gradelevel", 
+    "fields": {
+      "description": "includes Pre-K - Grade 6; Elementary; Lower Elementary; Upper Elementary", 
+      "name": "Primary", 
+      "slug": "primary"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.gradelevel", 
+    "fields": {
+      "description": "includes Grades 7 - 12; High School; Middle School; Jr. High School", 
+      "name": "Secondary", 
+      "slug": "secondary"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.gradelevel", 
+    "fields": {
+      "description": "includes all Higher Education; College, University, Graduate Levels; Professional Development; Training", 
+      "name": "Post-secondary", 
+      "slug": "post-secondary"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Abkhazian", 
+      "slug": "ab"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Afar", 
+      "slug": "aa"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Afrikaans", 
+      "slug": "af"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Albanian", 
+      "slug": "sq"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Amharic", 
+      "slug": "am"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Arabic", 
+      "slug": "ar"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Armenian", 
+      "slug": "hy"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Assamese", 
+      "slug": "as"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Aymara", 
+      "slug": "ay"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Azerbaijani", 
+      "slug": "az"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Bashkir", 
+      "slug": "ba"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Basque", 
+      "slug": "eu"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Bengali", 
+      "slug": "bn"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Bhutani", 
+      "slug": "dz"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Bihari", 
+      "slug": "bh"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Bislama", 
+      "slug": "bi"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Breton", 
+      "slug": "br"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Bulgarian", 
+      "slug": "bg"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Burmese", 
+      "slug": "my"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Byelorussian (Belarussian)", 
+      "slug": "be"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Cambodian", 
+      "slug": "km"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Catalan", 
+      "slug": "ca"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Chinese", 
+      "slug": "zh"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Cornish", 
+      "slug": "kw"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Corsican", 
+      "slug": "co"
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Croatian", 
+      "slug": "hr"
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Czech", 
+      "slug": "cs"
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Danish", 
+      "slug": "da"
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Dutch", 
+      "slug": "nl"
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "English", 
+      "slug": "en"
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Esperanto", 
+      "slug": "eo"
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Estonian", 
+      "slug": "et"
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Faroese", 
+      "slug": "fo"
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Fiji", 
+      "slug": "fj"
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Finnish", 
+      "slug": "fi"
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "French", 
+      "slug": "fr"
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Frisian", 
+      "slug": "fy"
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Galician", 
+      "slug": "gl"
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Georgian", 
+      "slug": "ka"
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "German", 
+      "slug": "de"
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Greek", 
+      "slug": "el"
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Greenlandic", 
+      "slug": "kl"
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Guarani", 
+      "slug": "gn"
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Gujarati", 
+      "slug": "gu"
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Haitian", 
+      "slug": "ht"
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Hausa", 
+      "slug": "ha"
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Hebrew", 
+      "slug": "he"
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Hindi", 
+      "slug": "hi"
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Hungarian", 
+      "slug": "hu"
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Icelandic", 
+      "slug": "is"
+    }
+  }, 
+  {
+    "pk": 51, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Indonesian", 
+      "slug": "id"
+    }
+  }, 
+  {
+    "pk": 52, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Interlingua", 
+      "slug": "ia"
+    }
+  }, 
+  {
+    "pk": 53, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Interlingue", 
+      "slug": "ie"
+    }
+  }, 
+  {
+    "pk": 54, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Inuktitut", 
+      "slug": "iu"
+    }
+  }, 
+  {
+    "pk": 55, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Inupiak", 
+      "slug": "ik"
+    }
+  }, 
+  {
+    "pk": 56, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Irish (Irish Gaelic)", 
+      "slug": "ga"
+    }
+  }, 
+  {
+    "pk": 57, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Italian", 
+      "slug": "it"
+    }
+  }, 
+  {
+    "pk": 58, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Japanese", 
+      "slug": "ja"
+    }
+  }, 
+  {
+    "pk": 59, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Javanese", 
+      "slug": "jw"
+    }
+  }, 
+  {
+    "pk": 60, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Kannada", 
+      "slug": "kn"
+    }
+  }, 
+  {
+    "pk": 61, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Kashmiri", 
+      "slug": "ks"
+    }
+  }, 
+  {
+    "pk": 62, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Kazakh", 
+      "slug": "kk"
+    }
+  }, 
+  {
+    "pk": 63, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Kirghiz", 
+      "slug": "ky"
+    }
+  }, 
+  {
+    "pk": 64, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Kirundi", 
+      "slug": "rn"
+    }
+  }, 
+  {
+    "pk": 65, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Kiyarwanda", 
+      "slug": "rw"
+    }
+  }, 
+  {
+    "pk": 66, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Korean", 
+      "slug": "ko"
+    }
+  }, 
+  {
+    "pk": 67, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Kurdish", 
+      "slug": "ku"
+    }
+  }, 
+  {
+    "pk": 68, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Laotian", 
+      "slug": "lo"
+    }
+  }, 
+  {
+    "pk": 69, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Latin", 
+      "slug": "la"
+    }
+  }, 
+  {
+    "pk": 70, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Latvian Lettish", 
+      "slug": "lv"
+    }
+  }, 
+  {
+    "pk": 71, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Lingala", 
+      "slug": "ln"
+    }
+  }, 
+  {
+    "pk": 72, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Lithuanian", 
+      "slug": "lt"
+    }
+  }, 
+  {
+    "pk": 73, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Luxemburgish", 
+      "slug": "lb"
+    }
+  }, 
+  {
+    "pk": 74, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Macedonian", 
+      "slug": "mk"
+    }
+  }, 
+  {
+    "pk": 75, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Malagasy", 
+      "slug": "mg"
+    }
+  }, 
+  {
+    "pk": 76, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Malay", 
+      "slug": "ms"
+    }
+  }, 
+  {
+    "pk": 77, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Malayalam", 
+      "slug": "ml"
+    }
+  }, 
+  {
+    "pk": 78, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Maltese", 
+      "slug": "mt"
+    }
+  }, 
+  {
+    "pk": 79, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Manx Gaelic", 
+      "slug": "gv"
+    }
+  }, 
+  {
+    "pk": 80, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Maori", 
+      "slug": "mi"
+    }
+  }, 
+  {
+    "pk": 81, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Marathi", 
+      "slug": "mr"
+    }
+  }, 
+  {
+    "pk": 82, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Moldavian", 
+      "slug": "mo"
+    }
+  }, 
+  {
+    "pk": 83, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Mongolian", 
+      "slug": "mn"
+    }
+  }, 
+  {
+    "pk": 84, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Nauru", 
+      "slug": "na"
+    }
+  }, 
+  {
+    "pk": 85, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Nepali", 
+      "slug": "ne"
+    }
+  }, 
+  {
+    "pk": 86, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Northern S\u00e1mi", 
+      "slug": "se"
+    }
+  }, 
+  {
+    "pk": 87, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Norwegian", 
+      "slug": "no"
+    }
+  }, 
+  {
+    "pk": 88, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Occitan", 
+      "slug": "oc"
+    }
+  }, 
+  {
+    "pk": 89, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Oriya", 
+      "slug": "or"
+    }
+  }, 
+  {
+    "pk": 90, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Oromo", 
+      "slug": "om"
+    }
+  }, 
+  {
+    "pk": 91, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Pashto", 
+      "slug": "ps"
+    }
+  }, 
+  {
+    "pk": 92, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Persian", 
+      "slug": "fa"
+    }
+  }, 
+  {
+    "pk": 93, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Polish", 
+      "slug": "pl"
+    }
+  }, 
+  {
+    "pk": 94, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Portuguese", 
+      "slug": "pt"
+    }
+  }, 
+  {
+    "pk": 95, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Punjabi", 
+      "slug": "pa"
+    }
+  }, 
+  {
+    "pk": 96, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Quechua", 
+      "slug": "qu"
+    }
+  }, 
+  {
+    "pk": 97, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Rhaeto-Romance", 
+      "slug": "rm"
+    }
+  }, 
+  {
+    "pk": 98, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Romanian", 
+      "slug": "ro"
+    }
+  }, 
+  {
+    "pk": 99, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Russian", 
+      "slug": "ru"
+    }
+  }, 
+  {
+    "pk": 100, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Samoan", 
+      "slug": "sm"
+    }
+  }, 
+  {
+    "pk": 101, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Sangho", 
+      "slug": "sg"
+    }
+  }, 
+  {
+    "pk": 102, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Sanskrit", 
+      "slug": "sa"
+    }
+  }, 
+  {
+    "pk": 103, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Scots Gaelic (Scottish Gaelic)", 
+      "slug": "gd"
+    }
+  }, 
+  {
+    "pk": 104, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Serbian", 
+      "slug": "sr"
+    }
+  }, 
+  {
+    "pk": 105, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Serbo-Croatian", 
+      "slug": "sh"
+    }
+  }, 
+  {
+    "pk": 106, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Sesotho", 
+      "slug": "st"
+    }
+  }, 
+  {
+    "pk": 107, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Setswana", 
+      "slug": "tn"
+    }
+  }, 
+  {
+    "pk": 108, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Shona", 
+      "slug": "sn"
+    }
+  }, 
+  {
+    "pk": 109, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Sindhi", 
+      "slug": "sd"
+    }
+  }, 
+  {
+    "pk": 110, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Singhalese", 
+      "slug": "si"
+    }
+  }, 
+  {
+    "pk": 111, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Siswati", 
+      "slug": "ss"
+    }
+  }, 
+  {
+    "pk": 112, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Slovak", 
+      "slug": "sk"
+    }
+  }, 
+  {
+    "pk": 113, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Slovenian", 
+      "slug": "sl"
+    }
+  }, 
+  {
+    "pk": 114, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Somali", 
+      "slug": "so"
+    }
+  }, 
+  {
+    "pk": 115, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Spanish", 
+      "slug": "es"
+    }
+  }, 
+  {
+    "pk": 116, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Sudanese", 
+      "slug": "su"
+    }
+  }, 
+  {
+    "pk": 117, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Swahili", 
+      "slug": "sw"
+    }
+  }, 
+  {
+    "pk": 118, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Swedish", 
+      "slug": "sv"
+    }
+  }, 
+  {
+    "pk": 119, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Tagalog", 
+      "slug": "tl"
+    }
+  }, 
+  {
+    "pk": 120, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Tajik", 
+      "slug": "tg"
+    }
+  }, 
+  {
+    "pk": 121, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Tamil", 
+      "slug": "ta"
+    }
+  }, 
+  {
+    "pk": 122, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Tatar", 
+      "slug": "tt"
+    }
+  }, 
+  {
+    "pk": 123, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Telugu", 
+      "slug": "te"
+    }
+  }, 
+  {
+    "pk": 124, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Thai", 
+      "slug": "th"
+    }
+  }, 
+  {
+    "pk": 125, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Tibetan", 
+      "slug": "bo"
+    }
+  }, 
+  {
+    "pk": 126, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Tigrinya", 
+      "slug": "ti"
+    }
+  }, 
+  {
+    "pk": 127, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Tonga", 
+      "slug": "to"
+    }
+  }, 
+  {
+    "pk": 128, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Tsonga", 
+      "slug": "ts"
+    }
+  }, 
+  {
+    "pk": 129, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Turkish", 
+      "slug": "tr"
+    }
+  }, 
+  {
+    "pk": 130, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Turkmen", 
+      "slug": "tk"
+    }
+  }, 
+  {
+    "pk": 131, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Twi", 
+      "slug": "tw"
+    }
+  }, 
+  {
+    "pk": 132, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Uigur", 
+      "slug": "ug"
+    }
+  }, 
+  {
+    "pk": 133, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Ukrainian", 
+      "slug": "uk"
+    }
+  }, 
+  {
+    "pk": 134, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Urdu", 
+      "slug": "ur"
+    }
+  }, 
+  {
+    "pk": 135, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Uzbek", 
+      "slug": "uz"
+    }
+  }, 
+  {
+    "pk": 136, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Vietnamese", 
+      "slug": "vi"
+    }
+  }, 
+  {
+    "pk": 137, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Volap\u00fck", 
+      "slug": "vo"
+    }
+  }, 
+  {
+    "pk": 138, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Welsh", 
+      "slug": "cy"
+    }
+  }, 
+  {
+    "pk": 139, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Wolof", 
+      "slug": "wo"
+    }
+  }, 
+  {
+    "pk": 140, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Xhosa", 
+      "slug": "xh"
+    }
+  }, 
+  {
+    "pk": 141, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Yiddish", 
+      "slug": "yi"
+    }
+  }, 
+  {
+    "pk": 142, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Yorouba", 
+      "slug": "yo"
+    }
+  }, 
+  {
+    "pk": 143, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Zhuang", 
+      "slug": "za"
+    }
+  }, 
+  {
+    "pk": 144, 
+    "model": "materials.language", 
+    "fields": {
+      "name": "Zulu", 
+      "slug": "zu"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.mediaformat", 
+    "fields": {
+      "name": "Audio", 
+      "slug": "audio"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.mediaformat", 
+    "fields": {
+      "name": "Graphics/Photos", 
+      "slug": "graphics-photos"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.mediaformat", 
+    "fields": {
+      "name": "Mobile", 
+      "slug": "mobile"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "materials.mediaformat", 
+    "fields": {
+      "name": "Other", 
+      "slug": "other"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "materials.mediaformat", 
+    "fields": {
+      "name": "Text/HTML", 
+      "slug": "text-html"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "materials.mediaformat", 
+    "fields": {
+      "name": "Downloadable docs", 
+      "slug": "downloadable-docs"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "materials.mediaformat", 
+    "fields": {
+      "name": "Video", 
+      "slug": "video"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.geographicrelevance", 
+    "fields": {
+      "name": "All", 
+      "slug": "all"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.geographicrelevance", 
+    "fields": {
+      "name": "Africa", 
+      "slug": "africa"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.geographicrelevance", 
+    "fields": {
+      "name": "Asia", 
+      "slug": "asia"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "materials.geographicrelevance", 
+    "fields": {
+      "name": "Australia", 
+      "slug": "australia"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "materials.geographicrelevance", 
+    "fields": {
+      "name": "Developing countries", 
+      "slug": "developing-countries"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "materials.geographicrelevance", 
+    "fields": {
+      "name": "Europe", 
+      "slug": "europe"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "materials.geographicrelevance", 
+    "fields": {
+      "name": "Middle East", 
+      "slug": "middle-east"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "materials.geographicrelevance", 
+    "fields": {
+      "name": "North America", 
+      "slug": "north-america"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "materials.geographicrelevance", 
+    "fields": {
+      "name": "South America", 
+      "slug": "south-america"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Activities and Labs", 
+      "slug": "activities-and-labs"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Assessments", 
+      "slug": "assessments"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Audio Lectures", 
+      "slug": "audio-lectures"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Curriculum Standards", 
+      "slug": "curriculum-standards"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Discussion Forums", 
+      "slug": "discussion-forums"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Games", 
+      "slug": "games"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Homework and Assignments", 
+      "slug": "homework-and-assignments"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Lecture Notes", 
+      "slug": "lecture-notes"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Lesson Plans", 
+      "slug": "lesson-plans"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Readings", 
+      "slug": "readings"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Simulations", 
+      "slug": "simulations"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Syllabi", 
+      "slug": "syllabi"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Teaching and Learning Strategies", 
+      "slug": "teaching-and-learning-strategies"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Textbooks", 
+      "slug": "textbooks"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Training Materials", 
+      "slug": "training-materials"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Video Lectures", 
+      "slug": "video-lectures"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "materials.coursematerialtype", 
+    "fields": {
+      "name": "Other", 
+      "slug": "other"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.librarymaterialtype", 
+    "fields": {
+      "name": "Primary Source", 
+      "slug": "primary-source"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.librarymaterialtype", 
+    "fields": {
+      "name": "Teaching and Learning Strategies", 
+      "slug": "teaching-and-learning-strategies"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.librarymaterialtype", 
+    "fields": {
+      "name": "Other", 
+      "slug": "other"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.communitytype", 
+    "fields": {
+      "name": "News Stories", 
+      "slug": "news-stories"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.communitytype", 
+    "fields": {
+      "name": "Articles and Reports", 
+      "slug": "articles-and-reports"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.communitytype", 
+    "fields": {
+      "name": "Tools and Technology", 
+      "slug": "tools-and-technology"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "materials.communitytype", 
+    "fields": {
+      "name": "Organizations and Associations", 
+      "slug": "organizations-and-associations"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "materials.communitytype", 
+    "fields": {
+      "name": "Conferences and Workshops", 
+      "slug": "conferences-and-workshops"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "materials.communitytype", 
+    "fields": {
+      "name": "Discussion Forums", 
+      "slug": "discussion-forums"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "materials.communitytype", 
+    "fields": {
+      "name": "Blogs and Wikis", 
+      "slug": "blogs-and-wikis"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "materials.communitytopic", 
+    "fields": {
+      "name": "How and Why of OER", 
+      "slug": "how-and-why-of-oer"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "materials.communitytopic", 
+    "fields": {
+      "name": "Teaching and Learning", 
+      "slug": "teaching-and-learning"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "materials.communitytopic", 
+    "fields": {
+      "name": "Localization", 
+      "slug": "localization"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "materials.communitytopic", 
+    "fields": {
+      "name": "Standards/Certifications", 
+      "slug": "standards-certifications"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "materials.communitytopic", 
+    "fields": {
+      "name": "Intellectual Property", 
+      "slug": "intellectual-property"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "materials.communitytopic", 
+    "fields": {
+      "name": "Open Source", 
+      "slug": "open-source"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "materials.communitytopic", 
+    "fields": {
+      "name": "Technology", 
+      "slug": "technology"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "materials.communitytopic", 
+    "fields": {
+      "name": "Research", 
+      "slug": "research"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "materials.communitytopic", 
+    "fields": {
+      "name": "Policy", 
+      "slug": "policy"
+    }
+  }
+]
