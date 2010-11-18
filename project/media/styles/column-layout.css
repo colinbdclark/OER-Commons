@@ -1,0 +1,58 @@
+/* column container */
+.columns {
+    position:relative;    /* This fixes the IE7 overflow hidden bug and stops the layout jumping out of place */
+    clear:both;
+    overflow:hidden;    /* This chops off any overhanging divs */
+}
+
+.columns-wrap-1 {
+    float:left;
+    width:200%;
+    margin-left:-180px;   /* Width of right column */
+    position:relative;
+    right:100%;
+    background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;     /* Center column background */
+}
+
+.columns-wrap-2 {
+    float:left;
+    width:100%;
+    margin-left:-50%;
+    position:relative;
+    left:360px;           /* Left column width + right column width */
+    background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;     /* Left column background */
+}
+
+.column-main-wrap {
+    float:left;
+    width:50%;
+    position:relative;
+    right:180px;          /* Width of left column */
+    padding-bottom:1em;   /* Centre column bottom padding. Leave it out if it's zero */
+}
+
+.column-main {
+    margin:0 190px;       /* Centre column side padding:
+    Left padding = left column width + centre column left padding width
+    Right padding = right column width + centre column right padding width */
+    position:relative;
+    left:200%;
+    overflow:hidden;
+}
+
+.column-left {
+    float:left;
+    float:right;      /* This overrides the float:left above */
+    width:170px;          /* Width of left column content (left column width minus left and right padding) */
+    position:relative;
+    right:10px;           /* Width of the right-had side padding on the left column */
+}
+
+.column-right {
+    float:left;
+    float:right;      /* This overrides the float:left above */
+    width:170px;          /* Width of right column content (right column width minus left and right padding) */
+    margin-right:10px;    /* Width of right column right-hand padding + left column left and right padding */
+    position:relative;
+    left:50%;
+}

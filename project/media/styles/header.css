@@ -1,0 +1,51 @@
+#header {
+    height: 110px;
+    background: url(../images/header-bg.png) no-repeat 50% 50%;
+}
+#logo {
+    background: url(../images/logo.png) no-repeat;
+    display: block;
+    float: left;
+    height: 83px;
+    margin-left: 2px;
+    margin-top: 12px;
+    width: 130px;
+}
+.header-links {
+    list-style-type: none;
+    text-align: right;
+    float: right;
+    position: relative;
+    top: 80px;
+}
+.header-links li {
+    display: inline;
+    background: url(../images/dotted-line-vert.gif) repeat-y 100% 0%;
+    padding: 2px 10px;
+}
+.header-links .last {
+    background: none;
+}
+.header-links a {
+    color: #707070;
+    font-size: 12px;
+    line-height: 22px;
+    font-weight: bolder;
+    padding: 0 5px;
+    text-decoration: none;
+}
+.button-contribute {
+    background: url(../images/contribute-btn.gif) no-repeat;
+    display: block;
+    float: right;
+    height: 22px;
+    width: 145px;
+    margin-left: 10px;
+    padding: 0px;
+    text-indent: 9999px;
+    overflow: hidden;
+}
+#navigation {
+    height: 40px;
+    margin-bottom: 20px;
+}

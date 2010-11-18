@@ -1,0 +1,8 @@
+body {
+  background: url(../images/main-bg.png) repeat-x;
+}
+
+.fixed-width {
+  width: 960px;
+  margin: 0 auto;
+}

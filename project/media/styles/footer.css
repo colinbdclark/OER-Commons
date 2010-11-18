@@ -1,0 +1,37 @@
+#footer {
+  border-top: 2px solid #999999;
+  color: #666666;
+  font-size: 10px;
+  margin-top: 20px;
+  clear: both;
+  padding-top: 10px;
+}
+
+.cc-button {
+  float: right;
+}
+
+.footer-links {
+  list-style-type: none;
+  margin-bottom: 5px;
+}
+
+.footer-links li {
+  display: inline;
+  border-left: 1px solid #666666;
+  padding-left: 5px;
+  padding-right: 3px;
+}
+
+.footer-links .first {
+  padding-left: 0px;
+  border: none;
+}
+
+.footer-links a,
+.footer-links a:visited {
+  color: #0D7BAC;
+  text-decoration: none;
+  line-height: 15px;
+}
+

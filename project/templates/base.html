@@ -4,32 +4,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ request.LANGUAGE_CODE }}" lang="{{ request.LANGUAGE_CODE }}">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% if page_title %}{{ page_title }} | {% endif %}OER Commons{% endblock %}</title>
     {% block meta_description %}{% endblock %}
-    <link rel="icon" href="{{MEDIA_URL}}images/favicon.ico"/>
+    <link rel="icon" href="{{STATIC_URL}}images/favicon.ico"/>
     {% include "include/js.html" %}
     {% block extra-js %}{% endblock %}
     {% include "include/css.html" %}
     {% block extra-css %}{% endblock %}
   </head>
   <body>
-    <div class="container">
     {% include "include/header.html" %}
-    <div id="content">
-      
-      {% include "include/status-messages.html" %}
-      
-      {% block left-siderbar %}
-      {% endblock %}
-      
-      {% block content %}
-      {% endblock %}
 
-      {% block right-sidebar %}
-      {% endblock %}
+    {% block above-content %}
+    {% endblock %}
+    
+    <div class="columns fixed-width"><div class="columns-wrap-1"><div class="columns-wrap-2">
       
-    </div>
-    {% block footer %}{% include "include/footer.html" %}{% endblock %}
-    </div>
+      <div class="column-main-wrap"><div class="column-main">
+        {% include "include/status-messages.html" %}
+  
+        <div id="content">
+          {% block content %}
+            <h1>Header</h1>
+            <p>Content goes here</p>
+          {% endblock %}
+        </div>
+      </div></div>
+
+      <div class="column-left">
+        {% block column-left %}
+          <p>Left column</p>
+        {% endblock %}
+      </div>
+
+      <div class="column-right">
+        {% block column-right %}
+          <p>Right column</p>
+        {% endblock %}
+      </div>
+    </div></div></div>
+
+    {% include "include/footer.html" %}
   </body>
 </html>

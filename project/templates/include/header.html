@@ -1,0 +1,39 @@
+<div id="header">
+  <div class="fixed-width">
+    
+    <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
+    
+    <ul class="header-links">
+      {% if request.user.is_anonymous %}
+        <li>
+          <a href="{% url registration %}">Register Now!</a>
+        </li>
+        <li>
+          <a href="{% url auth_login %}">Log In</a>
+        </li>
+      {% endif %}
+      {% if request.user.is_authenticated %}
+        <li>
+          <a href="{% url profile_edit %}">My Profile</a>
+        </li>
+        <li>
+          <a href="{% url auth_logout %}">Logout</a>
+        </li>
+      {% endif %}
+      <li>
+        <a href="{% url feedback %}">Feedback</a>
+      </li>
+      <li>
+        <a href="{% url information %}">Help</a>
+      </li>
+      <li>
+        <a title="Contribute Content" class="button-contribute"
+           href="{% url contribute %}">Contribute Content</a>
+      </li>
+    </ul>
+    
+  </div>
+</div>
+
+<div id="navigation" class="fixed-width">
+</div>

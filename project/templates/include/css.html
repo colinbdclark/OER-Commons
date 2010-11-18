@@ -1,13 +1,22 @@
 {% load compress %}
-
 {% compress css %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}blueprint/reset.css" media="screen, projection" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/blueprint/reset.css" media="screen, projection" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/blueprint/typography.css" media="screen, projection" />
 
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/base.css" media="screen, projection" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/header.css" media="screen, projection" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/column-layout.css" media="screen, projection" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/footer.css" media="screen, projection" />
+{% endcompress %}
 
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}blueprint/print.css" media="print" />
+{% compress css %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/blueprint/print.css" media="print" />
+{% endcompress %}
 
 <!--[if lt IE 8]>
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}blueprint/ie.css" media="screen, projection" />
+  {% compress css %}
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/blueprint/ie.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/ie.css" media="screen, projection" />
+  {% endcompress %}
 <![endif]-->
-{% endcompress %}
+
