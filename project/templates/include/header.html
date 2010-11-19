@@ -1,3 +1,4 @@
+{% load navigation %}
 <div id="header">
   <div class="fixed-width">
     
@@ -35,5 +36,14 @@
   </div>
 </div>
 
-<div id="navigation" class="fixed-width">
+<div class="navigation-ct fixed-width">
+  {% navigation %}
+  
+  <div class="search-box">
+    <form action="{% url materials_search %}" method="get">
+      <input type="text" name="f.search" value="Enter Search" class="text">
+      <input type="submit" value="Search" class="button">
+      <input type="button" onclick="window.location='{% url materials_advanced_search %}'" value="Advanced Search" class="button"> 
+    </form>
+  </div>  
 </div>

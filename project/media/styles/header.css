@@ -45,7 +45,45 @@
     text-indent: 9999px;
     overflow: hidden;
 }
-#navigation {
+.navigation-ct {
     height: 40px;
     margin-bottom: 20px;
+}
+.navigation {
+    list-style-type: none;
+    float: left;
+}
+.navigation li {
+    float: left;
+    height: 40px;
+    padding: 0 16px;
+}
+.navigation li.sep {
+    float: left;
+    height: 40px;
+    padding: 0;
+    width: 5px;
+    background: url(../images/section-sep.gif) no-repeat 50% 50%;
+}
+.navigation li.selected {
+    background: url(../images/section-active-bg.png) repeat-x;
+}
+.navigation li a {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 40px;
+    text-decoration: none;
+    color: #0C5670;
+}
+.navigation li.selected a {
+    color: #fff;
+}
+.search-box {
+    float: right;
+    padding-top: 8px;
+}
+.search-box input.text {
+    color:#666666;
+    height:18px;
+    width:300px;
 }

@@ -28,6 +28,8 @@ urlpatterns += patterns('',
     url(r'^oer$', "project.views.frontpage", name="materials_browse"),
     url(r'^community$', "project.views.frontpage", name="materials_community"),
     url(r'^my$', "project.views.frontpage", name="user_items"), # TODO! Set up redirect /portfolio -> /my
+    url(r'^search$', "project.views.frontpage", name="materials_search"),
+    url(r'^advanced-search$', "project.views.frontpage", name="materials_advanced_search"),
 )
 
 

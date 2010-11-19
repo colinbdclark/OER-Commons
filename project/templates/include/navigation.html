@@ -1,0 +1,13 @@
+<ul class="navigation">
+  {% for tab in tabs %}
+    <li class="sep"></li>
+    <li{% if tab.selected %} class="selected"{% endif %}>
+      <a href="{{ tab.url }}">{{ tab.title }}</a>
+      {% if forloop.end %}
+      {% endif %}
+    </li>
+    {% if forloop.last %}
+      <li class="sep"></li>
+    {% endif %}
+  {% endfor %}
+</ul>
