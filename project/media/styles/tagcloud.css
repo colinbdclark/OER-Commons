@@ -1,0 +1,46 @@
+.tag-cloud a {
+    text-decoration: none;
+    margin: 1px;
+    color: #0b7ba9;
+    font-size: 11px;
+    font-weight: normal;
+}
+.tag-cloud a:visited {
+    color: #0b7ba9;
+}
+.tag-cloud a:hover {
+    text-decoration: underline;
+    opacity: 1.0;
+}
+a.tag0 {
+    font-size: 1em;
+    opacity: .80;
+}
+a.tag1 {
+    font-size: 1.2em;
+    opacity: .90;
+}
+a.tag2 {
+    font-size: 1.4em;
+}
+a.tag3 {
+    font-size: 1.6em;
+}
+a.tag4 {
+    font-size: 1.8em;
+}
+a.tag5 {
+    font-size: 2em;
+}
+a.tag6 {
+    font-size: 2.2em;
+}
+a.tag7 {
+    font-size: 2.4em;
+}
+a.tag8 {
+    font-size: 2.6em;
+}
+a.tag9 {
+    font-size: 2.8em;
+}

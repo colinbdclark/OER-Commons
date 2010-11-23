@@ -1,33 +1,16 @@
 import os
 
-
-#DATABASE_ENGINE = 'sqlite3'    # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#DATABASE_NAME = 'project.db'
-#DATABASE_USER = ''             # Not used with sqlite3.
-#DATABASE_PASSWORD = ''         # Not used with sqlite3.
-#DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-#DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-
-
-DATABASES = {
-    'default': {
-        'NAME': 'oercommons',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'postgres',
-        'PASSWORD': 'PeOtipOtb9'
-    },
-    'old': {
-        'NAME': 'oer',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'postgres',
-        'PASSWORD': 'PeOtipOtb9'
-    }
-}
-
+INTERNAL_IPS = ('127.0.0.1',)
 
 TIME_ZONE = 'America/Chicago'
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = (
+    (u"en", u"English"),
+)
+
+DATE_FORMAT = "M j, Y"
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -81,6 +64,7 @@ INSTALLED_APPS = (
     'compressor',
     'debug_toolbar',
     'haystack',
+    'flatblocks',
     'tags',
     'materials',
     'users',
@@ -112,3 +96,8 @@ HAYSTACK_SITECONF = "project.search_sites"
 HAYSTACK_SEARCH_ENGINE = "solr"
 HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr/oercommons'
 
+FLATBLOCKS_AUTOCREATE_STATIC_BLOCKS = True
+
+AUTOSLUG_SLUGIFY_FUNCTION = "project.utils.slugify"
+
+CACHE_VERSION = 2

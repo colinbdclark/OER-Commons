@@ -7,11 +7,17 @@ from materials.models import License
 from tags.models import Tag
 
 
+PUBLISHED_STATE = u"published"
+PRIVATE_STATE = "private"
+PENDING_STATE = u"pending"
+REJECTED_STATE = u"rejected"
+
+
 WORKFLOW_STATES = (
-   (u"published", _(u"Published")),
-   (u"private", _(u"Private")),
-   (u"pending", _(u"Pending")),
-   (u"rejected", _(u"Rejected")),
+   (PUBLISHED_STATE, _(u"Published")),
+   (PRIVATE_STATE, _(u"Private")),
+   (PENDING_STATE, _(u"Pending")),
+   (REJECTED_STATE, _(u"Rejected")),
 )
 
 

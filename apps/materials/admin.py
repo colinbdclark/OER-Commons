@@ -2,7 +2,7 @@ from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
 from materials.models import Course, Library, CommunityItem
 from materials.models.common import Country, GeneralSubject, \
-    GradeLevel, Language, MediaFormat, GeographicRelevance
+    GradeLevel, Language, MediaFormat, GeographicRelevance, Keyword
 from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
 from materials.models.library import LibraryMaterialType
@@ -18,6 +18,9 @@ site.register(MediaFormat, ModelAdmin)
 site.register(CommunityType, ModelAdmin)
 site.register(CommunityTopic, ModelAdmin)
 site.register(GeographicRelevance, ModelAdmin)
+
+site.register(Keyword, ModelAdmin)
+
 
 site.register(Course, ModelAdmin)
 site.register(Library, ModelAdmin)

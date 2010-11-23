@@ -1,8 +1,33 @@
 body {
   background: url(../images/main-bg.png) repeat-x;
+  color: #333;
+  font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
+  font-size: 11px;
+}
+
+a {
+  color: #0B7BA9;
+}
+
+.clear {
+  clear: both;
 }
 
 .fixed-width {
   width: 960px;
   margin: 0 auto;
+}
+
+.dotted {
+  background:url(../images/dotted-line-hor.gif) repeat-x scroll 0 100% transparent;
+  padding-bottom:4px;
+}
+
+.ui-widget {
+  font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
+  font-size: 11px;
+}
+
+.ui-widget-content {
+  background: none;
 }

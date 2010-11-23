@@ -1,2 +1,133 @@
 {% extends "base.html" %}
+{% load flatblock_tags %}
 
+{% block extra-js %}
+<script type="text/javascript"> 
+  $(document).ready(function() {
+      $(".portlet.cou li a").cluetip({local:true, arrows: true, width: 300});
+  });
+</script> 
+{% endblock %}
+
+{% block column-left %}
+<div class="portlet oermaterials"> 
+  <h4 class="dotted">OER Materials</h4> 
+  <div class="accordion"> 
+    <h5><a href="#">Subject Areas</a></h5> 
+    <div> 
+      <ul> 
+        {% for general_subject in general_subjects %}
+        <li> 
+          <a href="{% url materials_index general_subject=general_subject.slug %}"> 
+             {{ general_subject.name }} ({{ general_subject.count }})
+          </a> 
+        </li> 
+        {% endfor %}
+      </ul> 
+    </div> 
+    <h5><a href="#">Grade Levels</a></h5> 
+    <div> 
+      <ul> 
+        {% for grade_level in grade_levels %}
+        <li> 
+          <a href="{% url materials_index grade_level=grade_level.slug %}"> 
+             {{ grade_level.name }} ({{ grade_level.count }})
+          </a> 
+        </li> 
+        {% endfor %}
+      </ul> 
+    </div> 
+  </div>    
+  <h5><a href="{% url materials_browse_providers %}">Browse by Provider</a></h5>
+</div>
+{% endblock %}
+
+{% block content %}
+  {% flatblock "recommended-resources" using "flatblocks/frontpage-block.html" %}
+  <table class="frontpage-blocks"><tbody><tr>
+    <td class="first" width="50%">
+      {% flatblock "featured-k-12-resources" using "flatblocks/frontpage-block.html" %}
+    </td>
+    <td width="50%">
+      {% flatblock "featured-higher-ed-resources" using "flatblocks/frontpage-block.html" %}
+    </td>
+  </tr></tbody></table>
+  <div class="frontpage-block">
+    <h4 class="dotted">Tags</h4>
+    <div class="tag-cloud">
+      {% for keyword in tagcloud %}
+        <a href="{% url materials_index keyword=keyword.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block column-right %}
+<div class="portlet twitter dotted"> 
+  <h4 class="green">OER Commons Tweets</h4> 
+  <ul class="tweets"> 
+    {% for tweet in tweets %}
+    <li> 
+      {{ tweet.text|safe }} 
+      <span class="date">{{ tweet.date|date:"DATE_FORMAT" }}</span> 
+    </li> 
+    {% endfor %}
+  </ul> 
+  <a href="http://twitter.com/OERCommons" class="follow-btn"> 
+    Follow Our Tweets
+  </a> 
+  <div class="clear"></div>
+</div> 
+
+<div class="portlet addthis dotted"> 
+  <h4 class="green">Share OER Commons</h4> 
+    <div class="addthis_toolbox addthis_32x32_style addthis_default_style"> 
+        <a class="addthis_button_facebook"></a> 
+        <a class="addthis_button_delicious"></a> 
+        <a class="addthis_button_email"></a> 
+        <a class="addthis_button_compact"></a> 
+    </div> 
+    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=oercommons"></script> 
+</div> 
+
+<div class="portlet cou dotted"> 
+  <h4 class="dotted">Conditions of Use</h4> 
+  <ul> 
+    <li> 
+      <a href="#no-strings-attached-tooltip"
+         rel="#no-strings-attached-tooltip"
+         title="No Strings Attached">No Strings Attached</a> 
+    </li> 
+    <li> 
+      <a href="#remix-and-share-tooltip"
+         rel="#remix-and-share-tooltip"
+         title="Remix and Share">Remix and Share</a> 
+    </li> 
+    <li> 
+      <a href="#share-only-tooltip"
+         rel="#share-only-tooltip" title="Share Only">Share Only</a> 
+    </li> 
+    <li> 
+      <a href="#read-the-fine-print-tooltip"
+         rel="#read-the-fine-print-tooltip"
+         title="Read the Fine Print">Read the Fine Print</a> 
+    </li> 
+  </ul> 
+</div> 
+<div style="display: none" id="no-strings-attached-tooltip"> 
+No restrictions on your remixing, redistributing, or making derivative works. 
+Give credit to the author, as required. 
+</div> 
+<div style="display: none" id="remix-and-share-tooltip"> 
+Your remixing, redistributing, or making derivatives works comes with some 
+restrictions, including how it is shared. 
+</div> 
+<div style="display: none" id="share-only-tooltip"> 
+Your redistributing comes with some restrictions. Do not remix or make 
+derivative works. 
+</div> 
+<div style="display: none" id="read-the-fine-print-tooltip"> 
+Copyrighted materials, available under Fair Use and the TEACH Act for US-based 
+educators, or other custom arrangements. Go to the resource provider to see 
+their individual restrictions.</div> 
+{% endblock %}

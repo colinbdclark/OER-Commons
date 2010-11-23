@@ -1,0 +1,129 @@
+.portlet a {
+  text-decoration: none;
+}
+
+.portlet.dotted {
+  margin-bottom: 15px;
+  padding-bottom: 17px;
+}
+
+.portlet h4 {
+  color: #666666;
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom:5px;
+}
+
+.portlet h4.green {
+  color: #679801;
+}
+
+.portlet h5 {
+  color: #0A546D;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+.portlet h5 a, .portlet h5 a:visited {
+  color: #0A546D;
+}
+
+.portlet.oermaterials h5 {
+  clear: both;
+  float: left;
+}
+
+.portlet.oermaterials ul {
+  list-style-type: none;
+}
+
+.portlet.oermaterials .ui-widget-content {
+  border: none;
+}
+
+.portlet.oermaterials .ui-widget-content a {
+  color: #0B7BA9;
+}
+
+.portlet.oermaterials .ui-state-active, .portlet.oermaterials .ui-state-default {
+  border: none;
+  background: none;
+}
+
+.portlet.oermaterials .ui-state-active a, .portlet.oermaterials .ui-state-active a:link, .portlet.oermaterials .ui-state-active a:visited, .portlet.oermaterials .ui-state-default a, .portlet.oermaterials .ui-state-default a:link, .portlet.oermaterials .ui-state-default a:visited {
+  color: #0a546d;
+}
+
+.portlet.oermaterials .ui-accordion-icons .ui-accordion-header a {
+  padding-left: 20px;
+}
+
+.portlet.oermaterials .ui-accordion .ui-accordion-header a {
+  display:block;
+  font-size: 13px;
+  padding: 0px 0px 0px 18px;
+}
+
+.portlet.oermaterials .ui-accordion .ui-accordion-content {
+  padding: 5px 0px;
+}
+
+.portlet.oermaterials .ui-accordion h5 {
+  margin-top: 0px;
+}
+
+.portlet.oermaterials .ui-accordion-content {
+  clear: both;
+}
+
+.portlet.oermaterials .ui-accordion .ui-accordion-header .ui-icon {
+  left: 0px;
+  margin-top: -7px;
+}
+
+.portlet.oermaterials .ui-icon-triangle-1-s {
+  background: url(../images/collapsible-btn-opened.png) no-repeat 0% 0%;
+}
+
+.portlet.oermaterials .ui-icon-triangle-1-e {
+  background: url(../images/collapsible-btn-closed.png) no-repeat 0% 0%;
+}
+
+.portlet.twitter .tweets {
+  list-style-type: none;
+  background: white;
+  border-color: #CCC;
+  border-style: solid;
+  border-width: 1px;
+  height: 150px;
+  overflow: auto;
+  position: relative;
+  margin-bottom: 6px;
+}
+
+.portlet.twitter .tweets li {
+  margin: 5px 5px 10px 5px;
+  line-height: 1.25;
+}
+
+.portlet.twitter .tweets .date {
+  display: block;
+  text-align: right;
+  color: #666;
+  margin-top: 5px;
+}
+
+.portlet.twitter a.follow-btn {
+  font-size: 16px;
+  display: block;
+  float: left;
+  line-height: 32px;
+  padding-right: 40px;
+  background: url(../images/twitter-icon.png) no-repeat 100% 0;
+}
+
+.portlet.cou ul {
+  list-style-type: none;
+}

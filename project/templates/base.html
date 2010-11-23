@@ -18,18 +18,7 @@
     {% block above-content %}
     {% endblock %}
     
-    <div class="columns fixed-width"><div class="columns-wrap-1"><div class="columns-wrap-2">
-      
-      <div class="column-main-wrap"><div class="column-main">
-        {% include "include/status-messages.html" %}
-  
-        <div id="content">
-          {% block content %}
-            <h1>Header</h1>
-            <p>Content goes here</p>
-          {% endblock %}
-        </div>
-      </div></div>
+    <div class="columns fixed-width">
 
       <div class="column-left">
         {% block column-left %}
@@ -37,13 +26,26 @@
         {% endblock %}
       </div>
 
+      <div class="column-main">
+        {% include "include/status-messages.html" %}
+  
+        <div class="content">
+          {% block content %}
+            <h1>Header</h1>
+            <p>Content goes here</p>
+          {% endblock %}
+        </div>
+      </div>
+
       <div class="column-right">
         {% block column-right %}
           <p>Right column</p>
         {% endblock %}
       </div>
-    </div></div></div>
 
+      <div class="clear"></div>
+    </div>
+    
     {% include "include/footer.html" %}
   </body>
 </html>

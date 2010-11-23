@@ -1,0 +1,34 @@
+.frontpage-block {
+  font-size: 12px;
+  margin: 0 15px;
+}
+
+.frontpage-block h4 {
+  color: #666666;
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 10px;
+}
+
+.frontpage-block a {
+  color: #0B7BA9;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.frontpage-block a:visited {
+  color: #0B7BA9;
+}
+
+.frontpage-block li {
+  margin-top: 10px;
+}
+
+.frontpage-blocks td {
+  vertical-align: top;
+  padding: 0;
+}
+
+.frontpage-blocks td.first {
+  border-right:1px solid #B1CEDC;
+}

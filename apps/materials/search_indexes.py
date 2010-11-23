@@ -15,6 +15,7 @@ class CourseIndex(SearchIndex):
     general_subjects = MultiValueField(model_attr="indexed_general_subjects")
     grade_levels = MultiValueField(model_attr="indexed_grade_levels")
 
+    workflow_state = CharField(model_attr="workflow_state")
 
     def get_queryset(self):
         return Course.objects.all()
