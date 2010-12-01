@@ -9,6 +9,11 @@ a {
   color: #0B7BA9;
 }
 
+a.dashed {
+  border-bottom-width: 1px;
+  border-bottom-style: dashed;
+}
+
 .clear {
   clear: both;
 }
@@ -23,11 +28,84 @@ a {
   padding-bottom:4px;
 }
 
+.breadcrumbs {
+  margin-top: 10px;
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+}
+
+.page-title {
+  color: #668D16;
+  font-size: 25px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+.page-title span {
+  color: #666;
+}
+
 .ui-widget {
   font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
   font-size: 11px;
 }
 
 .ui-widget-content {
+  background: none;
+}
+
+.expand-button {
+  display: block;
+  float: left;
+  width: 16px;
+  height: 16px;
+}
+
+.expand-button.collapsed {
+  background: url(../images/collapsible-btn-closed.png) no-repeat;
+}
+
+.expand-button.expanded {
+  background: url(../images/collapsible-btn-opened.png) no-repeat;
+}
+
+.action-panel {
+  background: url(../images/actionpanel-bg.png) no-repeat 0% 0%;
+  height: 32px;
+  margin-top: 10px;
+  padding-top: 10px;  
+}
+
+.action-panel ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+}
+
+.action-panel ul.left {
+  float: left;
+  margin-left: 10px;
+}
+
+.action-panel ul.right {
+  float: right;
+  margin-right: 10px;
+}
+
+.action-panel li {
+  float: left;
+  margin: 0 10px 0 0;
+  padding: 0 11px 0 0;
+  height: 20px;
+  line-height: 20px;
+  background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;
+}
+
+.action-panel li.last {
+  margin: 0;
+  padding: 0;
   background: none;
 }

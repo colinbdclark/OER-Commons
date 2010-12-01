@@ -43,7 +43,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+#    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'project.urls'
@@ -100,4 +100,4 @@ FLATBLOCKS_AUTOCREATE_STATIC_BLOCKS = True
 
 AUTOSLUG_SLUGIFY_FUNCTION = "project.utils.slugify"
 
-CACHE_VERSION = 2
+CACHE_VERSION = 1

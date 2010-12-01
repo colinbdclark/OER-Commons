@@ -15,18 +15,18 @@ def navigation(context):
     tab = {}
     tab["title"] = u"Browse All"
     if microsite:
-        tab["url"] = reverse("materials_browse", kwargs={"microsite": microsite})
+        tab["url"] = reverse("materials:browse", kwargs={"microsite": microsite})
         tab["selected"] = len(path_elements) > 1 and path_elements[1] in \
             ['oer', 'browse', 'courses', 'libraries', 'advanced_search', 'search']
     else:
-        tab["url"] = reverse("materials_browse")
+        tab["url"] = reverse("materials:browse")
         tab["selected"] = path_elements and path_elements[0] in \
             ['oer', 'browse', 'courses', 'libraries', 'advanced_search', 'search']
     tabs.append(tab)
 
     tab = {}
     tab["title"] = u"OER Landscape"
-    tab["url"] = reverse("materials_community")
+    tab["url"] = reverse("materials:community")
     tab["selected"] = path_elements and path_elements[0] == "community"
     tabs.append(tab)
 

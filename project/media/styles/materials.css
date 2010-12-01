@@ -1,0 +1,236 @@
+.materials-index .item {
+  border-bottom: 1px solid #BFC7CA;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+}
+
+.materials-index .item.last {
+  border: none;
+}
+
+.materials-index h3, .view-item h3 {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #1F4D64;
+}
+
+.materials-index a, .view-item a {
+  text-decoration: none;
+}
+
+.materials-index h3 a {
+  color: #1F4D64;
+}
+
+.materials-index dl, .view-item dl {
+  font-size: 12px;
+  margin: 10px 0 0 0;
+}
+
+.materials-index dl a, .view-item dl a {
+  font-weight: bold;
+}
+
+.materials-index dt, .view-item dt {
+  float: left;
+  margin-right: 4px;
+  color: #616161;
+  font-weight: bold;
+}
+
+.materials-index dd, .view-item dd {
+  margin-left: 0;
+  margin-bottom: 2px;
+}
+
+.materials-index dl.collapsed {
+  display: none;
+}
+
+.materials-index .details {
+  margin-left: 20px;
+  margin-right: 120px;
+}
+
+.materials-index .expand-button {
+  margin-top: 1px;
+}
+
+.materials-index .expand-link.expanded {
+  display: none;
+}
+
+.materials-index .index-navigation {
+  font-size: 13px;
+  padding: 10px 0;
+}
+
+.materials-index .index-navigation.top {
+  margin-bottom: 15px;
+  background: url(../images/dotted-line-hor.gif) repeat-x 0% 100%;
+}
+
+.materials-index .index-navigation.bottom {
+  margin-top: 15px;
+  background: url(../images/dotted-line-hor.gif) repeat-x 0% 0%;
+}
+
+.materials-index .index-navigation ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.materials-index .index-navigation li {
+  float: left;
+  margin: 0 10px 0 0;
+  padding: 0 11px 0 0;
+  background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;
+}
+
+.materials-index .index-navigation li.last {
+  margin-right: 0;
+  padding-right: 0;
+  background: none;
+}
+
+.materials-index .index-navigation .expand-links {
+  float: left;
+}
+
+.materials-index .index-navigation .pagination {
+  float: right;
+  color: #999;
+}
+
+.materials-index .index-navigation .pagination strong {
+  color: #000;
+}
+
+.materials-index .index-navigation .pagination a {
+  color: #0B7BA9;
+}
+
+.index-filters .search {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.index-filters .search input.text {
+  width: 173px;
+}
+
+.index-filters .search input.button {
+  color: #333;
+  font-size: 11px;
+  margin: 5px 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.index-filters .filter {
+  clear: both;
+  padding-bottom: 11px;
+  margin-bottom: 10px;
+}
+
+.index-filters .filter input {
+  float: left;
+  display: block;
+}
+
+.index-filters .filter label {
+  display: block;
+}
+
+.index-filters .filter dd {
+  clear: both;
+  margin-left: 16px;
+}
+
+.index-filters .filter dt label {
+  color: #666;
+  font-size: 13px;
+  font-weight: bold;
+  margin-left: 36px;
+}
+
+.index-filters .filter dt label span {
+  display: block;
+  float: left;
+}
+
+.index-filters .filter dd label {
+  margin-left: 20px;
+  color: #0B7BA9;
+  line-height: 16px;
+  height: 16px;
+  width: 146px;
+  overflow: hidden;
+}
+
+.index-filters .filter dd.collapsed {
+  display: none;
+}
+
+.index-filters dt .tooltip-button {
+  display: block;
+  float: left;
+  width: 13px;
+  height: 13px;
+  margin-left: 5px;
+  background: url(../images/tooltip-btn-13.png) no-repeat;
+}
+
+.top-keywords .all {
+  display: none;
+}
+
+.top-keywords .top {
+  margin-bottom: 5px;
+}
+
+.top-keywords .see-more {
+  color: #666;
+  font-size: 14px;
+}
+
+.item-keywords a {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.item-tags .button-ct {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.view-item-navigation {
+  text-align: center;
+  width: 580px;
+  margin: 2px auto 0 auto;
+}
+
+.view-item-navigation a {
+  font-size: 14px;
+  color: #000;
+  text-decoration: none;
+}
+
+.view-item-navigation a.item-link.prev {
+  background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;
+  padding-right: 14px;
+  margin-right: 10px;
+}
+
+.view-item-navigation a.item-link.next {
+  background: url(../images/dotted-line-vert.gif) repeat-y 0 0;
+  padding-left: 14px;
+  margin-left: 10px;
+}
+
+.view-item-navigation a.item-link.hidden {
+  visibility: hidden;
+}

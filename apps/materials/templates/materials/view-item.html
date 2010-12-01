@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load materials_tags %}
+
+{% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
+
+{% block above-content %}
+<div class="action-panel fixed-width">
+  {% if came_from_index %}
+  <div class="view-item-navigation">
+    {% if prev_item_url %}
+      <a class="item-link prev" href="{{ prev_item_url }}">&laquo; Previous Item</a>
+    {% else %}
+      <a class="item-link prev hidden" href="#">&laquo; Previous Item</a>
+    {% endif %}
+    {% if index_url %}
+      <a href="{{ index_url }}">Return to Search Results...</a>
+    {% endif %}
+    {% if next_item_url %}
+      <a class="item-link next" href="{{ next_item_url }}">Next Item &raquo;</a>
+    {% else %}
+      <a class="item-link next hidden" href="#">Next Item &raquo;</a>
+    {% endif %}
+    <form action="" method="post">
+      <input type="hidden" name="index_path" value="{{ index_path }}" />
+      <input type="hidden" name="batch_size" value="{{ batch_size }}" />
+      <input type="hidden" name="sort_by" value="{{ sort_by }}" />
+      {% hidden_filters hidden_filters %}
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="view-item">
+  <div class="details">
+    <h3>
+      {{ item.title|safe }}
+      <a href="{{ item.url }}"><img alt="" src="{{ STATIC_URL }}images/external-link-icon.gif"></a>  
+    </h3>
+
+    <dl>
+      {% if item.authors %}
+      <dt>Author:</dt>
+      <dd>{{ item.authors.all|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+      {% if item.general_subjects %}
+      <dt>Subject:</dt>
+      <dd>{{ item.general_subjects.all|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+      {% if item.institution %}
+      <dt>Institution Name:</dt>
+      <dd>{{ item.institution.name }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+      {% if item.collection %}
+      <dt>Collection:</dt>
+      <dd>
+        <a href="{% url materials:collection_index collection=item.collection.slug %}">{{ item.collection.name }}</a>
+      </dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+  
+      {% if item.grade_levels %}
+      <dt>Grade Level:</dt>
+      <dd>{{ item.grade_levels.all|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+      
+    </dl>
+    
+    <dl>
+      <dt>Abstract:</dt>
+      <dd>{{ item.abstract|linebreaks }}</dd>
+      <dd class="clear"></dd>
+    </dl>
+
+    <dl>
+      {% if item.course_or_module %}
+      <dt>Course Type:</dt>
+      <dd>{{ item.get_course_or_module_display }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+      {% if item.languages %}
+      <dt>Language:</dt>
+      <dd>{{ item.languages.all|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+      {% if item.material_types %}
+      <dt>Material Type:</dt>
+      <dd>{{ item.material_types.all|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+      
+      {% if item.media_formats %}
+      <dt>Media Format:</dt>
+      <dd>{{ item.media_formats.all|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+      {% if item.curriculum_standards %}
+      <dt>Curriculum Standards:</dt>
+      <dd>{{ item.curriculum_standards }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+      {% if item.tech_requirements %}
+      <dt>Technical Requirements:</dt>
+      <dd>{{ item.tech_requirements }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+      {% if item.community_types %}
+      <dt>Content Type:</dt>
+      <dd>{{ item.community_types.all|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+      
+      {% if item.community_topics %}
+      <dt>Content Topic:</dt>
+      <dd>{{ item.community_topics.all|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+    </dl>
+    
+    <dl>
+      {% if item.license %}
+        {% with item.license as license %}
+          <dt>Conditions of Use:</dt>
+          <dd>
+            {% if license.url %}
+              <a href="{{ license.url }}">{{ license.name }}</a>
+            {% else %}
+              {{ license.name }}
+            {% endif %}
+            {% if license.description %}<br /> {{ license.description }}{% endif %}
+            {% if license.image %}<br /> <img src="{{ license.image }}" alt="{{ license.name }}" />{% endif %}
+          </dd>
+          <dd class="clear"></dd>
+          {% if license.copyright_holder %}
+          <dt>Copyright Holder:</dt>
+          <dd>{{ license.copyright_holder }}</dd>
+          <dd class="clear"></dd>
+          {% endif %}
+        {% endwith %}
+      {% endif %}
+    </dl>
+    
+  </div>
+</div>
+
+{% endblock %}
+
+{% block column-right %}
+  <div class="portlet item-tags dotted">
+    <h4 class="dotted">Item Tags</h3>
+    {% if tags %}
+       <div class="tag-cloud dotted">
+       {% for tag in tags %}
+         <a href="{% url materials:keyword_index keywords=tag.slug %}" class="tag{{ tag.number }}">{{ tag.name }}</a>
+       {% endfor %}
+       </div>
+    {% else %}
+      <p class="dotted">This item has not been tagged yet.</p>
+    {% endif %}
+    
+    {% if user_tags %}
+      <h4 class="dotted">My Tags</h4>
+      <div class="dotted">
+        {% for tag in user_tags %}
+          <a href="{% url materials:keyword_index keywords=keyword.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% if add_tags_url %}
+      <div class="button-ct">
+        <a class="with-came-from" href="{{ add_tags_url }}">
+          {% if user_tags %}
+            <img src="{{ STATIC_URL }}images/edit-tag-btn.png" alt="Edit Your Tags" />
+          {% else %}  
+            <img src="{{ STATIC_URL }}images/add-tag-btn.png" alt="Tag This Item" /> 
+          {% endif %}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="portlet item-keywords dotted">
+    <h4 class="dotted">Keywords</h3>
+    {% for keyword in item.keywords.all %}
+      <a href="{% url materials:keyword_index keywords=keyword.slug %}">{{ keyword.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+{% endblock %}

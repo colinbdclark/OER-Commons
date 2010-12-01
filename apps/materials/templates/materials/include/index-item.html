@@ -1,0 +1,37 @@
+<div class="item collapsible{% if forloop.last %} last{% endif %}">
+  <a class="expand-button collapsed" href="#"></a>
+  <div class="details">
+    <h3>
+      <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
+      <a href="{{ item.url }}"><img alt="" src="{{ STATIC_URL }}images/external-link-icon.gif"></a>  
+    </h3>
+    <a class="expand-link collapsed" href="#">(Complete Item Description)</a>
+    <dl class="collapsed">
+      <dt>Abstract:</dt>
+      <dd>{{ item.abstract|linebreaks }}</dd>
+      <dd class="clear"></dd>
+    </dl>
+    <dl>
+      {% if item.general_subjects %}
+      <dt>Subject:</dt>
+      <dd>{{ item.general_subjects|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+
+      {% if item.grade_levels %}
+      <dt>Grade Level:</dt>
+      <dd>{{ item.grade_levels|join:", " }}</dd>
+      <dd class="clear"></dd>
+      {% endif %}
+      
+      {% if item.collection %}
+      <dt>Collection:</dt>
+      <dd>
+        <a href="{% url materials:collection_index collection=item.collection.slug %}">{{ item.collection.name }}</a>
+      </dd>
+      <dd class="clear"></dd>
+      {% endif %}
+    </dl>
+  </div>
+  <div class="clear"></div>
+</div>

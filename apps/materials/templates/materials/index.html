@@ -1,9 +1,48 @@
 {% extends "base.html" %}
 
+{% block above-content %}
+  {% include "materials/include/index-action-panel.html" %}
+{% endblock %}
+
+{% block column-left %}
+  {% include "materials/include/index-filters.html" %}
+{% endblock %}
+
 {% block content %}
-  {% for result in results %}
-    {% with result.object as object %}
-    <h3>{{ result.object }}</h3>
-    {% endwith %}
+  <div class="materials-index collapsibles">
+
+  {% with "top" as class %}
+    {% include "materials/include/index-navigation.html" %}
+  {% endwith %}
+
+  {% for item in items %}
+    {% include "materials/include/index-item.html" %}
   {% endfor %}
+
+  {% with "bottom" as class %}
+    {% include "materials/include/index-navigation.html" %}
+  {% endwith %}
+  </div>
+{% endblock %}
+
+{% block column-right %}
+   <div class="portlet top-keywords dotted">
+     <h4 class="dotted">Top Keywords</h4>
+     <div class="tag-cloud top dotted">
+       {% for keyword in top_keywords %}
+         <a href="{% url materials:keyword_index keywords=keyword.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
+       {% endfor %}
+     </div>
+     {% if all_keywords %}
+     <a href="#" class="see-more">See more</a>
+     <div class="tag-cloud all">
+       {% for keyword in all_keywords %}
+         <a href="{% url materials:keyword_index keywords=keyword.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
+       {% endfor %}
+     </div>
+     {% endif %}
+   </div>
+   
+   {% include "include/portlets/cou.html" %}
+   
 {% endblock %}

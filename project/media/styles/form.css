@@ -12,5 +12,6 @@ input.button {
     font-size:14px;
     overflow:visible;
     padding:0 10px;
+    line-height: 20px;
     width:auto;
 }

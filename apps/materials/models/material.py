@@ -20,8 +20,20 @@ WORKFLOW_STATES = (
    (REJECTED_STATE, _(u"Rejected")),
 )
 
+RATED = u"rated"
+REVIEWED = u"reviewed"
+TAGGED = u"tagged"
+
+MEMBER_ACTIVITY_TYPES = (
+    (RATED, u'Only Items with Ratings'),
+    (REVIEWED, u'Only Items with Reviews'),
+    (TAGGED, u'Only Items with Tags'),
+)
+
 
 class Material(models.Model):
+
+    namespace = None
 
     title = models.CharField(max_length=500, verbose_name=_(u"Title"))
     slug = AutoSlugField(populate_from='title', unique=True,
@@ -57,4 +69,10 @@ class Material(models.Model):
         app_label = "materials"
         abstract = True
 
-
+    @property
+    def member_activities(self):
+        activities = []
+        if self.tags.all().count():
+            activities.append(TAGGED)
+        return activities
+        # TODO: add rated and reviewed

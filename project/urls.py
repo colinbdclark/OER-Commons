@@ -9,9 +9,9 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-    url(r'^admin/(.*)', admin.site.root),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^$', "project.views.frontpage", name="frontpage"),
-    url(r'', include('materials.urls')),
+    url(r'', include('materials.urls', app_name=None, namespace="materials")),
 )
 
 
@@ -25,13 +25,9 @@ urlpatterns += patterns('',
     url(r'^feedback$', "project.views.frontpage", name="feedback"),
     url(r'^information$', "project.views.frontpage", name="information"),
     url(r'^contribute$', "project.views.frontpage", name="contribute"),
-    url(r'^oer$', "project.views.frontpage", name="materials_browse"),
-    url(r'^oer/providers$', "project.views.frontpage", name="materials_browse_providers"),
-    url(r'^community$', "project.views.frontpage", name="materials_community"),
     url(r'^my$', "project.views.frontpage", name="user_items"), # TODO! Set up redirect /portfolio -> /my
-    url(r'^search$', "project.views.frontpage", name="materials_search"),
     url(r'^advanced-search$', "project.views.frontpage", name="materials_advanced_search"),
-    url(r'^(?:(?P<microsite>[^/]+)/)?browse(?:/general_subject/(?P<general_subject>[^/]+))?(?:/edu_level/(?P<grade_level>[^/]+))?(?:/keyword/(?P<keyword>[^/]+))?$', "project.views.frontpage", name="materials_index"),
+    url(r'^(?P<microsite>[^/]+)$', "project.views.frontpage", name="microsite"),
 )
 
 

@@ -1,0 +1,30 @@
+<div class="action-panel materials fixed-width">
+  
+    <form method="get" action="{{ request.path }}">   
+    <ul class="left">
+      <li>
+        Displaying <strong>{{ first_item_number }} - {{ last_item_number }}</strong> of <strong>{{ total_items }}</strong> results
+      </li>
+      <li>
+        <select name="batch_size">
+          {% for option in batch_size_options %}
+            <option value="{{ option }}"{% if option == batch_size %}selected="selected"{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+        results per page
+      </li>
+      <li class="last">
+        Sort by:
+        <select name="sort_by">
+          {% for option in sort_by_options %}
+            <option value="{{ option.value }}"{% if option.value == sort_by %}selected="selected"{% endif %}>{{ option.title }}</option>
+          {% endfor %}
+        </select>
+      </li>
+    </ul>
+
+    <ul class="right">
+    </ul>
+    
+    </form>
+</div>

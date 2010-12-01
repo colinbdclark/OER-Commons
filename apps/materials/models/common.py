@@ -36,6 +36,16 @@ class License(models.Model):
         verbose_name_plural = _(u"Countries")
         ordering = ("id",)
 
+    @property
+    def type(self):
+        # TODO: fix this
+        return self.name
+
+    @property
+    def image(self):
+        # TODO: fix this
+        return self.image_url
+
 
 class Country(models.Model):
 

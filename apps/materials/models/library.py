@@ -26,6 +26,8 @@ class LibraryMaterialType(models.Model):
 
 class Library(Material):
 
+    namespace = "libraries"
+
     provider_id = models.CharField(max_length=300, default=u"", blank=True,
                                    verbose_name=_(u"Provider ID"))
 
@@ -72,3 +74,13 @@ class Library(Material):
         verbose_name = _(u"Library")
         verbose_name_plural = _(u"Libraries")
         ordering = ("created_on",)
+
+    def keyword_slugs(self):
+        keywords = set(self.keywords.values_list("slug", flat=True))
+        keywords.update(self.tags.values_list("slug", flat=True))
+        return sorted(keywords)
+
+    def keyword_names(self):
+        keywords = set(self.keywords.values_list("slug", flat=True))
+        keywords.update(self.tags.values_list("slug", flat=True))
+        return sorted(keywords)

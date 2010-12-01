@@ -1,5 +1,6 @@
 .columns {
     background: url(../images/columns-bg.gif) repeat-y 190px 0;
+    margin-top: 20px;
 }
 .column-main {
     padding: 0 20px;

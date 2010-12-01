@@ -6,6 +6,9 @@ AVERAGE_FONT_SIZE = 1
 def get_tag_cloud(tags, max_font=MAX_FONT_SIZE,
                   min_font=MIN_FONT_SIZE, average_font=AVERAGE_FONT_SIZE):
 
+    if not tags:
+        return []
+
     max_num = max(tags.values())
     min_num = min(tags.values())
     if max_num == min_num:

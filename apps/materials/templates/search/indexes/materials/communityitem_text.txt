@@ -1,7 +1,5 @@
 {{ object.title }} |
 {% for keyword in object.keywords.all %}{{ keyword.name }} | {% endfor %}
 {% for tag in object.tags.all %}{{ tag.name }} | {% endfor %}
-{{ object.collection.name }} |
-{{ object.institution.name }} |
 {% for author in object.authors.all %}{{ author.name }} | {% endfor %}
 {{ object.abstract }}

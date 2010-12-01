@@ -7,7 +7,7 @@ from materials.models.material import Material
 
 
 COURSE_OR_MODULE = (
-   (u"course", _(u"Full Course")),
+   (u"full-course", _(u"Full Course")),
    (u"learning-module", _(u"Learning Module")),
 )
 
@@ -58,6 +58,8 @@ class RelatedMaterial(models.Model):
 
 
 class Course(Material):
+
+    namespace = "courses"
 
     course_id = models.CharField(max_length=300, default=u"", blank=True,
                                  verbose_name=_(u"Course ID"))
@@ -111,11 +113,12 @@ class Course(Material):
         verbose_name_plural = _(u"Courses")
         ordering = ("created_on",)
 
-    def indexed_general_subjects(self):
-        return [o.id for o in self.general_subjects.all()]
+    def keyword_slugs(self):
+        keywords = set(self.keywords.values_list("slug", flat=True))
+        keywords.update(self.tags.values_list("slug", flat=True))
+        return sorted(keywords)
 
-    def indexed_grade_levels(self):
-        return [o.id for o in self.grade_levels.all()]
-
-    def indexed_keywords(self):
-        return sorted(set([kw.slug for kw in self.keywords.all()] + [tag.slug for tag in self.tags.all()]))
+    def keyword_names(self):
+        keywords = set(self.keywords.values_list("slug", flat=True))
+        keywords.update(self.tags.values_list("slug", flat=True))
+        return sorted(keywords)

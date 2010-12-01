@@ -4,16 +4,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ request.LANGUAGE_CODE }}" lang="{{ request.LANGUAGE_CODE }}">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{% block title %}{% if page_title %}{{ page_title }} | {% endif %}OER Commons{% endblock %}</title>
+    <title>{% block title %}{% if page_title %}{{ page_title }}{% if page_subtitle %}: {{ page_subtitle }}{% endif %} | {% endif %}OER Commons{% endblock %}</title>
     {% block meta_description %}{% endblock %}
     <link rel="icon" href="{{STATIC_URL}}images/favicon.ico"/>
-    {% include "include/js.html" %}
-    {% block extra-js %}{% endblock %}
     {% include "include/css.html" %}
     {% block extra-css %}{% endblock %}
+    {% include "include/js.html" %}
+    {% block extra-js %}{% endblock %}
   </head>
-  <body>
+  <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite}}{% endif %}">
     {% include "include/header.html" %}
+
+    {% block promo %}
+      <div class="fixed-width">
+        <img src="{{ STATIC_URL }}images/promo-bnr.gif" alt="Learning is Sharing" />
+      </div>
+    {% endblock %}
+    
+    {% if breadcrumbs %}
+      <div class="breadcrumbs fixed-width">
+        <a href="{% url frontpage %}">Home</a> &rarr;
+        {% for crumb in breadcrumbs %}
+          {% if forloop.last %}
+            {{ crumb.title }}
+          {% else %}
+            <a href="{{ crumb.url }}">{{ crumb.title }}</a> &rarr;
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if page_title %}
+      <h1 class="page-title fixed-width">{{ page_title }}{% if page_subtitle %}: <span>{{ page_subtitle }}</span>{% endif %}</h1>
+    {% endif %}
 
     {% block above-content %}
     {% endblock %}
@@ -22,7 +45,7 @@
 
       <div class="column-left">
         {% block column-left %}
-          <p>Left column</p>
+          &nbsp;
         {% endblock %}
       </div>
 
@@ -31,15 +54,13 @@
   
         <div class="content">
           {% block content %}
-            <h1>Header</h1>
-            <p>Content goes here</p>
           {% endblock %}
         </div>
       </div>
 
       <div class="column-right">
         {% block column-right %}
-          <p>Right column</p>
+          &nbsp;
         {% endblock %}
       </div>
 

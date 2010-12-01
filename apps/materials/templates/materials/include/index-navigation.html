@@ -1,0 +1,52 @@
+<div class="index-navigation {{ class }}">
+  <ul class="expand-links">
+    <li>
+      <a class="expand-all" href="#">Expand All</a>
+    </li>
+    <li class="last"> 
+      <a class="collapse-all" href="#">Collapse All</a>
+    </li> 
+  </ul>
+  
+  {% if pagination.pages|length > 1 %}
+  <ul class="pagination">
+    <li>
+      {% if pagination.first_page_url %}
+      <a title="First page" href="{{ pagination.first_page_url }}">|&lt;</a>
+      {% else %}|&lt;{% endif %}
+    </li>
+    <li>
+      {% if pagination.prev_page_url %}
+      <a title="Previous page" href="{{ pagination.prev_page_url }}">&lt;&lt;</a>
+      {% else %}&lt;&lt;{% endif %}
+    </li>
+
+    <li>
+      {% for page in pagination.pages %}
+        {% if page %}
+          {% if page.url %}
+            <a href="{{ page.url }}">{{ page.number }}</a>
+          {% else %}
+            <strong>{{ page.number }}</strong>
+          {% endif %}
+        {% else %}
+          …
+        {% endif %}
+      {% endfor %}
+    </li>
+
+    <li>
+      {% if pagination.next_page_url %}
+      <a title="Next page" href="{{ pagination.next_page_url }}">&gt;&gt;</a>
+      {% else %}&gt;&gt;{% endif %}
+    </li>
+    <li class="last">
+      {% if pagination.last_page_url %}
+      <a title="Last page" href="{{ pagination.last_page_url }}">&gt;|</a>
+      {% else %}&gt;|{% endif %}
+    </li>
+  </ul>
+  {% endif %}
+  
+  <div class="clear"></div>
+</div>
