@@ -153,7 +153,7 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter):
     return filters
 
 
-PATH_FILTERS = ["general_subjects", "grade_levels", "material_types",
+PATH_FILTERS = ["general_subjects", "grade_levels", "course_material_types",
                 "collection", "keywords", "license", "ocw",
                 "course_or_module", "community_types", "community_topics"]
 
