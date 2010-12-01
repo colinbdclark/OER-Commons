@@ -13,7 +13,7 @@ grade_level_patterns = patterns('materials.views',
 )
 
 material_type_patterns = patterns('materials.views',
-    url(r"^/material_types/(?P<material_types>[^/]+)/?$", "index.index", name="material_type_index"),
+    url(r"^/material_types/(?P<course_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
 )
 
 collection_patterns = patterns('materials.views',

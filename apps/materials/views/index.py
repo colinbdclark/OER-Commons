@@ -158,7 +158,7 @@ PATH_FILTERS = ["general_subjects", "grade_levels", "course_material_types",
                 "course_or_module", "community_types", "community_topics"]
 
 
-def index(request, general_subjects=None, grade_levels=None, material_types=None,
+def index(request, general_subjects=None, grade_levels=None, course_material_types=None,
           collection=None, keywords=None, license=None, ocw=None,
           course_or_module=None, community_types=None, community_topics=None,
           microsite=None, model=None, search=False,
