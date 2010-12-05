@@ -10,7 +10,7 @@ class LibraryMaterialType(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, populate_from="name",
+    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
 
@@ -71,8 +71,8 @@ class Library(Material):
 
     class Meta:
         app_label = "materials"
-        verbose_name = _(u"Library")
-        verbose_name_plural = _(u"Libraries")
+        verbose_name = _(u"Library and Collection")
+        verbose_name_plural = _(u"Libraries and Collections")
         ordering = ("created_on",)
 
     def keyword_slugs(self):
@@ -81,6 +81,6 @@ class Library(Material):
         return sorted(keywords)
 
     def keyword_names(self):
-        keywords = set(self.keywords.values_list("slug", flat=True))
-        keywords.update(self.tags.values_list("slug", flat=True))
+        keywords = set(self.keywords.values_list("name", flat=True))
+        keywords.update(self.tags.values_list("name", flat=True))
         return sorted(keywords)

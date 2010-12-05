@@ -65,6 +65,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'haystack',
     'flatblocks',
+    'utils',
     'tags',
     'materials',
     'users',

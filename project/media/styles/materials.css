@@ -307,3 +307,12 @@
   margin: 7px 10px;
   list-style-type: none;
 }
+
+.rss-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: url(../images/rss-icon.gif) no-repeat 0 0;
+  text-indent: -9999px;
+  margin-top: 2px;
+}

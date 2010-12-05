@@ -22,7 +22,7 @@ class CourseMaterialType(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, populate_from="name",
+    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
 
@@ -109,8 +109,8 @@ class Course(Material):
 
     class Meta:
         app_label = "materials"
-        verbose_name = _(u"Course")
-        verbose_name_plural = _(u"Courses")
+        verbose_name = _(u"Course Related Material")
+        verbose_name_plural = _(u"Course Related Materials")
         ordering = ("created_on",)
 
     def keyword_slugs(self):
@@ -119,6 +119,6 @@ class Course(Material):
         return sorted(keywords)
 
     def keyword_names(self):
-        keywords = set(self.keywords.values_list("slug", flat=True))
-        keywords.update(self.tags.values_list("slug", flat=True))
+        keywords = set(self.keywords.values_list("name", flat=True))
+        keywords.update(self.tags.values_list("name", flat=True))
         return sorted(keywords)

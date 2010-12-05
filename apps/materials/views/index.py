@@ -11,7 +11,7 @@ from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
 from tags.utils import get_tag_cloud
 import urllib
 from tags.models import Tag
-
+from django.http import Http404
 
 
 BATCH_SIZE_OPTIONS = (
@@ -29,9 +29,11 @@ SORT_BY_OPTIONS = (
 MAX_TOP_KEYWORDS = 25
 
 
-def serialize_query_string_params(query_string_params):
+def serialize_query_string_params(query_string_params, ignore_params=[]):
     params = []
     for key, value in query_string_params.items():
+        if key in ignore_params:
+            continue
         if isinstance(value, list):
             for v in value:
                 if isinstance(v, unicode):
@@ -174,6 +176,14 @@ def index(request, general_subjects=None, grade_levels=None,
     page_subtitle = u""
     breadcrumbs = [{"url": reverse("materials:browse"), "title": u"OER Materials"}]
 
+    format = "html"
+    if request.REQUEST.get("feed", None) == "yes":
+        format = "rss"
+    elif request.REQUEST.get("csv", None) == "yes":
+        if not request.user.is_authenticated() or not request.user.is_staff:
+            raise Http404()
+        format = "csv"
+
     query = SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE)
 
     if model:
@@ -255,12 +265,18 @@ def index(request, general_subjects=None, grade_levels=None,
             sort_by = "title"
     query_string_params["sort_by"] = sort_by
 
-    for facet_field in facet_fields:
-        query = query.facet(facet_field)
+
+    index_url = "%s?%s" % (request.path,
+                           serialize_query_string_params(query_string_params,
+                                             ignore_params=["batch_start"]))
+    feed_url = index_url + "&feed=yes"
+    csv_url = index_url + "&csv=yes"
 
     batch_end = batch_start + batch_size
 
-    if sort_by == "search":
+    if format == "rss":
+        order_by = "-published_on"
+    elif sort_by == "search":
         order_by = None
     elif sort_by == "date":
         order_by = "-published_on"
@@ -270,63 +286,101 @@ def index(request, general_subjects=None, grade_levels=None,
     if order_by is not None:
         query = query.order_by(order_by)
 
-    results = query[batch_start:batch_end]
     items = []
-    for result in results:
-        item = result.get_stored_fields()
-        if item.get("collection"):
-            collection_id = item["collection"]
-            item["collection"] = {"name": get_name_from_id(Collection,
-                                                           collection_id),
-                                  "slug": get_slug_from_id(Collection,
-                                                           collection_id)}
-        if item.get("general_subjects"):
-            item["general_subjects"] = [get_name_from_id(GeneralSubject, id) for id in item["general_subjects"]]
 
-        if item.get("grade_levels"):
-            item["grade_levels"] = [get_name_from_id(GradeLevel, id) for id in item["grade_levels"]]
+    if format == "html":
 
-        namespace = getattr(result.model, "namespace", None)
-        if namespace:
-            item["get_absolute_url"] = reverse("materials:%s:view_item" % namespace, kwargs=dict(slug=item["slug"]))
+        for facet_field in facet_fields:
+            query = query.facet(facet_field)
+
+        results = query[batch_start:batch_end]
+        for result in results:
+            item = result.get_stored_fields()
+            if item.get("collection"):
+                collection_id = item["collection"]
+                item["collection"] = {"name": get_name_from_id(Collection,
+                                                               collection_id),
+                                      "slug": get_slug_from_id(Collection,
+                                                               collection_id)}
+            if item.get("general_subjects"):
+                item["general_subjects"] = [get_name_from_id(
+                     GeneralSubject, id) for id in item["general_subjects"]]
+
+            if item.get("grade_levels"):
+                item["grade_levels"] = [get_name_from_id(
+                             GradeLevel, id) for id in item["grade_levels"]]
+
+            namespace = getattr(result.model, "namespace", None)
+            if namespace:
+                item["get_absolute_url"] = reverse(
+                                       "materials:%s:view_item" % namespace,
+                                       kwargs=dict(slug=item["slug"]))
+            else:
+                item["get_absolute_url"] = result.object.get_absolute_url()
+
+            items.append(item)
+
+        total_items = len(query)
+
+        first_item_number = batch_start + 1
+        last_item_number = batch_start + batch_size
+        if last_item_number > total_items:
+            last_item_number = total_items
+
+        pagination = build_pagination(request.path, query_string_params,
+                                      batch_start, batch_size, total_items)
+
+        facets = query.facet_counts()["fields"]
+
+        index_filters = build_index_filters(visible_filters,
+                                            facets,
+                                            filter_values, path_filter)
+
+        all_keywords = facets.get("keywords", [])
+        if len(all_keywords) > MAX_TOP_KEYWORDS:
+            top_keywords = get_tag_cloud(dict(all_keywords[:MAX_TOP_KEYWORDS]),
+                                              3, 0, 0)
+            all_keywords = get_tag_cloud(dict(all_keywords), 3, 0, 0)
         else:
-            item["get_absolute_url"] = result.object.get_absolute_url()
+            top_keywords = get_tag_cloud(dict(all_keywords), 3, 0, 0)
+            all_keywords = []
 
-        items.append(item)
+        for keyword in top_keywords:
+            name = get_name_from_slug(Keyword, keyword["slug"]) or \
+                   get_name_from_slug(Tag, keyword["slug"]) or \
+                   keyword["slug"]
+            keyword["name"] = name
+        for keyword in all_keywords:
+            name = get_name_from_slug(Keyword, keyword["slug"]) or \
+                   get_name_from_slug(Tag, keyword["slug"]) or \
+                   keyword["slug"]
+            keyword["name"] = name
 
-    total_items = len(query)
+        return direct_to_template(request, "materials/index.html", locals())
 
-    first_item_number = batch_start + 1
-    last_item_number = batch_start + batch_size
-    if last_item_number > total_items:
-        last_item_number = total_items
+    elif format == "rss":
+        results = query[0:20]
+        for result in results:
+            item = result.get_stored_fields()
+            if item.get("general_subjects"):
+                item["general_subjects"] = [get_name_from_id(
+                     GeneralSubject, id) for id in item["general_subjects"]]
 
-    pagination = build_pagination(request.path, query_string_params,
-                                  batch_start, batch_size, total_items)
+            namespace = getattr(result.model, "namespace", None)
+            if namespace:
+                item["get_absolute_url"] = reverse(
+                                       "materials:%s:view_item" % namespace,
+                                       kwargs=dict(slug=item["slug"]))
+            else:
+                item["get_absolute_url"] = result.object.get_absolute_url()
 
-    facets = query.facet_counts()["fields"]
+            item["model_verbose_name"] = result.model._meta.verbose_name_plural
 
-    index_filters = build_index_filters(visible_filters,
-                                        facets,
-                                        filter_values, path_filter)
+            items.append(item)
 
-    all_keywords = facets.get("keywords", [])
-    if len(all_keywords) > MAX_TOP_KEYWORDS:
-        top_keywords = get_tag_cloud(dict(all_keywords[:MAX_TOP_KEYWORDS]), 3, 0, 0)
-        all_keywords = get_tag_cloud(dict(all_keywords), 3, 0, 0)
-    else:
-        top_keywords = get_tag_cloud(dict(all_keywords), 3, 0, 0)
-        all_keywords = []
+        return direct_to_template(request, "materials/index-rss.xml", locals(),
+                                  "text/xml")
 
-    for keyword in top_keywords:
-        name = get_name_from_slug(Keyword, keyword["slug"]) or \
-               get_name_from_slug(Tag, keyword["slug"]) or \
-               keyword["slug"]
-        keyword["name"] = name
-    for keyword in all_keywords:
-        name = get_name_from_slug(Keyword, keyword["slug"]) or \
-               get_name_from_slug(Tag, keyword["slug"]) or \
-               keyword["slug"]
-        keyword["name"] = name
+    elif format == "csv":
+        return None
 
-    return direct_to_template(request, "materials/index.html", locals())

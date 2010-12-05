@@ -51,7 +51,8 @@ class Country(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, populate_from="name",
+    slug = AutoSlugField(unique=True, max_length=100,
+                         populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
 
@@ -87,7 +88,7 @@ class Keyword(models.Model):
 
     name = models.CharField(unique=True, max_length=500,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(populate_from="name",
+    slug = AutoSlugField(populate_from="name", max_length=500,
                          verbose_name=_(u"Slug"),
                          db_index=True)
     suggested = models.BooleanField(default=False,
@@ -107,7 +108,7 @@ class GeneralSubject(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, populate_from="name",
+    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
     description = models.TextField(default=u"", blank=True,
@@ -127,7 +128,7 @@ class GradeLevel(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, populate_from="name",
+    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
     description = models.TextField(default=u"", blank=True,
@@ -165,7 +166,7 @@ class Collection(models.Model):
 
     name = models.CharField(unique=True, max_length=300,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, populate_from="name",
+    slug = AutoSlugField(unique=True, max_length=300, populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
 
@@ -183,7 +184,7 @@ class Institution(models.Model):
 
     name = models.CharField(unique=True, max_length=300,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, populate_from="name",
+    slug = AutoSlugField(unique=True, max_length=300, populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
 
@@ -201,7 +202,7 @@ class MediaFormat(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, populate_from="name",
+    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
 
@@ -219,7 +220,7 @@ class GeographicRelevance(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
                             verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, populate_from="name",
+    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
 

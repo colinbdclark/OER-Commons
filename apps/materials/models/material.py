@@ -36,7 +36,7 @@ class Material(models.Model):
     namespace = None
 
     title = models.CharField(max_length=500, verbose_name=_(u"Title"))
-    slug = AutoSlugField(populate_from='title', unique=True,
+    slug = AutoSlugField(max_length=500, populate_from='title', unique=True,
                          verbose_name=_(u"Slug"))
 
     created_on = models.DateTimeField(auto_now_add=True,
