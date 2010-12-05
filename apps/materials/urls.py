@@ -12,10 +12,6 @@ grade_level_patterns = patterns('materials.views',
     url(r"^/edu_level/(?P<grade_levels>[^/]+)/?$", "index.index", name="grade_level_index"),
 )
 
-material_type_patterns = patterns('materials.views',
-    url(r"^/material_types/(?P<course_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
-)
-
 collection_patterns = patterns('materials.views',
     url(r"^/collection/(?P<collection>[^/]+)/?$", "index.index", name="collection_index"),
 )
@@ -35,13 +31,13 @@ browse_patterns = patterns('materials.views',
 ) + \
 general_subject_patterns + \
 grade_level_patterns + \
-material_type_patterns + \
 collection_patterns + \
 license_patterns + \
 keyword_patterns
 
 
 course_patterns = browse_patterns + patterns('materials.views',
+    url(r"^/material_types/(?P<course_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
     url(r"^/ocw/?$", "index.index", name="ocw_index", kwargs={"ocw": True}),
     url(r"^/(?P<course_or_module>full-course|learning-module)/?$", "index.index", name="course_or_module_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
@@ -50,6 +46,7 @@ course_patterns = browse_patterns + patterns('materials.views',
 )
 
 library_patterns = browse_patterns + patterns('materials.views',
+    url(r"^/material_types/(?P<library_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
 ) + patterns('',
     url(r"^/(?P<slug>[^/]+)/add-tags$", "tags.views.add", name="add_tags"),
@@ -76,7 +73,7 @@ urlpatterns = patterns('materials.views',
     url(r"^search/?$", "index.index", name="search", kwargs={"search": True}),
     url(r"^courses", include(course_patterns, app_name="materials", namespace="courses"), {"model": Course}),
     url(r"^libraries", include(library_patterns, app_name="materials", namespace="libraries"), {"model": Library}),
-    url(r"^community/?$", "community.community", name="community"),
+    url(r"^community/?$", "browse.community", name="community"),
     url(r"^community", include(community_patterns, app_name="materials", namespace="community"), {"model": CommunityItem}),
     url(r"^(?P<microsite>[^/]+)/browse", include(microsite_browse_patterns)),
 )

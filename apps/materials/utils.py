@@ -93,7 +93,7 @@ def get_facets_for_field(field, model=None):
     query = SearchQuerySet()
     if model is not None:
         query = query.models(model)
-    query = query.filter(workflow_state=PUBLISHED_STATE)
+    query = query.narrow("workflow_state:%s" % PUBLISHED_STATE)
     query = query.facet(field)
     return query.facet_counts()["fields"][field]
 

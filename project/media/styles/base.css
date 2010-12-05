@@ -75,7 +75,13 @@ a.dashed {
   background: url(../images/actionpanel-bg.png) no-repeat 0% 0%;
   height: 32px;
   margin-top: 10px;
-  padding-top: 10px;  
+  padding-top: 10px;
+}
+
+.action-panel.empty {
+  background: url(../images/actionpanel-empty-bg.png) no-repeat 0% 0%;
+  height: 25px;
+  padding: 0;
 }
 
 .action-panel ul {
@@ -108,4 +114,12 @@ a.dashed {
   margin: 0;
   padding: 0;
   background: none;
+}
+
+.promo {
+  background: #F4F8F9 url(../images/promo-bg.png) repeat-x 0% 0%;
+  border: 1px solid #AFCFDC;
+  margin-bottom: 15px;
+  padding: 15px 20px;
+  font-size: 12px;
 }

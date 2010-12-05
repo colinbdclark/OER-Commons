@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load materials_tags %}
+
+
+{% block column-left %}
+
+  <div class="portlet browse-providers">
+    <a href="{% url materials:browse_providers %}">Browse Collection Providers</a>
+  </div>
+
+  <div class="portlet featured-searches">
+  <h4 class="dotted">Featured Searches</h4>
+  <ul>
+    <li><a href="/search?f.search=Arts+Social+Justice">Art &amp; Social Justice</a></li>
+    <li><a href="/courses/material_types/textbooks?f.cou_bucket=no-strings-attached&amp;f.cou_bucket=remix-and-share&amp;f.cou_bucket=share-only">Open Textbooks</a></li>
+    <li><a href="/browse/material_types/textbooks?f.edu_level=primary&amp;f.edu_level=secondary">K-12 Textbooks</a></li>
+  </ul>
+</div>
+{% endblock %}
+
+
+{% block content %}
+<div class="browse-materials">
+  <table cellspacing="0" border="0" width="100%">
+    <thead><tr>
+      <th width="50%">Subject Areas</th>
+      <th class="sep"><div></div></th>
+      <th width="50%">Grade Levels</th>
+    </tr></thead>
+    <tbody><tr>
+      <td>
+        <ul>
+          {% for item in general_subjects %}
+          <li>
+            <span>({{ item.count }})</span>
+            <a href="{% url materials:general_subject_index general_subjects=item.slug %}">{{ item.name|shrink:100 }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </td>
+      <td class="sep"> </td>
+      <td>
+        <ul>
+          {% for item in grade_levels %}
+          <li>
+            <span>({{ item.count }})</span>
+            <a href="{% url materials:grade_level_index grade_levels=item.slug %}">{{ item.name|shrink:100 }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+  <table cellspacing="0" border="0" width="100%">
+    <thead><tr>
+      <th colspan="3">Materials Types</th>
+    </tr></thead>
+    <tbody><tr>
+      <td width="50%">
+        <ul>
+          {% for item in course_material_types_col1 %}
+          <li>
+            <span>({{ item.count }})</span>
+            <a href="{% url materials:courses:material_type_index course_material_types=item.slug %}">{{ item.name|shrink:100 }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </td>
+      <td class="nosep"><div></div></td>
+      <td width="50%">
+        <ul>
+          {% for item in course_material_types_col2 %}
+          <li>
+            <span>({{ item.count }})</span>
+            <a href="{% url materials:courses:material_type_index course_material_types=item.slug %}">{{ item.name|shrink:100 }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+  <table cellspacing="0" border="0" width="100%">
+    <thead><tr>
+      <th width="50%">Course Related Materials (26230)</th>
+      <th class="sep"><div></div></th>
+      <th width="50%">Libraries and Collections (2532)</th>
+    </tr></thead>
+    <tbody><tr>
+      <td>
+        <ul>
+          {% for item in course_or_module %}
+          <li>
+            <span>({{ item.count }})</span>
+            <a href="{% url materials:courses:course_or_module_index course_or_module=item.slug %}">{{ item.name|shrink:100 }}</a>
+          </li>
+          {% endfor %}
+          <li>
+            <span>({{ ocw_count}})</span>
+            <a href="{% url materials:courses:ocw_index %}">OpenCourseWare</a>
+          </li>
+        </ul>
+      </td>
+      <td class="sep"> </td>
+      <td>
+        <ul>
+          {% for item in library_material_types %}
+          <li>
+            <span>({{ item.count }})</span>
+            <a href="{% url materials:libraries:material_type_index library_material_types=item.slug %}">{{ item.name|shrink:100 }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+</div>
+{% endblock %}

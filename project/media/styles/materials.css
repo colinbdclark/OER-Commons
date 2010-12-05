@@ -234,3 +234,76 @@
 .view-item-navigation a.item-link.hidden {
   visibility: hidden;
 }
+
+/* Browse All */
+.content .browse-materials {
+  background: #f3f7f8;
+  border: 1px #bccacd;
+  border-style: none solid solid solid;
+}
+
+.content .browse-materials table {
+  margin-bottom: 10px;
+}
+
+.content .browse-materials thead th {
+  background: #f3f7f8 url(../images/box-header-bg.png) repeat-x 0% 0%;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 7px 0 14px 0;
+}
+
+.content .browse-materials  th a, .content .browse-materials  th a:visited {
+  color: white;
+}
+
+.content .browse-materials  th.sep {
+  background: #f3f7f8 url(../images/box-header-sep.png) no-repeat 0% 0%;
+}
+
+.content .browse-materials  th.sep div {
+  width: 11px;
+}
+
+.content .browse-materials  td {
+  padding: 0;
+}
+
+.content .browse-materials  ul {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.content .browse-materials  li {
+  margin: 7px 15px;
+  font-size: 13px;
+  color: #2683a5;
+  font-weight: bold;
+  list-style-type: none;
+}
+
+.content .browse-materials  li a, .content .browse-materials  li a:visited {
+  text-decoration: none;
+  color: #2683a5;
+}
+
+.content .browse-materials  li span {
+  float: right;
+}
+
+.content .browse-materials td.sep {
+  background: #f3f7f8 url(../images/browse-table-column-sep.png)
+  repeat-y 0% 0%;
+}
+
+.content .browse-materials td.sep div, .content .browse-materials  td.nosep div {
+  width: 11px;
+}
+
+.content .browse-materials.providers li {
+  font-size: 11px;
+  margin: 7px 10px;
+  list-style-type: none;
+}

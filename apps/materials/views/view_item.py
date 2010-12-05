@@ -33,7 +33,7 @@ def view_item(request, slug=None, model=None):
     if namespace:
         add_tags_url = reverse("materials:%s:add_tags" % namespace, kwargs=dict(slug=item.slug))
 
-
+    microsite = None
     came_from_index = False
 
     prev_item_url = u""
@@ -57,6 +57,7 @@ def view_item(request, slug=None, model=None):
         query = SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE)
 
         index_model = kwargs.get("model")
+        microsite = kwargs.get("microsite")
 
         if index_model:
             query = query.models(index_model)

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load materials_tags %}
+
+
+{% block column-left %}
+
+  <div class="portlet browse-materials">
+    <a href="{% url materials:browse %}">Browse OER Materials</a>
+  </div>
+
+  <div class="portlet featured-provider">
+  <h4 class="dotted">Featured Collection Provider</h4>
+  <dl>
+    <dt><a href="/browse/collection/stories-of-the-american-south">Stories of the American South</a></dt>
+    <dd>The library of the University of North Carolina at Chapel Hill presents Stories of the American South.</dd>
+  </dl>
+</div></div>
+{% endblock %}
+
+
+{% block content %}
+<div class="browse-materials providers">
+  <table cellspacing="0" border="0" width="100%">
+    <thead><tr>
+      <th width="50%">Course Related Materials</th>
+      <th class="sep"><div></div></th>
+      <th width="50%">Libraries and Collections</th>
+    </tr></thead>
+    <tbody><tr>
+      <td>
+        <ul>
+          {% for item in course_collections %}
+          <li>
+            <span>({{ item.count }})</span>
+            <a href="{% url materials:courses:collection_index collection=item.slug %}">{{ item.name }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </td>
+      <td class="sep"> </td>
+      <td>
+        <ul>
+          {% for item in library_collections %}
+          <li>
+            <span>({{ item.count }})</span>
+            <a href="{% url materials:libraries:collection_index collection=item.slug %}">{{ item.name }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+</div>
+{% endblock %}

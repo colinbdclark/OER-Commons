@@ -1,3 +1,7 @@
+.portlet {
+  margin-bottom: 10px;
+}
+
 .portlet a {
   text-decoration: none;
 }
@@ -126,4 +130,37 @@
 
 .portlet.cou ul {
   list-style-type: none;
+}
+
+.portlet.featured-searches ul {
+  list-style-type: none;
+}
+
+.portlet.browse-providers,
+.portlet.browse-materials
+ {
+  margin-bottom: 20px;
+}
+
+.portlet.browse-providers a,
+.portlet.browse-materials a
+ {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.portlet.featured-searches li {
+  font-size: 13px;
+  font-weight: bold;
+  margin: 7px 0px;
+}
+
+.portlet.featured-provider dt {
+  font-size: 13px;
+  font-weight: bold;
+  margin: 5px 0px;
+}
+
+.portlet.featured-provider dd {
+  font-size: 13px;
 }
