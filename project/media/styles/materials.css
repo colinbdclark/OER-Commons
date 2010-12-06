@@ -308,6 +308,15 @@
   list-style-type: none;
 }
 
+.csv-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: url(../images/csv-icon.png) no-repeat 0 0;
+  text-indent: -9999px;
+  margin-top: 2px;
+}
+
 .rss-icon {
   display: block;
   width: 16px;
@@ -316,3 +325,4 @@
   text-indent: -9999px;
   margin-top: 2px;
 }
+

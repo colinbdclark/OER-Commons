@@ -12,6 +12,7 @@ from tags.utils import get_tag_cloud
 import urllib
 from tags.models import Tag
 from django.http import Http404
+from materials.views.csv_export import csv_export
 
 
 BATCH_SIZE_OPTIONS = (
@@ -382,5 +383,9 @@ def index(request, general_subjects=None, grade_levels=None,
                                   "text/xml")
 
     elif format == "csv":
-        return None
+        if page_subtitle:
+            title = "%s: %s" % (page_title, page_subtitle)
+        else:
+            title = page_title
+        return csv_export(query, title)
 
