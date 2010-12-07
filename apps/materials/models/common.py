@@ -1,6 +1,7 @@
 from autoslug.fields import AutoSlugField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+import re
 
 
 COU_BUCKETS = (
@@ -8,6 +9,33 @@ COU_BUCKETS = (
    (u"remix-and-share", _(u"Remix and Share")),
    (u"share-only", _(u"Share Only")),
    (u"read-the-fine-print", _(u"Read the Fine Print")),
+)
+
+
+CC_LICENSE_URL_RE = re.compile(r"^http://(www\.)?creativecommons\.org/licenses/(?P<cc_type>nc-sa|by|by-sa|by-nd|by-nc|by-nc-sa|by-nc-nd)/[0-9]\.[0-9]/?$", re.I)
+PUBLIC_DOMAIN_URL_RE = re.compile(r"^http://creativecommons.org/licenses/publicdomain/?$", re.I)
+GNU_FDL_URL_RE = re.compile(r"^http://www.gnu.org/licenses/fdl.txt$", re.I)
+
+
+LICENSE_TYPES = (
+    (u"cc-nc-sa", u"CC Noncommercial-Share Alike"),
+    (u"cc-by", u"CC Attribution"),
+    (u"cc-by-sa", u"CC Attribution-Share Alike"),
+    (u"cc-by-nd", u"CC Attribution-No Derivative Works"),
+    (u"cc-by-nc", u"CC Attribution-Noncommercial"),
+    (u"cc-by-nc-sa", u"CC Attribution-Noncommercial-Share Alike"),
+    (u"cc-by-nc-nd", u"CC Attribution-Noncommercial-No Derivative Works"),
+    (u"public-domain", u"Public Domain"),
+    (u"gnu-fdl", u"GNU FDL"),
+    (u"custom", u"Custom"),
+)
+
+
+LICENSE_HIERARCHY = (
+    (u"no-strings-attached", ("cc-by", "public-domain")),
+    (u"remix-and-share", ("cc-by-sa", "cc-by-nc", "cc-by-nc-sa", "cc-nc-sa", "gnu-fdl")),
+    (u"share-only", ("cc-by-nd", "cc-by-nc-nd")),
+    (u"read-the-fine-print", ()),
 )
 
 
@@ -38,8 +66,13 @@ class License(models.Model):
 
     @property
     def type(self):
-        # TODO: fix this
-        return self.name
+        if CC_LICENSE_URL_RE.match(self.url):
+            return "cc-" + CC_LICENSE_URL_RE.groupdict(self.url)["cc_type"]
+        if PUBLIC_DOMAIN_URL_RE.match(self.url):
+            return "public-domain"
+        if GNU_FDL_URL_RE.match(self.url):
+            return "gnu-fdl"
+        return "custom"
 
     @property
     def image(self):

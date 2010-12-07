@@ -43,7 +43,7 @@
     <form action="{% url materials:search %}" method="get">
       <input type="text" name="f.search" value="Enter Search" class="text">
       <input type="submit" value="Search" class="button">
-      <input type="button" onclick="window.location='{% url materials_advanced_search %}'" value="Advanced Search" class="button"> 
+      <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button"> 
     </form>
   </div>  
 </div>

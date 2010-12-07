@@ -26,7 +26,6 @@ urlpatterns += patterns('',
     url(r'^information$', "project.views.frontpage", name="information"),
     url(r'^contribute$', "project.views.frontpage", name="contribute"),
     url(r'^my$', "project.views.frontpage", name="user_items"), # TODO! Set up redirect /portfolio -> /my
-    url(r'^advanced-search$', "project.views.frontpage", name="materials_advanced_search"),
     url(r'^(?P<microsite>[^/]+)$', "project.views.frontpage", name="microsite"),
 )
 

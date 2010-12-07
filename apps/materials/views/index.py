@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponsePermanentRedirect
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import GeneralSubject, GradeLevel, Collection, \
@@ -7,12 +8,12 @@ from materials.models.community import CommunityItem
 from materials.models.material import PUBLISHED_STATE
 from materials.utils import get_name_from_id, get_slug_from_id, \
     first_neighbours_last, get_name_from_slug
+from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
+from tags.models import Tag
 from tags.utils import get_tag_cloud
 import urllib
-from tags.models import Tag
-from django.http import Http404
-from materials.views.csv_export import csv_export
+from django.contrib import messages
 
 
 BATCH_SIZE_OPTIONS = (
@@ -101,7 +102,7 @@ BASIC_INDEX_FILTERS = (
   ("grade_levels", False,),
   ("course_material_types", True,),
   ("media_formats", True,),
-  (u"cou_bucket", True),
+  ("cou_bucket", True),
 )
 
 
@@ -222,7 +223,15 @@ def index(request, general_subjects=None, grade_levels=None,
             if filter_name == "search":
                 search_query = value
 
+
     if search:
+        if not search_query:
+            if filter_values:
+                return HttpResponsePermanentRedirect(reverse("materials:index") + "?" + serialize_query_string_params(query_string_params))
+            else:
+                messages.warning(request, u"You should specify the search term")
+                return HttpResponsePermanentRedirect(reverse("materials:advanced_search"))
+
         page_title = "Search"
         page_subtitle = search_query
         breadcrumbs = [{"url": reverse("materials:search"), "title": u"Search"}]
@@ -230,11 +239,16 @@ def index(request, general_subjects=None, grade_levels=None,
     elif model == CommunityItem:
         breadcrumbs = [{"url": reverse("materials:community"), "title": u"OER Community"}]
 
+
     if microsite:
         breadcrumbs = [{"url": reverse("microsite", kwargs=dict(microsite=microsite)), "title": microsite}] + breadcrumbs
 
     if not page_subtitle and model:
         page_subtitle = u"Content Type: %s" % model._meta.verbose_name_plural
+    elif not page_subtitle and filter_values:
+        filter_name = filter_values.keys()[0]
+        filter = FILTERS[filter_name]
+        page_subtitle = filter.page_subtitle(filter_values[filter_name])
 
     try:
         batch_start = int(request.REQUEST.get("batch_start", 0))

@@ -76,5 +76,6 @@ urlpatterns = patterns('materials.views',
     url(r"^community/?$", "browse.community", name="community"),
     url(r"^community", include(community_patterns, app_name="materials", namespace="community"), {"model": CommunityItem}),
     url(r"^(?P<microsite>[^/]+)/browse", include(microsite_browse_patterns)),
+    url(r"^advanced-search/?$", "advanced_search.advanced_search", name="advanced_search"),
 )
 

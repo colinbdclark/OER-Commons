@@ -53,7 +53,7 @@
       <div class="column-main">
         {% include "include/status-messages.html" %}
   
-        <div class="content">
+        <div class="content {% block contentclass %}{% endblock %}">
           {% block content %}
           {% endblock %}
         </div>

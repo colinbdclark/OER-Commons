@@ -2,7 +2,8 @@ from materials.utils import get_name_from_slug
 from django.http import Http404
 from materials.models.course import COURSE_OR_MODULE, CourseMaterialType
 from materials.models.common import Keyword, GeneralSubject, GradeLevel, \
-    MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS
+    MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS, \
+    LICENSE_TYPES
 from tags.models import Tag
 import re
 from materials.models.library import LibraryMaterialType
@@ -39,6 +40,7 @@ class VocabularyFilter(Filter):
 
     def extract_value(self, request):
         value = request.REQUEST.getlist(self.request_name)
+        value = [v.strip() for v in value if v.strip()]
         if not value:
             return None
         return value
@@ -64,6 +66,8 @@ class VocabularyFilter(Filter):
         return query_string_params
 
     def page_subtitle(self, value):
+        if isinstance(value, list):
+            return u"%s: %s" % (self.title, u", ".join([get_name_from_slug(self.model, v) for v in value]))
         return u"%s: %s" % (self.title, get_name_from_slug(self.model, value))
 
 
@@ -81,6 +85,7 @@ class ChoicesFilter(Filter):
 
     def extract_value(self, request):
         value = request.REQUEST.getlist(self.request_name)
+        value = [v.strip() for v in value if v.strip()]
         if not value:
             return None
         return value
@@ -104,7 +109,10 @@ class ChoicesFilter(Filter):
         return query_string_params
 
     def page_subtitle(self, value):
-        return u"%s: %s" % (self.title, dict(self.choices)[value])
+        choices_dict = dict(self.choices)
+        if isinstance(value, list):
+            return u"%s: %s" % (self.title, u", ".join([unicode(choices_dict[v]) for v in value]))
+        return u"%s: %s" % (self.title, choices_dict[value])
 
 
 class BooleanFilter(Filter):
@@ -239,7 +247,14 @@ class SearchFilter(Filter):
                        "collection_name", "institution_name", "authors"]
 
     def extract_value(self, request):
-        value = SearchParameters(raw_query=request.REQUEST.get("f.search", u""))
+        any_words = request.REQUEST.get("f.search.any", u"").split()
+        exclude_words = request.REQUEST.get("f.search.exclude", u"").split()
+        exact_phrases = request.REQUEST.get("f.search.exact", u"").replace(u'"', u"").strip()
+        exact_phrases = exact_phrases and [exact_phrases] or []
+        value = SearchParameters(raw_query=request.REQUEST.get("f.search", u""),
+                                 any_words=any_words,
+                                 exclude_words=exclude_words,
+                                 exact_phrases=exact_phrases)
         if not value:
             return None
         return value
@@ -291,6 +306,7 @@ FILTERS = {
     "community_topics": VocabularyFilter("community_topics", "f.oer_topic", CommunityTopic, u"OER Community Topic"),
     "course_or_module": ChoicesFilter("course_or_module", "f.course_or_module", COURSE_OR_MODULE, u"Course Type"),
     "cou_bucket": ChoicesFilter("cou_bucket", "f.cou_bucket", COU_BUCKETS, u"Conditions of Use"),
+    "license_type": ChoicesFilter("license_type", "f.license", LICENSE_TYPES, u"Conditions of Use"),
     "member_activities": ChoicesFilter("member_activities", "f.member_activity", MEMBER_ACTIVITY_TYPES, u"Member Activity"),
     "ocw": BooleanFilter("ocw", "f.is_ocw", u"OpenCourseWare"),
     "collection": VocabularyFilter("collection", "f.collection", Collection, u"Collection"),

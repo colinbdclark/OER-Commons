@@ -1,5 +1,5 @@
 $( function() {
-    var searchbox = $(".search-box input[name='f.search']");
+    var searchbox = $("#header .search-box input[name='f.search']");
     searchbox.focus( function() {
         if (this.value == "Enter Search")
             this.value = "";

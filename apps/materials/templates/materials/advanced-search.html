@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% load materials_tags %}
+
+{% block above-content %}{% endblock %}
+
+{% block contentclass %}advanced-search{% endblock %}
+
+{% block column-left %}
+  <div class="portlet advanced-search">
+    <p>Enter one or more Keywords then click the Search button.</p>
+    <br/>
+    <p>You may also refine your search further by choosing additional criteria
+    from the list below before clicking on Search</p> 
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="search-box">
+    <h3>Search Resources</h3>
+    <form method="post" action="{% url materials:search %}">
+    <input type="image" class="searchbutton" src="{{ STATIC_URL }}images/advancedsearch-searchbox-btn.png">
+    <input type="text" name="f.search" class="text">
+    {% with filters.general_subjects as filter %}
+    <select name="{{ filter.request_name }}">
+      <option value="">All Subject Areas</option>
+      {% for option in filter.options %}
+        <option value="{{ option.slug }}">{{ option.name }}</option>
+      {% endfor %}
+    </select>
+    {% endwith %}
+    {% with filters.grade_levels as filter %}
+    <select name="{{ filter.request_name }}">
+      <option value="">All Grade Levels</option>
+      {% for option in filter.options %}
+        <option value="{{ option.slug }}">{{ option.name }}</option>
+      {% endfor %}
+    </select>
+    {% endwith %}
+    {% with filters.cou_bucket as filter %}
+    <select name="{{ filter.request_name }}">
+      <option value="">All Conditions of Use</option>
+      {% for option in filter.options %}
+        <option value="{{ option.slug }}">{{ option.name }}</option>
+      {% endfor %}
+    </select>
+    {% endwith %}
+    </form>
+  </div>
+
+  <form method="get" name="advanced-search" action="{% url materials:search %}" class="clear">
+    <div class="box search-by-keyword">
+      <h3>Search By Keyword</h3>
+      <label for="f.search">Match <strong>all</strong> of the words</label>
+      <input type="text" class="text" name="f.search" size="33" id="f.search">
+      <label for="f.search.exact">Match <strong>the exact phrase</strong></label>
+      <input type="text" class="text" name="f.search.exact" size="33" id="f.search.exact">
+      <label for="f.search.any">Match <strong>at least one</strong> of the words</label>
+      <input type="text" class="text" name="f.search.any" size="33" id="f.search.any">
+      <label for="f.search.exclude"><strong>Exclude</strong> the words</label>
+      <input type="text" class="text" name="f.search.exclude" size="33" id="f.search.exclude">
+      <div class="clear"></div>
+      <div class="buttons">
+        <input type="image" src="{{ STATIC_URL }}images/search-btn.png" />
+      </div>
+    </div>
+      
+    <div class="box filters">
+      <h3>Additional Search Criteria</h3>
+      <div class="languages">
+        {% with filters.languages as filter %}
+        <label for="{{ filter.request_name }}">Search by Language</label>
+        <select name="{{ filter.request_name }}" id="{{ filter.request_name }}">
+          <option value="">Any Language</option>
+          {% for option in filter.options %}
+          <option value="{{ option.slug }}">{{ option.name }}</option>
+          {% endfor %}
+        </select>
+        {% endwith %}
+      </div>
+      <table><tbody><tr>
+        <td width="50%">
+        {% with filters.general_subjects as filter %}
+          {% if filter.options %}
+          <dl class="filter collapsible">
+            <dt>
+               <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+               <input type="checkbox" name="{{ filter.name }}"
+                      id="{{ filter.name }}" value="yes" />
+               <label for="{{ filter.name }}">{{ filter.title }}</label>
+            </dt>
+            {% for option in filter.options %}
+            <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <input type="checkbox" name="{{ filter.request_name }}"
+                      id="{{ option.input_id }}" value="{{ option.slug }}" />
+               <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+            </dd>
+            {% endfor %}
+          </dl>
+          {% endif %}
+        {% endwith %}
+        
+        {% with filters.course_material_types as filter %}
+          {% if filter.options %}
+          <dl class="filter collapsible">
+            <dt>
+               <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+               <input type="checkbox" name="{{ filter.name }}"
+                      id="{{ filter.name }}" value="yes" />
+               <label for="{{ filter.name }}">{{ filter.title }}</label>
+            </dt>
+            {% for option in filter.options %}
+            <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <input type="checkbox" name="{{ filter.request_name }}"
+                      id="{{ option.input_id }}" value="{{ option.slug }}" />
+               <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+            </dd>
+            {% endfor %}
+          </dl>
+          {% endif %}
+        {% endwith %}
+
+        {% with filters.course_or_module as filter %}
+          {% if filter.options %}
+          <dl class="filter collapsible">
+            <dt>
+               <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+               <input type="checkbox" name="{{ filter.name }}"
+                      id="{{ filter.name }}" value="yes" />
+               <label for="{{ filter.name }}">Course-Related Materials</label>
+            </dt>
+            {% for option in filter.options %}
+            <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <input type="checkbox" name="{{ filter.request_name }}"
+                      id="{{ option.input_id }}" value="{{ option.slug }}" />
+               <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+            </dd>
+            {% endfor %}
+          </dl>
+          {% endif %}
+        {% endwith %}
+
+        {% with filters.member_activities as filter %}
+          {% if filter.options %}
+          <dl class="filter collapsible">
+            <dt>
+               <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+               <input type="checkbox" name="{{ filter.name }}"
+                      id="{{ filter.name }}" value="yes" />
+               <label for="{{ filter.name }}">{{ filter.title }}</label>
+            </dt>
+            {% for option in filter.options %}
+            <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <input type="checkbox" name="{{ filter.request_name }}"
+                      id="{{ option.input_id }}" value="{{ option.slug }}" />
+               <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+            </dd>
+            {% endfor %}
+          </dl>
+          {% endif %}
+        {% endwith %}
+        
+       </td>
+       <td width="50%">
+
+        {% with filters.grade_levels as filter %}
+          {% if filter.options %}
+          <dl class="filter collapsible">
+            <dt>
+               <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+               <input type="checkbox" name="{{ filter.name }}"
+                      id="{{ filter.name }}" value="yes" />
+               <label for="{{ filter.name }}">{{ filter.title }}</label>
+            </dt>
+            {% for option in filter.options %}
+            <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <input type="checkbox" name="{{ filter.request_name }}"
+                      id="{{ option.input_id }}" value="{{ option.slug }}" />
+               <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+            </dd>
+            {% endfor %}
+          </dl>
+          {% endif %}
+        {% endwith %}
+
+        {% with filters.media_formats as filter %}
+          {% if filter.options %}
+          <dl class="filter collapsible">
+            <dt>
+               <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+               <input type="checkbox" name="{{ filter.name }}"
+                      id="{{ filter.name }}" value="yes" />
+               <label for="{{ filter.name }}">{{ filter.title }}</label>
+            </dt>
+            {% for option in filter.options %}
+            <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <input type="checkbox" name="{{ filter.request_name }}"
+                      id="{{ option.input_id }}" value="{{ option.slug }}" />
+               <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+            </dd>
+            {% endfor %}
+          </dl>
+          {% endif %}
+        {% endwith %}
+
+        {% with filters.library_material_types as filter %}
+          {% if filter.options %}
+          <dl class="filter collapsible">
+            <dt>
+               <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+               <input type="checkbox" name="{{ filter.name }}"
+                      id="{{ filter.name }}" value="yes" />
+               <label for="{{ filter.name }}">Libraries &amp; Collections</label>
+            </dt>
+            {% for option in filter.options %}
+            <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <input type="checkbox" name="{{ filter.request_name }}"
+                      id="{{ option.input_id }}" value="{{ option.slug }}" />
+               <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+            </dd>
+            {% endfor %}
+          </dl>
+          {% endif %}
+        {% endwith %}
+
+          {% with filters.cou_bucket as filter %}
+            {% if filter.options %}
+            <dl class="filter collapsible">
+              <dt>
+                 <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+                 <input type="checkbox" name="{{ filter.name }}"
+                        id="{{ filter.name }}" value="yes" />
+                 <label for="{{ filter.name }}">{{ filter.title }}</label>
+              </dt>
+              {% for option in filter.options %}
+              <dd class="{% if option.options %}collapsible {% endif %}{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+                 {% if option.options %}
+                   <a href="#" class="expand-button collapsed"></a>
+                 {% endif %}
+                 <input type="checkbox" name="{{ filter.request_name }}"
+                        id="{{ option.input_id }}" value="{{ option.slug }}" />
+                 <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+                 {% if option.options %}
+                 <ul class="collapsed">
+                   {% for sub_option in option.options %}
+                     <li>
+                     <input type="checkbox" name="{{ filter.sub_optoin_request_name }}"
+                            id="{{ sub_option.input_id }}" value="{{ sub_option.slug }}" />
+                     <label title="{{ sub_option.name }}" for="{{ sub_option.input_id }}">{{ sub_option.name|shrink:50 }}</label>
+                     </li>
+                   {% endfor %}
+                 </ul>
+                 {% endif %}
+              </dd>
+              {% endfor %}
+            </dl>
+            {% endif %}
+          {% endwith %}
+
+          {% with filters.community_types as filter %}
+            {% if filter.options %}
+            <dl class="filter collapsible">
+              <dt>
+                 <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+                 <input type="checkbox" name="{{ filter.name }}"
+                        id="{{ filter.name }}" value="yes" />
+                 <label for="{{ filter.name }}">{{ filter.title }}</label>
+              </dt>
+              {% for option in filter.options %}
+              <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+                 <input type="checkbox" name="{{ filter.request_name }}"
+                        id="{{ option.input_id }}" value="{{ option.slug }}" />
+                 <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+              </dd>
+              {% endfor %}
+            </dl>
+            {% endif %}
+          {% endwith %}
+              
+          {% with filters.community_topics as filter %}
+            {% if filter.options %}
+            <dl class="filter collapsible">
+              <dt>
+                 <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+                 <input type="checkbox" name="{{ filter.name }}"
+                        id="{{ filter.name }}" value="yes" />
+                 <label for="{{ filter.name }}">{{ filter.title }}</label>
+              </dt>
+              {% for option in filter.options %}
+              <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+                 <input type="checkbox" name="{{ filter.request_name }}"
+                        id="{{ option.input_id }}" value="{{ option.slug }}" />
+                 <label title="{{ option.name }}" for="{{ option.input_id }}">{{ option.name|shrink:30 }}</label>
+              </dd>
+              {% endfor %}
+            </dl>
+            {% endif %}
+          {% endwith %}
+              
+        </td>
+        </tr></tbody></table>
+        <div class="buttons">
+          <input type="image" src="{{ STATIC_URL }}images/search-btn.png">
+        </div>
+      </div>
+    </form>    
+    
+{% endblock %}

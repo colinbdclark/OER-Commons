@@ -164,3 +164,17 @@
 .portlet.featured-provider dd {
   font-size: 13px;
 }
+
+.portlet.advanced-search {
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  background: #F2F8F8;
+  color: #1a5565;
+  border: solid #B5CDD9;
+  border-width: 2px 1px;
+}
+
+.portlet.advanced-search p {
+  margin: 5px 0;
+}

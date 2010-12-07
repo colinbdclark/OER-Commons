@@ -136,21 +136,25 @@
   margin-bottom: 10px;
 }
 
-.index-filters .filter input {
+.index-filters .filter input,
+.advanced-search .filter input {
   float: left;
   display: block;
 }
 
-.index-filters .filter label {
+.index-filters .filter label,
+.advanced-search .filter label {
   display: block;
 }
 
-.index-filters .filter dd {
+.index-filters .filter dd,
+.advanced-search .filter dd {
   clear: both;
   margin-left: 16px;
 }
 
-.index-filters .filter dt label {
+.index-filters .filter dt label,
+.advanced-search .filter dt label {
   color: #666;
   font-size: 13px;
   font-weight: bold;
@@ -171,7 +175,14 @@
   overflow: hidden;
 }
 
-.index-filters .filter dd.collapsed {
+.advanced-search .filter dd label {
+  margin-left: 20px;
+}
+
+.index-filters .filter dd.collapsed,
+.index-filters .filter ul.collapsed,
+.advanced-search .filter dd.collapsed,
+.advanced-search .filter ul.collapsed {
   display: none;
 }
 
@@ -326,3 +337,102 @@
   margin-top: 2px;
 }
 
+.advanced-search .search-box {
+  background: #0c5671 url(../images/advancedsearch-searchbox-bg.png) repeat-x 0% 0%;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.advanced-search .search-box h3 {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  font-style: normal;
+  margin-bottom: 10px;
+}
+
+.advanced-search .search-box input.searchbutton {
+  float: right;
+}
+
+.advanced-search .search-box input.text {
+  width: 452px;
+  border: 1px solid #9d9d9d;
+  margin-bottom: 7px;
+}
+
+.advanced-search .search-box select {
+  width: 147px;
+  margin-right: 5px;
+}
+
+.box.search-by-keyword label {
+  display: block;
+  float: left;
+  clear: both;
+  color: #1A5565;
+  font-size: 13px;
+  margin-top: 10px;
+  margin-left: 13px;
+}
+
+.box.search-by-keyword input.text {
+  float: right;
+  margin-top: 10px;
+  margin-right: 13px;
+}
+
+.box.search-by-keyword .buttons,
+.box.filters .buttons {
+  text-align: right;
+  margin: 10px;
+}
+
+.advanced-search .filters .languages {
+  margin: 5px 13px 20px 13px;
+}
+
+.advanced-search .filters .languages label {
+  color: #1A5565;
+  font-size: 14px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.advanced-search .filters table {
+  margin-left: 13px;
+  margin-right 13px;
+  width: 530px;
+}
+
+.advanced-search .filter dt label {
+  color: #1A5565;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.advanced-search .filter dt {
+  margin-bottom: 2px;
+}
+
+.advanced-search .filter dd label {
+  color: #333;
+  font-size: 13px;
+}
+
+.advanced-search .filter dd.collapsible {
+  margin-left: 17px;
+}
+
+.advanced-search .filter dd.collapsible ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.advanced-search .filter dd.collapsible li {
+  margin: 0;
+  padding: 0;
+  clear: both;
+  margin-left: 16px;
+}
