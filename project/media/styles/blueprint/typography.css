@@ -14,6 +14,13 @@ body {
   line-height: 1.25;
 }
 
+strong      { font-weight: bold; }
+em,
+dfn      { font-style: italic; }
+dfn         { font-weight: bold; }
+sup,
+sub    { line-height: 0; }
+
 
 /* Headings
 -------------------------------------------------------------- */
@@ -40,12 +47,6 @@ body {
 .content p img.right { float: right; margin: 1.5em 0 1.5em 1.5em; }
 
 .content blockquote  { margin: 1.5em; color: #666; font-style: italic; }
-.content strong      { font-weight: bold; }
-.content em,
-.content dfn      { font-style: italic; }
-.content dfn         { font-weight: bold; }
-.content sup,
-.content sub    { line-height: 0; }
 
 .content abbr,
 .content acronym     { border-bottom: 1px dotted #666; }

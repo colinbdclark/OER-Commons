@@ -1,7 +1,12 @@
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.core.mail.message import EmailMessage
+from django.core.urlresolvers import reverse
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import GradeLevel
+from users.backend import encrypt_password
 
 
 MEMBER_ROLES = (
@@ -58,3 +63,82 @@ class Profile(models.Model):
 
     role = models.CharField(max_length=20, blank=True, choices=MEMBER_ROLES,
                             verbose_name=_(u"Role"))
+
+
+def gen_confirmation_key():
+    return User.objects.make_random_password(length=20)
+
+
+class RegistrationConfirmation(models.Model):
+
+    user = models.OneToOneField(User)
+    key = models.CharField(max_length=20, unique=True)
+    confirmed = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.user.username
+
+    def save(self, *args, **kwargs):
+        if not self.key:
+            key = gen_confirmation_key()
+            while RegistrationConfirmation.objects.filter(key=key).count():
+                key = gen_confirmation_key()
+            self.key = key
+        super(RegistrationConfirmation, self).save(*args, **kwargs)
+
+    def send_confirmation(self):
+        url = reverse("users:registration_confirm")
+        url = "http://%s%s" % (Site.objects.get_current().domain, url)
+        body = render_to_string("users/emails/registration-confirmation.html",
+                                   dict(url=url, key=self.key, user=self.user))
+        message = EmailMessage(u"Confirm your registration at OER Commons",
+                               body, None, [self.user.email])
+        message.content_subtype = "html"
+        message.send()
+
+    def confirm(self):
+        if self.confirmed:
+            return False
+        self.user.is_active = True
+        self.user.save()
+        self.confirmed = True
+        self.save()
+        return True
+
+
+class ResetPasswordConfirmation(models.Model):
+
+    user = models.OneToOneField(User)
+    key = models.CharField(max_length=20, unique=True,
+                           default=gen_confirmation_key)
+    confirmed = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.key:
+            key = gen_confirmation_key()
+            while ResetPasswordConfirmation.objects.filter(key=key).count():
+                key = gen_confirmation_key()
+            self.key = key
+        super(ResetPasswordConfirmation, self).save(*args, **kwargs)
+
+
+    def send_confirmation(self):
+        url = reverse("users:reset_password", kwargs=dict(key=self.key))
+        url = "http://%s%s" % (Site.objects.get_current().domain, url)
+        body = render_to_string("users/emails/reset-password-confirmation.html",
+                                   dict(url=url, user=self.user))
+        message = EmailMessage(u"Reset your OER Commons password",
+                               body, None, [self.user.email])
+        message.content_subtype = "html"
+        message.send()
+
+    def confirm(self, password):
+        if self.confirmed:
+            return False
+        self.user.password = encrypt_password(password)
+        self.user.save()
+        self.confirmed = True
+        self.save()
+        return True

@@ -1,7 +1,7 @@
 {% if messages %}
   {% for message in messages %}
     <div class="status-message{% if message.tags %} {{ message.tags }}{% endif %}">
-      {{ message }}
+      {{ message|safe }}
     </div>
   {% endfor %}
 {% endif %}

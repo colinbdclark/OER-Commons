@@ -7,18 +7,18 @@
     <ul class="header-links">
       {% if request.user.is_anonymous %}
         <li>
-          <a href="{% url registration %}">Register Now!</a>
+          <a href="{% url users:registration %}">Register Now!</a>
         </li>
         <li>
-          <a href="{% url auth_login %}">Log In</a>
+          <a href="{% url users:login %}">Log In</a>
         </li>
       {% endif %}
       {% if request.user.is_authenticated %}
         <li>
-          <a href="{% url profile_edit %}">My Profile</a>
+          <a href="{% url users:profile %}">My Profile</a>
         </li>
         <li>
-          <a href="{% url auth_logout %}">Logout</a>
+          <a href="{% url users:logout %}">Logout</a>
         </li>
       {% endif %}
       <li>

@@ -14,6 +14,13 @@ a.dashed {
   border-bottom-style: dashed;
 }
 
+hr.tall {
+  margin: 20px 0;
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: #ccc;
+}
+
 .clear {
   clear: both;
 }
@@ -45,6 +52,16 @@ a.dashed {
 
 .page-title span {
   color: #666;
+}
+
+.status-message {
+  background-color: #FC6;
+  border: 1px solid #A88743;
+  color: #544322;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding: 10px;
 }
 
 .ui-widget {

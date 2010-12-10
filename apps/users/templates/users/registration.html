@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+  <form method="post" class="formatted" name="registration" action="{% url users:registration %}">
+    {% for field in form %}
+      {% include "include/form-field.html" %}
+    {% endfor %}
+    <div class="buttons">
+      <input type="submit" class="button" value="Register" />
+    </div>
+  </form>
+{% endblock %}

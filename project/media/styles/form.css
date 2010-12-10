@@ -1,17 +1,136 @@
 input.text, textarea.text {
-    background:none;
-    background-color:#fff;
-    border:1px solid #9D9D9D;
-    font-size:14px;
-    padding:1px 2px;
+  background:none;
+  background-color:#fff;
+  border:1px solid #9D9D9D;
+  font-size:14px;
+  padding:1px 2px;
+  margin: 3px 0;
 }
+
 input.button {
-    background:url(../images/button-bg.png) repeat-x scroll 0 0 #DADADA;
-    border:1px solid #799BA5;
-    color:#0D5470;
-    font-size:14px;
-    overflow:visible;
-    padding:0 10px;
-    line-height: 20px;
-    width:auto;
+  background:url(../images/button-bg.png) repeat-x scroll 0 0 #DADADA;
+  border:1px solid #799BA5;
+  color:#0D5470;
+  font-size:14px;
+  overflow:visible;
+  padding:0 10px;
+  line-height: 20px;
+  width:auto;
+}
+
+form.formatted .field {
+  margin-bottom: 10px;
+}
+
+form.formatted label {
+  color: #333;
+  font-size: 11px;
+  padding-top: 3px;
+  font-weight: bold;
+  margin-bottom: 3px;
+  margin-top: 5px;
+}
+
+form.formatted .required label {
+  padding-right: 12px;
+  background: url(../images/asterisk.gif) no-repeat 100% 0;
+}
+
+form.formatted .help {
+  color: #666;
+  font-size: 11px;
+  font-style: italic;
+  margin-bottom: 3px;
+}
+
+form.formatted .errors span {
+  color: red;
+  display: block;
+}
+
+form.formatted .buttons {
+  text-align: right;
+}
+
+form.reset-password-init {
+  width: 300px;
+  margin: 0 auto;
+}
+
+form.reset-password-init input.text {
+  width: 292px;
+}
+
+form.reset-password,
+form.change-password {
+  width: 200px;
+  margin: 0 auto;
+}
+
+form.reset-password input.text,
+form.change-password input.text {
+  width: 192px;
+}
+
+form.login {
+  width: 230px;
+  margin: 0 auto;
+}
+
+form.login input.text {
+  width: 222px;
+}
+
+form.login a {
+  text-decoration: none;  
+}
+
+form.login p {
+  font-size: 12px;
+}
+
+form.login .buttons a {
+  display: block;
+  float: left;
+  font-size: 12px;
+  margin-top: 7px;
+}
+
+form.registration-confirm {
+  margin: 0 auto;
+  width: 230px;
+}
+
+form.registration-confirm input.text {
+  width: 222px;
+}
+
+form.profile input.text {
+  width: 550px;
+}
+
+form.profile textarea.text {
+  width: 550px;
+  resize: none;
+  height: 75px;
+}
+
+form.profile ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-top: 3px;
+}
+
+form.profile li {
+  margin: 1px 0;
+  padding: 0;
+}
+
+form.profile a {
+  text-decoration: none;
+}
+
+form.profile .change-password-link {
+  text-align: right;
 }

@@ -18,7 +18,7 @@ class Tag(models.Model):
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     def __unicode__(self):
-        return self.tag
+        return self.name
 
     class Meta:
         verbose_name = _(u"Tag")

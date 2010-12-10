@@ -2,6 +2,8 @@ import os
 
 INTERNAL_IPS = ('127.0.0.1',)
 
+DEFAULT_FROM_EMAIL = "info@oercommons.org"
+
 TIME_ZONE = 'America/Chicago'
 
 LANGUAGE_CODE = 'en'
@@ -43,6 +45,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
@@ -88,6 +91,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "staticfiles.context_processors.static_url",
 )
+
+
+AUTHENTICATION_BACKENDS = (
+    'users.backend.BcryptBackend',
+)
+
+REDIRECT_FIELD_NAME = "came_from"
 
 SITE_ID = 1
 
