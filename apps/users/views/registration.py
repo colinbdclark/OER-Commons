@@ -72,8 +72,6 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError(u"The two emails do not match.")
         return confirm_email
 
-    # TODO: jquery.validation
-
 
 class ConfirmationForm(forms.Form):
 

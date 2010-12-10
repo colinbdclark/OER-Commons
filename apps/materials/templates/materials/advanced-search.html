@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% load materials_tags %}
 
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.advanced_search.init();
+    });
+  </script>
+{% endblock %}
+
 {% block above-content %}{% endblock %}
 
 {% block contentclass %}advanced-search{% endblock %}

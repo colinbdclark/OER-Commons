@@ -1,0 +1,2 @@
+var oer = {};
+oer.materials = {};

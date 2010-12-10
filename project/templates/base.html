@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+{% load compress %}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ request.LANGUAGE_CODE }}" lang="{{ request.LANGUAGE_CODE }}">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -10,7 +10,9 @@
     {% include "include/css.html" %}
     {% block extra-css %}{% endblock %}
     {% include "include/js.html" %}
+    {% compress js %}
     {% block extra-js %}{% endblock %}
+    {% endcompress %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite}}{% endif %}">
     {% include "include/header.html" %}
@@ -53,7 +55,7 @@
       <div class="column-main">
         {% include "include/status-messages.html" %}
   
-        <div class="content {% block contentclass %}{% endblock %}">
+        <div id="content" class="content {% block contentclass %}{% endblock %}">
           {% block content %}
           {% endblock %}
         </div>

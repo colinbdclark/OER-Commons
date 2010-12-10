@@ -78,11 +78,11 @@
 .navigation li.selected a {
     color: #fff;
 }
-.search-box {
+#global-search-box {
     float: right;
     padding-top: 8px;
 }
-.search-box input.text {
+#global-search-box input.text {
     color:#666666;
     height:18px;
     width:300px;

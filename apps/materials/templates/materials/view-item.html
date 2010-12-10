@@ -3,6 +3,14 @@
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.materials.view_item.init();
+    });
+  </script>
+{% endblock %}
+
 {% block above-content %}
 <div class="action-panel fixed-width">
   {% if came_from_index %}

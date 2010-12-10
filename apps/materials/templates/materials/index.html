@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.materials.index.init();
+      $("div.portlet.cou a").cluetip({local:true, arrows: true, width: 300});
+    });
+  </script>
+{% endblock %}
+
 {% block above-content %}
   {% include "materials/include/index-action-panel.html" %}
 {% endblock %}

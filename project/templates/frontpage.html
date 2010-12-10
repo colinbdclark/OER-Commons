@@ -3,8 +3,14 @@
 
 {% block extra-js %}
 <script type="text/javascript"> 
-  $(document).ready(function() {
-      $(".portlet.cou li a").cluetip({local:true, arrows: true, width: 300});
+  $(function() {
+    $("div.portlet.oermaterials .accordion").accordion({
+      header: "h5",
+      event: "click hoverintent",
+      collapsible: true,
+      active: false
+    });
+    $("div.portlet.cou li a").cluetip({local:true, arrows: true, width: 300});
   });
 </script> 
 {% endblock %}

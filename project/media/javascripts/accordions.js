@@ -1,7 +1,9 @@
-var cfg = ($.hoverintent = {
-        sensitivity: 7,
-        interval: 100
-    });
+oer.accordions = {};
+
+oer.accordions.config =  {
+  sensitivity: 7,
+  interval  : 100
+};
 
 $.event.special.hoverintent = {
     setup: function() {
@@ -13,6 +15,7 @@ $.event.special.hoverintent = {
     handler: function(event) {
         event.type = "hoverintent";
         var self = this,
+        config = oer.accordions.config;
         args = arguments,
         target = $(event.target),
         cX, cY, pX, pY;
@@ -30,27 +33,18 @@ $.event.special.hoverintent = {
         }
 
         function handler() {
-            if ( ( Math.abs(pX-cX) + Math.abs(pY-cY) ) < cfg.sensitivity ) {
+            if ( ( Math.abs(pX-cX) + Math.abs(pY-cY) ) < config.sensitivity ) {
                 clear();
                 jQuery.event.handle.apply(self, args);
             } else {
                 pX = cX;
                 pY = cY;
-                timeout = setTimeout(handler, cfg.interval);
+                timeout = setTimeout(handler, config.interval);
             }
         }
 
-        var timeout = setTimeout(handler, cfg.interval);
+        var timeout = setTimeout(handler, config.interval);
         target.mousemove(track).mouseout(clear);
         return true;
     }
 };
-
-$(document).ready( function() {
-    $(".portlet.oermaterials .accordion").accordion({
-        header: "h5",
-        event: "click hoverintent",
-        collapsible: true,
-        active: false
-    });
-});

@@ -71,7 +71,7 @@ def gen_confirmation_key():
 
 class RegistrationConfirmation(models.Model):
 
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User)
     key = models.CharField(max_length=20, unique=True)
     confirmed = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -109,7 +109,7 @@ class RegistrationConfirmation(models.Model):
 
 class ResetPasswordConfirmation(models.Model):
 
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User)
     key = models.CharField(max_length=20, unique=True,
                            default=gen_confirmation_key)
     confirmed = models.BooleanField(default=False)

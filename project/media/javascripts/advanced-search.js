@@ -1,4 +1,6 @@
-$(function () {
+oer.advanced_search = {}
+
+oer.advanced_search.init = function() {
   
   var $form = $("form[name='advanced-search']");
   
@@ -24,4 +26,7 @@ $(function () {
       $filter.find("dd :checkbox").attr("checked", false);
     }
   });
-});
+  
+  oer.collapsibles.init($("#content"));
+  
+};

@@ -43,9 +43,13 @@ form.formatted .help {
   margin-bottom: 3px;
 }
 
-form.formatted .errors span {
+form.formatted label.error {
   color: red;
   display: block;
+  padding: 0;
+  margin: 0;
+  background: none;
+  font-weight: normal;
 }
 
 form.formatted .buttons {

@@ -26,8 +26,6 @@ class InitResetPasswordForm(forms.Form):
             raise forms.ValidationError(u"User account with this email is not registered.")
         return email
 
-    # TODO: jquery.validation
-
 
 class ResetPasswordForm(forms.Form):
 

@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      $("form[name='profile']").validate({rules: oer.validation.rules.profile});
+      $("form[name='change-password']").validate({rules: oer.validation.rules.change_password});
+    });
+  </script>
+{% endblock %}
+
 {% block above-content %}{% endblock %}
 
 {% block content %}
 
-  <form method="post" class="formatted profile"  name="profile" action="{% url users:profile %}">
+  <form method="post" class="formatted profile" name="profile" action="{% url users:profile %}">
   
     <p class="change-password-link"><a href="#change-password">Change password</a></p>
 

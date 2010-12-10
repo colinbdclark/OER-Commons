@@ -108,8 +108,6 @@ class ProfileForm(forms.ModelForm):
                   "department", "specializations", "biography",
                   "why_interested"]
 
-    # TODO: jquery.validation
-
 
 class ChangePasswordForm(forms.ModelForm):
 
@@ -152,8 +150,6 @@ class ChangePasswordForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["current_password", "new_password", "confirm_new_password"]
-
-    # TODO: jquery.validation
 
 
 @login_required

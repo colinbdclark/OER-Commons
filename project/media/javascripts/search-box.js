@@ -1,16 +1,23 @@
-$( function() {
-    var searchbox = $("#header .search-box input[name='f.search']");
-    searchbox.focus( function() {
-        if (this.value == "Enter Search")
-            this.value = "";
-    });
-    searchbox.blur( function() {
-        if (this.value == "")
-            this.value = "Enter Search";
-    });
-    $(".search-box form").submit( function() {
-        if (searchbox.attr("value") == "" || searchbox.attr("value") == "Enter Search")
-            return false;
-        return true;
-    });
-});
+oer.search_box = {};
+
+oer.search_box.init = function() {
+  var $search_box = $("#global-search-box");
+  var $input = $search_box.find("input[name='f.search']");
+  $input.focus(
+    function() {
+      if ($input.val() == "Enter Search") $input.val("");
+    }
+  ).blur(
+    function() {
+      if ($input.val() == "") $input.val("Enter Search");
+    }
+  );
+  $search_box.find("form").submit(
+    function() {
+      var value = $input.val();
+      if (value == "" || value == "Enter Search")
+          return false;
+      return true;
+    }
+  );
+}
