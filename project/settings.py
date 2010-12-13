@@ -72,6 +72,10 @@ INSTALLED_APPS = (
     'tags',
     'materials',
     'users',
+    'rating',
+    'reviews',
+    'notes',
+    'saveditems',
     'project',
 )
 
@@ -97,7 +101,9 @@ AUTHENTICATION_BACKENDS = (
     'users.backend.BcryptBackend',
 )
 
-REDIRECT_FIELD_NAME = "came_from"
+LOGIN_URL = '/login'
+LOGOUT_URL = '/logout'
+REDIRECT_FIELD_NAME = "next"
 
 SITE_ID = 1
 

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load utils %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.tags_form.init();
+    });
+  </script>
+{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+  <form name="tags" class="formatted tags" method="post" action="{{ form_action }}">
+  
+    {% next_url_input %}
+  
+    {% for field in form.visible_fields %}
+      {% include "include/form-field.html" %}
+    {% endfor %}
+    
+    <div class="buttons">
+      <input class="button" type="submit" value="Save" />
+      <input class="button" type="submit" value="Cancel" name="cancel" />
+    </div>
+
+    {% if item_tags %}
+      <div class="field other-tags">
+        <label>Item tags:</label>
+        <div class="help">Tags that other users added to this item. Click on tag to add it to your tags.</div>
+        {% for tag in item_tags %}
+          <a href="#">{{ tag }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if all_tags %}
+      <div class="field other-tags">
+        <label>Other tags:</label>
+        <div class="help">Click on tag to add it to your tags.</div>
+        {% for tag in all_tags %}
+          <a href="#">{{ tag }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </form>
+{% endblock %}

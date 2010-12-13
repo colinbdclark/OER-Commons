@@ -7,9 +7,9 @@ from materials.models.material import PUBLISHED_STATE
 from materials.utils import get_name_from_slug
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, BATCH_SIZE_OPTIONS, \
-    SORT_BY_OPTIONS, serialize_query_string_params
+    SORT_BY_OPTIONS, serialize_query_string_params, DEFAULT_BATCH_SIZE
 from tags.models import Tag
-from tags.utils import get_tag_cloud
+from tags.tags_utils import get_tag_cloud
 
 
 def view_item(request, slug=None, model=None):
@@ -26,12 +26,15 @@ def view_item(request, slug=None, model=None):
     for tag in tags:
         tag["name"] = get_name_from_slug(Tag, tag["slug"])
 
-    user_tags = item.tags.filter(user=request.user)
+    user_tags = []
+    if request.user.is_authenticated():
+        user_tags = item.tags.filter(user=request.user)
 
     add_tags_url = None
     namespace = getattr(model, "namespace", None)
     if namespace:
-        add_tags_url = reverse("materials:%s:add_tags" % namespace, kwargs=dict(slug=item.slug))
+        add_tags_url = reverse("materials:%s:add_tags" % namespace,
+                               kwargs=dict(slug=item.slug))
 
     microsite = None
     came_from_index = False
@@ -92,13 +95,15 @@ def view_item(request, slug=None, model=None):
         try:
             batch_size = int(request.REQUEST.get("batch_size", 0))
         except:
-            batch_size = 20
+            batch_size = DEFAULT_BATCH_SIZE
         if batch_size not in batch_size_options:
-            batch_size = 20
-        query_string_params["batch_size"] = batch_size
+            batch_size = DEFAULT_BATCH_SIZE
+        if batch_size != DEFAULT_BATCH_SIZE:
+            query_string_params["batch_size"] = batch_size
 
         sort_by_options = SORT_BY_OPTIONS
 
+        DEFAULT_SORT_BY = search_query and "search" or "title"
         sort_by = request.REQUEST.get("sort_by", request.REQUEST.get("sort_on"))
         if not sort_by or sort_by not in [o["value"] for o in sort_by_options]:
             if sort_by == "publication_time":
@@ -108,8 +113,9 @@ def view_item(request, slug=None, model=None):
             elif search_query:
                 sort_by = "search"
             else:
-                sort_by = "title"
-        query_string_params["sort_by"] = sort_by
+                sort_by = DEFAULT_SORT_BY
+        if sort_by != DEFAULT_SORT_BY:
+            query_string_params["sort_by"] = sort_by
 
         if sort_by == "search":
             order_by = None

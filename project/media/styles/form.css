@@ -138,3 +138,20 @@ form.profile a {
 form.profile .change-password-link {
   text-align: right;
 }
+
+form.tags textarea.text {
+  width: 550px;
+  resize: none;
+  height: 120px;
+}
+
+form.tags .other-tags a {
+  text-decoration: none;
+  font-size: 12px;
+  margin-right: 5px;
+  line-height: 1.5;
+}
+
+form.tags .other-tags a:hover {
+  text-decoration: underline;
+}

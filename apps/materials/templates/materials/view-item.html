@@ -181,16 +181,16 @@
     {% endif %}
     
     {% if user_tags %}
-      <h4 class="dotted">My Tags</h4>
+      <h4 class="dotted my-tags">My Tags</h4>
       <div class="dotted">
         {% for tag in user_tags %}
-          <a href="{% url materials:keyword_index keywords=keyword.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+          <a href="{% url materials:keyword_index keywords=tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
         {% endfor %}
       </div>
     {% endif %}
     {% if add_tags_url %}
       <div class="button-ct">
-        <a class="with-came-from" href="{{ add_tags_url }}">
+        <a class="with-next-url" href="{{ add_tags_url }}">
           {% if user_tags %}
             <img src="{{ STATIC_URL }}images/edit-tag-btn.png" alt="Edit Your Tags" />
           {% else %}  

@@ -6,6 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic.simple import direct_to_template
+from utils.shortcuts import redirect_to_next_url
 import re
 
 
@@ -18,7 +19,6 @@ class LoginForm(AuthenticationForm):
     password = forms.CharField(label=u"Password:",
                              widget=forms.PasswordInput(attrs={"size": 25,
                                                            "class": "text"}))
-
 
 
 def login(request):
@@ -60,11 +60,7 @@ def login(request):
 
 
 def logout(request):
-
     auth_logout(request)
-    redirect_to = request.REQUEST.get(settings.REDIRECT_FIELD_NAME, '')
-    if not redirect_to:
-        redirect_to = reverse("frontpage")
     messages.success(request, u"You are now logged out.")
-    return HttpResponseRedirect(redirect_to)
+    return redirect_to_next_url(request)
 

@@ -24,28 +24,28 @@
   color: #1F4D64;
 }
 
-.materials-index dl, .view-item dl {
+.materials-index .details dl, .view-item dl {
   font-size: 12px;
   margin: 10px 0 0 0;
 }
 
-.materials-index dl a, .view-item dl a {
+.materials-index .details dl a, .view-item dl a {
   font-weight: bold;
 }
 
-.materials-index dt, .view-item dt {
+.materials-index .details dt, .view-item dt {
   float: left;
   margin-right: 4px;
   color: #616161;
   font-weight: bold;
 }
 
-.materials-index dd, .view-item dd {
+.materials-index .details dd, .view-item dd {
   margin-left: 0;
   margin-bottom: 2px;
 }
 
-.materials-index dl.collapsed {
+.materials-index .details dl.collapsed {
   display: none;
 }
 
@@ -60,6 +60,66 @@
 
 .materials-index .expand-link.expanded {
   display: none;
+}
+
+.materials-index .item .right {
+  float: right;
+}
+
+.materials-index .item dl.actions {
+  margin: 0;
+  padding: 0;
+}
+
+.materials-index .item dl.actions.active {
+  position: relative;
+}
+
+.materials-index .item dl.actions dd {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  display: none;
+  height: auto;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  right: -1px;
+  top: 2em;
+  z-index: 5;
+}
+
+.materials-index .item dl.actions.active dd {
+  display: block;
+  z-index: 15;
+}
+
+.materials-index .item dl.actions ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-top: -2px;
+  background: #3D8298;
+  border: 1px solid #1B536A;
+  left: -4px;
+  position: relative
+}
+
+.materials-index .item dl.actions ul li {
+  margin: 0;
+  paddding: 0;
+}
+
+.materials-index .item dl.actions ul a {
+  color: #ffffff;
+  font-size: 12px;
+  padding: 2px 5px;
+  white-space: nowrap;
+  display: block;
+}
+
+.materials-index .item dl.actions ul a:hover {
+  background-color: #1C4D65;
 }
 
 .materials-index .index-navigation {
@@ -136,25 +196,21 @@
   margin-bottom: 10px;
 }
 
-.index-filters .filter input,
-.advanced-search .filter input {
+.index-filters .filter input, .advanced-search .filter input {
   float: left;
   display: block;
 }
 
-.index-filters .filter label,
-.advanced-search .filter label {
+.index-filters .filter label, .advanced-search .filter label {
   display: block;
 }
 
-.index-filters .filter dd,
-.advanced-search .filter dd {
+.index-filters .filter dd, .advanced-search .filter dd {
   clear: both;
   margin-left: 16px;
 }
 
-.index-filters .filter dt label,
-.advanced-search .filter dt label {
+.index-filters .filter dt label, .advanced-search .filter dt label {
   color: #666;
   font-size: 13px;
   font-weight: bold;
@@ -179,10 +235,7 @@
   margin-left: 20px;
 }
 
-.index-filters .filter dd.collapsed,
-.index-filters .filter ul.collapsed,
-.advanced-search .filter dd.collapsed,
-.advanced-search .filter ul.collapsed {
+.index-filters .filter dd.collapsed, .index-filters .filter ul.collapsed, .advanced-search .filter dd.collapsed, .advanced-search .filter ul.collapsed {
   display: none;
 }
 
@@ -216,6 +269,10 @@
 .item-tags .button-ct {
   text-align: center;
   margin-top: 5px;
+}
+
+.item-tags h4.my-tags {
+  margin-top: 10px;
 }
 
 .view-item-navigation {
@@ -382,8 +439,7 @@
   margin-right: 13px;
 }
 
-.box.search-by-keyword .buttons,
-.box.filters .buttons {
+.box.search-by-keyword .buttons, .box.filters .buttons {
   text-align: right;
   margin: 10px;
 }

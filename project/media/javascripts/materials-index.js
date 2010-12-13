@@ -80,5 +80,25 @@ oer.materials.index.init = function() {
   
   $filters_portlet.find("dl.cou a.tooltip-button").cluetip({local:true, arrows: true, width: 300});
   $filters_portlet.find("dl.grade-levels a.tooltip-button").cluetip({local:true, arrows: true, width: 200});
+  
+  $("#content dl.actions dt a").click(
+    function() {
+      var $menu = $(this).closest("dl.actions");
+      $("#content dl.actions").not($menu).removeClass("active");
+      if ($menu.hasClass("active")) {
+        $menu.removeClass("active");
+      } else {
+        $menu.addClass("active");    
+      }
+      return false;
+    }
+  );
+  
+  $(document).click(
+    function(event) {
+      $target = event.target;
+      $("#content dl.actions").removeClass("active");
+    }
+  );
 
 }

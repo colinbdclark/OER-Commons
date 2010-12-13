@@ -1,5 +1,17 @@
 <div class="item collapsible{% if forloop.last %} last{% endif %}">
   <a class="expand-button collapsed" href="#"></a>
+  <div class="right">
+    <dl class="actions">
+      <dt><a href="#"><img src="{{ STATIC_URL }}images/actions-menu-btn.png" alt="Actions" /></a></dt>
+      <dd>
+        <ul>
+          {% if item.add_tags_url %}
+            <li><a class="with-next-url" href="{{ item.add_tags_url }}">Tag this item</a></li>
+          {% endif %}
+        </ul>
+      </dd>
+    </ul>
+  </div>
   <div class="details">
     <h3>
       <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>

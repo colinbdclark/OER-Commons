@@ -1,9 +1,9 @@
 oer.accordions = {};
 
-oer.accordions.config =  {
-  sensitivity: 7,
-  interval  : 100
-};
+oer.accordions.config = ($.hoverintent = {
+    sensitivity: 7,
+    interval: 100
+});
 
 $.event.special.hoverintent = {
     setup: function() {
@@ -15,10 +15,11 @@ $.event.special.hoverintent = {
     handler: function(event) {
         event.type = "hoverintent";
         var self = this,
-        config = oer.accordions.config;
         args = arguments,
         target = $(event.target),
         cX, cY, pX, pY;
+
+        config = oer.accordions.config;
 
         function track(event) {
             cX = event.pageX;

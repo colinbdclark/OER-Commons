@@ -3,7 +3,7 @@ from django.views.generic.simple import direct_to_template
 from materials.models.common import Keyword, GeneralSubject, GradeLevel
 from materials.utils import get_name_from_slug, get_facets_for_field
 from tags.models import Tag
-from tags.utils import get_tag_cloud
+from tags.tags_utils import get_tag_cloud
 import dateutil.parser
 import re
 import twitter

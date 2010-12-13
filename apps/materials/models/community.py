@@ -1,5 +1,7 @@
 from autoslug.fields import AutoSlugField
+from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
     Language, GeographicRelevance
@@ -93,3 +95,15 @@ class CommunityItem(Material):
         keywords = set(self.keywords.values_list("name", flat=True))
         keywords.update(self.tags.values_list("name", flat=True))
         return sorted(keywords)
+
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:%s:view_item" % self.namespace, [], {"slug": self.slug})
+
+    def breadcrumbs(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": reverse("materials:community"),
+                            "title": u"Community"})
+        breadcrumbs.append({"url": self.get_absolute_url(),
+                            "title": self.title})
+        return breadcrumbs

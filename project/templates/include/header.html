@@ -10,7 +10,7 @@
           <a href="{% url users:registration %}">Register Now!</a>
         </li>
         <li>
-          <a href="{% url users:login %}">Log In</a>
+          <a class="with-next-url" href="{% url users:login %}">Log In</a>
         </li>
       {% endif %}
       {% if request.user.is_authenticated %}

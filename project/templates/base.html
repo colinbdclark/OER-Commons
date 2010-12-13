@@ -70,6 +70,10 @@
       <div class="clear"></div>
     </div>
     
+    <form name="next-url" action="" method="get">
+      <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+    </form>
+    
     {% include "include/footer.html" %}
   </body>
 </html>

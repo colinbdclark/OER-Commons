@@ -1,4 +1,3 @@
-from autoslug.fields import AutoSlugField
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
@@ -7,12 +6,21 @@ from django.utils.translation import ugettext_lazy as _
 import datetime
 
 
-class Tag(models.Model):
+RATING_VALUES = (
+    (1, u"1"),
+    (2, u"2"),
+    (3, u"3"),
+    (4, u"4"),
+    (5, u"5"),
+)
 
-    user = models.ForeignKey(User, verbose_name=_(u"User"))
-    name = models.CharField(max_length=100, verbose_name=_(u"name"),
-                            default=u"")
-    slug = AutoSlugField(populate_from="name", verbose_name=_(u"Slug"))
+
+class Rating(models.Model):
+
+    user = models.ForeignKey(User)
+
+    value = models.SmallIntegerField(choices=RATING_VALUES)
+
     content_type = models.ForeignKey(ContentType,
                                      verbose_name=_(u"Content type"))
     object_id = models.PositiveIntegerField(verbose_name=_(u"Object ID"))
@@ -22,8 +30,10 @@ class Tag(models.Model):
                                      default=datetime.datetime.now)
 
     def __unicode__(self):
-        return self.name
+        return u"'%s' rated by %s - %i" % (self.content_object, self.user,
+                                           self.value)
 
     class Meta:
-        verbose_name = _(u"Tag")
-        verbose_name_plural = _(u"Tags")
+        verbose_name = _(u"Rating")
+        verbose_name_plural = _(u"Ratings")
+

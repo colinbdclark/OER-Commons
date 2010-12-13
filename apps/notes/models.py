@@ -1,29 +1,27 @@
-from autoslug.fields import AutoSlugField
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-import datetime
 
 
-class Tag(models.Model):
+class Note(models.Model):
 
-    user = models.ForeignKey(User, verbose_name=_(u"User"))
-    name = models.CharField(max_length=100, verbose_name=_(u"name"),
-                            default=u"")
-    slug = AutoSlugField(populate_from="name", verbose_name=_(u"Slug"))
+    user = models.ForeignKey(User)
+
+    text = models.TextField()
+
+    timestamp = models.DateTimeField(auto_now_add=True)
+
     content_type = models.ForeignKey(ContentType,
                                      verbose_name=_(u"Content type"))
     object_id = models.PositiveIntegerField(verbose_name=_(u"Object ID"))
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
-    timestamp = models.DateTimeField(auto_now_add=True,
-                                     default=datetime.datetime.now)
-
     def __unicode__(self):
-        return self.name
+        return u"'%s' noted by %s" % (self.content_object, self.user)
 
     class Meta:
-        verbose_name = _(u"Tag")
-        verbose_name_plural = _(u"Tags")
+        verbose_name = _(u"Note")
+        verbose_name_plural = _(u"Notes")
+

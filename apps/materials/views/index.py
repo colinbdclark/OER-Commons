@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.views.generic.simple import direct_to_template
@@ -11,14 +12,15 @@ from materials.utils import get_name_from_id, get_slug_from_id, \
 from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
 from tags.models import Tag
-from tags.utils import get_tag_cloud
+from tags.tags_utils import get_tag_cloud
 import urllib
-from django.contrib import messages
 
 
 BATCH_SIZE_OPTIONS = (
     10, 20, 50, 100
 )
+
+DEFAULT_BATCH_SIZE = 20
 
 SORT_BY_OPTIONS = (
     {"value": u"title", "title": u"Title"},
@@ -261,13 +263,15 @@ def index(request, general_subjects=None, grade_levels=None,
     try:
         batch_size = int(request.REQUEST.get("batch_size", 0))
     except:
-        batch_size = 20
+        batch_size = DEFAULT_BATCH_SIZE
     if batch_size not in batch_size_options:
-        batch_size = 20
-    query_string_params["batch_size"] = batch_size
+        batch_size = DEFAULT_BATCH_SIZE
+    if batch_size != DEFAULT_BATCH_SIZE:
+        query_string_params["batch_size"] = batch_size
 
     sort_by_options = SORT_BY_OPTIONS
 
+    DEFAULT_SORT_BY = search_query and "search" or "title"
     sort_by = request.REQUEST.get("sort_by", request.REQUEST.get("sort_on"))
     if not sort_by or sort_by not in [o["value"] for o in sort_by_options]:
         if sort_by == "publication_time":
@@ -277,8 +281,9 @@ def index(request, general_subjects=None, grade_levels=None,
         elif search_query:
             sort_by = "search"
         else:
-            sort_by = "title"
-    query_string_params["sort_by"] = sort_by
+            sort_by = DEFAULT_SORT_BY
+    if sort_by != DEFAULT_SORT_BY:
+        query_string_params["sort_by"] = sort_by
 
 
     index_url = "%s?%s" % (request.path,
@@ -329,6 +334,9 @@ def index(request, general_subjects=None, grade_levels=None,
             if namespace:
                 item["get_absolute_url"] = reverse(
                                        "materials:%s:view_item" % namespace,
+                                       kwargs=dict(slug=item["slug"]))
+                item["add_tags_url"] = reverse(
+                                       "materials:%s:add_tags" % namespace,
                                        kwargs=dict(slug=item["slug"]))
             else:
                 item["get_absolute_url"] = result.object.get_absolute_url()
