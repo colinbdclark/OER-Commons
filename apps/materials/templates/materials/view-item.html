@@ -13,6 +13,14 @@
 
 {% block above-content %}
 <div class="action-panel fixed-width">
+  <ul class="right">
+    {% if save_url %}
+      <li class="last"><a href="{{ save_url }}">Save this item</a></li>
+    {% endif %}
+    {% if unsave_url %}
+      <li class="last"><a href="{{ unsave_url }}">Remove from collection</a></li>
+    {% endif %}
+  </ul>
   {% if came_from_index %}
   <div class="view-item-navigation">
     {% if prev_item_url %}
@@ -161,8 +169,39 @@
         {% endwith %}
       {% endif %}
     </dl>
-    
   </div>
+  
+  <div class="reviews">
+    <a href="{{ add_review_url }}" class="button with-next-url"><img alt="Review This Item" src="{{ STATIC_URL}}images/add-review-btn.png"></a>
+    {% with item.reviews.all as reviews %}
+      {% if reviews %}
+      <dl>
+        <dt>Reviews</dt>
+        {% for review in reviews %}
+          <dd>
+            {{ review.text|linebreaksbr }}
+            {% with review.user as author %}
+            <span class="by">- {{ author.first_name }} {{ author.last_name }}</span>
+            {% endwith %}
+          </dd>
+        {% endfor %}
+      </dl>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <div class="notes clear">
+    <a href="{{ add_note_url }}" class="button with-next-url"><img alt="Add Notes" src="{{ STATIC_URL}}images/add-notes-btn.png"></a>
+    {% if user_note %}
+      <dl>
+        <dt>My Notes</dt>
+        <dd>
+          {{ user_note.text|linebreaksbr }}
+        </dd>
+      </dl>
+    {% endif %}
+  </div>
+  
 </div>
 
 {% endblock %}

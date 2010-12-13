@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -8,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from materials.utils import get_name_from_slug
 from tags.models import Tag
+from utils.decorators import login_required
 from utils.shortcuts import redirect_to_next_url
 
 

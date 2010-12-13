@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load utils %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+  <form name="review" class="formatted review" method="post" action="{{ form_action }}">
+  
+    {% next_url_input %}
+  
+    {% for field in form.visible_fields %}
+      {% include "include/form-field.html" %}
+    {% endfor %}
+    
+    <div class="buttons">
+      <input class="button" type="submit" value="Save" />
+      <input class="button" type="submit" value="Cancel" name="cancel" />
+    </div>
+
+  </form>
+
+  <h3>Factors to consider when reviewing materials:</h3>
+  <h4>Use</h4>
+  <ul>
+    <li>How did you use this material? In which courses or programs did you use the material?</li>
+    <li>Did you augment the material? How?</li>
+  </ul>
+    
+  <h4>Overall Quality</h4>
+  <ul>
+    <li>Clarity: Is there a sufficient level of clarity and comprehensibility of written content?</li>
+    <li>Consistency: Is there consistency in the language and use of key terms? Is the language suitable for novice users?</li>
+    <li>Content Errors: Did you find factual, grammatical, or typographical errors?</li>
+    <li>Interface: Did you find technological issues, such as broken links? How is the ease of navigation?</li>
+    <li>Suggested Changes: What top three issues need addressing, if any?</li>
+    <li>Exemplary Features: What are the top three features that are notable or unique?</li>
+  </ul>
+      
+  <h4>Usefulness and Recommendations for Future Use</h4>
+  <ul>
+    <li>What knowledge and skills do you need to use it? What knowledge and skills must students have to use this material?</li>
+    <li>Is the material more (or less) appropriate for a specific audience, grade level, or student learning style?</li>
+    <li>Did using the material lead to successful or identifiable outcomes? This can include examples of student work, student learning, improved instruction, etc.</li>
+    <li>Is the material suitable for reuse? In terms of augmenting it, creating new derivative works from it, or localizing it in any way to meet your own needs, what is most notable?</li>
+  </ul>
+
+{% endblock %}

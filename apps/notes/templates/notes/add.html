@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load utils %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+  <form name="note" class="formatted note" method="post" action="{{ form_action }}">
+  
+    {% next_url_input %}
+  
+    {% with form.text as field %}
+      {% include "include/form-field.html" %}
+    {% endwith %}
+    
+    <div class="buttons">
+      {% with form.save_item as field %}
+        <div class="field">
+          {{ field }}
+          {{ field.label_tag }}
+        </div>
+      {% endwith %}
+      <input class="button" type="submit" value="Save" />
+      <input class="button" type="submit" value="Cancel" name="cancel" />
+    </div>
+
+  </form>
+
+{% endblock %}

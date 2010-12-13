@@ -3,6 +3,9 @@ from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
 from tags.urls import add_tags_patterns
+from reviews.urls import add_review_patterns
+from notes.urls import add_note_patterns
+from saveditems.urls import saved_item_patterns
 
 
 general_subject_patterns = patterns('materials.views',
@@ -42,12 +45,21 @@ course_patterns = browse_patterns + patterns('materials.views',
     url(r"^/ocw/?$", "index.index", name="ocw_index", kwargs={"ocw": True}),
     url(r"^/(?P<course_or_module>full-course|learning-module)/?$", "index.index", name="course_or_module_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
-) + add_tags_patterns
+) + \
+add_tags_patterns + \
+add_review_patterns + \
+add_note_patterns + \
+saved_item_patterns
+
 
 library_patterns = browse_patterns + patterns('materials.views',
     url(r"^/material_types/(?P<library_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
-) + add_tags_patterns
+) + \
+add_tags_patterns + \
+add_review_patterns + \
+add_note_patterns + \
+saved_item_patterns
 
 community_patterns = general_subject_patterns + \
 grade_level_patterns + \
@@ -56,7 +68,11 @@ keyword_patterns + patterns('materials.views',
     url(r"^/oer_type/(?P<community_types>[^/]+)/?$", "index.index", name="community_type_index"),
     url(r"^/oer_topic/(?P<community_topics>[^/]+)/?$", "index.index", name="community_topic_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
-) + add_tags_patterns
+) + \
+add_tags_patterns + \
+add_review_patterns + \
+add_note_patterns + \
+saved_item_patterns
 
 microsite_browse_patterns = browse_patterns # TODO: add subtopic here
 

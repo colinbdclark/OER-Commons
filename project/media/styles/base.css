@@ -133,6 +133,12 @@ hr.tall {
   background: none;
 }
 
+.action-panel ul.right a {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 11px;
+}
+
 .promo {
   background: #F4F8F9 url(../images/promo-bg.png) repeat-x 0% 0%;
   border: 1px solid #AFCFDC;

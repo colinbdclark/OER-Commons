@@ -4,6 +4,9 @@ from django.contrib.contenttypes import generic
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from materials.models import License
+from notes.models import Note
+from reviews.models import Review
+from saveditems.models import SavedItem
 from tags.models import Tag
 
 
@@ -64,6 +67,9 @@ class Material(models.Model):
     featured = models.BooleanField(default=False, verbose_name=_(u"Featured"))
 
     tags = generic.GenericRelation(Tag)
+    reviews = generic.GenericRelation(Review)
+    notes = generic.GenericRelation(Note)
+    saved_items = generic.GenericRelation(SavedItem)
 
     class Meta:
         app_label = "materials"

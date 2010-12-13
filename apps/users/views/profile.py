@@ -1,16 +1,16 @@
 from django import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
+from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
 from materials.models.common import GradeLevel
 from users.backend import encrypt_password
 from users.models import Profile, MEMBER_ROLES
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from utils.decorators import login_required
 
 
 class ProfileForm(forms.ModelForm):

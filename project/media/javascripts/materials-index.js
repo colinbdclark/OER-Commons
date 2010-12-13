@@ -96,9 +96,24 @@ oer.materials.index.init = function() {
   
   $(document).click(
     function(event) {
-      $target = event.target;
       $("#content dl.actions").removeClass("active");
     }
   );
+  
+  $("#content dl.actions a.save-item").click(
+    function() {
+      var $this = $(this)
+      $.post($this.attr("href"),
+        function(data) {
+          var $details = $this.closest("div.item").find("div.details");
+          $details.find("div.message").remove();
+          $("<div></div>").addClass("message").text(data).appendTo($details).delay(3000).fadeOut(1000, function() {$(this).remove();});
+        }, "application/json");
+      var $menu = $this.closest("dl.actions");
+      $menu.removeClass("active");
+      return false;
+    }
+  );
+  
 
 }

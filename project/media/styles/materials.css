@@ -24,23 +24,23 @@
   color: #1F4D64;
 }
 
-.materials-index .details dl, .view-item dl {
+.materials-index .details dl, .view-item .details dl {
   font-size: 12px;
   margin: 10px 0 0 0;
 }
 
-.materials-index .details dl a, .view-item dl a {
+.materials-index .details dl a, .view-item .details dl a {
   font-weight: bold;
 }
 
-.materials-index .details dt, .view-item dt {
+.materials-index .details dt, .view-item .details dt {
   float: left;
   margin-right: 4px;
   color: #616161;
   font-weight: bold;
 }
 
-.materials-index .details dd, .view-item dd {
+.materials-index .details dd, .view-item .details dd {
   margin-left: 0;
   margin-bottom: 2px;
 }
@@ -52,6 +52,14 @@
 .materials-index .details {
   margin-left: 20px;
   margin-right: 120px;
+}
+
+.materials-index .details .message {
+  background-color: #FC6;
+  border: 1px solid #A88743;
+  color: #544322;
+  font-weight: bold;
+  padding: 2px 5px;
 }
 
 .materials-index .expand-button {
@@ -301,6 +309,38 @@
 
 .view-item-navigation a.item-link.hidden {
   visibility: hidden;
+}
+
+.view-item .reviews,
+.view-item .notes {
+  margin-top: 20px;
+  font-size: 12px;
+}
+
+.view-item .reviews a.button,
+.view-item .notes a.button {
+  float: right;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.view-item .reviews dt,
+.view-item .notes dt {
+  color: #616161;
+  font-weight: bold;\
+}
+
+.view-item .reviews dd,
+.view-item .notes dd {
+  margin: 10px 20px;
+  font-style: italic;
+}
+
+.view-item .reviews .by {
+  display: block;
+  font-weight: bold;
+  font-style: normal;
+  text-align: right;
 }
 
 /* Browse All */

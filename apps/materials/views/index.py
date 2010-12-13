@@ -48,7 +48,10 @@ def serialize_query_string_params(query_string_params, ignore_params=[]):
                 value = value.encode("utf-8")
             params.append((key, value))
     params.sort()
-    return urllib.urlencode(params)
+    serialized = urllib.urlencode(params)
+    if serialized:
+        return "?" + serialized
+    return u""
 
 
 def build_pagination(path, query_string_params, batch_start, batch_size, total_items):
@@ -68,21 +71,25 @@ def build_pagination(path, query_string_params, batch_start, batch_size, total_i
 
     if current_page != 0:
         params = query_string_params.copy()
-        params["batch_start"] = 0
-        pagination["first_page_url"] = path + "?" + serialize_query_string_params(params)
+        if "batch_start" in params:
+            del params["batch_start"]
+        pagination["first_page_url"] = path + serialize_query_string_params(params)
 
         params = query_string_params.copy()
-        params["batch_start"] = (current_page - 1) * batch_size
-        pagination["prev_page_url"] = path + "?" + serialize_query_string_params(params)
+        if (current_page - 1) * batch_size:
+            params["batch_start"] = (current_page - 1) * batch_size
+        elif "batch_start" in params:
+            del params["batch_start"]
+        pagination["prev_page_url"] = path + serialize_query_string_params(params)
 
     if current_page < (total_pages - 1):
         params = query_string_params.copy()
         params["batch_start"] = (total_pages - 1) * batch_size
-        pagination["last_page_url"] = path + "?" + serialize_query_string_params(params)
+        pagination["last_page_url"] = path + serialize_query_string_params(params)
 
         params = query_string_params.copy()
         params["batch_start"] = (current_page + 1) * batch_size
-        pagination["next_page_url"] = path + "?" + serialize_query_string_params(params)
+        pagination["next_page_url"] = path + serialize_query_string_params(params)
 
     for page in first_neighbours_last(xrange(total_pages), current_page, 3, 3):
         if page is None:
@@ -91,8 +98,11 @@ def build_pagination(path, query_string_params, batch_start, batch_size, total_i
             page = dict(number=page + 1, url=None)
         else:
             params = query_string_params.copy()
-            params["batch_start"] = page * batch_size
-            url = path + "?" + serialize_query_string_params(params)
+            if page * batch_size:
+                params["batch_start"] = page * batch_size
+            elif "batch_start" in params:
+                del params["batch_start"]
+            url = path + serialize_query_string_params(params)
             page = dict(number=page + 1, url=url)
         pagination["pages"].append(page)
 
@@ -229,7 +239,7 @@ def index(request, general_subjects=None, grade_levels=None,
     if search:
         if not search_query:
             if filter_values:
-                return HttpResponsePermanentRedirect(reverse("materials:index") + "?" + serialize_query_string_params(query_string_params))
+                return HttpResponsePermanentRedirect(reverse("materials:index") + serialize_query_string_params(query_string_params))
             else:
                 messages.warning(request, u"You should specify the search term")
                 return HttpResponsePermanentRedirect(reverse("materials:advanced_search"))
@@ -256,7 +266,8 @@ def index(request, general_subjects=None, grade_levels=None,
         batch_start = int(request.REQUEST.get("batch_start", 0))
     except:
         batch_start = 0
-    query_string_params["batch_start"] = batch_start
+    if batch_start:
+        query_string_params["batch_start"] = batch_start
 
     batch_size_options = BATCH_SIZE_OPTIONS
 
@@ -286,9 +297,8 @@ def index(request, general_subjects=None, grade_levels=None,
         query_string_params["sort_by"] = sort_by
 
 
-    index_url = "%s?%s" % (request.path,
-                           serialize_query_string_params(query_string_params,
-                                             ignore_params=["batch_start"]))
+    index_url = request.path + serialize_query_string_params(query_string_params,
+                                             ignore_params=["batch_start"])
     feed_url = index_url + "&feed=yes"
     csv_url = index_url + "&csv=yes"
 
@@ -337,6 +347,12 @@ def index(request, general_subjects=None, grade_levels=None,
                                        kwargs=dict(slug=item["slug"]))
                 item["add_tags_url"] = reverse(
                                        "materials:%s:add_tags" % namespace,
+                                       kwargs=dict(slug=item["slug"]))
+                item["add_review_url"] = reverse(
+                                       "materials:%s:add_review" % namespace,
+                                       kwargs=dict(slug=item["slug"]))
+                item["save_item_url"] = reverse(
+                                       "materials:%s:save_item" % namespace,
                                        kwargs=dict(slug=item["slug"]))
             else:
                 item["get_absolute_url"] = result.object.get_absolute_url()

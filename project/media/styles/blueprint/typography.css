@@ -34,8 +34,8 @@ sub    { line-height: 0; }
 
 .content h1 { font-size: 3em; line-height: 1; margin-bottom: 0.5em; }
 .content h2 { font-size: 2em; margin-bottom: 0.75em; }
-.content h3 { font-size: 1.5em; line-height: 1; margin-bottom: 1em; }
-.content h4 { font-size: 1.2em; line-height: 1.25; margin-bottom: 1.25em; }
+.content h3 { font-size: 1.5em; margin-top: 0.7em; margin-bottom: 0.5em; }
+.content h4 { font-size: 1.2em; margin-top: 0.7em; margin-bottom: 0.5em; }
 .content h5 { font-size: 1em; font-weight: bold; margin-bottom: 1.5em; }
 .content h6 { font-size: 1em; font-weight: bold; }
 

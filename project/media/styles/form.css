@@ -140,7 +140,7 @@ form.profile .change-password-link {
 }
 
 form.tags textarea.text {
-  width: 550px;
+  width: 552px;
   resize: none;
   height: 120px;
 }
@@ -154,4 +154,24 @@ form.tags .other-tags a {
 
 form.tags .other-tags a:hover {
   text-decoration: underline;
+}
+
+form.review textarea.text {
+  width: 552px;
+  resize: none;
+  height: 200px;
+}
+
+form.note textarea.text {
+  width: 552px;
+  resize: none;
+  height: 200px;
+}
+
+form.note .buttons .field {
+  float: left;
+}
+
+form.note .buttons .field label {
+  font-weight: normal;
 }

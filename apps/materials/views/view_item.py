@@ -8,6 +8,7 @@ from materials.utils import get_name_from_slug
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, BATCH_SIZE_OPTIONS, \
     SORT_BY_OPTIONS, serialize_query_string_params, DEFAULT_BATCH_SIZE
+from notes.models import Note
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 
@@ -19,6 +20,11 @@ def view_item(request, slug=None, model=None):
 
     item = get_object_or_404(model, slug=slug)
 
+    if hasattr(item, "breadcrumbs"):
+        breadcrumbs = item.breadcrumbs
+    else:
+        breadcrumbs = []
+
     tags = {}
     for tag in item.tags.all():
         tags[tag.slug] = tags.get(tag.slug, 0) + 1
@@ -27,14 +33,31 @@ def view_item(request, slug=None, model=None):
         tag["name"] = get_name_from_slug(Tag, tag["slug"])
 
     user_tags = []
+    user_note = None
+    save_url = None
+    unsave_url = None
     if request.user.is_authenticated():
-        user_tags = item.tags.filter(user=request.user)
+        user_tags = item.tags.filter(user=request.user).order_by("slug")
+        try:
+            user_note = item.notes.get(user=request.user)
+        except Note.DoesNotExist:
+            pass
+        try:
+            item.saved_items.get(user=request.user)
+            unsave_url = reverse("materials:%s:unsave_item" % item.namespace,
+                           kwargs=dict(slug=item.slug))
 
-    add_tags_url = None
-    namespace = getattr(model, "namespace", None)
-    if namespace:
-        add_tags_url = reverse("materials:%s:add_tags" % namespace,
-                               kwargs=dict(slug=item.slug))
+        except:
+            save_url = reverse("materials:%s:save_item" % item.namespace,
+                           kwargs=dict(slug=item.slug))
+
+    add_tags_url = reverse("materials:%s:add_tags" % item.namespace,
+                           kwargs=dict(slug=item.slug))
+    add_review_url = reverse("materials:%s:add_review" % item.namespace,
+                           kwargs=dict(slug=item.slug))
+    add_note_url = reverse("materials:%s:add_note" % item.namespace,
+                           kwargs=dict(slug=item.slug))
+
 
     microsite = None
     came_from_index = False
@@ -152,6 +175,6 @@ def view_item(request, slug=None, model=None):
         if batch_start:
             query_string_params["batch_start"] = batch_start
 
-        index_url = "%s?%s" % (index_path, serialize_query_string_params(query_string_params))
+        index_url = index_path + serialize_query_string_params(query_string_params)
 
     return direct_to_template(request, "materials/view-item.html", locals())
