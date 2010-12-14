@@ -67,12 +67,12 @@ class License(models.Model):
     @property
     def type(self):
         if CC_LICENSE_URL_RE.match(self.url):
-            return "cc-" + CC_LICENSE_URL_RE.groupdict(self.url)["cc_type"]
+            return u"cc-" + CC_LICENSE_URL_RE.search(self.url).groupdict()["cc_type"]
         if PUBLIC_DOMAIN_URL_RE.match(self.url):
-            return "public-domain"
+            return u"public-domain"
         if GNU_FDL_URL_RE.match(self.url):
-            return "gnu-fdl"
-        return "custom"
+            return u"gnu-fdl"
+        return u"custom"
 
     @property
     def image(self):

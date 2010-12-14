@@ -1,12 +1,19 @@
+{% load rating_tags %}
+{% load materials_tags %}
 <div class="item collapsible{% if forloop.last %} last{% endif %}">
   <a class="expand-button collapsed" href="#"></a>
   <div class="right">
+    {% stars item.rating %}
+    {% cou_bucket item.cou_bucket %}
     <dl class="actions">
       <dt><a href="#"><img src="{{ STATIC_URL }}images/actions-menu-btn.png" alt="Actions" /></a></dt>
       <dd>
         <ul>
           {% if item.add_tags_url %}
             <li><a class="with-next-url" href="{{ item.add_tags_url }}">Tag this item</a></li>
+          {% endif %}
+          {% if item.rate_item_url %}
+            <li><a class="rate-item" href="{{ item.rate_item_url }}">Rate this item</a></li>
           {% endif %}
           {% if item.add_review_url %}
             <li><a class="with-next-url" href="{{ item.add_review_url }}">Review this item</a></li>
@@ -16,30 +23,27 @@
           {% endif %}
         </ul>
       </dd>
-    </ul>
+    </dl>
   </div>
   <div class="details">
     <h3>
       <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
-      <a href="{{ item.url }}"><img alt="" src="{{ STATIC_URL }}images/external-link-icon.gif"></a>  
+      <a href="{{ item.url }}"><img alt="{{ item.title }}" src="{{ STATIC_URL }}images/external-link-icon.gif" /></a>  
     </h3>
     <a class="expand-link collapsed" href="#">(Complete Item Description)</a>
     <dl class="collapsed">
       <dt>Abstract:</dt>
       <dd>{{ item.abstract|linebreaks }}</dd>
-      <dd class="clear"></dd>
     </dl>
     <dl>
       {% if item.general_subjects %}
       <dt>Subject:</dt>
       <dd>{{ item.general_subjects|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
 
       {% if item.grade_levels %}
       <dt>Grade Level:</dt>
       <dd>{{ item.grade_levels|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
       
       {% if item.collection %}
@@ -47,7 +51,6 @@
       <dd>
         <a href="{% url materials:collection_index collection=item.collection.slug %}">{{ item.collection.name }}</a>
       </dd>
-      <dd class="clear"></dd>
       {% endif %}
     </dl>
   </div>

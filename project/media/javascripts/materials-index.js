@@ -102,7 +102,7 @@ oer.materials.index.init = function() {
   
   $("#content dl.actions a.save-item").click(
     function() {
-      var $this = $(this)
+      var $this = $(this);
       $.post($this.attr("href"),
         function(data) {
           var $details = $this.closest("div.item").find("div.details");
@@ -115,5 +115,46 @@ oer.materials.index.init = function() {
     }
   );
   
+  var $rate_form = $("form[name='rate']");
+  $rate_form.find("a.rate").click(
+    function() {
+      var $this = $(this);
+      if ($rate_form.attr("method") == "post") {
+        $.post($rate_form.attr("action"), {rating: $rate_form.find("select").val()},
+          function(data) {
+            data = $.parseJSON(data);
+            var $stars = $this.closest("div.right").find("div.stars");
+            $stars.removeClass().addClass("stars").addClass(data.stars_class);
+            var $details = $this.closest("div.item").find("div.details");
+            $details.find("div.message").remove();
+            $("<div></div>").addClass("message").text(data.message).appendTo($details).delay(3000).fadeOut(1000, function() {$(this).remove();});
+            $rate_form.hide();
+          }, "application/json");
+      } else {
+        $rate_form.submit();
+      }
+      return false;
+    }
+  );
+
+  $rate_form.find("a.cancel").click(
+    function() {
+      $rate_form.hide();
+      return false;
+    }
+  );
+  
+  $("#content dl.actions a.rate-item").click(
+    function() {
+      var $this = $(this);
+      var $menu = $this.closest("dl.actions");
+      $rate_form.find("select").val("5");
+      $rate_form.attr("action", $this.attr("href"));
+      $rate_form.detach().insertAfter($menu).show();
+      $menu.removeClass("active");
+      return false;
+    }
+  );
+
 
 }

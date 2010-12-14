@@ -50,12 +50,17 @@ def view_item(request, slug=None, model=None):
         except:
             save_url = reverse("materials:%s:save_item" % item.namespace,
                            kwargs=dict(slug=item.slug))
+    else:
+        save_url = reverse("materials:%s:save_item" % item.namespace,
+                       kwargs=dict(slug=item.slug))
 
     add_tags_url = reverse("materials:%s:add_tags" % item.namespace,
                            kwargs=dict(slug=item.slug))
     add_review_url = reverse("materials:%s:add_review" % item.namespace,
                            kwargs=dict(slug=item.slug))
     add_note_url = reverse("materials:%s:add_note" % item.namespace,
+                           kwargs=dict(slug=item.slug))
+    rate_item_url = reverse("materials:%s:rate_item" % item.namespace,
                            kwargs=dict(slug=item.slug))
 
 
@@ -144,6 +149,8 @@ def view_item(request, slug=None, model=None):
             order_by = None
         elif sort_by == "date":
             order_by = "-published_on"
+        elif sort_by == "rating":
+            order_by = "-rating"
         else:
             order_by = "sortable_title"
 

@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
+from haystack.sites import site
 from materials.utils import get_name_from_slug
 from tags.models import Tag
 from utils.decorators import login_required
@@ -52,7 +53,7 @@ class TagsForm(forms.Form):
                 Tag(content_type=content_type, object_id=object_id,
                     user=self.user, name=tag).save()
 
-        # TODO: reindex item
+        site.update_object(self.instance)
 
 
 @login_required

@@ -6,6 +6,7 @@ from tags.urls import add_tags_patterns
 from reviews.urls import add_review_patterns
 from notes.urls import add_note_patterns
 from saveditems.urls import saved_item_patterns
+from rating.urls import rating_patterns
 
 
 general_subject_patterns = patterns('materials.views',
@@ -49,7 +50,8 @@ course_patterns = browse_patterns + patterns('materials.views',
 add_tags_patterns + \
 add_review_patterns + \
 add_note_patterns + \
-saved_item_patterns
+saved_item_patterns + \
+rating_patterns
 
 
 library_patterns = browse_patterns + patterns('materials.views',
@@ -59,7 +61,8 @@ library_patterns = browse_patterns + patterns('materials.views',
 add_tags_patterns + \
 add_review_patterns + \
 add_note_patterns + \
-saved_item_patterns
+saved_item_patterns + \
+rating_patterns
 
 community_patterns = general_subject_patterns + \
 grade_level_patterns + \
@@ -72,7 +75,8 @@ keyword_patterns + patterns('materials.views',
 add_tags_patterns + \
 add_review_patterns + \
 add_note_patterns + \
-saved_item_patterns
+saved_item_patterns + \
+rating_patterns
 
 microsite_browse_patterns = browse_patterns # TODO: add subtopic here
 

@@ -1,13 +1,9 @@
 <ul class="navigation">
   {% for tab in tabs %}
-    <li class="sep"></li>
     <li{% if tab.selected %} class="selected"{% endif %}>
-      <a href="{{ tab.url }}">{{ tab.title }}</a>
+      <span><a href="{{ tab.url }}">{{ tab.title }}</a></span>
       {% if forloop.end %}
       {% endif %}
     </li>
-    {% if forloop.last %}
-      <li class="sep"></li>
-    {% endif %}
   {% endfor %}
 </ul>

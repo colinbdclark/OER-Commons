@@ -52,22 +52,25 @@
 .navigation {
     list-style-type: none;
     float: left;
+    background: url(../images/section-sep.gif) no-repeat 100% 50%;
+    padding-right: 1px;
 }
 .navigation li {
     float: left;
     height: 40px;
+    padding-left: 3px;
+    margin-right: 2px;
+    background: url(../images/section-sep.gif) no-repeat 0% 50%;
+}
+.navigation li span {
+    display: block;
     padding: 0 16px;
-}
-.navigation li.sep {
-    float: left;
     height: 40px;
-    padding: 0;
-    width: 5px;
-    background: url(../images/section-sep.gif) no-repeat 50% 50%;
 }
-.navigation li.selected {
+.navigation li.selected span {
     background: url(../images/section-active-bg.png) repeat-x;
 }
+
 .navigation li a {
     font-size: 14px;
     font-weight: bold;

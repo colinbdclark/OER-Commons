@@ -310,6 +310,8 @@ def index(request, general_subjects=None, grade_levels=None,
         order_by = None
     elif sort_by == "date":
         order_by = "-published_on"
+    elif sort_by == "rating":
+        order_by = "-rating"
     else:
         order_by = "sortable_title"
 
@@ -347,6 +349,9 @@ def index(request, general_subjects=None, grade_levels=None,
                                        kwargs=dict(slug=item["slug"]))
                 item["add_tags_url"] = reverse(
                                        "materials:%s:add_tags" % namespace,
+                                       kwargs=dict(slug=item["slug"]))
+                item["rate_item_url"] = reverse(
+                                       "materials:%s:rate_item" % namespace,
                                        kwargs=dict(slug=item["slug"]))
                 item["add_review_url"] = reverse(
                                        "materials:%s:add_review" % namespace,

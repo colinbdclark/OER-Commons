@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load rating_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -32,6 +33,9 @@
     {% include "materials/include/index-navigation.html" %}
   {% endwith %}
   </div>
+  
+  {% rate_form %}
+  
 {% endblock %}
 
 {% block column-right %}

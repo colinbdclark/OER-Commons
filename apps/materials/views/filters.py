@@ -1,14 +1,14 @@
-from materials.utils import get_name_from_slug
 from django.http import Http404
-from materials.models.course import COURSE_OR_MODULE, CourseMaterialType
 from materials.models.common import Keyword, GeneralSubject, GradeLevel, \
     MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS, \
     LICENSE_TYPES
+from materials.models.community import CommunityType, CommunityTopic
+from materials.models.course import COURSE_OR_MODULE, CourseMaterialType
+from materials.models.library import LibraryMaterialType
+from materials.models.material import MEMBER_ACTIVITY_TYPES
+from materials.utils import get_name_from_slug
 from tags.models import Tag
 import re
-from materials.models.library import LibraryMaterialType
-from materials.models.community import CommunityType, CommunityTopic
-from materials.models.material import MEMBER_ACTIVITY_TYPES
 
 
 class Filter(object):
@@ -306,7 +306,7 @@ FILTERS = {
     "community_topics": VocabularyFilter("community_topics", "f.oer_topic", CommunityTopic, u"OER Community Topic"),
     "course_or_module": ChoicesFilter("course_or_module", "f.course_or_module", COURSE_OR_MODULE, u"Course Type"),
     "cou_bucket": ChoicesFilter("cou_bucket", "f.cou_bucket", COU_BUCKETS, u"Conditions of Use"),
-    "license_type": ChoicesFilter("license_type", "f.license", LICENSE_TYPES, u"Conditions of Use"),
+    "license_type": ChoicesFilter("license", "f.license", LICENSE_TYPES, u"Conditions of Use"),
     "member_activities": ChoicesFilter("member_activities", "f.member_activity", MEMBER_ACTIVITY_TYPES, u"Member Activity"),
     "ocw": BooleanFilter("ocw", "f.is_ocw", u"OpenCourseWare"),
     "collection": VocabularyFilter("collection", "f.collection", Collection, u"Collection"),

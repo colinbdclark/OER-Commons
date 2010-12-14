@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
+from haystack.sites import site
 from reviews.models import Review
 from utils.decorators import login_required
 from utils.shortcuts import redirect_to_next_url
@@ -47,8 +48,7 @@ class ReviewForm(forms.Form):
             review.text = text
             review.save()
 
-        # TODO: reindex item
-
+        site.update_object(self.instance)
 
 
 @login_required

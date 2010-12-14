@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load materials_tags %}
+{% load rating_tags %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -49,29 +50,42 @@
 
 {% block content %}
 <div class="view-item">
+  <div class="right">
+    {% stars item.rating %}
+    {% rate_form rate_item_url %}
+    <a href="#" class="rate-item"><img alt="" src="{{ STATIC_URL }}images/rate-btn.png" /></a>
+    {% cou_bucket item.license.bucket %}
+  </div>
+  
+  <div class="right add-this">
+    <script type="text/javascript">
+      addthis_url    = location.href;   
+      addthis_title  = document.title;  
+      addthis_pub    = 'oercommons';     
+    </script>
+    <script src="http://s7.addthis.com/js/addthis_widget.php?v=12" type="text/javascript"></script>
+  </div>
+  
   <div class="details">
     <h3>
       {{ item.title|safe }}
-      <a href="{{ item.url }}"><img alt="" src="{{ STATIC_URL }}images/external-link-icon.gif"></a>  
+      <a href="{{ item.url }}"><img alt="{{ item.title }}" src="{{ STATIC_URL }}images/external-link-icon.gif" /></a>  
     </h3>
 
     <dl>
       {% if item.authors %}
       <dt>Author:</dt>
       <dd>{{ item.authors.all|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
 
       {% if item.general_subjects %}
       <dt>Subject:</dt>
       <dd>{{ item.general_subjects.all|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
 
       {% if item.institution %}
       <dt>Institution Name:</dt>
       <dd>{{ item.institution.name }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
 
       {% if item.collection %}
@@ -79,14 +93,12 @@
       <dd>
         <a href="{% url materials:collection_index collection=item.collection.slug %}">{{ item.collection.name }}</a>
       </dd>
-      <dd class="clear"></dd>
       {% endif %}
 
   
       {% if item.grade_levels %}
       <dt>Grade Level:</dt>
       <dd>{{ item.grade_levels.all|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
       
     </dl>
@@ -94,56 +106,47 @@
     <dl>
       <dt>Abstract:</dt>
       <dd>{{ item.abstract|linebreaks }}</dd>
-      <dd class="clear"></dd>
     </dl>
 
     <dl>
       {% if item.course_or_module %}
       <dt>Course Type:</dt>
       <dd>{{ item.get_course_or_module_display }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
 
       {% if item.languages %}
       <dt>Language:</dt>
       <dd>{{ item.languages.all|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
 
       {% if item.material_types %}
       <dt>Material Type:</dt>
       <dd>{{ item.material_types.all|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
       
       {% if item.media_formats %}
       <dt>Media Format:</dt>
       <dd>{{ item.media_formats.all|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
 
       {% if item.curriculum_standards %}
       <dt>Curriculum Standards:</dt>
       <dd>{{ item.curriculum_standards }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
 
       {% if item.tech_requirements %}
       <dt>Technical Requirements:</dt>
       <dd>{{ item.tech_requirements }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
 
       {% if item.community_types %}
       <dt>Content Type:</dt>
       <dd>{{ item.community_types.all|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
       
       {% if item.community_topics %}
       <dt>Content Topic:</dt>
       <dd>{{ item.community_topics.all|join:", " }}</dd>
-      <dd class="clear"></dd>
       {% endif %}
     </dl>
     
@@ -160,11 +163,9 @@
             {% if license.description %}<br /> {{ license.description }}{% endif %}
             {% if license.image %}<br /> <img src="{{ license.image }}" alt="{{ license.name }}" />{% endif %}
           </dd>
-          <dd class="clear"></dd>
           {% if license.copyright_holder %}
           <dt>Copyright Holder:</dt>
           <dd>{{ license.copyright_holder }}</dd>
-          <dd class="clear"></dd>
           {% endif %}
         {% endwith %}
       {% endif %}
@@ -172,7 +173,7 @@
   </div>
   
   <div class="reviews">
-    <a href="{{ add_review_url }}" class="button with-next-url"><img alt="Review This Item" src="{{ STATIC_URL}}images/add-review-btn.png"></a>
+    <a href="{{ add_review_url }}" class="button with-next-url"><img alt="Review This Item" src="{{ STATIC_URL}}images/add-review-btn.png" /></a>
     {% with item.reviews.all as reviews %}
       {% if reviews %}
       <dl>
@@ -191,7 +192,7 @@
   </div>
 
   <div class="notes clear">
-    <a href="{{ add_note_url }}" class="button with-next-url"><img alt="Add Notes" src="{{ STATIC_URL}}images/add-notes-btn.png"></a>
+    <a href="{{ add_note_url }}" class="button with-next-url"><img alt="Add Notes" src="{{ STATIC_URL}}images/add-notes-btn.png" /></a>
     {% if user_note %}
       <dl>
         <dt>My Notes</dt>
@@ -208,7 +209,7 @@
 
 {% block column-right %}
   <div class="portlet item-tags dotted">
-    <h4 class="dotted">Item Tags</h3>
+    <h4 class="dotted">Item Tags</h4>
     {% if tags %}
        <div class="tag-cloud dotted">
        {% for tag in tags %}
@@ -241,7 +242,7 @@
   </div>
 
   <div class="portlet item-keywords dotted">
-    <h4 class="dotted">Keywords</h3>
+    <h4 class="dotted">Keywords</h4>
     {% for keyword in item.keywords.all %}
       <a href="{% url materials:keyword_index keywords=keyword.slug %}">{{ keyword.name }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}

@@ -38,11 +38,16 @@
   margin-right: 4px;
   color: #616161;
   font-weight: bold;
+  clear: left;
 }
 
 .materials-index .details dd, .view-item .details dd {
   margin-left: 0;
   margin-bottom: 2px;
+}
+
+.materials-index .details dd.clear, .view-item .details dd.clear {
+  clear: left;
 }
 
 .materials-index .details dl.collapsed {
@@ -52,6 +57,35 @@
 .materials-index .details {
   margin-left: 20px;
   margin-right: 120px;
+}
+
+.cou-bucket {
+  color: #0B7BA9;
+  font-size: 10px;
+  height: 29px;
+  line-height: 12px;
+  padding-left: 36px;
+  padding-right: 2px;
+  padding-top: 4px;
+  width: 50px;
+  margin: 3px 0;
+}
+
+.cou-bucket.no-strings-attached {
+  background: url(../images/no-strings-attached.png) no-repeat 0% 50%
+  ;
+}
+
+.cou-bucket.remix-and-share {
+  background: url(../images/remix-and-share.png) no-repeat 0% 50%;
+}
+
+.cou-bucket.share-only {
+  background: url(../images/share-only.png) no-repeat 0% 50%;
+}
+
+.cou-bucket.read-the-fine-print {
+  background: url(../images/read-the-fine-print.png) no-repeat 0% 50%;
 }
 
 .materials-index .details .message {
@@ -70,13 +104,36 @@
   display: none;
 }
 
-.materials-index .item .right {
+.materials-index .item .right,
+.view-item .right {
   float: right;
+  margin-left: 10px;
 }
 
 .materials-index .item dl.actions {
   margin: 0;
   padding: 0;
+}
+
+.view-item .stars {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.view-item .stars.s00 {
+  display: none;
+}
+
+.view-item .cou-bucket {
+  margin-left: 5px;  
+}
+
+.view-item .add-this img {
+  margin-top: 2px;
+}
+
+.view-item form.rate {
+  width: 97px;
 }
 
 .materials-index .item dl.actions.active {
@@ -115,7 +172,7 @@
 
 .materials-index .item dl.actions ul li {
   margin: 0;
-  paddding: 0;
+  padding: 0;
 }
 
 .materials-index .item dl.actions ul a {
@@ -311,27 +368,23 @@
   visibility: hidden;
 }
 
-.view-item .reviews,
-.view-item .notes {
+.view-item .reviews, .view-item .notes {
   margin-top: 20px;
   font-size: 12px;
 }
 
-.view-item .reviews a.button,
-.view-item .notes a.button {
+.view-item .reviews a.button, .view-item .notes a.button {
   float: right;
   margin-left: 10px;
   margin-bottom: 10px;
 }
 
-.view-item .reviews dt,
-.view-item .notes dt {
+.view-item .reviews dt, .view-item .notes dt {
   color: #616161;
-  font-weight: bold;\
+  font-weight: bold;
 }
 
-.view-item .reviews dd,
-.view-item .notes dd {
+.view-item .reviews dd, .view-item .notes dd {
   margin: 10px 20px;
   font-style: italic;
 }
@@ -497,7 +550,7 @@
 
 .advanced-search .filters table {
   margin-left: 13px;
-  margin-right 13px;
+  margin-right: 13px;
   width: 530px;
 }
 

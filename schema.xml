@@ -94,6 +94,7 @@
     <field name="url" type="string" indexed="false" stored="true" multiValued="false" />
     <field name="published_on" type="date" indexed="true" stored="true" multiValued="false" />
     <field name="member_activities" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="rating" type="sfloat" indexed="true" stored="true" multiValued="false" />
     <field name="license" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="cou_bucket" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="workflow_state" type="string"   indexed="true"  stored="true"  multiValued="false" />

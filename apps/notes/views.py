@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
+from haystack.sites import site
 from notes.models import Note
 from saveditems.models import SavedItem
 from utils.decorators import login_required
@@ -60,8 +61,7 @@ class NoteForm(forms.Form):
         else:
             self.instance.saved_items.filter(user=self.user).delete()
 
-        # TODO: reindex item
-
+        site.update_object(self.instance)
 
 
 @login_required
