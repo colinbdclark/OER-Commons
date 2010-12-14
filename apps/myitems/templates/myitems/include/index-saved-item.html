@@ -5,7 +5,7 @@
   <div class="details">
     <h3>
       <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
-      <a href="{{ item.url }}"><img alt="{{ item.title }}" src="{{ STATIC_URL }}images/external-link-icon.gif" /></a>  
+      <a class="unsave-item" href="{{ item.unsave_item_url }}"><img alt="Remove from collection" src="{{ STATIC_URL }}images/remove-from-collection.png" /></a>  
     </h3>
     {% include "materials/include/index-item-details.html" %}
   </div>

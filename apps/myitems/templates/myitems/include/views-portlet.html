@@ -1,0 +1,9 @@
+<div class="portlet my-items-views dotted">
+  {% if views %}
+  <ul>
+    {% for view in views %}
+      <li{% if view.selected %} class="selected"{% endif %}><a href="{{ view.url }}">{{ view.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>

@@ -1,0 +1,25 @@
+{% load materials_tags %}
+{% load rating_tags %}
+<div class="right">
+  {% stars item.rating %}
+  {% cou_bucket item.cou_bucket %}
+  <dl class="actions">
+    <dt><a href="#"><img src="{{ STATIC_URL }}images/actions-menu-btn.png" alt="Actions" /></a></dt>
+    <dd>
+      <ul>
+        {% if item.add_tags_url %}
+          <li><a class="with-next-url" href="{{ item.add_tags_url }}">Tag this item</a></li>
+        {% endif %}
+        {% if item.rate_item_url %}
+          <li><a class="rate-item" href="{{ item.rate_item_url }}">Rate this item</a></li>
+        {% endif %}
+        {% if item.add_review_url %}
+          <li><a class="with-next-url" href="{{ item.add_review_url }}">Review this item</a></li>
+        {% endif %}
+        {% if item.save_item_url %}
+          <li><a class="{% if request.user.is_authenticated %}save-item{% else %}with-next-url{% endif %}" href="{{ item.save_item_url }}">Save this item</a></li>
+        {% endif %}
+      </ul>
+    </dd>
+  </dl>
+</div>

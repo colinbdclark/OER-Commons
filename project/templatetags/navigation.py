@@ -32,7 +32,7 @@ def navigation(context):
 
     tab = {}
     tab["title"] = u"My Items"
-    tab["url"] = reverse("user_items")
+    tab["url"] = reverse("myitems:myitems")
     tab["selected"] = path_elements and path_elements[0] == "my"
     tabs.append(tab)
 

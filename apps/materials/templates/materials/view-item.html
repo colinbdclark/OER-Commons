@@ -39,8 +39,8 @@
     {% endif %}
     <form action="" method="post">
       <input type="hidden" name="index_path" value="{{ index_path }}" />
-      <input type="hidden" name="batch_size" value="{{ batch_size }}" />
-      <input type="hidden" name="sort_by" value="{{ sort_by }}" />
+      <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
+      <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
       {% hidden_filters hidden_filters %}
     </form>
   </div>

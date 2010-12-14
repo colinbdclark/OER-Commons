@@ -1,9 +1,7 @@
 oer.materials.index = {};
 
-oer.materials.index.init = function() {
-  
+oer.materials.index.init_action_panel = function() {
   var $filters_portlet = $("div.portlet.index-filters");
-  var $top_keywords_portlet = $("div.portlet.top-keywords");
   var $form = $filters_portlet.find("form[name='index-filters']");
   var $action_panel = $("div.action-panel");
   
@@ -19,6 +17,12 @@ oer.materials.index.init = function() {
     $form.submit();
   });
   
+}
+
+oer.materials.index.init_filters = function() {
+  var $filters_portlet = $("div.portlet.index-filters");
+  var $form = $filters_portlet.find("form[name='index-filters']");
+  
   $form.find("div.search input[type='submit']").click(function() {
     if ($form.find("input[name='f.search']").val() != "") {
       $form.find("input[name='sort_by']").val("search");
@@ -26,7 +30,6 @@ oer.materials.index.init = function() {
   });
 
   $form.submit(function() {
-    $form = $(this);
     $form.find(".filter").each(function() {
       $filter = $(this);
       if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
@@ -60,27 +63,29 @@ oer.materials.index.init = function() {
       $filter.find("dd :checkbox").attr("checked", false);
     }
   });
+  
+}
 
+oer.materials.index.init_top_keywords = function() {
+  var $top_keywords_portlet = $("div.portlet.top-keywords");
   $top_keywords_portlet.find("a.see-more").click(function() {
     $(this).hide();
     $top_keywords_portlet.find("div.top").hide();
     $top_keywords_portlet.find("div.all").show();
     return false;
   });
+}
 
+oer.materials.index.init_item_links = function() {
   $("#content div.materials-index h3 a.item-link").click(function() {
     $form.attr("action", $(this).attr("href")).attr("method", "post");
     $form.find("input[name='index_path']").attr("disabled", false);
     $form.submit();
     return false;
   });
-  
-  oer.collapsibles.init($("#content"));
-  oer.collapsibles.init($filters_portlet);
-  
-  $filters_portlet.find("dl.cou a.tooltip-button").cluetip({local:true, arrows: true, width: 300});
-  $filters_portlet.find("dl.grade-levels a.tooltip-button").cluetip({local:true, arrows: true, width: 200});
-  
+}
+
+oer.materials.index.init_actions_menus = function() {
   $("#content dl.actions dt a").click(
     function() {
       var $menu = $(this).closest("dl.actions");
@@ -155,6 +160,22 @@ oer.materials.index.init = function() {
       return false;
     }
   );
+}
 
+oer.materials.index.init = function() {
+  
+  oer.materials.index.init_action_panel();
+  oer.materials.index.init_filters();
+  oer.materials.index.init_item_links();
+  oer.materials.index.init_actions_menus();
+  
+  var $filters_portlet = $("div.portlet.index-filters");
+  
+  oer.collapsibles.init($("#content"));
+  oer.collapsibles.init($filters_portlet);
+  
+  $filters_portlet.find("dl.cou a.tooltip-button").cluetip({local:true, arrows: true, width: 300});
+  $filters_portlet.find("dl.grade-levels a.tooltip-button").cluetip({local:true, arrows: true, width: 200});
+  
 
 }

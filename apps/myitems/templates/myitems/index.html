@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load rating_tags %}
+{% load myitems_tags %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.myitems.index.init();
+    });
+  </script>
+{% endblock %}
+
+{% block above-content %}
+  {% include "myitems/include/index-action-panel.html" %}
+{% endblock %}
+
+{% block column-left %}
+  {% myitems_views_portlet %}
+{% endblock %}
+
+{% block content %}
+  {% include "myitems/include/user-info.html" %}
+
+  <div class="materials-index collapsibles">
+  {% with "top" as class %}
+    {% include "materials/include/index-navigation.html" %}
+  {% endwith %}
+
+  {% for item in items %}
+    {% include "materials/include/index-item.html" %}
+  {% endfor %}
+
+  {% with "bottom" as class %}
+    {% include "materials/include/index-navigation.html" %}
+  {% endwith %}
+  </div>
+  
+  {% rate_form %}
+  
+{% endblock %}
+
+{% block column-right %}
+  {% my_tags_portlet %}
+{% endblock %}

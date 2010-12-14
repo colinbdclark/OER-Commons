@@ -1,0 +1,8 @@
+<div class="portlet my-tags">
+  <h4 class="dotted">My Tags</h4>
+  <div class="tag-cloud">
+   {% for keyword in tags %}
+     <a href="{% url materials:keyword_index keywords=keyword.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
+   {% endfor %}
+  </div>
+</div>

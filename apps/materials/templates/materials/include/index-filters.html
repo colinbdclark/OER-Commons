@@ -3,8 +3,8 @@
 <div class="portlet index-filters">
   <form name="index-filters" action="{{ request.path }}">
 
-    <input type="hidden" name="batch_size" value="{{ batch_size }}" />
-    <input type="hidden" name="sort_by" value="{{ sort_by }}" />
+    <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
+    <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
     <input type="hidden" name="index_path" value="{{ request.path }}" disabled="disabled" />
 
     {% hidden_filters hidden_filters %}

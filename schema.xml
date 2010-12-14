@@ -85,7 +85,7 @@
 
     <field name="text" type="text" indexed="true" stored="true" multiValued="false" />
     <field name="text_exact" type="text_ws" indexed="true" stored="true" multiValued="false" />
-	<copyField source="text" dest="text_exact" />
+    <copyField source="text" dest="text_exact" />
 
     <field name="slug" type="string" indexed="false" stored="true" multiValued="false" />
     <field name="title" type="text" indexed="true" stored="true" multiValued="false" />
@@ -93,8 +93,18 @@
     <field name="abstract" type="text" indexed="true" stored="true" multiValued="false" />
     <field name="url" type="string" indexed="false" stored="true" multiValued="false" />
     <field name="published_on" type="date" indexed="true" stored="true" multiValued="false" />
+    
     <field name="member_activities" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="rating" type="sfloat" indexed="true" stored="true" multiValued="false" />
+
+    <field name="saved_by" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="tagged_by" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="rated_by" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="reviewed_by" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="noted_by" type="sint" indexed="true" stored="true" multiValued="true" />
+
+    <field name="creator" type="sint" indexed="true" stored="true" multiValued="false" />
+    
     <field name="license" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="cou_bucket" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="workflow_state" type="string"   indexed="true"  stored="true"  multiValued="false" />

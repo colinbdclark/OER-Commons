@@ -22,17 +22,6 @@
         </select>
       </li>
     </ul>
-
-    <ul class="right">
-      {% if request.user.is_authenticated and request.user.is_staff %}
-      <li>
-        <a class="csv-icon" href="{{ csv_url }}" title="Export to CSV">Export to CSV</a>
-      </li>
-      {% endif %}
-      <li>
-        <a class="rss-icon" href="{{ feed_url }}" title="Subscribe">Subscribe</a>
-      </li>
-    </ul>
-    
     </form>
+
 </div>

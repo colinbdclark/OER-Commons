@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^$', "project.views.frontpage", name="frontpage"),
     url(r'', include('users.urls', app_name=None, namespace="users")),
     url(r'', include('materials.urls', app_name=None, namespace="materials")),
+    url(r'^my', include('myitems.urls', app_name=None, namespace="myitems")), # TODO! Set up redirect /portfolio -> /my
 )
 
 
@@ -22,7 +23,6 @@ urlpatterns += patterns('',
     url(r'^feedback$', "project.views.frontpage", name="feedback"),
     url(r'^information$', "project.views.frontpage", name="information"),
     url(r'^contribute$', "project.views.frontpage", name="contribute"),
-    url(r'^my$', "project.views.frontpage", name="user_items"), # TODO! Set up redirect /portfolio -> /my
     url(r'^(?P<microsite>[^/]+)$', "project.views.frontpage", name="microsite"),
 )
 

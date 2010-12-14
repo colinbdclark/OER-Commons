@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from saveditems.models import SavedItem
 from utils.decorators import login_required
 from utils.shortcuts import redirect_to_next_url
+from haystack.sites import site
 
 
 @login_required
@@ -22,6 +23,8 @@ def save(request, slug=None, model=None):
     SavedItem.objects.get_or_create(content_type=content_type,
                           object_id=object_id,
                           user=request.user)
+
+    site.update_object(item)
 
     if request.method == "POST":
         # Save item by AJAX request
@@ -46,6 +49,13 @@ def unsave(request, slug=None, model=None):
         SavedItem.objects.get(content_type=content_type,
                               object_id=object_id,
                               user=request.user).delete()
+        site.update_object(item)
+
+        if request.method == "POST":
+            # Unsave item by AJAX request
+            return HttpResponse(u"Item was removed from your collection.",
+                                content_type="application/json")
+
         messages.success(request, u"Item was removed from your collection.")
     except SavedItem.DoesNotExist:
         pass

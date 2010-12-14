@@ -1,0 +1,53 @@
+dl.user-info {
+  margin-bottom: 0;
+  padding-bottom: 10px;
+  font-size: 14px;
+}
+
+dl.user-info dt {
+  float: left;
+  clear: left;
+  margin-right: 5px;
+  color: #1F555F;
+  font-weight: bold;
+}
+
+.portlet.my-items-views ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+.portlet.my-items-views li {
+  margin: 0 0 4px 0;
+}
+
+.portlet.my-items-views li.selected {
+  font-weight: bold;
+}
+
+.portlet.my-items-views a {
+  text-decoration: none;
+}
+
+.materials-index.saved .index-navigation.top {
+  margin-bottom: 5px;
+  background: none;
+}
+
+.materials-index.saved p.hint {
+  font-size: 14px;
+  padding-bottom: 10px;
+  margin-bottom: 15px;  
+  line-height: 14px;
+  font-weight: bold;
+}
+
+.materials-index.saved p.hint img {
+  vertical-align: top;
+}
+
+.unsave-confirmation {
+  display: none;
+}

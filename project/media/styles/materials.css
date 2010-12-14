@@ -16,6 +16,10 @@
   color: #1F4D64;
 }
 
+.materials-index h3 img, .view-item h3 img {
+  vertical-align: top;
+}
+
 .materials-index a, .view-item a {
   text-decoration: none;
 }

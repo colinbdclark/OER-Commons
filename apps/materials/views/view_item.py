@@ -6,8 +6,8 @@ from haystack.query import SearchQuerySet
 from materials.models.material import PUBLISHED_STATE
 from materials.utils import get_name_from_slug
 from materials.views.filters import FILTERS
-from materials.views.index import PATH_FILTERS, BATCH_SIZE_OPTIONS, \
-    SORT_BY_OPTIONS, serialize_query_string_params, DEFAULT_BATCH_SIZE
+from materials.views.index import PATH_FILTERS, IndexParams, \
+    serialize_query_string_params
 from notes.models import Note
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
@@ -71,8 +71,6 @@ def view_item(request, slug=None, model=None):
     next_item_url = u""
     index_url = u""
     hidden_filters = {}
-    sort_by = u""
-    batch_size = u""
 
     kwargs = {}
     index_path = request.REQUEST.get("index_path")
@@ -118,44 +116,11 @@ def view_item(request, slug=None, model=None):
                 if filter_name == "search":
                     search_query = value
 
-        batch_size_options = BATCH_SIZE_OPTIONS
+        index_params = IndexParams(request, search_query=search_query)
+        query_string_params = index_params.update_query_string_params(query_string_params)
 
-        try:
-            batch_size = int(request.REQUEST.get("batch_size", 0))
-        except:
-            batch_size = DEFAULT_BATCH_SIZE
-        if batch_size not in batch_size_options:
-            batch_size = DEFAULT_BATCH_SIZE
-        if batch_size != DEFAULT_BATCH_SIZE:
-            query_string_params["batch_size"] = batch_size
-
-        sort_by_options = SORT_BY_OPTIONS
-
-        DEFAULT_SORT_BY = search_query and "search" or "title"
-        sort_by = request.REQUEST.get("sort_by", request.REQUEST.get("sort_on"))
-        if not sort_by or sort_by not in [o["value"] for o in sort_by_options]:
-            if sort_by == "publication_time":
-                sort_by = "date"
-            elif sort_by == "overall_rating":
-                sort_by = "rating"
-            elif search_query:
-                sort_by = "search"
-            else:
-                sort_by = DEFAULT_SORT_BY
-        if sort_by != DEFAULT_SORT_BY:
-            query_string_params["sort_by"] = sort_by
-
-        if sort_by == "search":
-            order_by = None
-        elif sort_by == "date":
-            order_by = "-published_on"
-        elif sort_by == "rating":
-            order_by = "-rating"
-        else:
-            order_by = "sortable_title"
-
-        if order_by is not None:
-            query = query.order_by(order_by)
+        if index_params.query_order_by is not None:
+            query = query.order_by(index_params.query_order_by)
 
         current_item_idx = 0
         for result in query:
@@ -178,7 +143,7 @@ def view_item(request, slug=None, model=None):
                 break
             current_item_idx += 1
 
-        batch_start = (current_item_idx / batch_size) * batch_size
+        batch_start = (current_item_idx / index_params.batch_size) * index_params.batch_size
         if batch_start:
             query_string_params["batch_start"] = batch_start
 

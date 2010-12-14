@@ -35,6 +35,14 @@ class AuthorsField(MultiValueField):
         return value.values_list("name", flat=True)
 
 
+class ByField(MultiValueField):
+
+    def convert(self, value):
+        if isinstance(value, list):
+            return value
+        return value.values_list("user__id", flat=True)
+
+
 class MaterialSearchIndex(RealTimeSearchIndex):
 
     text = CharField(document=True, use_template=True)
@@ -45,6 +53,14 @@ class MaterialSearchIndex(RealTimeSearchIndex):
 
     member_activities = MultiValueField(model_attr="member_activities")
     rating = FloatField(model_attr="rating")
+
+    saved_by = ByField(model_attr="saved_items")
+    tagged_by = ByField(model_attr="tags")
+    rated_by = ByField(model_attr="ratings")
+    reviewed_by = ByField(model_attr="reviews")
+    noted_by = ByField(model_attr="notes")
+
+    creator = IntegerField(model_attr="creator__id")
 
     license = CharField(model_attr="license__type")
     cou_bucket = CharField(model_attr="license__bucket")

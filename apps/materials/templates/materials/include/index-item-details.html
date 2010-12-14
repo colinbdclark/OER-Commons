@@ -1,0 +1,23 @@
+<a class="expand-link collapsed" href="#">(Complete Item Description)</a>
+<dl class="collapsed">
+  <dt>Abstract:</dt>
+  <dd>{{ item.abstract|linebreaks }}</dd>
+</dl>
+<dl>
+  {% if item.general_subjects %}
+  <dt>Subject:</dt>
+  <dd>{{ item.general_subjects|join:", " }}</dd>
+  {% endif %}
+
+  {% if item.grade_levels %}
+  <dt>Grade Level:</dt>
+  <dd>{{ item.grade_levels|join:", " }}</dd>
+  {% endif %}
+  
+  {% if item.collection %}
+  <dt>Collection:</dt>
+  <dd>
+    <a href="{% url materials:collection_index collection=item.collection.slug %}">{{ item.collection.name }}</a>
+  </dd>
+  {% endif %}
+</dl>

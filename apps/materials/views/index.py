@@ -16,20 +16,6 @@ from tags.tags_utils import get_tag_cloud
 import urllib
 
 
-BATCH_SIZE_OPTIONS = (
-    10, 20, 50, 100
-)
-
-DEFAULT_BATCH_SIZE = 20
-
-SORT_BY_OPTIONS = (
-    {"value": u"title", "title": u"Title"},
-    {"value": u"search", "title": u"Relevance"},
-    {"value": u"rating", "title": u"Rating"},
-    {"value": u"date", "title": u"Date"},
-    {"value": u"visits", "title": u"Visits"},
-)
-
 MAX_TOP_KEYWORDS = 25
 
 
@@ -54,59 +40,60 @@ def serialize_query_string_params(query_string_params, ignore_params=[]):
     return u""
 
 
-def build_pagination(path, query_string_params, batch_start, batch_size, total_items):
-    pagination = dict(first_page_url=None,
-                 last_page_url=None,
-                 next_page_url=None,
-                 prev_page_url=None,
-                 pages=[])
+class Pagination:
 
-    if not total_items:
-        return pagination
+    def __init__(self, path, query_string_params, batch_start, batch_size,
+                 total_items):
+        self.total_items = total_items
+        self.first_item_number = batch_start + 1
+        self.last_item_number = batch_start + batch_size
+        if self.last_item_number > self.total_items:
+            self.last_item_number = self.total_items
+        self.first_page_url = None
+        self.last_page_url = None
+        self.next_page_url = None
+        self.prev_page_url = None
+        self.pages = []
 
-    total_pages = total_items / batch_size
-    if total_items % batch_size:
-        total_pages += 1
-    current_page = batch_start / batch_size
+        if self.total_items:
+            total_pages = total_items / batch_size
+            if total_items % batch_size:
+                total_pages += 1
+            current_page = batch_start / batch_size
 
-    if current_page != 0:
-        params = query_string_params.copy()
-        if "batch_start" in params:
-            del params["batch_start"]
-        pagination["first_page_url"] = path + serialize_query_string_params(params)
+            if current_page != 0:
+                self.first_page_url = path + serialize_query_string_params(query_string_params, ["batch_start"])
 
-        params = query_string_params.copy()
-        if (current_page - 1) * batch_size:
-            params["batch_start"] = (current_page - 1) * batch_size
-        elif "batch_start" in params:
-            del params["batch_start"]
-        pagination["prev_page_url"] = path + serialize_query_string_params(params)
+                params = query_string_params.copy()
+                if (current_page - 1) * batch_size:
+                    params["batch_start"] = (current_page - 1) * batch_size
+                elif "batch_start" in params:
+                    del params["batch_start"]
+                self.prev_page_url = path + serialize_query_string_params(params)
 
-    if current_page < (total_pages - 1):
-        params = query_string_params.copy()
-        params["batch_start"] = (total_pages - 1) * batch_size
-        pagination["last_page_url"] = path + serialize_query_string_params(params)
+            if current_page < (total_pages - 1):
+                params = query_string_params.copy()
+                params["batch_start"] = (total_pages - 1) * batch_size
+                self.last_page_url = path + serialize_query_string_params(params)
 
-        params = query_string_params.copy()
-        params["batch_start"] = (current_page + 1) * batch_size
-        pagination["next_page_url"] = path + serialize_query_string_params(params)
+                params = query_string_params.copy()
+                params["batch_start"] = (current_page + 1) * batch_size
+                self.next_page_url = path + serialize_query_string_params(params)
 
-    for page in first_neighbours_last(xrange(total_pages), current_page, 3, 3):
-        if page is None:
-            pass
-        elif page == current_page:
-            page = dict(number=page + 1, url=None)
-        else:
-            params = query_string_params.copy()
-            if page * batch_size:
-                params["batch_start"] = page * batch_size
-            elif "batch_start" in params:
-                del params["batch_start"]
-            url = path + serialize_query_string_params(params)
-            page = dict(number=page + 1, url=url)
-        pagination["pages"].append(page)
-
-    return pagination
+            for page in first_neighbours_last(xrange(total_pages), current_page, 3, 3):
+                if page is None:
+                    pass
+                elif page == current_page:
+                    page = dict(number=page + 1, url=None)
+                else:
+                    params = query_string_params.copy()
+                    if page * batch_size:
+                        params["batch_start"] = page * batch_size
+                    elif "batch_start" in params:
+                        del params["batch_start"]
+                    url = path + serialize_query_string_params(params)
+                    page = dict(number=page + 1, url=url)
+                self.pages.append(page)
 
 
 BASIC_INDEX_FILTERS = (
@@ -173,6 +160,119 @@ PATH_FILTERS = ["general_subjects", "grade_levels", "course_material_types",
                 "library_material_types", "collection", "keywords", "license",
                 "ocw", "course_or_module", "community_types",
                 "community_topics"]
+
+
+class IndexParams:
+
+    BATCH_SIZE_OPTIONS = (
+        10, 20, 50, 100
+    )
+
+    DEFAULT_BATCH_SIZE = 20
+
+    SORT_BY_OPTIONS = (
+        {"value": u"title", "title": u"Title"},
+        {"value": u"search", "title": u"Relevance"},
+        {"value": u"rating", "title": u"Rating"},
+        {"value": u"date", "title": u"Date"},
+        {"value": u"visits", "title": u"Visits"},
+    )
+
+    def __init__(self, request, format="html", search_query=None):
+
+        self.default_sort_by = search_query and "search" or "title"
+        self.format = format
+        self.search_query = search_query
+        self.batch_start = 0
+        self.batch_size = self.DEFAULT_BATCH_SIZE
+        self.sort_by = self.default_sort_by
+        self.query_order_by = None
+
+        try:
+            self.batch_start = int(request.REQUEST.get("batch_start", 0))
+        except:
+            pass
+
+        try:
+            batch_size = int(request.REQUEST.get("batch_size", 0))
+            if batch_size in self.BATCH_SIZE_OPTIONS:
+                self.batch_size = batch_size
+        except:
+            pass
+
+        sort_by = request.REQUEST.get("sort_by", request.REQUEST.get("sort_on"))
+        if not sort_by or sort_by not in [o["value"] for o in self.SORT_BY_OPTIONS]:
+            if sort_by == "publication_time":
+                self.sort_by = "date"
+            elif sort_by == "overall_rating":
+                self.sort_by = "rating"
+            elif search_query:
+                self.sort_by = "search"
+        else:
+            self.sort_by = sort_by
+
+
+        if format == "rss":
+            self.query_order_by = "-published_on"
+        elif self.sort_by == "search":
+            self.query_order_by = None
+        elif self.sort_by == "date":
+            self.query_order_by = "-published_on"
+        elif self.sort_by == "rating":
+            self.query_order_by = "-rating"
+        else:
+            self.query_order_by = "sortable_title"
+
+
+    def update_query_string_params(self, query_string_params):
+        if self.batch_start:
+            query_string_params["batch_start"] = self.batch_start
+        if self.batch_size != self.DEFAULT_BATCH_SIZE:
+            query_string_params["batch_size"] = self.batch_size
+        if self.sort_by != self.default_sort_by:
+            query_string_params["sort_by"] = self.sort_by
+        return query_string_params
+
+
+def populate_item_from_search_result(result):
+    item = result.get_stored_fields()
+    if item.get("collection"):
+        collection_id = item["collection"]
+        item["collection"] = {"name": get_name_from_id(Collection,
+                                                       collection_id),
+                              "slug": get_slug_from_id(Collection,
+                                                       collection_id)}
+    if item.get("general_subjects"):
+        item["general_subjects"] = [get_name_from_id(
+             GeneralSubject, id) for id in item["general_subjects"]]
+
+    if item.get("grade_levels"):
+        item["grade_levels"] = [get_name_from_id(
+                     GradeLevel, id) for id in item["grade_levels"]]
+
+    namespace = getattr(result.model, "namespace", None)
+    if namespace:
+        item["get_absolute_url"] = reverse(
+                               "materials:%s:view_item" % namespace,
+                               kwargs=dict(slug=item["slug"]))
+        item["add_tags_url"] = reverse(
+                               "materials:%s:add_tags" % namespace,
+                               kwargs=dict(slug=item["slug"]))
+        item["rate_item_url"] = reverse(
+                               "materials:%s:rate_item" % namespace,
+                               kwargs=dict(slug=item["slug"]))
+        item["add_review_url"] = reverse(
+                               "materials:%s:add_review" % namespace,
+                               kwargs=dict(slug=item["slug"]))
+        item["save_item_url"] = reverse(
+                               "materials:%s:save_item" % namespace,
+                               kwargs=dict(slug=item["slug"]))
+        item["unsave_item_url"] = reverse(
+                               "materials:%s:unsave_item" % namespace,
+                               kwargs=dict(slug=item["slug"]))
+    else:
+        item["get_absolute_url"] = result.object.get_absolute_url()
+    return item
 
 
 def index(request, general_subjects=None, grade_levels=None,
@@ -262,39 +362,6 @@ def index(request, general_subjects=None, grade_levels=None,
         filter = FILTERS[filter_name]
         page_subtitle = filter.page_subtitle(filter_values[filter_name])
 
-    try:
-        batch_start = int(request.REQUEST.get("batch_start", 0))
-    except:
-        batch_start = 0
-    if batch_start:
-        query_string_params["batch_start"] = batch_start
-
-    batch_size_options = BATCH_SIZE_OPTIONS
-
-    try:
-        batch_size = int(request.REQUEST.get("batch_size", 0))
-    except:
-        batch_size = DEFAULT_BATCH_SIZE
-    if batch_size not in batch_size_options:
-        batch_size = DEFAULT_BATCH_SIZE
-    if batch_size != DEFAULT_BATCH_SIZE:
-        query_string_params["batch_size"] = batch_size
-
-    sort_by_options = SORT_BY_OPTIONS
-
-    DEFAULT_SORT_BY = search_query and "search" or "title"
-    sort_by = request.REQUEST.get("sort_by", request.REQUEST.get("sort_on"))
-    if not sort_by or sort_by not in [o["value"] for o in sort_by_options]:
-        if sort_by == "publication_time":
-            sort_by = "date"
-        elif sort_by == "overall_rating":
-            sort_by = "rating"
-        elif search_query:
-            sort_by = "search"
-        else:
-            sort_by = DEFAULT_SORT_BY
-    if sort_by != DEFAULT_SORT_BY:
-        query_string_params["sort_by"] = sort_by
 
 
     index_url = request.path + serialize_query_string_params(query_string_params,
@@ -302,21 +369,13 @@ def index(request, general_subjects=None, grade_levels=None,
     feed_url = index_url + "&feed=yes"
     csv_url = index_url + "&csv=yes"
 
-    batch_end = batch_start + batch_size
+    index_params = IndexParams(request, format, search_query)
+    query_string_params = index_params.update_query_string_params(query_string_params)
 
-    if format == "rss":
-        order_by = "-published_on"
-    elif sort_by == "search":
-        order_by = None
-    elif sort_by == "date":
-        order_by = "-published_on"
-    elif sort_by == "rating":
-        order_by = "-rating"
-    else:
-        order_by = "sortable_title"
+    batch_end = index_params.batch_start + index_params.batch_size
 
-    if order_by is not None:
-        query = query.order_by(order_by)
+    if index_params.query_order_by is not None:
+        query = query.order_by(index_params.query_order_by)
 
     items = []
 
@@ -325,54 +384,14 @@ def index(request, general_subjects=None, grade_levels=None,
         for facet_field in facet_fields:
             query = query.facet(facet_field)
 
-        results = query[batch_start:batch_end]
+        results = query[index_params.batch_start:batch_end]
         for result in results:
-            item = result.get_stored_fields()
-            if item.get("collection"):
-                collection_id = item["collection"]
-                item["collection"] = {"name": get_name_from_id(Collection,
-                                                               collection_id),
-                                      "slug": get_slug_from_id(Collection,
-                                                               collection_id)}
-            if item.get("general_subjects"):
-                item["general_subjects"] = [get_name_from_id(
-                     GeneralSubject, id) for id in item["general_subjects"]]
+            items.append(populate_item_from_search_result(result))
 
-            if item.get("grade_levels"):
-                item["grade_levels"] = [get_name_from_id(
-                             GradeLevel, id) for id in item["grade_levels"]]
-
-            namespace = getattr(result.model, "namespace", None)
-            if namespace:
-                item["get_absolute_url"] = reverse(
-                                       "materials:%s:view_item" % namespace,
-                                       kwargs=dict(slug=item["slug"]))
-                item["add_tags_url"] = reverse(
-                                       "materials:%s:add_tags" % namespace,
-                                       kwargs=dict(slug=item["slug"]))
-                item["rate_item_url"] = reverse(
-                                       "materials:%s:rate_item" % namespace,
-                                       kwargs=dict(slug=item["slug"]))
-                item["add_review_url"] = reverse(
-                                       "materials:%s:add_review" % namespace,
-                                       kwargs=dict(slug=item["slug"]))
-                item["save_item_url"] = reverse(
-                                       "materials:%s:save_item" % namespace,
-                                       kwargs=dict(slug=item["slug"]))
-            else:
-                item["get_absolute_url"] = result.object.get_absolute_url()
-
-            items.append(item)
-
-        total_items = len(query)
-
-        first_item_number = batch_start + 1
-        last_item_number = batch_start + batch_size
-        if last_item_number > total_items:
-            last_item_number = total_items
-
-        pagination = build_pagination(request.path, query_string_params,
-                                      batch_start, batch_size, total_items)
+        pagination = Pagination(request.path, query_string_params,
+                                index_params.batch_start,
+                                index_params.batch_size,
+                                len(query))
 
         facets = query.facet_counts()["fields"]
 
