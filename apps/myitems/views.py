@@ -4,6 +4,8 @@ from materials.models.material import PUBLISHED_STATE
 from materials.views.index import IndexParams, populate_item_from_search_result, \
     Pagination
 from utils.decorators import login_required
+from savedsearches.models import SavedSearch
+from django.core.urlresolvers import reverse
 
 
 def myitems_index(request, view_name, page_title, index_name,
@@ -72,3 +74,17 @@ def noted(request):
 def submitted(request):
     return myitems_index(request, "submitted", u"My Submitted Items", "creator",
                          only_published=False)
+
+@login_required
+def searches(request):
+    page_title = u"My Saved Searches"
+    breadcrumbs = [
+        {"url": "myitems:myitems", "title": u"My Items"},
+        {"url": "myitems:searches", "title": page_title},
+    ]
+
+    items = list(SavedSearch.objects.filter(user=request.user))
+    for item in items:
+        item.unsave_item_url = reverse("savedsearches:unsave", kwargs=dict(id=item.id))
+
+    return direct_to_template(request, "myitems/searches.html", locals())

@@ -1,0 +1,17 @@
+<form name="save-search" class="save-search shadow formatted" method="{% if request.user.is_authenticated %}post{% else %}get{% endif %}"
+      action="{% url savedsearches:save %}">
+  <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+  
+  <h4 class="dotted">Save this search</h4>
+  
+  {{ form.url }}
+  {% with form.title as field %}
+    {% include "include/form-field.html" %}
+  {% endwith %}
+  
+  <div class="buttons">
+    <input type="submit" class="button" name="save" value="Save" />
+    <input type="submit" class="button" name="cancel" value="Cancel" />
+  </div>
+  
+</form>

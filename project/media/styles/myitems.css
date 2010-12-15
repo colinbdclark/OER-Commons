@@ -48,6 +48,10 @@ dl.user-info dt {
   vertical-align: top;
 }
 
+.materials-index.saved.searches p.hint {
+  margin-top: 10px;
+}
+
 .unsave-confirmation {
   display: none;
 }

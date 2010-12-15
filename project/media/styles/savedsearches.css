@@ -1,0 +1,28 @@
+form.save-search {
+  background: white;
+  border-color: #C0D8E4 #A3BFCD #96B0BD #A2BFCD;
+  border-style: solid;
+  border-width: 1px;
+  padding: 7px;
+  position: absolute;
+  z-index: 99;
+  display: none;
+}
+
+form.save-search h4 {
+  color: #666;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: normal;
+  margin-bottom: 5px;
+  padding-bottom: 3px;
+  margin-top: 0;
+}
+
+form.save-search .field {
+  margin-bottom: 0;
+}
+
+form.save-search .text {
+  width: 250px;
+}

@@ -8,4 +8,5 @@ urlpatterns = patterns("myitems.views",
   url(r"^/reviewed/?$", "reviewed", name="reviewed"),
   url(r"^/noted/?$", "noted", name="noted"),
   url(r"^/submitted/?$", "submitted", name="submitted"),
+  url(r"^/searches/?$", "searches", name="searches"),
 )

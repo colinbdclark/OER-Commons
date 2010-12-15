@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'', include('users.urls', app_name=None, namespace="users")),
     url(r'', include('materials.urls', app_name=None, namespace="materials")),
     url(r'^my', include('myitems.urls', app_name=None, namespace="myitems")), # TODO! Set up redirect /portfolio -> /my
+    url(r'^savedsearches', include('savedsearches.urls', app_name=None, namespace="savedsearches")),
 )
 
 

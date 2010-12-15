@@ -14,7 +14,7 @@ oer.materials.view_item.init = function() {
     function() {
       var $this = $(this);
       $rate_form.find("select").val("5");
-      $rate_form.show();
+      $rate_form.fadeIn(300);
       $this.hide();
       return false;
     }
@@ -39,7 +39,7 @@ oer.materials.view_item.init = function() {
             $stars.removeClass().addClass("stars").addClass(data.stars_class);
             var $main_column = $("div.column-main");
             $main_column.find("div.status-message").remove();
-            $("<div></div>").addClass("status-message").text(data.message).prependTo($main_column).delay(3000).fadeOut(1000, function() {$(this).remove();});
+            $("<div></div>").addClass("status-message").text(data.message).hide().prependTo($main_column).fadeIn(300).delay(3000).fadeOut(1000, function() {$(this).remove();});
             $rate_form.hide();
             $show_rate_form_button.show();
           }, "application/json");

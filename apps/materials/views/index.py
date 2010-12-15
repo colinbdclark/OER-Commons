@@ -14,6 +14,7 @@ from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 import urllib
+from autoslug.settings import slugify
 
 
 MAX_TOP_KEYWORDS = 25
@@ -279,10 +280,42 @@ def index(request, general_subjects=None, grade_levels=None,
           course_material_types=None, library_material_types=None,
           collection=None, keywords=None, license=None, ocw=None,
           course_or_module=None, community_types=None, community_topics=None,
-          microsite=None, model=None, search=False,
+          microsite=None, model=None, search=False, tags=None, subjects=None,
           facet_fields=["general_subjects", "grade_levels", "keywords",
                         "course_material_types", "media_formats",
                         "cou_bucket"]):
+
+    if model:
+        index_namespace = model.namespace
+    else:
+        index_namespace = None
+
+    if tags or subjects:
+        # Tags and subjects are old path filters which are combined to
+        # keywords filter now.
+
+        # Redirect to keyword index.
+        keywords = tags or subjects
+        if index_namespace:
+            url = reverse("materials:%s:keyword_index" % index_namespace,
+                          kwargs=dict(keywords=keywords))
+        else:
+            url = reverse("materials:keyword_index",
+                          kwargs=dict(keywords=keywords))
+        return HttpResponsePermanentRedirect(url)
+
+    if keywords:
+        slugified_keywords = slugify(keywords)
+        if slugified_keywords != keywords:
+            # Keywords should be slugified.
+            # Redirect to keyword index with slugified keyword.
+            if index_namespace:
+                url = reverse("materials:%s:keyword_index" % index_namespace,
+                              kwargs=dict(keywords=slugified_keywords))
+            else:
+                url = reverse("materials:keyword_index",
+                              kwargs=dict(keywords=slugified_keywords))
+            return HttpResponsePermanentRedirect(url)
 
     query_string_params = {}
     filter_values = {}
@@ -363,14 +396,18 @@ def index(request, general_subjects=None, grade_levels=None,
         page_subtitle = filter.page_subtitle(filter_values[filter_name])
 
 
+    index_params = IndexParams(request, format, search_query)
+    query_string_params = index_params.update_query_string_params(query_string_params)
 
     index_url = request.path + serialize_query_string_params(query_string_params,
                                              ignore_params=["batch_start"])
+    if page_subtitle:
+        index_title = "%s: %s" % (page_title, page_subtitle)
+    else:
+        index_title = page_title
     feed_url = index_url + "&feed=yes"
     csv_url = index_url + "&csv=yes"
 
-    index_params = IndexParams(request, format, search_query)
-    query_string_params = index_params.update_query_string_params(query_string_params)
 
     batch_end = index_params.batch_start + index_params.batch_size
 
@@ -445,9 +482,5 @@ def index(request, general_subjects=None, grade_levels=None,
                                   "text/xml")
 
     elif format == "csv":
-        if page_subtitle:
-            title = "%s: %s" % (page_title, page_subtitle)
-        else:
-            title = page_title
-        return csv_export(query, title)
+        return csv_export(query, index_title)
 

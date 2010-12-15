@@ -71,7 +71,7 @@ oer.materials.index.init_top_keywords = function() {
   $top_keywords_portlet.find("a.see-more").click(function() {
     $(this).hide();
     $top_keywords_portlet.find("div.top").hide();
-    $top_keywords_portlet.find("div.all").show();
+    $top_keywords_portlet.find("div.all").fadeIn(300);
     return false;
   });
 }
@@ -112,7 +112,7 @@ oer.materials.index.init_actions_menus = function() {
         function(data) {
           var $details = $this.closest("div.item").find("div.details");
           $details.find("div.message").remove();
-          $("<div></div>").addClass("message").text(data).appendTo($details).delay(3000).fadeOut(1000, function() {$(this).remove();});
+          $("<div></div>").addClass("message").text(data).hide().appendTo($details).fadeIn(300).delay(3000).fadeOut(1000, function() {$(this).remove();});
         }, "application/json");
       var $menu = $this.closest("dl.actions");
       $menu.removeClass("active");
@@ -132,7 +132,7 @@ oer.materials.index.init_actions_menus = function() {
             $stars.removeClass().addClass("stars").addClass(data.stars_class);
             var $details = $this.closest("div.item").find("div.details");
             $details.find("div.message").remove();
-            $("<div></div>").addClass("message").text(data.message).appendTo($details).delay(3000).fadeOut(1000, function() {$(this).remove();});
+            $("<div></div>").addClass("message").text(data.message).hide().appendTo($details).fadeIn(300).delay(3000).fadeOut(1000, function() {$(this).remove();});
             $rate_form.hide();
           }, "application/json");
       } else {
@@ -155,7 +155,7 @@ oer.materials.index.init_actions_menus = function() {
       var $menu = $this.closest("dl.actions");
       $rate_form.find("select").val("5");
       $rate_form.attr("action", $this.attr("href"));
-      $rate_form.detach().insertAfter($menu).show();
+      $rate_form.detach().insertAfter($menu).fadeIn(300);
       $menu.removeClass("active");
       return false;
     }
@@ -165,6 +165,7 @@ oer.materials.index.init_actions_menus = function() {
 oer.materials.index.init = function() {
   
   oer.materials.index.init_action_panel();
+  oer.materials.index.init_top_keywords();
   oer.materials.index.init_filters();
   oer.materials.index.init_item_links();
   oer.materials.index.init_actions_menus();

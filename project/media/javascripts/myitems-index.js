@@ -46,7 +46,7 @@ oer.myitems.index.init_saved_items = function() {
     function() {
       var $this = $(this);
       $details = $this.closest("div.item").find("div.details");
-      $confirmation.detach().appendTo($details).show();
+      $confirmation.detach().appendTo($details).fadeIn(300);
       return false;
     }
   );
