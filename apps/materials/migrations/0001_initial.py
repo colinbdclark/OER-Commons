@@ -24,7 +24,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_country', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=100, populate_from=None, unique_with=(), db_index=True)),
         ))
         db.send_create_signal('materials', ['Country'])
 
@@ -41,7 +41,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_keyword', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=500)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique_with=(), max_length=50, populate_from=None, db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique_with=(), max_length=500, populate_from=None, db_index=True)),
             ('suggested', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('materials', ['Keyword'])
@@ -50,7 +50,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_generalsubject', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=100, populate_from=None, unique_with=(), db_index=True)),
             ('description', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
         ))
         db.send_create_signal('materials', ['GeneralSubject'])
@@ -59,7 +59,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_gradelevel', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=100, populate_from=None, unique_with=(), db_index=True)),
             ('description', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
         ))
         db.send_create_signal('materials', ['GradeLevel'])
@@ -76,7 +76,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_collection', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=300)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=300, populate_from=None, unique_with=(), db_index=True)),
         ))
         db.send_create_signal('materials', ['Collection'])
 
@@ -84,7 +84,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_institution', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=300)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=300, populate_from=None, unique_with=(), db_index=True)),
         ))
         db.send_create_signal('materials', ['Institution'])
 
@@ -92,7 +92,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_mediaformat', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=100, populate_from=None, unique_with=(), db_index=True)),
         ))
         db.send_create_signal('materials', ['MediaFormat'])
 
@@ -100,7 +100,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_geographicrelevance', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=100, populate_from=None, unique_with=(), db_index=True)),
         ))
         db.send_create_signal('materials', ['GeographicRelevance'])
 
@@ -108,7 +108,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_coursematerialtype', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=100, populate_from=None, unique_with=(), db_index=True)),
         ))
         db.send_create_signal('materials', ['CourseMaterialType'])
 
@@ -117,7 +117,6 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('url', self.gf('django.db.models.fields.URLField')(default=u'', max_length=300, blank=True)),
-            ('relationship_type', self.gf('django.db.models.fields.CharField')(max_length=20)),
             ('description', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
         ))
         db.send_create_signal('materials', ['RelatedMaterial'])
@@ -126,13 +125,13 @@ class Migration(SchemaMigration):
         db.create_table('materials_course', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=500, populate_from=None, unique_with=(), db_index=True)),
             ('created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('modified_on', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
             ('workflow_state', self.gf('django.db.models.fields.CharField')(default=u'private', max_length=50)),
             ('published_on', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('license', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['materials.License'])),
+            ('license', self.gf('materials.models.common.AutoCreateForeignKey')(to=orm['materials.License'])),
             ('in_rss', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('rss_description', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
             ('rss_timestamp', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
@@ -143,11 +142,16 @@ class Migration(SchemaMigration):
             ('content_creation_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=300)),
             ('tech_requirements', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
-            ('institution', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['materials.Institution'], null=True, blank=True)),
-            ('collection', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['materials.Collection'], null=True, blank=True)),
+            ('institution', self.gf('materials.models.common.AutoCreateForeignKey')(to=orm['materials.Institution'], null=True, blank=True)),
+            ('collection', self.gf('materials.models.common.AutoCreateForeignKey')(to=orm['materials.Collection'], null=True, blank=True)),
             ('curriculum_standards', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
             ('course_or_module', self.gf('django.db.models.fields.CharField')(default=u'', max_length=50, blank=True)),
             ('ocw', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('prerequisite_1', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='prerequisites_1', null=True, to=orm['materials.RelatedMaterial'])),
+            ('prerequisite_2', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='prerequisites_2', null=True, to=orm['materials.RelatedMaterial'])),
+            ('postrequisite_1', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='postrequisites_1', null=True, to=orm['materials.RelatedMaterial'])),
+            ('postrequisite_2', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='postrequisites_2', null=True, to=orm['materials.RelatedMaterial'])),
+            ('derived_from', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='derived', null=True, to=orm['materials.RelatedMaterial'])),
         ))
         db.send_create_signal('materials', ['Course'])
 
@@ -215,19 +219,11 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('materials_course_media_formats', ['course_id', 'mediaformat_id'])
 
-        # Adding M2M table for field related_materials on 'Course'
-        db.create_table('materials_course_related_materials', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('course', models.ForeignKey(orm['materials.course'], null=False)),
-            ('relatedmaterial', models.ForeignKey(orm['materials.relatedmaterial'], null=False))
-        ))
-        db.create_unique('materials_course_related_materials', ['course_id', 'relatedmaterial_id'])
-
         # Adding model 'LibraryMaterialType'
         db.create_table('materials_librarymaterialtype', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=100, populate_from=None, unique_with=(), db_index=True)),
         ))
         db.send_create_signal('materials', ['LibraryMaterialType'])
 
@@ -235,13 +231,13 @@ class Migration(SchemaMigration):
         db.create_table('materials_library', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=500, populate_from=None, unique_with=(), db_index=True)),
             ('created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('modified_on', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
             ('workflow_state', self.gf('django.db.models.fields.CharField')(default=u'private', max_length=50)),
             ('published_on', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('license', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['materials.License'])),
+            ('license', self.gf('materials.models.common.AutoCreateForeignKey')(to=orm['materials.License'])),
             ('in_rss', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('rss_description', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
             ('rss_timestamp', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
@@ -251,8 +247,8 @@ class Migration(SchemaMigration):
             ('content_creation_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=300)),
             ('tech_requirements', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
-            ('institution', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['materials.Institution'], null=True, blank=True)),
-            ('collection', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['materials.Collection'], null=True, blank=True)),
+            ('institution', self.gf('materials.models.common.AutoCreateForeignKey')(to=orm['materials.Institution'], null=True, blank=True)),
+            ('collection', self.gf('materials.models.common.AutoCreateForeignKey')(to=orm['materials.Collection'], null=True, blank=True)),
             ('curriculum_standards', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
             ('is_homepage', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
@@ -326,7 +322,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_communitytype', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=100, populate_from=None, unique_with=(), db_index=True)),
         ))
         db.send_create_signal('materials', ['CommunityType'])
 
@@ -334,7 +330,7 @@ class Migration(SchemaMigration):
         db.create_table('materials_communitytopic', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=100, populate_from=None, unique_with=(), db_index=True)),
         ))
         db.send_create_signal('materials', ['CommunityTopic'])
 
@@ -342,13 +338,13 @@ class Migration(SchemaMigration):
         db.create_table('materials_communityitem', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=50, populate_from=None, unique_with=(), db_index=True)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique=True, max_length=500, populate_from=None, unique_with=(), db_index=True)),
             ('created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('modified_on', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
             ('workflow_state', self.gf('django.db.models.fields.CharField')(default=u'private', max_length=50)),
             ('published_on', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('license', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['materials.License'])),
+            ('license', self.gf('materials.models.common.AutoCreateForeignKey')(to=orm['materials.License'])),
             ('in_rss', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('rss_description', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
             ('rss_timestamp', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
@@ -495,9 +491,6 @@ class Migration(SchemaMigration):
         # Removing M2M table for field media_formats on 'Course'
         db.delete_table('materials_course_media_formats')
 
-        # Removing M2M table for field related_materials on 'Course'
-        db.delete_table('materials_course_related_materials')
-
         # Deleting model 'LibraryMaterialType'
         db.delete_table('materials_librarymaterialtype')
 
@@ -610,12 +603,12 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('name',)", 'object_name': 'Collection'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '300'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '300', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.communityitem': {
             'Meta': {'ordering': "('created_on',)", 'object_name': 'CommunityItem'},
             'abstract': ('django.db.models.fields.TextField', [], {'default': "u''"}),
-            'authors': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Author']", 'symmetrical': 'False'}),
+            'authors': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Author']", 'symmetrical': 'False'}),
             'community_featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'community_topics': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.CommunityTopic']", 'symmetrical': 'False'}),
             'community_types': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.CommunityType']", 'symmetrical': 'False'}),
@@ -628,15 +621,15 @@ class Migration(SchemaMigration):
             'grade_levels': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GradeLevel']", 'symmetrical': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_rss': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'keywords': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
+            'keywords': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
             'languages': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Language']", 'symmetrical': 'False'}),
-            'license': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['materials.License']"}),
+            'license': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.License']"}),
             'modified_on': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
             'news_featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'published_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'rss_description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'rss_timestamp': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'}),
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '500', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'}),
             'tech_requirements': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '300'}),
@@ -646,51 +639,55 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('id',)", 'object_name': 'CommunityTopic'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.communitytype': {
             'Meta': {'ordering': "('id',)", 'object_name': 'CommunityType'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.country': {
             'Meta': {'ordering': "('id',)", 'object_name': 'Country'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.course': {
             'Meta': {'ordering': "('created_on',)", 'object_name': 'Course'},
             'abstract': ('django.db.models.fields.TextField', [], {'default': "u''"}),
-            'authors': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Author']", 'symmetrical': 'False'}),
-            'collection': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['materials.Collection']", 'null': 'True', 'blank': 'True'}),
+            'authors': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Author']", 'symmetrical': 'False'}),
+            'collection': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.Collection']", 'null': 'True', 'blank': 'True'}),
             'content_creation_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'course_id': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '300', 'blank': 'True'}),
             'course_or_module': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '50', 'blank': 'True'}),
             'created_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'curriculum_standards': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
+            'derived_from': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'derived'", 'null': 'True', 'to': "orm['materials.RelatedMaterial']"}),
             'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'general_subjects': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GeneralSubject']", 'symmetrical': 'False'}),
             'geographic_relevance': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GeographicRelevance']", 'symmetrical': 'False'}),
             'grade_levels': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GradeLevel']", 'symmetrical': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_rss': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'institution': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['materials.Institution']", 'null': 'True', 'blank': 'True'}),
-            'keywords': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
+            'institution': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.Institution']", 'null': 'True', 'blank': 'True'}),
+            'keywords': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
             'languages': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Language']", 'symmetrical': 'False'}),
-            'license': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['materials.License']"}),
+            'license': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.License']"}),
             'material_types': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.CourseMaterialType']", 'symmetrical': 'False'}),
             'media_formats': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.MediaFormat']", 'symmetrical': 'False'}),
             'modified_on': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
             'ocw': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'postrequisite_1': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'postrequisites_1'", 'null': 'True', 'to': "orm['materials.RelatedMaterial']"}),
+            'postrequisite_2': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'postrequisites_2'", 'null': 'True', 'to': "orm['materials.RelatedMaterial']"}),
+            'prerequisite_1': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'prerequisites_1'", 'null': 'True', 'to': "orm['materials.RelatedMaterial']"}),
+            'prerequisite_2': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'prerequisites_2'", 'null': 'True', 'to': "orm['materials.RelatedMaterial']"}),
             'provider_id': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '300', 'blank': 'True'}),
             'published_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'related_materials': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.RelatedMaterial']", 'symmetrical': 'False'}),
             'rss_description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'rss_timestamp': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'}),
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '500', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'}),
             'tech_requirements': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '300'}),
@@ -700,39 +697,39 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('id',)", 'object_name': 'CourseMaterialType'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.generalsubject': {
             'Meta': {'ordering': "('id',)", 'object_name': 'GeneralSubject'},
             'description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.geographicrelevance': {
             'Meta': {'ordering': "('id',)", 'object_name': 'GeographicRelevance'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.gradelevel': {
             'Meta': {'ordering': "('id',)", 'object_name': 'GradeLevel'},
             'description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.institution': {
             'Meta': {'ordering': "('name',)", 'object_name': 'Institution'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '300'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '300', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.keyword': {
             'Meta': {'ordering': "('name',)", 'object_name': 'Keyword'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '500'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '50', 'populate_from': 'None', 'db_index': 'True'}),
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '500', 'populate_from': 'None', 'db_index': 'True'}),
             'suggested': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'materials.language': {
@@ -744,8 +741,8 @@ class Migration(SchemaMigration):
         'materials.library': {
             'Meta': {'ordering': "('created_on',)", 'object_name': 'Library'},
             'abstract': ('django.db.models.fields.TextField', [], {'default': "u''"}),
-            'authors': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Author']", 'symmetrical': 'False'}),
-            'collection': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['materials.Collection']", 'null': 'True', 'blank': 'True'}),
+            'authors': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Author']", 'symmetrical': 'False'}),
+            'collection': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.Collection']", 'null': 'True', 'blank': 'True'}),
             'content_creation_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'created_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
@@ -756,11 +753,11 @@ class Migration(SchemaMigration):
             'grade_levels': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GradeLevel']", 'symmetrical': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_rss': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'institution': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['materials.Institution']", 'null': 'True', 'blank': 'True'}),
+            'institution': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.Institution']", 'null': 'True', 'blank': 'True'}),
             'is_homepage': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'keywords': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
+            'keywords': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
             'languages': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Language']", 'symmetrical': 'False'}),
-            'license': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['materials.License']"}),
+            'license': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.License']"}),
             'material_types': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.LibraryMaterialType']", 'symmetrical': 'False'}),
             'media_formats': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.MediaFormat']", 'symmetrical': 'False'}),
             'modified_on': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
@@ -768,7 +765,7 @@ class Migration(SchemaMigration):
             'published_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'rss_description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'rss_timestamp': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'}),
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '500', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'}),
             'tech_requirements': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '300'}),
@@ -778,7 +775,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('id',)", 'object_name': 'LibraryMaterialType'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.license': {
             'Meta': {'ordering': "('id',)", 'object_name': 'License'},
@@ -794,15 +791,49 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('id',)", 'object_name': 'MediaFormat'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '50', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
         'materials.relatedmaterial': {
             'Meta': {'ordering': "('title',)", 'object_name': 'RelatedMaterial'},
             'description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'relationship_type': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'url': ('django.db.models.fields.URLField', [], {'default': "u''", 'max_length': '300', 'blank': 'True'})
+        },
+        'notes.note': {
+            'Meta': {'object_name': 'Note'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'text': ('django.db.models.fields.TextField', [], {}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
+        'rating.rating': {
+            'Meta': {'object_name': 'Rating'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'auto_now_add': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'value': ('django.db.models.fields.SmallIntegerField', [], {})
+        },
+        'reviews.review': {
+            'Meta': {'object_name': 'Review'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'text': ('django.db.models.fields.TextField', [], {}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
+        'saveditems.saveditem': {
+            'Meta': {'object_name': 'SavedItem'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'tags.tag': {
             'Meta': {'object_name': 'Tag'},
@@ -811,6 +842,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '100'}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '50', 'populate_from': 'None', 'db_index': 'True'}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'auto_now_add': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }

@@ -1,0 +1,38 @@
+{% load materials_tags %}
+<table class="keywords fields"><tbody class="field">
+  <tr>
+    <td colspan="2">
+      <div class="errors">
+        {% for error in field.errors %}
+          <label class="error">{{ error }}</label>
+        {% endfor %}
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">
+      <label>Available Keywords</label>
+    </td>
+    <td class="label">
+      <label>New Keywords</label>
+    </td>
+  </tr>
+  <tr>
+    <td class="help">
+      Use the CTRL key to select more than one
+    </td>
+    <td class="help">
+      Enter one keyword per line
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <select multiple="multiple" name="{{ field.name }}_suggested">
+        {% suggested_keywords_options %}
+      </select>
+    </td>
+    <td>
+      {{ field }}
+    </td>
+  </tr>
+</tbody></table>

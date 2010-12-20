@@ -36,6 +36,29 @@ form.formatted .required label {
   background: url(../images/asterisk.gif) no-repeat 100% 0;
 }
 
+form.formatted .field ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+form.formatted .field ul li {
+  margin: 0;
+  padding: 0;
+}
+
+form.formatted .field ul label {
+  font-weight: normal;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+form.formatted .field.required ul label {
+  padding-right: 0;
+  background: none;
+}
+
 form.formatted .help {
   color: #666;
   font-size: 11px;
@@ -65,14 +88,12 @@ form.reset-password-init input.text {
   width: 292px;
 }
 
-form.reset-password,
-form.change-password {
+form.reset-password, form.change-password {
   width: 200px;
   margin: 0 auto;
 }
 
-form.reset-password input.text,
-form.change-password input.text {
+form.reset-password input.text, form.change-password input.text {
   width: 192px;
 }
 
@@ -86,7 +107,7 @@ form.login input.text {
 }
 
 form.login a {
-  text-decoration: none;  
+  text-decoration: none;
 }
 
 form.login p {
@@ -174,4 +195,296 @@ form.note .buttons .field {
 
 form.note .buttons .field label {
   font-weight: normal;
+}
+
+form.content-submission {
+  background: #F3F7F8;
+  border: 1px solid #BCCACD;
+}
+
+form.content-submission h3 {
+  background: #F3F7F8 url(../images/box-header-bg.png) repeat-x 0 0;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding-bottom: 14px;
+  padding-left: 10px;
+  padding-top: 7px;
+  margin-top: 0;
+}
+
+form.content-submission h3 span.required {
+  padding-right: 12px;
+  background: url(../images/asterisk-white.gif) no-repeat 100% 0;
+}
+
+form.content-submission table {
+  margin-bottom: 0;
+}
+
+form.content-submission .fields {
+  width: 526px;
+  margin-left: 15px;
+  margin-bottom: 10px;
+}
+
+form.content-submission table.fields td {
+  padding: 0;
+  margin: 0;
+}
+
+form.content-submission .fields .label label {
+  color: #0C5670;
+  font-size: 14px;
+}
+
+form.content-submission .fields .required .label label {
+  background: url(../images/asterisk-blue.gif) no-repeat 100% 0;
+}
+
+form.content-submission .error {
+  font-size: 12px;
+}
+
+form.content-submission input.text {
+  background: #DDF0F6 url(../images/contribute-textinput-bg.png) repeat-x 0 0;
+}
+
+form.content-submission textarea {
+  resize: none;
+}
+
+form.content-submission .buttons {
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+form.content-submission .checkbox input {
+  float: left;
+}
+
+form.content-submission .checkbox label {
+  margin-left: 25px;
+  margin-top: 0;
+  padding: 0;
+  display: block;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+form.content-submission table.item-description.fields td {
+  padding-bottom: 5px;
+  vertical-align: middle;
+}
+
+form.content-submission table.item-description.fields .label {
+  width: 110px;
+  padding-top: 5px;
+  vertical-align: top;
+}
+
+form.content-submission table.item-description.fields .text.wide {
+  width: 410px;
+}
+
+form.content-submission #id_abstract {
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
+  height: 80px;
+}
+
+form.content-submission #id_content_creation_date {
+  width: 100px;
+}
+
+form.content-submission #id_tech_requirements {
+  background: #DDF0F6 url(../images/contribute-textinput-bg.png) repeat-x 0 0;
+  height: 33px;
+}
+
+form.content-submission #id_languages {
+  background: #DAEDF4 url(../images/contribute-textarea-bg-big.png) repeat-x 0 0;
+}
+
+form.content-submission .keywords td {
+  width: 50%;
+  padding: 0;
+}
+
+form.content-submission .keywords td.label {
+  padding: 0;
+}
+
+form.content-submission .keywords select, form.content-submission .keywords textarea {
+  background: #DAEDF4 url(../images/contribute-textarea-bg-big.png) repeat-x 0 0;
+}
+
+form.content-submission .keywords select {
+  height: 175px;
+  padding: 2px;
+  width: 250px;
+}
+
+form.content-submission .keywords textarea {
+  height: 170px;
+  width: 250px;
+}
+
+form.content-submission .keywords td.help {
+  color: #0C5670;
+  padding-bottom: 10px;
+}
+
+form.content-submission .columns td {
+  width: 50%;
+  padding: 0;
+}
+
+form.content-submission .columns .field {
+  margin-bottom: 15px;
+}
+
+form.content-submission .columns .label {
+  margin-bottom: 5px;
+}
+
+form.content-submission .columns li label {
+  font-size: 13px
+}
+
+form.content-submission .help {
+  color: #0C5670;
+  margin-bottom: 10px;
+}
+
+form.content-submission .cou a {
+  text-decoration: none;
+}
+
+form.content-submission .help a {
+  font-weight: bold;
+}
+
+form.content-submission .cou .radio label {
+  font-size: 13px;
+  font-weight: normal;
+}
+
+form.content-submission .cou .text {
+  margin: 0;
+}
+
+form.content-submission .cou .text.wide {
+  width: 520px;
+}
+
+form.content-submission #id_license_description {
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
+  height: 80px;
+}
+
+form.content-submission .cou .choose, form.content-submission .cou .change {
+  padding-left: 5px;
+  font-size: 13px;
+}
+
+form.content-submission .cou a.name {
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 20px;
+}
+
+form.content-submission .cou .field.cc-latest {
+  margin-bottom: 0;
+}
+
+form.content-submission .cou .cc-latest, form.content-submission .cou .cc-old {
+  margin-left: 23px;
+}
+
+form.content-submission .selection-widget {
+  margin-top: 5px;
+}
+
+form.content-submission .selection-widget table {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  width: auto;
+}
+
+form.content-submission .selection-widget table td {
+  margin: 0;
+  padding: 2px;
+}
+
+form.content-submission .selection-widget table td.label {
+  padding-top: 7px;
+}
+
+form.content-submission .selection-widget table td.buttons {
+  text-align: right;
+}
+
+form.content-submission .derived-fields .field {
+  margin-bottom: 5px;
+}
+
+form.content-submission .derived-fields .field .label {
+  margin-bottom: 0;
+}
+
+form.content-submission .derived-fields .text {
+  width: 240px;
+}
+
+form.content-submission #id_derived_description {
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
+  height: 80px;
+}
+
+form.content-submission #id_curriculum_standards {
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
+  height: 80px;
+  width: 520px;
+}
+
+form.content-submission fieldset {
+  border: 1px solid #BCCACD;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+form.content-submission legend {
+  color: #0C5670;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+form.content-submission fieldset .columns .field {
+  margin-bottom: 0;
+}
+
+form.content-submission fieldset .columns .label {
+  margin-bottom: 0;
+}
+
+form.content-submission .prerequisites-fields .text,
+form.content-submission .postrequisites-fields .text {
+  width: 200px;
+}
+
+form.content-submission #id_rss_description {
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
+  height: 80px;
+  width: 520px;  
+}
+
+form.content-submission #id_rss_timestamp_0 {
+  width: 100px;
+  margin-right: 10px;
+}
+
+form.content-submission #id_rss_timestamp_1 {
+  width: 50px;
 }

@@ -42,10 +42,12 @@ keyword_patterns
 
 
 course_patterns = browse_patterns + patterns('materials.views',
+    url(r"^/add/?$", "forms.course.add.add", name="add"),
     url(r"^/material_types/(?P<course_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
     url(r"^/ocw/?$", "index.index", name="ocw_index", kwargs={"ocw": True}),
     url(r"^/(?P<course_or_module>full-course|learning-module)/?$", "index.index", name="course_or_module_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
+    url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.course.edit.edit", name="edit"),
 ) + \
 add_tags_patterns + \
 add_review_patterns + \
@@ -55,8 +57,10 @@ rating_patterns
 
 
 library_patterns = browse_patterns + patterns('materials.views',
+    url(r"^/add/?$", "forms.library.add.add", name="add"),
     url(r"^/material_types/(?P<library_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
+    url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.library.edit.edit", name="edit"),
 ) + \
 add_tags_patterns + \
 add_review_patterns + \
@@ -68,9 +72,11 @@ community_patterns = general_subject_patterns + \
 grade_level_patterns + \
 license_patterns + \
 keyword_patterns + patterns('materials.views',
+    url(r"^/add/?$", "forms.community.add.add", name="add"),
     url(r"^/oer_type/(?P<community_types>[^/]+)/?$", "index.index", name="community_type_index"),
     url(r"^/oer_topic/(?P<community_topics>[^/]+)/?$", "index.index", name="community_topic_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
+    url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.community.edit.edit", name="edit"),
 ) + \
 add_tags_patterns + \
 add_review_patterns + \
@@ -91,5 +97,6 @@ urlpatterns = patterns('materials.views',
     url(r"^community", include(community_patterns, app_name="materials", namespace="community"), {"model": CommunityItem}),
     url(r"^(?P<microsite>[^/]+)/browse", include(microsite_browse_patterns)),
     url(r"^advanced-search/?$", "advanced_search.advanced_search", name="advanced_search"),
+    url(r"^license-picker/issue/?$", "license_picker.issue"),
 )
 

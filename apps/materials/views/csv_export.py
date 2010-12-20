@@ -82,10 +82,10 @@ COURSE_FIELDS = (
     ('CR_AUTHOR_NAME', "authors", process_author_names),
     ('CR_AUTHOR_EMAIL', "authors", process_author_emails),
     ('CR_AUTHOR_COUNTRY', "authors", process_author_countries),
-    ('CR_INSTITUTION', "institution", None),
+    ('CR_INSTITUTION', "institution", lambda x: x.name),
     ('CR_URL', "url", None),
     ('CR_IS_PART_OF_OCW', "ocw", process_boolean),
-    ('CR_COLLECTION', "collection", None),
+    ('CR_COLLECTION', "collection", lambda x: x.name),
     ('CR_SUBJECT', "general_subjects", process_vocabulary),
     ('CR_MATERIAL_TYPE', "material_types", process_vocabulary),
     ('CR_MEDIA_FORMATS', "media_formats", process_vocabulary),
@@ -95,23 +95,23 @@ COURSE_FIELDS = (
     ('CR_KEYWORDS', "keywords", process_vocabulary),
     ('CR_LANGUAGE', "languages", process_slugs),
     ('CR_IRR', "geographic_relevance", process_vocabulary),
-    ('CR_PREREQ_TITLE1', "related_materials", process_related_material("prerequisite", 0, "title")),
-    ('CR_PREREQ_URL1', "related_materials", process_related_material("prerequisite", 0, "url")),
-    ('CR_PREREQ_TITLE2', "related_materials", process_related_material("prerequisite", 1, "title")),
-    ('CR_PREREQ_URL2', "related_materials", process_related_material("prerequisite", 1, "url")),
-    ('CR_POSTREQ_TITLE1', "related_materials", process_related_material("postrequisite", 0, "title")),
-    ('CR_POSTREQ_URL1', "related_materials", process_related_material("postrequisite", 0, "url")),
-    ('CR_POSTREQ_TITLE2', "related_materials", process_related_material("postrequisite", 1, "title")),
-    ('CR_POSTREQ_URL2', "related_materials", process_related_material("postrequisite", 1, "url")),
+    ('CR_PREREQ_TITLE1', "prerequisite_1", lambda x: x.title),
+    ('CR_PREREQ_URL1', "prerequisite_1", lambda x: x.url),
+    ('CR_PREREQ_TITLE2', "prerequisite_2", lambda x: x.title),
+    ('CR_PREREQ_URL2', "prerequisite_2", lambda x: x.url),
+    ('CR_POSTREQ_TITLE1', "postrequisite_1", lambda x: x.title),
+    ('CR_POSTREQ_URL1', "postrequisite_1", lambda x: x.url),
+    ('CR_POSTREQ_TITLE2', "postrequisite_2", lambda x: x.title),
+    ('CR_POSTREQ_URL2', "postrequisite_2", lambda x: x.url),
     ('CR_COU_URL', "license", process_field_attr("url")),
     ('CR_COU_TITLE', "license", process_field_attr("name")),
     ('CR_COU_DESCRIPTION', "license", process_field_attr("description")),
     ('CR_COU_COPYRIGHT_HOLDER', "license", process_field_attr("copyright_holder")),
     ('CR_COU_BUCKET', "license", process_field_attr("bucket")),
     ('CR_PARENT_MODIFIED', "related_materials", lambda x: process_related_material("derived", 0, "title")(x) and "Yes" or "No"),
-    ('CR_PARENT_TITLE', "related_materials", process_related_material("derived", 0, "title")),
-    ('CR_PARENT_URL', "related_materials", process_related_material("derived", 0, "url")),
-    ('CR_PARENT_CHANGES', "related_materials", process_related_material("derived", 0, "description")),
+    ('CR_PARENT_TITLE', "derived_from", lambda x: x.title),
+    ('CR_PARENT_URL', "derived_from", lambda x: x.url),
+    ('CR_PARENT_CHANGES', "derived_from", lambda x: x.description),
     ('CR_CURRIC_STANDARDS', "curriculum_standards", None),
 )
 
@@ -125,9 +125,9 @@ LIBRARY_FIELDS = (
     ('LIB_AUTHOR_EMAIL', "authors", process_author_emails),
     ('LIB_AUTHOR_COUNTRY', "authors", process_author_countries),
     ('LIB_URL', "url", None),
-    ('LIB_COLLECTION', "collection", None),
+    ('LIB_COLLECTION', "collection", lambda x: x.name),
     ('LIB_IS_HOME_PAGE', "is_homepage", lambda x: x and 'Yes' or 'No'),
-    ('LIB_INSTITUTION', "institution", None),
+    ('LIB_INSTITUTION', "institution", lambda x: x.name),
     ('LIB_LEVEL', "grade_levels", process_vocabulary),
     ('LIB_ABSTRACT', "abstract", None),
     ('LIB_SUBJECT', "general_subjects", process_vocabulary),
@@ -212,8 +212,12 @@ def csv_export(query, title):
         object = result.object
         for field_name, attr_name, processor in fields:
             attr_value = getattr(object, attr_name)
+            if not attr_value:
+                row.append("")
             if processor is not None:
                 attr_value = processor(attr_value)
+            if not attr_value:
+                row.append("")
             if isinstance(attr_value, unicode):
                 attr_value = attr_value.encode("utf-8")
             row.append(attr_value)

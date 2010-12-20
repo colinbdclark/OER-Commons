@@ -4,7 +4,8 @@ from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
-    Language, GeographicRelevance, MediaFormat, Institution, Collection
+    Language, GeographicRelevance, MediaFormat, Institution, Collection, \
+    AutoCreateManyToManyField, AutoCreateForeignKey
 from materials.models.material import Material
 
 
@@ -36,10 +37,10 @@ class Library(Material):
     abstract = models.TextField(default=u"", verbose_name=u"Abstract")
     content_creation_date = models.DateField(null=True, blank=True,
                                      verbose_name=_(u"Content creation date"))
-    authors = models.ManyToManyField(Author, verbose_name=_(u"Authors"))
+    authors = AutoCreateManyToManyField(Author, verbose_name=_(u"Authors"))
 
     url = models.URLField(max_length=300, verbose_name=_(u"URL"))
-    keywords = models.ManyToManyField(Keyword, verbose_name=_(u"Keywords"))
+    keywords = AutoCreateManyToManyField(Keyword, verbose_name=_(u"Keywords"))
 
     tech_requirements = models.TextField(default=u"", blank=True,
                                      verbose_name=_(u"Techical requirements"))
@@ -57,9 +58,9 @@ class Library(Material):
     media_formats = models.ManyToManyField(MediaFormat,
                                            verbose_name=_(u"Media formats"))
 
-    institution = models.ForeignKey(Institution, null=True, blank=True,
+    institution = AutoCreateForeignKey(Institution, null=True, blank=True,
                                     verbose_name=_(u"Institution"))
-    collection = models.ForeignKey(Collection, null=True, blank=True,
+    collection = AutoCreateForeignKey(Collection, null=True, blank=True,
                                    verbose_name=_(u"Collection"))
 
     curriculum_standards = models.TextField(default=u"", blank=True,

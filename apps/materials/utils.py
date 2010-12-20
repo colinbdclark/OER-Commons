@@ -3,9 +3,6 @@ from haystack.query import SearchQuerySet
 from materials.models.material import PUBLISHED_STATE
 from titlecase import titlecase, ALL_CAPS
 import re
-from materials.models.course import Course
-from materials.models.library import Library
-from materials.models.community import CommunityItem
 
 
 ALPHANUM_RE = re.compile(r"\w+", re.IGNORECASE | re.UNICODE)
@@ -143,4 +140,3 @@ def first_neighbours_last(pages, current_page_idx, nb_left, nb_right):
     if current_page_idx < lastIdx:
         sublist.append(lastBatch)
     return sublist
-

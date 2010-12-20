@@ -2,7 +2,7 @@ from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.utils.html import fix_ampersands
 from django.utils.safestring import mark_safe
-from materials.models.common import COU_BUCKETS
+from materials.models.common import COU_BUCKETS, Keyword, License
 
 
 register = Library()
@@ -50,3 +50,19 @@ def cou_bucket(bucket=None):
     if bucket not in buckets:
         return {}
     return dict(slug=bucket, title=buckets[bucket])
+
+
+@register.inclusion_tag("materials/forms/include/suggested-keywords-options.html")
+def suggested_keywords_options():
+    return dict(keywords=Keyword.objects.filter(suggested=True).order_by("name").values_list("name", flat=True))
+
+
+@register.simple_tag
+def get_cc_license_name(url):
+    return License.objects.get_cc_license_name_from_url(url)
+
+
+@register.inclusion_tag("materials/forms/include/cc-selection-widget.html", takes_context=True)
+def cc_selection_widget(context):
+    return dict(fields=License.objects.get_cc_issue_fields(),
+                STATIC_URL=context["STATIC_URL"])

@@ -73,12 +73,12 @@
     </h3>
 
     <dl>
-      {% if item.authors %}
+      {% if item.authors.all.count %}
       <dt>Author:</dt>
       <dd>{{ item.authors.all|join:", " }}</dd>
       {% endif %}
 
-      {% if item.general_subjects %}
+      {% if item.general_subjects.all.count %}
       <dt>Subject:</dt>
       <dd>{{ item.general_subjects.all|join:", " }}</dd>
       {% endif %}
@@ -96,7 +96,7 @@
       {% endif %}
 
   
-      {% if item.grade_levels %}
+      {% if item.grade_levels.all.count %}
       <dt>Grade Level:</dt>
       <dd>{{ item.grade_levels.all|join:", " }}</dd>
       {% endif %}
@@ -114,17 +114,17 @@
       <dd>{{ item.get_course_or_module_display }}</dd>
       {% endif %}
 
-      {% if item.languages %}
+      {% if item.languages.all.count %}
       <dt>Language:</dt>
       <dd>{{ item.languages.all|join:", " }}</dd>
       {% endif %}
 
-      {% if item.material_types %}
+      {% if item.material_types.all.count %}
       <dt>Material Type:</dt>
       <dd>{{ item.material_types.all|join:", " }}</dd>
       {% endif %}
       
-      {% if item.media_formats %}
+      {% if item.media_formats.all.count %}
       <dt>Media Format:</dt>
       <dd>{{ item.media_formats.all|join:", " }}</dd>
       {% endif %}
@@ -139,12 +139,12 @@
       <dd>{{ item.tech_requirements }}</dd>
       {% endif %}
 
-      {% if item.community_types %}
+      {% if item.community_types.all.count %}
       <dt>Content Type:</dt>
       <dd>{{ item.community_types.all|join:", " }}</dd>
       {% endif %}
       
-      {% if item.community_topics %}
+      {% if item.community_topics.all.count %}
       <dt>Content Topic:</dt>
       <dd>{{ item.community_topics.all|join:", " }}</dd>
       {% endif %}

@@ -31,6 +31,10 @@ hr.tall {
   clear: both;
 }
 
+.hidden {
+  display: none;
+}
+
 .fixed-width {
   width: 960px;
   margin: 0 auto;
@@ -75,7 +79,7 @@ hr.tall {
   font-size: 11px;
 }
 
-.ui-widget-content {
+.ui-widget-content.ui-accordion-content {
   background: none;
 }
 

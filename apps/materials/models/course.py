@@ -1,11 +1,12 @@
 from autoslug.fields import AutoSlugField
+from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
-    Language, GeographicRelevance, MediaFormat, Institution, Collection
+    Language, GeographicRelevance, MediaFormat, Institution, Collection, \
+    AutoCreateManyToManyField, AutoCreateForeignKey
 from materials.models.material import Material
-from django.core.urlresolvers import reverse
-from django.db.models import permalink
 
 
 COURSE_OR_MODULE = (
@@ -43,9 +44,6 @@ class RelatedMaterial(models.Model):
     title = models.CharField(max_length=200, verbose_name=_(u"Title"))
     url = models.URLField(max_length=300, default=u"", blank=True,
                           verbose_name=_(u"URL"))
-    relationship_type = models.CharField(max_length=20,
-                                         choices=RELATIONSHIP_TYPES,
-                                         verbose_name=_(u"Relationship type"))
     description = models.TextField(default=u"", blank=True,
                                    verbose_name=_(u"Description"))
 
@@ -71,10 +69,10 @@ class Course(Material):
     abstract = models.TextField(default=u"", verbose_name=u"Abstract")
     content_creation_date = models.DateField(null=True, blank=True,
                                      verbose_name=_(u"Content creation date"))
-    authors = models.ManyToManyField(Author, verbose_name=_(u"Authors"))
+    authors = AutoCreateManyToManyField(Author, verbose_name=_(u"Authors"))
 
     url = models.URLField(max_length=300, verbose_name=_(u"URL"))
-    keywords = models.ManyToManyField(Keyword, verbose_name=_(u"Keywords"))
+    keywords = AutoCreateManyToManyField(Keyword, verbose_name=_(u"Keywords"))
 
     tech_requirements = models.TextField(default=u"", blank=True,
                                      verbose_name=_(u"Techical requirements"))
@@ -91,9 +89,9 @@ class Course(Material):
     media_formats = models.ManyToManyField(MediaFormat,
                                            verbose_name=_(u"Media formats"))
 
-    institution = models.ForeignKey(Institution, null=True, blank=True,
+    institution = AutoCreateForeignKey(Institution, null=True, blank=True,
                                     verbose_name=_(u"Institution"))
-    collection = models.ForeignKey(Collection, null=True, blank=True,
+    collection = AutoCreateForeignKey(Collection, null=True, blank=True,
                                    verbose_name=_(u"Collection"))
 
     curriculum_standards = models.TextField(default=u"", blank=True,
@@ -103,8 +101,25 @@ class Course(Material):
                                     verbose_name=_(u"Full course or module"))
     ocw = models.BooleanField(default=False, verbose_name=_(u"OpenCourseWare"))
 
-    related_materials = models.ManyToManyField(RelatedMaterial,
-                                           verbose_name=_(u"Related materials"))
+    prerequisite_1 = AutoCreateForeignKey(RelatedMaterial, null=True, blank=True,
+                                       verbose_name=_(u"Pre-requisite 1"),
+                                       related_name="prerequisites_1")
+
+    prerequisite_2 = AutoCreateForeignKey(RelatedMaterial, null=True, blank=True,
+                                       verbose_name=_(u"Pre-requisite 2"),
+                                       related_name="prerequisites_2")
+
+    postrequisite_1 = AutoCreateForeignKey(RelatedMaterial, null=True, blank=True,
+                                       verbose_name=_(u"Post-requisite 1"),
+                                       related_name="postrequisites_1")
+
+    postrequisite_2 = AutoCreateForeignKey(RelatedMaterial, null=True, blank=True,
+                                       verbose_name=_(u"Post-requisite 2"),
+                                       related_name="postrequisites_2")
+
+    derived_from = AutoCreateForeignKey(RelatedMaterial, null=True, blank=True,
+                                       verbose_name=_(u"Derived From"),
+                                       related_name="derived")
 
     def __unicode__(self):
         return self.title

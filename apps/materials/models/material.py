@@ -2,14 +2,15 @@ from autoslug.fields import AutoSlugField
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.db import models
+from django.db.models.aggregates import Avg
 from django.utils.translation import ugettext_lazy as _
 from materials.models import License
+from materials.models.common import AutoCreateForeignKey
 from notes.models import Note
 from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
 from tags.models import Tag
-from django.db.models.aggregates import Avg
 
 
 PUBLISHED_STATE = u"published"
@@ -57,7 +58,7 @@ class Material(models.Model):
 
     creator = models.ForeignKey(User, verbose_name=_("Creator"))
 
-    license = models.ForeignKey(License, verbose_name=_(u"License"))
+    license = AutoCreateForeignKey(License, verbose_name=_(u"License"))
 
     in_rss = models.BooleanField(default=False,
                                  verbose_name=_(u"Include in RSS"))

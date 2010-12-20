@@ -1,7 +1,7 @@
 from haystack import site
 from haystack.fields import CharField, MultiValueField, IntegerField, \
     BooleanField, DateTimeField, FloatField
-from haystack.indexes import RealTimeSearchIndex
+from haystack.indexes import RealTimeSearchIndex, SearchIndex
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
@@ -43,7 +43,7 @@ class ByField(MultiValueField):
         return value.values_list("user__id", flat=True)
 
 
-class MaterialSearchIndex(RealTimeSearchIndex):
+class MaterialSearchIndex(SearchIndex):
 
     text = CharField(document=True, use_template=True)
     slug = CharField(model_attr="slug", stored=True, indexed=False)

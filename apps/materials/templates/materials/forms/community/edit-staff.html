@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.content_submission.init_rss_fields();
+      oer.content_submission.init_license();
+      $("#id_content_creation_date").datepicker();
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+<form class="content-submission formatted community" name="content-submission"
+      method="post" action="{% url materials:community:edit slug=slug %}">
+  <h3>Item Description</h3>
+  
+  <table class="fields item-description"><tbody>
+  {% with form.slug as field %}
+    {% include "materials/forms/include/form-field.html" %}
+  {% endwith %}
+  {% with form.title as field %}
+    {% include "materials/forms/include/form-field.html" %}
+  {% endwith %}
+  {% with form.url as field %}
+    {% include "materials/forms/include/form-field.html" %}
+  {% endwith %}
+  {% with form.abstract as field %}
+    {% include "materials/forms/include/form-field.html" %}
+  {% endwith %}
+  {% with form.content_creation_date as field %}
+    {% include "materials/forms/include/form-field.html" %}
+  {% endwith %}
+  {% with form.authors as field %}
+    {% include "materials/forms/include/form-field.html" %}
+  {% endwith %}
+  {% with form.tech_requirements as field %}
+    {% include "materials/forms/include/form-field.html" %}
+  {% endwith %}
+  </tbody></table>
+    
+  <h3><span class="required">Keywords</span></h3>
+  {% with form.keywords as field %}
+  {% include "materials/forms/include/keywords-field.html" %}
+  {% endwith %}
+    
+  <h3>Additional Information</h3>
+  <table class="fields columns"><tbody><tr>
+    <td>
+      {% with form.community_types as field %}
+        {% include "materials/forms/include/vocabulary-field.html" %}
+      {% endwith %}
+      {% with form.languages as field %}
+        {% include "materials/forms/include/vocabulary-field.html" %}
+      {% endwith %}
+      {% with form.general_subjects as field %}
+        {% include "materials/forms/include/vocabulary-field.html" %}
+      {% endwith %}
+    </td>
+    <td>
+      {% with form.community_topics as field %}
+        {% include "materials/forms/include/vocabulary-field.html" %}
+      {% endwith %}
+      {% with form.geographic_relevance as field %}
+        {% include "materials/forms/include/vocabulary-field.html" %}
+      {% endwith %}
+      {% with form.grade_levels as field %}
+        {% include "materials/forms/include/vocabulary-field.html" %}
+      {% endwith %}
+    </td>
+  </tr></tbody></table>
+  
+  <div class="fields columns">
+    {% include "materials/forms/include/rss-fields.html" %}
+  </div>
+  
+  <h3><span class="required">Conditions of Use</span></h3>
+
+  {% include "materials/forms/include/license-field.html" %}    
+    
+  <div class="buttons">
+    <input type="submit" class="button" name="add" value="Submit" />
+  </div>
+</form>
+{% endblock %}

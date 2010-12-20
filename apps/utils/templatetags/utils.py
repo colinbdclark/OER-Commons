@@ -1,7 +1,8 @@
+from django.conf import settings
 from django.contrib.sites.models import Site
+from django.forms.fields import FileField
 from django.template import Library
 from django.template.defaultfilters import stringfilter
-from django.conf import settings
 
 
 register = Library()
@@ -21,3 +22,17 @@ def next_url_input(context):
     field_name = settings.REDIRECT_FIELD_NAME
     next_url = request.REQUEST.get(field_name, u"")
     return dict(field_name=field_name, next_url=next_url)
+
+
+@register.filter
+def bound_field_value(field):
+    if not field.form.is_bound:
+        data = field.form.initial.get(field.name, field.field.initial)
+        if callable(data):
+            data = data()
+    else:
+        if isinstance(field.field, FileField) and field.data is None:
+            data = field.form.initial.get(field.name, field.field.initial)
+        else:
+            data = field.data
+    return data

@@ -1,7 +1,33 @@
 from autoslug.fields import AutoSlugField
+from cache_utils.decorators import cached
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from materials.ccrest import CcRest
+from south.modelsinspector import add_introspection_rules
+from urllib2 import HTTPError
 import re
+
+
+class AutoCreateForeignKey(models.ForeignKey):
+
+    def save_form_data(self, instance, data):
+        if isinstance(data, dict):
+            to = self.rel.to
+            data = to.objects.get_or_create(**data)[0]
+        super(AutoCreateForeignKey, self).save_form_data(instance, data)
+add_introspection_rules([], ["^materials\.models\.common\.AutoCreateForeignKey"])
+
+
+class AutoCreateManyToManyField(models.ManyToManyField):
+
+    def save_form_data(self, instance, data):
+        if isinstance(data, list):
+            to = self.rel.to
+            for i, value in enumerate(data):
+                if isinstance(value, dict):
+                    data[i] = to.objects.get_or_create(**value)[0]
+        super(AutoCreateManyToManyField, self).save_form_data(instance, data)
+add_introspection_rules([], ["^materials\.models\.common\.AutoCreateManyToManyField"])
 
 
 COU_BUCKETS = (
@@ -12,9 +38,15 @@ COU_BUCKETS = (
 )
 
 
-CC_LICENSE_URL_RE = re.compile(r"^http://(www\.)?creativecommons\.org/licenses/(?P<cc_type>nc-sa|by|by-sa|by-nd|by-nc|by-nc-sa|by-nc-nd)/[0-9]\.[0-9]/?$", re.I)
+CC_LICENSE_URL_RE = re.compile(r"^http://(www\.)?creativecommons\.org/licenses/(?P<cc_type>nc-sa|by|by-sa|by-nd|by-nc|by-nc-sa|by-nc-nd)/[0-9]\.[0-9]/?", re.I)
 PUBLIC_DOMAIN_URL_RE = re.compile(r"^http://creativecommons.org/licenses/publicdomain/?$", re.I)
 GNU_FDL_URL_RE = re.compile(r"^http://www.gnu.org/licenses/fdl.txt$", re.I)
+
+PUBLIC_DOMAIN_URL = u"http://creativecommons.org/licenses/publicdomain/"
+PUBLIC_DOMAIN_NAME = u"Public Domain"
+
+GNU_FDL_URL = u"http://www.gnu.org/licenses/fdl.txt"
+GNU_FDL_NAME = u"GNU Free Documentation License"
 
 
 LICENSE_TYPES = (
@@ -39,6 +71,80 @@ LICENSE_HIERARCHY = (
 )
 
 
+class LicenseManager(models.Manager):
+
+    API_ROOT = "http://api.creativecommons.org/rest/1.5"
+    STANDARD_LICENSE = 'standard'
+
+    LICENSE_NAME_RE = re.compile(r"<license-name>(.*)</license-name>")
+    LICENSE_URL_RE = re.compile(r"<license-uri>(.*)</license-uri>")
+    LICENSE_IMG_RE = re.compile(r"<img.*?src=\"(.*?)\".*?>")
+
+    def get_cc_license_name_from_url(self, url):
+        url = url.lower()
+        if not re.match(CC_LICENSE_URL_RE, url):
+            raise ValueError("Invalid CC license URL: %s" % url)
+
+        l_type = url.split('/')[4]
+        l_version = url.split('/')[5]
+
+        if l_type == 'nc-sa':
+            name = 'Creative Commons Noncommercial-Share Alike'
+        elif l_type == 'by':
+            name = 'Creative Commons Attribution'
+        elif l_type == 'by-sa':
+            name = 'Creative Commons Attribution-Share Alike'
+        elif l_type == 'by-nd':
+            name = 'Creative Commons Attribution-No Derivative Works'
+        elif l_type == 'by-nc':
+            name = 'Creative Commons Attribution-Noncommercial'
+        elif l_type == 'by-nc-sa':
+            name = 'Creative Commons Attribution-Noncommercial-Share Alike'
+        elif l_type == 'by-nc-nd':
+            name = 'Creative Commons Attribution-Noncommercial-No Derivative Works'
+        else:
+            raise ValueError("Unknown license type: %s" % l_type)
+        return name + ' ' + l_version
+
+    @cached(3600)
+    def get_cc_issue_fields(self):
+        fields = []
+        try:
+            client = CcRest(self.API_ROOT)
+        except HTTPError:
+            return fields
+
+        # convert in list
+        raw_fields = client.fields(self.STANDARD_LICENSE)
+        for k in raw_fields['__keys__']:
+            f = raw_fields[k]
+            f['id'] = k
+            enum = [{'value':value, 'text':text} for value, text in f['enum'].items()]
+            if k == 'jurisdiction':
+                for i, e in enumerate(enum):
+                    if e['value'] == '':
+                        generic = enum.pop(i)
+                enum.sort(key=lambda x: x['text'])
+                enum.insert(0, generic)
+            f['enum'] = enum
+            fields.append(f)
+
+        return fields
+
+    @cached(3600)
+    def issue(self, answers):
+        result = {}
+        try:
+            client = CcRest(self.API_ROOT)
+            response = str(client.issue(self.STANDARD_LICENSE, answers))
+            result['name'] = self.LICENSE_NAME_RE.findall(response)[0]
+            result['url'] = self.LICENSE_URL_RE.findall(response)[0]
+            result['img'] = self.LICENSE_IMG_RE.findall(response)[0]
+        except:
+            return result
+        return result
+
+
 class License(models.Model):
 
     url = models.URLField(max_length=300, default=u"", blank=True,
@@ -54,6 +160,8 @@ class License(models.Model):
                                         verbose_name=_(u"Copyright holder"))
     bucket = models.CharField(max_length=50, choices=COU_BUCKETS, default=u"",
                               blank=True, verbose_name=_(u"Bucket"))
+
+    objects = LicenseManager()
 
     def __unicode__(self):
         return self.name or self.url
