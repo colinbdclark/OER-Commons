@@ -1,0 +1,11 @@
+<html>
+<body>
+<p>You are receiving this mail because {{ message.name }} ({{ message.email }})
+ is sending feedback about the site
+ administrated by you at {{ site_url }}.</p>
+<p>Feedback Type: {{ message.get_type_display }}</p>
+<p>Subject: {{ message.subject }}</p>
+<p>The message sent was:</p>
+<p>{{ message.text }}</p>
+</body>
+</html>

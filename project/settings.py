@@ -78,6 +78,7 @@ INSTALLED_APPS = (
     'saveditems',
     'savedsearches',
     'myitems',
+    'feedback',
     'project',
 )
 

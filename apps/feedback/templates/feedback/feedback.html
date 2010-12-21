@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form name="feedback" class="formatted feedback" method="post" action="{% url feedback %}">
+  <p>Please send us your feedback</p>
+  {% for field in form %}
+    {% include "include/form-field.html" %}
+  {% endfor %}
+  <div class="buttons">
+    <input type="submit" class="button" name="send" value="Send" />
+    <input type="submit" class="button" name="cancel" value="Cancel" />
+  </div>
+</form>
+{% endblock %}

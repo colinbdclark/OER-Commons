@@ -498,3 +498,17 @@ form.delete p {
   font-size: 14px;
   text-align: right;
 }
+
+form.feedback {
+  width: 400px;
+  margin: 0 auto;
+}
+
+form.feedback p {
+  font-size: 14px;
+}
+
+form.feedback .text {
+  width: 395px;
+  resize: none;
+}
