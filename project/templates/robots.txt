@@ -1,0 +1,1 @@
+{% load flatblock_tags %}{% flatblock "robots.txt" %}
