@@ -98,7 +98,7 @@ def edit(request, slug=None, model=None):
 
     page_title = u"Edit \"%s\"" % instance.title
     breadcrumbs = [
-        {"url": reverse("materials:community"), "title": model._meta.verbose_name_plural},
+        {"url": model.get_parent_url(), "title": model._meta.verbose_name_plural},
         {"url": reverse("materials:community:edit", kwargs=dict(slug=slug)), "title": page_title}
     ]
 

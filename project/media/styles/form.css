@@ -488,3 +488,13 @@ form.content-submission #id_rss_timestamp_0 {
 form.content-submission #id_rss_timestamp_1 {
   width: 50px;
 }
+
+form.delete {
+  width: 300px;
+  margin: 0 auto;
+}
+
+form.delete p {
+  font-size: 14px;
+  text-align: right;
+}

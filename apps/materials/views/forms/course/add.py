@@ -282,7 +282,7 @@ def add(request, model=None):
         page_title = u"Contribute Course Related Material"
 
     breadcrumbs = [
-        {"url": reverse("materials:courses:index"), "title": model._meta.verbose_name_plural},
+        {"url": model.get_parent_url(), "title": model._meta.verbose_name_plural},
         {"url": reverse("materials:courses:add"), "title": page_title}
     ]
 

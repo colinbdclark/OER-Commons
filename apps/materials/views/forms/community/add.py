@@ -183,7 +183,7 @@ def add(request, model=None):
         page_title = u"Contribute OER Community Item"
 
     breadcrumbs = [
-        {"url": reverse("materials:community"), "title": model._meta.verbose_name_plural},
+        {"url": model.get_parent_url(), "title": model._meta.verbose_name_plural},
         {"url": reverse("materials:community:add"), "title": page_title}
     ]
 

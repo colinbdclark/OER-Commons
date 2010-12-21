@@ -200,7 +200,7 @@ def add(request, model=None):
         page_title = u"Contribute Library or Collection"
 
     breadcrumbs = [
-        {"url": reverse("materials:libraries:index"), "title": model._meta.verbose_name_plural},
+        {"url": model.get_parent_url(), "title": model._meta.verbose_name_plural},
         {"url": reverse("materials:libraries:add"), "title": page_title}
     ]
 

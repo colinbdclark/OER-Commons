@@ -3,7 +3,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
-from materials.models.material import PUBLISHED_STATE
+from materials.models.material import PUBLISHED_STATE, WORKFLOW_TRANSITIONS
 from materials.utils import get_name_from_slug
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
@@ -24,6 +24,23 @@ def view_item(request, slug=None, model=None):
         breadcrumbs = item.breadcrumbs
     else:
         breadcrumbs = []
+
+    if request.user.is_authenticated():
+        if item.creator == request.user or request.user.is_staff:
+            content_actions = [
+                {"url": reverse("materials:%s:edit" % item.namespace, kwargs=dict(slug=item.slug)), "title": u"Edit", "class": "edit"},
+                {"url": reverse("materials:%s:delete" % item.namespace, kwargs=dict(slug=item.slug)), "title": u"Delete", "class": "delete"},
+            ]
+        else:
+            content_actions = []
+
+        workflow_actions = []
+        for transition in WORKFLOW_TRANSITIONS:
+            if item.workflow_state in transition["from"] and transition["condition"](request.user, item):
+                workflow_actions.append({
+                    "url": reverse("materials:%s:transition" % item.namespace, kwargs=dict(slug=item.slug, transition_id=transition["id"])),
+                    "title": transition["title"],
+                })
 
     tags = {}
     for tag in item.tags.all():

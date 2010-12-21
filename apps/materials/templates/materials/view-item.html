@@ -8,6 +8,9 @@
   <script type="text/javascript">
     $(function() {
       oer.materials.view_item.init();
+      {% if content_actions or workflow_actions %}
+        oer.materials.view_item.init_content_actions();
+      {% endif %}
     });
   </script>
 {% endblock %}
@@ -49,6 +52,38 @@
 {% endblock %}
 
 {% block content %}
+{% if content_actions or workflow_actions %}
+  <div class="content-actions">
+    <ul>
+      {% if content_actions %}
+        <li>
+          <dl>
+            <dt><a href="#">Item Actions...</a></dt>
+            <dd><ul>
+            {% for action in content_actions %}
+              <li class="icon {{ action.class }}"><a href="{{ action.url}}" >{{ action.title }}</a></li>
+            {% endfor %}
+            </ul></dd>
+          </dl>
+        </li>
+      {% endif %}
+      {% if workflow_actions %}
+        <li>
+          <dl>
+            <dt><a href="#">Status: {{ item.get_workflow_state_display }}...</a></dt>
+            <dd><ul>
+            {% for action in workflow_actions %}
+              <li><a href="{{ action.url}}" >{{ action.title }}</a></li>
+            {% endfor %}
+            </ul></dd>
+          </dl>
+        </li>
+      {% endif %}
+    </ul>
+    <div class="clear"></div>
+  </div>
+{% endif %}
+
 <div class="view-item">
   <div class="right">
     {% stars item.rating %}

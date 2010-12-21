@@ -11,6 +11,7 @@ from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
 from tags.models import Tag
+from django.db.models import permalink
 
 
 PUBLISHED_STATE = u"published"
@@ -25,6 +26,15 @@ WORKFLOW_STATES = (
    (PENDING_STATE, _(u"Pending")),
    (REJECTED_STATE, _(u"Rejected")),
 )
+
+
+WORKFLOW_TRANSITIONS = (
+    {"id": "request_review", "from": [PRIVATE_STATE, REJECTED_STATE], "to": PENDING_STATE, "title": u"Request review", "condition": lambda user, object: object.creator == user and not user.is_staff},
+    {"id": "publish", "from": [PRIVATE_STATE, PENDING_STATE, REJECTED_STATE], "to": PUBLISHED_STATE, "title": u"Publish", "condition": lambda user, object: user.is_staff},
+    {"id": "reject", "from": [PENDING_STATE, PUBLISHED_STATE], "to": REJECTED_STATE, "title": u"Reject", "condition": lambda user, object: object.creator != user and user.is_staff},
+    {"id": "retract", "from": [PENDING_STATE, PUBLISHED_STATE, REJECTED_STATE], "to": PRIVATE_STATE, "title": u"Retract", "condition": lambda user, object: object.creator == user},
+)
+
 
 RATED = u"rated"
 REVIEWED = u"reviewed"
@@ -74,6 +84,23 @@ class Material(models.Model):
     notes = generic.GenericRelation(Note)
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
+
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:%s:view_item" % self.namespace, [], {"slug": self.slug})
+
+    @classmethod
+    @permalink
+    def get_parent_url(self):
+        return ("materials:%s:index" % self.namespace, [], {})
+
+    def breadcrumbs(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": self.get_parent_url(),
+                            "title": self._meta.verbose_name_plural})
+        breadcrumbs.append({"url": self.get_absolute_url(),
+                            "title": self.title})
+        return breadcrumbs
 
     class Meta:
         app_label = "materials"

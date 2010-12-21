@@ -1,6 +1,7 @@
 from autoslug.fields import AutoSlugField
 from cache_utils.decorators import cached
 from django.db import models
+from django.db.models.fields import NOT_PROVIDED
 from django.utils.translation import ugettext_lazy as _
 from materials.ccrest import CcRest
 from south.modelsinspector import add_introspection_rules
@@ -13,6 +14,12 @@ class AutoCreateForeignKey(models.ForeignKey):
     def save_form_data(self, instance, data):
         if isinstance(data, dict):
             to = self.rel.to
+            for field in to._meta.fields:
+                if field.name not in data:
+                    if field.default == NOT_PROVIDED:
+                        data[field.name] = None
+                    else:
+                        data[field.name] = field.default
             data = to.objects.get_or_create(**data)[0]
         super(AutoCreateForeignKey, self).save_form_data(instance, data)
 add_introspection_rules([], ["^materials\.models\.common\.AutoCreateForeignKey"])
@@ -25,6 +32,12 @@ class AutoCreateManyToManyField(models.ManyToManyField):
             to = self.rel.to
             for i, value in enumerate(data):
                 if isinstance(value, dict):
+                    for field in to._meta.fields:
+                        if field.name not in value:
+                            if field.default == NOT_PROVIDED:
+                                value[field.name] = None
+                            else:
+                                value[field.name] = field.default
                     data[i] = to.objects.get_or_create(**value)[0]
         super(AutoCreateManyToManyField, self).save_form_data(instance, data)
 add_introspection_rules([], ["^materials\.models\.common\.AutoCreateManyToManyField"])
@@ -227,8 +240,7 @@ class Author(models.Model):
 
 class Keyword(models.Model):
 
-    name = models.CharField(unique=True, max_length=500,
-                            verbose_name=_(u"Name"))
+    name = models.CharField(max_length=500, verbose_name=_(u"Name"))
     slug = AutoSlugField(populate_from="name", max_length=500,
                          verbose_name=_(u"Slug"),
                          db_index=True)

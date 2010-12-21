@@ -51,3 +51,24 @@ oer.materials.view_item.init = function() {
   );
   
 };
+
+oer.materials.view_item.init_content_actions = function() {
+  $("#content div.content-actions dl dt a").click(
+    function() {
+      var $menu = $(this).closest("dl");
+      $("#content div.content-actions dl").not($menu).removeClass("active");
+      if ($menu.hasClass("active")) {
+        $menu.removeClass("active");
+      } else {
+        $menu.addClass("active");    
+      }
+      return false;
+    }
+  );
+  
+  $(document).click(
+    function(event) {
+      $("#content div.content-actions dl").removeClass("active");
+    }
+  );
+};

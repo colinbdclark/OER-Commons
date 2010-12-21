@@ -48,6 +48,8 @@ course_patterns = browse_patterns + patterns('materials.views',
     url(r"^/(?P<course_or_module>full-course|learning-module)/?$", "index.index", name="course_or_module_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.course.edit.edit", name="edit"),
+    url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
+    url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
 ) + \
 add_tags_patterns + \
 add_review_patterns + \
@@ -61,6 +63,8 @@ library_patterns = browse_patterns + patterns('materials.views',
     url(r"^/material_types/(?P<library_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.library.edit.edit", name="edit"),
+    url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
+    url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
 ) + \
 add_tags_patterns + \
 add_review_patterns + \
@@ -77,6 +81,8 @@ keyword_patterns + patterns('materials.views',
     url(r"^/oer_topic/(?P<community_topics>[^/]+)/?$", "index.index", name="community_topic_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.community.edit.edit", name="edit"),
+    url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
+    url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
 ) + \
 add_tags_patterns + \
 add_review_patterns + \

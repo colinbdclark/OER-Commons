@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form name="delete" class="formatted delete" method="post" action="{{ from_action}}">
+<p>Are you sure you want to remove this item?</p>
+<div class="buttons">
+  <input type="submit" name="delete" value="Yes, delete" class="button" />
+  <input type="submit" name="cancel" value="Cancel" class="button" />
+</div>
+</form>
+{% endblock %}

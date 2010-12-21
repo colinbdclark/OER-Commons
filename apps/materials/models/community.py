@@ -97,13 +97,6 @@ class CommunityItem(Material):
         return sorted(keywords)
 
     @permalink
-    def get_absolute_url(self):
-        return ("materials:%s:view_item" % self.namespace, [], {"slug": self.slug})
-
-    def breadcrumbs(self):
-        breadcrumbs = []
-        breadcrumbs.append({"url": reverse("materials:community"),
-                            "title": u"Community"})
-        breadcrumbs.append({"url": self.get_absolute_url(),
-                            "title": self.title})
-        return breadcrumbs
+    @classmethod
+    def get_parent_url(self):
+        return ("materials:%s:community" % self.namespace, [], {})

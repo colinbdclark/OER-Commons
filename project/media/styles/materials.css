@@ -108,8 +108,7 @@
   display: none;
 }
 
-.materials-index .item .right,
-.view-item .right {
+.materials-index .item .right, .view-item .right {
   float: right;
   margin-left: 10px;
 }
@@ -129,7 +128,7 @@
 }
 
 .view-item .cou-bucket {
-  margin-left: 5px;  
+  margin-left: 5px;
 }
 
 .view-item .add-this img {
@@ -588,4 +587,110 @@
   padding: 0;
   clear: both;
   margin-left: 16px;
+}
+
+.content-actions {
+  background-color: #CDE2A7;
+  border: 1px solid #74AE0B;
+  margin-bottom: 10px;
+  text-transform: lowercase;
+}
+
+.content-actions ul {
+  margin: 0;
+  paddding: 0;
+  list-style-type: none;
+}
+
+.content-actions ul li {
+  margin: 0;
+  padding: 3px 5px;
+  float: right;
+  border-left: 1px solid #74AE0B;
+}
+
+.content-actions a {
+  color: #000;
+  text-decoration: none;
+}
+
+.content-actions dl dt {
+  font-weight: normal;
+}
+
+.content-actions dl dt a {
+  padding-right: 16px;
+  background: url(../images/content-actions-arrow.gif) no-repeat 100% 50%;
+}
+
+.content-actions dl {
+  margin-bottom: 0;
+}
+
+.content-actions dl.active {
+  position: relative;
+}
+
+.content-actions dl dd {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  display: none;
+  height: auto;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  right: -1px;
+  top: 2em;
+  z-index: 5;
+}
+
+.content-actions dl.active dd {
+  display: block;
+  z-index: 15;
+}
+
+.content-actions dl ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-top: -6px;
+  background: #CDE2A7;
+  border: 1px solid #74AE0B;
+  position: relative
+}
+
+.content-actions dl ul li {
+  margin: 0;
+  padding: 0;
+}
+
+.content-actions dl ul a {
+  font-size: 12px;
+  padding: 4px 5px;
+  white-space: nowrap;
+  display: block;
+}
+
+.content-actions dl ul a:hover {
+  background-color: #74AE0B;
+}
+
+.content-actions li dd li {
+  float: none;
+  border-left: none;
+}
+
+.content-actions dl ul li.icon a {
+  padding-left: 22px;  
+  background-repeat: no-repeat;
+  background-position: 2px 2px;
+}
+
+.content-actions dl ul li.edit a {
+  background-image: url(../images/edit-icon.png);
+}
+
+.content-actions dl ul li.delete a {  
+  background-image: url(../images/delete-icon.png);
 }

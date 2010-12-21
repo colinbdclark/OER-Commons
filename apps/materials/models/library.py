@@ -87,16 +87,3 @@ class Library(Material):
         keywords = set(self.keywords.values_list("name", flat=True))
         keywords.update(self.tags.values_list("name", flat=True))
         return sorted(keywords)
-
-    @permalink
-    def get_absolute_url(self):
-        return ("materials:%s:view_item" % self.namespace, [], {"slug": self.slug})
-
-    def breadcrumbs(self):
-        breadcrumbs = []
-        breadcrumbs.append({"url": reverse("materials:%s:index" % self.namespace),
-                            "title": self._meta.verbose_name_plural})
-        breadcrumbs.append({"url": self.get_absolute_url(),
-                            "title": self.title})
-        return breadcrumbs
-
