@@ -1,0 +1,69 @@
+#content.information .promo {
+  color: #679801;
+  font-size: 16px;
+}
+
+#content.topics {
+  font-size: 12px;
+}
+
+#content.topics h3 {
+  background: #F3F7F8 url(../images/box-header-bg.png) repeat-x 0 0;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  padding-bottom: 14px;
+  padding-left: 10px;
+  padding-top: 7px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#content.topics h3 a {
+  color: #fff;
+}
+
+#content.topics .topic .body a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #0C5670;
+}
+
+#content.topics .topic {
+  background: #F3F7F8;
+  border: 1px solid #BCCACD;
+  margin-bottom: 20px;
+}
+
+#content.topics .topic .body {
+  padding: 10px;
+  padding-top: 5px;
+}
+
+#content.topics ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#content.topics li {
+  padding: 0;
+  margin: 0;
+}
+
+#content.topics li li {
+  margin: 5px 0 0 20px;
+}
+
+#content.topics .topic .body > ul {
+  background: url(../images/dotted-line-hor.gif) repeat-x 0 100%;
+  margin: 10px 0;
+}
+
+#content.topics .topic .body > ul > li {
+  background: url(../images/dotted-line-hor.gif) repeat-x 0 0;
+  padding-bottom: 7px;
+  margin-left: 0px;
+  padding-left: 10px;
+  padding-top: 8px;
+}

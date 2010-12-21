@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block contentclass %}information{% endblock %}
+
+{% block content %}
+<div class="promo">
+  Welcome to OER Commons, a place for you to find and share open educational resources.
+</div>
+
+<div class="browse-materials">
+  <table cellspacing="0" border="0" width="100%">
+    <thead><tr>
+      <th width="50%">Help</th>
+      <th class="sep"><div></div></th>
+      <th width="50%">About</th>
+    </tr></thead>
+    <tbody><tr>
+      <td>
+        <ul>
+          {% for topic in help_topics %}
+            <li><a href="{% url help %}#{{ topic.slug }}">{% if topic.short_title %}{{ topic.short_title }}{% else %}{{ topic.title }}{% endif %}</li>
+          {% endfor %}          
+        </ul>
+      </td>
+      <td class="sep"> </td>
+      <td>
+        <ul>
+          {% for topic in about_topics %}
+            <li><a href="{% url about %}#{{ topic.slug }}">{% if topic.short_title %}{{ topic.short_title }}{% else %}{{ topic.title }}{% endif %}</li>
+          {% endfor %}          
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block contentclass %}topics{% endblock %}
+
+{% block content %}
+  {% for topic in topics %}
+  <div class="topic">
+    <h3><a name="{{ topic.slug }}">{{ topic.title }}</a></h3>
+    <div class="body">{{ topic.text|safe }}</div>
+  </div>
+  {% endfor %}
+{% endblock %}

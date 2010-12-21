@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block contentclass %}contribute{% endblock %}
+
+{% block content %}
+  <p>OER Commons is a network of teaching and learning materials built by
+   linking to institutional collections and individual authors’ curricula and
+   other learning materials. We welcome you to submit the details or 
+   “metadata”, such as the URL, keywords, and more, to enable others to find 
+   your content more easily. You do not need to upload your materials. We link
+   to them where they are currently hosted.</p>
+  <p>For OER Commons to include your educational resources, they need to have 
+  usage rights, or “conditions of use” that allow the material to be used and 
+  shared. We promote the use of Creative Commons licenses (or other open 
+  licenses such as GFDL) for specifying how others may use, share, and change 
+  your resources, and encourage authors to make their resources as “open” as 
+  possible. To learn more about Creative Commons Licenses, please visit 
+  <a href="http://creativecommons.org/about/licenses/meet-the-licenses">http://creativecommons.org/about/licenses/meet-the-licenses</a>
+  .</p>
+  <p>After submitting the resource information, our staff will review the 
+  submission and either approve it or contact you for more information.</p>
+  <p>Please use one of the following links to submit your resources:</p>
+  <p><a href="{% url materials:courses:add %}">
+  <strong>Submit Course-Related Materials</strong></a><br>
+  Most of our resources are course-related materials, which includes 
+  materials that have an explicit learning focus.</p> 
+  <p><a href="{% url materials:libraries:add %}">
+  <strong>Submit Libraries and Collections</strong></a><br>
+  Libraries and Collections are non-curricular content, such as primary source 
+  materials or images.</p> 
+  <p><a href="{% url materials:community:add %}">
+  <strong>Submit OER Community Items</strong></a><br>
+  Resources that are about open educational resources are OER Community items. 
+  This includes news articles, research papers, conferences, blogs, and 
+  organizations.</p>
+  <p>Are you affiliated with an institution or organization that would like to 
+  contribute a collection of resources? We have a metadata schema we can 
+  share, and we can harvest some RSS and OAI feeds. Please contact 
+  <a href="mailto:info@oercommons.org">info@oercommons.org</a>, we would be happy to 
+  talk with you.</p>
+{% endblock %}

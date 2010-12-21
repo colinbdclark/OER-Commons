@@ -173,3 +173,11 @@ div.box h3 {
   line-height: 33px;
   height: 39px;
 }
+
+#content.contribute {
+  font-size: 13px; 
+}
+
+#content.contribute a {
+  text-decoration: none;
+}

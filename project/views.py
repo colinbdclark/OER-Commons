@@ -1,4 +1,5 @@
 from cache_utils.decorators import cached
+from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
 from materials.models.common import Keyword, GeneralSubject, GradeLevel
 from materials.utils import get_name_from_slug, get_facets_for_field
@@ -76,3 +77,9 @@ def frontpage(request):
                                    grade_levels=grade_levels,
                                    tweets=get_tweets(),
                                ))
+
+
+def contribute(request):
+    page_title = u"Contribute Your Content to OER Commons"
+    breadcrumbs = [{"url": reverse("contribute"), "title": page_title}]
+    return direct_to_template(request, "contribute.html", locals())
