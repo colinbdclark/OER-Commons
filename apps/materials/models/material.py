@@ -2,6 +2,7 @@ from autoslug.fields import AutoSlugField
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.db import models
+from django.db.models import permalink
 from django.db.models.aggregates import Avg
 from django.utils.translation import ugettext_lazy as _
 from materials.models import License
@@ -11,7 +12,7 @@ from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
 from tags.models import Tag
-from django.db.models import permalink
+import datetime
 
 
 PUBLISHED_STATE = u"published"
@@ -84,6 +85,11 @@ class Material(models.Model):
     notes = generic.GenericRelation(Note)
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
+
+    def save(self, *args, **kwargs):
+        if self.workflow_state == PUBLISHED_STATE and not self.published_on:
+            self.published_on = datetime.datetime.now()
+        super(Material, self).save(*args, **kwargs)
 
     @permalink
     def get_absolute_url(self):

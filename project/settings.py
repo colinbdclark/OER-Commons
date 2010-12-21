@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.syndication',
+    'django.contrib.sitemaps',
     'django_extensions',
     'south',
     'staticfiles',
