@@ -7,24 +7,21 @@
   $(function() {
     oer.accordion.init($("div.portlet.oermaterials div.accordion"));
     $("div.portlet.cou li a").cluetip({local:true, arrows: true, width: 300});
+    $(".slider").anythingSlider({
+      width: 960,
+      height: 227,
+      buildNavigation: true,
+      autoPlay: true,
+      startStopped: true
+    });
     oer.newsletter.init();
   });
 </script> 
 {% endblock %}
 
-{% block promo %}
-  <div id="frontpage-promo" class="fixed-width">
-    <div class="column1">
-      Learning is Sharing
-    </div>
-    <div class="column2">
-      Find <em>Free-to-Use</em> Teaching and Learning Content from around<br/>
-      the World. Organize K-12 Lessons, College Courses, and more.
-    </div>
-  </div>
-{% endblock %}
+{% block promo %}{% endblock %}
 
-{% block above-content %}{% endblock %}
+{% block above-content %}{% include "include/slider.html" %}{% endblock %}
 
 {% block column-left %}
 <div class="portlet oermaterials"> 
