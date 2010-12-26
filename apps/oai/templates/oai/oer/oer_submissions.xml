@@ -1,0 +1,17 @@
+<oers xmlns="http://www.oercommons.org/oers" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xsi:schemaLocation="http://www.oercommons.org/oers 
+                          http://www.oercommons.org{% url oers.xsd %}">
+  <url>{{ url }}</url>
+  {% if native_id %}<nativeId>{{ native_id }}</nativeId>{% endif %}
+  {% if tags %}<tags>
+    {% for tag in tags %}<tag>{{ tag }}</tag>{% endfor %}
+  </tags>{% endif %}
+  {% if rating %}<rating>
+    <averageRating>{{ rating }}</averageRating>
+    <votesNumber>{{ total_rates }}</votesNumber>
+  </rating>{% endif %}
+  {% if reviews %}<reviews>
+    {% for review in reviews %}<review>{{ review }}</review>{% endfor %}
+  </reviews>{% endif %}
+</oers>

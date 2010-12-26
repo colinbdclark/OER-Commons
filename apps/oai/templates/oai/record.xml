@@ -1,0 +1,1 @@
+{% load oai_tags %}<record>{{ header }}<metadata>{{ metadata|safe }}</metadata></record>

@@ -81,6 +81,7 @@ INSTALLED_APPS = (
     'myitems',
     'feedback',
     'information',
+    'oai',
     'project',
 )
 

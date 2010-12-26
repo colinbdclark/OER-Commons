@@ -1,0 +1,7 @@
+<ListMetadataFormats>
+{% for prefix, format in metadata_formats %}<metadataFormat>
+  <metadataPrefix>{{ prefix }}</metadataPrefix>
+  <schema>{{ format.schema }}</schema>
+  <metadataNamespace>{{ format.namespace }}</metadataNamespace>
+</metadataFormat>
+{% endfor %}</ListMetadataFormats>

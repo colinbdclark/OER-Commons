@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.oercommons.org/oers"
+    xmlns:tns="http://www.oercommons.org/oers"
+    elementFormDefault="qualified">
+    
+    <element name="url" type="string"></element>
+    <element name="nativeId" type="string"></element>
+    <element name="tag" type="string"></element>
+    <element name="tags" type="tns:tagsType"></element>
+    <element name="averageRating" type="string"></element>
+    <element name="votesNumber" type="string"></element>
+    <element name="rating" type="tns:ratingType"></element>
+    <element name="question" type="string"></element>
+    <element name="answer" type="string"></element>
+    <element name="review" type="string"></element>
+    <element name="reviews" type="tns:reviewsType"></element>
+    <element name="oers" type="tns:oersType"></element>
+    
+    <complexType name="tagsType">
+      <choice minOccurs="1" maxOccurs="unbounded">
+        <element ref="tns:tag"></element>
+      </choice>
+    </complexType>
+
+    <complexType name="ratingType">
+      <sequence>
+        <element ref="tns:averageRating"></element>
+        <element ref="tns:votesNumber"></element>
+      </sequence>
+    </complexType>
+
+    <complexType name="reviewsType">
+      <choice minOccurs="1" maxOccurs="unbounded">
+        <element ref="tns:review"></element>
+      </choice>
+    </complexType>
+
+    <complexType name="oersType">
+      <choice minOccurs="0" maxOccurs="unbounded">
+        <element ref="tns:url"></element>
+        <element ref="tns:nativeId"></element>
+        <element ref="tns:tags"></element>
+        <element ref="tns:rating"></element>
+        <element ref="tns:reviews"></element>
+      </choice>
+    </complexType>
+
+</schema>

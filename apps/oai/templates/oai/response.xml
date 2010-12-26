@@ -1,0 +1,9 @@
+{% load oai_tags %}<?xml version="1.0" encoding="UTF-8"?> 
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+                             http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+<responseDate>{{ now|oai_date }}</responseDate>
+<request verb="{{ verb }}"{% for name, value in arguments.items %} {{ name }}="{{ value }}"{% endfor %}>{{ repository.base_url }}</request>
+{{ response|safe }}
+</OAI-PMH>

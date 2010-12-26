@@ -1,0 +1,24 @@
+{% load oai_tags %}<oerr xmlns="http://www.oercommons.org/oerr"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.oercommons.org/oerr
+                          http://www.oercommons.org{% url oerr.xsd %}"> 
+  <url>{{ url }}</url> 
+  <oer_url>{{ oer_url }}</oer_url> 
+  <title>{{ title }}</title> 
+  <abstract>{{ abstract }}</abstract> 
+  <identifier>{{ identifier }}</identifier> 
+  {% if date %}<date>{{ date|oai_date }}</date>{% endif %}
+  {% if keywords %}
+  <keywords>{% for keyword in keywords %}
+    <keyword>{{ keyword }}</keyword>
+  {% endfor %}
+  </keywords> 
+  {% endif %}
+  {% if authors %}
+  <authors> 
+    {% for author in authors %}
+    <author>{{ author }}</author> 
+    {% endfor %}
+  </authors> 
+  {% endif %}
+</oerr> 

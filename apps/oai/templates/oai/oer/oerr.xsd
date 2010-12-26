@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.oercommons.org/oerr"
+    xmlns:tns="http://www.oercommons.org/oerr"
+    elementFormDefault="qualified">
+    
+    <element name="url" type="string"></element>
+    <element name="oer_url" type="string"></element>
+    <element name="abstract" type="string"></element>
+    <element name="title" type="string"></element>
+    <element name="keyword" type="string"></element>
+    <element name="author" type="string"></element>
+    <element name="identifier" type="string"></element>
+    <element name="date" type="string"></element>
+    <element name="keywords" type="tns:keywordsType"></element>
+    <element name="authors" type="tns:authorsType"></element>
+    <element name="oerr" type="tns:oerrType"></element>
+    
+    <complexType name="authorsType">
+      <choice minOccurs="1" maxOccurs="unbounded">
+        <element ref="tns:author"></element>
+      </choice>
+    </complexType>
+
+    <complexType name="keywordsType">
+      <choice minOccurs="1" maxOccurs="unbounded">
+        <element ref="tns:keyword"></element>
+      </choice>
+    </complexType>
+
+    <complexType name="oerrType">
+      <choice minOccurs="0" maxOccurs="unbounded">
+        <element ref="tns:url"></element>
+        <element ref="tns:oer_url"></element>
+        <element ref="tns:title"></element>
+        <element ref="tns:abstract"></element>
+        <element ref="tns:identifier"></element>
+        <element ref="tns:date"></element>
+        <element ref="tns:keywords"></element>
+        <element ref="tns:authors"></element>
+      </choice>
+    </complexType>
+
+</schema>

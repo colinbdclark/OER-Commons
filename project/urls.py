@@ -8,6 +8,11 @@ from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
 from materials.models.material import PUBLISHED_STATE
+from oai.oer.oai_dc import OAIDublinCore
+from oai.oer.oer_recommender import OERRecommender
+from oai.oer.oer_submissions import OERSubmissions
+from oai.oer.repository import OERRepository
+from oai.oer.oai_oer2 import OAIOER2
 
 
 admin.autodiscover()
@@ -24,6 +29,16 @@ sitemaps = {
 }
 
 
+oai_metadata_formats = {
+    "oai_dc": OAIDublinCore,
+    "oer_recommender": OERRecommender,
+    "oer_submissions": OERSubmissions,
+    "oai_oer2": OAIOER2,
+}
+
+repository = OERRepository(u"OER Commons Repository", "oercommons.org", oai_metadata_formats, "info@oercommons.org")
+
+
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', "project.views.frontpage", name="frontpage"),
@@ -31,6 +46,9 @@ urlpatterns = patterns('',
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.index', {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     url(r'^robots.txt$', 'django.views.generic.simple.direct_to_template', {'template': "robots.txt", "mimetype": "text/plain"}),
+    url(r'^oai/?$', 'oai.views.oai', {'repository': repository}, name="oai"),
+    url(r'^oerr.xsd$', 'django.views.generic.simple.direct_to_template', {'template': "oai/oer/oerr.xsd", "mimetype": "text/xml"}, name="oerr.xsd"),
+    url(r'^oers.xsd$', 'django.views.generic.simple.direct_to_template', {'template': "oai/oer/oers.xsd", "mimetype": "text/xml"}, name="oers.xsd"),
     url(r'', include('users.urls', app_name=None, namespace="users")),
     url(r'', include('materials.urls', app_name=None, namespace="materials")),
     url(r'', include('feedback.urls')),

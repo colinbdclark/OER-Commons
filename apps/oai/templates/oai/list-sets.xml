@@ -1,0 +1,7 @@
+<ListSets>
+{% for set in sets %}<set>
+  <setSpec>{{ set.spec }}</setSpec>
+  <setName>{{ set.name }}</setName>
+  {% if set.description %}<setDescription>{{ set.description|safe }}</setDescription>{% endif %}
+</set>
+{% endfor %}</ListSets>

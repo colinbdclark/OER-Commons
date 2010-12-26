@@ -1,0 +1,113 @@
+<lom xmlns="http://ltsc.ieee.org/xsd/LOM"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://ltsc.ieee.org/xsd/LOM http://ltsc.ieee.org/xsd/lomv1.0/lomLoose.xsd">
+<general>
+  {% for identifier in general.identifier %}<identifier>
+    <catalog>{{ identifier.catalog }}</catalog>
+    <entry>{{ identifier.entry }}</entry>
+  </identifier>{% endfor %}
+  <title><string language="en">{{ general.title }}</string></title>
+  {% for language in general.language %}<language>{{ language }}</language>{% endfor %}
+  <description><string language="en">{{ general.description }}</string></description>
+  {% for keyword in general.keyword %}<keyword><string language="en">{{ keyword }}</string></keyword>{% endfor %}
+  {% for coverage in general.coverage %}<coverage><string language="en">{{ coverage }}</string></coverage>{% endfor %}
+</general>
+<lifeCycle>
+  {% for contribute in life_cycle.contribute %}<contribute>
+    {% if contribute.role %}<role>
+      <source>LOMv1.0</source>
+       <value>{{ contribute.role }}</value>
+    </role>{% endif %}
+    {% if contribute.entity %}<entity>{{ contribute.entity }}</entity>{% endif %}
+    {% if contribute.date %}<date>
+      <dateTime>{{ contribute.date }}</dateTime>
+    </date>{% endif %}
+  </contribute>{% endfor %}
+</lifeCycle>
+<metaMetadata>
+  <identifier>
+    <catalog>{{ meta_metadata.identifier.catalog }}</catalog>
+    <entry>{{ meta_metadata.identifier.entry }}</entry>
+  </identifier>
+  <metadataSchema>LOMv1.0</metadataSchema>
+  <contribute>
+    <role>
+      <source>LREv3.0</source>
+      <value>provider</value>
+    </role>
+    <entity>BEGIN:VCARD
+VERSION:3.0
+N:oercommons.org;;;;
+FN:oercommons.org
+ORG:oercommons.org;
+END:VCARD</entity>
+    {% if published_on %}<date><dateTime>{{ published_on }}</dateTime></date>{% endif %}
+  </contribute>
+  <language>{{ meta_metadata.language }}</language>
+</metaMetadata>
+<technical>
+  {% for format in technical.format %}<format>{{ format }}</format>{% endfor %} 
+  <location>{{ technical.location }}</location>
+  {% if technical.installationRemarks %}<installationRemarks>
+    <string language="en">{{ technical.installationRemarks }}</string>
+  </installationRemarks>{% endif %}
+</technical>
+<educational>
+  {% for resource in educational.learningResourceType %}<learningResourceType>
+    <source>OER</source>
+    <value>{{ resource }}</value>
+  </learningResourceType>{% endfor %}
+  {% for context in educational.context %}<context>
+    <source>OER</source>
+    <value>{{ context }}</value>
+  </context>{% endfor %}
+  {% if educational.typicalagerange %}<typicalAgeRange>
+    <string language="en">{{ educational.typicalagerange }}</string>
+  </typicalAgeRange>{% endif %}
+  {% if educational.description %}<description>
+    <string language="en">{{ educational.description }}</string>
+  </description>{% endif %}
+</educational>
+<rights>
+  <cost>
+    <source>LOMv1.0</source>
+    <value>no</value>
+  </cost>
+  <copyrightAndOtherRestrictions>
+    <source>LOMv1.0</source>
+    <value>{{ rights.copyrightAndOtherRestrictions }}</value>
+  </copyrightAndOtherRestrictions>
+  {% if rights.description %}<description>
+    {% for language, description in rights.description.items %}<string language="{{ language }}">{{ description }}</string>{% endfor %}
+  </description>{% endif %}
+</rights>
+{% if relation %}<relation>
+  <kind>
+    <source>LREv3.0</source>
+    <value>ispartof</value>
+  </kind>
+  <resource>
+    <identifier>
+      <catalog>URI</catalog>
+      <entry>{{ relation.identifier }}</entry>
+    </identifier>
+    <description><string language="en">{{ relation.description }}</string></description>
+  </resource>
+</relation>{% endif %}
+{% for annotation in annotation %}<annotation>
+  <entity>{{ annotation.entity }}</entity>
+  <date><dateTime>{{ annotation.date }}</dateTime></date>
+  <description><string language="en">{{ annotation.description }}</string></description>
+</annotation>{% endfor %}
+{% if classification %}<classification>
+  <purpose>
+    <source>LOMv1.0</source>
+    <value>discipline</value>
+  </purpose>
+  <taxonPath>
+    {% for taxon in classification %}<taxon>
+      <entry><string language="en">{{ taxon }}</string></entry>
+    </taxon>{% endfor %}
+  </taxonPath>
+</classification>{% endif %}
+</lom>

@@ -1,0 +1,5 @@
+{% load oai_tags %}<header> 
+  <identifier>{{ header.identifier }}</identifier> 
+  <datestamp>{{ header.datestamp|oai_date }}</datestamp> 
+{% for set in header.sets %}  <setSpec>{{ set }}</setSpec> 
+{% endfor %}</header>
