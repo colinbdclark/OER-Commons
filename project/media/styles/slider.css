@@ -1,0 +1,32 @@
+.slider .wrapper {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+
+.slider .learning-is-sharing .column1 {
+  float: left;
+  width: 480px;
+  color: white;
+  margin-top: 137px;
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.slider .learning-is-sharing .column2 {
+  float: right;
+  width: 460px;
+  margin-top: 137px;
+  color: white;
+  font-size: 14px;
+  padding-left: 20px;
+  font-weight: bold;
+  padding-top: 12px;
+}
+
+.slider .learning-is-sharing .column2 em {
+  font-size: 17px;
+  font-style: normal;
+  color: #ffcc66;
+}

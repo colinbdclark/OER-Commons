@@ -11,6 +11,7 @@ from materials.models.common import Keyword, GeneralSubject, GradeLevel
 from materials.models.microsite import Microsite
 from materials.utils import get_name_from_slug, get_facets_for_field
 from oauth_provider.models import Token
+from slider.models import Slide
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 import dateutil.parser
@@ -77,6 +78,7 @@ def frontpage(request):
     for s in grade_levels:
         s["count"] = grade_levels_facets.get(unicode(s["id"]), 0)
 
+    slides = Slide.objects.all()
 
     microsites = Microsite.objects.all()
     microsites_ids = tuple(microsites.values_list("id", flat=True))
@@ -93,6 +95,7 @@ def frontpage(request):
                                    grade_levels=grade_levels,
                                    microsites=microsites,
                                    tweets=get_tweets(),
+                                   slides=slides,
                                    featured_k12=featured_k12,
                                    featured_highered=featured_highered,
                                ))
