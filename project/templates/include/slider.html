@@ -1,0 +1,11 @@
+{% if slides %}
+<ul class="slider">
+  {% for slide in slides %}
+  <li>
+    <div class="wrapper {{slide.title|slugify}}"{% if slide.image %} style="background-image: url({{slide.image.url}});"{% endif %}>
+      {{ slide.html|safe }}
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
