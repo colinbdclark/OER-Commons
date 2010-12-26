@@ -102,6 +102,7 @@ INSTALLED_APPS = (
     'api',
     'reports',
     'stats',
+    'slider',
     'harvester',
     'visitcounts',
     'newsletter',
