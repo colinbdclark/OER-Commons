@@ -1,0 +1,63 @@
+.frontpage-block.blog h4 {
+  margin-top: 0;
+}
+
+.frontpage-block.blog h4 a {
+  font-weight: normal;
+}
+
+.frontpage-block.blog div {
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.frontpage-block.blog div h5 {
+  font-size: 14px;
+  margin-bottom: 7px;
+}
+
+#content.blog .post a {
+  text-decoration: none;
+}
+
+#content.blog .post {
+  border-bottom: 1px solid #BFC7CA;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  font-size: 12px;
+}
+
+#content.blog .post h4 a {
+  color: #1F4D64;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.portlet.blogroll ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.portlet.blogroll li {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 5px;
+}
+
+.portlet.blogroll a.rss {
+  display: block;
+  float: left;
+  width: 16px;
+  height: 16px;
+  text-indent: -9999px;
+  overflow: hidden;
+  background: url(../images/rss-icon.gif) no-repeat 50% 50%;
+}
+
+.portlet.blogroll a.link {
+  display: block;
+  margin-left: 20px;
+  font-size: 12px;
+  line-height: 16px;
+}

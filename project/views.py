@@ -1,4 +1,5 @@
 from annoying.decorators import ajax_request
+from blog.models import Post
 from cache_utils.decorators import cached
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -77,6 +78,11 @@ def frontpage(request):
     for s in grade_levels:
         s["count"] = grade_levels_facets.get(unicode(s["id"]), 0)
 
+    blog_posts = Post.objects.all().order_by("-published_on")
+    if blog_posts.count() > 3:
+        blog_posts = blog_posts[:3]
+    else:
+        blog_posts = blog_posts[:]
 
     microsites = Microsite.objects.all()
     microsites_ids = tuple(microsites.values_list("id", flat=True))
@@ -95,6 +101,7 @@ def frontpage(request):
                                    tweets=get_tweets(),
                                    featured_k12=featured_k12,
                                    featured_highered=featured_highered,
+                                   blog_posts=blog_posts,
                                ))
 
 

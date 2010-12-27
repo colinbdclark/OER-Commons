@@ -72,6 +72,19 @@
 {% endblock %}
 
 {% block content %}
+
+  {% if blog_posts %}
+  <div class="frontpage-block blog">
+    <h4 class="dotted"><a href="{% url blog %}">Blog</a></h4>
+    {% for post in blog_posts %}
+      <div>
+        <h5><a href="{{ post.url }}">{{ post.title|safe }}</a></h5>
+        {{ post.snippet|safe|truncatewords:70 }}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   {% flatblock "recommended-resources" using "flatblocks/frontpage-block.html" %}
   {% include "include/featured-resources.html" %}
   <div class="frontpage-block tags">
