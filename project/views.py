@@ -8,6 +8,8 @@ from tags.tags_utils import get_tag_cloud
 import dateutil.parser
 import re
 import twitter
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 
 MAX_TAGS = 30
@@ -82,3 +84,19 @@ def contribute(request):
     page_title = u"Contribute Your Content to OER Commons"
     breadcrumbs = [{"url": reverse("contribute"), "title": page_title}]
     return direct_to_template(request, "contribute.html", locals())
+
+
+@login_required
+def oauth_authorize(request, token, callback, params):
+
+    return direct_to_template(request, "oauth/authorize.html", locals())
+
+
+@login_required
+def oauth_callback(request, **kwargs):
+
+    token = kwargs.pop("token", None)
+    if not token:
+        return redirect(reverse("frontpage"))
+
+    return direct_to_template(request, "oauth/callback.html", locals())

@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'haystack',
     'flatblocks',
+    'oauth_provider',
     'utils',
     'tags',
     'materials',
@@ -83,6 +84,7 @@ INSTALLED_APPS = (
     'information',
     'oai',
     'sendthis',
+    'api',
     'project',
 )
 
@@ -125,3 +127,6 @@ FLATBLOCKS_AUTOCREATE_STATIC_BLOCKS = True
 AUTOSLUG_SLUGIFY_FUNCTION = "project.utils.slugify"
 
 CACHE_VERSION = 1
+
+OAUTH_AUTHORIZE_VIEW = "project.views.oauth_authorize"
+OAUTH_CALLBACK_VIEW = "project.views.oauth_callback"

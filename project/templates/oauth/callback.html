@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>You have authorized {{ token.consumer.name }}</h2>
+  <p>The verifier code is <strong>{{ token.verifier }}</strong></p>
+{% endblock %}

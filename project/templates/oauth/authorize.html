@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Grant access to {{ token.consumer.name }}</h2>
+  <p><strong>{{ token.consumer.name }}</strong> asks for permission to access your OER Commons account.</p>
+  <form action="{% url oauth_user_authorization %}" method="post" class="formatted">
+    <div class="field">
+      <input type="hidden" name="oauth_token" value="{{ token.key }}" />
+      <input type="hidden" name="authorize_access" value="1" />
+      <input class="button" type="submit" value="Grant Access" />
+    </div>
+  </form>
+{% endblock %}
