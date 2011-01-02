@@ -31,7 +31,6 @@ def linkify_tweet(tweet):
 
 @cached(60 * 30)
 def get_tweets():
-    return []
     api = twitter.Api()
     tweets = []
     try:
