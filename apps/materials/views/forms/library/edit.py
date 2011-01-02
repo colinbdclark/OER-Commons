@@ -110,7 +110,6 @@ def edit(request, slug=None, model=None):
 
         if form.is_valid():
             object = form.save(commit=False)
-            print object.__dict__
             object.creator = request.user
             object.slug = form.cleaned_data["slug"]
             if not request.user.is_staff:
