@@ -222,8 +222,8 @@ class Country(models.Model):
 
 class Author(models.Model):
 
-    name = models.CharField(max_length=200, verbose_name=_(u"Name"))
-    email = models.EmailField(max_length=200, blank=True, default=u"",
+    name = models.CharField(max_length=500, verbose_name=_(u"Name"))
+    email = models.EmailField(max_length=500, blank=True, default=u"",
                               verbose_name=_(u"Email"))
     country = models.ForeignKey(Country, null=True, blank=True,
                                 verbose_name=_(u"Country"))
