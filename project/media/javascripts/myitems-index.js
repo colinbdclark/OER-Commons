@@ -17,7 +17,7 @@ oer.myitems.index.init = function() {
   
   oer.collapsibles.init($("#content"));
   
-}
+};
 
 oer.myitems.index.init_saved_items = function() {
   var $confirmation = $("div.unsave-confirmation");
@@ -33,7 +33,7 @@ oer.myitems.index.init_saved_items = function() {
     function() {
       var $item = $confirmation.closest("div.item");
       $confirmation.hide().detach();
-      var url = $item.find("a.unsave-item").attr("href")
+      var url = $item.find("a.unsave-item").attr("href");
       $.post(url,
         function() {
           $item.fadeOut(500);
@@ -50,4 +50,4 @@ oer.myitems.index.init_saved_items = function() {
       return false;
     }
   );
-}
+};

@@ -26,7 +26,7 @@ oer.saved_search.init = function() {
       if ($form.attr("method") == "post") {
         var data = {
           url: $form.find("input[name='url']").val(),
-          title: $form.find("input[name='title']").val(),
+          title: $form.find("input[name='title']").val()
         };
         $.post($form.attr("action"), data,
           function(data) {
@@ -34,8 +34,7 @@ oer.saved_search.init = function() {
             $main_column.remove("div.status-message");
             var $message = $("<div></div>");
             $message.addClass("status-message").text(data).hide().prependTo($main_column).fadeIn(500).delay(3000).fadeOut(1000);
-          }
-        , "application/json");
+          }, "application/json");
         $form.hide();
         return false;
       }

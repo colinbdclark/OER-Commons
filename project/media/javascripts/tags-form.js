@@ -1,4 +1,4 @@
-oer.tags_form = {}
+oer.tags_form = {};
 
 oer.tags_form.init = function() {
   var $form = $("form[name='tags']");
@@ -7,7 +7,7 @@ oer.tags_form.init = function() {
   $form.find("div.other-tags a").click(
     function() {
       var value = $(this).text();
-      var tags = $.grep($input.val().split("\n"), function(t) { return $.trim(t) != ""; });
+      var tags = $.grep($input.val().split("\n"), function(t) { return $.trim(t) !== ""; });
       if ($.inArray(value, tags) != -1) {
         return false;
       }

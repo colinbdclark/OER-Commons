@@ -1,4 +1,4 @@
-oer.advanced_search = {}
+oer.advanced_search = {};
 
 oer.advanced_search.init = function() {
   

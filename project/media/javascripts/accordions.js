@@ -24,7 +24,7 @@ $.event.special.hoverintent = {
         function track(event) {
             cX = event.pageX;
             cY = event.pageY;
-        };
+        }
 
         pX = event.pageX;
         pY = event.pageY;

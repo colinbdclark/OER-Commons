@@ -7,7 +7,7 @@ oer.collapsibles.switch_collapsible = function($button) {
     } else {
       $parent.find(".expanded").removeClass("expanded").addClass("collapsed");
     }
-}
+};
 
 oer.collapsibles.init = function($container) {
   $container.find("a.expand-button").click(

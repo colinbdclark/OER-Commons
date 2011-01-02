@@ -17,7 +17,7 @@ oer.content_submission.init_license = function() {
   $license_type_buttons.change(
     function() {
       var $this = $(this);
-      var value = $(this).val();
+      var value = $this.val();
       $cc_latest.hide();
       $cc_old.hide();
       $custom_license.hide();
@@ -68,9 +68,8 @@ oer.content_submission.init_license = function() {
             $choose_cc_button.show();
             $cc_selection_widget.hide();
           }
-          $cc_selection_widget_loader.hide()
-        }
-      , "application/json");
+          $cc_selection_widget_loader.hide();
+        }, "application/json");
       return false;
     }
   );

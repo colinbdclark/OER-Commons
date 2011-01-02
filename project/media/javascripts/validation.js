@@ -30,7 +30,7 @@ oer.validation.rules.profile = {
     required: true,
     email: true
   }
-}
+};
 
 oer.validation.rules.change_password = {
   current_password: {
@@ -45,14 +45,14 @@ oer.validation.rules.change_password = {
     minlength: 5,
     equalTo: "[name='new_password']"
   }
-}
+};
 
 oer.validation.rules.reset_password_init = {
   email: {
     required: true,
     email: true
   }
-}
+};
 
 oer.validation.rules.reset_password = {
   password: {
@@ -64,7 +64,7 @@ oer.validation.rules.reset_password = {
     minlength: 5,
     equalTo: "[name='password']"
   }
-}
+};
 
 $.validator.setDefaults({
   errorPlacement: function(error, element) {

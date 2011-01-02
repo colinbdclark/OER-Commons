@@ -17,14 +17,14 @@ oer.materials.index.init_action_panel = function() {
     $form.submit();
   });
   
-}
+};
 
 oer.materials.index.init_filters = function() {
   var $filters_portlet = $("div.portlet.index-filters");
   var $form = $filters_portlet.find("form[name='index-filters']");
   
   $form.find("div.search input[type='submit']").click(function() {
-    if ($form.find("input[name='f.search']").val() != "") {
+    if ($form.find("input[name='f.search']").val() !== "") {
       $form.find("input[name='sort_by']").val("search");
     }
   });
@@ -36,8 +36,8 @@ oer.materials.index.init_filters = function() {
         $filter.find(":checkbox").attr("disabled", true);
       }
     });
-    if ($form.find("input[name='f.search']").val() == "") {
-      $form.find("input[name='f.search']").attr("disabled", true)
+    if ($form.find("input[name='f.search']").val() === "") {
+      $form.find("input[name='f.search']").attr("disabled", true);
     }
   });
 
@@ -64,7 +64,7 @@ oer.materials.index.init_filters = function() {
     }
   });
   
-}
+};
 
 oer.materials.index.init_top_keywords = function() {
   var $top_keywords_portlet = $("div.portlet.top-keywords");
@@ -74,7 +74,7 @@ oer.materials.index.init_top_keywords = function() {
     $top_keywords_portlet.find("div.all").fadeIn(300);
     return false;
   });
-}
+};
 
 oer.materials.index.init_item_links = function() {
   $("#content div.materials-index h3 a.item-link").click(function() {
@@ -83,7 +83,7 @@ oer.materials.index.init_item_links = function() {
     $form.submit();
     return false;
   });
-}
+};
 
 oer.materials.index.init_actions_menus = function() {
   $("#content dl.actions dt a").click(
@@ -160,7 +160,7 @@ oer.materials.index.init_actions_menus = function() {
       return false;
     }
   );
-}
+};
 
 oer.materials.index.init = function() {
   
@@ -179,4 +179,4 @@ oer.materials.index.init = function() {
   $filters_portlet.find("dl.grade-levels a.tooltip-button").cluetip({local:true, arrows: true, width: 200});
   
 
-}
+};
