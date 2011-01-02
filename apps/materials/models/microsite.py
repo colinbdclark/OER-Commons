@@ -1,0 +1,61 @@
+from django.db import models
+from autoslug.fields import AutoSlugField
+from materials.models.common import AutoCreateManyToManyField, Keyword
+
+
+class MicrositeManager(models.Manager):
+
+    def get_by_natural_key(self, name):
+        return self.get(name=name)
+
+
+class Microsite(models.Model):
+
+    name = models.CharField(max_length=100, unique=True)
+    slug = AutoSlugField(max_length=100, populate_from="name")
+    keywords = AutoCreateManyToManyField(Keyword)
+
+    objects = MicrositeManager()
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        app_label = "materials"
+
+    def natural_key(self):
+        return (self.name,)
+
+
+class TopicManager(models.Manager):
+
+    def get_by_natural_key(self, microsite, name):
+        microsite = Microsite.objects.get_by_natural_key(microsite)
+        return self.get(microsite=microsite, name=name)
+
+
+class Topic(models.Model):
+
+    name = models.CharField(max_length=100)
+    slug = AutoSlugField(max_length=100, populate_from="name")
+    keywords = AutoCreateManyToManyField(Keyword)
+    microsite = models.ForeignKey(Microsite, related_name="topics")
+    parent = models.ForeignKey("self", null=True, blank=True)
+
+    objects = TopicManager()
+
+    def save(self, *args, **kwargs):
+        super(Topic, self).save(*args, **kwargs)
+        if not self.keywords.filter(name=self.name).count():
+            self.keywords.add(Keyword.objects.get_or_create(name=self.name)[0])
+
+    def __unicode__(self):
+        return self.name
+
+    def natural_key(self):
+        return (self.microsite.name, self.name)
+
+    class Meta:
+        app_label = "materials"
+        ordering = ["microsite", "parent__id", "id"]
+        unique_together = (("name", "microsite"))

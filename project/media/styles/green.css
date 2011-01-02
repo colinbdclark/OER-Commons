@@ -1,0 +1,12 @@
+body.green {
+  background-image: url(../images/green-main-bg.png);
+}
+
+.green #header {
+  background-image: url(../images/green-header-bg.jpg);
+}
+
+.green #logo {
+  background-image: url(../images/green-logo.jpg);
+  width: 273px;
+}

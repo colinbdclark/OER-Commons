@@ -62,14 +62,36 @@
         </dd>
         {% endfor %}
       </dl>
-      {% endif %}
-      
+
       <div style="display: none; " id="grade-levels-tooltip">
        <p><strong>Primary</strong>: Grades K-6</p>
        <p><strong>Secondary</strong>: Grades 7-12</p>
        <p><strong>Post-Secondary</strong>: University</p>
       </div>
-        
+      {% endif %}
+      
+    {% endwith %}
+
+    {% with index_filters.topics as filter %}
+      {% if filter.options %}
+      <dl class="dotted filter collapsible">
+        <dt>
+           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+           <input type="checkbox" name="{{ filter.name }}"
+                  id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                  {% if filter.disabled %}disabled="disabled"{% endif %} />
+           <label for="{{ filter.name }}">{{ filter.title }}</label>
+        </dt>
+        {% for option in filter.options %}
+        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+           <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                  id="{{ option.input_id }}" value="{{ option.slug }}"
+                  {% if filter.disabled %}disabled="disabled"{% endif %} />
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">{{ option.name|shrink:18 }} ({{ option.count }})</label>
+        </dd>
+        {% endfor %}
+      </dl>
+      {% endif %}
     {% endwith %}
 
     {% with index_filters.course_material_types as filter %}

@@ -15,6 +15,7 @@ from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 import urllib
 from autoslug.settings import slugify
+from materials.models.microsite import Microsite, Topic
 import cjson
 
 
@@ -107,7 +108,8 @@ BASIC_INDEX_FILTERS = (
 )
 
 
-def build_index_filters(visible_filters, facets, filter_values, path_filter):
+def build_index_filters(visible_filters, facets, filter_values, path_filter,
+                        microsite=None):
     filters = {}
     for filter_name, collapsed in BASIC_INDEX_FILTERS:
         if filter_name not in visible_filters:
@@ -155,13 +157,41 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter):
             filter_data["all_checked"] = True
         filters[filter_name] = filter_data
 
+    if microsite:
+        filter_name = "topics"
+        filter = FILTERS[filter_name]
+        if not facets.get(filter_name):
+            return filters
+        counts = dict(facets[filter_name])
+        values = filter_values.get(filter_name, [])
+        filter_data = {}
+        filter_data["name"] = filter_name
+        filter_data["title"] = u"%s %s" % (microsite.name, filter.title)
+        filter_data["disabled"] = filter_name == path_filter
+        filter_data["options"] = []
+        filter_data["all_checked"] = not bool(values)
+        filter_data["request_name"] = filter.request_name
+        filter_data["collapsed"] = False
+        if not isinstance(values, list):
+            values = [values]
+        for option in Topic.objects.filter(microsite=microsite).values("id", "slug", "name").order_by("id"):
+            count = counts.get(str(option["id"]), 0)
+            option["count"] = count
+            if filter_data["all_checked"] or option["slug"] in values:
+                option["checked"] = True
+            option["input_id"] = "%s-%i" % (filter_data["request_name"].replace(".", "-"), option["id"])
+            filter_data["options"].append(option)
+        if len(filter_data["options"]) == len(values):
+            filter_data["all_checked"] = True
+        filters[filter_name] = filter_data
+
     return filters
 
 
 PATH_FILTERS = ["general_subjects", "grade_levels", "course_material_types",
                 "library_material_types", "collection", "keywords", "license",
                 "ocw", "course_or_module", "community_types",
-                "community_topics"]
+                "community_topics", "microsite", "topics"]
 
 
 class IndexParams:
@@ -283,9 +313,10 @@ def index(request, general_subjects=None, grade_levels=None,
           course_or_module=None, community_types=None, community_topics=None,
           microsite=None, model=None, search=False, tags=None, subjects=None,
           format=None,
+          topics=None,
           facet_fields=["general_subjects", "grade_levels", "keywords",
                         "course_material_types", "media_formats",
-                        "cou_bucket"]):
+                        "cou_bucket", "topics"]):
 
     if model:
         index_namespace = model.namespace
@@ -341,9 +372,6 @@ def index(request, general_subjects=None, grade_levels=None,
 
     path_filter = None
 
-    visible_filters = ["search", "general_subjects", "grade_levels",
-                       "course_material_types", "media_formats",
-                       "cou_bucket"]
     hidden_filters = {}
 
     for filter_name in PATH_FILTERS:
@@ -352,9 +380,20 @@ def index(request, general_subjects=None, grade_levels=None,
             filter = FILTERS[filter_name]
             query = filter.update_query(query, value)
             path_filter = filter_name
-            page_subtitle = filter.page_subtitle(value)
+            if page_subtitle:
+                page_subtitle = u"%s &rarr; %s" % (page_subtitle, filter.page_subtitle(value))
+            else:
+                page_subtitle = filter.page_subtitle(value)
             filter_values[filter_name] = value
-            break
+
+    visible_filters = ["search", "general_subjects", "grade_levels",
+                       "course_material_types", "media_formats",
+                       "cou_bucket"]
+
+    if microsite:
+        microsite = Microsite.objects.get(slug=microsite)
+        visible_filters.append("topics")
+
 
     search_query = u""
 
@@ -389,7 +428,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
 
     if microsite:
-        breadcrumbs = [{"url": reverse("microsite", kwargs=dict(microsite=microsite)), "title": microsite}] + breadcrumbs
+        breadcrumbs = [{"url": reverse("microsite", kwargs=dict(microsite=microsite.slug)), "title": u"%s Home" % microsite.name}]
 
     if not page_subtitle and model:
         page_subtitle = u"Content Type: %s" % model._meta.verbose_name_plural
@@ -437,7 +476,9 @@ def index(request, general_subjects=None, grade_levels=None,
 
         index_filters = build_index_filters(visible_filters,
                                             facets,
-                                            filter_values, path_filter)
+                                            filter_values,
+                                            path_filter,
+                                            microsite)
 
         all_keywords = facets.get("keywords", [])
         if len(all_keywords) > MAX_TOP_KEYWORDS:

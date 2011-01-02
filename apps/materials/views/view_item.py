@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.material import PUBLISHED_STATE, WORKFLOW_TRANSITIONS
+from materials.models.microsite import Microsite
 from materials.utils import get_name_from_slug
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
@@ -104,6 +105,8 @@ def view_item(request, slug=None, model=None):
 
         index_model = kwargs.get("model")
         microsite = kwargs.get("microsite")
+        if microsite:
+            microsite = Microsite.objects.get(slug=microsite)
 
         if index_model:
             query = query.models(index_model)

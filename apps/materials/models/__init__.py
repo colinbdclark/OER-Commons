@@ -3,3 +3,4 @@ from material import *
 from course import *
 from library import *
 from community import *
+from microsite import *

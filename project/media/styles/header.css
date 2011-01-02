@@ -3,13 +3,17 @@
   background: url(../images/header-bg.png) no-repeat 50% 50%;
 }
 
+#header .fixed-width {
+  width: 965px;
+}
+
 #logo {
   background: url(../images/logo.png) no-repeat;
   display: block;
   float: left;
   height: 83px;
-  margin-left: 2px;
   margin-top: 12px;
+  margin-left: 2px;
   width: 130px;
 }
 
@@ -96,7 +100,7 @@
 
 #global-search-box {
   float: right;
-  padding-top: 7px;
+  padding-top: 8px;
 }
 
 #global-search-box input.text {

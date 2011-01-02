@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
     Language, GeographicRelevance, AutoCreateManyToManyField
 from materials.models.material import Material
+from materials.models.microsite import Microsite, Topic
 
 
 class CommunityType(models.Model):
@@ -86,17 +87,7 @@ class CommunityItem(Material):
         verbose_name = _(u"Community item")
         verbose_name_plural = _(u"Community items")
         ordering = ("created_on",)
-
-    def keyword_slugs(self):
-        keywords = set(self.keywords.values_list("slug", flat=True))
-        keywords.update(self.tags.values_list("slug", flat=True))
-        return sorted(keywords)
-
-    def keyword_names(self):
-        keywords = set(self.keywords.values_list("name", flat=True))
-        keywords.update(self.tags.values_list("name", flat=True))
-        return sorted(keywords)
-
+    
     @classmethod
     @permalink
     def get_parent_url(self):

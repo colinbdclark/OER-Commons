@@ -125,6 +125,8 @@
     <field name="media_formats" type="sint" indexed="true" stored="true" multiValued="true" />
     <field name="community_types" type="sint" indexed="true" stored="true" multiValued="true" />
     <field name="community_topics" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="microsites" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="topics" type="sint" indexed="true" stored="true" multiValued="true" />
 
     <field name="course_or_module" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="ocw" type="boolean" indexed="true" stored="true" multiValued="false" />

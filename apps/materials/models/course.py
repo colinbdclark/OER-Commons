@@ -1,12 +1,11 @@
 from autoslug.fields import AutoSlugField
-from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
     Language, GeographicRelevance, MediaFormat, Institution, Collection, \
     AutoCreateManyToManyField, AutoCreateForeignKey
 from materials.models.material import Material
+from materials.models.microsite import Microsite, Topic
 
 
 COURSE_OR_MODULE = (
@@ -130,14 +129,3 @@ class Course(Material):
         verbose_name = _(u"Course Related Material")
         verbose_name_plural = _(u"Course Related Materials")
         ordering = ("created_on",)
-
-    def keyword_slugs(self):
-        keywords = set(self.keywords.values_list("slug", flat=True))
-        keywords.update(self.tags.values_list("slug", flat=True))
-        return sorted(keywords)
-
-    def keyword_names(self):
-        keywords = set(self.keywords.values_list("name", flat=True))
-        keywords.update(self.tags.values_list("name", flat=True))
-        return sorted(keywords)
-

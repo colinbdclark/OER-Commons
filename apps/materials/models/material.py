@@ -7,6 +7,7 @@ from django.db.models.aggregates import Avg
 from django.utils.translation import ugettext_lazy as _
 from materials.models import License
 from materials.models.common import AutoCreateForeignKey
+from materials.models.microsite import Microsite, Topic
 from notes.models import Note
 from rating.models import Rating
 from reviews.models import Review
@@ -130,3 +131,36 @@ class Material(models.Model):
         if ratings.count():
             return ratings.aggregate(rating=Avg("value"))["rating"]
         return 0.0
+
+    def keyword_slugs(self, exclude_microsite_markers=True):
+        if exclude_microsite_markers:
+            microsite_markers = set()
+            for microsite in Microsite.objects.all():
+                microsite_markers.update(microsite.keywords.values_list("slug", flat=True))
+            keywords = set(self.keywords.exclude(slug__in=microsite_markers).values_list("slug", flat=True))
+            keywords.update(self.tags.exclude(slug__in=microsite_markers).values_list("slug", flat=True))
+        else:
+            keywords = set(self.keywords.values_list("slug", flat=True))
+            keywords.update(self.tags.values_list("slug", flat=True))
+        return sorted(keywords)
+
+    def keyword_names(self, exclude_microsite_markers=True):
+        if exclude_microsite_markers:
+            microsite_markers = set()
+            for microsite in Microsite.objects.all():
+                microsite_markers.update(microsite.keywords.values_list("slug", flat=True))
+            keywords = set(self.keywords.exclude(slug__in=microsite_markers).values_list("name", flat=True))
+            keywords.update(self.tags.exclude(slug__in=microsite_markers).values_list("name", flat=True))
+        else:
+            keywords = set(self.keywords.values_list("name", flat=True))
+            keywords.update(self.tags.values_list("name", flat=True))
+        return sorted(keywords)
+
+    def microsites(self):
+        return Microsite.objects.filter(keywords__slug__in=self.keyword_slugs(exclude_microsite_markers=False))
+
+    def topics(self):
+        microsites = self.microsites()
+        if not microsites.count():
+            return []
+        return Topic.objects.filter(microsite__in=microsites, keywords__slug__in=self.keyword_slugs())

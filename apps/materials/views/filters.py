@@ -9,6 +9,7 @@ from materials.models.material import MEMBER_ACTIVITY_TYPES
 from materials.utils import get_name_from_slug
 from tags.models import Tag
 import re
+from materials.models.microsite import Microsite, Topic
 
 
 class Filter(object):
@@ -28,11 +29,13 @@ class Filter(object):
 
 class VocabularyFilter(Filter):
 
-    def __init__(self, index_name, request_name, model, title):
+    def __init__(self, index_name, request_name, model, title,
+                 ignore_all_values=True):
         self.index_name = index_name
         self.request_name = request_name
         self.model = model
         self.title = title
+        self.ignore_all_values = ignore_all_values
 
     @property
     def available_values(self):
@@ -48,13 +51,14 @@ class VocabularyFilter(Filter):
     def update_query(self, query, value):
         available_values = self.available_values
 
+
         if not isinstance(value, list):
             value = [value]
 
         if set(value) - available_values:
             raise Http404()
 
-        if set(value) == available_values:
+        if self.ignore_all_values and set(value) == available_values:
             return query
 
         value = list(self.model.objects.filter(slug__in=value).values_list("id", flat=True))
@@ -316,6 +320,8 @@ FILTERS = {
     "ocw": BooleanFilter("ocw", "f.is_ocw", u"OpenCourseWare"),
     "collection": VocabularyFilter("collection", "f.collection", Collection, u"Collection"),
     "keywords": KeywordFilter("keywords", "f.keyword"),
+    "microsite": VocabularyFilter("microsites", "f.microsite", Microsite, u"Topic", ignore_all_values=False),
+    "topics": VocabularyFilter("topics", "f.subtopic", Topic, u"SubTopic"),
     "search": SearchFilter(),
 }
 

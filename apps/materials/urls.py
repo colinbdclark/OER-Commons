@@ -90,7 +90,9 @@ add_note_patterns + \
 saved_item_patterns + \
 rating_patterns
 
-microsite_browse_patterns = browse_patterns # TODO: add subtopic here
+microsite_browse_patterns = browse_patterns + patterns('materials.views',
+    url(r"^/topic/(?P<topics>[^/]+)/?$", "index.index", name="topic_index"),
+)
 
 urlpatterns = patterns('materials.views',
     url(r"^oer/?$", "browse.browse", name="browse"),

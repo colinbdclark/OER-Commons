@@ -4,13 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ request.LANGUAGE_CODE }}" lang="{{ request.LANGUAGE_CODE }}">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{% block title %}{% if page_title %}{{ page_title }}{% if page_subtitle %}: {{ page_subtitle }}{% endif %} | {% endif %}OER Commons{% endblock %}</title>
+    <title>{% block title %}{% if page_title %}{{ page_title }}{% if page_subtitle %}: {{ page_subtitle|safe }}{% endif %} | {% endif %}OER Commons{% endblock %}</title>
     {% block meta_description %}{% endblock %}
     <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico"/>
     {% include "include/css.html" %}
     {% block extra-css %}{% endblock %}
   </head>
-  <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite}}{% endif %}">
+  <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}">
     {% include "include/header.html" %}
 
     {% block promo %}
@@ -33,7 +33,7 @@
     {% endif %}
 
     {% if page_title %}
-      <h1 class="page-title fixed-width">{{ page_title }}{% if page_subtitle %}: <span>{{ page_subtitle }}</span>{% endif %}</h1>
+      <h1 class="page-title fixed-width">{{ page_title }}{% if page_subtitle %}: <span>{{ page_subtitle|safe }}</span>{% endif %}</h1>
     {% endif %}
 
     {% block above-content %}

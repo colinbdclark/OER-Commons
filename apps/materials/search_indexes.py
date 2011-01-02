@@ -23,7 +23,7 @@ class VocabularyMultiValueField(MultiValueField):
 
     def convert(self, value):
         if isinstance(value, list):
-            return value
+            return [isinstance(v, int) and v or v.id for v in value]
         return value.values_list("id", flat=True)
 
 
@@ -85,6 +85,8 @@ class CourseIndex(MaterialSearchIndex):
     media_formats = VocabularyMultiValueField(model_attr="media_formats")
     languages = VocabularyMultiValueField(model_attr="languages")
     geographic_relevance = VocabularyMultiValueField(model_attr="geographic_relevance")
+    microsites = VocabularyMultiValueField(model_attr="microsites")
+    topics = VocabularyMultiValueField(model_attr="topics")
 
     course_or_module = CharField(model_attr="course_or_module")
     ocw = BooleanField(model_attr="ocw")
@@ -110,6 +112,8 @@ class LibraryIndex(MaterialSearchIndex):
     media_formats = VocabularyMultiValueField(model_attr="media_formats")
     languages = VocabularyMultiValueField(model_attr="languages")
     geographic_relevance = VocabularyMultiValueField(model_attr="geographic_relevance")
+    microsites = VocabularyMultiValueField(model_attr="microsites")
+    topics = VocabularyMultiValueField(model_attr="topics")
 
     def get_queryset(self):
         return Library.objects.all()
@@ -128,6 +132,8 @@ class CommunityItemIndex(MaterialSearchIndex):
     community_topics = VocabularyMultiValueField(model_attr="community_topics")
     languages = VocabularyMultiValueField(model_attr="languages")
     geographic_relevance = VocabularyMultiValueField(model_attr="geographic_relevance")
+    microsites = VocabularyMultiValueField(model_attr="microsites")
+    topics = VocabularyMultiValueField(model_attr="topics")
 
     def get_queryset(self):
         return CommunityItem.objects.all()
