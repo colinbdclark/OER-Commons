@@ -7,6 +7,8 @@ BCRYPT_PREFIX = "bcrypt$"
 
 
 def encrypt_password(password):
+    if isinstance(password, unicode):
+        password = password.encode("utf-8")
     return BCRYPT_PREFIX + bcrypt.hashpw(password, bcrypt.gensalt())
 
 
@@ -15,6 +17,8 @@ def check_password(encrypted_password, password):
         return False
     encrypted_password = encrypted_password[len(BCRYPT_PREFIX):]
     salt = encrypted_password[:29]
+    if isinstance(password, unicode):
+        password = password.encode("utf-8")
     return bcrypt.hashpw(password, salt) == encrypted_password
 
 
