@@ -21,6 +21,7 @@ class RegistrationForm(forms.Form):
                                 error_messages={'invalid': "This value may "
                                 "contain only letters, numbers and @/./+/-/_ "
                                 "characters."},
+                                help_text=u"Enter your user name, with no spaces or special characters. Your user name is used for your login, and is case sensitive.",
                                 widget=forms.TextInput(attrs={"size": 30,
                                                       "class": "text"}))
 
