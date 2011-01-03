@@ -500,7 +500,7 @@ form.delete p {
 }
 
 form.feedback {
-  width: 400px;
+  width: 550px;
   margin: 0 auto;
 }
 
@@ -509,6 +509,6 @@ form.feedback p {
 }
 
 form.feedback .text {
-  width: 395px;
+  width: 542px;
   resize: none;
 }
