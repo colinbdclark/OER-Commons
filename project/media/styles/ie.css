@@ -1,0 +1,22 @@
+.index-filters .filter input,
+.advanced-search .filter input {
+  height: 16px;
+}
+
+.index-filters .filter dd label {
+  width: 144px;
+}
+
+.advanced-search .filter dd.collapsible li label {
+  margin-left: 0px;
+  float: left;
+}
+
+#global-search-box .text {
+  margin-top: 1px;
+  margin-bottom: 0px;
+}
+
+#global-search-box .button {
+  line-height: 16px;
+}

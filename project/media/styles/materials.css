@@ -576,6 +576,14 @@
   margin-left: 17px;
 }
 
+.advanced-search .filter dd.not-collapsible {
+  padding-left: 17px;
+}
+
+.advanced-search .filter dd.not-collapsible label {
+  margin-left: 0px;
+}
+
 .advanced-search .filter dd.collapsible ul {
   list-style-type: none;
   margin: 0;

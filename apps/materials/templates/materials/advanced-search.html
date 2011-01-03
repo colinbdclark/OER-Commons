@@ -240,7 +240,7 @@
                  <label for="{{ filter.name }}">{{ filter.title }}</label>
               </dt>
               {% for option in filter.options %}
-              <dd class="{% if option.options %}collapsible {% endif %}{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+              <dd class="{% if option.options %}collapsible {% else %}not-collapsible {% endif %}{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
                  {% if option.options %}
                    <a href="#" class="expand-button collapsed"></a>
                  {% endif %}
