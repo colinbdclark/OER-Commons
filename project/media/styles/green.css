@@ -10,3 +10,54 @@ body.green {
   background-image: url(../images/green-logo.jpg);
   width: 273px;
 }
+
+.green-feature {
+  background: url(../images/green-homepage-feature.jpg) no-repeat;
+  height: 119px;
+  padding-left: 22px;
+  padding-top: 18px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 936px;
+}
+
+.green-feature h2 {
+  color: #666;
+  font-size: 16px;
+  font-weight: normal;
+  font-size: 22px;
+  width: 466px;
+  padding-bottom: 8px;
+  background: url(../images/dotted-line-hor.gif) repeat-x 0% 100%;
+  margin-bottom: 12px;
+}
+
+.green-feature p {
+  font-size: 16px;
+  color: #666;
+}
+
+.green-feature p a {
+  font-weight: bold;
+  color: #0C5670;
+  text-decoration: none; 
+}  
+
+.green .content.microsite-frontpage h2 {
+  color: #666;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: normal;
+  margin-bottom: 15px;
+  margin-top: 0;
+  line-height: 28px;  
+}
+
+.green .content.microsite-frontpage h2 .icon {
+  display: block;
+  float: left;
+  background: url(../images/green-icon.png) no-repeat;
+  width: 28px;
+  height: 28px;
+  margin-right: 3px;
+}

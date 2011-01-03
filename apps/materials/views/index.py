@@ -428,7 +428,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
 
     if microsite:
-        breadcrumbs = [{"url": reverse("microsite", kwargs=dict(microsite=microsite.slug)), "title": u"%s Home" % microsite.name}]
+        breadcrumbs = [{"url": reverse("materials:microsite", kwargs=dict(microsite=microsite.slug)), "title": u"%s Home" % microsite.name}]
 
     if not page_subtitle and model:
         page_subtitle = u"Content Type: %s" % model._meta.verbose_name_plural

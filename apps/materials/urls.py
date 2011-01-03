@@ -106,5 +106,6 @@ urlpatterns = patterns('materials.views',
     url(r"^(?P<microsite>[^/]+)/browse", include(microsite_browse_patterns)),
     url(r"^advanced-search/?$", "advanced_search.advanced_search", name="advanced_search"),
     url(r"^license-picker/issue/?$", "license_picker.issue"),
+    url(r'^(?P<microsite>[^/]+)/?$', "microsites.microsite", name="microsite"),
 )
 

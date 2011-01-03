@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load rating_tags %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.collapsibles.init($("#content"));
+      oer.materials.index.init_actions_menus();
+    });
+  </script>
+{% endblock %}
+
+
+{% block page-title %}{% endblock %}
+{% block promo %}{% endblock %}
+
+{% block above-content %}
+<div class="green-feature fixed-width">
+  <h2>
+    Highlight
+  </h2>
+  <p><a href="#">Sun Curve Challenge</a>: ISKME announces the Sun Curve Design<br>
+  Challenge, a partnership with INKA, the creator of Sun Curve...</p>
+</div>
+{% endblock %}
+
+{% block contentclass %}microsite-frontpage{% endblock %}
+
+{% block content %}
+  <h2 class="dotted"><span class="icon"></span> Top <strong>{{ microsite.name }}</strong> resources</h2>
+  <div class="materials-index collapsibles">
+    {% for item in items %}
+      {% include "materials/include/index-item.html" %}
+    {% endfor %}
+  </div>
+
+  {% rate_form %}
+{% endblock %}
+
+{% block column-right %}
+   <div class="portlet top-keywords dotted">
+     <h4 class="dotted">Top {{ microsite.name }} Keywords</h4>
+     <div class="tag-cloud">
+       {% for keyword in keywords %}
+         <a href="{% url materials:keyword_index keywords=keyword.slug microsite=microsite.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
+       {% endfor %}
+     </div>
+   </div>
+{% endblock %}

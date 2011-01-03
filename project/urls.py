@@ -50,7 +50,6 @@ urlpatterns = patterns('',
     url(r'^oerr.xsd$', 'django.views.generic.simple.direct_to_template', {'template': "oai/oer/oerr.xsd", "mimetype": "text/xml"}, name="oerr.xsd"),
     url(r'^oers.xsd$', 'django.views.generic.simple.direct_to_template', {'template': "oai/oer/oers.xsd", "mimetype": "text/xml"}, name="oers.xsd"),
     url(r'', include('users.urls', app_name=None, namespace="users")),
-    url(r'', include('materials.urls', app_name=None, namespace="materials")),
     url(r'', include('feedback.urls')),
     url(r'', include('information.urls')),
     url(r'', include('sendthis.urls')),
@@ -58,15 +57,8 @@ urlpatterns = patterns('',
     url(r'^savedsearches', include('savedsearches.urls', app_name=None, namespace="savedsearches")),
     url(r'^oauth/', include('oauth_provider.urls')),
     url(r'^api/', include('api.urls')),
+    url(r'', include('materials.urls', app_name=None, namespace="materials")),
 )
-
-
-# Dummy URL should be replaced with real ones later.
-# We place them here because we need then in {% url %} tags.
-urlpatterns += patterns('',
-    url(r'^(?P<microsite>[^/]+)$', "project.views.frontpage", name="microsite"),
-)
-
 
 if settings.DEBUG:
     urlpatterns += patterns('',
