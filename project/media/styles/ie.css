@@ -4,7 +4,7 @@
 }
 
 .index-filters .filter dd label {
-  width: 144px;
+  width: 140px;
 }
 
 .advanced-search .filter dd.collapsible li label {
@@ -23,4 +23,9 @@
 
 .navigation li span {
   float: left;
+}
+
+.index-filters .filter dd,
+a.expand-link {
+  background: none !important;
 }
