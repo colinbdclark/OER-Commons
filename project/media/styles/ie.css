@@ -26,6 +26,8 @@
 }
 
 .index-filters .filter dd,
-a.expand-link {
+a.expand-link,
+.materials-index dl.expanded,
+.materials-index dl.collapsed {
   background: none !important;
 }

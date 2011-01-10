@@ -104,7 +104,8 @@
   margin-top: 1px;
 }
 
-.materials-index .expand-link.expanded {
+/* This selector very specific to prevent multiple class bug in IE6 */
+.materials-index .details a.expand-link.expanded {
   display: none;
 }
 
