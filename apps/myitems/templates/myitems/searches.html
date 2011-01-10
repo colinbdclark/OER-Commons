@@ -20,6 +20,7 @@
 {% block content %}
   {% include "myitems/include/user-info.html" %}
 
+  {% if items %}
   <div class="materials-index saved searches">
 
   <p class="hint dotted">
@@ -35,6 +36,10 @@
     Remove this saved search?
     <a href="#" class="unsave">Yes, remove</a> | <a href="#" class="cancel">Cancel</a>
   </div>
+  {% else %}
+  <p class="clear">You have not saved any search yet.</p>
+  {% endif %}
+  
 {% endblock %}
 
 {% block column-right %}

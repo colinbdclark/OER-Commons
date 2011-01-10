@@ -21,6 +21,7 @@
 {% block content %}
   {% include "myitems/include/user-info.html" %}
 
+  {% if items %}
   <div class="materials-index collapsibles">
   {% with "top" as class %}
     {% include "materials/include/index-navigation.html" %}
@@ -36,7 +37,10 @@
   </div>
   
   {% rate_form %}
-  
+  {% else %}
+  {% if no_items_message %}<p class="clear">{{ no_items_message }}</p>{% endif %}
+  {% endif %}
+    
 {% endblock %}
 
 {% block column-right %}

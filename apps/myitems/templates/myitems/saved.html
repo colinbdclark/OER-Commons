@@ -22,6 +22,7 @@
 {% block content %}
   {% include "myitems/include/user-info.html" %}
 
+  {% if items %}
   <div class="materials-index saved collapsibles">
 
   {% with "top" as class %}
@@ -47,6 +48,9 @@
     Remove this item from your collection?
     <a href="#" class="unsave">Yes, remove</a> | <a href="#" class="cancel">Cancel</a>
   </div>
+  {% else %}
+  {% if no_items_message %}<p class="clear">{{ no_items_message }}</p>{% endif %}
+  {% endif %}  
   
 {% endblock %}
 

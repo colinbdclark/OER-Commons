@@ -8,7 +8,7 @@ from savedsearches.models import SavedSearch
 from django.core.urlresolvers import reverse
 
 
-def myitems_index(request, view_name, page_title, index_name,
+def myitems_index(request, view_name, page_title, no_items_message, index_name,
                   only_published=True, template="myitems/index.html"):
 
     breadcrumbs = [
@@ -46,33 +46,33 @@ def myitems_index(request, view_name, page_title, index_name,
 
 @login_required
 def saved(request):
-    return myitems_index(request, "myitems", u"My Saved Items", "saved_by",
+    return myitems_index(request, "myitems", u"My Saved Items", u"You have not saved any item yet.", "saved_by",
                          template="myitems/saved.html")
 
 
 @login_required
 def rated(request):
-    return myitems_index(request, "rated", u"My Rated Items", "rated_by")
+    return myitems_index(request, "rated", u"My Rated Items", u"You have not rated any item yet.", "rated_by")
 
 
 @login_required
 def tagged(request):
-    return myitems_index(request, "tagged", u"My Tagged Items", "tagged_by")
+    return myitems_index(request, "tagged", u"My Tagged Items", u"You have not tagged any item yet.", "tagged_by")
 
 
 @login_required
 def reviewed(request):
-    return myitems_index(request, "reviewed", u"My Reviewed Items", "reviewed_by")
+    return myitems_index(request, "reviewed", u"My Reviewed Items", u"You have not reviewed any item yet.", "reviewed_by")
 
 
 @login_required
 def noted(request):
-    return myitems_index(request, "noted", u"My Noted Items", "noted_by")
+    return myitems_index(request, "noted", u"My Noted Items", u"You have not added any note yet.", "noted_by")
 
 
 @login_required
 def submitted(request):
-    return myitems_index(request, "submitted", u"My Submitted Items", "creator",
+    return myitems_index(request, "submitted", u"My Submitted Items", u"You have not submitted any item yet.", "creator",
                          only_published=False)
 
 @login_required
