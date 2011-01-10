@@ -20,3 +20,7 @@
 #global-search-box .button {
   line-height: 16px;
 }
+
+.navigation li span {
+  float: left;
+}
