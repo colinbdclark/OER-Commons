@@ -246,6 +246,8 @@ class SearchFilter(Filter):
     weighted_fields = ["title", "abstract", "keywords_names",
                        "collection_name", "institution_name", "authors"]
 
+    request_name = "f.search"
+
     def extract_value(self, request):
         any_words = request.REQUEST.get("f.search.any", u"").split()
         exclude_words = request.REQUEST.get("f.search.exclude", u"").split()
