@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% load rating_tags %}
 {% load savedsearches_tags %}
+{% load sendthis_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
       oer.materials.index.init();
       oer.saved_search.init();
+      oer.send_this.init();
       $("div.portlet.cou a").cluetip({local:true, arrows: true, width: 300});
     });
   </script>
@@ -39,6 +41,7 @@
   {% rate_form %}
   
   {% save_search_form index_url index_title %}
+  {% send_this_form index_url %}
   
 {% endblock %}
 

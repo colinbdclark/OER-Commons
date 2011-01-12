@@ -66,6 +66,19 @@ oer.validation.rules.reset_password = {
   }
 };
 
+oer.validation.rules.save_search = {
+  title: {
+    required: true
+  }
+};
+
+oer.validation.rules.send_this = {
+  email: {
+    required: true,
+    email: true
+  }
+};
+
 $.validator.setDefaults({
   errorPlacement: function(error, element) {
      error.appendTo(element.closest(".field").find(".errors"));

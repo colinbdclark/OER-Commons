@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load materials_tags %}
 {% load rating_tags %}
+{% load sendthis_tags %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -8,6 +9,7 @@
   <script type="text/javascript">
     $(function() {
       oer.materials.view_item.init();
+      oer.send_this.init();
       {% if content_actions or workflow_actions %}
         oer.materials.view_item.init_content_actions();
       {% endif %}
@@ -18,6 +20,9 @@
 {% block above-content %}
 <div class="action-panel fixed-width">
   <ul class="right">
+    <li>
+      <a class="email-icon send-this" href="#" title="Send this">Send this</a>
+    </li>
     {% if save_url %}
       <li class="last"><a href="{{ save_url }}">Save this item</a></li>
     {% endif %}
@@ -239,6 +244,10 @@
   </div>
   
 </div>
+
+{% with item.get_absolute_url as path %}
+  {% send_this_form path %}
+{% endwith %}
 
 {% endblock %}
 

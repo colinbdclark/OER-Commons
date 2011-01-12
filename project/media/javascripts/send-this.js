@@ -1,8 +1,8 @@
-oer.saved_search = {};
+oer.send_this = {};
 
-oer.saved_search.init = function() {
-  var $form = $("form[name='save-search']");
-  var $show_form_link = $("a.save-search");
+oer.send_this.init = function() {
+  var $form = $("form[name='send-this']");
+  var $show_form_link = $("a.send-this");
   
   var coordinates = $show_form_link.offset();
   
@@ -26,8 +26,11 @@ oer.saved_search.init = function() {
     submitHandler: function(form) {
       if ($form.attr("method") == "post") {
         var data = {
-          url: $form.find("input[name='url']").val(),
-          title: $form.find("input[name='title']").val()
+          path: $form.find("input[name='path']").val(),
+          email: $form.find("input[name='email']").val(),
+          comment: $form.find("textarea[name='comment']").val(),
+          ajax: "yes",
+          send: "send"
         };
         $.post($form.attr("action"), data,
           function(data) {
@@ -41,7 +44,6 @@ oer.saved_search.init = function() {
       }
       form.submit();
     },
-    rules: oer.validation.rules.save_search
+    rules: oer.validation.rules.send_this
   });
-  
 };

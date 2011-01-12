@@ -82,6 +82,7 @@ INSTALLED_APPS = (
     'feedback',
     'information',
     'oai',
+    'sendthis',
     'project',
 )
 

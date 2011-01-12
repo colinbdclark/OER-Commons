@@ -1,0 +1,15 @@
+<html>
+<body>
+  <p>This link is sent to you from <a href="{{ site_url }}">{{ site_url }}</a></p>
+  <p>You are receiving this mail because someone read a page at
+  <a href="{{ link }}">{{ link }}</a>
+  and thought it might interest you.</p>
+  <p>It is sent by {{ user.email }}
+  with the following comment:</p>
+  <p>{{ comment }}</p>
+  <p>--<br/> 
+    {{ user.first_name }} {{ user.last_name }},<br/> 
+    {{ user.email }}
+  </p>
+</body>
+</html>

@@ -491,6 +491,15 @@
   margin-top: 2px;
 }
 
+.email-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: url(../images/email-icon.png) no-repeat 50% 50%;
+  text-indent: -9999px;
+  margin-top: 2px;
+}
+
 .advanced-search .search-box {
   background: #0c5671 url(../images/advancedsearch-searchbox-bg.png) repeat-x 0% 0%;
   padding: 10px;

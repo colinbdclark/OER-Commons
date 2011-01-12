@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form name="send-this" method="post" class="formatted send-this"
+      action="{% url send-this %}">
+      
+  <p><label>Link:</label> <a href="{{ link }}">{{ link }}</a></p>
+      
+  <input type="hidden" name="path" value="{{ path }}" />
+      
+  {% for field in form.visible_fields %}
+    {% include "include/form-field.html" %}
+  {% endfor %}
+  
+  <div class="buttons">
+    <input type="submit" class="button" name="send" value="Send" />
+    <input type="submit" class="button" name="cancel" value="Cancel" />
+  </div>
+</form>
+{% endblock %}
