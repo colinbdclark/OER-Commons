@@ -43,7 +43,7 @@ class ByField(MultiValueField):
         return value.values_list("user__id", flat=True)
 
 
-class MaterialSearchIndex(SearchIndex):
+class MaterialSearchIndex(RealTimeSearchIndex):
 
     text = CharField(document=True, use_template=True)
     slug = CharField(model_attr="slug", stored=True, indexed=False)
