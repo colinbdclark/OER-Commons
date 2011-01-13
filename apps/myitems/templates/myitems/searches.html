@@ -21,23 +21,28 @@
   {% include "myitems/include/user-info.html" %}
 
   {% if items %}
-  <div class="materials-index saved searches">
+    <div class="materials-index saved searches">
+  
+    <p class="hint dotted">
+      Click <img alt="Remove search" src="{{ STATIC_URL }}images/remove-from-collection.png" />  to remove a saved search.
+    </p>
+  
+    {% for item in items %}
+      {% include "myitems/include/index-saved-search.html" %}
+    {% endfor %}
 
-  <p class="hint dotted">
-    Click <img alt="Remove search" src="{{ STATIC_URL }}images/remove-from-collection.png" />  to remove a saved search.
-  </p>
+    <p class="hint">
+      Click <img alt="Remove search" src="{{ STATIC_URL }}images/remove-from-collection.png" />  to remove a saved search.
+    </p>
+  
+    </div>
 
-  {% for item in items %}
-    {% include "myitems/include/index-saved-search.html" %}
-  {% endfor %}
-  </div>
-
-  <div class="unsave-confirmation message">
-    Remove this saved search?
-    <a href="#" class="unsave">Yes, remove</a> | <a href="#" class="cancel">Cancel</a>
-  </div>
+    <div class="unsave-confirmation message">
+      Remove this saved search?
+      <a href="#" class="unsave">Yes, remove</a> | <a href="#" class="cancel">Cancel</a>
+    </div>
   {% else %}
-  <p class="clear">You have not saved any search yet.</p>
+    <p class="clear">You have not saved any search yet.</p>
   {% endif %}
   
 {% endblock %}
