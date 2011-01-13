@@ -377,9 +377,9 @@ def index(request, general_subjects=None, grade_levels=None,
                 messages.warning(request, u"You should specify the search term")
                 return HttpResponsePermanentRedirect(reverse("materials:advanced_search"))
 
-        page_title = "Search"
+        page_title = u"Search Results"
         page_subtitle = search_query
-        breadcrumbs = [{"url": reverse("materials:search"), "title": u"Search"}]
+        breadcrumbs = [{"url": reverse("materials:search"), "title": page_title}]
 
     elif model == CommunityItem:
         breadcrumbs = [{"url": reverse("materials:community"), "title": u"OER Community"}]
