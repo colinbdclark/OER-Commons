@@ -59,7 +59,7 @@
 {% block content %}
 {% if content_actions or workflow_actions %}
   <div class="content-actions">
-    <ul>
+    <ul class="clearfix">
       {% if content_actions %}
         <li>
           <dl>
@@ -85,7 +85,6 @@
         </li>
       {% endif %}
     </ul>
-    <div class="clear"></div>
   </div>
 {% endif %}
 

@@ -18,7 +18,7 @@
       <td>
         <ul>
           {% for topic in help_topics %}
-            <li><a href="{% url help %}#{{ topic.slug }}">{% if topic.short_title %}{{ topic.short_title }}{% else %}{{ topic.title }}{% endif %}</li>
+            <li><a href="{% url help %}#{{ topic.slug }}">{% if topic.short_title %}{{ topic.short_title }}{% else %}{{ topic.title }}{% endif %}</a></li>
           {% endfor %}          
         </ul>
       </td>
@@ -26,7 +26,7 @@
       <td>
         <ul>
           {% for topic in about_topics %}
-            <li><a href="{% url about %}#{{ topic.slug }}">{% if topic.short_title %}{{ topic.short_title }}{% else %}{{ topic.title }}{% endif %}</li>
+            <li><a href="{% url about %}#{{ topic.slug }}">{% if topic.short_title %}{{ topic.short_title }}{% else %}{{ topic.title }}{% endif %}</a></li>
           {% endfor %}          
         </ul>
       </td>

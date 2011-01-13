@@ -27,6 +27,14 @@ hr.tall {
   box-shadow: 3px 3px 5px #888;
 }
 
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
 .clear {
   clear: both;
 }
@@ -90,11 +98,11 @@ hr.tall {
   height: 16px;
 }
 
-.expand-button.collapsed {
+a.expand-button.collapsed {
   background: url(../images/collapsible-btn-closed.png) no-repeat;
 }
 
-.expand-button.expanded {
+a.expand-button.expanded {
   background: url(../images/collapsible-btn-opened.png) no-repeat;
 }
 
@@ -169,13 +177,14 @@ div.box h3 {
   font-style: normal;
   font-weight: bold;
   margin-bottom: 0px;
+  margin-top: 0px;
   padding-left: 10px;
   line-height: 33px;
   height: 39px;
 }
 
 #content.contribute {
-  font-size: 13px; 
+  font-size: 13px;
 }
 
 #content.contribute a {

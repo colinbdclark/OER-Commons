@@ -71,7 +71,7 @@
 {% endblock %}
 
 {% block column-right %}
-<div class="portlet twitter dotted"> 
+<div class="portlet twitter dotted clearfix"> 
   <h4 class="green">OER Commons Tweets</h4> 
   {% if tweets %}
   <ul class="tweets"> 
@@ -86,7 +86,6 @@
   <a href="http://twitter.com/OERCommons" class="follow-btn"> 
     Follow Our Tweets
   </a> 
-  <div class="clear"></div>
 </div> 
 
 {% include "include/portlets/addthis.html" %}

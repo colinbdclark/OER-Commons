@@ -20,7 +20,7 @@
     
     {% with index_filters.general_subjects as filter %}
       {% if filter.options %}
-      <dl class="dotted filter collapsible">
+      <dl class="dotted filter collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
            <input type="checkbox" name="{{ filter.name }}"
@@ -42,7 +42,7 @@
 
     {% with index_filters.grade_levels as filter %}
       {% if filter.options %}
-      <dl class="dotted filter grade-levels collapsible">
+      <dl class="dotted filter grade-levels collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
            <input type="checkbox" name="{{ filter.name }}"
@@ -61,7 +61,6 @@
            <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">{{ option.name|shrink:18 }} ({{ option.count }})</label>
         </dd>
         {% endfor %}
-        <dd class="clear"></dd>
       </dl>
       {% endif %}
       
@@ -75,7 +74,7 @@
 
     {% with index_filters.course_material_types as filter %}
       {% if filter.options %}
-      <dl class="dotted filter collapsible">
+      <dl class="dotted filter collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
            <input type="checkbox" name="{{ filter.name }}"
@@ -97,7 +96,7 @@
 
     {% with index_filters.media_formats as filter %}
       {% if filter.options %}
-      <dl class="dotted filter collapsible">
+      <dl class="dotted filter collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
            <input type="checkbox" name="{{ filter.name }}"
@@ -119,7 +118,7 @@
 
     {% with index_filters.cou_bucket as filter %}
       {% if filter.options %}
-      <dl class="dotted filter cou collapsible">
+      <dl class="dotted filter cou collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
            <input type="checkbox" name="{{ filter.name }}"
@@ -138,7 +137,6 @@
            <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">{{ option.name|shrink:18 }} ({{ option.count }})</label>
         </dd>
         {% endfor %}
-        <dd class="clear"></dd>
       </dl>
 
       <div style="display: none; " id="cou-tooltip">

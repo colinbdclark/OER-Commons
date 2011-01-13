@@ -1,5 +1,8 @@
-.index-filters .filter input,
-.advanced-search .filter input {
+.clearfix {
+  zoom: 1;     /* triggers hasLayout */
+}
+
+.index-filters .filter input, .advanced-search .filter input {
   height: 16px;
 }
 
@@ -25,9 +28,7 @@
   float: left;
 }
 
-.index-filters .filter dd,
-a.expand-link,
-.materials-index dl.expanded,
-.materials-index dl.collapsed {
+.index-filters .filter dd, a.expand-link, .materials-index dl.expanded, .materials-index dl.collapsed,
+.advanced-search .filter dd {
   background: none !important;
 }

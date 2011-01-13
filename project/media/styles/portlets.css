@@ -165,7 +165,8 @@
   font-size: 13px;
 }
 
-.portlet.advanced-search {
+/* This selector is very specific to prevent multiple class bug in IE6 */
+.column-left .portlet.advanced-search {
   padding: 5px 10px;
   font-size: 14px;
   font-weight: bold;
@@ -175,6 +176,7 @@
   border-width: 2px 1px;
 }
 
-.portlet.advanced-search p {
+/* This selector is very specific to prevent multiple class bug in IE6 */
+.column-left .portlet.advanced-search p {
   margin: 5px 0;
 }

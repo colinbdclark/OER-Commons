@@ -159,7 +159,8 @@ def profile(request):
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
 
     user = request.user
-    profile_form = ProfileForm(instance=user.profile)
+    profile = Profile.objects.get_or_create(user=user)[0]
+    profile_form = ProfileForm(instance=profile)
     change_password_form = ChangePasswordForm()
 
     if request.method == "POST" and "save-profile" in request.POST:

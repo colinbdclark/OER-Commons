@@ -104,13 +104,13 @@
   margin-top: 1px;
 }
 
-/* This selector very specific to prevent multiple class bug in IE6 */
+/* This selector is very specific to prevent multiple class bug in IE6 */
 .materials-index .details a.expand-link.expanded {
   display: none;
 }
 
 .materials-index .item .right, .view-item .right {
-  float: right;
+  float: right !important;
   margin-left: 10px;
 }
 
@@ -120,8 +120,7 @@
 }
 
 .view-item .stars {
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 5px;
 }
 
 .view-item .stars.s00 {
