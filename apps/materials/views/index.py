@@ -1,3 +1,4 @@
+from autoslug.settings import slugify
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponse
@@ -7,16 +8,16 @@ from materials.models.common import GeneralSubject, GradeLevel, Collection, \
     Keyword
 from materials.models.community import CommunityItem
 from materials.models.material import PUBLISHED_STATE
+from materials.models.microsite import Microsite, Topic, \
+    get_topic_microsite_from_id
 from materials.utils import get_name_from_id, get_slug_from_id, \
     first_neighbours_last, get_name_from_slug
 from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
-import urllib
-from autoslug.settings import slugify
-from materials.models.microsite import Microsite, Topic
 import cjson
+import urllib
 
 
 MAX_TOP_KEYWORDS = 25
@@ -281,6 +282,11 @@ def populate_item_from_search_result(result):
     if item.get("grade_levels"):
         item["grade_levels"] = [get_name_from_id(
                      GradeLevel, id) for id in item["grade_levels"]]
+
+    if item.get("topics"):
+        item["topics"] = [{"name": get_name_from_id(Topic, id),
+                           "slug": get_slug_from_id(Topic, id),
+                           "microsite": get_topic_microsite_from_id(id)} for id in item["topics"]]
 
     namespace = getattr(result.model, "namespace", None)
     if namespace:

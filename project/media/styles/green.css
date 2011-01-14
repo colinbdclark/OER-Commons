@@ -61,3 +61,7 @@ body.green {
   height: 28px;
   margin-right: 3px;
 }
+
+.materials-index .details dd.topics a.green {
+  background: url(../images/green-icon-small.png) no-repeat 0 50%;
+}

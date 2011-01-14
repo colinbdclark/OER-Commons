@@ -63,6 +63,16 @@
   margin-right: 120px;
 }
 
+.materials-index .details dt.topics {
+  line-height: 16px;
+}
+
+.materials-index .details dd.topics a {
+  display: inline-block;
+  padding-left: 20px;
+  line-height: 16px;
+}
+
 .cou-bucket {
   color: #0B7BA9;
   font-size: 10px;

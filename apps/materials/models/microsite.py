@@ -1,5 +1,6 @@
-from django.db import models
 from autoslug.fields import AutoSlugField
+from cache_utils.decorators import cached
+from django.db import models
 from materials.models.common import AutoCreateManyToManyField, Keyword
 
 
@@ -59,3 +60,18 @@ class Topic(models.Model):
         app_label = "materials"
         ordering = ["microsite", "parent__id", "id"]
         unique_together = (("name", "microsite"))
+
+
+@cached(60 * 60 * 24)
+def get_topic_microsite_from_id(id):
+    """
+    Lookup a Topic instance by id and return its microsite slug.
+    Use caching to reduce the number of database queries. Return None if 
+    an Topic with given id does not exist.
+    """
+    try:
+        return Topic.objects.get(pk=id).microsite.slug
+    except Topic.DoesNotExist:
+        return None
+
+
