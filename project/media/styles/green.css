@@ -40,8 +40,8 @@ body.green {
 .green-feature p a {
   font-weight: bold;
   color: #0C5670;
-  text-decoration: none; 
-}  
+  text-decoration: none;
+}
 
 .green .content.microsite-frontpage h2 {
   color: #666;
@@ -50,7 +50,7 @@ body.green {
   font-weight: normal;
   margin-bottom: 15px;
   margin-top: 0;
-  line-height: 28px;  
+  line-height: 28px;
 }
 
 .green .content.microsite-frontpage h2 .icon {
@@ -64,4 +64,16 @@ body.green {
 
 .materials-index .details dd.topics a.green {
   background: url(../images/green-icon-small.png) no-repeat 0 50%;
+}
+
+#green-sponsors-portlet p {
+  font-size: 13px;
+  color: #666;
+  line-height: 16px;
+  margin-right 20px;
+}
+
+#green-sponsors-portlet div {
+  text-align: center;
+  margin: 15px 0;
 }

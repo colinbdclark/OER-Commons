@@ -26,6 +26,25 @@
 
 {% block contentclass %}microsite-frontpage{% endblock %}
 
+{% block column-left %}
+<div class="portlet" id="green-sponsors-portlet">
+  <h4 class="green">Sponsorship</h4>
+  <p>Green OER is a project in OER Commons developed by 
+     <a href="http://www.iskme.org">ISKME</a> in
+     partnership with <a href="http://www.agroknow.gr">Agro-Know</a></p>
+  <div>               
+    <a href="http://www.iskme.org">
+      <img alt="ISKME" src="{{STATIC_URL }}images/iskme.png">
+    </a>
+  </div>
+  <div>               
+    <a href="http://www.agroknow.gr">
+      <img alt="Agro-Know Technologies" src="{{STATIC_URL }}images/agro-know.png">
+    </a>
+  </div>
+</div>
+{% endblock %}
+
 {% block content %}
   <h2 class="dotted"><span class="icon"></span> Top <strong>{{ microsite.name }}</strong> resources</h2>
   <div class="materials-index collapsibles">
