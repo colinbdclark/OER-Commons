@@ -91,6 +91,7 @@ saved_item_patterns + \
 rating_patterns
 
 microsite_browse_patterns = browse_patterns + patterns('materials.views',
+    url(r"^/material_types/(?P<course_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
     url(r"^/topic/(?P<topics>[^/]+)/?$", "index.index", name="topic_index"),
 )
 

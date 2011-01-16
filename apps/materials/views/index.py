@@ -8,10 +8,9 @@ from materials.models.common import GeneralSubject, GradeLevel, Collection, \
     Keyword
 from materials.models.community import CommunityItem
 from materials.models.material import PUBLISHED_STATE
-from materials.models.microsite import Microsite, Topic, \
-    get_topic_microsite_from_id
+from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_id, get_slug_from_id, \
-    first_neighbours_last, get_name_from_slug
+    first_neighbours_last, get_name_from_slug, get_object
 from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
 from tags.models import Tag
@@ -284,9 +283,16 @@ def populate_item_from_search_result(result):
                      GradeLevel, id) for id in item["grade_levels"]]
 
     if item.get("topics"):
-        item["topics"] = [{"name": get_name_from_id(Topic, id),
-                           "slug": get_slug_from_id(Topic, id),
-                           "microsite": get_topic_microsite_from_id(id)} for id in item["topics"]]
+        topics = []
+        for id in item["topics"]:
+            topic = get_object(Topic, pk=id)
+            if not topic or topic.other:
+                continue
+            topics.append(dict(name=topic.name,
+                               slug=topic.slug,
+                               microsite=topic.microsite.slug))
+        item["topics"] = topics
+
 
     namespace = getattr(result.model, "namespace", None)
     if namespace:

@@ -1,7 +1,9 @@
 from autoslug.fields import AutoSlugField
 from cache_utils.decorators import cached
+from django.core.exceptions import ValidationError
 from django.db import models
 from materials.models.common import AutoCreateManyToManyField, Keyword
+from mptt.models import MPTTModel
 
 
 class MicrositeManager(models.Manager):
@@ -35,20 +37,35 @@ class TopicManager(models.Manager):
         return self.get(microsite=microsite, name=name)
 
 
-class Topic(models.Model):
+class Topic(MPTTModel):
 
     name = models.CharField(max_length=100)
     slug = AutoSlugField(max_length=100, populate_from="name")
-    keywords = AutoCreateManyToManyField(Keyword)
+    keywords = AutoCreateManyToManyField(Keyword, null=True, blank=True)
     microsite = models.ForeignKey(Microsite, related_name="topics")
     parent = models.ForeignKey("self", null=True, blank=True)
+
+    other = models.BooleanField(default=False)
 
     objects = TopicManager()
 
     def save(self, *args, **kwargs):
+        if self.parent:
+            self.microsite = self.parent.microsite
         super(Topic, self).save(*args, **kwargs)
-        if not self.keywords.filter(name=self.name).count():
+        if self.other:
+            self.parent = None
+            self.keywords.clear()
+        elif not self.keywords.filter(name=self.name).count():
             self.keywords.add(Keyword.objects.get_or_create(name=self.name)[0])
+
+    def clean(self):
+        if self.other:
+            qs = Topic.objects.filter(microsite=self.microsite, other=True)
+            if self.id:
+                qs = qs.exclude(pk=self.id)
+            if qs.count():
+                raise ValidationError(u"Only one 'Other' topic is allowed.")
 
     def __unicode__(self):
         return self.name
@@ -58,8 +75,9 @@ class Topic(models.Model):
 
     class Meta:
         app_label = "materials"
-        ordering = ["microsite", "parent__id", "id"]
+        ordering = ["microsite", "tree_id", "lft"]
         unique_together = (("name", "microsite"))
+
 
 
 @cached(60 * 60 * 24)

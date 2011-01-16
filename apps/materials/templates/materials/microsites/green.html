@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 {% load rating_tags %}
+{% load materials_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
+      $("div.portlet.oermaterials .accordion").accordion({
+        header: "h5:not(.skip)",
+        event: "click hoverintent",
+        collapsible: true,
+        active: false,
+        autoHeight: false
+      });
       oer.collapsibles.init($("#content"));
       oer.materials.index.init_actions_menus();
     });
@@ -16,9 +24,7 @@
 
 {% block above-content %}
 <div class="green-feature fixed-width">
-  <h2>
-    Highlight
-  </h2>
+  <h2>Highlight</h2>
   <p><a href="#">Sun Curve Challenge</a>: ISKME announces the Sun Curve Design<br>
   Challenge, a partnership with INKA, the creator of Sun Curve...</p>
 </div>
@@ -26,7 +32,50 @@
 
 {% block contentclass %}microsite-frontpage{% endblock %}
 
+
 {% block column-left %}
+<div class="portlet oermaterials clearfix">
+  <h4 class="dotted">Browse Resources</h4>
+  <h6>by Green Subtopic</h6>
+  <div class="accordion dotted clearfix">
+  {% for topic, tree_info in topics %}
+    {% if topic.level == 0 %}
+      <h5{% if tree_info.closed_levels %} class="skip"{% endif %}><a href="{% url materials:topic_index topics=topic.slug, microsite=microsite.slug %}" title="{{ topic.name }}">{{ topic.name }} ({{ topic.count }})</a></h5>
+    {% else %}
+      {% if tree_info.new_level %}
+      <div><ul>
+      {% endif %}
+        <li>
+          <a href="{% url materials:topic_index topics=topic.slug, microsite=microsite.slug %}" title="{{ topic.name }}">{{ topic.name|shrink:20 }} ({{ topic.count }})</a>
+        </li>
+      {% if tree_info.closed_levels %}
+      </ul></div>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  </div>
+  
+  <div class="accordion dotted clearfix">
+    <h5><a href="#">Grade Level</a></h5>
+    <div>
+      <ul>
+        {% for level in grade_levels %}
+          <li><a href="{% url materials:grade_level_index grade_levels=level.slug, microsite=microsite.slug %}" title="{{ level.name }}">{{ level.name }} ({{ level.count }})</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  	<h5><a href="#">Material Type</a></h5>
+  	<div>
+  		<ul>
+  		  {% for material_type in course_material_types %}
+  		    <li><a href="{% url materials:material_type_index course_material_types=material_type.slug, microsite=microsite.slug %}" title="{{ material_type.name }}">{{ material_type.name|shrink:18 }} ({{ material_type.count }})</a></li>
+  		  {% endfor %}
+  		</ul>
+  	</div>
+  </div>
+  
+</div>
+
 <div class="portlet" id="green-sponsors-portlet">
   <h4 class="green">Sponsorship</h4>
   <p>Green OER is a project in OER Commons developed by 

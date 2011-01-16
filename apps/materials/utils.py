@@ -47,42 +47,50 @@ def cleanup_keywords(keywords):
 
 
 @cached(60 * 60 * 24)
-def get_name_from_slug(model, slug):
+def get_object(model, **kwargs):
     """
-    Lookup a model instance by slug and return its name. Use caching to reduce
-    the number of database queries. Return None if an object with given slug
-    does not exist.
+    Lookup a model instance by filter params and return its name. Use caching to reduce
+    the number of database queries. Return None if an object with given params
+    does not exist. This is used for objects which are not supposed to change,
+    e.g. vocabulary items.
     """
-    result = model.objects.filter(slug=slug)
+    result = model.objects.filter(**kwargs).select_related()
     if not result.count():
         return None
-    return result[0].name
+    return result[0]
 
 
-@cached(60 * 60 * 24)
 def get_name_from_id(model, id):
     """
-    Lookup a model instance by id and return its name. Use caching to reduce
-    the number of database queries. Return None if an object with given id
-    does not exist.
+    Lookup a model instance by id and return its name. Return None if an object
+    with given id does not exist.
     """
-    try:
-        return model.objects.get(pk=id).name
-    except model.DoesNotExist:
-        return None
+    object = get_object(model, pk=id)
+    if object:
+        return object.name
+    return None
 
 
-@cached(60 * 60 * 24)
 def get_slug_from_id(model, id):
     """
-    Lookup a model instance by id and return its slug. Use caching to reduce
-    the number of database queries. Return None if an object with given id
-    does not exist.
+    Lookup a model instance by id and return its slug. Return None if an object
+    with given id does not exist.
     """
-    try:
-        return model.objects.get(pk=id).slug
-    except model.DoesNotExist:
-        return None
+    object = get_object(model, pk=id)
+    if object:
+        return object.slug
+    return None
+
+
+def get_name_from_slug(model, slug):
+    """
+    Lookup a model instance by slug and return its name. Return None if an object
+    with given slug does not exist.
+    """
+    object = get_object(model, slug=slug)
+    if object:
+        return object.name
+    return None
 
 
 def get_facets_for_field(field, model=None):

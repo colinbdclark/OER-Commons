@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'haystack',
     'flatblocks',
+    'mptt',
     'oauth_provider',
     'utils',
     'tags',

@@ -4061,7 +4061,11 @@
         "Green"
       ], 
       "slug": "natural-resources", 
-      "name": "Natural Resources"
+      "name": "Natural Resources",
+      "tree_id": 1,
+      "level": 0,
+      "lft": 1,
+      "rght": 12
     }
   }, 
   {
@@ -4087,7 +4091,11 @@
         "Green", 
         "Natural Resources"
       ], 
-      "name": "Soil and Land"
+      "name": "Soil and Land",
+      "tree_id": 1,
+      "level": 1,
+      "lft": 2,
+      "rght": 3
     }
   }, 
   {
@@ -4107,7 +4115,11 @@
         "Green", 
         "Natural Resources"
       ], 
-      "name": "Water"
+      "name": "Water",
+      "tree_id": 1,
+      "level": 1,
+      "lft": 4,
+      "rght": 5
     }
   }, 
   {
@@ -4127,7 +4139,11 @@
         "Green", 
         "Natural Resources"
       ], 
-      "name": "Energy"
+      "name": "Energy",
+      "tree_id": 1,
+      "level": 1,
+      "lft": 6,
+      "rght": 7
     }
   }, 
   {
@@ -4153,7 +4169,11 @@
         "Green", 
         "Natural Resources"
       ], 
-      "name": "Plants and Forests"
+      "name": "Plants and Forests",
+      "tree_id": 1,
+      "level": 1,
+      "lft": 8,
+      "rght": 9
     }
   }, 
   {
@@ -4179,7 +4199,11 @@
         "Green", 
         "Natural Resources"
       ], 
-      "name": "Animals and Insects"
+      "name": "Animals and Insects",
+      "tree_id": 1,
+      "level": 1,
+      "lft": 10,
+      "rght": 11
     }
   }, 
   {
@@ -4195,7 +4219,11 @@
         "Green"
       ], 
       "slug": "human-impact", 
-      "name": "Human Impact"
+      "name": "Human Impact",
+      "tree_id": 2,
+      "level": 0,
+      "lft": 1,
+      "rght": 10
     }
   }, 
   {
@@ -4218,7 +4246,11 @@
         "Green", 
         "Human Impact"
       ], 
-      "name": "Climate Change"
+      "name": "Climate Change",
+      "tree_id": 2,
+      "level": 1,
+      "lft": 2,
+      "rght": 3
     }
   }, 
   {
@@ -4238,7 +4270,11 @@
         "Green", 
         "Human Impact"
       ], 
-      "name": "Pollution"
+      "name": "Pollution",
+      "tree_id": 2,
+      "level": 1,
+      "lft": 4,
+      "rght": 5
     }
   }, 
   {
@@ -4261,7 +4297,11 @@
         "Green", 
         "Human Impact"
       ], 
-      "name": "Endangered Species"
+      "name": "Endangered Species",
+      "tree_id": 2,
+      "level": 1,
+      "lft": 6,
+      "rght": 7
     }
   }, 
   {
@@ -4287,7 +4327,11 @@
         "Green", 
         "Human Impact"
       ], 
-      "name": "Industrial and Agricultural Impacts"
+      "name": "Industrial and Agricultural Impacts",
+      "tree_id": 2,
+      "level": 1,
+      "lft": 8,
+      "rght": 9
     }
   }, 
   {
@@ -4303,7 +4347,11 @@
         "Green"
       ], 
       "slug": "tools-for-change", 
-      "name": "Tools for Change"
+      "name": "Tools for Change",
+      "tree_id": 3,
+      "level": 0,
+      "lft": 1,
+      "rght": 12
     }
   }, 
   {
@@ -4329,7 +4377,11 @@
         "Green", 
         "Tools for Change"
       ], 
-      "name": "Policy and Advocacy"
+      "name": "Policy and Advocacy",
+      "tree_id": 3,
+      "level": 1,
+      "lft": 2,
+      "rght": 3
     }
   }, 
   {
@@ -4355,7 +4407,11 @@
         "Green", 
         "Tools for Change"
       ], 
-      "name": "Eco Art and Culture"
+      "name": "Eco Art and Culture",
+      "tree_id": 3,
+      "level": 1,
+      "lft": 4,
+      "rght": 5
     }
   }, 
   {
@@ -4381,7 +4437,11 @@
         "Green", 
         "Tools for Change"
       ], 
-      "name": "Green Building and Design"
+      "name": "Green Building and Design",
+      "tree_id": 3,
+      "level": 1,
+      "lft": 6,
+      "rght": 7
     }
   }, 
   {
@@ -4401,7 +4461,11 @@
         "Green", 
         "Tools for Change"
       ], 
-      "name": "Business"
+      "name": "Business",
+      "tree_id": 3,
+      "level": 1,
+      "lft": 8,
+      "rght": 9
     }
   }, 
   {
@@ -4427,7 +4491,27 @@
         "Green", 
         "Tools for Change"
       ], 
-      "name": "Sustainable Agriculture and Nutrition"
+      "name": "Sustainable Agriculture and Nutrition",
+      "tree_id": 3,
+      "level": 1,
+      "lft": 10,
+      "rght": 11
+    }
+  },
+  {
+    "pk": 18, 
+    "model": "materials.topic", 
+    "fields": {
+      "microsite": [
+        "Green"
+      ], 
+      "slug": "other", 
+      "name": "Other",
+      "tree_id": 4,
+      "level": 0,
+      "lft": 1,
+      "rght": 2,
+      "other": true
     }
   }
 ]

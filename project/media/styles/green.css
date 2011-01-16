@@ -66,6 +66,36 @@ body.green {
   background: url(../images/green-icon-small.png) no-repeat 0 50%;
 }
 
+.green .portlet.oermaterials {
+  background: url(../images/dotted-line-hor.gif) repeat-x 0 0;
+  padding-top: 5px;
+}
+
+.green .portlet.oermaterials h4 {
+}
+
+.green .portlet.oermaterials h6 {
+  color: #666;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 15px;
+}
+
+.green .portlet.oermaterials ul {
+  font-size: 12px;
+  margin-left: 20px;
+}
+
+.green .portlet.oermaterials .accordion {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.green .portlet.oermaterials {
+  margin-bottom: 0;
+}
+
 #green-sponsors-portlet p {
   font-size: 13px;
   color: #666;

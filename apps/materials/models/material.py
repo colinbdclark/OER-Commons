@@ -163,4 +163,14 @@ class Material(models.Model):
         microsites = self.microsites()
         if not microsites.count():
             return []
-        return Topic.objects.filter(microsite__in=microsites, keywords__slug__in=self.keyword_slugs())
+        topics = []
+        for microsite in self.microsites():
+            t = microsite.topics.exclude(other=True).filter(keywords__slug__in=self.keyword_slugs())
+            if t.count():
+                topics += list(t)
+            else:
+                try:
+                    topics.append(microsite.topics.get(other=True))
+                except Topic.DoesNotExist:
+                    pass
+        return topics
