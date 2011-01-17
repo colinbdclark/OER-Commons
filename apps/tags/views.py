@@ -18,7 +18,19 @@ class TagsField(forms.Field):
         return u"\n".join(value)
 
     def to_python(self, value):
-        return sorted(set([v.strip() for v in value.split(u"\n") if v.strip()]))
+        if not value:
+            return []
+
+        # Split tags by newline
+        tags = [t.strip() for t in value.split("\n") if t.strip()]
+
+        # Split tags by comma
+        new_tags = []
+        for tag in tags:
+            new_tags += [t.strip() for t in tag.split(",") if t.strip()]
+        tags = new_tags
+
+        return sorted(set(tags))
 
 
 class TagsForm(forms.Form):
