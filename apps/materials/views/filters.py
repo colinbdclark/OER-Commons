@@ -295,6 +295,9 @@ class SearchFilter(Filter):
         query_string_params["f.search"] = str(value)
         return query_string_params
 
+    def page_subtitle(self, value):
+        return str(value)
+
 
 FILTERS = {
     "general_subjects": VocabularyFilter("general_subjects", "f.general_subject", GeneralSubject, u"Subject Area"),

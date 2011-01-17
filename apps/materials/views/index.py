@@ -495,10 +495,9 @@ def index(request, general_subjects=None, grade_levels=None,
             item["abstract"] = data["abstract"]
             item["url"] = data["url"]
             item["keywords"] = data["keywords_names"]
-            item["subject"] = [get_slug_from_id(GeneralSubject, id) for id in data["general_subjects"]]
-            item["grade_level"] = [get_slug_from_id(GradeLevel, id) for id in data["grade_levels"]]
-            collection = data.get("collection")
-            item["collection"] = collection and get_name_from_id(Collection, collection) or None
+            item["subject"] = [get_slug_from_id(GeneralSubject, id) for id in (data["general_subjects"] or [])]
+            item["grade_level"] = [get_slug_from_id(GradeLevel, id) for id in (data["grade_levels"] or [])]
+            item["collection"] = data["collection"] and get_name_from_id(Collection, data["collection"]) or None
             items.append(item)
 
         return HttpResponse(cjson.encode(items),
