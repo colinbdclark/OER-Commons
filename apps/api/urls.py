@@ -2,5 +2,5 @@ from django.conf.urls.defaults import patterns, url
 
 
 urlpatterns = patterns("api.views",
-   url("^dummy", "dummy"),
+   url("^search/?$", "search.search"),
 )

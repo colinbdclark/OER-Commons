@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponsePermanentRedirect, HttpResponse
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import GeneralSubject, GradeLevel, Collection, \
@@ -15,6 +15,7 @@ from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 import urllib
 from autoslug.settings import slugify
+import cjson
 
 
 MAX_TOP_KEYWORDS = 25
@@ -281,6 +282,7 @@ def index(request, general_subjects=None, grade_levels=None,
           collection=None, keywords=None, license=None, ocw=None,
           course_or_module=None, community_types=None, community_topics=None,
           microsite=None, model=None, search=False, tags=None, subjects=None,
+          format=None,
           facet_fields=["general_subjects", "grade_levels", "keywords",
                         "course_material_types", "media_formats",
                         "cou_bucket"]):
@@ -323,13 +325,14 @@ def index(request, general_subjects=None, grade_levels=None,
     page_subtitle = u""
     breadcrumbs = [{"url": reverse("materials:browse"), "title": u"OER Materials"}]
 
-    format = "html"
-    if request.REQUEST.get("feed", None) == "yes":
-        format = "rss"
-    elif request.REQUEST.get("csv", None) == "yes":
-        if not request.user.is_authenticated() or not request.user.is_staff:
-            raise Http404()
-        format = "csv"
+    if not format:
+        format = "html"
+        if request.REQUEST.get("feed", None) == "yes":
+            format = "rss"
+        elif request.REQUEST.get("csv", None) == "yes":
+            if not request.user.is_authenticated() or not request.user.is_staff:
+                raise Http404()
+            format = "csv"
 
     query = SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE)
 
@@ -480,6 +483,26 @@ def index(request, general_subjects=None, grade_levels=None,
 
         return direct_to_template(request, "materials/index-rss.xml", locals(),
                                   "text/xml")
+
+    elif format == "json":
+        results = query[index_params.batch_start:batch_end]
+
+        for result in results:
+            data = result.get_stored_fields()
+            item = {}
+            item["id"] = result.id
+            item["title"] = data["title"]
+            item["abstract"] = data["abstract"]
+            item["url"] = data["url"]
+            item["keywords"] = data["keywords_names"]
+            item["subject"] = [get_slug_from_id(GeneralSubject, id) for id in data["general_subjects"]]
+            item["grade_level"] = [get_slug_from_id(GradeLevel, id) for id in data["grade_levels"]]
+            collection = data.get("collection")
+            item["collection"] = collection and get_name_from_id(Collection, collection) or None
+            items.append(item)
+
+        return HttpResponse(cjson.encode(items),
+                            content_type="application/json")
 
     elif format == "csv":
         return csv_export(query, index_title)
