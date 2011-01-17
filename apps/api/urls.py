@@ -7,4 +7,6 @@ urlpatterns = patterns("api.views",
    url("^setTags/?$", "set_tags.set_tags"),
    url("^getReview/?$", "get_review.get_review"),
    url("^setReview/?$", "set_review.set_review"),
+   url("^getRating/?$", "get_rating.get_rating"),
+   url("^setRating/?$", "set_rating.set_rating"),
 )
