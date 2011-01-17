@@ -1,15 +1,16 @@
 from cache_utils.decorators import cached
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
 from materials.models.common import Keyword, GeneralSubject, GradeLevel
 from materials.utils import get_name_from_slug, get_facets_for_field
+from oauth_provider.models import Token
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 import dateutil.parser
 import re
 import twitter
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
 
 
 MAX_TAGS = 30
@@ -95,8 +96,9 @@ def oauth_authorize(request, token, callback, params):
 @login_required
 def oauth_callback(request, **kwargs):
 
-    token = kwargs.pop("token", None)
+    token = kwargs.pop("oauth_token", None)
     if not token:
         return redirect(reverse("frontpage"))
 
+    token = Token.objects.get(key=token)
     return direct_to_template(request, "oauth/callback.html", locals())
