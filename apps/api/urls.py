@@ -9,4 +9,7 @@ urlpatterns = patterns("api.views",
    url("^setReview/?$", "set_review.set_review"),
    url("^getRating/?$", "get_rating.get_rating"),
    url("^setRating/?$", "set_rating.set_rating"),
+   url("^addCourse/?$", "add_course.add_course"),
+   url("^addLibrary/?$", "add_library.add_library"),
+   url("^addMatter/?$", "add_community_item.add_community_item"),
 )
