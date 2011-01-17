@@ -83,6 +83,7 @@ class AddForm(SubmissionFormBase, ModelForm):
     license_cc = forms.URLField(required=False, widget=forms.HiddenInput())
 
     license_cc_old = forms.ChoiceField(choices=CC_OLD_LICENSES,
+                                       required=False,
                                        widget=forms.Select())
 
     license_custom_name = forms.CharField(label=u"License Name:",

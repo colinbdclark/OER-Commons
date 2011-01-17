@@ -139,7 +139,7 @@ class SubmissionFormBase:
     def clean_license_cc_old(self):
         value = self.cleaned_data["license_cc_old"]
         if self.cleaned_data.get("license_type") == "cc-old":
-            if value == "-":
+            if not value or value == "-":
                 raise forms.ValidationError(u"You should select the license.")
         else:
             return u""
