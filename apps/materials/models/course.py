@@ -69,7 +69,8 @@ class Course(Material):
     abstract = models.TextField(default=u"", verbose_name=u"Abstract")
     content_creation_date = models.DateField(null=True, blank=True,
                                      verbose_name=_(u"Content creation date"))
-    authors = AutoCreateManyToManyField(Author, verbose_name=_(u"Authors"))
+    authors = AutoCreateManyToManyField(Author, verbose_name=_(u"Authors"),
+                                        respect_all_fields=True)
 
     url = models.URLField(max_length=300, verbose_name=_(u"URL"))
     keywords = AutoCreateManyToManyField(Keyword, verbose_name=_(u"Keywords"))

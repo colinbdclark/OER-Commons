@@ -69,7 +69,8 @@ class Material(models.Model):
 
     creator = models.ForeignKey(User, verbose_name=_("Creator"))
 
-    license = AutoCreateForeignKey(License, verbose_name=_(u"License"))
+    license = AutoCreateForeignKey(License, verbose_name=_(u"License"),
+                                   respect_all_fields=True)
 
     in_rss = models.BooleanField(default=False,
                                  verbose_name=_(u"Include in RSS"))

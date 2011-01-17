@@ -5,13 +5,13 @@ from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
 from materials.models.common import GeneralSubject, GradeLevel, MediaFormat, \
-    Language, GeographicRelevance, COU_BUCKETS
+    Language, GeographicRelevance, COU_BUCKETS, Collection
+from materials.models.library import LibraryMaterialType, Library
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
 from materials.views.forms import AuthorsField, KeywordsField, LICENSE_TYPES, \
     CC_OLD_LICENSES, LicenseTypeFieldRenderer, SubmissionFormBase
-from materials.views.forms.course import InstitutionField
+from materials.views.forms.course import InstitutionField, CollectionField
 from utils.decorators import login_required
-from materials.models.library import LibraryMaterialType, Library
 
 
 class AddForm(SubmissionFormBase, ModelForm):
@@ -115,9 +115,9 @@ class AddForm(SubmissionFormBase, ModelForm):
 
 class AddFormStaff(AddForm):
 
-    collection = InstitutionField(label=u"Collection:",
-                                  widget=forms.TextInput(
-                                  attrs={"class": "text wide"}))
+    collection = CollectionField(label=u"Collection:",
+                                 widget=forms.TextInput(
+                                 attrs={"class": "text wide"}))
 
     content_creation_date = forms.DateField(label=u"Content Creation Date:",
                                   input_formats=["%m/%d/%Y"],
@@ -209,6 +209,8 @@ def add(request, model=None):
 
         if form.is_valid():
             object = form.save(commit=False)
+            if isinstance(form, AddForm):
+                object.collection = Collection.objects.get_or_create(name=u"Individual Authors")[0]
             object.creator = request.user
             if request.user.is_staff:
                 object.workflow_state = PUBLISHED_STATE
