@@ -32,7 +32,8 @@ oer.content_submission.init_license = function() {
   );
   
   $choose_cc_button.click(
-    function() {
+    function(e) {
+      e.preventDefault();
       $cc_latest.show();
       $cc_old.hide();
       $custom_license.hide();
@@ -40,12 +41,12 @@ oer.content_submission.init_license = function() {
       $cc_latest_errors.find("label").remove();
       $license_type_buttons.val(["cc"]);
       $cc_selection_widget.fadeIn(300);
-      return false;
     }
   );
   
   $cc_selection_widget.find("input[name='issue']").click(
-    function() {
+    function(e) {
+      e.preventDefault();
       var data = {};
       $cc_selection_widget.find("select").each(
         function() {
@@ -69,8 +70,9 @@ oer.content_submission.init_license = function() {
             $cc_selection_widget.hide();
           }
           $cc_selection_widget_loader.hide();
-        }, "application/json");
-      return false;
+        },
+        "application/json"
+      );
     }
   );
   

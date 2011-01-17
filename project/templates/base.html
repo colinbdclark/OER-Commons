@@ -9,10 +9,6 @@
     <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico"/>
     {% include "include/css.html" %}
     {% block extra-css %}{% endblock %}
-    {% include "include/js.html" %}
-    {% compress js %}
-    {% block extra-js %}{% endblock %}
-    {% endcompress %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite}}{% endif %}">
     {% include "include/header.html" %}
@@ -74,5 +70,11 @@
     </form>
     
     {% include "include/footer.html" %}
+
+    {% include "include/js.html" %}
+    {% compress js %}
+    {% block extra-js %}{% endblock %}
+    {% endcompress %}
+
   </body>
 </html>

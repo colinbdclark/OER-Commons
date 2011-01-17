@@ -23,14 +23,15 @@ oer.myitems.index.init_saved_items = function() {
   var $confirmation = $("div.unsave-confirmation");
   
   $confirmation.find("a.cancel").click(
-    function() {
+    function(e) {
+      e.preventDefault();
       $confirmation.hide();
-      return false;
     }
   );
 
   $confirmation.find("a.unsave").click(
-    function() {
+    function(e) {
+      e.preventDefault();
       var $item = $confirmation.closest("div.item");
       $confirmation.hide().detach();
       var url = $item.find("a.unsave-item").attr("href");
@@ -38,16 +39,15 @@ oer.myitems.index.init_saved_items = function() {
         function() {
           $item.fadeOut(500);
         }, "application/json");
-      return false;
     }
   );
   
-  $("#content a.unsave-item").click(
-    function() {
+  $("#content").delegate("a.unsave-item", "click",
+    function(e) {
+      e.preventDefault();
       var $this = $(this);
       $details = $this.closest("div.item").find("div.details");
       $confirmation.detach().appendTo($details).fadeIn(300);
-      return false;
     }
   );
 };

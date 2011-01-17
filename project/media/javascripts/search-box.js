@@ -17,12 +17,11 @@ oer.search_box.init = function() {
     }
   );
   $search_box.find("form").submit(
-    function() {
+    function(e) {
       var value = $input.val();
       if (value === "" || value === "Enter Search") {
-        return false;
+        e.preventDefault();
       }
-      return true;
     }
   );
 };

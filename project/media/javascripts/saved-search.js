@@ -9,16 +9,16 @@ oer.saved_search.init = function() {
   $form.offset({left: coordinates.left - $form.width() + $show_form_link.width(), top: coordinates.top + 100});
   
   $show_form_link.click(
-    function() {
+    function(e) {
+      e.preventDefault();
       $form.slideDown(300);
-      return false;
     }
   );
   
   $form.find(":submit[name='cancel']").click(
-    function() {
+    function(e) {
+      e.preventDefault();
       $form.hide();
-      return false;
     }
   );
   

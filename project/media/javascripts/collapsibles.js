@@ -10,30 +10,30 @@ oer.collapsibles.switch_collapsible = function($button) {
 };
 
 oer.collapsibles.init = function($container) {
-  $container.find("a.expand-button").click(
-    function() {
+  $container.delegate("a.expand-button", "click",
+    function(e) {
+      e.preventDefault();
       oer.collapsibles.switch_collapsible($(this));
-      return false;
     }
   );
-  $container.find("a.expand-link").click(
-    function() {
+  $container.delegate("a.expand-link", "click",
+    function(e) {
+      e.preventDefault();
       oer.collapsibles.switch_collapsible($(this));
-      return false;
     }
   );
-  $container.find("a.expand-all").click(
-    function() {
+  $container.delegate("a.expand-all", "click",
+    function(e) {
+      e.preventDefault();
       var $parent = $(this).closest(".collapsibles");
       $parent.find(".collapsed").removeClass("collapsed").addClass("expanded");
-      return false;
     }
   );
-  $container.find("a.collapse-all").click(
-    function() {
+  $container.delegate("a.collapse-all", "click",
+    function(e) {
+      e.preventDefault();
       var $parent = $(this).closest(".collapsibles");
       $parent.find(".expanded").removeClass("expanded").addClass("collapsed");
-      return false;
     }
   );
 };

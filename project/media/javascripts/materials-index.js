@@ -30,7 +30,7 @@ oer.materials.index.init_filters = function() {
   });
 
   $form.submit(function() {
-    $form.find(".filter").each(function() {
+    $form.find("dl.filter").each(function() {
       $filter = $(this);
       if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
         $filter.find(":checkbox").attr("disabled", true);
@@ -41,9 +41,9 @@ oer.materials.index.init_filters = function() {
     }
   });
 
-  $form.find(".filter dd :checkbox").click(function() {
+  $form.delegate("dl.filter dd :checkbox", "click", function(e) {
     $checkbox = $(this);
-    $filter = $checkbox.parents(".filter").first();
+    $filter = $checkbox.parents("dl.filter").first();
     if ($checkbox.attr("checked")) {
       if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
         $filter.find("dt :checkbox").attr("checked", true);
@@ -53,62 +53,65 @@ oer.materials.index.init_filters = function() {
     }
   });
 
-  $form.find(".filter dt :checkbox").click(function() {
-    $checkbox = $(this);
-    $filter = $checkbox.parents(".filter").first();
-    $filter.find(".collapsed").removeClass("collapsed").addClass("expanded");
-    if ($checkbox.attr("checked")) {
-      $filter.find("dd :checkbox").attr("checked", true);
-    } else {
-      $filter.find("dd :checkbox").attr("checked", false);
-    }
+  $form.delegate("dl.filter dt :checkbox", "click", function(e) {
+      $checkbox = $(this);
+      $filter = $checkbox.parents("dl.filter").first();
+      $filter.find(".collapsed").removeClass("collapsed").addClass("expanded");
+      if ($checkbox.attr("checked")) {
+        $filter.find("dd :checkbox").attr("checked", true);
+      } else {
+        $filter.find("dd :checkbox").attr("checked", false);
+      }
   });
   
 };
 
 oer.materials.index.init_top_keywords = function() {
   var $top_keywords_portlet = $("div.portlet.top-keywords");
-  $top_keywords_portlet.find("a.see-more").click(function() {
+  $top_keywords_portlet.find("a.see-more").click(function(e) {
+    e.preventDefault();
     $(this).hide();
     $top_keywords_portlet.find("div.top").hide();
     $top_keywords_portlet.find("div.all").fadeIn(300);
-    return false;
   });
 };
 
 oer.materials.index.init_item_links = function() {
   var $filters_portlet = $("div.portlet.index-filters");
   var $form = $filters_portlet.find("form[name='index-filters']");
-  $("#content div.materials-index h3 a.item-link").click(function() {
+  $("#content div.materials-index").delegate("h3 a.item-link", "click", function(e) {
+    e.preventDefault();
     $form.attr("action", $(this).attr("href")).attr("method", "post");
     $form.find("input[name='index_path']").attr("disabled", false);
     $form.submit();
-    return false;
   });
 };
 
 oer.materials.index.init_actions_menus = function() {
-  $("#content dl.actions dt a").click(
-    function() {
+  var $materials_index = $("#content div.materials-index");
+  $materials_index.delegate("dl.actions dt a", "click",
+    function(e) {
+      e.preventDefault();
+      e.stopPropagation();
       var $menu = $(this).closest("dl.actions");
-      $("#content dl.actions").not($menu).removeClass("active");
+      $materials_index.find("dl.actions").not($menu).removeClass("active");
       if ($menu.hasClass("active")) {
         $menu.removeClass("active");
       } else {
         $menu.addClass("active");    
       }
-      return false;
     }
   );
   
   $(document).click(
-    function(event) {
-      $("#content dl.actions").removeClass("active");
+    function(e) {
+      $materials_index.find("dl.actions").removeClass("active");
     }
   );
   
-  $("#content dl.actions a.save-item").click(
-    function() {
+  $materials_index.delegate("dl.actions a.save-item", "click",
+    function(e) {
+      e.preventDefault();
       var $this = $(this);
       $.post($this.attr("href"),
         function(data) {
@@ -118,13 +121,13 @@ oer.materials.index.init_actions_menus = function() {
         }, "application/json");
       var $menu = $this.closest("dl.actions");
       $menu.removeClass("active");
-      return false;
     }
   );
   
   var $rate_form = $("form[name='rate']");
   $rate_form.find("a.rate").click(
-    function() {
+    function(e) {
+      e.preventDefault();
       var $this = $(this);
       if ($rate_form.attr("method") == "post") {
         $.post($rate_form.attr("action"), {rating: $rate_form.find("select").val()},
@@ -140,26 +143,25 @@ oer.materials.index.init_actions_menus = function() {
       } else {
         $rate_form.submit();
       }
-      return false;
     }
   );
 
   $rate_form.find("a.cancel").click(
-    function() {
+    function(e) {
+      e.preventDefault();
       $rate_form.hide();
-      return false;
     }
   );
   
-  $("#content dl.actions a.rate-item").click(
-    function() {
+  $materials_index.delegate("dl.actions a.rate-item", "click",
+    function(e) {
+      e.preventDefault();
       var $this = $(this);
       var $menu = $this.closest("dl.actions");
       $rate_form.find("select").val("5");
       $rate_form.attr("action", $this.attr("href"));
       $rate_form.detach().insertAfter($menu).fadeIn(300);
       $menu.removeClass("active");
-      return false;
     }
   );
 };

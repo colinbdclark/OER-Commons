@@ -3,33 +3,34 @@ oer.materials.view_item = {};
 oer.materials.view_item.init = function() {
   var $navigation = $("div.view-item-navigation");
   $navigation.find("a.item-link").click(
-    function() {
+    function(e) {
+      e.preventDefault();
       $navigation.find("form").attr("action", $(this).attr("href")).submit();
-      return false;
   }); 
   
   var $rate_form = $("form[name='rate']");
   var $show_rate_form_button = $("div.view-item a.rate-item");
   $show_rate_form_button.click(
-    function() {
+    function(e) {
+      e.preventDefault();
       var $this = $(this);
       $rate_form.find("select").val("5");
       $rate_form.fadeIn(300);
       $this.hide();
-      return false;
     }
   );
   
   $rate_form.find("a.cancel").click(
-    function() {
+    function(e) {
+      e.preventDefault();
       $rate_form.hide();
       $show_rate_form_button.show();
-      return false;
     }
   );
   
   $rate_form.find("a.rate").click(
-    function() {
+    function(e) {
+      e.preventDefault();
       var $this = $(this);
       if ($rate_form.attr("method") == "post") {
         $.post($rate_form.attr("action"), {rating: $rate_form.find("select").val()},
@@ -46,29 +47,30 @@ oer.materials.view_item.init = function() {
       } else {
         $rate_form.submit();
       }
-      return false;
     }
   );
   
 };
 
 oer.materials.view_item.init_content_actions = function() {
-  $("#content div.content-actions dl dt a").click(
-    function() {
+  var $content_actions = $("#content div.content-actions");
+  $content_actions.delegate("dl dt a", "click",
+    function(e) {
+      e.preventDefault();
+      e.stopPropagation();
       var $menu = $(this).closest("dl");
-      $("#content div.content-actions dl").not($menu).removeClass("active");
+      $content_actions.find("dl").not($menu).removeClass("active");
       if ($menu.hasClass("active")) {
         $menu.removeClass("active");
       } else {
         $menu.addClass("active");    
       }
-      return false;
     }
   );
   
   $(document).click(
     function(event) {
-      $("#content div.content-actions dl").removeClass("active");
+      $content_actions.find("dl").removeClass("active");
     }
   );
 };
