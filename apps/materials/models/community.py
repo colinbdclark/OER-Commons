@@ -97,7 +97,7 @@ class CommunityItem(Material):
         keywords.update(self.tags.values_list("name", flat=True))
         return sorted(keywords)
 
-    @permalink
     @classmethod
+    @permalink
     def get_parent_url(self):
         return ("materials:%s:community" % self.namespace, [], {})
