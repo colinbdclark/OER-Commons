@@ -100,4 +100,4 @@ class CommunityItem(Material):
     @classmethod
     @permalink
     def get_parent_url(self):
-        return ("materials:%s:community" % self.namespace, [], {})
+        return ("materials:community", [], {})
