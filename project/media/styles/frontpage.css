@@ -32,3 +32,36 @@
 .frontpage-blocks td.first {
   border-right:1px solid #B1CEDC;
 }
+
+#frontpage-promo {
+  background: url(../images/frontpage-promo-bg.jpg) no-repeat 0% 0%;
+  height: 227px;
+}
+
+#frontpage-promo .column1 {
+  color: white;
+  float: left;
+  font-size: 35px;
+  font-weight: bold;
+  margin-top: 137px;
+  padding-top: 10px;
+  text-align: center;
+  width: 480px;
+}
+
+#frontpage-promo .column2 {
+  color: white;
+  float: right;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 137px;
+  padding-left: 20px;
+  padding-top: 12px;
+  width: 460px;
+}
+
+#frontpage-promo .column2 em {
+  color: #FC6;
+  font-size: 17px;
+  font-style: normal;
+}
