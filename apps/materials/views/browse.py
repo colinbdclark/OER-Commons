@@ -75,12 +75,12 @@ def providers(request, microsite=None):
 def community(request):
 
     community_topics_facets = dict(get_facets_for_field("community_topics"))
-    community_topics = list(CommunityTopic.objects.order_by("slug").values("id", "slug", "name"))
+    community_topics = list(CommunityTopic.objects.values("id", "slug", "name"))
     for o in community_topics:
         o["count"] = community_topics_facets.get(unicode(o["id"]), 0)
 
     community_types_facets = dict(get_facets_for_field("community_types"))
-    community_types = list(CommunityType.objects.order_by("slug").values("id", "slug", "name"))
+    community_types = list(CommunityType.objects.values("id", "slug", "name"))
     for o in community_types:
         o["count"] = community_types_facets.get(unicode(o["id"]), 0)
     community_types = [o for o in community_types if o["count"]]

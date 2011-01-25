@@ -165,6 +165,10 @@ a.expand-button.expanded {
   font-size: 12px;
 }
 
+.promo a {
+  text-decoration: none;
+}
+
 div.box {
   background: #F3F7F8;
   border: 1px solid #BCCACD;
