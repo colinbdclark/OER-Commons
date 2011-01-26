@@ -86,6 +86,7 @@ INSTALLED_APPS = (
     'oai',
     'sendthis',
     'api',
+    'reports',
     'project',
 )
 

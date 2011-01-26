@@ -25,3 +25,4 @@ project/media/admin/
 project/media/debug_toolbar/
 project/media/django_extensions/
 project/media/upload/
+project/media/reports/
