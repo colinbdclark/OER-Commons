@@ -18,7 +18,6 @@ parts/
 eggs/
 downloads/
 virtualenv/
-scripts/
 project.db
 project/media/CACHE/
 project/media/admin/
