@@ -1,6 +1,39 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load utils %}
+
+{% block extra-css %}
+<style type="text/css">
+    #goog-wm li.search-goog {
+    display: none;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-  <p>{% trans "Page not found" %}</p>
+ <h2>Our apologies...</h2>
+
+  <p>The item you requested does not exist on this server or cannot be served.</p>
+
+  <p>Please double check the web address or use the search function on this page to find what you are looking for.</p>
+
+  <p>If you know you have the correct web address but are encountering an error, please
+  contact the <a href="{% url feedback %}">Site Administration</a>.</p>
+
+  <p>Thank you.</p>
+        
+  <script type="text/javascript">
+    var GOOG_FIXURL_LANG = 'en';
+    var GOOG_FIXURL_SITE = '{% protocol %}{% domain %}/';
+  </script>
+        
+  <script type="text/javascript" src="http://linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script> 
+
+  <ul>
+    <li>Search <strong>{% domain %}</strong>:<br />
+        <form action="{% url materials:search %}" method="get">
+          <input type="text" class="text" name="f.search" />
+          <input type="submit" class="button" value="Search" />
+        </form>
+    </li>
+  </ul>
 {% endblock %}

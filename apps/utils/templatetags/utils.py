@@ -1,8 +1,9 @@
 from django.conf import settings
-from django.contrib.sites.models import Site
+from django.contrib.sites.models import Site, RequestSite
 from django.forms.fields import FileField
 from django.template import Library
 from django.template.defaultfilters import stringfilter
+from django.template.defaulttags import Node
 
 
 register = Library()
@@ -13,6 +14,36 @@ register = Library()
 def full_url(path):
     return "http://%s%s" % (Site.objects.get_current().domain, path)
 full_url.is_safe = True
+
+
+class DomainNode(Node):
+
+    def render(self, context):
+        request = context["request"]
+        site = getattr(context, "__site", None)
+        if not site:
+            if Site._meta.installed:
+                site = Site.objects.get_current()
+            else:
+                site = RequestSite(request)
+            context.__site = site
+        return site.domain
+
+@register.tag
+def domain(parser, token):
+    return DomainNode()
+
+
+class ProtocolNode(Node):
+
+    def render(self, context):
+        request = context["request"]
+        return request.is_secure() and 'https://' or 'http://'
+
+
+@register.tag
+def protocol(parser, token):
+    return ProtocolNode()
 
 
 @register.inclusion_tag("utils/include/next-url-input.html",
