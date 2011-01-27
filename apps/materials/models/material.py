@@ -7,7 +7,6 @@ from django.db import models
 from django.db.models import permalink
 from django.db.models.aggregates import Avg
 from django.utils.translation import ugettext_lazy as _
-from haystack.sites import site
 from materials import globals
 from materials.models import License
 from materials.models.common import AutoCreateForeignKey
@@ -201,6 +200,7 @@ def mark_for_reindex(sender, **kwargs):
 
 def reindex_materials(**kwargs):
     to_be_reindexed = getattr(globals, "to_be_reindexed", {})
+    from haystack.sites import site
     for model, objects in to_be_reindexed.items():
         index = site.get_index(model)
         print "Reindex objects", objects
@@ -214,4 +214,5 @@ def unindex_material(sender, **kwargs):
     to_be_reindexed = getattr(globals, "to_be_reindexed", {})
     if sender in to_be_reindexed:
         to_be_reindexed[sender].discard(instance)
+    from haystack.sites import site
     site.remove_object(instance)
