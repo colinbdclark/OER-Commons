@@ -83,8 +83,8 @@
     <field name="django_ct" type="string"   indexed="true"  stored="true"  multiValued="false" />
     <field name="django_id" type="string"   indexed="true"  stored="true"  multiValued="false" />
 
-    <field name="text" type="text" indexed="true" stored="true" multiValued="false" />
-    <field name="text_exact" type="text_ws" indexed="true" stored="true" multiValued="false" />
+    <field name="text" type="text" indexed="true" stored="false" multiValued="false" />
+    <field name="text_exact" type="text_ws" indexed="true" stored="false" multiValued="false" />
     <copyField source="text" dest="text_exact" />
 
     <field name="slug" type="string" indexed="false" stored="true" multiValued="false" />
@@ -117,7 +117,7 @@
     <field name="collection" type="sint" indexed="true" stored="true" multiValued="false" />
     <field name="collection_name" type="text" indexed="true" stored="true" multiValued="false" />
     <field name="institution" type="sint" indexed="true" stored="true" multiValued="false" />
-    <field name="institution_name" type="text" indexed="true" stored="true" multiValued="false" />
+    <field name="institution_name" type="text" indexed="true" stored="false" multiValued="false" />
     <field name="languages" type="sint" indexed="true" stored="true" multiValued="true" />
     <field name="geographic_relevance" type="sint" indexed="true" stored="true" multiValued="true" />
     <field name="course_material_types" type="sint" indexed="true" stored="true" multiValued="true" />
