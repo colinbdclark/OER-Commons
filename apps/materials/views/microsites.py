@@ -24,7 +24,7 @@ def microsite(request, microsite):
     query = SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE)
     query = query.narrow("microsites:%i" % microsite.id)
     query = query.order_by("-rating")
-    query = query.facet("topics").facet("keywords").facet("grade_levels").facet("course_material_types")
+    query = query.facet("indexed_topics").facet("keywords").facet("grade_levels").facet("course_material_types")
 
     items = []
     results = query[0:8]
@@ -34,7 +34,7 @@ def microsite(request, microsite):
     facets = query.facet_counts()["fields"]
 
     topics = []
-    topic_counts = dict(facets["topics"])
+    topic_counts = dict(facets["indexed_topics"])
     for topic, tree_info in tree_item_iterator(microsite.topics.all()):
         topic.count = topic_counts.get(str(topic.id), 0)
         topics.append((topic, tree_info))

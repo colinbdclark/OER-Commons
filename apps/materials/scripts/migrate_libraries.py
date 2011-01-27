@@ -7,6 +7,7 @@ from materials.models.common import Institution, Collection, Author, License, \
     Country, GeneralSubject, GradeLevel, Keyword, Language, GeographicRelevance, \
     MediaFormat
 from materials.models.library import Library, LibraryMaterialType
+from materials.models.material import reindex_materials
 from materials.utils import cleanup_keywords
 from notes.models import Note
 from rating.models import Rating
@@ -247,4 +248,5 @@ def run():
         if cnt % 100 == 0:
             print "%i of %i" % (cnt, total_items)
 
+    reindex_materials()
     print "Done!"

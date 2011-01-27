@@ -43,7 +43,7 @@ class ByField(MultiValueField):
         return value.values_list("user__id", flat=True)
 
 
-class MaterialSearchIndex(RealTimeSearchIndex):
+class MaterialSearchIndex(SearchIndex):
 
     text = CharField(document=True, use_template=True)
     slug = CharField(model_attr="slug", stored=True, indexed=False)
@@ -65,6 +65,10 @@ class MaterialSearchIndex(RealTimeSearchIndex):
     license = CharField(model_attr="license__type")
     cou_bucket = CharField(model_attr="license__bucket")
 
+    microsites = VocabularyMultiValueField(model_attr="microsites")
+    topics = VocabularyMultiValueField(model_attr="topics")
+    indexed_topics = VocabularyMultiValueField(model_attr="indexed_topics")
+
     workflow_state = CharField(model_attr="workflow_state")
 
 
@@ -85,8 +89,6 @@ class CourseIndex(MaterialSearchIndex):
     media_formats = VocabularyMultiValueField(model_attr="media_formats")
     languages = VocabularyMultiValueField(model_attr="languages")
     geographic_relevance = VocabularyMultiValueField(model_attr="geographic_relevance")
-    microsites = VocabularyMultiValueField(model_attr="microsites")
-    topics = VocabularyMultiValueField(model_attr="topics")
 
     course_or_module = CharField(model_attr="course_or_module")
     ocw = BooleanField(model_attr="ocw")
@@ -112,8 +114,6 @@ class LibraryIndex(MaterialSearchIndex):
     media_formats = VocabularyMultiValueField(model_attr="media_formats")
     languages = VocabularyMultiValueField(model_attr="languages")
     geographic_relevance = VocabularyMultiValueField(model_attr="geographic_relevance")
-    microsites = VocabularyMultiValueField(model_attr="microsites")
-    topics = VocabularyMultiValueField(model_attr="topics")
 
     def get_queryset(self):
         return Library.objects.all()
@@ -132,8 +132,6 @@ class CommunityItemIndex(MaterialSearchIndex):
     community_topics = VocabularyMultiValueField(model_attr="community_topics")
     languages = VocabularyMultiValueField(model_attr="languages")
     geographic_relevance = VocabularyMultiValueField(model_attr="geographic_relevance")
-    microsites = VocabularyMultiValueField(model_attr="microsites")
-    topics = VocabularyMultiValueField(model_attr="topics")
 
     def get_queryset(self):
         return CommunityItem.objects.all()

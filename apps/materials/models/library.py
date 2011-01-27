@@ -1,11 +1,12 @@
 from autoslug.fields import AutoSlugField
 from django.db import models
+from django.db.models.signals import pre_delete, m2m_changed, post_save
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
     Language, GeographicRelevance, MediaFormat, Institution, Collection, \
     AutoCreateManyToManyField, AutoCreateForeignKey
-from materials.models.material import Material
-from materials.models.microsite import Microsite, Topic
+from materials.models.material import Material, mark_for_reindex, \
+    unindex_material
 
 
 class LibraryMaterialType(models.Model):
@@ -77,3 +78,8 @@ class Library(Material):
         verbose_name = _(u"Library and Collection")
         verbose_name_plural = _(u"Libraries and Collections")
         ordering = ("created_on",)
+
+
+post_save.connect(mark_for_reindex, sender=Library, dispatch_uid="library_post_save_reindex")
+m2m_changed.connect(mark_for_reindex, sender=Library, dispatch_uid="library_m2m_changed_reindex")
+pre_delete.connect(unindex_material, sender=Library, dispatch_uid="library_pre_delete_unindex")

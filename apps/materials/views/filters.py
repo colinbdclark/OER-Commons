@@ -321,7 +321,7 @@ FILTERS = {
     "collection": VocabularyFilter("collection", "f.collection", Collection, u"Collection"),
     "keywords": KeywordFilter("keywords", "f.keyword"),
     "microsite": VocabularyFilter("microsites", "f.microsite", Microsite, u"Topic", ignore_all_values=False),
-    "topics": VocabularyFilter("topics", "f.subtopic", Topic, u"SubTopic"),
+    "topics": VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic"),
     "search": SearchFilter(),
 }
 

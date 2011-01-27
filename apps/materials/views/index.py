@@ -115,9 +115,9 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
         if filter_name not in visible_filters:
             continue
         filter = FILTERS[filter_name]
-        if not facets.get(filter_name):
+        if not facets.get(filter.index_name):
             continue
-        counts = dict(facets[filter_name])
+        counts = dict(facets[filter.index_name])
         values = filter_values.get(filter_name, [])
         filter_data = {}
         filter_data["name"] = filter_name
@@ -160,9 +160,9 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
     if microsite:
         filter_name = "topics"
         filter = FILTERS[filter_name]
-        if not facets.get(filter_name):
+        if not facets.get(filter.index_name):
             return filters
-        counts = dict(facets[filter_name])
+        counts = dict(facets[filter.index_name])
         values = filter_values.get(filter_name, [])
         filter_data = {}
         filter_data["name"] = filter_name
@@ -328,7 +328,7 @@ def index(request, general_subjects=None, grade_levels=None,
           topics=None,
           facet_fields=["general_subjects", "grade_levels", "keywords",
                         "course_material_types", "media_formats",
-                        "cou_bucket", "topics"]):
+                        "cou_bucket", "indexed_topics"]):
 
     if model:
         index_namespace = model.namespace

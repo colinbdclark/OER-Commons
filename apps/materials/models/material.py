@@ -1,10 +1,15 @@
 from autoslug.fields import AutoSlugField
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
+from django.core.signals import request_finished
 from django.db import models
 from django.db.models import permalink
 from django.db.models.aggregates import Avg
+from django.db.models.signals import post_save, m2m_changed, pre_delete
 from django.utils.translation import ugettext_lazy as _
+from haystack.management.commands.update_index import DEFAULT_BATCH_SIZE
+from haystack.sites import site
+from materials import globals
 from materials.models import License
 from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
@@ -165,12 +170,49 @@ class Material(models.Model):
             return []
         topics = []
         for microsite in self.microsites():
-            t = microsite.topics.exclude(other=True).filter(keywords__slug__in=self.keyword_slugs())
-            if t.count():
-                topics += list(t)
+            topics_qs = microsite.topics.exclude(other=True).filter(keywords__slug__in=self.keyword_slugs())
+            if topics_qs.count():
+                topics += list(topics_qs)
             else:
                 try:
                     topics.append(microsite.topics.get(other=True))
                 except Topic.DoesNotExist:
                     pass
         return topics
+
+    def indexed_topics(self):
+        topics = self.topics()
+        if len(topics) == 1 and topics[0].other == True:
+            return topics
+        indexed_topics = set(topics)
+        for topic in topics:
+            indexed_topics.update(topic.get_ancestors())
+        return list(indexed_topics)
+
+
+def mark_for_reindex(sender, **kwargs):
+    to_be_reindexed = getattr(globals, "to_be_reindexed", {})
+    if sender not in to_be_reindexed:
+        to_be_reindexed[sender] = set()
+    to_be_reindexed[sender].add(kwargs["instance"])
+    if len(to_be_reindexed[sender]) > DEFAULT_BATCH_SIZE:
+        reindex_materials()
+    globals.to_be_reindexed = to_be_reindexed
+
+
+def reindex_materials(**kwargs):
+    to_be_reindexed = getattr(globals, "to_be_reindexed", {})
+    for model, objects in to_be_reindexed.items():
+        index = site.get_index(model)
+        print "Reindex objects", objects
+        index.backend.update(index, objects)
+    globals.to_be_reindexed = {}
+request_finished.connect(reindex_materials, dispatch_uid="materials_request_finished_reindex")
+
+
+def unindex_material(sender, **kwargs):
+    instance = kwargs["instance"]
+    to_be_reindexed = getattr(globals, "to_be_reindexed", {})
+    if sender in to_be_reindexed:
+        to_be_reindexed[sender].discard(instance)
+    site.remove_object(instance)

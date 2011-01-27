@@ -14,6 +14,7 @@ from reviews.models import Review
 from saveditems.models import SavedItem
 from tags.models import Tag
 from users.models import Profile
+from materials.models.material import reindex_materials
 
 
 def force_unicode(o):
@@ -241,4 +242,6 @@ def run():
         if cnt % 100 == 0:
             print "%i of %i" % (cnt, total_items)
 
+
+    reindex_materials()
     print "Done!"
