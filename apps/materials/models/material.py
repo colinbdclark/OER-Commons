@@ -1,4 +1,5 @@
 from autoslug.fields import AutoSlugField
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.core.signals import request_finished
@@ -6,7 +7,6 @@ from django.db import models
 from django.db.models import permalink
 from django.db.models.aggregates import Avg
 from django.utils.translation import ugettext_lazy as _
-from haystack.management.commands.update_index import DEFAULT_BATCH_SIZE
 from haystack.sites import site
 from materials import globals
 from materials.models import License
@@ -194,7 +194,7 @@ def mark_for_reindex(sender, **kwargs):
     if sender not in to_be_reindexed:
         to_be_reindexed[sender] = set()
     to_be_reindexed[sender].add(kwargs["instance"])
-    if len(to_be_reindexed[sender]) > DEFAULT_BATCH_SIZE:
+    if len(to_be_reindexed[sender]) > getattr(settings, 'HAYSTACK_BATCH_SIZE', 1000):
         reindex_materials()
     globals.to_be_reindexed = to_be_reindexed
 
