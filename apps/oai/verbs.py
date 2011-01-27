@@ -2,7 +2,7 @@ from django.core.paginator import EmptyPage
 from django.template.loader import render_to_string
 from oai import DATETIME_FORMAT
 from oai.exceptions import BadArgument, InvalidMetadataPrefix, NoRecordsMatch, \
-    NoSetHierarchy, IdDoesNotExist, NoMetadataFormats
+    NoSetHierarchy, NoMetadataFormats
 import cjson
 import datetime
 

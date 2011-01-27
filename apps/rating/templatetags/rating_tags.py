@@ -1,6 +1,5 @@
 from django.template import Library
 from rating import get_rating_stars_class
-from rating.models import RATING_VALUES
 from rating.views import RatingForm
 
 

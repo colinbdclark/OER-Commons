@@ -1,7 +1,7 @@
 from haystack import site
 from haystack.fields import CharField, MultiValueField, IntegerField, \
     BooleanField, DateTimeField, FloatField
-from haystack.indexes import RealTimeSearchIndex, SearchIndex
+from haystack.indexes import SearchIndex
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library

@@ -5,7 +5,6 @@ from django.core.signals import request_finished
 from django.db import models
 from django.db.models import permalink
 from django.db.models.aggregates import Avg
-from django.db.models.signals import post_save, m2m_changed, pre_delete
 from django.utils.translation import ugettext_lazy as _
 from haystack.management.commands.update_index import DEFAULT_BATCH_SIZE
 from haystack.sites import site

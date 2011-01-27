@@ -1,12 +1,11 @@
 from django.template.loader import render_to_string
+from haystack.models import SearchResult
 from materials.models.common import GeneralSubject, MediaFormat, Language, \
     GeographicRelevance
+from materials.models.course import Course
 from materials.models.library import Library
 from materials.utils import get_name_from_id, get_slug_from_id
-from oai import DATETIME_FORMAT
 from oai.oer import OERMetadataFormat
-from haystack.models import SearchResult
-from materials.models.course import Course
 
 
 MEDIA_FORMAT_TO_DC_TYPE_MAPPING = {

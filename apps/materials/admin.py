@@ -1,6 +1,5 @@
 from django import forms
-from django.contrib.admin.options import ModelAdmin, TabularInline, \
-    StackedInline
+from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
 from materials.models import Course, Library, CommunityItem
 from materials.models.common import Country, GeneralSubject, GradeLevel, \
