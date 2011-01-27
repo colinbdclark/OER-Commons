@@ -2,6 +2,7 @@ from autoslug.fields import AutoSlugField
 from cache_utils.decorators import cached
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import permalink
 from materials.models.common import AutoCreateManyToManyField, Keyword
 from mptt.models import MPTTModel
 
@@ -28,6 +29,10 @@ class Microsite(models.Model):
 
     def natural_key(self):
         return (self.name,)
+
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:microsite", [], {"microsite": self.slug})
 
 
 class TopicManager(models.Manager):

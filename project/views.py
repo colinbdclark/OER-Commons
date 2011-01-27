@@ -11,6 +11,7 @@ from tags.tags_utils import get_tag_cloud
 import dateutil.parser
 import re
 import twitter
+from materials.models.microsite import Microsite
 
 
 MAX_TAGS = 30
@@ -73,10 +74,13 @@ def frontpage(request):
         s["count"] = grade_levels_facets.get(unicode(s["id"]), 0)
 
 
+    microsites = Microsite.objects.all()
+
     return direct_to_template(request, "frontpage.html",
                               dict(tagcloud=tagcloud,
                                    general_subjects=general_subjects,
                                    grade_levels=grade_levels,
+                                   microsites=microsites,
                                    tweets=get_tweets(),
                                ))
 
