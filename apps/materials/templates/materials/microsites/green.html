@@ -108,7 +108,7 @@
 
 {% block column-right %}
    <div class="portlet top-keywords dotted">
-     <h4 class="dotted">Top {{ microsite.name }} Keywords</h4>
+     <h4 class="dotted"><span class="icon"></span> Top Keywords</h4>
      <div class="tag-cloud">
        {% for keyword in keywords %}
          <a href="{% url materials:keyword_index keywords=keyword.slug microsite=microsite.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>

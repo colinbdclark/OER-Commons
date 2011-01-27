@@ -107,3 +107,16 @@ body.green {
   text-align: center;
   margin: 15px 0;
 }
+
+body.green .top-keywords h4 .icon {
+  display: block;
+  float: left;
+  width: 27px;
+  height: 26px;
+  margin-right: 4px;
+  background: url(../images/green-icon.png) no-repeat;
+}
+
+body.green .top-keywords h4 {
+  line-height: 26px;
+}
