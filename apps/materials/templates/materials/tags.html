@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block bodyclass %}tags-index{% endblock %}
+
+{% block content %}
+<ul class="letters">
+  {% for l in letters %}
+    <li>
+      {% if l == letter %}
+        <span>{{ l }}</span>
+      {% else %}
+        <a href="{% url materials:tags letter=l %}">{{ l }}</a>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% for column in columns %}
+  <ul class="tags">
+  	{% for slug, name in column %}
+  	  <li><a title="{{ name }}" href="{% url materials:keyword_index keywords=slug %}">{{ name }}</a></li>
+  	{% endfor %}
+  </ul>
+{% endfor %}
+{% endblock %}

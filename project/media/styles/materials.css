@@ -721,3 +721,69 @@
 .content-actions dl ul li.delete a {  
   background-image: url(../images/delete-icon.png);
 }
+
+.tags-index .layout-columns {
+  background: none;
+}
+
+.tags-index .column-left,
+.tags-index .column-right {
+  display: none;
+}
+
+.tags-index .column-main {
+  float: none;
+  width: auto;
+}
+
+.tags-index ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tags-index ul.letters {
+  margin-bottom: 10px;
+}
+
+.tags-index ul.letters li {
+  display: inline;
+  margin: 0;
+  margin-right: 8px;
+  padding: 0;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.tags-index ul.letters li a,
+.tags-index ul.letters li span {
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+}
+
+.tags-index ul.letters li a {
+  text-decoration: none;
+}
+
+.tags-index ul.letters li a:hover,
+.tags-index ul.letters li span {
+  border-color: #666;
+}
+
+.tags-index ul.tags {
+  float: left;
+  margin-right: 10px;
+  margin-left: 0;
+  width: 210px;
+  overflow: hidden;
+  font-size: 12px;
+}
+
+.tags-index ul.tags li {
+  margin: 3px 0;
+  white-space: nowrap;
+}
+
+.tags-index ul.tags a {
+  text-decoration: none;
+}
