@@ -23,17 +23,19 @@
       <dl class="dotted filter collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <input type="checkbox" name="{{ filter.name }}"
-                  id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label for="{{ filter.name }}">{{ filter.title }}</label>
+           <label for="{{ filter.name }}">
+             <input type="checkbox" name="{{ filter.name }}"
+                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ filter.title }}</label>
         </dt>
         {% for option in filter.options %}
         <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                  id="{{ option.input_id }}" value="{{ option.slug }}"
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">{{ option.name|shrink:18 }} ({{ option.count }})</label>
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
+             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                    id="{{ option.input_id }}" value="{{ option.slug }}"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ option.name|shrink:18 }} ({{ option.count }})</label>
         </dd>
         {% endfor %}
       </dl>
@@ -45,20 +47,21 @@
       <dl class="dotted filter grade-levels collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <input type="checkbox" name="{{ filter.name }}"
-                  id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
            <label for="{{ filter.name }}">
+             <input type="checkbox" name="{{ filter.name }}"
+                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
              <span>{{ filter.title }}</span>
              <a class="tooltip-button" rel="#grade-levels-tooltip" href="#grade-levels-tooltip" title="Grade Levels"></a>
            </label>
         </dt>
         {% for option in filter.options %}
         <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                  id="{{ option.input_id }}" value="{{ option.slug }}"
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">{{ option.name|shrink:18 }} ({{ option.count }})</label>
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
+             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                    id="{{ option.input_id }}" value="{{ option.slug }}"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ option.name|shrink:18 }} ({{ option.count }})</label>
         </dd>
         {% endfor %}
       </dl>
@@ -77,17 +80,19 @@
       <dl class="dotted filter collapsible">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <input type="checkbox" name="{{ filter.name }}"
-                  id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label for="{{ filter.name }}">{{ filter.title }}</label>
+           <label for="{{ filter.name }}">
+             <input type="checkbox" name="{{ filter.name }}"
+                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ filter.title }}</label>
         </dt>
         {% for option in filter.options %}
         <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                  id="{{ option.input_id }}" value="{{ option.slug }}"
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">{{ option.name|shrink:18 }} ({{ option.count }})</label>
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
+             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                    id="{{ option.input_id }}" value="{{ option.slug }}"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ option.name|shrink:18 }} ({{ option.count }})</label>
         </dd>
         {% endfor %}
       </dl>
@@ -99,17 +104,19 @@
       <dl class="dotted filter collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <input type="checkbox" name="{{ filter.name }}"
-                  id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label for="{{ filter.name }}">{{ filter.title }}</label>
+           <label for="{{ filter.name }}">
+             <input type="checkbox" name="{{ filter.name }}"
+                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ filter.title }}</label>
         </dt>
         {% for option in filter.options %}
         <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                  id="{{ option.input_id }}" value="{{ option.slug }}"
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">{{ option.name|shrink:18 }} ({{ option.count }})</label>
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
+             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                    id="{{ option.input_id }}" value="{{ option.slug }}"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ option.name|shrink:18 }} ({{ option.count }})</label>
         </dd>
         {% endfor %}
       </dl>
@@ -121,17 +128,19 @@
       <dl class="dotted filter collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <input type="checkbox" name="{{ filter.name }}"
-                  id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label for="{{ filter.name }}">{{ filter.title }}</label>
+           <label for="{{ filter.name }}">
+             <input type="checkbox" name="{{ filter.name }}"
+                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ filter.title }}</label>
         </dt>
         {% for option in filter.options %}
         <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                  id="{{ option.input_id }}" value="{{ option.slug }}"
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">{{ option.name|shrink:18 }} ({{ option.count }})</label>
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
+             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                    id="{{ option.input_id }}" value="{{ option.slug }}"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ option.name|shrink:18 }} ({{ option.count }})</label>
         </dd>
         {% endfor %}
       </dl>
@@ -143,20 +152,21 @@
       <dl class="dotted filter cou collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <input type="checkbox" name="{{ filter.name }}"
-                  id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
            <label for="{{ filter.name }}">
+             <input type="checkbox" name="{{ filter.name }}"
+                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
              <span>{{ filter.title }}</span>
              <a class="tooltip-button" rel="#cou-tooltip" href="#cou-tooltip" title="Conditions of Use"></a>
            </label>
         </dt>
         {% for option in filter.options %}
         <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                  id="{{ option.input_id }}" value="{{ option.slug }}"
-                  {% if filter.disabled %}disabled="disabled"{% endif %} />
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">{{ option.name|shrink:18 }} ({{ option.count }})</label>
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
+             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                    id="{{ option.input_id }}" value="{{ option.slug }}"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ option.name|shrink:20 }} ({{ option.count }})</label>
         </dd>
         {% endfor %}
       </dl>

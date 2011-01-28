@@ -281,6 +281,11 @@
 
 .index-filters .filter label, .advanced-search .filter label {
   display: block;
+  float: left;
+}
+
+.index-filters .filter dt, .advanced-search .filter dt {
+  clear: both;
 }
 
 .index-filters .filter dd, .advanced-search .filter dd {
@@ -292,7 +297,6 @@
   color: #666;
   font-size: 13px;
   font-weight: bold;
-  margin-left: 36px;
 }
 
 .index-filters .filter dt label span {
@@ -301,16 +305,11 @@
 }
 
 .index-filters .filter dd label {
-  margin-left: 20px;
   color: #0B7BA9;
   line-height: 16px;
   height: 16px;
   width: 146px;
   overflow: hidden;
-}
-
-.advanced-search .filter dd label {
-  margin-left: 20px;
 }
 
 .index-filters .filter dd.collapsed, .index-filters .filter ul.collapsed, .advanced-search .filter dd.collapsed, .advanced-search .filter ul.collapsed {
