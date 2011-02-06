@@ -181,7 +181,7 @@ class AddFormStaff(AddForm):
                   "content_creation_date", "authors",
                   "tech_requirements", "keywords", "general_subjects",
                   "grade_levels", "material_types", "media_formats", "languages",
-                  "geographic_relevance", "curriculum_standards", "is_homepage"
+                  "geographic_relevance", "curriculum_standards", "is_homepage",
                   "featured", "in_rss", "rss_description", "rss_timestamp",
                   "license_type", "license_cc", "license_cc_old",
                   "license_custom_name", "license_custom_url", "license_description",
