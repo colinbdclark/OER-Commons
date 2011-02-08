@@ -335,7 +335,7 @@ form.content-submission .keywords td.help {
   padding-bottom: 10px;
 }
 
-form.content-submission .columns td {
+form.content-submission table.columns td {
   width: 50%;
   padding: 0;
 }
