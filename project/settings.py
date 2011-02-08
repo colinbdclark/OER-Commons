@@ -41,12 +41,14 @@ ADMIN_MEDIA_ROOT = os.path.join(STATIC_ROOT, 'admin_media')
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = 'project.urls'
@@ -138,3 +140,6 @@ CACHE_VERSION = 1
 
 OAUTH_AUTHORIZE_VIEW = "project.views.oauth_authorize"
 OAUTH_CALLBACK_VIEW = "project.views.oauth_callback"
+
+CACHE_MIDDLEWARE_SECONDS = 60
+CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
