@@ -6,6 +6,7 @@
   <dl class="actions">
     <dt><a href="#"><img src="{{ STATIC_URL }}images/actions-menu-btn.png" alt="Actions" /></a></dt>
     <dd>
+      {% spaceless %}
       <ul>
         {% if item.add_tags_url %}
           <li><a class="with-next-url" href="{{ item.add_tags_url }}">Tag this item</a></li>
@@ -20,6 +21,7 @@
           <li><a class="{% if request.user.is_authenticated %}save-item{% else %}with-next-url{% endif %}" href="{{ item.save_item_url }}">Save this item</a></li>
         {% endif %}
       </ul>
+      {% endspaceless %}
     </dd>
   </dl>
 </div>

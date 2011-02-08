@@ -8,7 +8,7 @@
   border: none;
 }
 
-.materials-index h3, .view-item h3 {
+.materials-index h3,.view-item h3 {
   font-size: 14px;
   font-style: normal;
   font-weight: bold;
@@ -16,11 +16,11 @@
   color: #1F4D64;
 }
 
-.materials-index h3 img, .view-item h3 img {
+.materials-index h3 img,.view-item h3 img {
   vertical-align: top;
 }
 
-.materials-index a, .view-item a {
+.materials-index a,.view-item a {
   text-decoration: none;
 }
 
@@ -28,16 +28,16 @@
   color: #1F4D64;
 }
 
-.materials-index .details dl, .view-item .details dl {
+.materials-index .details dl,.view-item .details dl {
   font-size: 12px;
   margin: 10px 0 0 0;
 }
 
-.materials-index .details dl a, .view-item .details dl a {
+.materials-index .details dl a,.view-item .details dl a {
   font-weight: bold;
 }
 
-.materials-index .details dt, .view-item .details dt {
+.materials-index .details dt,.view-item .details dt {
   float: left;
   margin-right: 4px;
   color: #616161;
@@ -45,12 +45,12 @@
   clear: left;
 }
 
-.materials-index .details dd, .view-item .details dd {
+.materials-index .details dd,.view-item .details dd {
   margin-left: 0;
   margin-bottom: 2px;
 }
 
-.materials-index .details dd.clear, .view-item .details dd.clear {
+.materials-index .details dd.clear,.view-item .details dd.clear {
   clear: left;
 }
 
@@ -86,8 +86,7 @@
 }
 
 .cou-bucket.no-strings-attached {
-  background: url(../images/no-strings-attached.png) no-repeat 0% 50%
-  ;
+  background: url(../images/no-strings-attached.png) no-repeat 0% 50%;
 }
 
 .cou-bucket.remix-and-share {
@@ -119,7 +118,7 @@
   display: none;
 }
 
-.materials-index .item .right, .view-item .right {
+.materials-index .item .right,.view-item .right {
   float: right !important;
   margin-left: 10px;
 }
@@ -180,7 +179,7 @@
   background: #3D8298;
   border: 1px solid #1B536A;
   left: -4px;
-  position: relative
+  position: relative;
 }
 
 .materials-index .item dl.actions ul li {
@@ -274,26 +273,26 @@
   margin-bottom: 10px;
 }
 
-.index-filters .filter input, .advanced-search .filter input {
+.index-filters .filter input,.advanced-search .filter input {
   float: left;
   display: block;
 }
 
-.index-filters .filter label, .advanced-search .filter label {
+.index-filters .filter label,.advanced-search .filter label {
   display: block;
   float: left;
 }
 
-.index-filters .filter dt, .advanced-search .filter dt {
+.index-filters .filter dt,.advanced-search .filter dt {
   clear: both;
 }
 
-.index-filters .filter dd, .advanced-search .filter dd {
+.index-filters .filter dd,.advanced-search .filter dd {
   clear: both;
   margin-left: 16px;
 }
 
-.index-filters .filter dt label, .advanced-search .filter dt label {
+.index-filters .filter dt label,.advanced-search .filter dt label {
   color: #666;
   font-size: 13px;
   font-weight: bold;
@@ -312,7 +311,8 @@
   overflow: hidden;
 }
 
-.index-filters .filter dd.collapsed, .index-filters .filter ul.collapsed, .advanced-search .filter dd.collapsed, .advanced-search .filter ul.collapsed {
+.index-filters .filter dd.collapsed,.index-filters .filter ul.collapsed,.advanced-search .filter dd.collapsed,.advanced-search .filter ul.collapsed
+  {
   display: none;
 }
 
@@ -380,23 +380,23 @@
   visibility: hidden;
 }
 
-.view-item .reviews, .view-item .notes {
+.view-item .reviews,.view-item .notes {
   margin-top: 20px;
   font-size: 12px;
 }
 
-.view-item .reviews a.button, .view-item .notes a.button {
+.view-item .reviews a.button,.view-item .notes a.button {
   float: right;
   margin-left: 10px;
   margin-bottom: 10px;
 }
 
-.view-item .reviews dt, .view-item .notes dt {
+.view-item .reviews dt,.view-item .notes dt {
   color: #616161;
   font-weight: bold;
 }
 
-.view-item .reviews dd, .view-item .notes dd {
+.view-item .reviews dd,.view-item .notes dd {
   margin: 10px 20px;
   font-style: italic;
 }
@@ -428,7 +428,8 @@
   padding: 7px 0 14px 0;
 }
 
-.content .browse-materials  th a, .content .browse-materials  th a:visited {
+.content .browse-materials  th a,.content .browse-materials  th a:visited
+  {
   color: white;
 }
 
@@ -457,7 +458,8 @@
   list-style-type: none;
 }
 
-.content .browse-materials  li a, .content .browse-materials  li a:visited {
+.content .browse-materials  li a,.content .browse-materials  li a:visited
+  {
   text-decoration: none;
   color: #2683a5;
 }
@@ -467,11 +469,12 @@
 }
 
 .content .browse-materials td.sep {
-  background: #f3f7f8 url(../images/browse-table-column-sep.png)
-  repeat-y 0% 0%;
+  background: #f3f7f8 url(../images/browse-table-column-sep.png) repeat-y
+    0% 0%;
 }
 
-.content .browse-materials td.sep div, .content .browse-materials  td.nosep div {
+.content .browse-materials td.sep div,.content .browse-materials  td.nosep div
+  {
   width: 11px;
 }
 
@@ -509,7 +512,8 @@
 }
 
 .advanced-search .search-box {
-  background: #0c5671 url(../images/advancedsearch-searchbox-bg.png) repeat-x 0% 0%;
+  background: #0c5671 url(../images/advancedsearch-searchbox-bg.png)
+    repeat-x 0% 0%;
   padding: 10px;
   margin-bottom: 20px;
 }
@@ -553,7 +557,7 @@
   margin-right: 13px;
 }
 
-.box.search-by-keyword .buttons, .box.filters .buttons {
+.box.search-by-keyword .buttons,.box.filters .buttons {
   text-align: right;
   margin: 10px;
 }
@@ -708,7 +712,7 @@
 }
 
 .content-actions dl ul li.icon a {
-  padding-left: 22px;  
+  padding-left: 22px;
   background-repeat: no-repeat;
   background-position: 2px 2px;
 }
@@ -717,7 +721,7 @@
   background-image: url(../images/edit-icon.png);
 }
 
-.content-actions dl ul li.delete a {  
+.content-actions dl ul li.delete a {
   background-image: url(../images/delete-icon.png);
 }
 
@@ -725,8 +729,7 @@
   background: none;
 }
 
-.tags-index .column-left,
-.tags-index .column-right {
+.tags-index .column-left,.tags-index .column-right {
   display: none;
 }
 
@@ -754,8 +757,7 @@
   text-transform: uppercase;
 }
 
-.tags-index ul.letters li a,
-.tags-index ul.letters li span {
+.tags-index ul.letters li a,.tags-index ul.letters li span {
   padding: 2px 5px;
   border: 1px solid #ccc;
 }
@@ -764,8 +766,7 @@
   text-decoration: none;
 }
 
-.tags-index ul.letters li a:hover,
-.tags-index ul.letters li span {
+.tags-index ul.letters li a:hover,.tags-index ul.letters li span {
   border-color: #666;
 }
 
