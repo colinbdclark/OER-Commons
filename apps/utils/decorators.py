@@ -1,9 +1,12 @@
+from django.contrib import messages
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseRedirect
 from django.utils.decorators import available_attrs
 from django.utils.functional import wraps
 from django.utils.http import urlquote
-from django.contrib import messages
+from tempfile import NamedTemporaryFile
+import hotshot
+import hotshot.stats
 
 
 def user_passes_test(test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME):
@@ -40,3 +43,22 @@ def login_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME):
     if function:
         return actual_decorator(function)
     return actual_decorator
+
+
+def profile(f):
+    
+    def _inner(*args, **kwargs):
+        
+        log_file = NamedTemporaryFile()
+        prof = hotshot.Profile(log_file.name)
+        try:
+            ret = prof.runcall(f, *args, **kwargs)
+            stats = hotshot.stats.load(log_file.name)
+            #stats.strip_dirs()
+            stats.sort_stats('time', 'calls')
+            stats.print_stats(200)
+        finally:
+            prof.close()
+        return ret
+    
+    return _inner
