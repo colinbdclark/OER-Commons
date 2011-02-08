@@ -4,13 +4,7 @@
 {% block extra-js %}
 <script type="text/javascript"> 
   $(function() {
-    $("div.portlet.oermaterials .accordion").accordion({
-      header: "h5",
-      event: "click mouseover",
-      collapsible: true,
-      active: false,
-      autoHeight: false
-    });
+    oer.accordion.init($("div.portlet.oermaterials div.accordion"));
     $("div.portlet.cou li a").cluetip({local:true, arrows: true, width: 300});
   });
 </script> 
@@ -34,8 +28,8 @@
 <div class="portlet oermaterials"> 
   <h4 class="dotted">OER Materials</h4> 
   <div class="accordion clearfix"> 
-    <h5><a href="#">Subject Areas</a></h5> 
-    <div> 
+    <h5 class="accordion-header"><a href="#">Subject Areas</a></h5> 
+    <div class="accordion-body"> 
       <ul> 
         {% for general_subject in general_subjects %}
         <li> 
@@ -46,8 +40,8 @@
         {% endfor %}
       </ul> 
     </div> 
-    <h5><a href="#">Grade Levels</a></h5> 
-    <div> 
+    <h5 class="accordion-header"><a href="#">Grade Levels</a></h5> 
+    <div class="accordion-body"> 
       <ul> 
         {% for grade_level in grade_levels %}
         <li> 
