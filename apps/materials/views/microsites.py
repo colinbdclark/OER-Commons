@@ -31,7 +31,7 @@ def microsite(request, microsite):
     for result in results:
         items.append(populate_item_from_search_result(result))
 
-    facets = query.facet_counts()["fields"]
+    facets = query.facet_counts()["fields"] 
 
     topics = []
     topic_counts = dict(facets["indexed_topics"])
@@ -51,7 +51,7 @@ def microsite(request, microsite):
         material_type.count = course_material_type_counts.get(str(material_type.id), 0)
         course_material_types.append(material_type)
 
-    keywords = facets.get("keywords", [])
+    keywords = query.count() and facets.get("keywords", []) or []
     if len(keywords) > MAX_TOP_KEYWORDS:
         keywords = keywords[:MAX_TOP_KEYWORDS]
     keywords = get_tag_cloud(dict(keywords), 3, 0, 0)

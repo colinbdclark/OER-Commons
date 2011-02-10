@@ -492,7 +492,7 @@ def index(request, general_subjects=None, grade_levels=None,
                                             path_filter,
                                             microsite)
 
-        all_keywords = facets.get("keywords", [])
+        all_keywords = query.count() and facets.get("keywords", []) or []
         if len(all_keywords) > MAX_TOP_KEYWORDS:
             top_keywords = get_tag_cloud(dict(all_keywords[:MAX_TOP_KEYWORDS]),
                                               3, 0, 0)
