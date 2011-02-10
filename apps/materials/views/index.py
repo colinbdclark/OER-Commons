@@ -459,9 +459,11 @@ def index(request, general_subjects=None, grade_levels=None,
         index_title = "%s: %s" % (page_title, page_subtitle)
     else:
         index_title = page_title
-    feed_url = index_url + "&feed=yes"
-    csv_url = index_url + "&csv=yes"
-
+    
+    feed_url = request.path + serialize_query_string_params(dict(query_string_params.items() + [("feed", "yes")]),
+                                             ignore_params=["batch_start"])
+    csv_url = request.path + serialize_query_string_params(dict(query_string_params.items() + [("csv", "yes")]),
+                                             ignore_params=["batch_start"])
 
     batch_end = index_params.batch_start + index_params.batch_size
 
