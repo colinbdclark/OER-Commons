@@ -166,17 +166,17 @@ class Material(models.Model):
         microsites = self.microsites()
         if not microsites.count():
             return []
-        topics = []
+        topics = set()
         for microsite in self.microsites():
             topics_qs = microsite.topics.exclude(other=True).filter(keywords__slug__in=self.keyword_slugs())
             if topics_qs.count():
-                topics += list(topics_qs)
+                topics.update(topics_qs)
             else:
                 try:
-                    topics.append(microsite.topics.get(other=True))
+                    topics.add(microsite.topics.get(other=True))
                 except Topic.DoesNotExist:
                     pass
-        return topics
+        return sorted(topics)
 
     def indexed_topics(self):
         topics = self.topics()

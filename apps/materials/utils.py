@@ -17,6 +17,8 @@ def cleanup_keywords(keywords):
     cleaned_keywords = set()
     for kw in keywords:
 
+        kw = kw.strip()
+
         if not ALPHANUM_RE.match(kw):
             continue
 
@@ -31,8 +33,6 @@ def cleanup_keywords(keywords):
         if u"|" in kw:
             cleaned_keywords.update(cleanup_keywords(kw.split(u"|")))
             continue
-
-        kw = kw.strip()
 
         # If the keyword contains one and only one quote char we remove it
         if kw.count(u'"') == 1:
