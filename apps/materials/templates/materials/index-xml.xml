@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oersearchresults>
+{% for item in items %}
+	<result>
+	  <title href="{{ item.url }}">{{ item.title }}</title>
+	  {% if item.author %}
+	    <author>{{ item.author }}</author>
+	  {% endif %}
+	  {% if item.institution %}
+	    <institution>{{ item.institution }}</institution>
+	  {% endif %}
+	  <abstract>{{ data.abstract }}</abstract>
+	  {% if item.copyright_holder %}
+	    <copyright>{{ item.copyright_holder }}</copyright>
+	  {% endif %}
+	  {% if item.license_type %}
+	    <license title="{{ item.license_name }}"
+	             type="{{ item.license_type }}"
+	             url="{{ item.license_url }}"
+	             cou-bucket="{{ item.cou_bucket }}">{{ item.license_description }}</license>
+	  {% endif %}
+	  {% if item.rating %}
+	    <rating>{{ item.rating }}</rating>
+	  {% endif %}
+	  <oersummary>
+	    {% for field in item.fields %}
+	    <item title="{{ field.title }}"
+	          param="{{ field.param }}"
+	          value="{{ field.value }}">{{ field.content }}</item>
+	    {% endfor %}
+	  </oersummary>
+	</result>
+{% endfor %}
+</oersearchresults>

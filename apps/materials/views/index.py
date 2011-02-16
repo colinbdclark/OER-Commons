@@ -5,7 +5,8 @@ from django.http import Http404, HttpResponsePermanentRedirect, HttpResponse
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import GeneralSubject, GradeLevel, Collection, \
-    Keyword
+    Keyword, PUBLIC_DOMAIN_URL, GNU_FDL_URL, CC_LICENSE_URL_RE,\
+    GeographicRelevance
 from materials.models.community import CommunityItem
 from materials.models.material import PUBLISHED_STATE
 from materials.models.microsite import Microsite, Topic
@@ -17,6 +18,7 @@ from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 import cjson
 import urllib
+import re
 
 
 MAX_TOP_KEYWORDS = 25
@@ -557,6 +559,85 @@ def index(request, general_subjects=None, grade_levels=None,
 
         return HttpResponse(cjson.encode(items),
                             content_type="application/json")
+        
+    elif format == "xml":
+        query = query.load_all()
+        
+        for result in query:
+            object = result.object
+            data = result.get_stored_fields()
+            item = {}
+            
+            item["url"] = data["url"]
+            item["title"] = data["title"]
+            if data["authors"]:
+                item["author"] = data["authors"][0] 
+            if data["institution_name"]:
+                item["institution"] = data["institution_name"]
+            item["abstract"] = data["abstract"]
+            
+            license = object.license
+            item["copyright_holder"] = license.copyright_holder
+            item["license_url"] = license.url
+            item["license_name"] = license.name
+            item["license_description"] = license.description
+            item["license_type"] = license.type
+            item["cou_bucket"] = license.bucket
+            
+            if data["rating"]:
+                item["rating"] = '%.1f' % data["rating"]
+            
+            item["fields"] = []
+            grade_levels = data["grade_levels"]
+            if grade_levels:
+                item["fields"].append(dict(title=u"Grade Level",
+                                           param=FILTERS["grade_levels"].request_name,
+                                           value=u",".join([get_slug_from_id(GradeLevel, id) for id in grade_levels]),
+                                           content=u",".join([get_name_from_id(GradeLevel, id) for id in grade_levels])
+                                           ))
+            general_subjects = data["general_subjects"]
+            if grade_levels:
+                item["fields"].append(dict(title=u"Subject",
+                                           param=FILTERS["general_subjects"].request_name,
+                                           value=u",".join([get_slug_from_id(GeneralSubject, id) for id in general_subjects]),
+                                           content=u",".join([get_name_from_id(GeneralSubject, id) for id in general_subjects])
+                                           ))
+            collection = data["collection"]
+            if collection:
+                item["fields"].append(dict(title=u"Collection",
+                                           param=FILTERS["collection"].request_name,
+                                           value=get_slug_from_id(Collection, collection),
+                                           content=get_name_from_id(Collection, collection)
+                                           ))
+            geographic_relevance = data["geographic_relevance"]
+            if geographic_relevance:
+                item["fields"].append(dict(title=u"Geographic Regional Relevance",
+                                           param=FILTERS["geographic_relevance"].request_name,
+                                           value=u",".join([get_slug_from_id(GeographicRelevance, id) for id in geographic_relevance]),
+                                           content=u",".join([get_name_from_id(GeographicRelevance, id) for id in geographic_relevance])
+                                           ))
+            
+            keywords = object.keywords.values("slug", "name")
+            if keywords:
+                item["fields"].append(dict(title=u"Keywords",
+                                           param=FILTERS["keywords"].request_name,
+                                           value=u",".join([k["slug"] for k in keywords]),
+                                           content=u",".join([k["name"] for k in keywords]),
+                                           ))
+                
+
+            tags = object.tags.values("slug", "name").order_by("slug").distinct()
+            if tags:
+                item["fields"].append(dict(title=u"Tags",
+                                           param=FILTERS["keywords"].request_name,
+                                           value=u",".join([k["slug"] for k in tags]),
+                                           content=u",".join([k["name"] for k in tags]),
+                                           ))
+            
+            items.append(item)
+
+        return direct_to_template(request, "materials/index-xml.xml", locals(),
+                                  "text/xml")
 
     elif format == "csv":
         return csv_export(query, index_title)
