@@ -5,8 +5,7 @@ from django.http import Http404, HttpResponsePermanentRedirect, HttpResponse
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import GeneralSubject, GradeLevel, Collection, \
-    Keyword, PUBLIC_DOMAIN_URL, GNU_FDL_URL, CC_LICENSE_URL_RE,\
-    GeographicRelevance
+    Keyword, GeographicRelevance
 from materials.models.community import CommunityItem
 from materials.models.material import PUBLISHED_STATE
 from materials.models.microsite import Microsite, Topic
@@ -18,7 +17,6 @@ from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 import cjson
 import urllib
-import re
 
 
 MAX_TOP_KEYWORDS = 25
