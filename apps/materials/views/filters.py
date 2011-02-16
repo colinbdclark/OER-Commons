@@ -268,7 +268,7 @@ class SearchFilter(Filter):
     def escape(self, value):
         if isinstance(value, (list, tuple)):
             return [self.escape(v) for v in value]
-        return value.replace(u":", "\:")
+        return value.replace(u":", "\:").replace("!", "\!")
 
     def update_query(self, query, value):
 
