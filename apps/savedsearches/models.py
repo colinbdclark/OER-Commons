@@ -5,8 +5,8 @@ from django.db import models
 class SavedSearch(models.Model):
 
     user = models.ForeignKey(User)
-    title = models.CharField(max_length=500)
-    url = models.CharField(max_length=1000)
+    title = models.CharField(max_length=1500)
+    url = models.CharField(max_length=1500)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
