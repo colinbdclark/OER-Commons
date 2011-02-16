@@ -265,6 +265,11 @@ class SearchFilter(Filter):
             return None
         return value
 
+    def escape(self, value):
+        if isinstance(value, (list, tuple)):
+            return [self.escape(v) for v in value]
+        return value.replace(u":", "\:")
+
     def update_query(self, query, value):
 
         all_words = list(value.all_words)
@@ -276,22 +281,22 @@ class SearchFilter(Filter):
 
         if all_words or value.any_words:
             for field in self.weighted_fields:
-                query = query.filter_or(**{"%s__in" % field:(all_words + value.any_words)})
+                query = query.filter_or(**{"%s__in" % field:self.escape((all_words + value.any_words))})
 
         for phrase in value.exact_phrases:
             if " " not in phrase:
-                query = query.filter(text_exact=u'"%s"' % phrase)
+                query = query.filter(text_exact=u'"%s"' % self.escape(phrase))
             else:
-                query = query.filter(text_exact=phrase)
+                query = query.filter(text_exact=self.escape(phrase))
 
         for word in value.exclude_words:
-            query = query.exclude(text_exact=word)
+            query = query.exclude(text_exact=self.escape(word))
 
         if value.any_words:
-            query = query.filter(text_exact__in=value.any_words)
+            query = query.filter(text_exact__in=self.escape(value.any_words))
 
         for word in all_words:
-            query = query.filter(text=word)
+            query = query.filter(text=self.escape(word))
 
         return query
 
