@@ -77,7 +77,7 @@
 
     {% with index_filters.topics as filter %}
       {% if filter.options %}
-      <dl class="dotted filter collapsible">
+      <dl class="dotted filter collapsible clearfix">
         <dt>
            <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
            <label for="{{ filter.name }}">
