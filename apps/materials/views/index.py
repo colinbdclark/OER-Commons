@@ -568,7 +568,7 @@ def index(request, general_subjects=None, grade_levels=None,
             
             item["url"] = data["url"]
             item["title"] = data["title"]
-            if data["authors"]:
+            if data.get("authors"):
                 item["author"] = data["authors"][0] 
             if data.get("institution"):
                 item["institution"] = get_name_from_id(Institution, data["institution"])
@@ -586,28 +586,28 @@ def index(request, general_subjects=None, grade_levels=None,
                 item["rating"] = '%.1f' % data["rating"]
             
             item["fields"] = []
-            grade_levels = data["grade_levels"]
+            grade_levels = data.get("grade_levels")
             if grade_levels:
                 item["fields"].append(dict(title=u"Grade Level",
                                            param=FILTERS["grade_levels"].request_name,
                                            value=u",".join([get_slug_from_id(GradeLevel, id) for id in grade_levels]),
                                            content=u",".join([get_name_from_id(GradeLevel, id) for id in grade_levels])
                                            ))
-            general_subjects = data["general_subjects"]
+            general_subjects = data.get("general_subjects")
             if grade_levels:
                 item["fields"].append(dict(title=u"Subject",
                                            param=FILTERS["general_subjects"].request_name,
                                            value=u",".join([get_slug_from_id(GeneralSubject, id) for id in general_subjects]),
                                            content=u",".join([get_name_from_id(GeneralSubject, id) for id in general_subjects])
                                            ))
-            collection = data["collection"]
+            collection = data.get("collection")
             if collection:
                 item["fields"].append(dict(title=u"Collection",
                                            param=FILTERS["collection"].request_name,
                                            value=get_slug_from_id(Collection, collection),
                                            content=get_name_from_id(Collection, collection)
                                            ))
-            geographic_relevance = data["geographic_relevance"]
+            geographic_relevance = data.get("geographic_relevance")
             if geographic_relevance:
                 item["fields"].append(dict(title=u"Geographic Regional Relevance",
                                            param=FILTERS["geographic_relevance"].request_name,
