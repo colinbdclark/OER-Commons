@@ -20,7 +20,7 @@
     "pk": 4, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "User-agent: *\r\nDisallow: /*add_\r\nDisallow: /*addNote\r\nDisallow: /*addReview\r\nDisallow: /*addTags\r\nDisallow: /*batch_\r\nDisallow: /*deleteNote\r\nDisallow: /*mini_nav\r\nDisallow: /searchId\r\nDisallow: /*sort_\r\nDisallow: /*transition_form\r\nDisallow: /*unsave\r\nDisallow: /++skin++OER\r\nDisallow: /@@loginForm.html\r\nDisallow: /edit\r\nDisallow: /home\r\nDisallow: /Members/\r\nDisallow: /oer/home\r\nDisallow: /portfolio\r\nDisallow: /profile\r\nDisallow: /search\r\nDisallow: /send-this\r\nNoindex: /*sort_\r\nNoindex: /*batch_\r\nNoindex: /searchId\r\nNoindex: /++skin++OER", 
+      "content": "User-agent: *\r\nDisallow: /login\r\nDisallow: /*add_\r\nDisallow: /*addNote\r\nDisallow: /*addReview\r\nDisallow: /*addTags\r\nDisallow: /*batch_\r\nDisallow: /*deleteNote\r\nDisallow: /*mini_nav\r\nDisallow: /searchId\r\nDisallow: /*sort_\r\nDisallow: /*transition_form\r\nDisallow: /*unsave\r\nDisallow: /++skin++OER\r\nDisallow: /@@loginForm.html\r\nDisallow: /edit\r\nDisallow: /home\r\nDisallow: /Members/\r\nDisallow: /oer/home\r\nDisallow: /portfolio\r\nDisallow: /profile\r\nDisallow: /search\r\nDisallow: /send-this\r\nNoindex: /*sort_\r\nNoindex: /*batch_\r\nNoindex: /searchId\r\nNoindex: /++skin++OER", 
       "header": "", 
       "slug": "robots.txt"
     }
