@@ -305,7 +305,7 @@ class SearchFilter(Filter):
         return query_string_params
 
     def page_subtitle(self, value):
-        return str(value)
+        return unicode(value)
 
 
 FILTERS = {

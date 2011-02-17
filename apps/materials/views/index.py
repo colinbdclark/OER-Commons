@@ -456,7 +456,7 @@ def index(request, general_subjects=None, grade_levels=None,
     index_url = request.path + serialize_query_string_params(query_string_params,
                                              ignore_params=["batch_start"])
     if page_subtitle:
-        index_title = "%s: %s" % (page_title, page_subtitle)
+        index_title = u"%s: %s" % (page_title, page_subtitle)
     else:
         index_title = page_title
     
