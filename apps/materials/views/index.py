@@ -594,7 +594,7 @@ def index(request, general_subjects=None, grade_levels=None,
                                            content=u",".join([get_name_from_id(GradeLevel, id) for id in grade_levels])
                                            ))
             general_subjects = data.get("general_subjects")
-            if grade_levels:
+            if general_subjects:
                 item["fields"].append(dict(title=u"Subject",
                                            param=FILTERS["general_subjects"].request_name,
                                            value=u",".join([get_slug_from_id(GeneralSubject, id) for id in general_subjects]),
