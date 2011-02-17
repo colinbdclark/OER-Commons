@@ -1,0 +1,50 @@
+{% extends "admin/change_form.html" %}
+{% load i18n  %}
+
+{% block extrahead %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}javascripts/jquery/jquery.date_input.css" media="all" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.date_input.js"></script>
+<script type="text/javascript">
+  $(function() {
+      $("#id_from_date").date_input();
+      $("#id_until_date").date_input();
+  });
+</script>
+{% endblock %}
+
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+     <a href="../../../">{% trans "Home" %}</a> &rsaquo;
+     <a href="../../">{{ repository_verbose_name_plural }}</a> &rsaquo; 
+     <a href="../">{{ repository }}</a> &rsaquo; 
+     {% trans "Harvest" %}
+</div>
+{% endblock %}
+
+{% block content %}<div id="content-main">
+<form method="post">{% csrf_token %}
+{% for field in form.hidden_fields %}{{ field }}{% endfor %}
+<fieldset class="module aligned ">
+    {% for field in form.visible_fields %}
+        <div class="form-row{% if field.errors %} errors{% endif %}">
+            <div{% if field.field.required %} class="required"{% endif %}>
+                {{ field.errors }}
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <p class="help">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</fieldset>
+
+<div class="submit-row">
+<input type="submit" value="{% trans 'Cancel' %}" name="cancel" />
+<input type="submit" value="{% trans 'Harvest' %}" class="default" name="harvest" />
+</div>
+
+</form>
+</div>{% endblock %} 

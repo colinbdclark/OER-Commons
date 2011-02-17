@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.signals import post_save
 from harvester.oaipmh.client import Client
 from harvester.oaipmh.error import NoSetHierarchyError
 from urllib2 import HTTPError
@@ -106,10 +105,10 @@ class Set(models.Model):
     name = models.CharField(max_length=200)
     
     def __unicode__(self):
-        return u"%s - %s" % (self.name, self.spec)
+        return u"%s - %s" % (self.spec, self.name)
     
     class Meta:
-        ordering = ["repository", "name", "spec"]
+        ordering = ["repository", "spec", "name"]
     
 
 class AdminEmail(models.Model):
@@ -131,13 +130,18 @@ class MetadataPrefix(models.Model):
     def __unicode__(self):
         return self.prefix
     
+    class Meta:
+        verbose_name = u"Metadata Prefix"
+        verbose_name_plural = u"Metadata Prefixes"
+        ordering = ["repository", "prefix"]
+    
 
 class Job(models.Model):
     
     repository = models.ForeignKey(Repository)
     metadata_prefix = models.ForeignKey(MetadataPrefix)
-    from_date = models.DateTimeField(null=True, blank=True)
-    until_data = models.DateTimeField(null=True, blank=True)
+    from_date = models.DateField(null=True, blank=True)
+    until_date = models.DateField(null=True, blank=True)
     sets = models.ManyToManyField(Set, null=True, blank=True)
     email = models.EmailField(max_length=200)
     processed_records = models.IntegerField(null=True, blank=True)
