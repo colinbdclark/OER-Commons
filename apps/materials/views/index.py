@@ -562,7 +562,7 @@ def index(request, general_subjects=None, grade_levels=None,
         query = query.load_all()
         results = query[index_params.batch_start:batch_end]
         
-        for result in query:
+        for result in results:
             object = result.object
             data = result.get_stored_fields()
             item = {}
