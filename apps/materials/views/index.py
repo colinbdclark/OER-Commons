@@ -486,7 +486,7 @@ def index(request, general_subjects=None, grade_levels=None,
                                 index_params.batch_size,
                                 len(query))
 
-        facets = query.facet_counts()["fields"]
+        facets = query.facet_counts().get("fields", {})
 
         index_filters = build_index_filters(visible_filters,
                                             facets,

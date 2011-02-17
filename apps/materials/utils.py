@@ -100,7 +100,7 @@ def get_facets_for_field(field, model=None):
         query = query.models(model)
     query = query.narrow("workflow_state:%s" % PUBLISHED_STATE)
     query = query.facet(field)
-    return query.facet_counts()["fields"][field]
+    return query.facet_counts().get("fields", {}).get(field, [])
 
 
 def first_neighbours_last(pages, current_page_idx, nb_left, nb_right):
