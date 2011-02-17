@@ -560,6 +560,7 @@ def index(request, general_subjects=None, grade_levels=None,
         
     elif format == "xml":
         query = query.load_all()
+        results = query[index_params.batch_start:batch_end]
         
         for result in query:
             object = result.object
