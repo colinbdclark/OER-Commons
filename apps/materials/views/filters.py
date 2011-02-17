@@ -224,6 +224,8 @@ class SearchParameters(object):
             if self.any_words[0] not in self.all_words:
                 self.all_words.append(self.any_words[0])
             self.any_words = []
+        
+        self.all_words = [w for w in self.all_words if w.lower() != "and"]
 
     def __nonzero__(self):
         return bool(self.all_words or self.any_words or self.exclude_words or self.exact_phrases)
