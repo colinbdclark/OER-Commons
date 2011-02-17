@@ -34,7 +34,7 @@ class Repository(object):
 
     @property
     def earliest_timestamp(self):
-        return datetime.datetime(year=2000)
+        return datetime.datetime(2000, 1, 1)
 
     @property
     def identifier_prefix(self):

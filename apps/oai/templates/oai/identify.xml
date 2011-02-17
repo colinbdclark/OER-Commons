@@ -1,9 +1,9 @@
-<Identify>
+{% load oai_tags %}<Identify>
 <repositoryName>{{ repository.name }}</repositoryName>
 <baseURL>{{ repository.base_url }}</baseURL>
 <protocolVersion>2.0</protocolVersion>
 <adminEmail>{{ repository.admin_email }}</adminEmail>
-<earliestDatestamp>{{ repository.earliest_timestamp|date:"c" }}</earliestDatestamp>
+<earliestDatestamp>{{ repository.earliest_timestamp|oai_date }}</earliestDatestamp>
 <deletedRecord>no</deletedRecord>
 <granularity>YYYY-MM-DDThh:mm:ssZ</granularity>
 <description>
