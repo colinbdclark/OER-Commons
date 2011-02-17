@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponsePermanentRedirect, HttpResponse
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import GeneralSubject, GradeLevel, Collection, \
-    Keyword, GeographicRelevance
+    Keyword, GeographicRelevance, Institution
 from materials.models.community import CommunityItem
 from materials.models.material import PUBLISHED_STATE
 from materials.models.microsite import Microsite, Topic
@@ -570,8 +570,8 @@ def index(request, general_subjects=None, grade_levels=None,
             item["title"] = data["title"]
             if data["authors"]:
                 item["author"] = data["authors"][0] 
-            if data["institution_name"]:
-                item["institution"] = data["institution_name"]
+            if data["institution"]:
+                item["institution"] = get_name_from_id(Institution, data["institution"])
             item["abstract"] = data["abstract"]
             
             license = object.license
