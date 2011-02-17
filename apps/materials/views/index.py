@@ -570,7 +570,7 @@ def index(request, general_subjects=None, grade_levels=None,
             item["title"] = data["title"]
             if data["authors"]:
                 item["author"] = data["authors"][0] 
-            if data["institution"]:
+            if data.get("institution"):
                 item["institution"] = get_name_from_id(Institution, data["institution"])
             item["abstract"] = data["abstract"]
             
