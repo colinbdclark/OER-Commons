@@ -1,4 +1,6 @@
 import os
+import djcelery
+
 
 INTERNAL_IPS = ('127.0.0.1',)
 
@@ -76,6 +78,7 @@ INSTALLED_APPS = (
     'paging',
     'sentry',
     'sentry.client',
+    'djcelery',
     'oauth_provider',
     'utils',
     'tags',
@@ -145,3 +148,12 @@ OAUTH_CALLBACK_VIEW = "project.views.oauth_callback"
 
 CACHE_MIDDLEWARE_SECONDS = 60
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+
+
+BROKER_HOST = "iMac.local"
+BROKER_PORT = 5672
+BROKER_USER = "django"
+BROKER_PASSWORD = "django"
+BROKER_VHOST = "oercommons"
+
+djcelery.setup_loader()

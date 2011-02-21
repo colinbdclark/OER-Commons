@@ -1,7 +1,17 @@
+from autoslug.settings import slugify
+from celery.decorators import task
+from django.conf import settings
+from django.core.files.base import File
 from django.db import models
+from django.utils.dateformat import format
+from harvester.metadata.oai_dc import OAI_DC
 from harvester.oaipmh.client import Client
-from harvester.oaipmh.error import NoSetHierarchyError
+from harvester.oaipmh.error import NoSetHierarchyError, NoRecordsMatchError
+from tempfile import NamedTemporaryFile
 from urllib2 import HTTPError
+import csv
+import datetime
+import traceback
 
 
 PROTOCOL_VERSIONS = (
@@ -25,12 +35,19 @@ GRANULARITIES = (
 RUNNING = "running"
 COMPLETE = "complete"
 ERROR = "error"
+NO_RECORDS_MATCH = "no-records"
 
 STATUSES = (
     (RUNNING, u"Running"),
     (COMPLETE, u"Complete"),
     (ERROR, u"Error"),
+    (NO_RECORDS_MATCH, u"No records match"),
 )
+
+
+METADATA_FORMATS = {
+    "oai_dc": OAI_DC()
+}
 
 
 class Repository(models.Model):
@@ -103,9 +120,14 @@ class Set(models.Model):
     repository = models.ForeignKey(Repository, related_name="sets")
     spec = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
+    harvested_on = models.DateField(null=True, blank=True)
     
     def __unicode__(self):
-        return u"%s - %s" % (self.spec, self.name)
+        s = u"%s - %s" % (self.spec, self.name)
+        if self.harvested_on:
+            s = u"%s - harvested on %s" % (s, format(self.harvested_on,
+                                                     settings.DATETIME_FORMAT))
+        return s
     
     class Meta:
         ordering = ["repository", "spec", "name"]
@@ -136,22 +158,112 @@ class MetadataPrefix(models.Model):
         ordering = ["repository", "prefix"]
     
 
+@task()
+def run_job(job):
+    job.status = RUNNING
+    job.save()
+    metadata_prefix = job.metadata_prefix.prefix
+    format = METADATA_FORMATS[metadata_prefix]
+    client = job.repository.client
+    client.ignoreBadCharacters(True)
+    client.updateGranularity()
+    
+    kwargs = {}
+    kwargs['metadataPrefix'] = metadata_prefix 
+    if job.from_date:
+        kwargs['from_'] = job.from_date.replace(tzinfo=None) # Remove timezone information
+    if job.until_date:
+        kwargs['until'] = job.until_date.replace(tzinfo=None) # Remove timezone information
+
+    if job.set:
+        kwargs["set"] = job.set.spec
+
+    f = NamedTemporaryFile()
+    writer = csv.writer(f, quoting=csv.QUOTE_NONNUMERIC)
+
+    writer.writerow(format.header)
+
+    job.harvested_records = 0
+    job.processed_records = 0
+    
+    try:
+        for header, metadata, about in client.listRecords(**kwargs):
+            if header.isDeleted():
+                continue
+            identifier = str(header.identifier())
+            try:
+                writer.writerow(format.process_record(identifier, metadata))
+                job.harvested_records += 1
+            except:
+                text = u"Error while processing record identifier: %s\n%s" % (identifier,
+                                                                              traceback.format_exc())
+                Error(text=text, job=job).save()
+            job.processed_records += 1
+            
+            # Save the job after every 100 processed records
+            if not job.processed_records % 100:
+                job.save()
+        
+        if job.errors.count():
+            job.status = ERROR
+        else:
+            job.status = COMPLETE
+            
+        now = datetime.datetime.now()
+        
+        if job.set:
+            job.set.harvested_on = now
+            job.set.save()
+            
+        job.finished_on = now
+
+        filename_parts = [slugify(unicode(job.repository))]
+        if job.set:
+            filename_parts.append(slugify(job.set.spec))
+        filename_parts.append(now.isoformat())
+        filename = "-".join(filename_parts) + ".csv"
+        job.file.save(filename, File(f))        
+
+        # TODO: send email notification
+
+    except NoRecordsMatchError:
+        job.status = NO_RECORDS_MATCH
+
+    except:
+        job.status = ERROR
+        Error(text=traceback.format_exc(), job=job).save()
+        
+    finally:
+        job.save()
+        f.close()
+    
+
 class Job(models.Model):
     
     repository = models.ForeignKey(Repository)
     metadata_prefix = models.ForeignKey(MetadataPrefix)
     from_date = models.DateField(null=True, blank=True)
     until_date = models.DateField(null=True, blank=True)
-    sets = models.ManyToManyField(Set, null=True, blank=True)
+    set = models.ForeignKey(Set, null=True, blank=True)
     email = models.EmailField(max_length=200)
     processed_records = models.IntegerField(null=True, blank=True)
     harvested_records = models.IntegerField(null=True, blank=True)
-    status = models.CharField(max_length=30, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    finished_at = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=30, choices=STATUSES,
+                              null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    finished_on = models.DateField(null=True, blank=True)
+    file = models.FileField(upload_to="harvester",
+                            null=True, blank=True)
     
     def __unicode__(self):
         return unicode(self.repository)
+    
+    def run(self):
+        run_job.delay(self)
+    
+    class Meta:
+        verbose_name = u"Job"
+        verbose_name_plural = u"Jobs"
     
     
 class Error(models.Model):

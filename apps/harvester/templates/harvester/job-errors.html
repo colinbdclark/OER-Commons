@@ -1,0 +1,16 @@
+{% extends "admin/base_site.html" %}
+{% load i18n  %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+     <a href="../../../">{% trans "Home" %}</a> &rsaquo;
+     <a href="../../">{{ job_verbose_name_plural }}</a> &rsaquo; 
+     {% trans "Errors" %}
+</div>
+{% endblock %}
+
+{% block content %}<div id="content-main">
+{% for error in errors %}
+<pre>{{ error.text }}</pre>
+{% endfor %}
+</div>{% endblock %} 

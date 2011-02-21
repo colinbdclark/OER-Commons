@@ -1,10 +1,10 @@
 from django import forms
+from django.conf.urls.defaults import patterns, url
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
-from harvester.models import Repository, Job
-from django.conf.urls.defaults import patterns, url
-from harvester.views import add_job
 from django.core.urlresolvers import reverse
+from harvester.models import Repository, Job, ERROR
+from harvester.views import add_job, job_errors
 
 
 class AddRepositoryForm(forms.ModelForm):
@@ -59,7 +59,26 @@ site.register(Repository, RepositoryAdmin)
 
 
 class JobAdmin(ModelAdmin):
-    pass
 
+    def status(self):
+        if self.status == ERROR:
+            return """<a href="%s">%s (%i)</a>""" % (reverse("admin:harvester_job_errors", args=(self.id,)), 
+                                                     self.get_status_display(),
+                                                     self.errors.count())
+        return self.get_status_display()
+    status.allow_tags = True
+
+    def get_urls(self):
+        urls = patterns("",
+            url("^(\d+)/errors/$", self.admin_site.admin_view(job_errors), name="harvester_job_errors"),
+        )
+        return urls + super(JobAdmin, self).get_urls()
+
+    list_display = ["__unicode__", "metadata_prefix", status, "created_on",
+                    "processed_records"]
+
+    def has_add_permission(self, request):\
+        return False
+    
 
 site.register(Job, JobAdmin)
