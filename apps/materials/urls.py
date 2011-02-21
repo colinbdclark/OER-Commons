@@ -96,6 +96,7 @@ microsite_browse_patterns = browse_patterns + patterns('materials.views',
 )
 
 urlpatterns = patterns('materials.views',
+    url(r"^facebook_rss/?$", "facebook_feed.facebook_feed", name="facebook_feed"),
     url(r"^oer/?$", "browse.browse", name="browse"),
     url(r"^oer/providers/?$", "browse.providers", name="browse_providers"),
     url(r"^browse", include(browse_patterns)),

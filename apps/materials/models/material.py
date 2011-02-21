@@ -90,6 +90,14 @@ class Material(models.Model):
     notes = generic.GenericRelation(Note)
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
+    
+    @property
+    def verbose_name(self):
+        return self._meta.verbose_name
+
+    @property
+    def verbose_name_plural(self):
+        return self._meta.verbose_name_plural
 
     def save(self, *args, **kwargs):
         if self.workflow_state == PUBLISHED_STATE and not self.published_on:

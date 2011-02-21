@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF xmlns="http://purl.org/rss/1.0/"
+         xmlns:oer="http://oercommons.org/rss/ns#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:syn="http://purl.org/rss/1.0/modules/syndication/">
+         
+<channel rdf:about="{{ site_url }}{% url materials:facebook_feed %}">
+  <title>Facebook RSS Feed</title>
+  <link>{{ site_url }}</link>  
+  <description></description>
+
+  <syn:updatePeriod>daily</syn:updatePeriod>
+  <syn:updateFrequency>1</syn:updateFrequency>
+  <syn:updateBase>2000-01-01T12:00+00:00</syn:updateBase>
+
+  <image
+    rdf:resource="{{ site_url }}{{ STATIC_URL }}images/logo.png" />
+
+  <items>
+    <rdf:Seq>
+      {% for item in items %}
+        <rdf:li rdf:resource="{{ site_url }}{{ item.get_absolute_url }}" />
+      {% endfor %}
+    </rdf:Seq>
+  </items>
+
+</channel>
+
+{% for item in items %}
+<item rdf:about="{{ site_url }}{{ item.get_absolute_url }}">
+ <title>{{ item.title }}</title>
+ <link>{{ site_url }}{{ item.get_absolute_url }}</link>
+ <description>{{ item.abstract }}</description>
+ <dc:publisher>No Publisher</dc:publisher>
+ <dc:creator>{{ item.creator }}</dc:creator>
+ <dc:rights>{{ item.license }}</dc:rights>
+ {% for keyword in item.keyword_names %}
+ <dc:subject>{{ keyword }}</dc:subject>
+ {% endfor %}
+ <dc:date>{{ item.published_on|date:"c" }}</dc:date>
+ <dc:type>{{ item.verbose_name }}</dc:type>
+ <oer:shortdescription>{{ item.rss_description }}</oer:shortdescription>
+ {% for level in item.grade_levels.all %}
+ <oer:gradelevel>{{ level }}</oer:gradelevel>
+ {% endfor %}
+ {% for subject in item.general_subjects.all %}
+ <oer:generalsubject>{{ subject }}</oer:generalsubject>
+ {% endfor %}
+ {% for tag in item.tag_names %}
+ <oer:tag>{{ tag }}</oer:tag>
+ {% endfor %}
+ {% if item.collection %}
+ <oer:collection>{{ item.collection }}</oer:collection>
+ {% endif %}
+ {% for material_type in item.material_types.all %}
+ <oer:materialtype>{{ material_type }}</oer:materialtype>
+ {% endfor %}
+ <oer:featuredate>{{ item.rss_timestamp|date:"Y/m/d" }}</oer:featuredate>
+</item>
+{% endfor %}
+         
+</rdf:RDF>
