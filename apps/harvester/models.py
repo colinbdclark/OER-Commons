@@ -16,6 +16,7 @@ from urllib2 import HTTPError
 import csv
 import datetime
 import traceback
+from harvester.metadata.oai_lom import OAILOM
 
 
 PROTOCOL_VERSIONS = (
@@ -52,6 +53,10 @@ STATUSES = (
 METADATA_FORMATS = {
     "oai_dc": OAI_DC(),
     "ims1_2_1": IMS1_2_1(),
+    "oai_lom": OAILOM(),
+    "LREv3.0": OAILOM(),
+    "oai_lre3": OAILOM(),
+    "oai_oer2": OAILOM(),
 }
 
 
