@@ -1,0 +1,7 @@
+CACHE/
+admin/
+debug_toolbar/
+django_extensions/
+upload/
+reports/
+harvester/

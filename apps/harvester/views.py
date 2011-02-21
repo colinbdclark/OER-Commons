@@ -62,3 +62,17 @@ def job_errors(request, job_id):
     title = u"Job errors"
     
     return direct_to_template(request, "harvester/job-errors.html", locals())
+
+
+def job_restart(request, job_id):
+    job_id = int(job_id)
+    job = get_object_or_404(Job, id=job_id)
+    job.processed_records = 0
+    job.harvested_records = 0
+    job.finished_on = None
+    for error in job.errors.all():
+        error.delete()
+    job.file = None
+    job.save()
+    job.run()
+    return HttpResponseRedirect(reverse("admin:harvester_job_changelist"))

@@ -1,8 +1,11 @@
 from autoslug.settings import slugify
 from celery.decorators import task
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.files.base import File
+from django.core.mail import send_mail
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils.dateformat import format
 from harvester.metadata.oai_dc import OAI_DC
 from harvester.oaipmh.client import Client
@@ -120,12 +123,12 @@ class Set(models.Model):
     repository = models.ForeignKey(Repository, related_name="sets")
     spec = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
-    harvested_on = models.DateField(null=True, blank=True)
+    harvested_on = models.DateTimeField(null=True, blank=True)
     
     def __unicode__(self):
         s = u"%s - %s" % (self.spec, self.name)
         if self.harvested_on:
-            s = u"%s - harvested on %s" % (s, format(self.harvested_on,
+            s = u"%s - Harvested on %s" % (s, format(self.harvested_on,
                                                      settings.DATETIME_FORMAT))
         return s
     
@@ -224,8 +227,6 @@ def run_job(job):
         filename = "-".join(filename_parts) + ".csv"
         job.file.save(filename, File(f))        
 
-        # TODO: send email notification
-
     except NoRecordsMatchError:
         job.status = NO_RECORDS_MATCH
 
@@ -236,6 +237,8 @@ def run_job(job):
     finally:
         job.save()
         f.close()
+
+    job.notify()
     
 
 class Job(models.Model):
@@ -260,6 +263,13 @@ class Job(models.Model):
     
     def run(self):
         run_job.delay(self)
+    
+    def notify(self):
+        base_url = "http://%s" % Site.objects.get_current().domain
+        text = render_to_string("harvester/notification.html",
+                                dict(base_url=base_url, job=self))
+        send_mail(u"Harvesting job is complete",
+                  text, settings.DEFAULT_FROM_EMAIL, [self.email])
     
     class Meta:
         verbose_name = u"Job"

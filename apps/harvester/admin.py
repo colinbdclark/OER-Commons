@@ -3,8 +3,8 @@ from django.conf.urls.defaults import patterns, url
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
 from django.core.urlresolvers import reverse
-from harvester.models import Repository, Job, ERROR
-from harvester.views import add_job, job_errors
+from harvester.models import Repository, Job, ERROR, COMPLETE
+from harvester.views import add_job, job_errors, job_restart
 
 
 class AddRepositoryForm(forms.ModelForm):
@@ -61,21 +61,35 @@ site.register(Repository, RepositoryAdmin)
 class JobAdmin(ModelAdmin):
 
     def status(self):
+        status = self.get_status_display()
         if self.status == ERROR:
-            return """<a href="%s">%s (%i)</a>""" % (reverse("admin:harvester_job_errors", args=(self.id,)), 
-                                                     self.get_status_display(),
-                                                     self.errors.count())
-        return self.get_status_display()
+            status = u"""<a href="%s">%s (%i)</a>""" % (reverse("admin:harvester_job_errors", args=(self.id,)),
+                                                          status, 
+                                                          self.errors.count())
+        if self.status in (COMPLETE, ERROR):
+            status += u""" - <a href="%s">restart</a>""" % reverse("admin:harvester_job_restart", args=(self.id,))
+        return status
     status.allow_tags = True
+
+    def download(self):
+        if self.file:
+            return u"""<a href="%s">Download</a>""" % self.file.url
+        return u""
+    download.allow_tags = True 
+        
+    def set(self):
+        set = self.set
+        return set and set.name or u"" 
 
     def get_urls(self):
         urls = patterns("",
             url("^(\d+)/errors/$", self.admin_site.admin_view(job_errors), name="harvester_job_errors"),
+            url("^(\d+)/restart/$", self.admin_site.admin_view(job_restart), name="harvester_job_restart"),
         )
         return urls + super(JobAdmin, self).get_urls()
 
-    list_display = ["__unicode__", "metadata_prefix", status, "created_on",
-                    "processed_records"]
+    list_display = ["__unicode__", "metadata_prefix", set, status, "created_on",
+                    "processed_records", download]
 
     def has_add_permission(self, request):\
         return False

@@ -1,0 +1,35 @@
+<html>
+<body>
+<p>Harvesting job for <strong>{{ job.repository }}</strong> is complete{% if job.erros.count %} with errors{% endif %}.</p>
+<h4>Harvest parameters</h4>
+<dl>
+  <dt>Repository URL</dt>
+  <dd>{{ job.repository.base_url }}</dd>
+  <dt>Metadata format</dt>
+  <dd>{{ job.metadata_prefix.prefix }}</dd>
+  {% if job.from_date %}
+    <dt>From date</dt>
+    <dd>{{ job.from_date|date:"DATETIME_FORMAT" }}</dd>
+  {% endif %}
+  {% if job.until_date %}
+    <dt>Until date</dt>
+    <dd>{{ job.until_date|date:"DATETIME_FORMAT" }}</dd>
+  {% endif %}
+  {% if job.set %}
+  <dt>Set</dt>
+  <dd>{{ job.set.name }}</dd>
+  {% endif %}
+</dl>
+
+<p>Total records processed: <strong>{{ job.processed_records }}</strong></p>
+
+{% if job.file %}
+  <p><a href="{{ base_url }}{{ job.file.url }}">Download CSV file</a></p>
+{% endif %}
+
+{% if job.errors.count %}
+  <p><a href="{{ base_url }}{% url admin:harvester_job_errors job.id %}">View errors</a></p>
+{% endif %}
+
+</body>
+</html>
