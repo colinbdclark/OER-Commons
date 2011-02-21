@@ -3,7 +3,7 @@ from django.conf.urls.defaults import patterns, url
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
 from django.core.urlresolvers import reverse
-from harvester.models import Repository, Job, ERROR, COMPLETE
+from harvester.models import Repository, Job, ERROR, COMPLETE, NO_RECORDS_MATCH
 from harvester.views import add_job, job_errors, job_restart
 
 
@@ -66,7 +66,7 @@ class JobAdmin(ModelAdmin):
             status = u"""<a href="%s">%s (%i)</a>""" % (reverse("admin:harvester_job_errors", args=(self.id,)),
                                                           status, 
                                                           self.errors.count())
-        if self.status in (COMPLETE, ERROR):
+        if self.status in (COMPLETE, ERROR, NO_RECORDS_MATCH):
             status += u""" - <a href="%s">restart</a>""" % reverse("admin:harvester_job_restart", args=(self.id,))
         return status
     status.allow_tags = True

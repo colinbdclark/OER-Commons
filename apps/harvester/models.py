@@ -8,7 +8,9 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils.dateformat import format
 from harvester.metadata.ims1_2_1 import IMS1_2_1
+from harvester.metadata.nsdl_dc import NSDLDublinCore
 from harvester.metadata.oai_dc import OAI_DC
+from harvester.metadata.oai_lom import OAILOM
 from harvester.oaipmh.client import Client
 from harvester.oaipmh.error import NoSetHierarchyError, NoRecordsMatchError
 from tempfile import NamedTemporaryFile
@@ -16,7 +18,6 @@ from urllib2 import HTTPError
 import csv
 import datetime
 import traceback
-from harvester.metadata.oai_lom import OAILOM
 
 
 PROTOCOL_VERSIONS = (
@@ -57,6 +58,8 @@ METADATA_FORMATS = {
     "LREv3.0": OAILOM(),
     "oai_lre3": OAILOM(),
     "oai_oer2": OAILOM(),
+    "nsdl_dc": NSDLDublinCore(),
+    "nsdl_dc_1_02": NSDLDublinCore(),
 }
 
 

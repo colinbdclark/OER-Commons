@@ -21,10 +21,14 @@
   {% endif %}
 </dl>
 
-<p>Total records processed: <strong>{{ job.processed_records }}</strong></p>
-
-{% if job.file %}
-  <p><a href="{{ base_url }}{{ job.file.url }}">Download CSV file</a></p>
+{% if job.status == "no-records" %}
+  <p>No records match the given criteria.</p>
+{% else %}
+  <p>Total records processed: <strong>{{ job.processed_records }}</strong>.</p>
+  
+  {% if job.file %}
+    <p><a href="{{ base_url }}{{ job.file.url }}">Download CSV file</a></p>
+  {% endif %}
 {% endif %}
 
 {% if job.errors.count %}
