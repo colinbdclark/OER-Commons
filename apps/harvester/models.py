@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.dateformat import format
+from harvester.metadata.ims1_2_1 import IMS1_2_1
 from harvester.metadata.oai_dc import OAI_DC
 from harvester.oaipmh.client import Client
 from harvester.oaipmh.error import NoSetHierarchyError, NoRecordsMatchError
@@ -49,7 +50,8 @@ STATUSES = (
 
 
 METADATA_FORMATS = {
-    "oai_dc": OAI_DC()
+    "oai_dc": OAI_DC(),
+    "ims1_2_1": IMS1_2_1(),
 }
 
 
@@ -165,31 +167,35 @@ class MetadataPrefix(models.Model):
 def run_job(job):
     job.status = RUNNING
     job.save()
-    metadata_prefix = job.metadata_prefix.prefix
-    format = METADATA_FORMATS[metadata_prefix]
-    client = job.repository.client
-    client.ignoreBadCharacters(True)
-    client.updateGranularity()
-    
-    kwargs = {}
-    kwargs['metadataPrefix'] = metadata_prefix 
-    if job.from_date:
-        kwargs['from_'] = job.from_date.replace(tzinfo=None) # Remove timezone information
-    if job.until_date:
-        kwargs['until'] = job.until_date.replace(tzinfo=None) # Remove timezone information
-
-    if job.set:
-        kwargs["set"] = job.set.spec
-
-    f = NamedTemporaryFile()
-    writer = csv.writer(f, quoting=csv.QUOTE_NONNUMERIC)
-
-    writer.writerow(format.header)
 
     job.harvested_records = 0
     job.processed_records = 0
-    
+
+    f = NamedTemporaryFile()
+        
     try:
+
+        metadata_prefix = job.metadata_prefix.prefix
+        format = METADATA_FORMATS[metadata_prefix]
+        client = job.repository.client
+        client.ignoreBadCharacters(True)
+        client.updateGranularity()
+        
+        kwargs = {}
+        kwargs['metadataPrefix'] = metadata_prefix
+        _time = datetime.time(0, 0, 0, tzinfo=None) 
+        if job.from_date:
+            kwargs['from_'] = datetime.datetime.combine(job.from_date, _time)
+        if job.until_date:
+            kwargs['until'] = datetime.datetime.combine(job.until_date, _time)
+    
+        if job.set:
+            kwargs["set"] = job.set.spec
+    
+        writer = csv.writer(f, quoting=csv.QUOTE_NONNUMERIC)
+    
+        writer.writerow(format.header)
+    
         for header, metadata, about in client.listRecords(**kwargs):
             if header.isDeleted():
                 continue
