@@ -39,7 +39,7 @@ class RegistrationForm(forms.Form):
                                                          "class": "text",
                                                      "autocomplete": "off"}))
 
-    email = forms.EmailField(label=u"Email:",
+    email = forms.EmailField(label=u"Email:", max_length=75,
                              help_text=u"Enter your email address. This is "
                              "used to confirm your registration, so please "
                              "use a valid email address. We respect your "
@@ -48,7 +48,7 @@ class RegistrationForm(forms.Form):
                              widget=forms.TextInput(attrs={"size": 40,
                                                            "class": "text"}))
 
-    confirm_email = forms.EmailField(label=u"Confirm email",
+    confirm_email = forms.EmailField(label=u"Confirm email", max_length=75,
                              help_text=u"Re-enter your email address.",
                              widget=forms.TextInput(attrs={"size": 40,
                                                            "class": "text"}))
