@@ -351,6 +351,8 @@ def index(request, general_subjects=None, grade_levels=None,
 
     if keywords:
         slugified_keywords = slugify(keywords)
+        if not slugified_keywords:
+            raise Http404()
         if slugified_keywords != keywords:
             # Keywords should be slugified.
             # Redirect to keyword index with slugified keyword.
