@@ -1,4 +1,4 @@
 {% load oai_tags %}<ListIdentifiers>
 {% for header in headers %}{{ header }}{% endfor %}
-{% if resumption_token %}<resumptionToken{% if total_items %} completeListSize="{{ total_items }}"{% endif %}>{{ resumption_token|urlencode }}</resumptionToken>{% endif %}
+{% if resumption_token %}<resumptionToken{% if total_items %} completeListSize="{{ total_items }}"{% endif %}>{{ resumption_token }}</resumptionToken>{% endif %}
 </ListIdentifiers>

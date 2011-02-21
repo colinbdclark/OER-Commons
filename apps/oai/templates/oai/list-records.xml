@@ -1,4 +1,4 @@
 {% load oai_tags %}<ListRecords>
 {% for record in records %}{{ record }}
-{% endfor %}{% if resumption_token %}<resumptionToken{% if total_items %} completeListSize="{{ total_items }}"{% endif %}>{{ resumption_token|urlencode }}</resumptionToken>{% endif %}
+{% endfor %}{% if resumption_token %}<resumptionToken{% if total_items %} completeListSize="{{ total_items }}"{% endif %}>{{ resumption_token }}</resumptionToken>{% endif %}
 </ListRecords>
