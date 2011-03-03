@@ -1,0 +1,38 @@
+<fieldset class="module aligned license">
+  <h2>License</h2>
+  {% with form.license_name as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}{% if field.field.required %} required{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+  {% with form.license_url as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}{% if field.field.required %} required{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+  {% with form.license_description as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}{% if field.field.required %} required{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+  {% with form.copyright_holder as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}{% if field.field.required %} required{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+  {% with form.cou_bucket as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}{% if field.field.required %} required{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+</fieldset>

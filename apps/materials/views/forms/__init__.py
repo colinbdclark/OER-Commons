@@ -105,7 +105,22 @@ class LicenseTypeFieldRenderer(RadioFieldRenderer):
                 % force_unicode(w) for w in self]))
 
 
-class SubmissionFormBase:
+class RSSFields:
+
+    def clean_rss_description(self):
+        value = self.cleaned_data["rss_description"]
+        if self.cleaned_data.get("in_rss") and not value:
+            raise forms.ValidationError(u"This field is required.")
+        return value
+
+    def clean_rss_timestamp(self):
+        value = self.cleaned_data["rss_timestamp"]
+        if self.cleaned_data.get("in_rss") and not value:
+            raise forms.ValidationError(u"This field is required.")
+        return value
+
+
+class SubmissionFormBase(RSSFields):
 
     def _post_clean(self):
         pass
@@ -223,16 +238,3 @@ class SubmissionFormBase:
         self.fields["copyright_holder"].initial = license.copyright_holder
         if "cou_bucket" in self.fields:
             self.fields["cou_bucket"].initial = license.bucket
-
-    def clean_rss_description(self):
-        value = self.cleaned_data["rss_description"]
-        if self.cleaned_data.get("in_rss") and not value:
-            raise forms.ValidationError(u"This field is required.")
-        return value
-
-    def clean_rss_timestamp(self):
-        value = self.cleaned_data["rss_timestamp"]
-        if self.cleaned_data.get("in_rss") and not value:
-            raise forms.ValidationError(u"This field is required.")
-        return value
-

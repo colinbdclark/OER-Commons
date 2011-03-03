@@ -1,0 +1,31 @@
+<fieldset class="module aligned derived collapse">
+  <h2>Derived from</h2>
+  {% with form.derived as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+  {% with form.derived_title as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+  {% with form.derived_url as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+  {% with form.derived_description as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+</fieldset>

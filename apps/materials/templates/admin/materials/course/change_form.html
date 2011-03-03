@@ -1,0 +1,76 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+{% block extrahead %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/materials-admin.css" media="all" />
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/base/jquery-ui.css" media="all" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+      $("#id_content_creation_date").datepicker();
+      $("#id_rss_timestamp_0").datepicker();
+      $("#id_institution").autocomplete({
+          minLength: 2,
+          source: "{% url materials:autocomplete "materials" "institution" "name" %}"
+      });
+      $("#id_collection").autocomplete({
+          minLength: 2,
+          source: "{% url materials:autocomplete "materials" "collection" "name" %}"
+      });
+      $("fieldset.authors input[name$='name']").autocomplete({
+          minLength: 2,
+          source: "{% url materials:autocomplete "materials" "author" "name" %}"
+      });
+      $("fieldset.authors input[name$='email']").autocomplete({
+          minLength: 2,
+          source: "{% url materials:autocomplete "materials" "author" "email" %}"
+      });
+      $("#id_license_name").autocomplete({
+          minLength: 2,
+          source: "{% url materials:autocomplete "materials" "license" "name" %}"
+      });
+      $("#id_license_url").autocomplete({
+          minLength: 2,
+          source: "{% url materials:autocomplete "materials" "license" "url" %}"
+      });
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  {% block object-tools %}
+  {% if change %}{% if not is_popup %}
+    <ul class="object-tools">
+    {% if original %}
+    <li><a href="{% url admin:auth_user_change original.creator.id %}">Added by {{ original.creator }}</a></li>
+    {% endif %}
+    <li><a href="history/" class="historylink">{% trans "History" %}</a></li>
+    {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif%}
+    </ul>
+  {% endif %}{% endif %}
+  {% endblock %}
+  <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form">{% csrf_token %}{% block form_top %}{% endblock %}
+  {% for field in form.hidden_fields %}{{ field }}{% endfor %}
+  <div>
+  <fieldset class="module aligned">
+  {% for field in form.visible_fields %}
+    {% if field.name in main_fields %}
+      {% include "admin/materials/include/form-field.html" %}
+    {% endif %}
+  {% endfor %}
+  </fieldset>
+  {% include "admin/materials/include/license-fieldset.html" %}
+  {% include "admin/materials/include/authors-formset.html" %}
+  {% include "admin/materials/include/prepost-requisites-fieldset.html" %}
+  {% include "admin/materials/include/derived-fieldset.html" %}
+  {% include "admin/materials/include/rss-fieldset.html" %}
+</div>
+
+<div class="submit-row">
+<input type="submit" value="{% trans 'Cancel' %}" name="cancel" />
+<input type="submit" value="{% trans 'Save' %}" class="default" name="save" />
+</div>
+ 
+</form></div>
+{% endblock %}

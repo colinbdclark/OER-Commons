@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
+from materials.admin.course import CourseAdmin
+from materials.admin.material import MaterialAdmin
 from materials.models import Course, Library, CommunityItem
 from materials.models.common import Country, GeneralSubject, GradeLevel, \
     Language, MediaFormat, GeographicRelevance, Keyword, Author
@@ -25,23 +27,7 @@ site.register(GeographicRelevance, ModelAdmin)
 site.register(Keyword, ModelAdmin)
 site.register(Author, ModelAdmin)
 
-
-def publish(modeladmin, request, queryset):
-    for obj in queryset:
-        obj.workflow_state = PUBLISHED_STATE
-        obj.save()
-publish.short_description = u"Publish selected items"
-
-
-class MaterialAdmin(ModelAdmin):
-
-    list_display = ["title", "workflow_state", "creator"]
-    list_filter = ['workflow_state', ]
-
-    actions = [publish]
-
-
-site.register(Course, MaterialAdmin)
+site.register(Course, CourseAdmin)
 site.register(Library, MaterialAdmin)
 site.register(CommunityItem, MaterialAdmin)
 

@@ -1,0 +1,24 @@
+<fieldset class="module aligned in_rss collapse">
+  <h2>Include in RSS</h2>
+  {% with form.in_rss as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+  {% with form.rss_timestamp as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+  {% with form.rss_description as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}">
+    {{ field.errors }}
+    {{ field.label_tag }}
+    {{ field }}
+  </div>
+  {% endwith %}
+</fieldset>

@@ -1,0 +1,24 @@
+<fieldset class="module aligned authors tabular collapse">
+  <h2>Authors</h2>
+  {{ authors_formset.management_form }}
+  {% for form in authors_formset.forms %}
+    <div class="form-row">
+    {% for field in form.hidden_fields %}{{ field }}{% endfor %}
+    <table>
+      <tbody>
+        <tr>
+          {% for field in form.visible_fields %}
+            <td class="label{% if field.field.required %} required{% endif %}">
+              {{ field.label_tag }}
+            </td>
+            <td{% if field.errors %} class="errors"{% endif %}>
+              {{ field.errors }}
+              {{ field }}
+            </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  {% endfor %}
+</fieldset>

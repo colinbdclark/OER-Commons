@@ -1,0 +1,108 @@
+<fieldset class="module aligned tabular pre-requisites collapse">
+  <h2>Pre-requisites</h2>
+  {% with form.has_prerequisites as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}">
+    {{ field.errors }}
+    <table><tbody>
+      <tr>
+        <td>{{ field }}</td>
+        <td>{{ field.label_tag }}</td>
+      </tr>
+    </tbody></table>
+  </div>
+  {% endwith %}
+  <div class="form-row">
+    <table><tbody>
+      <tr>
+        {% with form.prerequisite_1_title as field %}
+        <td>{{ field.label_tag }}</td>
+        <td{% if field.errors %} class="errors"{% endif %}>
+          {{ field.errors }}
+          {{ field }}
+        </td>
+        {% endwith %}
+        {% with form.prerequisite_1_url as field %}
+        <td>{{ field.label_tag }}</td>
+        <td{% if field.errors %} class="errors"{% endif %}>
+          {{ field.errors }}
+          {{ field }}
+        </td>
+        {% endwith %}
+      </tr>
+    </tbody></table>
+  </div>
+  <div class="form-row">
+    <table><tbody>
+      <tr>
+        {% with form.prerequisite_2_title as field %}
+        <td>{{ field.label_tag }}</td>
+        <td{% if field.errors %} class="errors"{% endif %}>
+          {{ field.errors }}
+          {{ field }}
+        </td>
+        {% endwith %}
+        {% with form.prerequisite_2_url as field %}
+        <td>{{ field.label_tag }}</td>
+        <td{% if field.errors %} class="errors"{% endif %}>
+          {{ field.errors }}
+          {{ field }}
+        </td>
+        {% endwith %}
+      </tr>
+    </tbody></table>
+  </div>
+</fieldset>
+<fieldset class="module aligned tabular post-requisites collapse">
+  <h2>Post-requisites</h2>
+  {% with form.has_postrequisites as field %}
+  <div class="form-row{% if field.errors %} errors{% endif %}">
+    {{ field.errors }}
+    <table><tbody>
+      <tr>
+        <td>{{ field }}</td>
+        <td>{{ field.label_tag }}</td>
+      </tr>
+    </tbody></table>
+  </div>
+  {% endwith %}
+  <div class="form-row">
+    <table><tbody>
+      <tr>
+        {% with form.postrequisite_1_title as field %}
+        <td>{{ field.label_tag }}</td>
+        <td{% if field.errors %} class="errors"{% endif %}>
+          {{ field.errors }}
+          {{ field }}
+        </td>
+        {% endwith %}
+        {% with form.postrequisite_1_url as field %}
+        <td>{{ field.label_tag }}</td>
+        <td{% if field.errors %} class="errors"{% endif %}>
+          {{ field.errors }}
+          {{ field }}
+        </td>
+        {% endwith %}
+      </tr>
+    </tbody></table>
+  </div>
+  <div class="form-row">
+    <table><tbody>
+      <tr>
+        {% with form.postrequisite_2_title as field %}
+        <td>{{ field.label_tag }}</td>
+        <td{% if field.errors %} class="errors"{% endif %}>
+          {{ field.errors }}
+          {{ field }}
+        </td>
+        {% endwith %}
+        {% with form.postrequisite_2_url as field %}
+        <td>{{ field.label_tag }}</td>
+        <td{% if field.errors %} class="errors"{% endif %}>
+          {{ field.errors }}
+          {{ field }}
+        </td>
+        {% endwith %}
+      </tr>
+    </tbody></table>
+  </div>
+</fieldset>
