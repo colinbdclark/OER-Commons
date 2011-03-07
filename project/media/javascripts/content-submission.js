@@ -1,5 +1,53 @@
 oer.content_submission = {};
 
+oer.content_submission.init_autocomplete = function() {
+    $("#id_institution").autocomplete({
+        minLength: 2,
+        source: "/autocomplete/materials/institution/name"
+    });
+    $("#id_collection").autocomplete({
+        minLength: 2,
+        source: "/autocomplete/materials/collection/name"
+    });
+    
+    function split( val ) {
+        return val.split( /,\s*/ );
+    }
+    function extractLast( term ) {
+        return split( term ).pop();
+    }
+    
+    $("#id_authors").autocomplete({
+        source: function( request, response ) {
+            $.getJSON( "/autocomplete/materials/author/name", {
+                term: extractLast( request.term )
+            }, response );
+        },
+        search: function() {
+            // custom minLength
+            var term = extractLast( this.value );
+            if ( term.length < 2 ) {
+                return false;
+            }
+        },
+        focus: function() {
+            // prevent value inserted on focus
+            return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });
+};
+
 oer.content_submission.init_license = function() {
   var $form = $("form.content-submission");
   var $license_type_buttons = $form.find("input[name='license_type']");
@@ -128,21 +176,6 @@ oer.content_submission.init_rss_fields = function() {
   $("input[name='rss_timestamp_0']").date_input();
 };
 
-$.extend(DateInput.DEFAULT_OPTS, {
-    stringToDate: function(string) {
-      var matches;
-      if (matches = string.match(/^(\d{2,2}).(\d{2,2}).(\d{4,4})$/)) {
-        return new Date(matches[3], matches[1] - 1, matches[2]);
-      } else {
-        return null;
-      };
-    },
-    
-    dateToString: function(date) {
-      var month = (date.getMonth() + 1).toString();
-      var dom = date.getDate().toString();
-      if (month.length == 1) month = "0" + month;
-      if (dom.length == 1) dom = "0" + dom;
-      return month + "." + dom + "." + date.getFullYear();
-    }
+$.datepicker.setDefaults({ 
+    dateFormat: "mm.dd.yy"
 });

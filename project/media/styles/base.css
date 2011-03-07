@@ -49,8 +49,9 @@ hr.tall {
 }
 
 .dotted {
-  background:url(../images/dotted-line-hor.gif) repeat-x scroll 0 100% transparent;
-  padding-bottom:4px;
+  background: url(../images/dotted-line-hor.gif) repeat-x scroll 0 100%
+    transparent;
+  padding-bottom: 4px;
 }
 
 .breadcrumbs {
@@ -209,4 +210,10 @@ div.box h3 {
 .accordion .accordion-body {
   display: none;
   padding-bottom: 5px;
+}
+
+.ui-autocomplete,.ui-datepicker {
+  -moz-box-shadow: 2px 2px 3px #999;
+  -webkit-box-shadow: 2px 2px 3px #999;
+  box-shadow: 2px 2px 3px #999;
 }
