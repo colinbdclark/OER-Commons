@@ -5,7 +5,7 @@ from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
 from materials.models.common import GeneralSubject, GradeLevel, MediaFormat, \
-    Language, GeographicRelevance, COU_BUCKETS, Collection
+    Language, GeographicRelevance, COU_BUCKETS
 from materials.models.library import LibraryMaterialType, Library
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
 from materials.views.forms import AuthorsField, KeywordsField, LICENSE_TYPES, \
@@ -32,6 +32,11 @@ class AddForm(SubmissionFormBase, ModelForm):
                                   required=False,
                                   widget=forms.TextInput(
                                   attrs={"class": "text wide"}))
+
+    collection = CollectionField(label=u"Collection:",
+                                 required=False,
+                                 widget=forms.TextInput(
+                                 attrs={"class": "text wide"}))
 
     authors = AuthorsField(label=u"Authors:", required=False,
                            widget=forms.TextInput(
@@ -103,11 +108,12 @@ class AddForm(SubmissionFormBase, ModelForm):
     def __init__(self, *args, **kwargs):
         super(AddForm, self).__init__(*args, **kwargs)
         self.set_initial_license_data()
+        self.fields["collection"].initial = u"Individual Authors"
 
     class Meta:
         model = Library
-        fields = ["title", "url", "abstract", "institution", "authors",
-                  "tech_requirements", "keywords", "general_subjects",
+        fields = ["title", "url", "abstract", "institution", "collection",
+                  "authors", "tech_requirements", "keywords", "general_subjects",
                   "grade_levels", "material_types", "media_formats",
                   "license_type", "license_cc", "license_cc_old",
                   "license_custom_name", "license_custom_url", "license_description",
@@ -115,10 +121,6 @@ class AddForm(SubmissionFormBase, ModelForm):
 
 
 class AddFormStaff(AddForm):
-
-    collection = CollectionField(label=u"Collection:",
-                                 widget=forms.TextInput(
-                                 attrs={"class": "text wide"}))
 
     content_creation_date = forms.DateField(label=u"Content Creation Date:",
                                   input_formats=["%m/%d/%Y"],
@@ -210,8 +212,6 @@ def add(request, model=None):
 
         if form.is_valid():
             object = form.save(commit=False)
-            if isinstance(form, AddForm):
-                object.collection = Collection.objects.get_or_create(name=u"Individual Authors")[0]
             object.creator = request.user
             if request.user.is_staff:
                 object.workflow_state = PUBLISHED_STATE
