@@ -173,7 +173,7 @@ oer.content_submission.init_rss_fields = function() {
       }
     }
   );
-  $("input[name='rss_timestamp_0']").date_input();
+  $("input[name='rss_timestamp_0']").datepicker();
 };
 
 $.datepicker.setDefaults({ 
