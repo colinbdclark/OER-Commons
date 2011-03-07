@@ -1,0 +1,8 @@
+{% extends "base.html" %} 
+
+{% block bodyclass %}stats graph{% endblock %}
+
+{% block content %}
+<p><img src="{{ graph_url }}" alt="{{ page_title }}" /></p>
+<p><a href="{% url stats %}">Back to all statistics</a></p>
+{% endblock %}

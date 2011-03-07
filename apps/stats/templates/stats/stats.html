@@ -1,0 +1,31 @@
+{% extends "base.html" %} 
+
+{% block bodyclass %}stats{% endblock %}
+
+{% block content %}
+  <strong>Period:</strong>
+  {% spaceless %}
+  <ul class="periods">
+    {% for period in periods %}
+      <li{% if forloop.last %} class="last"{% endif %}>
+        {% if selected_period == forloop.counter %}
+          <strong>{{ period }}</strong>
+        {% else %}
+          <a href="{% url stats period=forloop.counter %}">{{ period }}</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  {% endspaceless %}
+  <table>
+    <tbody>
+      {% for stat in stats %}
+        <tr{% if forloop.counter0|divisibleby:2%} class="even"{% endif %}>
+          <td>{{ stat.title }}</td>
+          <td><strong>{{ stat.value }}</strong></td>
+          <td><a href="{% url stats_graph graph=forloop.counter %}"><img src="{{ STATIC_URL }}images/icon-graph.png" alt="View graph" /></a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

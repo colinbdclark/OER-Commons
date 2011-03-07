@@ -1,0 +1,39 @@
+.stats {
+  font-size: 13px;
+}
+
+.stats ul.periods {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: inline;
+}
+
+.stats ul.periods a {
+  text-decoration: none;
+}
+
+.stats ul.periods li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 0.5em;
+  display: inline;
+  border-right: 1px solid #ccc;
+}
+
+.stats ul.periods li.last {
+  border: none;
+}
+
+.stats table {
+  margin-top: 1em;
+  width: auto;
+}
+
+.stats table td {
+  padding: 0.5em 0.5em;
+}
+
+.stats table .even td {
+  background-color: #eee;
+}

@@ -93,6 +93,7 @@ INSTALLED_APPS = (
     'sendthis',
     'api',
     'reports',
+    'stats',
     'project',
 )
 

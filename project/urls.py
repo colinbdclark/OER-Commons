@@ -58,6 +58,7 @@ urlpatterns = patterns('',
     url(r'^oauth/', include('oauth_provider.urls')),
     url(r'^api/', include('api.urls')),
     url(r'^sentry/', include('sentry.urls')),
+    url(r'', include('stats.urls')),
     url(r'', include('materials.urls', app_name=None, namespace="materials")),
 )
 
