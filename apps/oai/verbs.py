@@ -118,7 +118,7 @@ class ListIdentifiers(Verb):
 
         if set is not None:
             try:
-                sets = self.repository.list_sets()
+                sets = self.repository.list_sets(self.microsite)
             except NoSetHierarchy:
                 if resumption_token:
                     raise BadArgument(u"Invalid %s" % RESUMPTION_TOKEN)
