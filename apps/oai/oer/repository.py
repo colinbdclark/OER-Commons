@@ -5,6 +5,7 @@ from materials.models.library import Library
 from oai.metadata import Header
 from oai.repository import Repository
 from oai.set import Set
+from haystack.query import SearchQuerySet
 
 
 class OERRepository(Repository):
@@ -28,8 +29,14 @@ class OERRepository(Repository):
         sets = self.get_sets(item)
         return Header(identifier, datestamp, sets)
 
-    def list_sets(self):
+    def list_sets(self, microsite):
         sets = []
-        for slug, name in Collection.objects.values_list("slug", "name"):
+        if microsite:
+            query = SearchQuerySet().narrow("microsites:%s" % microsite.id).facet("collection")
+            collections_facets = query.facet_counts().get("fields", {}).get("collection", [])
+            collections_qs = Collection.objects.filter(id__in=[c[0] for c in collections_facets]).values_list("slug", "name")
+        else:
+            collections_qs = Collection.objects.values_list("slug", "name")
+        for slug, name in collections_qs:
             sets.append(Set("collection:%s" % slug, name))
         return sets

@@ -17,9 +17,10 @@ UNTIL = "until"
 
 class Verb(object):
 
-    def __init__(self, repository, request):
+    def __init__(self, repository, request, microsite=None):
         self.repository = repository
         self.request = request
+        self.microsite = microsite
         self.raw_arguments = {}
         self.parse_arguments()
 
@@ -33,8 +34,16 @@ class Verb(object):
 class Identify(Verb):
 
     def get_response(self):
+        base_url = self.repository.base_url(self.microsite)
+        if not self.microsite:
+            repository_name = self.repository.name
+        else:
+            repository_name = u"%s - %s" % (self.repository.name, self.microsite.name)
         return render_to_string("oai/identify.xml",
-                                dict(repository=self.repository))
+                                dict(repository=self.repository,
+                                     repository_name=repository_name,
+                                     base_url=base_url,
+                                     ))
 
 
 class ListIdentifiers(Verb):
@@ -136,7 +145,11 @@ class ListIdentifiers(Verb):
 
     def get_response(self):
         try:
-            headers, next_page_number, total_items = self.metadata_format.list_identifiers(self.page, self.from_date, self.until_date, self.set)
+            headers, next_page_number, total_items = self.metadata_format.list_identifiers(self.page,
+                                                                                           self.from_date,
+                                                                                           self.until_date,
+                                                                                           self.set,
+                                                                                           self.microsite)
         except EmptyPage:
             raise BadArgument(u"Invalid %s" % RESUMPTION_TOKEN)
         if not headers:
@@ -155,7 +168,11 @@ class ListRecords(ListIdentifiers):
 
     def get_response(self):
         try:
-            records, next_page_number, total_items = self.metadata_format.list_records(self.page, self.from_date, self.until_date, self.set)
+            records, next_page_number, total_items = self.metadata_format.list_records(self.page,
+                                                                                       self.from_date,
+                                                                                       self.until_date,
+                                                                                       self.set,
+                                                                                       self.microsite)
         except EmptyPage:
             raise BadArgument(u"Invalid %s" % RESUMPTION_TOKEN)
         if not records:
@@ -192,7 +209,8 @@ class GetRecord(Verb):
         self.identifier = identifier
 
     def get_response(self):
-        record = self.metadata_format.get_record(self.identifier)
+        record = self.metadata_format.get_record(self.identifier,
+                                                 self.microsite)
         return render_to_string("oai/get-record.xml",
                                   dict(record=record))
 
@@ -226,5 +244,5 @@ class ListMetadataFormats(Verb):
 class ListSets(Verb):
 
     def get_response(self):
-        sets = self.repository.list_sets()
+        sets = self.repository.list_sets(self.microsite)
         return render_to_string("oai/list-sets.xml", dict(sets=sets))

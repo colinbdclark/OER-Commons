@@ -56,9 +56,10 @@ class MetadataFormat(object):
     def supported_by(self, item):
         raise NotImplementedError()
 
-    def list_identifiers(self, page_number=1, from_date=None, until_date=None, set=None):
+    def list_identifiers(self, page_number=1, from_date=None, until_date=None,
+                         set=None, microsite=None):
         headers = []
-        items = Paginator(self.get_items(from_date, until_date, set), self.BATCH_SIZE).page(page_number)
+        items = Paginator(self.get_items(from_date, until_date, set, microsite), self.BATCH_SIZE).page(page_number)
         for item in items.object_list:
             header = self.repository.build_header(item)
             headers.append(header)
@@ -67,9 +68,10 @@ class MetadataFormat(object):
             next_page_number = items.next_page_number()
         return headers, next_page_number, items.paginator.count
 
-    def list_records(self, page_number=1, from_date=None, until_date=None, set=None):
+    def list_records(self, page_number=1, from_date=None, until_date=None,
+                     set=None, microsite=None):
         records = []
-        items = Paginator(self.get_items(from_date, until_date, set), self.BATCH_SIZE).page(page_number)
+        items = Paginator(self.get_items(from_date, until_date, set, microsite), self.BATCH_SIZE).page(page_number)
         site = Site.objects.get_current()
         for item in items.object_list:
             header = self.repository.build_header(item)
@@ -80,8 +82,8 @@ class MetadataFormat(object):
             next_page_number = items.next_page_number()
         return records, next_page_number, items.paginator.count
 
-    def get_record(self, identifier):
-        item = self.repository.get_item(identifier)
+    def get_record(self, identifier, microsite=None):
+        item = self.repository.get_item(identifier, microsite=None)
         if not self.supported_by(item):
             raise InvalidMetadataPrefix(u"The value of the metadataPrefix argument is not supported by the item identified by the value of the identifier argument.")
         site = Site.objects.get_current()

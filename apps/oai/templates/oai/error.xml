@@ -4,6 +4,6 @@
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
                              http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate>{{ now|oai_date }}</responseDate>
-  <request verb="{{ verb }}">{{ repository.base_url }}</request>
+  <request verb="{{ verb }}">{{ base_url }}</request>
   <error code="{{ code }}">{{ message }}</error>
 </OAI-PMH>

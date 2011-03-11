@@ -20,7 +20,8 @@ class OERMetadataFormat(MetadataFormat):
             return True
         return False
 
-    def get_items(self, from_date=None, until_date=None, set=None):
+    def get_items(self, from_date=None, until_date=None, set=None,
+                  microsite=None):
         query = SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE)
         if from_date:
             query = query.filter(published_on__gte=from_date)
@@ -31,6 +32,9 @@ class OERMetadataFormat(MetadataFormat):
             set_name, slug = set.split(":")
             if set_name == "collection":
                 query = query.narrow("collection:%i" % Collection.objects.get(slug=slug).id)
+
+        if microsite:
+            query = query.narrow("microsites:%i" % microsite.id)
 
         return query.order_by("published_on").load_all()
 

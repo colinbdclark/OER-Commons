@@ -1,6 +1,6 @@
 {% load oai_tags %}<Identify>
-<repositoryName>{{ repository.name }}</repositoryName>
-<baseURL>{{ repository.base_url }}</baseURL>
+<repositoryName>{{ repository_name }}</repositoryName>
+<baseURL>{{ base_url }}</baseURL>
 <protocolVersion>2.0</protocolVersion>
 <adminEmail>{{ repository.admin_email }}</adminEmail>
 <earliestDatestamp>{{ repository.earliest_timestamp|oai_date }}</earliestDatestamp>

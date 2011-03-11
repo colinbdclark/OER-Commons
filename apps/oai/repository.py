@@ -27,10 +27,12 @@ class Repository(object):
         self.metadata_formats = dict((key, format(self)) for key, format in metadata_formats.items())
         self.admin_email = admin_email
 
-    @property
-    def base_url(self):
+    def base_url(self, microsite=None):
+        kwargs = {}
+        if microsite:
+            kwargs["microsite"] = microsite.slug
         return "http://%s%s" % (Site.objects.get_current().domain,
-                                reverse("oai"))
+                                reverse("oai", kwargs=kwargs))
 
     @property
     def earliest_timestamp(self):
@@ -51,7 +53,7 @@ class Repository(object):
             return None
         return header.identifier
 
-    def list_sets(self):
+    def list_sets(self, microsite):
         raise NoSetHierarchy(u"Sets are not supported by this repository")
 
     def get_item(self, identifier):
@@ -84,22 +86,24 @@ class Repository(object):
         sets = self.get_sets(item)
         return Header(identifier, datestamp, sets)
 
-    def process(self, request):
+    def process(self, request, microsite=None):
         verb = request.REQUEST.get("verb", None)
         handler = self.verbs.get(verb, None)
+        base_url = self.base_url(microsite)
         if handler is None:
             raise Http404()
         now = datetime.datetime.now()
         try:
-            handler = handler(self, request)
+            handler = handler(self, request, microsite=microsite)
             response = handler.get_response()
         except OAIError as err:
             return direct_to_template(request, "oai/error.xml",
                                   dict(verb=verb, now=now, repository=self,
-                                       code=err.code, message=err[0]),
+                                       base_url=base_url, code=err.code,
+                                       message=err[0]),
                                   mimetype="text/xml")
         return direct_to_template(request, "oai/response.xml",
                                   dict(verb=verb, now=now, repository=self,
-                                       response=response,
+                                       base_url=base_url, response=response,
                                        arguments=handler.raw_arguments),
                                   mimetype="text/xml")
