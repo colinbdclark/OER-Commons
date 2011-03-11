@@ -45,21 +45,6 @@ def process_slugs(value):
     return "|".join(value.values_list("slug", flat=True))
 
 
-class process_related_material:
-
-    def __init__(self, relationship_type, index, attr):
-        self.relationship_type = relationship_type
-        self.index = index
-        self.attr = attr
-
-    def __call__(self, value):
-        value = value.filter(relationship_type=self.relationship_type)
-        value = list(value)
-        if len(value) > self.index:
-            return getattr(value[self.index], self.attr)
-        return ""
-
-
 class process_field_attr():
 
     def __init__(self, attr):
@@ -95,23 +80,23 @@ COURSE_FIELDS = (
     ('CR_KEYWORDS', "keywords", process_vocabulary),
     ('CR_LANGUAGE', "languages", process_slugs),
     ('CR_IRR', "geographic_relevance", process_vocabulary),
-    ('CR_PREREQ_TITLE1', "prerequisite_1", lambda x: x.title),
-    ('CR_PREREQ_URL1', "prerequisite_1", lambda x: x.url),
-    ('CR_PREREQ_TITLE2', "prerequisite_2", lambda x: x.title),
-    ('CR_PREREQ_URL2', "prerequisite_2", lambda x: x.url),
-    ('CR_POSTREQ_TITLE1', "postrequisite_1", lambda x: x.title),
-    ('CR_POSTREQ_URL1', "postrequisite_1", lambda x: x.url),
-    ('CR_POSTREQ_TITLE2', "postrequisite_2", lambda x: x.title),
-    ('CR_POSTREQ_URL2', "postrequisite_2", lambda x: x.url),
+    ('CR_PREREQ_TITLE1', "prerequisite_1", process_field_attr("title")),
+    ('CR_PREREQ_URL1', "prerequisite_1", process_field_attr("url")),
+    ('CR_PREREQ_TITLE2', "prerequisite_2", process_field_attr("title")),
+    ('CR_PREREQ_URL2', "prerequisite_2", process_field_attr("url")),
+    ('CR_POSTREQ_TITLE1', "postrequisite_1", process_field_attr("title")),
+    ('CR_POSTREQ_URL1', "postrequisite_1", process_field_attr("url")),
+    ('CR_POSTREQ_TITLE2', "postrequisite_2", process_field_attr("title")),
+    ('CR_POSTREQ_URL2', "postrequisite_2", process_field_attr("url")),
     ('CR_COU_URL', "license", process_field_attr("url")),
     ('CR_COU_TITLE', "license", process_field_attr("name")),
     ('CR_COU_DESCRIPTION', "license", process_field_attr("description")),
     ('CR_COU_COPYRIGHT_HOLDER', "license", process_field_attr("copyright_holder")),
     ('CR_COU_BUCKET', "license", process_field_attr("bucket")),
-    ('CR_PARENT_MODIFIED', "related_materials", lambda x: process_related_material("derived", 0, "title")(x) and "Yes" or "No"),
-    ('CR_PARENT_TITLE', "derived_from", lambda x: x.title),
-    ('CR_PARENT_URL', "derived_from", lambda x: x.url),
-    ('CR_PARENT_CHANGES', "derived_from", lambda x: x.description),
+    ('CR_PARENT_MODIFIED', "derived_from", lambda x: x and u"Yes" or u"No"),
+    ('CR_PARENT_TITLE', "derived_from", process_field_attr("title")),
+    ('CR_PARENT_URL', "derived_from", process_field_attr("url")),
+    ('CR_PARENT_CHANGES', "derived_from", process_field_attr("description")),
     ('CR_CURRIC_STANDARDS', "curriculum_standards", None),
 )
 
