@@ -25,3 +25,6 @@ project/media/debug_toolbar/
 project/media/django_extensions/
 project/media/upload/
 project/media/reports/
+project/production.py
+project/development.py
+project/staging.py
