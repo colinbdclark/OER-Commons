@@ -8,7 +8,7 @@
   border: none;
 }
 
-.materials-index h3,.view-item h3 {
+.materials-index h3,.view-item h3,.view-item h3 a {
   font-size: 14px;
   font-style: normal;
   font-weight: bold;
