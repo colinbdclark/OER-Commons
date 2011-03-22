@@ -479,6 +479,11 @@ def index(request, general_subjects=None, grade_levels=None,
         for facet_field in facet_fields:
             query = query.facet(facet_field)
 
+        total_items = len(query)
+        
+        if index_params.batch_start >= total_items:
+            return HttpResponsePermanentRedirect(index_url)
+
         results = query[index_params.batch_start:batch_end]
         for result in results:
             items.append(populate_item_from_search_result(result))
@@ -486,7 +491,7 @@ def index(request, general_subjects=None, grade_levels=None,
         pagination = Pagination(request.path, query_string_params,
                                 index_params.batch_start,
                                 index_params.batch_size,
-                                len(query))
+                                total_items)
 
         facets = query.facet_counts().get("fields", {})
 
