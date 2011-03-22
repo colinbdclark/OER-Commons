@@ -4002,6 +4002,14 @@
     }
   }, 
   {
+    "pk": 8, 
+    "model": "materials.mediaformat", 
+    "fields": {
+      "name": "Interactive", 
+      "slug": "interactive"
+    }
+  }, 
+  {
     "pk": 1, 
     "model": "materials.geographicrelevance", 
     "fields": {
