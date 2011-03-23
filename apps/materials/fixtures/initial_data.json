@@ -3030,7 +3030,8 @@
     "model": "materials.language", 
     "fields": {
       "name": "English", 
-      "slug": "en"
+      "slug": "en",
+      "order": 1
     }
   }, 
   {

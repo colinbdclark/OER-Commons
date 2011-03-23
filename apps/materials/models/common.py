@@ -326,7 +326,8 @@ class Language(models.Model):
     slug = models.SlugField(max_length=3, unique=True,
                             verbose_name=_(u"Slug"),
                             db_index=True)
-
+    order = models.IntegerField(default=999, verbose_name=_(u"Order"))
+    
     def __unicode__(self):
         return self.name
 
@@ -334,7 +335,7 @@ class Language(models.Model):
         app_label = "materials"
         verbose_name = _(u"Language")
         verbose_name_plural = _(u"Languages")
-        ordering = ("name",)
+        ordering = ("order", "name",)
 
 
 class Collection(models.Model):

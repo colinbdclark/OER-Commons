@@ -10,7 +10,7 @@ from materials.models.community import CommunityItem, CommunityType, \
     CommunityTopic
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
 from materials.views.forms import AuthorsField, KeywordsField, LICENSE_TYPES, \
-    CC_OLD_LICENSES, LicenseTypeFieldRenderer, SubmissionFormBase
+    CC_OLD_LICENSES, LicenseTypeFieldRenderer, SubmissionFormBase, LanguagesField
 from utils.decorators import login_required
 
 
@@ -67,15 +67,16 @@ class AddForm(SubmissionFormBase, ModelForm):
                                 required=False,
                                 widget=forms.CheckboxSelectMultiple())
 
-    languages = forms.ModelMultipleChoiceField(Language.objects.all(),
+    languages = LanguagesField(Language.objects.all(),
                                 label=u"Language",
-                                required=False,
-                                widget=forms.SelectMultiple())
+                                required=True,
+                                initial=Language.objects.get(name=u"English"))
 
     geographic_relevance = forms.ModelMultipleChoiceField(GeographicRelevance.objects.all(),
                                 label=u"Intended Regional Relevance",
-                                required=False,
-                                widget=forms.CheckboxSelectMultiple())
+                                required=True,
+                                widget=forms.CheckboxSelectMultiple(),
+                                initial=[GeographicRelevance.objects.get(name=u"All")])
 
     license_type = forms.ChoiceField(choices=LICENSE_TYPES, initial="cc",
                                      widget=forms.RadioSelect(renderer=LicenseTypeFieldRenderer))

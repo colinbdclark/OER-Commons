@@ -9,7 +9,7 @@ from materials.models.common import GeneralSubject, GradeLevel, MediaFormat, \
 from materials.models.course import Course, CourseMaterialType, COURSE_OR_MODULE
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
 from materials.views.forms import AuthorsField, KeywordsField, LICENSE_TYPES, \
-    CC_OLD_LICENSES, LicenseTypeFieldRenderer, SubmissionFormBase
+    CC_OLD_LICENSES, LicenseTypeFieldRenderer, SubmissionFormBase, LanguagesField
 from materials.views.forms.course import InstitutionField, DerivedFields, \
     PrePostRequisitesFields, CollectionField
 from utils.decorators import login_required
@@ -130,15 +130,16 @@ class AddFormStaff(DerivedFields, PrePostRequisitesFields, AddForm):
                                   attrs={"class": "text"},
                                   format="%m/%d/%Y"))
 
-    languages = forms.ModelMultipleChoiceField(Language.objects.all(),
+    languages = LanguagesField(Language.objects.all(),
                                 label=u"Language",
-                                required=False,
-                                widget=forms.SelectMultiple())
+                                required=True,
+                                initial=Language.objects.get(name=u"English"))
 
     geographic_relevance = forms.ModelMultipleChoiceField(GeographicRelevance.objects.all(),
                                 label=u"Intended Regional Relevance",
-                                required=False,
-                                widget=forms.CheckboxSelectMultiple())
+                                required=True,
+                                widget=forms.CheckboxSelectMultiple(),
+                                initial=[GeographicRelevance.objects.get(name=u"All")])
 
     course_or_module = forms.ChoiceField(choices=[(u"", u"-- select one --")] + list(COURSE_OR_MODULE),
                                          required=False,

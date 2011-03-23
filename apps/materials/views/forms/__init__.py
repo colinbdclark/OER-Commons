@@ -98,6 +98,24 @@ class KeywordsField(forms.Field):
         return [{"name": v} for v in values]
 
 
+class LanguagesField(forms.ModelMultipleChoiceField):
+
+    widget = forms.Select
+    
+    def clean(self, value):
+        if value and not isinstance(value, (list, tuple)):
+            value = [value]
+        return super(LanguagesField, self).clean(value)
+    
+    def prepare_value(self, value):
+        if hasattr(value, '__iter__'):
+            if len(value):
+                value = value[0]
+            else:
+                value = None
+        return super(forms.ModelMultipleChoiceField, self).prepare_value(value)
+
+
 class LicenseTypeFieldRenderer(RadioFieldRenderer):
 
     def render(self):
