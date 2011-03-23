@@ -83,6 +83,7 @@
   padding-top: 4px;
   width: 50px;
   margin: 3px 0;
+  cursor: pointer;
 }
 
 .cou-bucket.no-strings-attached {

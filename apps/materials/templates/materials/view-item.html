@@ -13,6 +13,7 @@
       {% if content_actions or workflow_actions %}
         oer.materials.view_item.init_content_actions();
       {% endif %}
+      $("#content div.cou-bucket").cluetip({local:true, arrows: true, width: 300});
     });
   </script>
 {% endblock %}
@@ -244,6 +245,8 @@
   </div>
   
 </div>
+
+{% include "include/cou-tooltips.html" %}
 
 {% with item.get_absolute_url as path %}
   {% send_this_form path %}
