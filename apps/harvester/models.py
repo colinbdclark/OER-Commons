@@ -3,7 +3,7 @@ from celery.decorators import task
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.files.base import File
-from django.core.mail import send_mail
+from django.core.mail.message import EmailMessage
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.dateformat import format
@@ -282,8 +282,9 @@ class Job(models.Model):
         base_url = "http://%s" % Site.objects.get_current().domain
         text = render_to_string("harvester/notification.html",
                                 dict(base_url=base_url, job=self))
-        send_mail(u"Harvesting job is complete",
-                  text, settings.DEFAULT_FROM_EMAIL, [self.email])
+        message = EmailMessage(u"Harvesting job is complete", text, settings.DEFAULT_FROM_EMAIL, [self.email])
+        message.content_subtype = "html"
+        message.send()
     
     class Meta:
         verbose_name = u"Job"
