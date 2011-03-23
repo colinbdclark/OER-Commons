@@ -150,10 +150,7 @@ CACHE_MIDDLEWARE_SECONDS = 60
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 
-BROKER_HOST = "iMac.local"
+BROKER_HOST = "localhost"
 BROKER_PORT = 5672
-BROKER_USER = "django"
-BROKER_PASSWORD = "django"
-BROKER_VHOST = "oercommons"
 
 djcelery.setup_loader()
