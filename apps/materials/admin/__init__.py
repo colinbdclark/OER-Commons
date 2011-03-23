@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
+from materials.admin.community_item import CommunityItemAdmin
 from materials.admin.course import CourseAdmin
+from materials.admin.library import LibraryAdmin
 from materials.admin.material import MaterialAdmin
 from materials.models import Course, Library, CommunityItem
 from materials.models.common import Country, GeneralSubject, GradeLevel, \
@@ -28,8 +30,8 @@ site.register(Keyword, ModelAdmin)
 site.register(Author, ModelAdmin)
 
 site.register(Course, CourseAdmin)
-site.register(Library, MaterialAdmin)
-site.register(CommunityItem, MaterialAdmin)
+site.register(Library, LibraryAdmin)
+site.register(CommunityItem, CommunityItemAdmin)
 
 
 class AdminKeywordsWidget(forms.Textarea):
