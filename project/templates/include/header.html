@@ -1,25 +1,23 @@
 {% load navigation %}
 <div id="header">
   <div class="fixed-width">
-    
-    <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
-    
+    <a id="logo" title="OER Commons" href="{% if microsite %}{% url materials:microsite microsite=microsite.slug %}{% else %}{% url frontpage %}{% endif %}"></a>
     <ul class="header-links">
       {% if request.user.is_anonymous %}
-        <li>
-          <a href="{% url users:registration %}">Register Now!</a>
-        </li>
-        <li>
-          <a class="with-next-url" href="{% url users:login %}">Log In</a>
-        </li>
+      <li>
+        <a href="{% url users:registration %}">Register Now!</a>
+      </li>
+      <li>
+        <a class="with-next-url" href="{% url users:login %}">Log In</a>
+      </li>
       {% endif %}
       {% if request.user.is_authenticated %}
-        <li>
-          <a href="{% url users:profile %}">My Profile</a>
-        </li>
-        <li>
-          <a href="{% url users:logout %}">Logout</a>
-        </li>
+      <li>
+        <a href="{% url users:profile %}">My Profile</a>
+      </li>
+      <li>
+        <a href="{% url users:logout %}">Logout</a>
+      </li>
       {% endif %}
       <li>
         <a href="{% url feedback %}">Feedback</a>
@@ -32,13 +30,11 @@
            href="{% url contribute %}">Contribute Content</a>
       </li>
     </ul>
-    
   </div>
 </div>
 
 <div class="navigation-ct fixed-width">
   {% navigation %}
-  
   <div id="global-search-box">
     <form action="{% url materials:search %}" method="get">
       <input type="text" name="f.search" value="Enter Search" class="text" />
