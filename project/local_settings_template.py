@@ -20,3 +20,7 @@ MANAGERS = ADMINS
 SECRET_KEY = ''
 
 FLAVOR = "oercommons"
+
+BROKER_USER = ""
+BROKER_PASSWORD = ""
+BROKER_VHOST = "oercommons"
