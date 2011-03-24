@@ -31,7 +31,7 @@
 }
 
 .frontpage-blocks td.first {
-  border-right:1px solid #B1CEDC;
+  border-right: 1px solid #B1CEDC;
 }
 
 #frontpage-promo {
@@ -65,4 +65,20 @@
   color: #FC6;
   font-size: 17px;
   font-style: normal;
+}
+
+.tags a.view-all-tags,
+.tags a.view-all-tags:visited {
+  color: #666;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.frontpage-block.tags h4 {
+  margin-bottom: 5px;
+}
+
+.tags .tag-cloud {
+  padding-bottom: 5px;
+  margin-bottom: 5px;
 }

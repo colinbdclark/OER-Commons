@@ -79,13 +79,14 @@
       {% flatblock "featured-higher-ed-resources" using "flatblocks/frontpage-block.html" %}
     </td>
   </tr></tbody></table>
-  <div class="frontpage-block">
+  <div class="frontpage-block tags">
     <h4 class="dotted">Tags</h4>
-    <div class="tag-cloud">
+    <div class="tag-cloud dotted">
       {% for keyword in tagcloud %}
         <a href="{% url materials:keyword_index keywords=keyword.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
       {% endfor %}
     </div>
+    <a class="view-all-tags" href="{% url materials:tags %}">View All Tags</a>
   </div>
 {% endblock %}
 
