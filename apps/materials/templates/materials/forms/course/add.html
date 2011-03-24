@@ -52,12 +52,18 @@
       {% with form.grade_levels as field %}
         {% include "materials/forms/include/vocabulary-field.html" %}
       {% endwith %}
-      {% with form.media_formats as field %}
+      {% with form.languages as field %}
+        {% include "materials/forms/include/vocabulary-field.html" %}
+      {% endwith %}
+      {% with form.geographic_relevance as field %}
         {% include "materials/forms/include/vocabulary-field.html" %}
       {% endwith %}
     </td>
     <td>
       {% with form.material_types as field %}
+        {% include "materials/forms/include/vocabulary-field.html" %}
+      {% endwith %}
+      {% with form.media_formats as field %}
         {% include "materials/forms/include/vocabulary-field.html" %}
       {% endwith %}
     </td>

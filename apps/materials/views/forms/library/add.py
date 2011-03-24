@@ -58,6 +58,17 @@ class AddForm(SubmissionFormBase, ModelForm):
                                 label=u"Grade Levels",
                                 widget=forms.CheckboxSelectMultiple())
 
+    languages = LanguagesField(Language.objects.all(),
+                                label=u"Language",
+                                required=True,
+                                initial=Language.objects.get(name=u"English"))
+
+    geographic_relevance = forms.ModelMultipleChoiceField(GeographicRelevance.objects.all(),
+                                label=u"Intended Regional Relevance",
+                                required=True,
+                                widget=forms.CheckboxSelectMultiple(),
+                                initial=[GeographicRelevance.objects.get(name=u"All")])
+
     material_types = forms.ModelMultipleChoiceField(LibraryMaterialType.objects.all(),
                                 label=u"Material Types",
                                 widget=forms.CheckboxSelectMultiple())
@@ -115,6 +126,7 @@ class AddForm(SubmissionFormBase, ModelForm):
         fields = ["title", "url", "abstract", "institution", "collection",
                   "authors", "tech_requirements", "keywords", "general_subjects",
                   "grade_levels", "material_types", "media_formats",
+                  "languages", "geographic_relevance",
                   "license_type", "license_cc", "license_cc_old",
                   "license_custom_name", "license_custom_url", "license_description",
                   "copyright_holder", "license"]
