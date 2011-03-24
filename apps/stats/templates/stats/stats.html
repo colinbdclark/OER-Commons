@@ -17,7 +17,9 @@
     {% endfor %}
   </ul>
   {% endspaceless %}
-  <table>
+
+  <h3>Member activities:</h3>
+  <table class="activities">
     <tbody>
       {% for stat in stats %}
         <tr{% if forloop.counter0|divisibleby:2%} class="even"{% endif %}>
@@ -28,4 +30,23 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <h3>Member roles:</h3>
+  <table class="roles">
+    <tbody>
+      {% for role in roles %}
+        <tr{% if forloop.counter0|divisibleby:2%} class="even"{% endif %}>
+          <td>{{ role.name }}</td>
+          <td><strong>{{ role.count }}</strong></td>
+          {% if forloop.first %}
+            <td class="graph" width="50%" rowspan="{{ roles|length }}">
+              <img src="{{ roles_graph_url }}" />
+            </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  
 {% endblock %}

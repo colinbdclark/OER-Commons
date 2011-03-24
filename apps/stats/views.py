@@ -8,6 +8,7 @@ from materials.models.library import Library
 from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
+from users.models import Profile, MEMBER_ROLES
 from utils.decorators import login_required
 import datetime
 import urllib
@@ -85,18 +86,46 @@ def stats(request, period=None):
         
     timedelta = period[1]
     kwargs = dict()
+    from_date = None
     if timedelta:
-        kwargs["from_date"] = datetime.datetime.now() - timedelta
+        from_date = datetime.datetime.now() - timedelta
+        kwargs["from_date"] = from_date
         
     stats = []
     for title, getter in STATS:
         stats.append(dict(title=title, value=getter(**kwargs)))
+
+    profile_qs = Profile.objects.filter(user__is_active=True)
+    if from_date:
+        profile_qs = profile_qs.filter(user__date_joined__gte=from_date)
+    role_counts = dict(profile_qs.values_list("role").annotate(count=models.Count("role")))
+    roles = []
+    for role, role_name in MEMBER_ROLES:
+        roles.append(dict(name=role_name, count=role_counts.get(role, 0)))
+    roles.append(dict(name=u"Not specified", count=role_counts.get("", 0)))
+    
+    params = {}
+    chxl = []
+    for role in roles:
+        chxl.append(unicode(role["name"]))
+            
+    params["chbh"] = "a"
+    params["chs"] = "300x198"
+    params["cht"] = "bhs"
+    params["chco"] = "4D89F9"
+    params["chd"] = "t:%s" % ",".join([str(v["count"]) for v in roles])
+    params["chds"] = "0,%i" % max([v["count"] for v in roles])
+    params["chbh"] = "a,5"
+    roles_graph_url = "http://chart.apis.google.com/chart?%s" % urllib.urlencode(params)
+    
     
     return direct_to_template(request, "stats/stats.html",
                               dict(
                                 selected_period=PERIODS.index(period) + 1,
                                 periods=[p[0] for p in PERIODS],
                                 stats=stats,
+                                roles=roles,
+                                roles_graph_url=roles_graph_url,
                                 page_title=u"Statistics",
                               ))
 
