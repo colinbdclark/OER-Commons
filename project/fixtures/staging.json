@@ -26,24 +26,6 @@
     }
   }, 
   {
-    "pk": 3, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<ul>\r\n         <li>\r\n         <a href=\"/courses/teaching-process-activity-from-iskme-s-teacher-academy\">Teaching Process Activity from ISKME's Teacher Academy</a></li>\r\n         <li>\r\n         <a href=\"/courses/on-innovation\">On Innovation</a></li>\r\n</ul>", 
-      "header": "Featured Higher Ed Resources", 
-      "slug": "featured-higher-ed-resources"
-    }
-  }, 
-  {
-    "pk": 2, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "       <ul>\r\n         <li>\r\n         <a href=\"/courses/green-design-challenge-activity\">Green Design Challenge Activity</a></li>\r\n         <li>\r\n         <a href=\"/courses/sun-curve-design-challenge-design-process-activity\">Sun Curve Design Challenge: Design Process Activity</a></li>\r\n         <li>\r\n         <a href=\"/courses/improv-activities-from-iskme-s-teacher-academy\">Improv Activities from ISKME's Teacher Academy</a></li>\r\n       </ul>\r\n    ", 
-      "header": "Featured K-12 Resources", 
-      "slug": "featured-k-12-resources"
-    }
-  }, 
-  {
     "pk": 1, 
     "model": "flatblocks.flatblock", 
     "fields": {

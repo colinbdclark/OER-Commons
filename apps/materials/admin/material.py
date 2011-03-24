@@ -12,7 +12,7 @@ publish.short_description = u"Publish selected items"
 class MaterialAdmin(ModelAdmin):
 
     list_display = ["title", "workflow_state", "creator"]
-    list_filter = ['workflow_state', ]
+    list_filter = ["workflow_state", "featured"]
 
     actions = [publish]
 

@@ -12,6 +12,7 @@ import dateutil.parser
 import re
 import twitter
 from materials.models.microsite import Microsite
+from haystack.query import SearchQuerySet
 
 
 MAX_TAGS = 30
@@ -76,12 +77,20 @@ def frontpage(request):
 
     microsites = Microsite.objects.all()
 
+    featured_k12 = SearchQuerySet().filter(featured=True, grade_levels__in=(1, 2)).order_by("-featured_on").load_all()[:3]
+    featured_k12 = [r.object for r in featured_k12]
+
+    featured_highered = SearchQuerySet().filter(featured=True, grade_levels=3).order_by("-featured_on").load_all()[:3]
+    featured_highered = [r.object for r in featured_highered]
+
     return direct_to_template(request, "frontpage.html",
                               dict(tagcloud=tagcloud,
                                    general_subjects=general_subjects,
                                    grade_levels=grade_levels,
                                    microsites=microsites,
                                    tweets=get_tweets(),
+                                   featured_k12=featured_k12,
+                                   featured_highered=featured_highered,
                                ))
 
 

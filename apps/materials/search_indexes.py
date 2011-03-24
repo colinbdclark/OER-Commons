@@ -50,6 +50,8 @@ class MaterialSearchIndex(SearchIndex):
     title = CharField(model_attr="title", weight=10.0)
     sortable_title = SortableTitleField(model_attr="title")
     published_on = DateTimeField(model_attr="published_on", null=True)
+    featured = BooleanField(model_attr="featured")
+    featured_on = DateTimeField(model_attr="featured_on", null=True)
 
     member_activities = MultiValueField(model_attr="member_activities")
     rating = FloatField(model_attr="rating")

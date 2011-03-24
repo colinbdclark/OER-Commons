@@ -84,6 +84,7 @@ class Material(models.Model):
                                          verbose_name=_(u"RSS Date/Time"))
 
     featured = models.BooleanField(default=False, verbose_name=_(u"Featured"))
+    featured_on = models.DateTimeField(null=True, blank=True)
 
     tags = generic.GenericRelation(Tag)
     reviews = generic.GenericRelation(Review)
@@ -102,6 +103,10 @@ class Material(models.Model):
     def save(self, *args, **kwargs):
         if self.workflow_state == PUBLISHED_STATE and not self.published_on:
             self.published_on = datetime.datetime.now()
+        if self.featured and not self.featured_on:
+            self.featured_on = datetime.datetime.now()
+        if not self.featured:
+            self.featured_on = None
         super(Material, self).save(*args, **kwargs)
 
     @permalink
@@ -211,7 +216,6 @@ def reindex_materials(**kwargs):
     from haystack.sites import site
     for model, objects in to_be_reindexed.items():
         index = site.get_index(model)
-        print "Reindex objects", objects
         index.backend.update(index, objects)
     globals.to_be_reindexed = {}
 request_finished.connect(reindex_materials, dispatch_uid="materials_request_finished_reindex")

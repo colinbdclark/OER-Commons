@@ -222,7 +222,7 @@ class AddFormStaff(DerivedFields, PrePostRequisitesFields, AddForm):
     postrequisite_2 = forms.Field(required=False)
 
     featured = forms.BooleanField(required=False, initial=False,
-                         label=u"Marked as Top Ten Featured",
+                         label=u"Marked as Featured",
                                  widget=forms.CheckboxInput())
 
     in_rss = forms.BooleanField(required=False, initial=False,

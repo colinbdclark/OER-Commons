@@ -77,7 +77,7 @@ class CommunityItemAddForm(forms.ModelForm, LicenseFields, RSSFields):
     keywords = KeywordsField()
 
     featured = forms.BooleanField(required=False, initial=False,
-                         label=u"Marked as Top Ten Featured",
+                         label=u"Marked as Featured",
                                  widget=forms.CheckboxInput())
 
     in_rss = forms.BooleanField(required=False, initial=False,

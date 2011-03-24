@@ -161,7 +161,7 @@ class AddFormStaff(AddForm):
                                  widget=forms.CheckboxInput())
 
     featured = forms.BooleanField(required=False, initial=False,
-                         label=u"Marked as Top Ten Featured",
+                         label=u"Marked as Featured",
                                  widget=forms.CheckboxInput())
 
     in_rss = forms.BooleanField(required=False, initial=False,
