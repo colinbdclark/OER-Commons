@@ -10,6 +10,7 @@
   
   <h5>Your Tags</h5>
   {% if can_add_tags %}
+    {% spaceless %}
     <ul class="user-tags">
       {% for tag in user_tags %}
         <li id="tag{{ tag.id }}">
@@ -18,6 +19,7 @@
         </li>
       {% endfor %}
     </ul>
+    {% endspaceless %}
     <form action="{% url tags:add_tags content_type_id=content_type_id, object_id=item.id %}"
           method="post" class="add-tags" name="tags">
       <label for="id_tags">Add new tag:</label>

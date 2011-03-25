@@ -16,8 +16,9 @@ oer.tags_form.init = function() {
     $.template("user-tags-item", '<li id="tag${id}"><a href="#" class="delete">Delete</a><div><a href="${url}">${name}</a></div></li>');
 
     $form.submit(function(e) {
+        $input.autocomplete("close");
         e.preventDefault();
-        var value = $input.val().trim();
+        var value = $.trim($input.val());
         if (value === "") {
             return;
         }
@@ -45,6 +46,5 @@ oer.tags_form.init = function() {
                 $(this).detach();
             });
         });
-        console.log(tag_id);
     });
 };
