@@ -37,7 +37,8 @@
   {% navigation %}
   <div id="global-search-box">
     <form action="{% url materials:search %}" method="get">
-      <input type="text" name="f.search" value="Enter Search" class="text" x-webkit-speech="x-webkit-speech" />
+      <label class="inline" for="search-input">Enter Search</label>
+      <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" />
       <input type="submit" value="Search" class="button" />
       <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" /> 
     </form>

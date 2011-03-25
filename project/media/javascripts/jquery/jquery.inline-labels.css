@@ -1,0 +1,26 @@
+/* user-defined settings */
+label.inline {
+  display: none;
+}
+
+label.inline-label {
+  color: #666;
+}
+
+label.inline-label-focus {
+  color: #666;
+}
+
+/* don't change any of this! */
+label.inline-label {
+  position: absolute !important;
+  cursor: text !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+
+label.inline-label-has-text {
+  visibility: hidden !important;
+}
