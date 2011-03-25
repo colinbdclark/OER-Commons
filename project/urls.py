@@ -9,10 +9,10 @@ from materials.models.course import Course
 from materials.models.library import Library
 from materials.models.material import PUBLISHED_STATE
 from oai.oer.oai_dc import OAIDublinCore
+from oai.oer.oai_oer2 import OAIOER2
 from oai.oer.oer_recommender import OERRecommender
 from oai.oer.oer_submissions import OERSubmissions
 from oai.oer.repository import OERRepository
-from oai.oer.oai_oer2 import OAIOER2
 
 
 admin.autodiscover()
@@ -53,6 +53,7 @@ urlpatterns = patterns('',
     url(r'', include('feedback.urls')),
     url(r'', include('information.urls')),
     url(r'', include('sendthis.urls')),
+    url(r'', include('tags.urls', app_name=None, namespace="tags")),
     url(r'^my', include('myitems.urls', app_name=None, namespace="myitems")), # TODO! Set up redirect /portfolio -> /my
     url(r'^savedsearches', include('savedsearches.urls', app_name=None, namespace="savedsearches")),
     url(r'^oauth/', include('oauth_provider.urls')),

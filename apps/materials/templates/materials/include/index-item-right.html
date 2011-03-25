@@ -8,9 +8,6 @@
     <dd>
       {% spaceless %}
       <ul>
-        {% if item.add_tags_url %}
-          <li><a class="with-next-url" href="{{ item.add_tags_url }}">Tag this item</a></li>
-        {% endif %}
         {% if item.rate_item_url %}
           <li><a class="rate-item" href="{{ item.rate_item_url }}">Rate this item</a></li>
         {% endif %}

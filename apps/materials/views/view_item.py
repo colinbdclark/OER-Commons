@@ -5,13 +5,10 @@ from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.material import PUBLISHED_STATE, WORKFLOW_TRANSITIONS
 from materials.models.microsite import Microsite
-from materials.utils import get_name_from_slug
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
 from notes.models import Note
-from tags.models import Tag
-from tags.tags_utils import get_tag_cloud
 
 
 def view_item(request, slug=None, model=None):
@@ -43,19 +40,11 @@ def view_item(request, slug=None, model=None):
                     "title": transition["title"],
                 })
 
-    tags = {}
-    for tag in item.tags.all():
-        tags[tag.slug] = tags.get(tag.slug, 0) + 1
-    tags = get_tag_cloud(tags, 3, 0, 1)
-    for tag in tags:
-        tag["name"] = get_name_from_slug(Tag, tag["slug"])
-
     user_tags = []
     user_note = None
     save_url = None
     unsave_url = None
     if request.user.is_authenticated():
-        user_tags = item.tags.filter(user=request.user).order_by("slug")
         try:
             user_note = item.notes.get(user=request.user)
         except Note.DoesNotExist:
@@ -72,8 +61,6 @@ def view_item(request, slug=None, model=None):
         save_url = reverse("materials:%s:save_item" % item.namespace,
                        kwargs=dict(slug=item.slug))
 
-    add_tags_url = reverse("materials:%s:add_tags" % item.namespace,
-                           kwargs=dict(slug=item.slug))
     add_review_url = reverse("materials:%s:add_review" % item.namespace,
                            kwargs=dict(slug=item.slug))
     add_note_url = reverse("materials:%s:add_note" % item.namespace,

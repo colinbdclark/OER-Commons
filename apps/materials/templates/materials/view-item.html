@@ -2,6 +2,7 @@
 {% load materials_tags %}
 {% load rating_tags %}
 {% load sendthis_tags %}
+{% load tags_tags %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -10,6 +11,7 @@
     $(function() {
       oer.materials.view_item.init();
       oer.send_this.init();
+      oer.tags_form.init();
       {% if content_actions or workflow_actions %}
         oer.materials.view_item.init_content_actions();
       {% endif %}
@@ -255,38 +257,7 @@
 {% endblock %}
 
 {% block column-right %}
-  <div class="portlet item-tags dotted">
-    <h4 class="dotted">Item Tags</h4>
-    {% if tags %}
-       <div class="tag-cloud dotted">
-       {% for tag in tags %}
-         <a href="{% url materials:keyword_index keywords=tag.slug %}" class="tag{{ tag.number }}">{{ tag.name }}</a>
-       {% endfor %}
-       </div>
-    {% else %}
-      <p class="dotted">This item has not been tagged yet.</p>
-    {% endif %}
-    
-    {% if user_tags %}
-      <h4 class="dotted my-tags">My Tags</h4>
-      <div class="dotted">
-        {% for tag in user_tags %}
-          <a href="{% url materials:keyword_index keywords=tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      </div>
-    {% endif %}
-    {% if add_tags_url %}
-      <div class="button-ct">
-        <a class="with-next-url" href="{{ add_tags_url }}">
-          {% if user_tags %}
-            <img src="{{ STATIC_URL }}images/edit-tag-btn.png" alt="Edit Your Tags" />
-          {% else %}  
-            <img src="{{ STATIC_URL }}images/add-tag-btn.png" alt="Tag This Item" /> 
-          {% endif %}
-        </a>
-      </div>
-    {% endif %}
-  </div>
+  {% item_tags_portlet item %}
 
   <div class="portlet item-keywords dotted">
     <h4 class="dotted">Keywords</h4>

@@ -1,0 +1,29 @@
+<div class="portlet item-tags dotted">
+  <h4 class="dotted">Tags</h4>
+  {% if tags %}
+     <div class="tag-cloud dotted">
+     {% for tag in tags %}
+       <a href="{% url materials:keyword_index keywords=tag.slug %}" class="tag{{ tag.number }}">{{ tag.name }}</a>
+     {% endfor %}
+     </div>
+  {% endif %}
+  
+  <h5>Your Tags</h5>
+  {% if can_add_tags %}
+    <ul class="user-tags">
+      {% for tag in user_tags %}
+        <li id="tag{{ tag.id }}">
+          <a href="#" class="delete">Delete</a>
+          <div><a href="{% url materials:keyword_index keywords=tag.slug %}" class="name">{{ tag.name }}</a></div>
+        </li>
+      {% endfor %}
+    </ul>
+    <form action="{% url tags:add_tags content_type_id=content_type_id, object_id=item.id %}"
+          method="post" class="add-tags" name="tags">
+      <label for="id_tags">Add new tag:</label>
+      <input type="text" name="tags" id="id_tags" value="" class="text" />
+    </form>
+  {% else %}
+    <a href="{% url users:login %}" class="with-next-url">Log in</a> to add tags to this item.
+  {% endif %}
+</div>
