@@ -38,13 +38,13 @@ oer.tags_form.init = function() {
         e.preventDefault();
         $this = $(this);
         $li = $this.closest("li");
+        $li.fadeOut(250, function() {
+            $(this).detach();
+        });
         var tag_id = $li.attr("id").slice(3);
         $.post("/tags/delete", {
             id : tag_id
         }, function(response, status, request) {
-            $li.fadeOut(250, function() {
-                $(this).detach();
-            });
         });
     });
 };
