@@ -177,7 +177,7 @@ oer.materials.index.init_tags_form = function() {
         var $this = $(this);
         var $menu = $this.closest("dl.actions");
         $menu.removeClass("active");
-        if ($form.hasClass("can-add")) {
+        if ($input.length) {
             $form.hide();
             $user_tags.empty();
             $form.attr("action", $this.attr("href"));
