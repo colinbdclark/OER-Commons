@@ -1,7 +1,7 @@
 from autoslug.settings import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from haystack.sites import site
 from tags.models import Tag
@@ -10,16 +10,13 @@ import cjson
 
 
 @login_required
-def add(request, content_type_id=None, object_id=None):
+def add(request, app_label, model, object_id):
 
-    if not content_type_id or not object_id:
-        raise Http404()
-    
-    content_type_id = int(content_type_id)
+    content_type = get_object_or_404(ContentType, app_label=app_label,
+                                     model=model)
+    model = content_type.model_class()
     object_id = int(object_id)
     
-    content_type = get_object_or_404(ContentType, id=content_type_id)
-    model = content_type.model_class()
     item = get_object_or_404(model, id=object_id)
     user = request.user
 
@@ -68,4 +65,39 @@ def delete(request):
                 pass
 
     return HttpResponse(cjson.encode(response), content_type="application/json")
+    
+    
+@login_required
+def get_tags(request, app_label, model, object_id):
+    
+    content_type = get_object_or_404(ContentType, app_label=app_label,
+                                     model=model)
+    model = content_type.model_class()
+    object_id = int(object_id)
+    
+    item = get_object_or_404(model, id=object_id)
+    user = request.user
+
+    user_tags = []
+    for id, slug, name in item.tags.filter(user=user).values_list("id", "slug", "name"):
+        user_tags.append(dict(id=id,
+                              url=reverse("materials:keyword_index",
+                                         kwargs={"keywords": slug}),
+                              name=name))
+        
+    item_tags = item.tags.all()
+    if user_tags:
+        item_tags = item_tags.exclude(id__in=[t["id"] for t in user_tags])
+
+    item_tags = item_tags.values_list("slug", "name")
+    item_tags = [dict(url=reverse("materials:keyword_index",
+                                  kwargs={"keywords": slug}),
+                      name=name) for slug, name in item_tags]
+    
+    response = dict(tags=item_tags,
+                    user_tags=user_tags)
+
+    return HttpResponse(cjson.encode(response), content_type="application/json")
+    
+    
     

@@ -1,8 +1,8 @@
+from django.contrib.contenttypes.models import ContentType
 from django.template import Library
 from materials.utils import get_name_from_slug
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
-from django.contrib.contenttypes.models import ContentType
 
 
 register = Library()
@@ -30,9 +30,18 @@ def item_tags_portlet(context, item):
     for tag in tags:
         tag["name"] = get_name_from_slug(Tag, tag["slug"])
 
+    content_type = ContentType.objects.get_for_model(item)
+
     return dict(item=item,
                 tags=tags,
                 user_tags=user_tags,
-                content_type_id=ContentType.objects.get_for_model(item).id,
+                app_label=content_type.app_label,
+                model=content_type.model,
                 can_add_tags=can_add_tags)
-        
+
+
+@register.inclusion_tag("tags/include/add-tags-form.html", takes_context=True)
+def add_tags_form(context):        
+    request = context["request"]
+    can_add_tags = request.user.is_authenticated()
+    return dict(can_add_tags=can_add_tags)

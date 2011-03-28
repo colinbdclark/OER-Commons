@@ -17,6 +17,9 @@
         {% if item.save_item_url %}
           <li><a class="{% if request.user.is_authenticated %}save-item{% else %}with-next-url{% endif %}" href="{{ item.save_item_url }}">Save this item</a></li>
         {% endif %}
+        {% if item.add_tags_url %}
+          <li><a class="tag-item" href="{{ item.add_tags_url }}">Tag this item</a></li>
+        {% endif %}
       </ul>
       {% endspaceless %}
     </dd>

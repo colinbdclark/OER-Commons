@@ -294,7 +294,8 @@ def populate_item_from_search_result(result):
         item["topics"] = topics
 
 
-    namespace = getattr(result.model, "namespace", None)
+    model = result.model
+    namespace = getattr(model, "namespace", None)
     if namespace:
         item["get_absolute_url"] = reverse(
                                "materials:%s:view_item" % namespace,
@@ -311,6 +312,14 @@ def populate_item_from_search_result(result):
         item["unsave_item_url"] = reverse(
                                "materials:%s:unsave_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
+        item["unsave_item_url"] = reverse(
+                               "materials:%s:unsave_item" % namespace,
+                               kwargs=dict(slug=item["slug"]))
+        item["add_tags_url"] = reverse("tags:add_tags", args=(
+                                    result.app_label,
+                                    result.model_name,
+                                    result.pk,
+                                ))
     else:
         item["get_absolute_url"] = result.object.get_absolute_url()
     return item

@@ -1,7 +1,9 @@
 oer.tags_form = {};
 
+$.template("user-tags-item", '<li id="tag${id}"><a href="#" class="delete">Delete</a><div><a href="${url}">${name}</a></div></li>');
+
 oer.tags_form.init = function() {
-    var $form = $("form[name='tags']");
+    var $form = $("#add-tags-form");
     var $input = $form.find("#id_tags");
     var $user_tags = $("ul.user-tags");
 
@@ -12,8 +14,6 @@ oer.tags_form.init = function() {
         $form.submit();
     }
     });
-
-    $.template("user-tags-item", '<li id="tag${id}"><a href="#" class="delete">Delete</a><div><a href="${url}">${name}</a></div></li>');
 
     $form.submit(function(e) {
         $input.autocomplete("close");

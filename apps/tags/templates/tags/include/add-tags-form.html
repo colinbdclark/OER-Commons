@@ -1,0 +1,9 @@
+<ul class="user-tags clearfix"></ul>
+<form action="" method="post" id="add-tags-form" name="add-tags-form">
+  {% if can_add_tags %}
+    <label for="id_tags">Add new tag:</label>
+    <input type="text" name="tags" id="id_tags" value="" class="text" />
+  {% else %}
+    <p><a href="{% url users:login %}" class="with-next-url">Log in</a> to add tags to this item.</p>
+  {% endif %}
+</form>

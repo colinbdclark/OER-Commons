@@ -2,6 +2,7 @@
 {% load rating_tags %}
 {% load savedsearches_tags %}
 {% load sendthis_tags %}
+{% load tags_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -43,6 +44,10 @@
   
   {% save_search_form index_url index_title %}
   {% send_this_form index_url %}
+
+  <div id="add-tags-dialog">
+      {% add_tags_form %}
+  </div>
   
 {% endblock %}
 

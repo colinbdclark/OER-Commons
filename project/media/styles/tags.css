@@ -57,7 +57,7 @@ a.tag9 {
   font-size: 2.8em;
 }
 
-form.add-tags label {
+#add-tags-form label {
   display: block;
   font-size: 12px;
 }
@@ -93,14 +93,36 @@ form.add-tags label {
 }
 
 .user-tags a.delete {
-   float: right;
-   width: 15px;
-   height: 15px;
-   display: none;
-   background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
-   text-indent: -9999px;
+  float: right;
+  width: 15px;
+  height: 15px;
+  display: block;
+  background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
+  text-indent: -9999px;
 }
 
-.user-tags li:hover a.delete {
-  display: block;
+#add-tags-dialog .user-tags li {
+  float: left;
+  clear: none;
+  line-height: 16px;
+}
+
+#add-tags-dialog .user-tags li div {
+  margin-right: 17px;
+}
+
+#add-tags-dialog a {
+  color: #0B7BA9;
+  text-decoration: none;
+}
+
+#add-tags-dialog #add-tags-form {
+  padding: 3px 5px;
+  margin-bottom: 5px;
+}
+
+#add-tags-dialog p {
+   font-size: 16px;
+   text-align: center;
+   margin-top: 25px;
 }
