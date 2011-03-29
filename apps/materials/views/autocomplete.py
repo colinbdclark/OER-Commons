@@ -25,6 +25,4 @@ def autocomplete(request, app_label, model, field):
         except:
             pass
 
-    results = [r.encode("utf-8") for r in results]
-
     return HttpResponse(cjson.encode(results), "application/json")
