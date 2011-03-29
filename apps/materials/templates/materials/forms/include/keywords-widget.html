@@ -1,0 +1,12 @@
+<div id="{{ name }}-widget" class="keywords-widget">
+  {% spaceless %}
+  <ul class="clearfix">
+      {% for kw in value %}
+        <li><a href="#" class="delete">Delete</a> <span>{{ kw }}</span></li>
+      {% endfor %}
+  </ul>
+  {% endspaceless %}
+  <input type="hidden" id="id_{{ name }}" name="{{ name }}" value="{% if value %}{{ value|join:"," }}{% endif %}" />
+  <label for="add-{{ name }}">Add new keyword:</label>
+  <input type="text" id="add-{{ name }}" class="add-keyword" class="text" value="" />
+</div>

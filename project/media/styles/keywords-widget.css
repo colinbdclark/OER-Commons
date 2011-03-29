@@ -1,0 +1,34 @@
+form.formatted .keywords-widget,.keywords-widget,form.formatted .keywords-widget label,form.formatted .keywords-widget input
+  {
+  font-size: 12px;
+}
+
+.keywords-widget input.add-keyword {
+  width: 250px;
+  margin-left: 5px;
+}
+
+form.formatted .field .keywords-widget ul,.keywords-widget ul {
+  list-style-type: none;
+  margin-bottom: 5px;
+}
+
+form.formatted .field .keywords-widget ul li,.keywords-widget ul li {
+  padding: 3px 5px;
+  float: left;
+  margin-right: 5px;
+}
+
+.keywords-widget ul li:hover {
+  background: #DDF0F6;
+}
+
+.keywords-widget a.delete {
+  float: right;
+  width: 15px;
+  height: 15px;
+  display: block;
+  background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
+  text-indent: -9999px;
+  margin-left: 3px;
+}

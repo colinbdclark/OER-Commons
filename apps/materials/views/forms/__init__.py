@@ -7,6 +7,7 @@ from django.utils.safestring import mark_safe
 from materials.models.common import GeneralSubject, GradeLevel, License, \
     PUBLIC_DOMAIN_URL, PUBLIC_DOMAIN_NAME, GNU_FDL_URL, GNU_FDL_NAME, \
     CC_LICENSE_URL_RE, Author, Keyword
+from django.template.loader import render_to_string
 
 
 LICENSE_TYPES = (
@@ -62,17 +63,13 @@ class AuthorsField(forms.Field):
 class KeywordsWidget(forms.Textarea):
 
     def render(self, name, value, attrs=None):
-        if isinstance(value, list):
-            value = u"\n".join(value)
-        return super(KeywordsWidget, self).render(name, value, attrs=attrs)
+        if value and not isinstance(value, list):
+            value = [value]
+        return render_to_string("materials/forms/include/keywords-widget.html",
+                                dict(name=name, value=value, attrs=attrs))
 
     def value_from_datadict(self, data, files, name):
-        values = []
-        if isinstance(data, (MultiValueDict, MergeDict)):
-            values = data.getlist(name + "_suggested")
-        else:
-            values = data.get(name + "_suggested", [])
-        values += data.get(name, u"").split("\n")
+        values = [k for k in data.get(name, u"").split(",") if k]
         return values
 
 
@@ -82,7 +79,7 @@ class KeywordsField(forms.Field):
 
     def prepare_value(self, value):
         if not value:
-            return u""
+            return []
         if isinstance(value, list):
             values = []
             for v in value:
