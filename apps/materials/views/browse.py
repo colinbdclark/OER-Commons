@@ -44,8 +44,6 @@ def browse(request, microsite=None):
     for o in course_or_module:
         o["count"] = course_or_module_facets.get(unicode(o["slug"]), 0)
 
-    ocw_count = len(SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE).narrow("ocw:true"))
-
     page_title = u"Browse OER Materials"
     breadcrumbs = [{"url": reverse("materials:browse"), "title": u"OER Materials"}]
 

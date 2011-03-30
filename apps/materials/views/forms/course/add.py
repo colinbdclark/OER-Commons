@@ -147,10 +147,6 @@ class AddFormStaff(DerivedFields, PrePostRequisitesFields, AddForm):
                                          label=u"Full Course or Module",
                                          widget=forms.Select())
 
-    ocw = forms.BooleanField(required=False, initial=False,
-                                label=u"Is this part of an OpenCourseWare Collection?",
-                                widget=forms.CheckboxInput())
-
     derived = forms.BooleanField(required=False, initial=False,
                                  label=u"Is this work modified from preexisiting/parent materials that are not your own?",
                                  widget=forms.CheckboxInput())
@@ -259,7 +255,7 @@ class AddFormStaff(DerivedFields, PrePostRequisitesFields, AddForm):
                   "content_creation_date", "authors",
                   "tech_requirements", "keywords", "general_subjects",
                   "grade_levels", "material_types", "media_formats", "languages",
-                  "geographic_relevance", "course_or_module", "ocw", "derived",
+                  "geographic_relevance", "course_or_module", "derived",
                   "derived_title", "derived_url", "derived_description",
                   "derived_from", "curriculum_standards",
                   "has_prerequisites", "prerequisite_1_title", "prerequisite_1_url",

@@ -190,7 +190,7 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
 
 PATH_FILTERS = ["general_subjects", "grade_levels", "course_material_types",
                 "library_material_types", "collection", "keywords", "license",
-                "ocw", "course_or_module", "community_types",
+                "course_or_module", "community_types",
                 "community_topics", "microsite", "topics"]
 
 
@@ -327,7 +327,7 @@ def populate_item_from_search_result(result):
 
 def index(request, general_subjects=None, grade_levels=None,
           course_material_types=None, library_material_types=None,
-          collection=None, keywords=None, license=None, ocw=None,
+          collection=None, keywords=None, license=None,
           course_or_module=None, community_types=None, community_topics=None,
           microsite=None, model=None, search=False, tags=None, subjects=None,
           format=None,

@@ -25,7 +25,7 @@ COURSE_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "coll
                      "content_creation_date", "tech_requirements", "keywords",
                      "general_subjects", "grade_levels", "material_types",
                      "media_formats", "languages", "geographic_relevance",
-                     "curriculum_standards", "is_ocw", "featured", "in_rss", "rss_description", "rss_timestamp",
+                     "curriculum_standards", "featured", "in_rss", "rss_description", "rss_timestamp",
                      "derived", "derived_title", "derived_url", "derived_description",
                   "derived_from",
                   "has_prerequisites", "prerequisite_1_title", "prerequisite_1_url",
@@ -40,7 +40,7 @@ MAIN_FIELDS_ADD = ["creator", "title", "url", "abstract", "institution", "collec
                "content_creation_date", "tech_requirements", "keywords",
                "general_subjects", "grade_levels", "material_types",
                "media_formats", "languages", "geographic_relevance",
-               "curriculum_standards", "is_ocw", "featured"]
+               "curriculum_standards", "featured"]
 MAIN_FIELDS_CHANGE = ["slug"] + MAIN_FIELDS_ADD
 
 
@@ -87,10 +87,6 @@ class CourseAddForm(forms.ModelForm, DerivedFields, PrePostRequisitesFields,
     curriculum_standards = forms.CharField(required=False,
                                        widget=forms.Textarea(
                                              attrs={"rows": 5, "cols": 50}))
-
-    is_ocw = forms.BooleanField(required=False, initial=False,
-                         label=u"OpenCourseWare",
-                                 widget=forms.CheckboxInput())
 
     derived = forms.BooleanField(required=False, initial=False,
                                  widget=forms.CheckboxInput())

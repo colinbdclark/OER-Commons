@@ -8,14 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding field 'Language.order'
-        db.add_column('materials_language', 'order', self.gf('django.db.models.fields.IntegerField')(default=999), keep_default=False)
+        # Deleting field 'Course.ocw'
+        db.delete_column('materials_course', 'ocw')
 
 
     def backwards(self, orm):
         
-        # Deleting field 'Language.order'
-        db.delete_column('materials_language', 'order')
+        # Adding field 'Course.ocw'
+        db.add_column('materials_course', 'ocw', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
 
 
     models = {
@@ -143,7 +143,6 @@ class Migration(SchemaMigration):
             'material_types': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.CourseMaterialType']", 'symmetrical': 'False'}),
             'media_formats': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.MediaFormat']", 'symmetrical': 'False'}),
             'modified_on': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
-            'ocw': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'postrequisite_1': ('materials.models.common.AutoCreateForeignKey', [], {'blank': 'True', 'related_name': "'postrequisites_1'", 'null': 'True', 'to': "orm['materials.RelatedMaterial']"}),
             'postrequisite_2': ('materials.models.common.AutoCreateForeignKey', [], {'blank': 'True', 'related_name': "'postrequisites_2'", 'null': 'True', 'to': "orm['materials.RelatedMaterial']"}),
             'prerequisite_1': ('materials.models.common.AutoCreateForeignKey', [], {'blank': 'True', 'related_name': "'prerequisites_1'", 'null': 'True', 'to': "orm['materials.RelatedMaterial']"}),

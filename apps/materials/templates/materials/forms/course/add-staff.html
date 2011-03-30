@@ -76,11 +76,6 @@
       {% with form.course_or_module as field %}
         {% include "materials/forms/include/vocabulary-field.html" %}
       {% endwith %}
-      {% with form.ocw as field %}
-        {% with "OpenCourseWare Collection" as label %}
-          {% include "materials/forms/include/checkbox-field.html" %}
-        {% endwith %}
-      {% endwith %}
       {% include "materials/forms/include/derived-fields.html" %}
     </td>
   </tr></tbody></table>

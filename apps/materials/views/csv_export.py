@@ -69,7 +69,6 @@ COURSE_FIELDS = (
     ('CR_AUTHOR_COUNTRY', "authors", process_author_countries),
     ('CR_INSTITUTION', "institution", lambda x: x.name),
     ('CR_URL', "url", None),
-    ('CR_IS_PART_OF_OCW', "ocw", process_boolean),
     ('CR_COLLECTION', "collection", lambda x: x.name),
     ('CR_SUBJECT', "general_subjects", process_vocabulary),
     ('CR_MATERIAL_TYPE', "material_types", process_vocabulary),

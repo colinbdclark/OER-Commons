@@ -100,7 +100,6 @@ class Course(Material):
     course_or_module = models.CharField(max_length=50, default=u"", blank=True,
                                         choices=COURSE_OR_MODULE,
                                     verbose_name=_(u"Full course or module"))
-    ocw = models.BooleanField(default=False, verbose_name=_(u"OpenCourseWare"))
 
     prerequisite_1 = AutoCreateForeignKey(RelatedMaterial, null=True, blank=True,
                                        verbose_name=_(u"Pre-requisite 1"),

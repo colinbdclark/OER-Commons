@@ -128,7 +128,7 @@ def run():
         author_emails, author_countries, remote_url, keywords, \
         tech_requirements, general_subjects, grade_levels, languages, \
         geographic_relevance, institution, collection, material_types, \
-        media_formats, curriculum_standards, course_or_module, is_ocw, \
+        media_formats, curriculum_standards, course_or_module, \
         prerequisite_1_title, prerequisite_1_url, prerequisite_2_title, \
         prerequisite_2_url, postrequisite_1_title, postrequisite_1_url, \
         postrequisite_2_title, postrequisite_2_url, is_derived, derived_title, \
@@ -161,7 +161,6 @@ def run():
                                                                   bucket=force_unicode(cou_bucket))[0],
                             curriculum_standards=curriculum_standards,
                             course_or_module=course_or_module,
-                            ocw=is_ocw,
                             course_id=force_unicode(course_id),
                             provider_id=force_unicode(native_id),
                             in_rss=in_rss,

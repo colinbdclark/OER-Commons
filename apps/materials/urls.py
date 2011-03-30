@@ -43,7 +43,6 @@ keyword_patterns
 course_patterns = browse_patterns + patterns('materials.views',
     url(r"^/add/?$", "forms.course.add.add", name="add"),
     url(r"^/material_types/(?P<course_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
-    url(r"^/ocw/?$", "index.index", name="ocw_index", kwargs={"ocw": True}),
     url(r"^/(?P<course_or_module>full-course|learning-module)/?$", "index.index", name="course_or_module_index"),
     url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.course.edit.edit", name="edit"),

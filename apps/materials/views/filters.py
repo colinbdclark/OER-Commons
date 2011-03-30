@@ -324,7 +324,6 @@ FILTERS = {
     "cou_bucket": ChoicesFilter("cou_bucket", "f.cou_bucket", COU_BUCKETS, u"Conditions of Use"),
     "license_type": ChoicesFilter("license", "f.license", LICENSE_TYPES, u"Conditions of Use"),
     "member_activities": ChoicesFilter("member_activities", "f.member_activity", MEMBER_ACTIVITY_TYPES, u"Member Activity"),
-    "ocw": BooleanFilter("ocw", "f.is_ocw", u"OpenCourseWare"),
     "collection": VocabularyFilter("collection", "f.collection", Collection, u"Collection"),
     "keywords": KeywordFilter("keywords", "f.keyword"),
     "microsite": VocabularyFilter("microsites", "f.microsite", Microsite, u"Topic", ignore_all_values=False),

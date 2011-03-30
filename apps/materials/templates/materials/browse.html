@@ -94,10 +94,6 @@
             <a href="{% url materials:courses:course_or_module_index course_or_module=item.slug %}">{{ item.name|shrink:100 }}</a>
           </li>
           {% endfor %}
-          <li>
-            <span>({{ ocw_count}})</span>
-            <a href="{% url materials:courses:ocw_index %}">OpenCourseWare</a>
-          </li>
         </ul>
       </td>
       <td class="sep"> </td>

@@ -93,7 +93,6 @@ class CourseIndex(MaterialSearchIndex):
     geographic_relevance = VocabularyMultiValueField(model_attr="geographic_relevance")
 
     course_or_module = CharField(model_attr="course_or_module")
-    ocw = BooleanField(model_attr="ocw")
 
     def get_queryset(self):
         return Course.objects.all()
