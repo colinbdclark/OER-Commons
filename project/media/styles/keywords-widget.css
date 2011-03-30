@@ -23,6 +23,14 @@ form.formatted .field .keywords-widget ul li,.keywords-widget ul li {
   background: #DDF0F6;
 }
 
+.keywords-widget ul:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
 .keywords-widget a.delete {
   float: right;
   width: 15px;
