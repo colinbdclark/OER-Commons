@@ -62,7 +62,8 @@ body.green {
   margin-right: 3px;
 }
 
-.materials-index .details dd.topics a.green {
+.materials-index .details dd.topics a.green,.view-item .details dd.topics a.green
+  {
   background: url(../images/green-icon-small.png) no-repeat 0 50%;
 }
 
@@ -72,6 +73,7 @@ body.green {
 }
 
 .green .portlet.oermaterials h4 {
+  
 }
 
 .green .portlet.oermaterials h6 {
@@ -100,7 +102,8 @@ body.green {
   font-size: 13px;
   color: #666;
   line-height: 16px;
-  margin-right 20px;
+  margin-right
+  20px;
 }
 
 #green-sponsors-portlet div {

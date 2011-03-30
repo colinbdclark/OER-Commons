@@ -63,11 +63,11 @@
   margin-right: 120px;
 }
 
-.materials-index .details dt.topics {
+.materials-index .details dt.topics,.view-item .details dt.topics {
   line-height: 16px;
 }
 
-.materials-index .details dd.topics a {
+.materials-index .details dd.topics a,.view-item .details dd.topics a {
   display: inline-block;
   padding-left: 20px;
   line-height: 16px;

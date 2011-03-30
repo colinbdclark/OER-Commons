@@ -143,6 +143,16 @@
       <dt>Grade Level:</dt>
       <dd>{{ item.grade_levels.all|join:", " }}</dd>
       {% endif %}
+
+      {% if item.topics %}
+      <dt class="topics">SubTopics:</dt>
+      <dd class="topics clearfix">
+        {% for topic in item.topics %}
+          <a href="{% url materials:topic_index topics=topic.slug, microsite=topic.microsite.slug %}"
+             class="{{ topic.microsite.slug }}">{{ topic.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </dd>
+      {% endif %}
       
     </dl>
     
