@@ -475,7 +475,9 @@ def index(request, general_subjects=None, grade_levels=None,
 
     batch_end = index_params.batch_start + index_params.batch_size
 
-    if index_params.query_order_by is not None:
+    if len(filter_values) == 1 and "featured" in filter_values:
+        query = query.order_by("-featured_on")
+    elif index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
 
     items = []

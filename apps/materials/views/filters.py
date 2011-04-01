@@ -329,6 +329,7 @@ FILTERS = {
     "keywords": KeywordFilter("keywords", "f.keyword"),
     "microsite": VocabularyFilter("microsites", "f.microsite", Microsite, u"Topic", ignore_all_values=False),
     "topics": VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic"),
+    "featured": BooleanFilter("featured", "f.featured", u"Featured Resources"),
     "search": SearchFilter(),
 }
 
