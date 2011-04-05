@@ -14,8 +14,10 @@ class Tag(models.Model):
                             default=u"")
     slug = AutoSlugField(populate_from="name", verbose_name=_(u"Slug"))
     content_type = models.ForeignKey(ContentType,
-                                     verbose_name=_(u"Content type"))
-    object_id = models.PositiveIntegerField(verbose_name=_(u"Object ID"))
+                                     verbose_name=_(u"Content type"),
+                                     db_index=True)
+    object_id = models.PositiveIntegerField(verbose_name=_(u"Object ID"),
+                                            db_index=True)
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     timestamp = models.DateTimeField(auto_now_add=True,
