@@ -481,6 +481,9 @@ def index(request, general_subjects=None, grade_levels=None,
         query = query.order_by("-featured_on")
     elif index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
+        
+    if index_params.sort_by == "visits" and not filter_values:
+        query = query.narrow("visits:[1 TO *]")
 
     items = []
 
