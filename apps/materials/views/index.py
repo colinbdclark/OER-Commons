@@ -489,7 +489,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
         total_items = len(query)
         
-        if index_params.batch_start >= total_items:
+        if total_items and index_params.batch_start >= total_items:
             return HttpResponsePermanentRedirect(index_url)
 
         results = query[index_params.batch_start:batch_end]

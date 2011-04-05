@@ -788,3 +788,7 @@
 .tags-index ul.tags a {
   text-decoration: none;
 }
+
+.no-items-match {
+   font-size: 14px; 
+}

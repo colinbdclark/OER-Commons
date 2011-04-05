@@ -17,7 +17,9 @@
 {% endblock %}
 
 {% block above-content %}
-  {% include "materials/include/index-action-panel.html" %}
+  {% if items %}
+    {% include "materials/include/index-action-panel.html" %}
+  {% endif %}
 {% endblock %}
 
 {% block column-left %}
@@ -27,17 +29,21 @@
 {% block content %}
   <div class="materials-index collapsibles">
 
-  {% with "top" as class %}
-    {% include "materials/include/index-navigation.html" %}
-  {% endwith %}
-
-  {% for item in items %}
-    {% include "materials/include/index-item.html" %}
-  {% endfor %}
-
-  {% with "bottom" as class %}
-    {% include "materials/include/index-navigation.html" %}
-  {% endwith %}
+  {% if items %}
+    {% with "top" as class %}
+      {% include "materials/include/index-navigation.html" %}
+    {% endwith %}
+  
+    {% for item in items %}
+      {% include "materials/include/index-item.html" %}
+    {% endfor %}
+  
+    {% with "bottom" as class %}
+      {% include "materials/include/index-navigation.html" %}
+    {% endwith %}
+  {% else %}
+  <p class="no-items-match">No items match your search.</p>
+  {% endif %}
   </div>
   
   {% rate_form %}
@@ -45,13 +51,14 @@
   {% save_search_form index_url index_title %}
   {% send_this_form index_url %}
 
-  <div id="add-tags-dialog">
+  <div id="add-tags-dialog" style="display: none;">
       {% add_tags_form %}
   </div>
   
 {% endblock %}
 
 {% block column-right %}
+   {% if items %}
    <div class="portlet top-keywords dotted">
      <h4 class="dotted">{% if microsite %}<span class="icon"></span> {% endif %}Top Keywords</h4>
      <div class="tag-cloud top dotted">
@@ -68,6 +75,7 @@
      </div>
      {% endif %}
    </div>
+   {% endif %}
    
    {% include "include/portlets/cou.html" %}
    
