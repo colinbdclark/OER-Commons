@@ -132,7 +132,7 @@
     <field name="indexed_topics" type="sint" indexed="true" stored="true" multiValued="true" />
 
     <field name="course_or_module" type="string" indexed="true" stored="true" multiValued="false" />
-
+    <field name="ocw" type="boolean" indexed="true" stored="true" multiValued="false" />
 
   </fields>
 
