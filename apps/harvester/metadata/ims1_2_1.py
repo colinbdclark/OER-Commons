@@ -461,7 +461,6 @@ class IMS1_2_1(MetadataFormat):
             'CR_AUTHOR_COUNTRY',
             'CR_INSTITUTION',
             'CR_URL',
-            'CR_IS_PART_OF_OCW',
             'CR_COLLECTION',
             'CR_SUBJECT',
             'CR_MATERIAL_TYPE',
@@ -522,7 +521,6 @@ class IMS1_2_1(MetadataFormat):
         row.append('') # CR_AUTHOR_COUNTRY
         row.append('') # CR_INSTITUTION
         row.append(data["technical"]['location'][0]) # CR_URL
-        row.append('') # CR_IS_PART_OF_OCW
         row.append('') # CR_COLLECTION
         row.append("|".join(extractSubjects(data["classification"])).encode('utf-8')) # CR_SUBJECT
         row.append('') # CR_MATERIAL_TYPE

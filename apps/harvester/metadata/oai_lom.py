@@ -560,7 +560,6 @@ class OAILOM(MetadataFormat):
             'CR_AUTHOR_COUNTRY',
             'CR_INSTITUTION',
             'CR_URL',
-            'CR_IS_PART_OF_OCW',
             'CR_COLLECTION',
             'CR_SUBJECT',
             'CR_MATERIAL_TYPE',
@@ -620,7 +619,6 @@ class OAILOM(MetadataFormat):
         row.append('') # CR_AUTHOR_COUNTRY
         row.append(extractInstitution(data["lifeCycle"]).encode('utf-8')) # CR_INSTITUTION
         row.append(extractURL(data["technical"]).encode('utf-8')) # CR_URL
-        row.append('No') # CR_IS_PART_OF_OCW
         row.append('') # CR_COLLECTION
         row.append("|".join(extractSubjects(data["classification"])).encode('utf-8')) # CR_SUBJECT
         row.append("|".join(extractLearningResourceType(data["educational"])).encode('utf-8')) # CR_MATERIAL_TYPE
