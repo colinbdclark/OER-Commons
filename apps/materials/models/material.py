@@ -16,6 +16,7 @@ from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
 from tags.models import Tag
+from visitcounts.models import Visit
 import datetime
 
 
@@ -199,6 +200,10 @@ class Material(models.Model):
         for topic in topics:
             indexed_topics.update(topic.get_ancestors())
         return list(indexed_topics)
+
+    @property
+    def visits(self):
+        return Visit.objects.get_visits_count(self, None)
 
 
 def mark_for_reindex(sender, **kwargs):

@@ -9,6 +9,7 @@ from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
 from notes.models import Note
+from visitcounts.models import Visit
 
 
 def view_item(request, slug=None, model=None):
@@ -155,5 +156,7 @@ def view_item(request, slug=None, model=None):
             query_string_params["batch_start"] = batch_start
 
         index_url = index_path + serialize_query_string_params(query_string_params)
+
+    Visit.objects.count(request, item)
 
     return direct_to_template(request, "materials/view-item.html", locals())

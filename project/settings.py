@@ -97,6 +97,7 @@ INSTALLED_APPS = (
     'reports',
     'stats',
     'harvester',
+    'visitcounts',
     'project',
 )
 

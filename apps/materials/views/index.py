@@ -252,6 +252,8 @@ class IndexParams:
             self.query_order_by = "-published_on"
         elif self.sort_by == "rating":
             self.query_order_by = "-rating"
+        elif self.sort_by == "visits":
+            self.query_order_by = "-visits"
         else:
             self.query_order_by = "sortable_title"
 

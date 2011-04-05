@@ -95,6 +95,7 @@
     <field name="published_on" type="date" indexed="true" stored="true" multiValued="false" />
     <field name="featured" type="boolean" indexed="true" stored="true" multiValued="false" />
     <field name="featured_on" type="date" indexed="true" stored="true" multiValued="false" />
+    <field name="visits" type="sint" indexed="true" stored="true" multiValued="false" />
     
     <field name="member_activities" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="rating" type="sfloat" indexed="true" stored="true" multiValued="false" />

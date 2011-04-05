@@ -73,6 +73,8 @@ class MaterialSearchIndex(SearchIndex):
 
     workflow_state = CharField(model_attr="workflow_state")
 
+    visits = IntegerField(model_attr="visits")
+
 
 class CourseIndex(MaterialSearchIndex):
 
