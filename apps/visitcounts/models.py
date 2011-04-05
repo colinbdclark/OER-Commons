@@ -3,6 +3,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 import datetime
+import re
+
+
+ROBOT_RE = re.compile("bot|crawler|spider", re.I)
 
 
 class VisitManager(models.Manager):
@@ -11,6 +15,11 @@ class VisitManager(models.Manager):
         ''' Count a visit for a given instance. Use session key to distinguish
         visits from different users. Count only if current user has visited
         the instance at least an hour ago or haven't visited at all. '''
+
+        user_agent = request.META.get("HTTP_USER_AGENT")
+        if user_agent and ROBOT_RE.search(user_agent):
+            return
+        
         session_key = request.session.session_key
         content_type = ContentType.objects.get_for_model(instance)
         object_id = instance.id
