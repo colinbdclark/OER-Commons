@@ -1,11 +1,11 @@
 {% load compress %}
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+{% include "include/cdn-js.html" %}
 {% compress js %}
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.cluetip.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.validate.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.inline-labels.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.tmpl.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}javascripts/postmessage.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/namespace.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/search-box.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/next-url.js"></script>

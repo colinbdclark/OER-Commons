@@ -245,10 +245,6 @@ form.content-submission #id_tech_requirements {
   height: 33px;
 }
 
-form.content-submission #id_languages {
-  background: #DAEDF4 url(../images/contribute-textarea-bg-big.png) repeat-x 0 0;
-}
-
 form.content-submission .keywords td {
   width: 50%;
   padding: 0;

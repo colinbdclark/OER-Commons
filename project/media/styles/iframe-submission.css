@@ -1,0 +1,183 @@
+body.iframe-submission {
+  background: none;
+  padding: 10px;
+  font-size: 13px;
+}
+
+ul.stepy-titles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+ul.stepy-titles li {
+  color: #DDD;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+ul.stepy-titles li.current-step {
+  color: #369;
+  cursor: auto;
+}
+
+ul.stepy-titles li span {
+  font: 11px verdana;
+  display: block;
+}
+
+#close {
+  display: block;
+  float: right;
+  font-size: 13px;
+  line-height: 15px;
+  text-decoration: none;
+  padding-left: 15px;
+  background: url(../images/icon-delete-gray.png) no-repeat 0% 50%;
+  margin-top: -5px;
+  meright-right: -7px;
+}
+
+form.content-submission {
+  font-size: 13px;
+  display: none;
+  border: none;
+  background: inherit;
+}
+
+.content-submission .label label {
+  font-weight: bold;
+}
+
+.content-submission td.label {
+  width: 80px;
+}
+
+.content-submission td.label label {
+  margin-right: 5px;
+  margin-top: 3px;
+  display: block;
+}
+
+.content-submission div.label {
+  margin-bottom: 3px; 
+}
+
+.content-submission .wide {
+  width: 520px;
+}
+
+.content-submission td {
+  padding-bottom: 5px;
+}
+
+.content-submission label.error {
+  color: red;
+  display: block;
+  padding: 0;
+  margin: 0;
+  background: none;
+  font-weight: normal;
+  font-size: 11px;
+}
+
+fieldset.step p.content-submission-buttons {
+  background: #eee;
+  padding: 10px;
+  text-align: right;
+  position: fixed;
+  bottom: 10px;
+  width: 610px;
+}
+
+fieldset.step p.content-submission-buttons a {
+  display: inline-block;
+  visibility: hidden;
+}
+
+fieldset.step p.content-submission-buttons a .ui-button-text {
+  font-size: 11px;
+}
+
+form.content-submission fieldset.step {
+  clear: left;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.content-submission .keywords-widget ul {
+  margin-bottom: 0;
+}
+
+.content-submission .keywords-widget label {
+  display: none;
+}
+
+.content-submission .keywords-widget input.add-keyword {
+  width: 520px;
+  margin-left: 0;
+}
+
+.content-submission textarea {
+  resize: none;
+}
+
+.content-submission .field ul {
+  list-style-type: none;
+}
+
+.content-submission table.columns div.field {
+  margin-bottom: 10px;
+}
+
+.content-submission table.columns td.column-2 {
+  padding-left: 20px;
+}
+
+.iframe-submission form.content-submission #id_abstract {
+  height: auto;
+  background: none;
+}
+
+.content-submission .selection-widget table td.label {
+  width: auto;
+}
+
+.iframe-submission form.content-submission .help {
+  margin-bottom: 0px;
+  font-size: 12px;
+  color: #666;
+}
+
+.iframe-submission form.content-submission .cou .help {
+  margin-bottom: 10px;
+}
+
+.iframe-submission form.content-submission #id_license_description {
+  background: none;
+}
+
+.iframe-submission form.content-submission .fields .label label {
+  color: inherit;
+  font-size: inherit;
+}
+
+.iframe-submission form.content-submission .fields .required .label label
+  {
+  background: none;
+}
+
+.iframe-submission .content-submission .field {
+  margin-bottom: 5px;
+}
+
+.iframe-submission form.content-submission #id_tech_requirements {
+  background: none;
+  height: 33px;
+}
