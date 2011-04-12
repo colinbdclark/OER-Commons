@@ -73,12 +73,6 @@
     {% include "include/form-field.html" %}
   {% endwith %}
   
-  {% if "cou_bucket" in form.fields %}
-    {% with form.cou_bucket as field %}
-      {% include "include/form-field.html" %}
-    {% endwith %}
-  {% endif %}
-  
   {% with form.copyright_holder as field %}
     {% include "include/form-field.html" %}
   {% endwith %}

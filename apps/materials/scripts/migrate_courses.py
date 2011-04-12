@@ -140,8 +140,6 @@ def run():
         cnt += 1
 
         creator = creators[id]
-        if cou_bucket is None:
-            cou_bucket = u""
 
         try:
             course = Course(id=id,
@@ -157,8 +155,7 @@ def run():
                                                                   name=force_unicode(license_name),
                                                                   image_url=force_unicode(license_image),
                                                                   description=force_unicode(license_description),
-                                                                  copyright_holder=force_unicode(copyright_holder),
-                                                                  bucket=force_unicode(cou_bucket))[0],
+                                                                  copyright_holder=force_unicode(copyright_holder))[0],
                             curriculum_standards=curriculum_standards,
                             course_or_module=course_or_module,
                             course_id=force_unicode(course_id),

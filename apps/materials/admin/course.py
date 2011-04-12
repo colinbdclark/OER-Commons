@@ -14,7 +14,7 @@ from django.views.generic.simple import redirect_to
 from material import MaterialAdmin
 from materials.admin.fields import LicenseFields
 from materials.models.common import Author, GeneralSubject, GradeLevel, \
-    MediaFormat, Language, GeographicRelevance, COU_BUCKETS
+    MediaFormat, Language, GeographicRelevance
 from materials.models.course import Course, CourseMaterialType
 from materials.views.forms import KeywordsField, RSSFields
 from materials.views.forms.course import InstitutionField, CollectionField, \
@@ -33,7 +33,7 @@ COURSE_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "coll
                   "prerequisite_2", "has_postrequisites", "postrequisite_1_title", "postrequisite_1_url",
                   "postrequisite_1", "postrequisite_2_title", "postrequisite_2_url",
                   "postrequisite_2", "license_name", "license_url",
-                  "license_description", "copyright_holder", "cou_bucket", "license"]
+                  "license_description", "copyright_holder", "license"]
 
 
 MAIN_FIELDS_ADD = ["creator", "title", "url", "abstract", "institution", "collection", "workflow_state",
@@ -170,10 +170,6 @@ class CourseAddForm(forms.ModelForm, DerivedFields, PrePostRequisitesFields,
                                          required=False)
     copyright_holder = forms.CharField(widget=forms.TextInput(attrs={"size": 150}),
                                        required=False)
-
-    cou_bucket = forms.ChoiceField(choices=COU_BUCKETS,
-                                   label=u"Condition of Use Bucket",
-                                   widget=forms.Select())
 
     license = forms.Field(required=False)
 

@@ -14,7 +14,7 @@ from material import MaterialAdmin
 from materials.admin.course import AuthorsFormSet
 from materials.admin.fields import LicenseFields
 from materials.models.common import Author, GeneralSubject, GradeLevel, Language, \
-    GeographicRelevance, COU_BUCKETS
+    GeographicRelevance
 from materials.models.community import CommunityType, CommunityTopic, \
     CommunityItem
 from materials.views.forms import KeywordsField, RSSFields
@@ -26,7 +26,7 @@ COMMUNITY_ITEM_ADD_FIELDS = ["creator", "title", "url", "abstract", "workflow_st
                      "geographic_relevance", "community_types", "community_topics",
                      "featured", "in_rss", "rss_description", "rss_timestamp",
                      "license_name", "license_url",
-                     "license_description", "copyright_holder", "cou_bucket", "license"]
+                     "license_description", "copyright_holder", "license"]
 
 
 MAIN_FIELDS_ADD = ["creator", "title", "url", "abstract", "workflow_state",
@@ -102,10 +102,6 @@ class CommunityItemAddForm(forms.ModelForm, LicenseFields, RSSFields):
                                          required=False)
     copyright_holder = forms.CharField(widget=forms.TextInput(attrs={"size": 150}),
                                        required=False)
-
-    cou_bucket = forms.ChoiceField(choices=COU_BUCKETS,
-                                   label=u"Condition of Use Bucket",
-                                   widget=forms.Select())
 
     license = forms.Field(required=False)
 

@@ -53,11 +53,17 @@ class AutoCreateManyToManyField(models.ManyToManyField):
 add_introspection_rules([], ["^materials\.models\.common\.AutoCreateManyToManyField"])
 
 
+NO_STRING_ATTACHED = "no-strings-attached" 
+REMIX_AND_SHARE = "remix-and-share"
+SHARE_ONLY = "share-only"
+READ_THE_FINE_PRINT = "read-the-fine-print"
+
+
 COU_BUCKETS = (
-   (u"no-strings-attached", _(u"No Strings Attached")),
-   (u"remix-and-share", _(u"Remix and Share")),
-   (u"share-only", _(u"Share Only")),
-   (u"read-the-fine-print", _(u"Read the Fine Print")),
+   (NO_STRING_ATTACHED, _(u"No Strings Attached")),
+   (REMIX_AND_SHARE, _(u"Remix and Share")),
+   (SHARE_ONLY, _(u"Share Only")),
+   (READ_THE_FINE_PRINT, _(u"Read the Fine Print")),
 )
 
 
@@ -87,10 +93,10 @@ LICENSE_TYPES = (
 
 
 LICENSE_HIERARCHY = (
-    (u"no-strings-attached", ("cc-by", "public-domain")),
-    (u"remix-and-share", ("cc-by-sa", "cc-by-nc", "cc-by-nc-sa", "cc-nc-sa", "gnu-fdl")),
-    (u"share-only", ("cc-by-nd", "cc-by-nc-nd")),
-    (u"read-the-fine-print", ()),
+    (NO_STRING_ATTACHED, ("cc-by", "public-domain")),
+    (REMIX_AND_SHARE, ("cc-by-sa", "cc-by-nc", "cc-by-nc-sa", "cc-nc-sa", "gnu-fdl")),
+    (SHARE_ONLY, ("cc-by-nd", "cc-by-nc-nd")),
+    (READ_THE_FINE_PRINT, ()),
 )
 
 
@@ -181,9 +187,6 @@ class License(models.Model):
     copyright_holder = models.CharField(max_length=2000, default=u"",
                                         blank=True,
                                         verbose_name=_(u"Copyright holder"))
-    bucket = models.CharField(max_length=50, choices=COU_BUCKETS, default=u"",
-                              blank=True, verbose_name=_(u"Bucket"))
-
     objects = LicenseManager()
 
     def __unicode__(self):
@@ -204,6 +207,16 @@ class License(models.Model):
         if GNU_FDL_URL_RE.match(self.url):
             return u"gnu-fdl"
         return u"custom"
+
+    @property
+    def bucket(self):
+        license_type = self.type
+        for bucket, license_types in LICENSE_HIERARCHY:
+            if not license_types:
+                continue
+            if license_type in license_types:
+                return bucket
+        return READ_THE_FINE_PRINT
 
     @property
     def image(self):

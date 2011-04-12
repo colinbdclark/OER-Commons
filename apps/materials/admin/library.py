@@ -14,7 +14,7 @@ from material import MaterialAdmin
 from materials.admin.course import AuthorsFormSet
 from materials.admin.fields import LicenseFields
 from materials.models.common import Author, GeneralSubject, GradeLevel, \
-    MediaFormat, Language, GeographicRelevance, COU_BUCKETS
+    MediaFormat, Language, GeographicRelevance
 from materials.models.library import Library, LibraryMaterialType
 from materials.views.forms import KeywordsField, RSSFields
 from materials.views.forms.course import InstitutionField, CollectionField
@@ -27,7 +27,7 @@ LIBRARY_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "col
                      "curriculum_standards", "is_homepage",
                      "featured", "in_rss", "rss_description", "rss_timestamp",
                      "license_name", "license_url",
-                     "license_description", "copyright_holder", "cou_bucket", "license"]
+                     "license_description", "copyright_holder", "license"]
 
 
 MAIN_FIELDS_ADD = ["creator", "title", "url", "abstract", "institution", "collection", "workflow_state",
@@ -111,10 +111,6 @@ class LibraryAddForm(forms.ModelForm, LicenseFields, RSSFields):
                                          required=False)
     copyright_holder = forms.CharField(widget=forms.TextInput(attrs={"size": 150}),
                                        required=False)
-
-    cou_bucket = forms.ChoiceField(choices=COU_BUCKETS,
-                                   label=u"Condition of Use Bucket",
-                                   widget=forms.Select())
 
     license = forms.Field(required=False)
 

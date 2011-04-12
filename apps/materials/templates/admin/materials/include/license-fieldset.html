@@ -28,11 +28,4 @@
     {{ field }}
   </div>
   {% endwith %}
-  {% with form.cou_bucket as field %}
-  <div class="form-row{% if field.errors %} errors{% endif %}{% if field.field.required %} required{% endif %}">
-    {{ field.errors }}
-    {{ field.label_tag }}
-    {{ field }}
-  </div>
-  {% endwith %}
 </fieldset>

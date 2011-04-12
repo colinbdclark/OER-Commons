@@ -5,7 +5,7 @@ from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
 from materials.models.common import GeneralSubject, GradeLevel, MediaFormat, \
-    Language, GeographicRelevance, COU_BUCKETS
+    Language, GeographicRelevance
 from materials.models.course import Course, CourseMaterialType, COURSE_OR_MODULE
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
 from materials.views.forms import AuthorsField, KeywordsField, LICENSE_TYPES, \
@@ -238,10 +238,6 @@ class AddFormStaff(DerivedFields, PrePostRequisitesFields, AddForm):
                                             time_format="%H:%M",
                                             attrs={"class": "text"}))
 
-    cou_bucket = forms.ChoiceField(choices=COU_BUCKETS,
-                                   label=u"Condition of Use Bucket",
-                                   widget=forms.Select())
-
     def __init__(self, *args, **kwargs):
         super(AddForm, self).__init__(*args, **kwargs)
         self.fields["institution"].required = True
@@ -266,7 +262,7 @@ class AddFormStaff(DerivedFields, PrePostRequisitesFields, AddForm):
                   "featured", "in_rss", "rss_description", "rss_timestamp",
                   "license_type", "license_cc", "license_cc_old",
                   "license_custom_name", "license_custom_url", "license_description",
-                  "copyright_holder", "cou_bucket", "license"]
+                  "copyright_holder", "license"]
 
 
 @login_required

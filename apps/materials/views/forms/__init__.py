@@ -209,10 +209,6 @@ class SubmissionFormBase(RSSFields):
             name = self.cleaned_data.get("license_custom_name")
         description = self.cleaned_data.get("license_description")
         copyright_holder = self.cleaned_data.get("copyright_holder")
-        if "cou_bucket" in self.cleaned_data:
-            bucket = self.cleaned_data["cou_bucket"]
-        else:
-            bucket = None
         license = {}
         if url:
             license["url"] = url
@@ -222,8 +218,6 @@ class SubmissionFormBase(RSSFields):
             license["description"] = description
         if copyright_holder:
             license["copyright_holder"] = copyright_holder
-        if bucket:
-            license["bucket"] = bucket
         return license
 
     def set_initial_license_data(self):
@@ -251,5 +245,3 @@ class SubmissionFormBase(RSSFields):
             self.fields["license_custom_url"].initial = license.url
         self.fields["license_description"].initial = license.description
         self.fields["copyright_holder"].initial = license.copyright_holder
-        if "cou_bucket" in self.fields:
-            self.fields["cou_bucket"].initial = license.bucket

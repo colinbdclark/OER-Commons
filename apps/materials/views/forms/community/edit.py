@@ -21,7 +21,6 @@ class EditForm(AddFormStaff):
         del self.fields["in_rss"]
         del self.fields["rss_description"]
         del self.fields["rss_timestamp"]
-        del self.fields["cou_bucket"]
         self.fields["slug"].initial = self.instance.slug
         self.set_initial_license_data()
 
@@ -78,7 +77,7 @@ class EditFormStaff(AddFormStaff):
                   "in_rss", "rss_description", "rss_timestamp",
                   "license_type", "license_cc", "license_cc_old",
                   "license_custom_name", "license_custom_url", "license_description",
-                  "copyright_holder", "cou_bucket", "license"]
+                  "copyright_holder", "license"]
 
 
 @login_required

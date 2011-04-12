@@ -5,7 +5,7 @@ from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
 from materials.models.common import GeneralSubject, GradeLevel, Language, \
-    GeographicRelevance, COU_BUCKETS
+    GeographicRelevance
 from materials.models.community import CommunityItem, CommunityType, \
     CommunityTopic
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
@@ -151,10 +151,6 @@ class AddFormStaff(AddForm):
                                             time_format="%H:%M",
                                             attrs={"class": "text"}))
 
-    cou_bucket = forms.ChoiceField(choices=COU_BUCKETS,
-                                   label=u"Condition of Use Bucket",
-                                   widget=forms.Select())
-
     def __init__(self, *args, **kwargs):
         super(AddForm, self).__init__(*args, **kwargs)
         self.set_initial_license_data()
@@ -169,7 +165,7 @@ class AddFormStaff(AddForm):
                   "in_rss", "rss_description", "rss_timestamp",
                   "license_type", "license_cc", "license_cc_old",
                   "license_custom_name", "license_custom_url", "license_description",
-                  "copyright_holder", "cou_bucket", "license"]
+                  "copyright_holder", "license"]
 
 
 @login_required
