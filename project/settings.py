@@ -80,6 +80,7 @@ INSTALLED_APPS = (
     'djcelery',
     'oauth_provider',
     'honeypot',
+    'mailchimp',
     'utils',
     'tags',
     'materials',
@@ -99,6 +100,7 @@ INSTALLED_APPS = (
     'stats',
     'harvester',
     'visitcounts',
+    'newsletter',
     'project',
 )
 

@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load flatblock_tags %}
+{% load newsletter_tags %}
 
 {% block extra-js %}
 <script type="text/javascript"> 
   $(function() {
     oer.accordion.init($("div.portlet.oermaterials div.accordion"));
     $("div.portlet.cou li a").cluetip({local:true, arrows: true, width: 300});
+    oer.newsletter.init();
   });
 </script> 
 {% endblock %}
@@ -102,6 +104,8 @@
 </div> 
 
 {% include "include/portlets/addthis.html" %}
+
+{% newsletter_portlet %}
 
 {% include "include/portlets/cou.html" %}
 

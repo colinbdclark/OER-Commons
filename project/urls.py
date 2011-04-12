@@ -60,6 +60,7 @@ urlpatterns = patterns('',
     url(r'^api/', include('api.urls')),
     url(r'^sentry/', include('sentry.urls')),
     url(r'', include('stats.urls')),
+    url(r'', include('newsletter.urls', app_name=None, namespace="newsletter")),
     url(r'', include('materials.urls', app_name=None, namespace="materials")),
 )
 

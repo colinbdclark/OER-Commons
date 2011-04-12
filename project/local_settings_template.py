@@ -24,3 +24,6 @@ FLAVOR = "oercommons"
 BROKER_USER = ""
 BROKER_PASSWORD = ""
 BROKER_VHOST = "oercommons"
+
+MAILCHIMP_API_KEY = ""
+MAILCHIMP_LIST_ID = ""

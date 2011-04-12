@@ -79,6 +79,13 @@ oer.validation.rules.send_this = {
   }
 };
 
+oer.validation.rules.newsletter = {
+    email: {
+      required: true,
+      email: true
+    }
+};
+
 $.validator.setDefaults({
   errorPlacement: function(error, element) {
      error.appendTo(element.closest(".field").find(".errors"));

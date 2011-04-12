@@ -1,0 +1,18 @@
+{% if form %}
+<div class="portlet dotted" id="portlet-newsletter">
+  <h4 class="dotted green">Newsletter Sign Up</h4>
+  <form action="{% url newsletter:subscribe %}" method="post"
+        id="newsletter-subscribe" class="formatted">
+    {% with form.email as field %}
+    <div class="field">
+      {{ field.label_tag }}
+      <div class="errors"></div>
+      {{ field }}
+    </div>
+    {% endwith %}
+    <div class="buttons">
+      <input type="submit" value="Sign up" class="button" />
+    </div>
+  </form>
+</div>
+{% endif %}
