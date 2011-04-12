@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
+from honeypot.decorators import check_honeypot
 from users.backend import encrypt_password
 from users.models import MEMBER_ROLES, RegistrationConfirmation, Profile
 
@@ -91,6 +92,7 @@ class ConfirmationForm(forms.Form):
         return code
 
 
+@check_honeypot
 def registration(request):
 
     if request.user.is_authenticated():

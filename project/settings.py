@@ -79,6 +79,7 @@ INSTALLED_APPS = (
     'sentry.client',
     'djcelery',
     'oauth_provider',
+    'honeypot',
     'utils',
     'tags',
     'materials',
@@ -154,3 +155,6 @@ BROKER_HOST = "localhost"
 BROKER_PORT = 5672
 
 djcelery.setup_loader()
+
+
+HONEYPOT_FIELD_NAME = "address"
