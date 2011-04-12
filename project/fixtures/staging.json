@@ -33,5 +33,14 @@
       "header": "Recommended Resources", 
       "slug": "recommended-resources"
     }
+  },
+  {
+    "pk": 6, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "", 
+      "header": "", 
+      "slug": "conversion-view-item"
+    }
   }
 ]

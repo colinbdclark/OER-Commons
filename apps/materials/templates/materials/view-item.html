@@ -3,6 +3,7 @@
 {% load rating_tags %}
 {% load sendthis_tags %}
 {% load tags_tags %}
+{% load flatblock_tags %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -275,4 +276,8 @@
       <a href="{% url materials:keyword_index keywords=keyword.slug %}">{{ keyword.name }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block extra-footer %}
+  {% flatblock "conversion-view-item" %}
 {% endblock %}

@@ -33,5 +33,14 @@
       "header": "Recommended Resources", 
       "slug": "recommended-resources"
     }
+  },
+  {
+    "pk": 6, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<!-- Google Code for Basic Conversion - Views Conversion Page -->\r\n<script type=\"text/javascript\">\r\n/* <![CDATA[ /\r\nvar google_conversion_id = 1049115598;\r\nvar google_conversion_language = \"en\";\r\nvar google_conversion_format = \"2\";\r\nvar google_conversion_color = \"ffffff\";\r\nvar google_conversion_label = \"R3pgCNqw_AEQzveg9AM\";\r\nvar google_conversion_value = 0;\r\n/ ]]> */\r\n</script>\r\n<script type=\"text/javascript\" src=\"http://www.googleadservices.com/pagead/conversion.js\">\r\n</script>\r\n<noscript>\r\n<div style=\"display:inline;\">\r\n<img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\" src=\"http://www.googleadservices.com/pagead/conversion/1049115598/?label=R3pgCNqw_AEQzveg9AM&amp;guid=ON&amp;script=0\"/>\r\n</div>\r\n</noscript>", 
+      "header": "", 
+      "slug": "conversion-view-item"
+    }
   }
 ]
