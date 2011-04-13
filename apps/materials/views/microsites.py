@@ -61,4 +61,10 @@ def microsite(request, microsite):
                keyword["slug"]
         keyword["name"] = name
 
+    featured_k12 = SearchQuerySet().filter(featured=True, grade_levels__in=(1, 2), microsites=microsite.id).order_by("-featured_on").load_all()[:3]
+    featured_k12 = [r.object for r in featured_k12]
+
+    featured_highered = SearchQuerySet().filter(featured=True, grade_levels=3, microsites=microsite.id).order_by("-featured_on").load_all()[:3]
+    featured_highered = [r.object for r in featured_highered]
+
     return direct_to_template(request, "materials/microsites/%s.html" % microsite.slug, locals())

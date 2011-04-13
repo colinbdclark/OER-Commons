@@ -1,0 +1,26 @@
+<table class="frontpage-blocks"><tbody><tr>
+  <td class="first" width="50%">
+    <div class="frontpage-block">
+      <h4 class="dotted">Featured K-12 Resources</h4>
+      {% if featured_k12 %}
+        <ul>
+          {% for item in featured_k12 %}
+            <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </td>
+  <td width="50%">
+    <div class="frontpage-block">
+      <h4 class="dotted">Featured Higher Ed Resources</h4>
+      {% if featured_highered %}
+        <ul>
+          {% for item in featured_highered %}
+            <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </td>
+</tr></tbody></table>

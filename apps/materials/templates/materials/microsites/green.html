@@ -90,6 +90,8 @@
 {% endblock %}
 
 {% block content %}
+  {% include "include/featured-resources.html" %}
+
   <h2 class="dotted"><span class="icon"></span> Top <strong>{{ microsite.name }}</strong> resources</h2>
   <div class="materials-index collapsibles">
     {% for item in items %}
