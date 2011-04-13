@@ -79,26 +79,22 @@ def process_url(url, timeout, statuses=None):
     return statuses
 
 
-def process_item(_type, name, title, collection, url, timeout):
+def process_item(_type, id, status, slug, title, collection, url, timeout):
     if url.startswith('https://'):
         return None
 
-    row = [_type, name, title, collection, url]
-    delete = False
+    row = [_type, slug, title, collection, url]
 
-    for status, reason, redirect_url in process_url(url, timeout):
-        if status is None:
+    for actual_status, reason, redirect_url in process_url(url, timeout):
+        if actual_status is None:
             row.append(reason)
         else:
-            row.append("%i %s" % (status, reason))
+            row.append("%i %s" % (actual_status, reason))
 
         if redirect_url:
             row.append(redirect_url)
 
-        if status == 404:
-            delete = True
-
-    return (row, delete)
+    return (id, status, actual_status, row)
 
 
 class Processor(pprocess.Exchange):
@@ -106,9 +102,14 @@ class Processor(pprocess.Exchange):
     def store_data(self, ch):
         result = ch.receive()
         if result:
-            row, delete = result
-            if delete:
-                self.to_be_deleted.append((row[0], row[1]))
+            id, status, actual_status, row = result
+            if status != actual_status:
+                _type = row[0]
+                if actual_status not in self.updated_statuses:
+                    self.updated_statuses[actual_status] = {}
+                if _type not in self.updated_statuses[actual_status]:
+                    self.updated_statuses[actual_status][_type] = []
+                self.updated_statuses[actual_status][_type].append(id)
             row = map(lambda x: unicode(x).encode('utf-8'), row)
             self.writer.writerow(row)
         self.cnt += 1
@@ -129,30 +130,28 @@ def process_check_urls(limit=10, timeout=30):
                   Library.objects.all().count() + \
                   CommunityItem.objects.all().count()
     processor.cnt = 0
-    processor.to_be_deleted = []
+    processor.updated_statuses = {}
 
     process = processor.manage(pprocess.MakeReusable(process_item))
 
-    for slug, title, collection, url in Course.objects.values_list("slug",
-                               "title", "collection", "url"):
-        process("course", slug, title,
+    for id, status, slug, title, collection, url in Course.objects.values_list(
+                                  "id", "http_status", "slug", "title", "collection", "url"):
+        process("course", id, status, slug, title,
                 get_name_from_id(Collection, collection), url, timeout)
 
-    for slug, title, collection, url in Library.objects.values_list("slug",
-                               "title", "collection", "url"):
-        process("library", slug, title,
+    for id, status, slug, title, collection, url in Library.objects.values_list(
+                                  "id", "http_status", "slug", "title", "collection", "url"):
+        process("library", id, status, slug, title,
                       get_name_from_id(Collection, collection), url, timeout)
 
-    for slug, title, url in CommunityItem.objects.values_list("slug",
-                               "title", "url"):
-        process("community item", slug, title, "", url, timeout)
+    for id, status, slug, title, url in CommunityItem.objects.values_list(
+                                  "id", "http_status", "slug", "title", "url"):
+        process("community item", id, status, slug, title, "", url, timeout)
 
     processor.finish()
 
-    if processor.to_be_deleted:
-        print "Removing %i items with 404 status" % len(processor.to_be_deleted)
-        for _type, slug in processor.to_be_deleted:
-            # Remove items which have 404 status
+    for status, items in processor.updated_statuses.items():
+        for _type, ids in items.items():
             if _type == 'course':
                 model = Course
             elif _type == 'library':
@@ -160,12 +159,9 @@ def process_check_urls(limit=10, timeout=30):
             elif _type == 'community item':
                 model = CommunityItem
             else:
-                model = None
-            if model:
-                try:
-                    model.objects.get(slug=slug).delete()
-                except model.DoesNotExist:
-                    pass
+                continue
+            print "Set %s status for %i %s" % (str(status), len(items), unicode(model._meta.verbose_name_plural))
+            model.objects.filter(id__in=ids).update(http_status=status)
 
     filename = '%s-%s.csv' % (CHECK_URLS, datetime.datetime.now().isoformat())
     report = Report(type=CHECK_URLS)

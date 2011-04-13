@@ -11,8 +11,12 @@ publish.short_description = u"Publish selected items"
 
 class MaterialAdmin(ModelAdmin):
 
-    list_display = ["title", "workflow_state", "creator"]
-    list_filter = ["workflow_state", "featured"]
+    def url(self):
+        return """<a target="_blank" href="%s">%s</a>""" % (self.url, self.url)
+    url.allow_tags = True
+    
+    list_display = ["title", url, "http_status", "workflow_state", "creator"]
+    list_filter = ["workflow_state", "featured", "http_status"]
 
     actions = [publish]
 

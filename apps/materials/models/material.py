@@ -86,6 +86,8 @@ class Material(models.Model):
 
     featured = models.BooleanField(default=False, verbose_name=_(u"Featured"))
     featured_on = models.DateTimeField(null=True, blank=True)
+    
+    http_status = models.IntegerField(null=True, blank=True, verbose_name=_(u"HTTP Status"))
 
     tags = generic.GenericRelation(Tag)
     reviews = generic.GenericRelation(Review)
