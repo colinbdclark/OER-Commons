@@ -75,17 +75,21 @@ form.formatted label.error {
   font-weight: normal;
 }
 
+form.formatted label.error a {
+  text-decoration: none; 
+}
+
 form.formatted .buttons {
   text-align: right;
 }
 
 form.reset-password-init {
-  width: 300px;
+  width: 400px;
   margin: 0 auto;
 }
 
 form.reset-password-init input.text {
-  width: 292px;
+  width: 392px;
 }
 
 form.reset-password, form.change-password {

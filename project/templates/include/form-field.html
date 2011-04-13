@@ -5,7 +5,7 @@
   {% endif %}
   <div class="errors">
     {% for error in field.errors %}
-      <label class="error">{{ error }}</label>
+      <label class="error">{{ error|safe }}</label>
     {% endfor %}
   </div>
   {{ field }}

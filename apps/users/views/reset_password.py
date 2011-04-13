@@ -1,30 +1,34 @@
 from django import forms
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, Http404
-from django.views.generic.simple import direct_to_template
-from django.contrib.auth.models import User
-from users.models import ResetPasswordConfirmation
-from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.core.validators import email_re
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404
+from django.views.generic.simple import direct_to_template
+from users.models import ResetPasswordConfirmation
 
 
 class InitResetPasswordForm(forms.Form):
 
-    email = forms.EmailField(label=u"Your email:",
-                             help_text=u"Please enter the email address you "
-                             "used to create your OER Commons account, and we "
-                             "will send you a link to reset your password.",
+    username_or_email = forms.CharField(label=u"Your username or email:",
                              widget=forms.TextInput(attrs={"size": 40,
                                                            "class": "text"}))
 
 
-    def clean_email(self):
-        email = self.cleaned_data["email"]
-        try:
-            User.objects.get(email=email)
-        except User.DoesNotExist:
-            raise forms.ValidationError(u"User account with this email is not registered.")
-        return email
+    def clean_username_or_email(self):
+        username_or_email = self.cleaned_data["username_or_email"].strip()
+        if email_re.match(username_or_email):
+            try:
+                self.user = User.objects.get(email=username_or_email)
+            except User.DoesNotExist:
+                raise forms.ValidationError(u"""User account with this email is not registered. <a href="#">Register now.</a>""")
+        else:
+            try:
+                self.user = User.objects.get(username=username_or_email)
+            except User.DoesNotExist:
+                raise forms.ValidationError(u"""User account with this username is not registered. <a href="#">Register now.</a>""")
+        return username_or_email
 
 
 class ResetPasswordForm(forms.Form):
@@ -63,12 +67,14 @@ def init(request):
     if request.method == "POST":
         form = InitResetPasswordForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data["email"]
-            user = User.objects.get(email=email)
+            user = form.user
             confirmation = ResetPasswordConfirmation(user=user)
             confirmation.save()
             confirmation.send_confirmation()
-            messages.success(request, u"We have sent a link to reset your password to %s." % email)
+            if email_re.match(form.cleaned_data["username_or_email"]):
+                messages.success(request, u"We have sent a link to reset your password to %s." % user.email)
+            else:
+                messages.success(request, u"We have sent a link to reset your password to your email.")
             return HttpResponseRedirect(reverse("frontpage"))
 
     return direct_to_template(request, "users/reset-password-init.html", locals())
