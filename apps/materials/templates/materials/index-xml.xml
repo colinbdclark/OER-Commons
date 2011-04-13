@@ -9,7 +9,7 @@
 	  {% if item.institution %}
 	    <institution>{{ item.institution }}</institution>
 	  {% endif %}
-	  <abstract>{{ data.abstract }}</abstract>
+	  <abstract>{{ item.abstract }}</abstract>
 	  {% if item.copyright_holder %}
 	    <copyright>{{ item.copyright_holder }}</copyright>
 	  {% endif %}
