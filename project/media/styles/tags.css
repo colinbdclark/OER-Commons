@@ -2,7 +2,6 @@
   text-decoration: none;
   margin: 1px;
   color: #0b7ba9;
-  font-size: 11px;
   font-weight: normal;
 }
 
@@ -59,11 +58,9 @@ a.tag9 {
 
 #add-tags-form label {
   display: block;
-  font-size: 12px;
 }
 
 #id_tags {
-  font-size: 12px;
   width: 173px;
 }
 
@@ -75,7 +72,6 @@ a.tag9 {
 
 .user-tags {
   list-style-type: none;
-  font-size: 12px;
   margin-bottom: 5px;
 }
 

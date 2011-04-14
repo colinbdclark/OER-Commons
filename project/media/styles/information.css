@@ -3,10 +3,6 @@
   font-size: 16px;
 }
 
-#content.topics {
-  font-size: 12px;
-}
-
 #content.topics h3 {
   background: #F3F7F8 url(../images/box-header-bg.png) repeat-x 0 0;
   color: #fff;

@@ -1,8 +1,3 @@
-form.formatted .keywords-widget,.keywords-widget,form.formatted .keywords-widget label,form.formatted .keywords-widget input
-  {
-  font-size: 12px;
-}
-
 .keywords-widget input.add-keyword {
   width: 250px;
   margin-left: 5px;

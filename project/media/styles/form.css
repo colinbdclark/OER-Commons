@@ -24,7 +24,6 @@ form.formatted .field {
 
 form.formatted label {
   color: #333;
-  font-size: 11px;
   padding-top: 3px;
   font-weight: bold;
   margin-bottom: 3px;
@@ -61,7 +60,7 @@ form.formatted .field.required ul label {
 
 form.formatted .help {
   color: #666;
-  font-size: 11px;
+  font-size: 12px;
   font-style: italic;
   margin-bottom: 3px;
 }
@@ -114,14 +113,9 @@ form.login a {
   text-decoration: none;
 }
 
-form.login p {
-  font-size: 12px;
-}
-
 form.login .buttons a {
   display: block;
   float: left;
-  font-size: 12px;
   margin-top: 7px;
 }
 
@@ -162,23 +156,6 @@ form.profile a {
 
 form.profile .change-password-link {
   text-align: right;
-}
-
-form.tags textarea.text {
-  width: 552px;
-  resize: none;
-  height: 120px;
-}
-
-form.tags .other-tags a {
-  text-decoration: none;
-  font-size: 12px;
-  margin-right: 5px;
-  line-height: 1.5;
-}
-
-form.tags .other-tags a:hover {
-  text-decoration: underline;
 }
 
 form.review textarea.text {
@@ -246,10 +223,6 @@ form.content-submission .fields .required .label label {
   background: url(../images/asterisk-blue.gif) no-repeat 100% 0;
 }
 
-form.content-submission .error {
-  font-size: 12px;
-}
-
 form.content-submission input.text {
   background: #DDF0F6 url(../images/contribute-textinput-bg.png) repeat-x 0 0;
 }
@@ -274,7 +247,6 @@ form.content-submission .checkbox label {
   padding: 0;
   display: block;
   font-weight: normal;
-  font-size: 13px;
 }
 
 form.content-submission table.item-description.fields td {
@@ -352,10 +324,6 @@ form.content-submission .columns .label {
   margin-bottom: 5px;
 }
 
-form.content-submission .columns li label {
-  font-size: 13px
-}
-
 form.content-submission .help {
   color: #0C5670;
   margin-bottom: 10px;
@@ -370,7 +338,6 @@ form.content-submission .help a {
 }
 
 form.content-submission .cou .radio label {
-  font-size: 13px;
   font-weight: normal;
 }
 
@@ -389,11 +356,9 @@ form.content-submission #id_license_description {
 
 form.content-submission .cou .choose, form.content-submission .cou .change {
   padding-left: 5px;
-  font-size: 13px;
 }
 
 form.content-submission .cou a.name {
-  font-size: 13px;
   font-weight: bold;
   line-height: 20px;
 }
@@ -413,7 +378,6 @@ form.content-submission .selection-widget {
 form.content-submission .selection-widget table {
   margin: 0;
   padding: 0;
-  font-size: 12px;
   width: auto;
 }
 

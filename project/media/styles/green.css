@@ -85,7 +85,6 @@ body.green {
 }
 
 .green .portlet.oermaterials ul {
-  font-size: 12px;
   margin-left: 20px;
 }
 
@@ -94,16 +93,15 @@ body.green {
   margin-bottom: 20px;
 }
 
+
 .green .portlet.oermaterials {
   margin-bottom: 0;
 }
 
 #green-sponsors-portlet p {
-  font-size: 13px;
   color: #666;
   line-height: 16px;
-  margin-right
-  20px;
+  margin-right: 20px;
 }
 
 #green-sponsors-portlet div {

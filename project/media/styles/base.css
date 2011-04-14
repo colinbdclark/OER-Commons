@@ -2,7 +2,7 @@ body {
   background: url(../images/main-bg.png) repeat-x;
   color: #333;
   font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 a {
@@ -55,7 +55,7 @@ hr.tall {
 }
 
 .breadcrumbs {
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
 .breadcrumbs a {
@@ -77,7 +77,6 @@ hr.tall {
   background-color: #FC6;
   border: 1px solid #A88743;
   color: #544322;
-  font-size: 13px;
   font-weight: bold;
   margin-bottom: 10px;
   padding: 10px;
@@ -85,7 +84,7 @@ hr.tall {
 
 .ui-widget {
   font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .expand-button {
@@ -120,7 +119,6 @@ a.expand-button.expanded {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  font-size: 13px;
 }
 
 .action-panel ul.left {
@@ -151,7 +149,6 @@ a.expand-button.expanded {
 .action-panel ul.right a {
   text-decoration: none;
   font-weight: bold;
-  font-size: 11px;
 }
 
 .promo {
@@ -182,10 +179,6 @@ div.box h3 {
   padding-left: 10px;
   line-height: 33px;
   height: 39px;
-}
-
-#content.contribute {
-  font-size: 13px;
 }
 
 #content.contribute a {
