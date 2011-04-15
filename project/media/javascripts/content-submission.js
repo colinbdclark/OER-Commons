@@ -177,5 +177,5 @@ oer.content_submission.init_rss_fields = function() {
 };
 
 $.datepicker.setDefaults({ 
-    dateFormat: "mm.dd.yy"
+    dateFormat: "mm/dd/yy"
 });
