@@ -52,6 +52,12 @@ form.content-submission {
 
 .content-submission .label label {
   font-weight: bold;
+  display: inline-block;
+}
+
+.content-submission .required .label label {
+  padding-right: 12px;
+  background: url(../images/asterisk.gif) no-repeat 100% 0%;
 }
 
 .content-submission td.label {
@@ -61,7 +67,6 @@ form.content-submission {
 .content-submission td.label label {
   margin-right: 5px;
   margin-top: 3px;
-  display: block;
 }
 
 .content-submission div.label {
