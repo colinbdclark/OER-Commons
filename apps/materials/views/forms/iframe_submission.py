@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.models import ModelForm
+from django.http import HttpResponse
 from django.utils.html import strip_tags
 from django.views.generic.simple import direct_to_template
 from materials.models.common import GeneralSubject, GradeLevel, Language, \
@@ -14,10 +15,9 @@ from materials.views.forms.pyreadability import Readability, \
     ReadabilityException
 from urllib2 import URLError
 from utils.decorators import login_required
+import cjson
 import re
 import requests
-from django.http import HttpResponse
-import cjson
 
 
 HTTP_USER_AGENT = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.25 (KHTML, like Gecko) Chrome/12.0.706.0 Safari/534.25" 
@@ -96,11 +96,6 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
                            attrs={"class": "wide"}))
 
     keywords = KeywordsField(label=u"Keywords")
-
-    tech_requirements = forms.CharField(label=u"Technical requirements",
-                                     required=False,
-                                     widget=forms.Textarea(
-                                     attrs={"class": "wide"}))
 
     general_subjects = forms.ModelMultipleChoiceField(
                                 GeneralSubject.objects.all(),
