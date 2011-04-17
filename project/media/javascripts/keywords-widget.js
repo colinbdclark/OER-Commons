@@ -23,8 +23,7 @@ oer.keywords_widget.init = function() {
         var $add_input = $widget.find("input[type='text']");
         var $keywords = $widget.find("ul");
 
-        function add_value() {
-            var value = $add_input.val().split(",")[0];
+        function add_value(value) {
             var values = get_values($input);
             $add_input.val("");
             if ($.inArray(value, values) != -1) {
@@ -40,15 +39,21 @@ oer.keywords_widget.init = function() {
 
         $add_input.autocomplete({
         minLength : 2,
-        source : "/autocomplete/materials/keyword/name"
+        source : "/autocomplete/materials/keyword/name",
+        select: function(e, ui) {
+            e.preventDefault();
+            add_value(ui.item.value);
+        }  
         });
 
-        $add_input.keydown(function(e) {
-            if (e.keyCode == 13) {
-                if ($add_input.autocomplete("opened")) {
-                    e.preventDefault();
-                    add_value();
+        $add_input.keypress(function(e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                var value = $.trim($add_input.val());
+                if (value !== "") {
+                    add_value(value);
                 }
+                $add_input.autocomplete("close");
             }
         });
   
