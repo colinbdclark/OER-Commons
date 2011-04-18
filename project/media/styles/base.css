@@ -211,6 +211,9 @@ div.box h3 {
   box-shadow: 2px 2px 3px #999;
 }
 
+.ui-button .ui-button-text {
+  font-size: 12px;
+}
 .ui-dialog.loading .ui-dialog-title {
   padding-right: 22px;
   background: url(../images/ajax-loader.gif) no-repeat 100% 50%;

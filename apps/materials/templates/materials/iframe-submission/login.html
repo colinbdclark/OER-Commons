@@ -1,0 +1,23 @@
+<form action="{% url materials:iframe_login %}" method="post"
+      id="login" class="login formatted">
+<p>Please sign in to OER Commons. If you do not have an account, head over to
+the <a href="{% url users:registration %}" target="_blank">registration form</a>.</p>
+
+  <div class="global errors"></div>
+
+  {% for field in form %}
+    {% include "include/form-field.html" %}
+  {% endfor %}
+  <div class="buttons clearfix">
+    <input type="submit" value="Login" id="submit" />
+  </div>
+
+<p><a href="{% url users:reset_password_init %}" target="_blank">Forgot your password?</a></p>
+
+</form>
+
+<script type="text/javascript">
+  $(function() {
+      oer.iframe_submission.login.init();
+  });
+</script>

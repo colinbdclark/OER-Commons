@@ -1,0 +1,84 @@
+<form action="{{ request.get_full_path }}" method="post"
+        class="content-submission" id="content-submission">
+    {% for field in form.hidden_fields %}
+      {{ field }}
+    {% endfor %}
+    <fieldset title="Step 1">
+      <legend></legend>
+      <table>
+        <tbody>
+          {% with form.title as field %}
+            {% include "materials/iframe-submission/form-field.html" %}
+          {% endwith %}
+          {% with form.abstract as field %}
+            {% include "materials/iframe-submission/form-field.html" %}
+          {% endwith %}
+          {% with form.institution as field %}
+            {% include "materials/iframe-submission/form-field.html" %}
+          {% endwith %}
+          {% with form.collection as field %}
+            {% include "materials/iframe-submission/form-field.html" %}
+          {% endwith %}
+          {% with form.authors as field %}
+            {% include "materials/iframe-submission/form-field.html" %}
+          {% endwith %}
+          {% with form.keywords as field %}
+            {% include "materials/iframe-submission/form-field.html" %}
+          {% endwith %}
+        </tbody>
+      </table>
+    </fieldset>
+    <fieldset title="Step 2">
+      <legend></legend>
+      <table width="100%">
+        <tbody>
+          <tr>
+            <td width="33%">
+              {% with form.general_subjects as field %}
+                {% include "include/form-field.html" %}
+              {% endwith %}
+              {% with form.media_formats as field %}
+                {% include "include/form-field.html" %}
+              {% endwith %}
+            </td>
+            <td width="33%">
+              {% with form.grade_levels as field %}
+                {% include "include/form-field.html" %}
+              {% endwith %}
+              {% with form.languages as field %}
+                {% include "include/form-field.html" %}
+              {% endwith %}
+              {% with form.geographic_relevance as field %}
+                {% include "include/form-field.html" %}
+              {% endwith %}
+            </td>
+            <td width="33%">
+              {% with form.material_types as field %}
+                {% include "include/form-field.html" %}
+              {% endwith %}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+    <fieldset title="Step 3">
+      <legend></legend>
+      {% include "materials/iframe-submission/license-field.html" %}
+    </fieldset>
+    <fieldset title="Step 4">
+      <legend></legend>
+        {% with form.license_description as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+        
+        {% with form.copyright_holder as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+    </fieldset>
+    <a class="finish" href="#" style="display: inline-block;">Submit</a>
+  </form>
+<script type="text/javascript">
+  $(function() {
+    oer.iframe_submission.content_submission.init();
+  });
+</script>

@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns, url, include
+from django.views.generic.simple import direct_to_template
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
@@ -97,7 +98,10 @@ urlpatterns = patterns('materials.views',
     url(r"^license-picker/issue/?$", "license_picker.issue"),
     url(r"^tags(?:/(?P<letter>[a-z]))?/?$", "tags_index.tags_index", name="tags"),
     url(r'^autocomplete/(\w+)/(\w+)/(\w+)/?$', "autocomplete.autocomplete", name="autocomplete"),
-    url(r'^submit/?$', "forms.iframe_submission.iframe_submission", name="iframe_submission"),
+    url(r'^submit/?$', "iframe_submission.iframe.iframe", name="iframe_submission"),
+    url(r'^submit/close$', direct_to_template, kwargs=dict(template="materials/iframe-submission/close.html"), name="iframe_close"),
+    url(r'^submit/dispatch$', "iframe_submission.iframe.dispatch_iframe", name="iframe_dispatch"),
+    url(r'^submit/login$', "iframe_submission.login.login", name="iframe_login"),
     url(r'^(?P<microsite>[^/]+)/?$', "microsites.microsite", name="microsite"),
 )
 

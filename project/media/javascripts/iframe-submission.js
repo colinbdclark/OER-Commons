@@ -1,6 +1,23 @@
 oer.iframe_submission = {};
 
 oer.iframe_submission.init = function() {
+    oer.iframe_submission.dispatch();
+};
+
+oer.iframe_submission.dispatch = function() {
+    var $container = $("#container");
+    $container.empty();
+    $container.addClass("loading");
+    $container.load("/submit/dispatch", {
+        "url" : RESOURCE_URL
+    }, function(response) {
+        $container.removeClass("loading");
+    });
+};
+
+oer.iframe_submission.content_submission = {};
+
+oer.iframe_submission.content_submission.init = function() {
 
     var $form = $("#content-submission");
 
@@ -17,7 +34,7 @@ oer.iframe_submission.init = function() {
 
     $form.find("a.finish").button().css("visibility", "visible").click(function(e) {
         e.preventDefault();
-        var $container = $form.parent(); 
+        var $container = $form.parent();
         $.post($form.attr("action"), $form.serialize(), function(response) {
             if (response.status === "success") {
                 $form.hide();
@@ -60,21 +77,40 @@ oer.iframe_submission.init = function() {
         }
     });
 
-    $("a#close").click(function(e) {
-        e.preventDefault();
-        oer.iframe_submission.close();
-    });
-
     oer.content_submission.init_autocomplete();
     oer.keywords_widget.init();
     oer.content_submission.init_license();
-
     $form.show();
-
 };
 
-oer.iframe_submission.close = function() {
-    var parent_url = decodeURIComponent(document.location.hash.replace(/^#/, ''));
-    XD.postMessage("close", parent_url, parent);
-    return false;
+oer.iframe_submission.login = {};
+
+oer.iframe_submission.login.init = function() {
+
+    $form = $("#login");
+    var $global_error_ct = $form.find(".errors.global");
+
+    var validator = $form.validate({
+    rules : {
+    username : "required",
+    password : "required"
+    },
+    submitHandler : function(form) {
+        $global_error_ct.empty();
+        $.post($form.attr("action"), $form.serialize(), function(response) {
+            if (response.status === "success") {
+                oer.iframe_submission.dispatch();
+            } else if (response.status === "error") {
+                if (response.errors.__all__ !== undefined) {
+                    $global_error_ct.append('<label class="error">' + response.errors.__all__ + '</label>');
+                    delete response.errors.__all__
+                }
+                validator.showErrors(response.errors);
+            }
+        });
+        return false;
+    }
+    });
+
+    $form.find(".buttons input").button();
 };

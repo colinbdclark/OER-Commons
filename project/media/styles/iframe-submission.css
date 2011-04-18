@@ -1,7 +1,19 @@
 body.iframe-submission {
-  background: none;
+  background-image: none;
+  background-color: #fff;
   padding: 10px;
-  font-size: 13px;
+}
+
+body.iframe-submission a {
+  text-decoration: none;
+}
+
+.iframe-submission #container {
+  height: 510px;
+}
+
+.iframe-submission #container.loading {
+   background: url(../images/ajax-loader-big.gif) no-repeat 50% 50%;
 }
 
 ul.stepy-titles {
@@ -36,7 +48,6 @@ ul.stepy-titles li span {
   float: right;
   font-size: 13px;
   line-height: 15px;
-  text-decoration: none;
   padding-left: 15px;
   background: url(../images/icon-delete-gray.png) no-repeat 0% 50%;
   margin-top: -5px;
@@ -103,10 +114,6 @@ fieldset.step p.content-submission-buttons {
 fieldset.step p.content-submission-buttons a {
   display: inline-block;
   visibility: hidden;
-}
-
-fieldset.step p.content-submission-buttons a .ui-button-text {
-  font-size: 11px;
 }
 
 form.content-submission fieldset.step {
@@ -185,4 +192,18 @@ form.content-submission fieldset.step {
 .iframe-submission form.content-submission #id_tech_requirements {
   background: none;
   height: 33px;
+}
+
+.iframe-submission form.login {
+  width: 230px;
+  margin: 0; 
+}
+
+.iframe-submission form.login p {
+  margin: 10px 0; 
+}
+
+.iframe-submission form.login .buttons a {
+  float: right;
+  margin-top: 0;
 }
