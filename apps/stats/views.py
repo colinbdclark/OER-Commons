@@ -12,6 +12,8 @@ from users.models import Profile, MEMBER_ROLES
 from utils.decorators import login_required
 import datetime
 import urllib
+from visitcounts.models import UniqueVisitor
+from django.contrib.auth.models import User
 
 
 PERIODS = (
@@ -62,11 +64,44 @@ def get_users_saveditems_count(from_date=None, until_date=None):
     return SavedItem.objects.filter(**filter).values("user__id").annotate(count=models.Count("user__id")).filter(count__gt=5).count()
 
 
+def get_anonymous_visitors_count(from_date=None, until_date=None):
+    filter = {}
+    if from_date:
+        filter["timestamp__gte"] = from_date
+    if until_date:
+        filter["timestamp__lt"] = until_date
+    filter["is_authenticated"] = False
+    return UniqueVisitor.objects.filter(**filter).count() 
+
+
+def get_authenticated_visitors_count(from_date=None, until_date=None):
+    filter = {}
+    if from_date:
+        filter["timestamp__gte"] = from_date
+    if until_date:
+        filter["timestamp__lt"] = until_date
+    filter["is_authenticated"] = True
+    return UniqueVisitor.objects.filter(**filter).count() 
+
+
+def get_registrations_count(from_date=None, until_date=None):
+    filter = {}
+    if from_date:
+        filter["date_joined__gte"] = from_date
+    if until_date:
+        filter["date_joined__lt"] = until_date
+    filter["is_active"] = True
+    return User.objects.filter(**filter).count() 
+
+
 STATS = (
     (u"How many users have submitted resources?", get_users_submitted_count),
     (u"How many users have commented on at least one item?", get_users_commented_count),
     (u"How many users have rated at least one item?", get_users_rated_count),
     (u"How many users have more than five items bookmarked?", get_users_saveditems_count),
+    (u"Unique visitors (anonymous)", get_anonymous_visitors_count),
+    (u"Unique visitors (authenticated)", get_authenticated_visitors_count),
+    (u"New registered members", get_registrations_count),
 )
 
 
