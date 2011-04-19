@@ -49,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'visitcounts.middleware.UniqueVisitorMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
