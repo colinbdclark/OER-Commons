@@ -9,6 +9,13 @@
       oer.collapsibles.init($("#content"));
       oer.materials.index.init_actions_menus();
       oer.rating.init();
+      $(".slider").anythingSlider({
+          width: 960,
+          height: 227,
+          buildNavigation: true,
+          autoPlay: true,
+          startStopped: true
+        });
     });
   </script>
 {% endblock %}
@@ -18,6 +25,7 @@
 {% block promo %}{% endblock %}
 
 {% block above-content %}
+{% include "include/slider.html" %}
 <div class="green-feature fixed-width">
   <h2>Highlight</h2>
   <p><a href="/courses/sun-curve-design-challenge-design-process-activity">Sun Curve Design Challenge</a>: A student-teacher collaborative<br/>

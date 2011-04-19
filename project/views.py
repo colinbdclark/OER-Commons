@@ -78,7 +78,7 @@ def frontpage(request):
     for s in grade_levels:
         s["count"] = grade_levels_facets.get(unicode(s["id"]), 0)
 
-    slides = Slide.objects.all()
+    slides = Slide.objects.filter(microsite=None)
 
     microsites = Microsite.objects.all()
     microsites_ids = tuple(microsites.values_list("id", flat=True))

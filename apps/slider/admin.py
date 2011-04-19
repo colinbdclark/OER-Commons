@@ -5,7 +5,7 @@ from slider.models import Slide
 
 class SlideAdmin(ModelAdmin):
 
-    list_display = ["title", "order"]
+    list_display = ["title", "microsite", "order"]
     list_editable = ["order"]
 
 
