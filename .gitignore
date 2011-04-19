@@ -19,6 +19,7 @@ eggs/
 downloads/
 virtualenv/
 project.db
+celerybeat-schedule
 project/media/CACHE/
 project/media/admin/
 project/media/debug_toolbar/
