@@ -9,6 +9,7 @@ from materials.utils import get_name_from_slug
 from materials.views.index import populate_item_from_search_result, \
     MAX_TOP_KEYWORDS
 from mptt.utils import tree_item_iterator
+from slider.models import Slide
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 
@@ -65,6 +66,8 @@ def microsite(request, microsite):
 
     featured_highered = SearchQuerySet().filter(featured=True, grade_levels=3, microsites=microsite.id).order_by("-featured_on").load_all()[:3]
     featured_highered = [r.object for r in featured_highered]
+
+    slides = Slide.objects.filter(microsite=microsite)
 
     return direct_to_template(request, "materials/microsites/%s.html" % microsite.slug, locals())
 
