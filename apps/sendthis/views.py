@@ -2,11 +2,12 @@ from django import forms
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import resolve, reverse
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect
 from django.views.generic.simple import direct_to_template
 from utils.decorators import login_required
 from django.template.loader import render_to_string
 from django.core.mail.message import EmailMessage
+from annoying.decorators import JsonResponse
 
 
 class SendThisForm(forms.Form):
@@ -76,8 +77,8 @@ def send(request):
         if form.is_valid():
             form.send()
             message = u"Email was sent to %s" % form.cleaned_data["email"]
-            if "ajax" in request.REQUEST:
-                return HttpResponse(message, content_type="application/json")
+            if request.is_ajax():
+                return JsonResponse(dict(message=message))
             messages.success(request, message)
             return HttpResponseRedirect(path)
         else:

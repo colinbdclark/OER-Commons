@@ -1,14 +1,14 @@
+from annoying.decorators import ajax_request
 from django import forms
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.shortcuts import get_object_or_404
+from haystack.sites import site
 from rating import get_rating_stars_class
 from rating.models import RATING_VALUES, Rating
 from utils.decorators import login_required
 from utils.shortcuts import redirect_to_next_url
-import cjson
-from haystack.sites import site
 
 
 class RatingForm(forms.Form):
@@ -50,6 +50,7 @@ class RatingForm(forms.Form):
 
 
 @login_required
+@ajax_request
 def rate(request, slug=None, model=None):
 
     if not slug or not model:
@@ -62,16 +63,12 @@ def rate(request, slug=None, model=None):
     if form.is_valid():
         form.save()
         if request.method == "POST":
-            return HttpResponse(cjson.encode(dict(
-                              stars_class=get_rating_stars_class(item.rating),
-                              message=u"Your rating was saved."
-                              )), content_type="application/json")
+            return dict(stars_class=get_rating_stars_class(item.rating),
+                        message=u"Your rating was saved.")
         else:
             messages.success(request, u"Your rating was saved.")
     elif request.method == "POST":
-        return HttpResponse(cjson.encode(dict(
-                          stars_class=get_rating_stars_class(item.rating),
-                          message=u"There was a problem with saved your rate."
-                          )), content_type="application/json")
+        return dict(stars_class=get_rating_stars_class(item.rating),
+                    message=u"There was a problem with saved your rate.")
 
     return redirect_to_next_url(request, item.get_absolute_url())

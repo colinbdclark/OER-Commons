@@ -1,15 +1,15 @@
+from annoying.decorators import ajax_request
 from autoslug.settings import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from haystack.sites import site
 from tags.models import Tag
 from utils.decorators import login_required
-import cjson
 
 
 @login_required
+@ajax_request
 def add(request, app_label, model, object_id):
 
     content_type = get_object_or_404(ContentType, app_label=app_label,
@@ -42,10 +42,11 @@ def add(request, app_label, model, object_id):
                                                  kwargs={"keywords": tag.slug}),
                                      ))
     
-    return HttpResponse(cjson.encode(response), content_type="application/json")
+    return response
 
 
 @login_required
+@ajax_request
 def delete(request):
     
     response = {}
@@ -64,10 +65,11 @@ def delete(request):
             except Tag.DoesNotExist:
                 pass
 
-    return HttpResponse(cjson.encode(response), content_type="application/json")
+    return response
     
     
 @login_required
+@ajax_request
 def get_tags(request, app_label, model, object_id):
     
     content_type = get_object_or_404(ContentType, app_label=app_label,
@@ -97,7 +99,7 @@ def get_tags(request, app_label, model, object_id):
     response = dict(tags=item_tags,
                     user_tags=user_tags)
 
-    return HttpResponse(cjson.encode(response), content_type="application/json")
+    return response
     
     
     

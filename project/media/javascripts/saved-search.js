@@ -34,8 +34,8 @@ oer.saved_search.init = function() {
             var $main_column = $("div.column-main");
             $main_column.remove("div.status-message");
             var $message = $("<div></div>");
-            $message.addClass("status-message").text(data).hide().prependTo($main_column).fadeIn(500).delay(3000).fadeOut(1000);
-          }, "application/json");
+            $message.addClass("status-message").text(data.message).hide().prependTo($main_column).fadeIn(500).delay(3000).fadeOut(1000);
+          });
         $form.hide();
         return false;
       }

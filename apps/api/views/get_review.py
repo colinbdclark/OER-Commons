@@ -1,5 +1,5 @@
+from annoying.decorators import ajax_request
 from api.decorators import api_method
-from api.shortcuts import api_response
 from api.utils import get_object
 from django.contrib.contenttypes.models import ContentType
 from oauth_provider.decorators import oauth_required
@@ -8,6 +8,7 @@ from reviews.models import Review
 
 @oauth_required
 @api_method
+@ajax_request
 def get_review(request):
 
     obj = get_object(request.REQUEST.get("id", None))
@@ -19,4 +20,4 @@ def get_review(request):
     except Review.DoesNotExist:
         review = None
 
-    return api_response(dict(review=review))
+    return dict(review=review)

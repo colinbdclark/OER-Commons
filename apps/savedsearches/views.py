@@ -1,11 +1,12 @@
 from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from savedsearches.models import SavedSearch
 from utils.decorators import login_required
 from utils.shortcuts import redirect_to_next_url
+from annoying.decorators import JsonResponse
 
 
 class SaveSearchForm(forms.Form):
@@ -36,9 +37,8 @@ def save(request):
     form = SaveSearchForm(request.REQUEST, user=request.user)
     if form.is_valid():
         form.save()
-        if request.method == "POST":
-            return HttpResponse(u"The search was saved.",
-                                content_type="application/json")
+        if request.is_ajax():
+            return JsonResponse(dict(message=u"The search was saved."))
         else:
             messages.success(request, u"The search was saved.")
 
@@ -54,8 +54,7 @@ def unsave(request, id=None):
 
     search.delete()
 
-    if request.method == "POST":
-        return HttpResponse(u"Saved search was removed.",
-                            content_type=u"application/json")
+    if request.is_ajax():
+        return JsonResponse(dict(message=u"Saved search was removed."))
     else:
         return redirect_to_next_url(request, reverse("myitems:searches"))

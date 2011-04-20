@@ -1,7 +1,6 @@
+from annoying.decorators import JsonResponse
 from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-import cjson
 
 
 MAX_RESULTS = 10
@@ -25,4 +24,4 @@ def autocomplete(request, app_label, model, field):
         except:
             pass
 
-    return HttpResponse(cjson.encode(results), "application/json")
+    return JsonResponse(results)

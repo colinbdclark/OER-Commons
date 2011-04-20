@@ -111,10 +111,10 @@ oer.materials.index.init_actions_menus = function() {
         $.post($this.attr("href"), function(data) {
             var $details = $this.closest("div.item").find("div.details");
             $details.find("div.message").remove();
-            $("<div></div>").addClass("message").text(data).hide().appendTo($details).fadeIn(300).delay(3000).fadeOut(1000, function() {
+            $("<div></div>").addClass("message").text(data.message).hide().appendTo($details).fadeIn(300).delay(3000).fadeOut(1000, function() {
                 $(this).remove();
             });
-        }, "application/json");
+        });
         var $menu = $this.closest("dl.actions");
         $menu.removeClass("active");
     });
@@ -136,7 +136,7 @@ oer.materials.index.init_actions_menus = function() {
                     $(this).remove();
                 });
                 $rate_form.hide();
-            }, "application/json");
+            });
         } else {
             $rate_form.submit();
         }

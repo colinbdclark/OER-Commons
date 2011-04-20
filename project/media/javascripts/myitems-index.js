@@ -38,7 +38,7 @@ oer.myitems.index.init_saved_items = function() {
       $.post(url,
         function() {
           $item.fadeOut(500);
-        }, "application/json");
+        });
     }
   );
   

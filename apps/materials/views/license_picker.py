@@ -1,10 +1,11 @@
-from django.http import Http404, HttpResponse
+from annoying.decorators import ajax_request
+from django.http import Http404
 from materials.models.common import License
 from utils.decorators import login_required
-import cjson
 
 
 @login_required
+@ajax_request
 def issue(request):
     if request.method != "POST":
         raise Http404()
@@ -23,6 +24,5 @@ def issue(request):
         response["status"] = "error"
         response["message"] = u"Unable to get license information from CreativeCommons.org. Try again later."
 
-    return HttpResponse(cjson.encode(response),
-                        content_type="application/json")
+    return response
 

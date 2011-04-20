@@ -1,5 +1,5 @@
+from annoying.decorators import JsonResponse
 from api import APIError
-from api.shortcuts import api_response
 import sys
 
 
@@ -9,6 +9,6 @@ def api_method(func):
         try:
             return func(*args, **kwargs)
         except APIError:
-            return api_response(dict(error=unicode(sys.exc_info()[1])))
+            return JsonResponse(dict(error=unicode(sys.exc_info()[1])))
 
     return decorated

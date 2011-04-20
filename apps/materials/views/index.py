@@ -1,7 +1,8 @@
+from annoying.decorators import JsonResponse
 from autoslug.settings import slugify
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponsePermanentRedirect, HttpResponse
+from django.http import Http404, HttpResponsePermanentRedirect
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import GeneralSubject, GradeLevel, Collection, \
@@ -15,7 +16,6 @@ from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
-import cjson
 import urllib
 
 
@@ -575,8 +575,7 @@ def index(request, general_subjects=None, grade_levels=None,
             item["collection"] = data["collection"] and get_name_from_id(Collection, data["collection"]) or None
             items.append(item)
 
-        return HttpResponse(cjson.encode(items),
-                            content_type="application/json")
+        return JsonResponse(items)
         
     elif format == "xml":
         query = query.load_all()

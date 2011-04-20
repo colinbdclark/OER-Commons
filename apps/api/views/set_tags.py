@@ -1,12 +1,11 @@
+from annoying.decorators import ajax_request
 from api.decorators import api_method
-from api.shortcuts import api_response
 from api.utils import get_object
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from haystack.sites import site
 from oauth_provider.decorators import oauth_required
 from tags.models import Tag
-
 
 
 class TagsField(forms.Field):
@@ -52,6 +51,7 @@ class TagsForm(forms.Form):
 
 @oauth_required
 @api_method
+@ajax_request
 def set_tags(request):
 
     obj = get_object(request.REQUEST.get("id", None))
@@ -62,6 +62,6 @@ def set_tags(request):
 
     if form.is_valid():
         form.save()
-        return api_response(dict(status="success"))
+        return dict(status="success")
     else:
-        return api_response(dict(errors=form._errors))
+        return dict(errors=form._errors)

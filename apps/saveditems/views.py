@@ -1,11 +1,12 @@
+from annoying.decorators import JsonResponse
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.shortcuts import get_object_or_404
+from haystack.sites import site
 from saveditems.models import SavedItem
 from utils.decorators import login_required
 from utils.shortcuts import redirect_to_next_url
-from haystack.sites import site
 
 
 @login_required
@@ -26,10 +27,8 @@ def save(request, slug=None, model=None):
 
     site.update_object(item)
 
-    if request.method == "POST":
-        # Save item by AJAX request
-        return HttpResponse(u"Item was saved in your collection.",
-                            content_type="application/json")
+    if request.is_ajax():
+        return JsonResponse(dict(message=u"Item was saved in your collection."))
 
     messages.success(request, u"Item was saved in your collection.")
     return redirect_to_next_url(request, item.get_absolute_url())
@@ -51,10 +50,8 @@ def unsave(request, slug=None, model=None):
                               user=request.user).delete()
         site.update_object(item)
 
-        if request.method == "POST":
-            # Unsave item by AJAX request
-            return HttpResponse(u"Item was removed from your collection.",
-                                content_type="application/json")
+        if request.is_ajax():
+            return JsonResponse(dict(message=u"Item was removed from your collection."))
 
         messages.success(request, u"Item was removed from your collection.")
     except SavedItem.DoesNotExist:

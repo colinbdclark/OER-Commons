@@ -1,5 +1,5 @@
+from annoying.decorators import ajax_request
 from api.decorators import api_method
-from api.shortcuts import api_response
 from django.contrib.sites.models import Site
 from materials.models.common import Collection
 from materials.models.material import PUBLISHED_STATE, PRIVATE_STATE
@@ -9,6 +9,7 @@ from oauth_provider.decorators import oauth_required
 
 @oauth_required
 @api_method
+@ajax_request
 def add_library(request):
 
     form = AddForm(request.REQUEST)
@@ -23,8 +24,8 @@ def add_library(request):
             object.workflow_state = PRIVATE_STATE
         object.save()
         form.save_m2m()
-        return api_response(dict(status="success",
-                                 url="http://%s%s" % (Site.objects.get_current(),
-                                                      object.get_absolute_url())))
+        return dict(status="success",
+                     url="http://%s%s" % (Site.objects.get_current(),
+                                          object.get_absolute_url()))
     else:
-        return api_response(dict(errors=form._errors))
+        return dict(errors=form._errors)
