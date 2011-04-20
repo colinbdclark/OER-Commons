@@ -11,7 +11,7 @@
     {% include "include/css.html" %}
     {% block extra-css %}{% endblock %}
   </head>
-  <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}">
+  <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
     {% include "include/header.html" %}
 
     {% block promo %}
