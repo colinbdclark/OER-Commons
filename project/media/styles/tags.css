@@ -73,6 +73,11 @@ a.tag9 {
 .user-tags {
   list-style-type: none;
   margin-bottom: 5px;
+  display: none;
+}
+
+body.authenticated .user-tags {
+   display: block; 
 }
 
 .user-tags li {
@@ -95,6 +100,18 @@ a.tag9 {
   display: block;
   background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
   text-indent: -9999px;
+}
+
+#add-tags-form {
+  display: none;
+}
+
+body.authenticated #add-tags-form {
+  display: block; 
+}
+
+body.authenticated .portlet.item-tags .login {
+  display: none; 
 }
 
 #add-tags-dialog .user-tags li {

@@ -5,4 +5,5 @@ $(function() {
       opacity: 1
   });
   oer.next_url.init();
+  oer.login.init();
 });

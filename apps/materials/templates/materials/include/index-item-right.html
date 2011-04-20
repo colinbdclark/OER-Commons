@@ -12,10 +12,10 @@
           <li><a class="rate-item" href="{{ item.rate_item_url }}">Rate this item</a></li>
         {% endif %}
         {% if item.add_review_url %}
-          <li><a class="with-next-url" href="{{ item.add_review_url }}">Review this item</a></li>
+          <li><a class="with-next-url require-login" href="{{ item.add_review_url }}">Review this item</a></li>
         {% endif %}
         {% if item.save_item_url %}
-          <li><a class="{% if request.user.is_authenticated %}save-item{% else %}with-next-url{% endif %}" href="{{ item.save_item_url }}">Save this item</a></li>
+          <li><a class="save-item" href="{{ item.save_item_url }}">Save this item</a></li>
         {% endif %}
         {% if item.add_tags_url %}
           <li><a class="tag-item" href="{{ item.add_tags_url }}">Tag this item</a></li>

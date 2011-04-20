@@ -32,21 +32,16 @@ oer.materials.view_item.init = function() {
     function(e) {
       e.preventDefault();
       var $this = $(this);
-      if ($rate_form.attr("method") == "post") {
+      oer.login.check_login(function() {
         $.post($rate_form.attr("action"), {rating: $rate_form.find("select").val()},
           function(data) {
-            data = $.parseJSON(data);
             var $stars = $this.closest("div.right").find("div.stars");
             $stars.removeClass().addClass("stars").addClass(data.stars_class);
-            var $main_column = $("div.column-main");
-            $main_column.find("div.status-message").remove();
-            $("<div></div>").addClass("status-message").text(data.message).hide().prependTo($main_column).fadeIn(300).delay(3000).fadeOut(1000, function() {$(this).remove();});
+            oer.status_message.success(data.message, true);
             $rate_form.hide();
             $show_rate_form_button.show();
-          }, "application/json");
-      } else {
-        $rate_form.submit();
-      }
+          });
+      });
     }
   );
   

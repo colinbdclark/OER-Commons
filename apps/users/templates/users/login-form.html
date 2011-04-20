@@ -1,0 +1,24 @@
+{% load utils %}
+
+<form method="post" class="formatted login" name="login" action="{% url users:login %}">
+  
+  <p>Please provide login Information.</p>
+  <p>If you do not have an account here, head over to the <a href="{% url users:registration %}">registration form</a>.</p>
+
+  {% next_url_input %}
+
+  {% for field in form.hidden_fields %}
+    {{ field }}
+  {% endfor %}
+    
+  <div class="errors global"></div>
+
+  {% for field in form.visible_fields %}
+    {% include "include/form-field.html" %}
+  {% endfor %}
+  <div class="buttons">
+    <a href="{% url users:reset_password_init %}">Forgot your password?</a>
+    <input type="submit" class="button" value="Log in" />
+  </div>
+  
+</form>

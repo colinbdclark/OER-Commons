@@ -108,11 +108,13 @@ oer.materials.index.init_actions_menus = function() {
     $materials_index.delegate("dl.actions a.save-item", "click", function(e) {
         e.preventDefault();
         var $this = $(this);
-        $.post($this.attr("href"), function(data) {
-            var $details = $this.closest("div.item").find("div.details");
-            $details.find("div.message").remove();
-            $("<div></div>").addClass("message").text(data.message).hide().appendTo($details).fadeIn(300).delay(3000).fadeOut(1000, function() {
-                $(this).remove();
+        oer.login.check_login(function() {
+            $.post($this.attr("href"), function(data) {
+                var $details = $this.closest("div.item").find("div.details");
+                $details.find("div.message").remove();
+                $("<div></div>").addClass("message").text(data.message).hide().appendTo($details).fadeIn(300).delay(3000).fadeOut(1000, function() {
+                    $(this).remove();
+                });
             });
         });
         var $menu = $this.closest("dl.actions");
@@ -123,11 +125,10 @@ oer.materials.index.init_actions_menus = function() {
     $rate_form.find("a.rate").click(function(e) {
         e.preventDefault();
         var $this = $(this);
-        if ($rate_form.attr("method") == "post") {
+        oer.login.check_login(function() {
             $.post($rate_form.attr("action"), {
                 rating : $rate_form.find("select").val()
             }, function(data) {
-                data = $.parseJSON(data);
                 var $stars = $this.closest("div.right").find("div.stars");
                 $stars.removeClass().addClass("stars").addClass(data.stars_class);
                 var $details = $this.closest("div.item").find("div.details");
@@ -137,9 +138,7 @@ oer.materials.index.init_actions_menus = function() {
                 });
                 $rate_form.hide();
             });
-        } else {
-            $rate_form.submit();
-        }
+        });
     });
 
     $rate_form.find("a.cancel").click(function(e) {
@@ -177,7 +176,7 @@ oer.materials.index.init_tags_form = function() {
         var $this = $(this);
         var $menu = $this.closest("dl.actions");
         $menu.removeClass("active");
-        if ($input.length) {
+        oer.login.check_login(function() {
             $form.hide();
             $user_tags.empty();
             $form.attr("action", $this.attr("href"));
@@ -190,11 +189,10 @@ oer.materials.index.init_tags_form = function() {
                 });
                 $form.show();
             });
-        }
-        $dialog.dialog("option", "title", "Add tags to " + $this.closest("div.item").find("h3 a").first().text());
-        $dialog.dialog("open");
+            $dialog.dialog("option", "title", "Add tags to " + $this.closest("div.item").find("h3 a").first().text());
+            $dialog.dialog("open");
+        });
     });
-
     oer.tags_form.init();
 };
 

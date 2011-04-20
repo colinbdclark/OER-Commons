@@ -42,6 +42,4 @@ def item_tags_portlet(context, item):
 
 @register.inclusion_tag("tags/include/add-tags-form.html", takes_context=True)
 def add_tags_form(context):        
-    request = context["request"]
-    can_add_tags = request.user.is_authenticated()
-    return dict(can_add_tags=can_add_tags)
+    return dict()

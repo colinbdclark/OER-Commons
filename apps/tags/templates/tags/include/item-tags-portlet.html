@@ -9,23 +9,22 @@
   {% endif %}
   
   <h5>Your Tags</h5>
-  {% if can_add_tags %}
-    {% spaceless %}
-    <ul class="user-tags">
-      {% for tag in user_tags %}
-        <li id="tag{{ tag.id }}">
-          <a href="#" class="delete">Delete</a>
-          <div><a href="{% url materials:keyword_index keywords=tag.slug %}" class="name">{{ tag.name }}</a></div>
-        </li>
-      {% endfor %}
-    </ul>
-    {% endspaceless %}
-    <form action="{% url tags:add_tags app_label,model,item.id %}"
-          method="post" id="add-tags-form" name="add-tags-form">
-      <label for="id_tags">Add new tag:</label>
-      <input type="text" name="tags" id="id_tags" value="" class="text" />
-    </form>
-  {% else %}
-    <a href="{% url users:login %}" class="with-next-url">Log in</a> to add tags to this item.
-  {% endif %}
+  {% spaceless %}
+  <ul class="user-tags">
+    {% for tag in user_tags %}
+      <li id="tag{{ tag.id }}">
+        <a href="#" class="delete">Delete</a>
+        <div><a href="{% url materials:keyword_index keywords=tag.slug %}" class="name">{{ tag.name }}</a></div>
+      </li>
+    {% endfor %}
+  </ul>
+  {% endspaceless %}
+  <form action="{% url tags:add_tags app_label,model,item.id %}"
+        method="post" id="add-tags-form" name="add-tags-form">
+    <label for="id_tags">Add new tag:</label>
+    <input type="text" name="tags" id="id_tags" value="" class="text" />
+  </form>
+  <div class="login">
+      <a href="{% url users:login %}">Log in</a> to add tags to this item.
+  </div>
 </div>

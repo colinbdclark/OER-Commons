@@ -100,25 +100,6 @@ form.reset-password input.text, form.change-password input.text {
   width: 192px;
 }
 
-form.login {
-  width: 230px;
-  margin: 0 auto;
-}
-
-form.login input.text {
-  width: 222px;
-}
-
-form.login a {
-  text-decoration: none;
-}
-
-form.login .buttons a {
-  display: block;
-  float: left;
-  margin-top: 7px;
-}
-
 form.registration-confirm {
   margin: 0 auto;
   width: 230px;

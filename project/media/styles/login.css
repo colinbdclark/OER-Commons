@@ -1,0 +1,31 @@
+form.login {
+  width: 230px;
+  margin: 0 auto;
+}
+
+form.login input.text {
+  width: 222px;
+}
+
+form.login a {
+  text-decoration: none;
+}
+
+form.login .buttons a {
+  display: block;
+  float: left;
+  margin-top: 7px;
+}
+
+#login-popup form.login {
+  margin: 5px;
+}
+
+#login-popup form.login a {
+  color: #0B7BA9;
+}
+
+#login-popup form.login p {
+  margin: 5px 0;
+}
+

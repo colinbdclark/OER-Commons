@@ -1,3 +1,4 @@
+from annoying.decorators import JsonResponse
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -33,31 +34,48 @@ def login(request):
 
     if request.method == "POST":
         form = LoginForm(data=request.POST)
-        if form.is_valid():
-            # Light security check -- make sure redirect_to isn't garbage.
-            if not redirect_to or ' ' in redirect_to:
-                redirect_to = reverse("frontpage")
-
-            # Heavier security check -- redirects to http://example.com should 
-            # not be allowed, but things like /view/?param=http://example.com 
-            # should be allowed. This regex checks if there is a '//' *before* a
-            # question mark.
-            elif '//' in redirect_to and re.match(r'[^\?]*//', redirect_to):
-                redirect_to = reverse("frontpage")
-
-            # Okay, security checks complete. Log the user in.
-            auth_login(request, form.get_user())
-            messages.success(request, u"You are logged in now.")
-
-            return HttpResponseRedirect(redirect_to)
+        if request.is_ajax():
+            if form.is_valid():
+                auth_login(request, form.get_user())
+                return JsonResponse(dict(status="success",
+                                         message=u"You are logged in now."))
+            else:
+                errors = {}
+                for field_name, errors_list in form.errors.items():
+                    errors[field_name] = errors_list[0]
+                return JsonResponse(dict(status="error", errors=errors))
+                
         else:
-            messages.error(request, u"Invalid user name and/or password.")
+            if form.is_valid():
+                # Light security check -- make sure redirect_to isn't garbage.
+                if not redirect_to or ' ' in redirect_to:
+                    redirect_to = reverse("frontpage")
+    
+                # Heavier security check -- redirects to http://example.com should 
+                # not be allowed, but things like /view/?param=http://example.com 
+                # should be allowed. This regex checks if there is a '//' *before* a
+                # question mark.
+                elif '//' in redirect_to and re.match(r'[^\?]*//', redirect_to):
+                    redirect_to = reverse("frontpage")
+    
+                # Okay, security checks complete. Log the user in.
+                auth_login(request, form.get_user())
+                messages.success(request, u"You are logged in now.")
+    
+                return HttpResponseRedirect(redirect_to)
+            else:
+                messages.error(request, u"Invalid user name and/or password.")
 
     else:
         form = LoginForm(request)
 
     return direct_to_template(request, "users/login.html", locals())
 
+
+def render_login_form(request):
+    form = LoginForm()
+    return direct_to_template(request, "users/login-form.html", locals())
+ 
 
 def logout(request):
     auth_logout(request)

@@ -12,6 +12,7 @@
     $(function() {
       oer.materials.view_item.init();
       oer.send_this.init();
+      oer.tags_portlet.init();
       oer.tags_form.init();
       {% if content_actions or workflow_actions %}
         oer.materials.view_item.init_content_actions();
@@ -28,10 +29,10 @@
       <a class="email-icon send-this" href="#" title="Send this">Send this</a>
     </li>
     {% if save_url %}
-      <li class="last"><a href="{{ save_url }}">Save this item</a></li>
+      <li class="last"><a href="{{ save_url }}" class="require-login">Save this item</a></li>
     {% endif %}
     {% if unsave_url %}
-      <li class="last"><a href="{{ unsave_url }}">Remove from collection</a></li>
+      <li class="last"><a href="{{ unsave_url }}" class="require-login">Remove from collection</a></li>
     {% endif %}
   </ul>
   {% if came_from_index %}

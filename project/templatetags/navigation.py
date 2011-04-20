@@ -34,6 +34,7 @@ def navigation(context):
     tab["title"] = u"My Items"
     tab["url"] = reverse("myitems:myitems")
     tab["selected"] = path_elements and path_elements[0] == "my"
+    tab["class"] = "require-login"
     tabs.append(tab)
 
     return dict(tabs=tabs)

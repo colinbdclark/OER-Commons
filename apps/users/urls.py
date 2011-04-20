@@ -3,6 +3,7 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns('users.views',
     url(r"^login/?$", "login.login", name="login"),
+    url(r"^login/form$", "login.render_login_form", name="login_form"),
     url(r"^logout/?$", "login.logout", name="logout"),
     url(r"^registration/?$", "registration.registration", name="registration"),
     url(r"^registration/confirm/?$", "registration.confirm", name="registration_confirm"),

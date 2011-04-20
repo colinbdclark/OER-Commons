@@ -31,7 +31,7 @@ oer.tags_form.init = function() {
                 $.tmpl("user-tags-item", tag).appendTo($user_tags);
             });
             $input.val("");
-        }, "json");
+        });
     });
 
     $user_tags.delegate("a.delete", "click", function(e) {
@@ -45,6 +45,32 @@ oer.tags_form.init = function() {
         $.post("/tags/delete", {
             id : tag_id
         }, function(response, status, request) {
+        });
+    });
+};
+
+oer.tags_portlet = {};
+
+oer.tags_portlet.init = function() {
+    var $body = $("body");
+    if ($body.hasClass("authenticated")) {
+        return;
+    }
+    var $portlet = $("div.portlet.item-tags");
+    $portlet.find(".login a").click(function(e) {
+        e.preventDefault();
+        oer.login.show_popup(function() {
+            var $user_tags = $("ul.user-tags");
+            $user_tags.empty().hide();
+            var $form = $("#add-tags-form");
+            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/"), function(data, status) {
+                var item_tags = data.tags;
+                var user_tags = data.user_tags;
+                $.each(user_tags, function(index, tag) {
+                    $.tmpl("user-tags-item", tag).appendTo($user_tags);
+                });
+                $user_tags.fadeIn(300);
+            });
         });
     });
 };

@@ -1,5 +1,4 @@
-<form name="rate" action="{{ form_action }}" method="{{ form_method }}" class="rate">
-  <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+<form name="rate" action="{{ form_action }}" method="post" class="rate">
   {{ form.rating }}
   <div>
   <a class="rate" href="#">Rate</a> | <a class="cancel" href="#">Cancel</a>

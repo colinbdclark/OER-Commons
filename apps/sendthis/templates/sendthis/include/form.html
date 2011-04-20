@@ -1,4 +1,4 @@
-<form name="send-this" class="send-this-popup shadow formatted" method="{% if request.user.is_authenticated %}post{% else %}get{% endif %}"
+<form name="send-this" class="send-this-popup shadow formatted" method="post"
       action="{% url send-this %}">
   
   <h4 class="dotted">Send link to this page</h4>
