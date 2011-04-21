@@ -1,4 +1,4 @@
-<form action="{{ request.get_full_path }}" method="post"
+<form action="{% url materials:iframe_submission_post %}" method="post"
         class="content-submission" id="content-submission">
     {% for field in form.hidden_fields %}
       {{ field }}

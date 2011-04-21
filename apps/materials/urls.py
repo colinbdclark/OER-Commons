@@ -102,6 +102,7 @@ urlpatterns = patterns('materials.views',
     url(r'^submit/close$', direct_to_template, kwargs=dict(template="materials/iframe-submission/close.html"), name="iframe_close"),
     url(r'^submit/dispatch$', "iframe_submission.iframe.dispatch_iframe", name="iframe_dispatch"),
     url(r'^submit/login$', "iframe_submission.login.login", name="iframe_login"),
+    url(r'^submit/post?$', "iframe_submission.submission_form.submit", name="iframe_submission_post"),
     url(r'^(?P<microsite>[^/]+)/?$', "microsites.microsite", name="microsite"),
 )
 

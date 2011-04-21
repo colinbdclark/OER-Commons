@@ -11,7 +11,6 @@ from materials.views.forms import SubmissionFormBase, AuthorsField, \
 from materials.views.forms.course import InstitutionField, CollectionField
 from utils.decorators import login_required
 import cjson
-import requests
 
 
 class SubmissionForm(SubmissionFormBase, ModelForm):    
