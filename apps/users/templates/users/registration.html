@@ -14,7 +14,13 @@
 {% block content %}
   <form method="post" class="formatted" name="registration" action="{% url users:registration %}">
     {% for field in form %}
-      {% include "include/form-field.html" %}
+      {% if field.name == "newsletter" %}
+        <div class="field">
+          {{ field }} {{ field.label_tag }}
+        </div>
+      {% else %}
+        {% include "include/form-field.html" %}
+      {% endif %}
     {% endfor %}
     {% render_honeypot_field %}
     <div class="buttons">
