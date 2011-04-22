@@ -16,6 +16,7 @@ from users.views.login import LoginForm
 from utils import reduce_whitespace
 import re
 import requests
+from reviews.views import ReviewForm
 
 
 HTTP_USER_AGENT = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.25 (KHTML, like Gecko) Chrome/12.0.706.0 Safari/534.25" 
