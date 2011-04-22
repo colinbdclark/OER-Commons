@@ -1,1 +1,62 @@
-<p>{{ message }}</p>
+{% load rating_tags %}
+{% load tags_tags %}
+<div class="existing-resource">
+  <p><strong>{{ item.title }}</strong> already exists in OER Commons database.</p>
+  <p>You can rate this item, tag it or add a review.</p>
+  
+  <table width="95%">
+  	<tbody>
+  		<tr>
+  			<td width="25%">
+              <h3>Rating</h3>
+              <div class="rating">
+                {% stars item.rating %}
+                {% rate_form rate_item_url %}
+                <a href="#" class="rate-item">Rate This Item</a>
+              </div>
+            </td>
+  			<td>
+              <h3>Tags</h3>
+              {% spaceless %}
+              <ul class="user-tags">
+                {% for tag in user_tags %}
+                  <li id="tag{{ tag.id }}">
+                    <a href="#" class="delete">Delete</a>
+                    <div><a href="{% url materials:keyword_index keywords=tag.slug %}" target="blank" class="name">{{ tag.name }}</a></div>
+                  </li>
+                {% endfor %}
+              </ul>
+              {% endspaceless %}
+              <form action="{% url tags:add_tags app_label,model,item.id %}"
+                    method="post" id="add-tags-form" name="add-tags-form">
+                <label for="id_tags">Add new tag:</label>
+                <input type="text" name="tags" id="id_tags" value="" class="text" />
+              </form>
+            </td>
+  		</tr>
+  	</tbody>
+  </table>
+
+  <h3>Your Review</h3>
+  <form name="review" class="formatted review" method="post" action="{{ review_item_url }}">
+  
+    {% for field in review_form.visible_fields %}
+      <div class="field">
+          <div class="help">{{ field.help_text }}</div>
+          <div class="errors"></div>
+          {{ field }}
+      </div>
+    {% endfor %}
+    <div class="buttons">
+      <a href="#" class="submit">Add review</a>
+    </div>
+    
+  </form>
+
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    oer.iframe_submission.existing_resource.init();
+  });
+</script>

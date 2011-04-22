@@ -207,3 +207,47 @@ form.content-submission fieldset.step {
   float: right;
   margin-top: 0;
 }
+
+.iframe-submission .existing-resource {
+  padding: 10px;
+}
+
+.iframe-submission .existing-resource p {
+  margin-bottom: 5px; 
+}
+
+.iframe-submission .existing-resource h3 {
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.iframe-submission .existing-resource form.rate {
+  text-align: inherit; 
+}
+
+.iframe-submission .existing-resource .user-tags li {
+  display: inline-block; 
+}
+
+.iframe-submission .existing-resource .user-tags li div {
+  margin-right: 20px; 
+}
+
+.iframe-submission .existing-resource .review textarea {
+  width: 463px; 
+}
+
+.iframe-submission .existing-resource .review {
+  width: 470px; 
+}
+
+.iframe-submission .existing-resource .review .message {
+  background-color: #FC6;
+  border: 1px solid #A88743;
+  color: #544322;
+  margin: 5px 0;
+  font-weight: bold;
+  padding: 2px 5px;
+  font-size: 12px;
+}

@@ -100,6 +100,7 @@ oer.iframe_submission.login.init = function() {
         $.post($form.attr("action"), $form.serialize(), function(response) {
             if (response.status === "success") {
                 oer.iframe_submission.dispatch();
+                $("body").addClass("authenticated");
             } else if (response.status === "error") {
                 if (response.errors.__all__ !== undefined) {
                     $global_error_ct.append('<label class="error">' + response.errors.__all__ + '</label>');
@@ -113,4 +114,72 @@ oer.iframe_submission.login.init = function() {
     });
 
     $form.find(".buttons input").button();
+};
+
+oer.iframe_submission.existing_resource = {};
+
+oer.iframe_submission.existing_resource.init = function() {
+
+    oer.tags_form.init();
+
+    var $rate_form = $("form[name='rate']");
+    var $show_rate_form_button = $("a.rate-item").button();
+
+    $show_rate_form_button.click(function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        $rate_form.find("select").val("5");
+        $rate_form.fadeIn(300);
+        $this.hide();
+    });
+
+    $rate_form.find("a.cancel").click(function(e) {
+        e.preventDefault();
+        $rate_form.hide();
+        $show_rate_form_button.show();
+    });
+
+    $rate_form.find("a.rate").click(function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        if ($rate_form.attr("method") == "post") {
+            $.post($rate_form.attr("action"), {
+                rating : $rate_form.find("select").val()
+            }, function(response) {
+                var $stars = $this.closest("div.rating").find("div.stars");
+                $stars.removeClass().addClass("stars").addClass(response.stars_class);
+                $rate_form.hide();
+                $show_rate_form_button.show();
+            });
+        } else {
+            $rate_form.submit();
+        }
+    });
+
+    $review_form = $("form.review");
+    var validator = $review_form.validate({
+    rules : {
+        text : "required"
+    },
+    submitHandler : function(form) {
+        $.post($review_form.attr("action"), $review_form.serialize(), function(response) {
+            if (response.status === "success") {
+                var $message = $('<div class="message">' + response.message + '</div>').hide();
+                $message.prependTo($review_form).fadeIn(300);
+                setTimeout(function() {
+                    $message.fadeOut(300, function() {
+                        $message.detach();
+                    });
+                }, 3000);
+            } else if (response.status === "error") {
+                validator.showErrors(response.errors);
+            }
+        });
+    }
+    });
+
+    var $review_btn = $review_form.find("a.submit").button().click(function(e) {
+        e.preventDefault();
+        $review_form.submit();
+    });
 };

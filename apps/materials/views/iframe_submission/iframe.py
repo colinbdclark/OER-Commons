@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags
 from django.views.generic.simple import direct_to_template
 from materials.models.common import MediaFormat, CC_LICENSE_URL_RE
@@ -11,6 +13,7 @@ from urllib2 import URLError
 from users.views.login import LoginForm
 import re
 import requests
+from reviews.views import ReviewForm
 
 
 HTTP_USER_AGENT = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.25 (KHTML, like Gecko) Chrome/12.0.706.0 Safari/534.25" 
@@ -34,6 +37,7 @@ class URLForm(forms.Form):
             raise forms.ValidationError(u"Can't retrieve data from this URL. Please make sure that it is valid.")
         url = response.url
         if Course.objects.filter(url=url).exists():
+            self.instance = Course.objects.get(url=url)
             raise forms.ValidationError(u"A resource with this URL is registered already.")
         self.content = response.content
         return url
@@ -89,8 +93,33 @@ def dispatch_iframe(request):
                                   dict(form=form))
 
     else:        
+        item = url_form.instance
+        rate_item_url = reverse("materials:%s:rate_item" % item.namespace,
+                           kwargs=dict(slug=item.slug))
+        
+        user = request.user
+        user_tags = item.tags.filter(user=user).order_by("slug")
+        item_tags = item.tags.all() 
+        if user_tags:
+            item_tags = item_tags.exclude(id__in=user_tags.values_list("id", flat=True))
+    
+        content_type = ContentType.objects.get_for_model(item)
+
+        review_item_url = reverse("materials:%s:add_review" % item.namespace,
+                               kwargs=dict(slug=item.slug))
+        
+        review_form = ReviewForm(instance=item,
+                                 user=user)
+
         return direct_to_template(request, "materials/iframe-submission/existing-resource.html",
-                                  dict(message=url_form.errors["url"]))
+                                  dict(item=item,
+                                       rate_item_url=rate_item_url,
+                                       user_tags=user_tags,
+                                       app_label=content_type.app_label,
+                                       model=content_type.model,
+                                       review_item_url=review_item_url,
+                                       review_form=review_form,
+                                       ))
         
         
         
