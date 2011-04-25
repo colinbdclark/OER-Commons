@@ -5,8 +5,13 @@ oer.login.init = function() {
         e.preventDefault();
         oer.login.show_popup();
     });
+
+    var $body = $("body");
     var $next_url_form = $("form[name='next-url']");
     $(document).delegate("a.require-login", "click", function(e) {
+        if ($body.hasClass("authenticated")) {
+            return true;
+        }
         e.preventDefault();
         var $this = $(this);
         oer.login.show_popup(function() {
