@@ -10,6 +10,7 @@ from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
 from notes.models import Note
 from visitcounts.models import Visit
+from django.contrib.contenttypes.models import ContentType
 
 
 def view_item(request, slug=None, model=None):
@@ -66,10 +67,12 @@ def view_item(request, slug=None, model=None):
                            kwargs=dict(slug=item.slug))
     add_note_url = reverse("materials:%s:add_note" % item.namespace,
                            kwargs=dict(slug=item.slug))
-    rate_item_url = reverse("materials:%s:rate_item" % item.namespace,
-                           kwargs=dict(slug=item.slug))
 
-
+    content_type = ContentType.objects.get_for_model(item)
+    item.identifier = "%s.%s.%i" % (content_type.app_label,
+                                    content_type.model,
+                                    item.id)
+    
     microsite = None
     came_from_index = False
 

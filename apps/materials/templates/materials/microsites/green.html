@@ -8,6 +8,7 @@
       oer.accordion.init($("div.portlet.oermaterials div.accordion"));
       oer.collapsibles.init($("#content"));
       oer.materials.index.init_actions_menus();
+      oer.rating.init();
     });
   </script>
 {% endblock %}
@@ -98,8 +99,6 @@
       {% include "materials/include/index-item.html" %}
     {% endfor %}
   </div>
-
-  {% rate_form %}
 {% endblock %}
 
 {% block column-right %}

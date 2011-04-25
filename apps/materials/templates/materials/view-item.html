@@ -14,6 +14,7 @@
       oer.send_this.init();
       oer.tags_portlet.init();
       oer.tags_form.init();
+      oer.rating.init();
       {% if content_actions or workflow_actions %}
         oer.materials.view_item.init_content_actions();
       {% endif %}
@@ -95,11 +96,9 @@
    </div>
 {% endif %}
 
-<div class="view-item">
+<div class="view-item item" id="{{ item.identifier }}">
   <div class="right">
     {% stars item.rating %}
-    {% rate_form rate_item_url %}
-    <a href="#" class="rate-item"><img alt="" src="{{ STATIC_URL }}images/rate-btn.png" /></a>
     {% cou_bucket item.license.bucket %}
   </div>
   

@@ -1,6 +1,7 @@
 from annoying.decorators import JsonResponse
 from autoslug.settings import slugify
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.views.generic.simple import direct_to_template
@@ -270,6 +271,11 @@ class IndexParams:
 
 def populate_item_from_search_result(result):
     item = result.get_stored_fields()
+
+    item["identifier"] = "%s.%s.%s" % (result.app_label,
+                                       result.model_name,
+                                       result.pk)
+    
     if item.get("collection"):
         collection_id = item["collection"]
         item["collection"] = {"name": get_name_from_id(Collection,
@@ -297,22 +303,17 @@ def populate_item_from_search_result(result):
 
 
     model = result.model
+    
     namespace = getattr(model, "namespace", None)
     if namespace:
         item["get_absolute_url"] = reverse(
                                "materials:%s:view_item" % namespace,
-                               kwargs=dict(slug=item["slug"]))
-        item["rate_item_url"] = reverse(
-                               "materials:%s:rate_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
         item["add_review_url"] = reverse(
                                "materials:%s:add_review" % namespace,
                                kwargs=dict(slug=item["slug"]))
         item["save_item_url"] = reverse(
                                "materials:%s:save_item" % namespace,
-                               kwargs=dict(slug=item["slug"]))
-        item["unsave_item_url"] = reverse(
-                               "materials:%s:unsave_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
         item["unsave_item_url"] = reverse(
                                "materials:%s:unsave_item" % namespace,

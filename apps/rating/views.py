@@ -13,12 +13,23 @@ from utils.shortcuts import redirect_to_next_url
 
 class RatingForm(forms.Form):
 
-    rating = forms.ChoiceField(choices=([(u"delete", u"--")] + list(RATING_VALUES)))
+    number = forms.ChoiceField(list(RATING_VALUES))
+    identifier = forms.CharField()
 
     def __init__(self, *args, **kwargs):
-        self.instance = kwargs.pop("instance", None)
         self.user = kwargs.pop("user", None)
         super(RatingForm, self).__init__(*args, **kwargs)
+
+    def clean_identifier(self):
+        identifier = self.cleaned_data["identifier"]
+        try:
+            app_label, model, object_id = identifier.split(".")
+            content_type = ContentType.objects.get(app_label=app_label, model=model)
+            model = content_type.model_class()
+            self.instance = model.objects.get(id=int(object_id))
+        except:
+            raise forms.ValidationError(u"Invalid object identifier.")
+        return identifier
 
     def save(self):
         if not self.instance or not self.user:
@@ -26,7 +37,7 @@ class RatingForm(forms.Form):
         content_type = ContentType.objects.get_for_model(self.instance)
         object_id = self.instance.id
 
-        rating = self.cleaned_data["rating"].strip()
+        rating = self.cleaned_data["number"].strip()
 
         if rating == "delete":
             # Delete rating
@@ -51,24 +62,19 @@ class RatingForm(forms.Form):
 
 @login_required
 @ajax_request
-def rate(request, slug=None, model=None):
+def rate(request):
 
-    if not slug or not model:
+    if not request.is_ajax():
         raise Http404()
 
-    item = get_object_or_404(model, slug=slug)
-
-    form = RatingForm(request.REQUEST, instance=item, user=request.user)
+    form = RatingForm(request.REQUEST, user=request.user)
 
     if form.is_valid():
         form.save()
-        if request.method == "POST":
-            return dict(stars_class=get_rating_stars_class(item.rating),
-                        message=u"Your rating was saved.")
-        else:
-            messages.success(request, u"Your rating was saved.")
-    elif request.method == "POST":
-        return dict(stars_class=get_rating_stars_class(item.rating),
-                    message=u"There was a problem with saved your rate.")
-
-    return redirect_to_next_url(request, item.get_absolute_url())
+        return dict(status="success",
+                    stars_class=get_rating_stars_class(form.instance.rating),
+                    message=u"Your rating was saved.")
+    else:
+        print "!!!", form.errors
+        return dict(status="error",
+                    message=u"There was a problem with saving your rate.")

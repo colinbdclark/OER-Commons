@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% load rating_tags %}
 {% load myitems_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
       oer.myitems.index.init();
+      oer.rating.init();
       oer.myitems.index.init_saved_items();
     });
   </script>
@@ -46,8 +46,6 @@
     </p>
   
     </div>
-    
-    {% rate_form %}
     
     <div class="unsave-confirmation message">
       Remove this item from your collection?

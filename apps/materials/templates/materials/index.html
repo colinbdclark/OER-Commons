@@ -10,6 +10,7 @@
       oer.materials.index.init();
       oer.saved_search.init();
       oer.send_this.init();
+      oer.rating.init();
       $("div.portlet.cou a").cluetip({local:true, arrows: true, width: 300});
       $("#content div.cou-bucket").cluetip({local:true, arrows: true, width: 300});
     });
@@ -45,8 +46,6 @@
   <p class="no-items-match">No items match your search.</p>
   {% endif %}
   </div>
-  
-  {% rate_form %}
   
   {% save_search_form index_url index_title %}
   {% send_this_form index_url %}

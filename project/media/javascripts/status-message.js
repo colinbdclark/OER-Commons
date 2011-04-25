@@ -12,3 +12,7 @@ oer.status_message.message = function(message, _class, autohide) {
 oer.status_message.success = function(message, autohide) {
     oer.status_message.message(message, "success", autohide);
 };
+
+oer.status_message.error = function(message, autohide) {
+    oer.status_message.message(message, "error", autohide);
+};

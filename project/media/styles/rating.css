@@ -1,52 +1,53 @@
 .stars {
   height: 18px;
   width: 86px;
-  background: url(../images/stars-00.png) 50% 50% no-repeat;
+  background-image: url(../images/stars.png);
+  background-repeat: no-repeat;
   margin-bottom: 5px;
 }
 
 .stars.s00 {
-  background-image: url(../images/stars-00.png);
+  background-position: 0 0;
 }
 
 .stars.s05 {
-  background-image: url(../images/stars-05.png);
+  background-position: 0 -68px;
 }
 
 .stars.s10 {
-  background-image: url(../images/stars-10.png);
+  background-position: 0 -136px;
 }
 
 .stars.s15 {
-  background-image: url(../images/stars-15.png);
+  background-position: 0 -204px;
 }
 
 .stars.s20 {
-  background-image: url(../images/stars-20.png);
+  background-position: 0 -272px;
 }
 
 .stars.s25 {
-  background-image: url(../images/stars-25.png);
+  background-position: 0 -340px;
 }
 
 .stars.s30 {
-  background-image: url(../images/stars-30.png);
+  background-position: 0 -408px;
 }
 
 .stars.s35 {
-  background-image: url(../images/stars-35.png);
+  background-position: 0 -476px;
 }
 
 .stars.s40 {
-  background-image: url(../images/stars-40.png);
+  background-position: 0 -544px;
 }
 
 .stars.s45 {
-  background-image: url(../images/stars-45.png);
+  background-position: 0 -612px;
 }
 
 .stars.s50 {
-  background-image: url(../images/stars-50.png);
+  background-position: 0 -680px;
 }
 
 form.rate {

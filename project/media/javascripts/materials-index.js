@@ -87,6 +87,14 @@ oer.materials.index.init_item_links = function() {
     });
 };
 
+oer.materials.index.item_message = function($item, message) {
+    var $details = $item.find("div.details");
+    $details.find("div.message").remove();
+    $("<div></div>").addClass("message").text(message).hide().appendTo($details).fadeIn(300).delay(3000).fadeOut(1000, function() {
+        $(this).remove();
+    });
+};
+
 oer.materials.index.init_actions_menus = function() {
     var $materials_index = $("#content div.materials-index");
     $materials_index.delegate("dl.actions dt a", "click", function(e) {
@@ -110,49 +118,10 @@ oer.materials.index.init_actions_menus = function() {
         var $this = $(this);
         oer.login.check_login(function() {
             $.post($this.attr("href"), function(data) {
-                var $details = $this.closest("div.item").find("div.details");
-                $details.find("div.message").remove();
-                $("<div></div>").addClass("message").text(data.message).hide().appendTo($details).fadeIn(300).delay(3000).fadeOut(1000, function() {
-                    $(this).remove();
-                });
+                oer.materials.index.item_message($this.closest("div.item"), data.message);
             });
         });
         var $menu = $this.closest("dl.actions");
-        $menu.removeClass("active");
-    });
-
-    var $rate_form = $("form[name='rate']");
-    $rate_form.find("a.rate").click(function(e) {
-        e.preventDefault();
-        var $this = $(this);
-        oer.login.check_login(function() {
-            $.post($rate_form.attr("action"), {
-                rating : $rate_form.find("select").val()
-            }, function(data) {
-                var $stars = $this.closest("div.right").find("div.stars");
-                $stars.removeClass().addClass("stars").addClass(data.stars_class);
-                var $details = $this.closest("div.item").find("div.details");
-                $details.find("div.message").remove();
-                $("<div></div>").addClass("message").text(data.message).hide().appendTo($details).fadeIn(300).delay(3000).fadeOut(1000, function() {
-                    $(this).remove();
-                });
-                $rate_form.hide();
-            });
-        });
-    });
-
-    $rate_form.find("a.cancel").click(function(e) {
-        e.preventDefault();
-        $rate_form.hide();
-    });
-
-    $materials_index.delegate("dl.actions a.rate-item", "click", function(e) {
-        e.preventDefault();
-        var $this = $(this);
-        var $menu = $this.closest("dl.actions");
-        $rate_form.find("select").val("5");
-        $rate_form.attr("action", $this.attr("href"));
-        $rate_form.detach().insertAfter($menu).fadeIn(300);
         $menu.removeClass("active");
     });
 

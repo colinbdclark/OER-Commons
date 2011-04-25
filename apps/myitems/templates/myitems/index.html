@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% load rating_tags %}
 {% load myitems_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
       oer.myitems.index.init();
+      oer.rating.init();
     });
   </script>
 {% endblock %}
@@ -36,7 +36,6 @@
   {% endwith %}
   </div>
   
-  {% rate_form %}
   {% else %}
   {% if no_items_message %}<p class="clear">{{ no_items_message }}</p>{% endif %}
   {% endif %}
