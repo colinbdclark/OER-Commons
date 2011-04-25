@@ -94,8 +94,12 @@ def dispatch_iframe(request):
 
     else:        
         item = url_form.instance
-        rate_item_url = reverse("materials:%s:rate_item" % item.namespace,
-                           kwargs=dict(slug=item.slug))
+        content_type = ContentType.objects.get_for_model(item)
+
+        item.identifier = "%s.%s.%i" % (content_type.app_label,
+                                        content_type.model,
+                                        item.id)
+                
         
         user = request.user
         user_tags = item.tags.filter(user=user).order_by("slug")
@@ -103,8 +107,6 @@ def dispatch_iframe(request):
         if user_tags:
             item_tags = item_tags.exclude(id__in=user_tags.values_list("id", flat=True))
     
-        content_type = ContentType.objects.get_for_model(item)
-
         review_item_url = reverse("materials:%s:add_review" % item.namespace,
                                kwargs=dict(slug=item.slug))
         
@@ -113,7 +115,6 @@ def dispatch_iframe(request):
 
         return direct_to_template(request, "materials/iframe-submission/existing-resource.html",
                                   dict(item=item,
-                                       rate_item_url=rate_item_url,
                                        user_tags=user_tags,
                                        app_label=content_type.app_label,
                                        model=content_type.model,

@@ -7,12 +7,12 @@
   <table width="95%">
   	<tbody>
   		<tr>
-  			<td width="25%">
+  			<td width="25%"">
               <h3>Rating</h3>
-              <div class="rating">
-                {% stars item.rating %}
-                {% rate_form rate_item_url %}
-                <a href="#" class="rate-item">Rate This Item</a>
+              <div class="item" id="{{ item.identifier }}">
+                <div class="rating">
+                  {% stars item.rating %}
+                </div>
               </div>
             </td>
   			<td>
@@ -58,5 +58,6 @@
 <script type="text/javascript">
   $(function() {
     oer.iframe_submission.existing_resource.init();
+    oer.rating.init();
   });
 </script>

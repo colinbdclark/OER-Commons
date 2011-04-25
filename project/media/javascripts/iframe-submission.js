@@ -119,6 +119,30 @@ oer.iframe_submission.login.init = function() {
 oer.iframe_submission.existing_resource = {};
 
 oer.iframe_submission.existing_resource.init = function() {
+    
+    function show_message($container, message) {
+        $("<div></div>").addClass("message").text(message).hide().appendTo($container).fadeIn(300).delay(3000).fadeOut(1000, function() {
+            $(this).remove();
+        });
+    }
+
+    oer.rating.submit = function(e) {
+        var $this = $(this);
+        $.post("/rate", {
+        number : $this.data("number"),
+        identifier : $this.data("identifier")
+        }, function(data) {
+            if (data.status === "success") {
+                var class_name = data.stars_class;
+                $this.removeClass(oer.rating.get_class($this)).addClass(class_name);
+                $this.data("initial_class", class_name);
+                show_message($this.closest("div.item"), data.message);
+            } else if (data.status === "error") {
+                $this.removeClass(oer.rating.get_class($this)).addClass($this.data("initial_class"));
+                show_message($this.closest("div.item"), data.message);
+            }
+        });
+    };
 
     oer.tags_form.init();
 
