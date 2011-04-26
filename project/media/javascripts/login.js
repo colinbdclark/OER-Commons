@@ -40,6 +40,7 @@ oer.login.show_popup = function(callback) {
         $popup.load("/login/form", function(response) {
             $popup.dialog("widget").removeClass("loading");
             var $form = $popup.find("form.login");
+            var $button = $form.find("input[type='submit']").button();
             var $global_error_ct = $form.find(".errors.global");
             var validator = $form.validate({
             rules : {
@@ -48,6 +49,8 @@ oer.login.show_popup = function(callback) {
             },
             submitHandler : function(form) {
                 $popup.dialog("widget").addClass("loading");
+                $button.button("option", "label", "Logging in");
+                $button.button("option", "disabled", true);
                 $global_error_ct.empty();
                 $.post($form.attr("action"), $form.serialize(), function(response) {
                     if (response.status === "success") {
@@ -65,6 +68,8 @@ oer.login.show_popup = function(callback) {
                         validator.showErrors(response.errors);
                     }
                     $popup.dialog("widget").removeClass("loading");
+                    $button.button("option", "label", "Log in");
+                    $button.button("option", "disabled", false);
                 });
                 return false;
             }
