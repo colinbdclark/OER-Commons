@@ -6,6 +6,10 @@
   margin-bottom: 5px;
 }
 
+.stars.hover {
+  background-image: url(../images/stars-hover.png);
+}
+
 .stars.s00 {
   background-position: 0 0;
 }

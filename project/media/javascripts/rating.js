@@ -19,6 +19,7 @@ oer.rating.submit = function(e) {
         identifier : $this.data("identifier")
         }, function(data) {
             if (data.status === "success") {
+                $this.removeClass("hover");
                 var class_name = data.stars_class;
                 $this.removeClass(oer.rating.get_class($this)).addClass(class_name);
                 $this.data("initial_class", class_name);
@@ -28,6 +29,7 @@ oer.rating.submit = function(e) {
                     oer.status_message.success(data.message, true);
                 }
             } else if (data.status === "error") {
+                $this.removeClass("hover");
                 $this.removeClass(oer.rating.get_class($this)).addClass($this.data("initial_class"));
                 if (is_materials_index) {
                     oer.materials.index.item_message($this.closest("div.item"), data.message);
@@ -54,11 +56,13 @@ oer.rating.init = function(submit_success, submit_error) {
 
         $rating.mouseout(function(e) {
             var $this = $(this);
+            $this.removeClass("hover");
             $this.removeClass(oer.rating.get_class($this)).addClass($this.data("initial_class"));
         });
 
         $rating.mousemove(function(e) {
             $this = $(this);
+            $this.addClass("hover");
             var x = null;
             if (e.offsetX !== undefined) {
                 x = e.offsetX;
