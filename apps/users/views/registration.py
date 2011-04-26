@@ -62,7 +62,7 @@ class RegistrationForm(forms.Form):
                              help_text=u"Indicate your relationship to open "
                              "educational resources.")
 
-    newsletter = forms.BooleanField(label=u"Subscribe to monthly OER Commons newsletter",
+    newsletter = forms.BooleanField(label=u"Subscribe to the OER Commons Monthly Newsletter",
                                     widget=forms.CheckboxInput(),
                                     required=False,
                                     initial=True)
