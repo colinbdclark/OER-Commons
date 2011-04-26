@@ -2,13 +2,13 @@ from django import forms
 from django.forms.models import ModelForm
 from django.http import HttpResponse, Http404
 from materials.models.common import GeneralSubject, GradeLevel, Language, \
-    GeographicRelevance, MediaFormat
+    GeographicRelevance, MediaFormat, Collection
 from materials.models.course import Course, CourseMaterialType
 from materials.models.material import PENDING_STATE
 from materials.views.forms import SubmissionFormBase, AuthorsField, \
     KeywordsField, LanguagesField, LicenseTypeFieldRenderer, CC_OLD_LICENSES, \
     LICENSE_TYPES
-from materials.views.forms.course import InstitutionField, CollectionField
+from materials.views.forms.course import InstitutionField
 from utils.decorators import login_required
 import cjson
 
@@ -24,10 +24,6 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
     institution = InstitutionField(required=False,
                                   widget=forms.TextInput(
                                   attrs={"class": "wide"}))
-
-    collection = CollectionField(required=False,
-                                 widget=forms.TextInput(
-                                 attrs={"class": "wide"}))
 
     authors = AuthorsField(required=False,
                            widget=forms.TextInput(
@@ -95,11 +91,10 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
     def __init__(self, *args, **kwargs):
         super(SubmissionForm, self).__init__(*args, **kwargs)
         self.set_initial_license_data()
-        self.fields["collection"].initial = u"Individual Authors"
 
     class Meta:
         model = Course
-        fields = ["title", "url", "abstract", "institution", "collection",
+        fields = ["title", "url", "abstract", "institution",
                   "authors", "keywords", "general_subjects",
                   "grade_levels", "material_types", "media_formats", 
                   "languages", "geographic_relevance",
@@ -119,6 +114,7 @@ def submit(request):
             object = form.save(commit=False)
             object.creator = request.user
             object.workflow_state = PENDING_STATE
+            object.collection = Collection.objects.get_or_create(name=u"Individual Authors")[0]
             object.save()
             form.save_m2m()
             return HttpResponse(cjson.encode(dict(status="success",
