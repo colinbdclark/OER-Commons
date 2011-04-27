@@ -56,7 +56,7 @@ class Repository(object):
     def list_sets(self, microsite):
         raise NoSetHierarchy(u"Sets are not supported by this repository")
 
-    def get_item(self, identifier):
+    def get_item(self, identifier, microsite=None):
         if not identifier.startswith(self.identifier_prefix):
             raise IdDoesNotExist(u"Invalid identifier")
 
@@ -70,9 +70,13 @@ class Repository(object):
         if model is None:
             raise IdDoesNotExist(u"Invalid identifier")
         try:
-            return model.objects.get(id=id)
+            item = model.objects.get(id=id)
         except model.DoesNotExist:
             raise IdDoesNotExist(u"Invalid identifier")
+        
+        if microsite and microsite not in item.microsites():
+            raise IdDoesNotExist(u"Invalid identifier")
+        return item
 
     def get_sets(self, item):
         return []

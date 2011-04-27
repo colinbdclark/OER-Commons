@@ -83,7 +83,7 @@ class MetadataFormat(object):
         return records, next_page_number, items.paginator.count
 
     def get_record(self, identifier, microsite=None):
-        item = self.repository.get_item(identifier, microsite=None)
+        item = self.repository.get_item(identifier, microsite=microsite)
         if not self.supported_by(item):
             raise InvalidMetadataPrefix(u"The value of the metadataPrefix argument is not supported by the item identified by the value of the identifier argument.")
         site = Site.objects.get_current()
