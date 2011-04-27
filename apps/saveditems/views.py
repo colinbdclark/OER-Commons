@@ -28,7 +28,8 @@ def save(request, slug=None, model=None):
     site.update_object(item)
 
     if request.is_ajax():
-        return JsonResponse(dict(message=u"Item was saved in your collection."))
+        return JsonResponse(dict(status="success",
+                                 message=u"Item was saved in your collection."))
 
     messages.success(request, u"Item was saved in your collection.")
     return redirect_to_next_url(request, item.get_absolute_url())
@@ -51,7 +52,8 @@ def unsave(request, slug=None, model=None):
         site.update_object(item)
 
         if request.is_ajax():
-            return JsonResponse(dict(message=u"Item was removed from your collection."))
+            return JsonResponse(dict(status="success",
+                                     message=u"Item was removed from your collection."))
 
         messages.success(request, u"Item was removed from your collection.")
     except SavedItem.DoesNotExist:

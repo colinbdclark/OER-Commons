@@ -6,7 +6,7 @@
   <div class="details">
     <h3>
       <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
-      <a href="{{ item.url }}"><img alt="{{ item.title }}" src="{{ STATIC_URL }}images/external-link-icon.gif" /></a>  
+      <a href="{{ item.toolbar_view_url }}"><img alt="{{ item.title }}" src="{{ STATIC_URL }}images/external-link-icon.gif" /></a>  
     </h3>
     {% include "materials/include/index-item-details.html" %}
   </div>

@@ -1,0 +1,101 @@
+body.toolbar-view {
+  background: none;
+}
+
+iframe#resource {
+  top: 33px;
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  z-index: 1;
+}
+
+#toolbar {
+  height: 23px;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  background: url(../javascripts/jquery/Aristo/images/bg_fallback.png) 0 0
+    repeat-x;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(1, rgb(237,
+    237, 237) ), color-stop(0, rgb(196, 196, 196) ) );
+  background: -moz-linear-gradient(center top, rgb(237, 237, 237),
+    rgb(196, 196, 196) );
+  border-bottom: 1px solid #B6B6B6;
+  padding: 5px 0;
+}
+
+#toolbar a {
+  text-decoration: none;
+}
+
+#toolbar a:hover {
+  text-decoration: underline;
+}
+
+#toolbar .stars {
+  margin-bottom: -4px;
+  display: inline-block;
+}
+
+#toolbar ul {
+  margin: 0 15px;
+  padding: 0;
+  list-style-type: none;
+}
+
+#toolbar li {
+  line-height: 23px;
+  height: 23px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 10px;
+  padding-right: 11px;
+  background: url(../images/dotted-line-vert.gif) 100% 0% repeat-y;
+}
+
+#toolbar li img.logo {
+  margin-top: 3px; 
+}
+
+#toolbar li.last {
+  background: none;
+}
+
+#toolbar li a {
+  display: inline-block; 
+}
+
+#toolbar li a.loading {
+  padding-left: 20px;
+  background: url(../images/ajax-loader.gif) 0% 50% no-repeat; 
+}
+
+#close-toolbar {
+  display: block;
+  z-index: 10;
+  position: absolute;
+  top: 9px;
+  right: 15px;
+  width: 16px;
+  height: 16px;
+  background: url(../javascripts/jquery/Aristo/images/icon_sprite.png) 0px
+    -16px no-repeat;
+  text-indent: -9999px;
+}
+
+#close-toolbar:hover {
+  background-position: -16px -16px;
+}
+
+body.toolbar-view #status-messages {
+  position: absolute;
+  top: 43px;
+  left: 10px;
+  z-index: 10; 
+}
+
+body.toolbar-view #status-messages .status-message {
+  float: left;
+  clear: both; 
+}

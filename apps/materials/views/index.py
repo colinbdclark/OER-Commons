@@ -321,6 +321,9 @@ def populate_item_from_search_result(result):
                                     result.model_name,
                                     result.pk,
                                 ))
+        item["toolbar_view_url"] = reverse(
+                               "materials:%s:toolbar_view_item" % namespace,
+                               kwargs=dict(slug=item["slug"]))
     else:
         item["get_absolute_url"] = result.object.get_absolute_url()
     return item

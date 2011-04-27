@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load compress %}
+{% load flatblock_tags %}
+{% load rating_tags %}
+{% load tags_tags %}
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ request.LANGUAGE_CODE }}" lang="{{ request.LANGUAGE_CODE }}">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    {% compress css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/blueprint/reset.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/blueprint/typography.css" media="all" />
+    
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all" />
+    
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/base.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/form.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/login.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/rating.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/tags.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/materials-toolbar.css" media="all" />
+    {% endcompress %}
+    
+    <!--[if lt IE 8]>
+      {% compress css %}
+      <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/blueprint/ie.css" media="all" />
+      <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/ie.css" media="all" />
+      {% endcompress %}
+    <![endif]-->
+    
+    <title>{{ item.title }} | OER Commons</title>
+    <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico"/> 
+    
+  </head>
+  <body class="toolbar-view {% if request.user.is_authenticated %} authenticated{% endif %}">
+
+    <a href="javascript:window.location = '{{ item.url|escapejs }}';" id="close-toolbar">Close toolbar</a>
+
+    <div id="toolbar">
+      <div class="item" id="{{ item.identifier }}">
+        {% spaceless %}
+        <ul>
+          <li><a href="/"><img src="{{ STATIC_URL }}images/favicon.ico" alt="Home" class="logo" /></a></li>
+          <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
+          <li><a href="#" class="review">Review</a></li>
+          <li><a href="#" class="note">Note</a></li>
+          <li>
+            <a href="{{ save_url }}" class="save"{% if saved %} style="display: none;"{% endif %}>Save to collection</a>
+            <a href="{{ unsave_url }}" class="unsave"{% if not saved %} style="display: none;"{% endif %}>Remove from collection</a>
+          </li>
+          <li class="last">Rating: {% stars item.rating %}</li>
+        </ul>
+        {% endspaceless %}
+      </div>
+    </div>
+
+    <div id="status-messages"></div>
+
+    <div id="add-tags-dialog" style="display: none;">
+        {% add_tags_form %}
+    </div>
+
+    <iframe id="resource" src="{{ item.url }}" width="100%" height="100%"></iframe>
+  
+    {% include "include/cdn-js.html" %}
+    {% compress js %}
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.validate.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/namespace.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/validation.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/status-message.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/login.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/tags-form.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/rating.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/materials-toolbar.js"></script>
+    {% endcompress %}
+    <script type="text/javascript">
+      ITEM_TITLE = "{{ item.title|escapejs }}"; 
+      $(function() {
+          oer.materials.toolbar.init();
+          oer.rating.init();
+      });
+    </script>
+    
+  </body>
+</html>
