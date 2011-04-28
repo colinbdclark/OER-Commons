@@ -6,7 +6,7 @@ from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel,
     Language, GeographicRelevance, MediaFormat, Institution, Collection, \
     AutoCreateManyToManyField, AutoCreateForeignKey
 from materials.models.material import Material, mark_for_reindex, \
-    unindex_material
+    unindex_material, check_material_url
 
 
 class LibraryMaterialType(models.Model):
@@ -81,5 +81,6 @@ class Library(Material):
 
 
 post_save.connect(mark_for_reindex, sender=Library, dispatch_uid="library_post_save_reindex")
+post_save.connect(check_material_url, sender=Library, dispatch_uid="library_post_save_check_url")
 m2m_changed.connect(mark_for_reindex, sender=Library, dispatch_uid="library_m2m_changed_reindex")
 pre_delete.connect(unindex_material, sender=Library, dispatch_uid="library_pre_delete_unindex")

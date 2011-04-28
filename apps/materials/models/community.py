@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
     Language, GeographicRelevance, AutoCreateManyToManyField
 from materials.models.material import Material, mark_for_reindex, \
-    unindex_material
+    unindex_material, check_material_url
 
 
 class CommunityType(models.Model):
@@ -95,5 +95,6 @@ class CommunityItem(Material):
 
 
 post_save.connect(mark_for_reindex, sender=CommunityItem, dispatch_uid="community_item_post_save_reindex")
+post_save.connect(check_material_url, sender=CommunityItem, dispatch_uid="community_item_post_save_check_url")
 m2m_changed.connect(mark_for_reindex, sender=CommunityItem, dispatch_uid="community_item_m2m_changed_reindex")
 pre_delete.connect(unindex_material, sender=CommunityItem, dispatch_uid="community_item_pre_delete_unindex")

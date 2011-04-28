@@ -11,6 +11,7 @@ from materials import globals
 from materials.models import License
 from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
+from materials.tasks import check_url_status
 from notes.models import Note
 from rating.models import Rating
 from reviews.models import Review
@@ -239,3 +240,8 @@ def unindex_material(sender, **kwargs):
         to_be_reindexed[sender].discard(instance)
     from haystack.sites import site
     site.remove_object(instance)
+
+
+def check_material_url(sender, **kwargs):
+    instance = kwargs["instance"]
+    check_url_status.delay(instance)
