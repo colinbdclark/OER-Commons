@@ -72,7 +72,8 @@ class MaterialSearchIndex(SearchIndex):
     indexed_topics = VocabularyMultiValueField(model_attr="indexed_topics")
 
     workflow_state = CharField(model_attr="workflow_state")
-
+    is_displayed = BooleanField(model_attr="is_displayed")
+    
     visits = IntegerField(model_attr="visits")
 
 

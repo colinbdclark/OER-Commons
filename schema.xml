@@ -110,7 +110,8 @@
     
     <field name="license" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="cou_bucket" type="string" indexed="true" stored="true" multiValued="false" />
-    <field name="workflow_state" type="string"   indexed="true"  stored="true"  multiValued="false" />
+    <field name="workflow_state" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="is_displayed" type="boolean" indexed="true" stored="true" multiValued="false" />
 
     <field name="authors" type="text" indexed="true" stored="true" multiValued="true" />
     <field name="grade_levels" type="sint" indexed="true" stored="true" multiValued="true" />

@@ -206,6 +206,10 @@ class Material(models.Model):
     @property
     def visits(self):
         return Visit.objects.get_visits_count(self, None)
+    
+    @property
+    def is_displayed(self):
+        return self.workflow_state == PUBLISHED_STATE and self.http_status != 404
 
 
 def mark_for_reindex(sender, **kwargs):
