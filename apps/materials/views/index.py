@@ -1,7 +1,6 @@
 from annoying.decorators import JsonResponse
 from autoslug.settings import slugify
 from django.contrib import messages
-from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.views.generic.simple import direct_to_template
@@ -9,7 +8,6 @@ from haystack.query import SearchQuerySet
 from materials.models.common import GeneralSubject, GradeLevel, Collection, \
     Keyword, GeographicRelevance, Institution
 from materials.models.community import CommunityItem
-from materials.models.material import PUBLISHED_STATE
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_id, get_slug_from_id, \
     first_neighbours_last, get_name_from_slug, get_object
@@ -388,7 +386,7 @@ def index(request, general_subjects=None, grade_levels=None,
                 raise Http404()
             format = "csv"
 
-    query = SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE)
+    query = SearchQuerySet().narrow("is_displayed:true")
 
     if model:
         query = query.models(model)

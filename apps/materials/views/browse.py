@@ -1,13 +1,10 @@
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
-from haystack.query import SearchQuerySet
 from materials.models.common import GeneralSubject, GradeLevel, Collection
-from materials.models.course import COURSE_OR_MODULE, CourseMaterialType, \
-    Course
-from materials.models.library import LibraryMaterialType, Library
-from materials.models.material import PUBLISHED_STATE
-from materials.utils import get_facets_for_field
 from materials.models.community import CommunityTopic, CommunityType
+from materials.models.course import COURSE_OR_MODULE, CourseMaterialType, Course
+from materials.models.library import LibraryMaterialType, Library
+from materials.utils import get_facets_for_field
 
 
 def browse(request, microsite=None):

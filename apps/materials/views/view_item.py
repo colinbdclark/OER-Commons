@@ -1,16 +1,16 @@
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, resolve
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
-from materials.models.material import PUBLISHED_STATE, WORKFLOW_TRANSITIONS
+from materials.models.material import WORKFLOW_TRANSITIONS
 from materials.models.microsite import Microsite
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
 from notes.models import Note
 from visitcounts.models import Visit
-from django.contrib.contenttypes.models import ContentType
 
 
 def view_item(request, slug=None, model=None):
@@ -92,7 +92,7 @@ def view_item(request, slug=None, model=None):
 
     if came_from_index:
 
-        query = SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE)
+        query = SearchQuerySet().narrow("is_displayed:true")
 
         index_model = kwargs.get("model")
         microsite = kwargs.get("microsite")

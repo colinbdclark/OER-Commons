@@ -5,7 +5,6 @@ from materials.models.common import Collection
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
-from materials.models.material import PUBLISHED_STATE
 from oai.exceptions import IdDoesNotExist
 from oai.metadata import MetadataFormat, Header
 
@@ -22,7 +21,7 @@ class OERMetadataFormat(MetadataFormat):
 
     def get_items(self, from_date=None, until_date=None, set=None,
                   microsite=None):
-        query = SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE)
+        query = SearchQuerySet().narrow("is_displayed:true")
         if from_date:
             query = query.filter(published_on__gte=from_date)
         if until_date:

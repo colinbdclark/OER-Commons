@@ -5,7 +5,6 @@ from haystack.query import SearchQuerySet
 from materials.models import Microsite
 from materials.models.common import Keyword, GradeLevel
 from materials.models.course import CourseMaterialType
-from materials.models.material import PUBLISHED_STATE
 from materials.utils import get_name_from_slug
 from materials.views.index import populate_item_from_search_result, \
     MAX_TOP_KEYWORDS
@@ -21,7 +20,7 @@ def microsite(request, microsite):
     page_title = u"%s Home" % microsite.name
     breadcrumbs = [{"url": reverse("materials:microsite", kwargs=dict(microsite=microsite.slug)), "title": page_title}]
 
-    query = SearchQuerySet().narrow("workflow_state:%s" % PUBLISHED_STATE)
+    query = SearchQuerySet().narrow("is_displayed:true")
     query = query.narrow("microsites:%i" % microsite.id)
     query = query.order_by("-rating")
     query = query.facet("indexed_topics").facet("keywords").facet("grade_levels").facet("course_material_types")

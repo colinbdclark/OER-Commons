@@ -23,9 +23,9 @@ class GenericSitemap(BaseGenericSitemap):
 
 
 sitemaps = {
-    'courses': GenericSitemap(dict(queryset=Course.objects.filter(workflow_state=PUBLISHED_STATE), date_field="published_on")),
-    'libraries': GenericSitemap(dict(queryset=Library.objects.filter(workflow_state=PUBLISHED_STATE), date_field="published_on")),
-    'community': GenericSitemap(dict(queryset=CommunityItem.objects.filter(workflow_state=PUBLISHED_STATE), date_field="published_on")),
+    'courses': GenericSitemap(dict(queryset=Course.objects.filter(workflow_state=PUBLISHED_STATE).exclude(http_status=404), date_field="published_on")),
+    'libraries': GenericSitemap(dict(queryset=Library.objects.filter(workflow_state=PUBLISHED_STATE).exclude(http_status=404), date_field="published_on")),
+    'community': GenericSitemap(dict(queryset=CommunityItem.objects.filter(workflow_state=PUBLISHED_STATE).exclude(http_status=404), date_field="published_on")),
 }
 
 

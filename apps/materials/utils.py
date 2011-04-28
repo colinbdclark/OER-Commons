@@ -1,6 +1,5 @@
 from cache_utils.decorators import cached
 from haystack.query import SearchQuerySet
-from materials.models.material import PUBLISHED_STATE
 from titlecase import titlecase, ALL_CAPS
 import re
 
@@ -98,7 +97,7 @@ def get_facets_for_field(field, model=None):
     query = SearchQuerySet()
     if model is not None:
         query = query.models(model)
-    query = query.narrow("workflow_state:%s" % PUBLISHED_STATE)
+    query = query.narrow("is_displayed:true")
     query = query.facet(field)
     return query.facet_counts().get("fields", {}).get(field, [])
 

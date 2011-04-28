@@ -11,7 +11,6 @@ from materials.models.common import Country, GeneralSubject, GradeLevel, \
 from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
 from materials.models.library import LibraryMaterialType
-from materials.models.material import PUBLISHED_STATE
 from materials.models.microsite import Microsite, Topic
 from materials.views.forms import KeywordsField
 

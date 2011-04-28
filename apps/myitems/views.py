@@ -1,11 +1,10 @@
+from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
-from materials.models.material import PUBLISHED_STATE
 from materials.views.index import IndexParams, populate_item_from_search_result, \
     Pagination
-from utils.decorators import login_required
 from savedsearches.models import SavedSearch
-from django.core.urlresolvers import reverse
+from utils.decorators import login_required
 
 
 def myitems_index(request, view_name, page_title, no_items_message, index_name,
@@ -24,7 +23,7 @@ def myitems_index(request, view_name, page_title, no_items_message, index_name,
 
     query = SearchQuerySet()
     if only_published:
-        query = query.narrow("workflow_state:%s" % PUBLISHED_STATE)
+        query = query.narrow("is_displayed:true")
     query = query.narrow("%s:%i" % (index_name, request.user.id))
 
     if index_params.query_order_by is not None:
