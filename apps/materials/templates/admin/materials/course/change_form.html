@@ -9,6 +9,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.tmpl.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/namespace.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/keywords-widget.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}javascripts/admin.js"></script>
 <script type="text/javascript">
   $(function() {
       $("#id_content_creation_date").datepicker();
@@ -38,6 +39,7 @@
           source: "{% url materials:autocomplete "materials" "license" "url" %}"
       });
       oer.keywords_widget.init();
+      oer.admin.tags.init();
   });
 </script>
 {% endblock %}
@@ -64,12 +66,14 @@
       {% include "admin/materials/include/form-field.html" %}
     {% endif %}
   {% endfor %}
+  {% include "admin/materials/include/tags-field.html" %}
   </fieldset>
   {% include "admin/materials/include/license-fieldset.html" %}
   {% include "admin/materials/include/authors-formset.html" %}
   {% include "admin/materials/include/prepost-requisites-fieldset.html" %}
   {% include "admin/materials/include/derived-fieldset.html" %}
   {% include "admin/materials/include/rss-fieldset.html" %}
+  
 </div>
 
 <div class="submit-row">

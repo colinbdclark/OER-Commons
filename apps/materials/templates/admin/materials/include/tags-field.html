@@ -1,0 +1,17 @@
+<div class="form-row tags">
+  <div>
+    <label>Tags</label>
+    {% if tags %}
+      <ul class="user-tags">
+        {% for tag in tags %}
+          <li>
+            <div>
+              <span>{{ tag }}</span>
+              <a href="#" class="delete">Delete</a>
+            </div>      
+          </li>
+        {% endfor %}
+      </ul>
+   {% endif %}
+  </div>
+</div>
