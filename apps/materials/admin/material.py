@@ -1,5 +1,4 @@
 from annoying.decorators import ajax_request
-from django.conf.urls.defaults import patterns, url
 from django.contrib.admin.options import ModelAdmin
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -27,6 +26,7 @@ class MaterialAdmin(ModelAdmin):
     actions = [publish]
 
     def get_urls(self):
+        from django.conf.urls.defaults import patterns, url
         
         def wrap(view):
             def wrapper(*args, **kwargs):
