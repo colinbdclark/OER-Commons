@@ -55,7 +55,7 @@ class CommunityItem(Material):
     authors = AutoCreateManyToManyField(Author, verbose_name=_(u"Authors"),
                                         respect_all_fields=True)
 
-    url = models.URLField(max_length=300, verbose_name=_(u"URL"))
+    url = models.URLField(max_length=300, verbose_name=_(u"URL"), verify_exists=False)
     keywords = AutoCreateManyToManyField(Keyword, verbose_name=_(u"Keywords"))
 
     tech_requirements = models.TextField(default=u"", blank=True,
