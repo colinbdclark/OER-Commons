@@ -8,7 +8,7 @@ $(function() {
     oer.login.init();
 
     // Google Analytics tracker to count logged in visitors.
-    if (_gaq !== undefined) {
+    if (window._gaq !== undefined) {
         var user_type = $("body").hasClass("authenticated") ? "Member" : "Anonymous";
         _gaq.push([ '_setCustomVar', 3, 'User Type', user_type, 2 ]);
     }
