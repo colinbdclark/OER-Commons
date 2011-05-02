@@ -11,6 +11,8 @@ oer.materials.toolbar.init = function() {
 
     oer.materials.toolbar.init_tags();
     oer.materials.toolbar.init_save();
+    oer.materials.toolbar.init_review()
+    oer.materials.toolbar.init_note()
 };
 
 oer.materials.toolbar.resize_iframe = function() {
@@ -98,3 +100,81 @@ oer.materials.toolbar.init_save = function() {
         });
     });
 }
+
+oer.materials.toolbar.init_review = function() {
+    var $dialog = $("#review-dialog").dialog({
+    modal : true,
+    width : 583,
+    autoOpen : false,
+    resizable : false,
+    title : "Add review"
+    });
+
+    var $toolbar = $("#toolbar");
+    var $review_btn = $toolbar.find("a.review");
+
+    $review_btn.click(function(e) {
+        e.preventDefault();
+        oer.login.check_login(function() {
+            $dialog.dialog("open");
+        });
+    });
+
+    var $form = $("#review-form");
+
+    var $submit_btn = $form.find("input[type='submit']").button();
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        $dialog.dialog("widget").addClass("loading");
+        $submit_btn.button("option", "disabled", true);
+        $.post($form.attr("action"), $form.serialize(), function(data) {
+            $dialog.dialog("widget").removeClass("loading");
+            $submit_btn.button("option", "disabled", false);
+            if (data.status === "success") {
+                oer.status_message.success(data.message, true);
+                $dialog.dialog("close");
+            }
+        });
+    });
+
+};
+
+oer.materials.toolbar.init_note = function() {
+    var $dialog = $("#note-dialog").dialog({
+    modal : true,
+    width : 583,
+    autoOpen : false,
+    resizable : false,
+    title : "Add note"
+    });
+
+    var $toolbar = $("#toolbar");
+    var $review_btn = $toolbar.find("a.note");
+
+    $review_btn.click(function(e) {
+        e.preventDefault();
+        oer.login.check_login(function() {
+            $dialog.dialog("open");
+        });
+    });
+
+    var $form = $("#note-form");
+
+    var $submit_btn = $form.find("input[type='submit']").button();
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        $dialog.dialog("widget").addClass("loading");
+        $submit_btn.button("option", "disabled", true);
+        $.post($form.attr("action"), $form.serialize(), function(data) {
+            $dialog.dialog("widget").removeClass("loading");
+            $submit_btn.button("option", "disabled", false);
+            if (data.status === "success") {
+                oer.status_message.success(data.message, true);
+                $dialog.dialog("close");
+            }
+        });
+    });
+
+};

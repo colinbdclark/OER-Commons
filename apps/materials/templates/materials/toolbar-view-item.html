@@ -48,7 +48,22 @@
             <a href="{{ save_url }}" class="save"{% if saved %} style="display: none;"{% endif %}>Save to collection</a>
             <a href="{{ unsave_url }}" class="unsave"{% if not saved %} style="display: none;"{% endif %}>Remove from collection</a>
           </li>
-          <li class="last">Rating: {% stars item.rating %}</li>
+          <li>
+            <a href="{% url myitems:myitems %}">My items</a>
+          </li>
+          <li>Rating: {% stars item.rating %}</li>
+          <li class="last">
+            <div class="addthis_toolbox addthis_default_style ">
+              <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+              <a class="addthis_button_tweet"></a>
+            </div>
+            <script type="text/javascript">
+              addthis_url    = location.href;   
+              addthis_title  = document.title;  
+              addthis_pub    = 'oercommons';     
+            </script>
+            <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4dbe4f65120603bd"></script>
+        </li>
         </ul>
         {% endspaceless %}
       </div>
@@ -58,6 +73,44 @@
 
     <div id="add-tags-dialog" style="display: none;">
         {% add_tags_form %}
+    </div>
+
+    <div id="review-dialog" style="display: none;">
+      <form action="{{ add_review_url }}" method="post" id="review-form" class="formatted review">
+        {% with review_form as form %}
+          {% for field in form.visible_fields %}
+            <div class="help">{{ field.help_text }}</div>
+            <div class="errors">
+              {% for error in field.errors %}
+                <label class="error">{{ error }}</label>
+              {% endfor %}
+            </div>
+            <div class="field">{{ field }}</div>
+          {% endfor %}
+        {% endwith %}
+        <div class="buttons">
+            <input type="submit" value="Add review" />        
+        </div>
+      </form>
+    </div>
+
+    <div id="note-dialog" style="display: none;">
+      <form action="{{ add_note_url }}" method="post" id="note-form" class="formatted note">
+        {% with note_form as form %}
+          {% with form.text as field %}
+            <div class="help">{{ field.help_text }}</div>
+            <div class="errors">
+              {% for error in field.errors %}
+                <label class="error">{{ error }}</label>
+              {% endfor %}
+            </div>
+            <div class="field">{{ field }}</div>
+          {% endwith %}
+        {% endwith %}
+        <div class="buttons">
+            <input type="submit" value="Add note" />        
+        </div>
+      </form>
     </div>
 
     <iframe id="resource" src="{{ item.url }}" width="100%" height="100%"></iframe>
@@ -81,6 +134,8 @@
           oer.rating.init();
       });
     </script>
+    
+    {% flatblock "google-analytics" %}
     
   </body>
 </html>

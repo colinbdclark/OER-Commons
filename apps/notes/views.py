@@ -1,3 +1,4 @@
+from annoying.decorators import JsonResponse
 from django import forms
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
@@ -86,10 +87,21 @@ def add(request, slug=None, model=None):
         form = NoteForm(request.POST, instance=item, user=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, u"Your note was saved.")
-            return redirect_to_next_url(request, item.get_absolute_url())
+            if request.is_ajax():
+                return JsonResponse(dict(status="success",
+                                         message=u"Your note was saved."))
+            else:
+                messages.success(request, u"Your note was saved.")
+                return redirect_to_next_url(request, item.get_absolute_url())
         else:
-            messages.error(request, u"Please correct the indicated errors.")
+            if request.is_ajax():
+                errors = {}
+                for field, errors_list in form.errors.items():
+                    errors[field] = errors_list[0]
+                return JsonResponse(dict(status="error",
+                                         errors=errors))
+            else:
+                messages.error(request, u"Please correct the indicated errors.")
     else:
         form = NoteForm(instance=item, user=request.user)
 

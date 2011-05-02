@@ -9,7 +9,9 @@ from materials.models.microsite import Microsite
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
+from saveditems.models import SavedItem
 from visitcounts.models import Visit
+from reviews.views import ReviewForm
 
 
 def view_item(request, slug=None, model=None):
@@ -169,6 +171,53 @@ def view_item(request, slug=None, model=None):
 
         index_url = index_path + serialize_query_string_params(query_string_params)
 
+    toolbar_view_url = reverse("materials:%s:toolbar_view_item" % item.namespace,
+                                   kwargs=dict(slug=item.slug))
+
     Visit.objects.count(request, item)
 
     return direct_to_template(request, "materials/view-item.html", locals())
+
+
+def toolbar_view_item(request, slug=None, model=None):
+
+    if not slug or not model:
+        raise Http404()
+
+    item = get_object_or_404(model, slug=slug)
+    if not item.url:
+        raise Http404()
+
+    content_type = ContentType.objects.get_for_model(item)
+    item.identifier = "%s.%s.%i" % (content_type.app_label,
+                                    content_type.model,
+                                    item.id)
+
+    add_tags_url = reverse("tags:add_tags", args=(
+                                content_type.app_label,
+                                content_type.model,
+                                item.id,
+                            ))
+    
+    saved = False
+    if request.user.is_authenticated():
+        saved = SavedItem.objects.filter(content_type=content_type,
+                                         object_id=item.id,
+                                         user=request.user).exists()
+
+    save_url = reverse("materials:%s:save_item" % item.namespace,
+                   kwargs=dict(slug=item.slug))
+    unsave_url = reverse("materials:%s:unsave_item" % item.namespace,
+                   kwargs=dict(slug=item.slug))
+
+    add_review_url = reverse("materials:%s:add_review" % item.namespace,
+                           kwargs=dict(slug=item.slug))
+
+    if request.user.is_authenticated():
+        review_form = ReviewForm(instance=item, user=request.user)
+    else:
+        review_form = ReviewForm()
+
+    Visit.objects.count(request, item)
+
+    return direct_to_template(request, "materials/toolbar-view-item.html", locals())
