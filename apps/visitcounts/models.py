@@ -4,8 +4,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 import datetime
 import re
-from django.utils.dateformat import format
-from django.conf import settings
 
 
 ROBOT_RE = re.compile("bot|crawler|spider", re.I)
@@ -55,19 +53,3 @@ class Visit(models.Model):
                                      db_index=True)
 
     objects = VisitManager()
-    
-    
-class UniqueVisitor(models.Model):
-    
-    is_authenticated = models.BooleanField(default=False, db_index=True)
-    
-    timestamp = models.DateTimeField(auto_now_add=True,
-                                     default=datetime.datetime.now,
-                                     db_index=True)
-    
-    def __unicode__(self):
-        if self.is_authenticated:
-            s = u"Authenticated visitor at %s"
-        else: 
-            s = u"Anonymous visitor at %s"
-        return  s % format(self.timestamp, settings.DATETIME_FORMAT)
