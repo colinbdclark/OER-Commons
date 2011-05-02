@@ -4,6 +4,7 @@
 {% load flatblock_tags %}
 {% load rating_tags %}
 {% load tags_tags %}
+{% load materials_tags %}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ request.LANGUAGE_CODE }}" lang="{{ request.LANGUAGE_CODE }}">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -37,6 +38,29 @@
     <a href="javascript:window.location = '{{ item.url|escapejs }}';" id="close-toolbar">Close toolbar</a>
 
     <div id="toolbar">
+    
+      {% if came_from_index %}
+      <div class="view-item-navigation">
+        <ul>
+          {% if prev_item_url %}
+            <li><a class="item-link prev" href="{{ prev_item_url }}">&laquo; Previous Item</a></li>
+          {% endif %}
+          {% if index_url %}
+            <li><a href="{{ index_url }}">Return to Search Results...</a></li>
+          {% endif %}
+          {% if next_item_url %}
+            <li class="last"><a class="item-link next" href="{{ next_item_url }}">Next Item &raquo;</a></li>
+          {% endif %}
+        </ul>
+        <form action="" method="post">
+          <input type="hidden" name="index_path" value="{{ index_path }}" />
+          <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
+          <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
+          {% hidden_filters hidden_filters %}
+        </form>
+      </div>
+      {% endif %}
+    
       <div class="item" id="{{ item.identifier }}">
         {% spaceless %}
         <ul>
@@ -125,6 +149,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/login.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/tags-form.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/rating.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/materials-view-item.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/materials-toolbar.js"></script>
     {% endcompress %}
     <script type="text/javascript">

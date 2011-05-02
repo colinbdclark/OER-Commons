@@ -79,7 +79,7 @@ oer.materials.index.init_top_keywords = function() {
 oer.materials.index.init_item_links = function() {
     var $filters_portlet = $("div.portlet.index-filters");
     var $form = $filters_portlet.find("form[name='index-filters']");
-    $("#content div.materials-index").delegate("h3 a.item-link", "click", function(e) {
+    $("#content div.materials-index").delegate("h3 a", "click", function(e) {
         e.preventDefault();
         $form.attr("action", $(this).attr("href")).attr("method", "post");
         $form.find("input[name='index_path']").attr("disabled", false);

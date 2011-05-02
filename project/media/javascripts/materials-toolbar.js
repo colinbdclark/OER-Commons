@@ -11,8 +11,9 @@ oer.materials.toolbar.init = function() {
 
     oer.materials.toolbar.init_tags();
     oer.materials.toolbar.init_save();
-    oer.materials.toolbar.init_review()
-    oer.materials.toolbar.init_note()
+    oer.materials.toolbar.init_review();
+    oer.materials.toolbar.init_note();
+    oer.materials.view_item.init_navigation();
 };
 
 oer.materials.toolbar.resize_iframe = function() {
