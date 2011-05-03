@@ -7,15 +7,23 @@ from materials.models.community import CommunityItem, CommunityType, \
 from materials.models.course import Course, CourseMaterialType
 from materials.models.library import Library, LibraryMaterialType
 from materials.models.material import PUBLISHED_STATE
+import datetime
+
+
+now = datetime.datetime.now()
 
 
 class GenericSitemap(BaseGenericSitemap):
     limit = 1000
 
 
-class StaticPagesSitemap(Sitemap):
+class LastmodGenedicSitemap(GenericSitemap):
+    lastmod = now
 
+
+class StaticPagesSitemap(Sitemap):
     changefreq = "daily"
+    lastmod = now 
 
     def location(self, item):
         view_name, args, kwargs = item
@@ -41,12 +49,12 @@ class StaticPagesSitemap(Sitemap):
 
 sitemaps = {
     'static': StaticPagesSitemap(),
-    'library-material-types': GenericSitemap(dict(queryset=LibraryMaterialType.objects.all()), changefreq="daily"),
-    'general-subjects': GenericSitemap(dict(queryset=GeneralSubject.objects.all()), changefreq="daily"),
-    'grade-levels': GenericSitemap(dict(queryset=GradeLevel.objects.all()), changefreq="daily"),
-    'course-material-types': GenericSitemap(dict(queryset=CourseMaterialType.objects.all()), changefreq="daily"),
-    'community-types': GenericSitemap(dict(queryset=CommunityType.objects.all()), changefreq="daily"),
-    'community-topics': GenericSitemap(dict(queryset=CommunityTopic.objects.all()), changefreq="daily"),
+    'library-material-types': LastmodGenedicSitemap(dict(queryset=LibraryMaterialType.objects.all()), changefreq="daily"),
+    'general-subjects': LastmodGenedicSitemap(dict(queryset=GeneralSubject.objects.all()), changefreq="daily"),
+    'grade-levels': LastmodGenedicSitemap(dict(queryset=GradeLevel.objects.all()), changefreq="daily"),
+    'course-material-types': LastmodGenedicSitemap(dict(queryset=CourseMaterialType.objects.all()), changefreq="daily"),
+    'community-types': LastmodGenedicSitemap(dict(queryset=CommunityType.objects.all()), changefreq="daily"),
+    'community-topics': LastmodGenedicSitemap(dict(queryset=CommunityTopic.objects.all()), changefreq="daily"),
     'courses': GenericSitemap(dict(queryset=Course.objects.filter(workflow_state=PUBLISHED_STATE).exclude(http_status=404), date_field="published_on")),
     'libraries': GenericSitemap(dict(queryset=Library.objects.filter(workflow_state=PUBLISHED_STATE).exclude(http_status=404), date_field="published_on")),
     'community': GenericSitemap(dict(queryset=CommunityItem.objects.filter(workflow_state=PUBLISHED_STATE).exclude(http_status=404), date_field="published_on")),
