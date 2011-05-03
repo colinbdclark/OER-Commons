@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags
+from django.utils.text import unescape_entities
 from django.views.generic.simple import direct_to_template
 from materials.models.common import MediaFormat, CC_LICENSE_URL_RE
 from materials.models.course import Course
@@ -9,11 +10,12 @@ from materials.views.forms import CC_OLD_LICENSES
 from materials.views.iframe_submission.pyreadability import Readability, \
     ReadabilityException
 from materials.views.iframe_submission.submission_form import SubmissionForm
+from reviews.views import ReviewForm
 from urllib2 import URLError
 from users.views.login import LoginForm
+from utils import reduce_whitespace
 import re
 import requests
-from reviews.views import ReviewForm
 
 
 HTTP_USER_AGENT = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.25 (KHTML, like Gecko) Chrome/12.0.706.0 Safari/534.25" 
@@ -48,8 +50,12 @@ def fetch_data_from_url(url, content):
     data["url"] = url
     try:
         readable = Readability(url, content)
-        data["title"] = readable.get_article_title()
-        data["abstract"] = strip_tags(readable.get_article_text()).strip()
+        data["title"] = reduce_whitespace(unescape_entities(readable.get_article_title()))
+        # Try to get abstract from meta description:
+        abstract = reduce_whitespace(unescape_entities(strip_tags(readable.get_meta_description()).strip()))
+        if not abstract:
+            abstract = reduce_whitespace(unescape_entities(strip_tags(readable.get_article_text()).strip()))
+        data["abstract"] = abstract
     except ReadabilityException:
         pass
     

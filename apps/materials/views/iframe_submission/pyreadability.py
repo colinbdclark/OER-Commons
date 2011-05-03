@@ -146,6 +146,13 @@ class Readability:
         
         return title
     
+    def get_meta_description(self):
+        soup = self.soup
+        description_tag = soup.find("meta", {"name": "description"})
+        if description_tag and description_tag["content"]:
+            return description_tag["content"].strip()
+        return None
+        
     def get_article_text(self):
         
         soup = self.soup
