@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags
-from django.utils.text import unescape_entities
+from django.utils.text import unescape_entities, truncate_words
 from django.views.generic.simple import direct_to_template
 from materials.models.common import MediaFormat, CC_LICENSE_URL_RE
 from materials.models.course import Course
@@ -55,6 +55,7 @@ def fetch_data_from_url(url, content):
         abstract = reduce_whitespace(unescape_entities(strip_tags(readable.get_meta_description()).strip()))
         if not abstract:
             abstract = reduce_whitespace(unescape_entities(strip_tags(readable.get_article_text()).strip()))
+        abstract = truncate_words(abstract, 200)
         data["abstract"] = abstract
     except ReadabilityException:
         pass
