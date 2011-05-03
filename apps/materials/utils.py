@@ -54,11 +54,12 @@ def get_object(model, **kwargs):
     e.g. vocabulary items.
     """
     result = model.objects.filter(**kwargs).select_related()
-    if not result.count():
+    if not result.exists():
         return None
     return result[0]
 
 
+@cached(60 * 60 * 24)
 def get_name_from_id(model, id):
     """
     Lookup a model instance by id and return its name. Return None if an object
@@ -70,6 +71,7 @@ def get_name_from_id(model, id):
     return None
 
 
+@cached(60 * 60 * 24)
 def get_slug_from_id(model, id):
     """
     Lookup a model instance by id and return its slug. Return None if an object
@@ -81,6 +83,7 @@ def get_slug_from_id(model, id):
     return None
 
 
+@cached(60 * 60 * 24)
 def get_name_from_slug(model, slug):
     """
     Lookup a model instance by slug and return its name. Return None if an object
