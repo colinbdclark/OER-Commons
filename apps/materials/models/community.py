@@ -26,6 +26,10 @@ class CommunityType(models.Model):
         verbose_name_plural = _(u"Community types")
         ordering = ("id",)
 
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:community:community_type_index", [], {"community_types": self.slug}) 
+
 
 class CommunityTopic(models.Model):
 
@@ -43,6 +47,10 @@ class CommunityTopic(models.Model):
         verbose_name = _(u"Community topic")
         verbose_name_plural = _(u"Community topics")
         ordering = ("id",)
+
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:community:community_topic_index", [], {"community_topics": self.slug}) 
 
 
 class CommunityItem(Material):

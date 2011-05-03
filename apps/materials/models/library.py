@@ -1,5 +1,6 @@
 from autoslug.fields import AutoSlugField
 from django.db import models
+from django.db.models import permalink
 from django.db.models.signals import pre_delete, m2m_changed, post_save
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
@@ -25,6 +26,10 @@ class LibraryMaterialType(models.Model):
         verbose_name = _(u"Library material type")
         verbose_name_plural = _(u"Library material types")
         ordering = ("id",)
+
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:libraries:material_type_index", [], {"library_material_types": self.slug}) 
 
 
 class Library(Material):

@@ -7,6 +7,7 @@ from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel,
     AutoCreateManyToManyField, AutoCreateForeignKey
 from materials.models.material import Material, mark_for_reindex, \
     unindex_material, check_material_url
+from django.db.models import permalink
 
 
 COURSE_OR_MODULE = (
@@ -37,6 +38,10 @@ class CourseMaterialType(models.Model):
         verbose_name = _(u"Course material type")
         verbose_name_plural = _(u"Course material types")
         ordering = ("id",)
+
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:courses:material_type_index", [], {"course_material_types": self.slug}) 
 
 
 class RelatedMaterial(models.Model):

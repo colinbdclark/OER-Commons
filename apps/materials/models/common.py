@@ -1,6 +1,7 @@
 from autoslug.fields import AutoSlugField
 from cache_utils.decorators import cached
 from django.db import models
+from django.db.models import permalink
 from django.db.models.fields import NOT_PROVIDED
 from django.utils.translation import ugettext_lazy as _
 from materials.ccrest import CcRest
@@ -311,6 +312,10 @@ class GeneralSubject(models.Model):
         verbose_name_plural = _(u"General subjects")
         ordering = ("id",)
 
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:general_subject_index", [], {"general_subjects": self.slug}) 
+    
 
 class GradeLevel(models.Model):
 
@@ -330,6 +335,10 @@ class GradeLevel(models.Model):
         verbose_name = _(u"Grade level")
         verbose_name_plural = _(u"Grade levels")
         ordering = ("id",)
+
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:grade_level_index", [], {"grade_levels": self.slug}) 
 
 
 class Language(models.Model):
