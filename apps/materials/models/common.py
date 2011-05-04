@@ -225,6 +225,12 @@ class License(models.Model):
         return self.image_url
 
 
+class CountryManager(models.Manager):
+    
+    def get_by_natural_key(self, code):
+        return self.get(code=code)
+
+
 class Country(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
@@ -234,6 +240,8 @@ class Country(models.Model):
                          verbose_name=_(u"Slug"),
                          db_index=True)
     code = models.CharField(unique=True, max_length=2, db_index=True)
+
+    objects = CountryManager()
 
     def __unicode__(self):
         return self.name
