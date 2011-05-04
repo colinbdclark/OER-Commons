@@ -233,6 +233,7 @@ class Country(models.Model):
                          populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
+    code = models.CharField(unique=True, max_length=2, db_index=True)
 
     def __unicode__(self):
         return self.name
@@ -241,7 +242,7 @@ class Country(models.Model):
         app_label = "materials"
         verbose_name = _(u"Country")
         verbose_name_plural = _(u"Countries")
-        ordering = ("id",)
+        ordering = ("name",)
 
 
 class Author(models.Model):
