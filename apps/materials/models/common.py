@@ -195,8 +195,8 @@ class License(models.Model):
 
     class Meta:
         app_label = "materials"
-        verbose_name = _(u"Country")
-        verbose_name_plural = _(u"Countries")
+        verbose_name = _(u"License")
+        verbose_name_plural = _(u"Licenses")
         ordering = ("id",)
 
     @property
