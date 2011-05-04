@@ -21,6 +21,9 @@ class Country(models.Model):
 
     objects = CountryManager()
 
+    def natural_key(self):
+        return (self.code, )
+    
     def __unicode__(self):
         return self.name
 
@@ -31,3 +34,37 @@ class Country(models.Model):
         ordering = ("name",)
 
 
+class CountryIPDiapasonManager(models.Manager):
+    
+    def ip2int(self, ip):
+        parts = map(lambda x: int(x), ip.split("."))
+        parts.reverse()
+        sum = 0
+        for i, part in enumerate(parts):
+            sum += part * (256 ** i)
+        return sum    
+
+    def get_country_by_ip(self, ip):
+        int_ip = self.ip2int(ip)
+        results = self.filter(start__lte=int_ip, end__gte=int_ip)
+        if results.exists():
+            return results[0].country
+        return None
+
+
+class CountryIPDiapason(models.Model):
+    
+    country = models.ForeignKey(Country)
+    start = models.BigIntegerField(db_index=True)
+    end = models.BigIntegerField(db_index=True)
+    
+    objects = CountryIPDiapasonManager()
+    
+    class Meta:
+        verbose_name = _(u"Country IP Diapason")
+        verbose_name_plural = _(u"Country IP Diapasons")
+        ordering = ("country",)
+        
+    def __unicode__(self):
+        return u"%s %i - %s" % (self.country.name, self.start, self.end)
+    
