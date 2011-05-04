@@ -85,6 +85,7 @@ INSTALLED_APPS = (
     'mailchimp',
     'utils',
     'tags',
+    'geo',
     'materials',
     'users',
     'rating',
