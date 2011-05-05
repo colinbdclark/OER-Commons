@@ -1,0 +1,82 @@
+table.profile {
+  width: auto;
+}
+
+table.profile td,
+table.profile th {
+  padding: 0;
+}
+
+table.profile form.user-info {
+  width: 350px;
+}
+
+table.profile th {
+   background: none;
+   font-size: 20px;
+   color: #0A546D;
+   font-weight: normal;
+   padding-bottom: 10px; 
+}
+
+table.profile th span {
+  display: inline-block;
+}
+
+table.profile th.loading span {
+   padding-right: 20px;
+   background: url(../images/ajax-loader.gif) no-repeat 100% 50%;
+}
+
+table.profile th.user-info,table.profile td.user-info {
+  padding-left: 35px;
+  padding-right: 35px;
+  border-right: 1px solid #ccc;
+}
+
+table.profile form.user-info input.text {
+  width: 338px;
+}
+
+table.profile form.change-password {
+  width: 250px;
+}
+
+table.profile th.change-password,table.profile td.change-password {
+  padding-left: 35px;
+}
+
+table.profile form.change-password input.text {
+  width: 238px;
+}
+
+table.profile form .field {
+  margin-bottom: 15px;
+}
+
+table.profile form label {
+  font-size: 16px;
+  margin: 0;
+}
+
+table.profile form label.error {
+  font-size: 12px; 
+}
+
+table.profile div.label {
+  margin-bottom: 5px;
+}
+
+table.profile form.formatted .required label {
+  background: none;
+}
+
+table.profile form input.text {
+  font-size: 18px;
+  padding: 2px 4px;
+  margin: 0;
+}
+
+table.profile .avatar img {
+  margin-top: 25px;
+}
