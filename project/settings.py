@@ -83,6 +83,7 @@ INSTALLED_APPS = (
     'oauth_provider',
     'honeypot',
     'mailchimp',
+    'simplegravatar',
     'utils',
     'tags',
     'geo',
