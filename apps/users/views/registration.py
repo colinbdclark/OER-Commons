@@ -15,8 +15,11 @@ import mailchimp
 
 class RegistrationForm(forms.Form):
 
-    name = forms.CharField(max_length=61, label=u"Your name:",
-                           help_text=u"Enter your full name.",
+    first_name = forms.CharField(max_length=30, label=u"Your first name:",
+                           widget=forms.TextInput(attrs={"size": 50,
+                                                         "class": "text"}))
+
+    last_name = forms.CharField(max_length=30, label=u"Your last first name:",
                            widget=forms.TextInput(attrs={"size": 50,
                                                          "class": "text"}))
 
@@ -166,11 +169,8 @@ def registration(request):
                 return direct_to_template(request, "users/registration.html", locals())
 
             else:
-                try:
-                    first_name, last_name = data["name"].split(None, 1)
-                except ValueError:
-                    first_name = data["name"]
-                    last_name = u""
+                first_name = data["first_name"]
+                last_name = data["last_name"]
                 password = encrypt_password(data["password"])
                 user = User(username=username, first_name=first_name,
                             last_name=last_name, email=email,
