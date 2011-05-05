@@ -22,6 +22,7 @@ class MaterialAdmin(ModelAdmin):
     
     list_display = ["title", url, "http_status", "workflow_state", "creator"]
     list_filter = ["workflow_state", "featured", "http_status"]
+    search_fields = ["title"]
 
     actions = [publish]
 
