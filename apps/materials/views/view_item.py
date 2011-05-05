@@ -25,20 +25,36 @@ def view_item(request, slug=None, model=None):
     else:
         breadcrumbs = []
 
+    content_type = ContentType.objects.get_for_model(item)
+
     if request.user.is_authenticated():
+        content_actions = []
         if item.creator == request.user or request.user.is_staff:
-            content_actions = [
-                {"url": reverse("materials:%s:edit" % item.namespace, kwargs=dict(slug=item.slug)), "title": u"Edit", "class": "edit"},
-                {"url": reverse("materials:%s:delete" % item.namespace, kwargs=dict(slug=item.slug)), "title": u"Delete", "class": "delete"},
+            content_actions += [
+                {"url": reverse("materials:%s:edit" % item.namespace,
+                                kwargs=dict(slug=item.slug)),
+                 "title": u"Edit",
+                 "class": "edit"},
+                                
+                {"url": reverse("materials:%s:delete" % item.namespace,
+                                kwargs=dict(slug=item.slug)),
+                 "title": u"Delete",
+                 "class": "delete"},
             ]
-        else:
-            content_actions = []
+        if request.user.is_staff:
+            content_actions.append({"url": reverse("admin:%s_%s_change" % (content_type.app_label,
+                                                                           content_type.model),
+                                                   args=(item.id,)),
+                                      "title": u"Edit in admin",
+                                      "class": "edit"})
 
         workflow_actions = []
         for transition in WORKFLOW_TRANSITIONS:
             if item.workflow_state in transition["from"] and transition["condition"](request.user, item):
                 workflow_actions.append({
-                    "url": reverse("materials:%s:transition" % item.namespace, kwargs=dict(slug=item.slug, transition_id=transition["id"])),
+                    "url": reverse("materials:%s:transition" % item.namespace,
+                                   kwargs=dict(slug=item.slug,
+                                               transition_id=transition["id"])),
                     "title": transition["title"],
                 })
 
@@ -68,7 +84,6 @@ def view_item(request, slug=None, model=None):
     add_note_url = reverse("materials:%s:add_note" % item.namespace,
                            kwargs=dict(slug=item.slug))
 
-    content_type = ContentType.objects.get_for_model(item)
     item.identifier = "%s.%s.%i" % (content_type.app_label,
                                     content_type.model,
                                     item.id)
@@ -140,7 +155,8 @@ def view_item(request, slug=None, model=None):
                     prev_item = query[current_item_idx - 1]
                     namespace = getattr(prev_item.model, "namespace", None)
                     if namespace:
-                        prev_item_url = reverse("materials:%s:view_item" % namespace, kwargs=dict(slug=prev_item.get_stored_fields()["slug"]))
+                        prev_item_url = reverse("materials:%s:view_item" % namespace,
+                                                kwargs=dict(slug=prev_item.get_stored_fields()["slug"]))
                     else:
                         prev_item_url = result.object.get_absolute_url()
 
@@ -148,7 +164,8 @@ def view_item(request, slug=None, model=None):
                     next_item = query[current_item_idx + 1]
                     namespace = getattr(next_item.model, "namespace", None)
                     if namespace:
-                        next_item_url = reverse("materials:%s:view_item" % namespace, kwargs=dict(slug=next_item.get_stored_fields()["slug"]))
+                        next_item_url = reverse("materials:%s:view_item" % namespace,
+                                                kwargs=dict(slug=next_item.get_stored_fields()["slug"]))
                     else:
                         next_item_url = result.object.get_absolute_url()
                 break
