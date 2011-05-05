@@ -7,109 +7,56 @@ from django.core.mail.message import EmailMessage
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
-from materials.models.common import GradeLevel
 from users.backend import encrypt_password
-from users.models import Profile, MEMBER_ROLES
+from users.models import Profile
 from utils.decorators import login_required
+from utils.shortcuts import ajax_form_success, ajax_form_error
 
 
-class ProfileForm(forms.ModelForm):
+class UserInfoForm(forms.ModelForm):
 
-    name = forms.CharField(max_length=61, label=u"Your name:",
+    success_mesage = u"Your profile was saved."
+    error_message = u"Please correct the indicated errors."
+
+    first_name = forms.CharField(max_length=30, label=u"First name:",
+                           widget=forms.TextInput(attrs={"class": "text"}))
+
+    last_name = forms.CharField(max_length=30, label=u"Last name:",
+                           widget=forms.TextInput(attrs={"class": "text"}))
+
+    username = forms.CharField(max_length=30, label=u"Username:",
                            widget=forms.TextInput(attrs={"class": "text"}))
 
     email = forms.EmailField(label=u"Email:",
                              widget=forms.TextInput(attrs={"class": "text"}))
 
-    homepage = forms.URLField(label=u"Homepage:",
-                              required=False,
-                              widget=forms.TextInput(attrs={"class": "text"}))
-
-    institution = forms.CharField(label=u"Institution:",
-                                  required=False,
-                                  widget=forms.TextInput(
-                                                     attrs={"class": "text"}))
-
-    institution_url = forms.URLField(label=u"Institution URL:",
-                                     required=False,
-                                     widget=forms.TextInput(
-                                                    attrs={"class": "text"}))
-
-    state = forms.CharField(label=u"State, Province, or Country:",
-                            required=False,
-                            widget=forms.TextInput(attrs={"class": "text"}))
-
-    role = forms.ChoiceField(choices=((u"", u"Select one"),) + MEMBER_ROLES,
-                             required=False,
-                             label="Role:",
-                             help_text=u"Indicate your relationship to open "
-                             "educational resources.")
-
-    grade_level = forms.ModelMultipleChoiceField(GradeLevel.objects.all(),
-                            required=False,
-                            label=u"Grade Level:",
-                            widget=forms.CheckboxSelectMultiple())
-
-    department = forms.CharField(label=u"Department and/or Subject areas in "
-                                 "which you are involved:",
-                                 required=False,
-                                 widget=forms.Textarea(attrs={"class":"text"}))
-
-    specializations = forms.CharField(label=u"Specializations/Interests:",
-                                 required=False,
-                                 widget=forms.Textarea(attrs={"class":"text"}))
-
-    biography = forms.CharField(label=u"Biography:",
-                                 required=False,
-                                 widget=forms.Textarea(attrs={"class":"text"}))
-
-    why_interested = forms.CharField(label=u"Why are you interested in open "
-                                "educational resources?",
-                                 required=False,
-                                 widget=forms.Textarea(attrs={"class":"text"}))
-
-    def __init__(self, *args, **kwargs):
-        super(ProfileForm, self).__init__(*args, **kwargs)
+    def clean_username(self):
+        username = self.cleaned_data["username"]
         instance = getattr(self, "instance", None)
         if instance is not None:
-            user = self.instance.user
-            name = ("%s %s" % (user.first_name, user.last_name)).strip()
-            self.fields["name"].initial = name
-            self.fields["email"].initial = user.email
-
-    def save(self, *args, **kwargs):
-        super(ProfileForm, self).save(*args, **kwargs)
-        name = self.cleaned_data["name"]
-        try:
-            first_name, last_name = name.split(None, 1)
-        except ValueError:
-            first_name = name
-            last_name = u""
-        user = self.instance.user
-        user.first_name = first_name
-        user.last_name = last_name
-        user.email = self.cleaned_data["email"]
-        user.save()
+            if User.objects.filter(username=username).exclude(pk=instance.id).exists():
+                raise forms.ValidationError(u"This username is used by "
+                                            "another user.")
+        return username
 
     def clean_email(self):
         email = self.cleaned_data["email"]
         instance = getattr(self, "instance", None)
         if instance is not None:
-            if User.objects.filter(email=email).exclude(
-                                                pk=instance.user.id).count():
+            if User.objects.filter(email=email).exclude(pk=instance.id).exists():
                 raise forms.ValidationError(u"This email address is used by "
                                             "another user.")
         return email
 
     class Meta:
-        model = Profile
-        fields = ["name", "email", "homepage", "institution",
-                  "institution_url", "state", "role", "grade_level",
-                  "department", "specializations", "biography",
-                  "why_interested"]
+        model = User
+        fields = ["first_name", "last_name", "username", "email"]
 
 
 class ChangePasswordForm(forms.ModelForm):
+
+    success_message = u"Your password was changed. New password was emailed to you."
+    error_message = u"Please correct the indicated errors."
 
     current_password = forms.CharField(min_length=5,
                                        label=u"Current password:",
@@ -160,33 +107,54 @@ def profile(request):
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
-    profile_form = ProfileForm(instance=profile)
+    user_info_form = UserInfoForm(instance=user)
     change_password_form = ChangePasswordForm()
 
-    if request.method == "POST" and "save-profile" in request.POST:
-        profile_form = ProfileForm(request.POST, instance=user.profile)
-        if profile_form.is_valid():
-            profile_form.save()
-            messages.success(request, u"Your profile was saved.")
-        else:
-            messages.error(request, u"Please correct the indicated errors.")
-    elif request.method == "POST" and "change-password" in request.POST:
-        change_password_form = ChangePasswordForm(request.POST,
-                                                  instance=user)
-        if change_password_form.is_valid():
-            change_password_form.save()
-            body = render_to_string("users/emails/change-password.html",
-                                    dict(user=user,
-               new_password=change_password_form.cleaned_data["new_password"],
-               domain=Site.objects.get_current().domain))
-            message = EmailMessage(u"OER Commons: Password Changed",
-                                   body, None, [user.email])
-            message.content_subtype = "html"
-            message.send()
-            messages.success(request, u"Your password was changed.")
-            change_password_form = ChangePasswordForm()
-        else:
-            messages.error(request, u"Please correct the indicated errors.")
+    if request.method == "POST":
+        
+        if "user-info" in request.POST:
+            user_info_form = UserInfoForm(request.POST, instance=user)
+            
+            if user_info_form.is_valid():
+                user_info_form.save()
+                
+                if request.is_ajax():
+                    return ajax_form_success(user_info_form.success_mesage)
+                
+                messages.success(request, user_info_form.success_mesage)
+                
+            else:
+                if request.is_ajax():
+                    return ajax_form_error(user_info_form, user_info_form.error_message)
+                
+                messages.error(request, user_info_form.error_message)
+                    
+        elif "change-password" in request.POST:
+            change_password_form = ChangePasswordForm(request.POST, instance=user)
+            
+            if change_password_form.is_valid():
+                change_password_form.save()
+                body = render_to_string("users/emails/change-password.html",
+                                        dict(user=user,
+                   new_password=change_password_form.cleaned_data["new_password"],
+                   domain=Site.objects.get_current().domain))
+                message = EmailMessage(u"OER Commons: Password Changed",
+                                       body, None, [user.email])
+                message.content_subtype = "html"
+                message.send()
+                
+                if request.is_ajax():
+                    return ajax_form_success(change_password_form.success_message)
+                
+                messages.success(request, change_password_form.success_message)
+                change_password_form = ChangePasswordForm()
+                
+            else:
+                if request.is_ajax():
+                    return ajax_form_error(change_password_form,
+                                           change_password_form.error_message)
+                    
+                messages.error(request, change_password_form.error_message)
 
     return direct_to_template(request, "users/profile.html", locals())
 

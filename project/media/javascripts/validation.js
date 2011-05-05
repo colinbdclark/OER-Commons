@@ -2,7 +2,8 @@ oer.validation = {};
 oer.validation.rules = {};
 
 oer.validation.rules.registration = {
-  name: "required",
+  first_name: "required",
+  last_name: "required",
   username: "required",
   email: {
     required: true,
@@ -21,29 +22,6 @@ oer.validation.rules.registration = {
     required: true,
     minlength: 5,
     equalTo: "[name='password']"
-  }
-};
-
-oer.validation.rules.profile = {
-  name: "required",
-  email: {
-    required: true,
-    email: true
-  }
-};
-
-oer.validation.rules.change_password = {
-  current_password: {
-    required: true
-  },
-  new_password: {
-    required: true,
-    minlength: 5
-  },
-  confirm_new_password: {
-    required: true,
-    minlength: 5,
-    equalTo: "[name='new_password']"
   }
 };
 
