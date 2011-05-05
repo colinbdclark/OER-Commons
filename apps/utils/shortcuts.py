@@ -1,3 +1,4 @@
+from annoying.decorators import JsonResponse
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -22,3 +23,20 @@ def redirect_to_next_url(request, default=None):
         redirect_to = default
 
     return HttpResponseRedirect(redirect_to)
+
+
+def ajax_form_success(message=None):
+    response = dict(status="success")
+    if message:
+        response["message"] = message
+    return JsonResponse(response)
+
+
+def ajax_form_error(form, message=None):
+    errors = {}
+    for field_name, errors_list in form.errors.items():
+        errors[field_name] = errors_list[0]
+    response = dict(status="error", errors=errors)
+    if message:
+        response["message"] = message
+    return JsonResponse(response)
