@@ -1,102 +1,15 @@
-from django import forms
 from django.contrib import messages
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
-from users.backend import encrypt_password
 from users.models import Profile
+from users.views.forms import UserInfoForm, ChangePasswordForm, GeographyForm
 from utils.decorators import login_required
 from utils.shortcuts import ajax_form_success, ajax_form_error
-
-
-class UserInfoForm(forms.ModelForm):
-
-    success_mesage = u"Your profile was saved."
-    error_message = u"Please correct the indicated errors."
-
-    first_name = forms.CharField(max_length=30, label=u"First name:",
-                           widget=forms.TextInput(attrs={"class": "text"}))
-
-    last_name = forms.CharField(max_length=30, label=u"Last name:",
-                           widget=forms.TextInput(attrs={"class": "text"}))
-
-    username = forms.CharField(max_length=30, label=u"Username:",
-                           widget=forms.TextInput(attrs={"class": "text"}))
-
-    email = forms.EmailField(label=u"Email:",
-                             widget=forms.TextInput(attrs={"class": "text"}))
-
-    def clean_username(self):
-        username = self.cleaned_data["username"]
-        instance = getattr(self, "instance", None)
-        if instance is not None:
-            if User.objects.filter(username=username).exclude(pk=instance.id).exists():
-                raise forms.ValidationError(u"This username is used by "
-                                            "another user.")
-        return username
-
-    def clean_email(self):
-        email = self.cleaned_data["email"]
-        instance = getattr(self, "instance", None)
-        if instance is not None:
-            if User.objects.filter(email=email).exclude(pk=instance.id).exists():
-                raise forms.ValidationError(u"This email address is used by "
-                                            "another user.")
-        return email
-
-    class Meta:
-        model = User
-        fields = ["first_name", "last_name", "username", "email"]
-
-
-class ChangePasswordForm(forms.ModelForm):
-
-    success_message = u"Your password was changed. New password was emailed to you."
-    error_message = u"Please correct the indicated errors."
-
-    current_password = forms.CharField(min_length=5,
-                                       label=u"Current password:",
-                           widget=forms.PasswordInput(attrs={"class": "text",
-                                                     "autocomplete": "off"}))
-
-    new_password = forms.CharField(min_length=5, label=u"New password:",
-                           widget=forms.PasswordInput(attrs={"class": "text",
-                                                     "autocomplete": "off"}))
-
-    confirm_new_password = forms.CharField(min_length=5,
-                                           label=u"Confirm new password:",
-                           widget=forms.PasswordInput(attrs={"class": "text",
-                                                     "autocomplete": "off"}))
-
-    def clean_current_password(self):
-        current_password = self.cleaned_data["current_password"]
-        instance = getattr(self, "instance", None)
-        if instance is not None:
-            if authenticate(username=instance.username,
-                            password=current_password) is None:
-                raise forms.ValidationError(u"Wrong password")
-        return current_password
-
-    def clean_confirm_new_password(self):
-        password = self.cleaned_data.get("new_password", "")
-        confirm_password = self.cleaned_data["confirm_new_password"]
-        if password != confirm_password:
-            raise forms.ValidationError(u"The two passwords do not match.")
-        return confirm_password
-
-    def save(self, *args, **kwargs):
-        super(ChangePasswordForm, self).save(*args, **kwargs)
-        user = self.instance
-        user.password = encrypt_password(self.cleaned_data["new_password"])
-        user.save()
-
-    class Meta:
-        model = User
-        fields = ["current_password", "new_password", "confirm_new_password"]
+from django.shortcuts import redirect
+from geo.models import CountryIPDiapason
 
 
 @login_required
@@ -121,7 +34,7 @@ def profile(request):
                 if request.is_ajax():
                     return ajax_form_success(user_info_form.success_mesage)
                 
-                messages.success(request, user_info_form.success_mesage)
+                return redirect("users:profile_geography")
                 
             else:
                 if request.is_ajax():
@@ -158,3 +71,39 @@ def profile(request):
 
     return direct_to_template(request, "users/profile.html", locals())
 
+
+@login_required
+def geography(request):
+
+    page_title = u"My Profile"
+    breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+
+    user = request.user
+    profile = Profile.objects.get_or_create(user=user)[0]
+
+    initial = None
+    if not profile.country:
+        ip = request.META.get("REMOTE_ADDR", None)
+        if ip:
+            country = CountryIPDiapason.objects.get_country_by_ip(ip)
+            if country:
+                initial = dict(country=country)
+
+    form = GeographyForm(instance=profile, initial=initial)
+
+    if request.method == "POST":
+        form = GeographyForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            if request.is_ajax():
+                return ajax_form_success(form.success_message)
+            else:
+                messages.success(request, form.success_message)
+        
+        else:
+            if request.is_ajax():
+                return ajax_form_error(form, form.error_message)
+            
+            messages.error(request, form.error_message)
+
+    return direct_to_template(request, "users/profile-geography.html", locals())
