@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from honeypot.decorators import check_honeypot
 from users.backend import encrypt_password, BcryptBackend
-from users.models import MEMBER_ROLES, RegistrationConfirmation, Profile
+from users.models import RegistrationConfirmation, Profile
 import mailchimp
 
 
@@ -59,12 +59,6 @@ class RegistrationForm(forms.Form):
                              help_text=u"Re-enter your email address.",
                              widget=forms.TextInput(attrs={"size": 40,
                                                            "class": "text"}))
-
-    role = forms.ChoiceField(choices=((u"", u"Select one"),) + MEMBER_ROLES,
-                             required=False,
-                             label="Role:",
-                             help_text=u"Indicate your relationship to open "
-                             "educational resources.")
 
     newsletter = forms.BooleanField(label=u"Subscribe to the OER Commons Monthly Newsletter",
                                     widget=forms.CheckboxInput(),
@@ -176,7 +170,7 @@ def registration(request):
                             last_name=last_name, email=email,
                             password=password, is_active=False)
                 user.save()
-                profile = Profile(user=user, role=data["role"])
+                profile = Profile(user=user)
                 profile.save()
                 confirmation = RegistrationConfirmation(user=user,
                                                         confirmed=False)

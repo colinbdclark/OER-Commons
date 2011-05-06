@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.profile.init_geography();
+    });
+  </script>
+{% endblock %}
+
+{% block bodyclass %}no-columns{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+
+  <table class="profile" cellpadding="0" cellspacing="0">
+  <thead>
+    <tr>
+        <th colspan="2" class="geography"><span>Where are you in the world?</span></th>
+    </tr>
+  </thead>
+  <tbody><tr>
+    <td class="geography">
+      <form method="post" class="formatted geography" name="geography" action="{% url users:profile_geography %}">
+    
+        {% with form.country as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+
+        {% with form.connect_with as field %}
+          <div class="field{% if field.field.required %} required{% endif %}">
+            {% if field.help_text %}
+              <div class="help">{{ field.help_text }}</div>
+            {% endif %}
+            <div class="errors">
+              {% for error in field.errors %}
+                <label class="error">{{ error|safe }}</label>
+              {% endfor %}
+            </div>
+            {{ field }}
+          </div>
+        {% endwith %}
+              
+        <div class="buttons">
+          <input type="submit" class="save" value="Save" />
+          <input type="submit" class="next" value="Save and tell us more!" />
+        </div>
+      </form>
+    </td>
+    <td class="map">
+    </td>
+  </tr></tbody></table>
+
+{% endblock %}
