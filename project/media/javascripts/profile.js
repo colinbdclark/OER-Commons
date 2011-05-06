@@ -185,3 +185,38 @@ oer.profile.init_educator = function() {
     }
     });
 };
+
+
+oer.profile.init_wish = function() {
+    var $form = $("form.wish");
+    var $header = $("table.profile th.wish");
+    var $save_btn = $form.find("input[type='submit'].save");
+    var $next_btn = $form.find("input[type='submit'].next");
+    $next_btn.click(function(e) {
+        $form.data("next", true);
+    });
+    var $inputs = $form.find(":input");
+    $save_btn.data("label", $save_btn.val());
+    var validator = $form.validate({
+    rules : {},
+    submitHandler : function(form) {
+        if ($form.data("next")) {
+            form.submit();
+        } else {
+            $header.addClass("loading");
+            $save_btn.val("Saving...");
+            var form_data = $form.serialize();
+            $.post($form.attr("action"), form_data, function(data) {
+                if (data.status === "success") {
+                    oer.status_message.success(data.message, true);
+                } else if (data.status === "error") {
+                    validator.showErrors(data.errors);
+                }
+                $header.removeClass("loading");
+                $save_btn.val($save_btn.data("label"));
+                $inputs.attr("disabled", "");
+            });
+        }
+    }
+    });
+};
