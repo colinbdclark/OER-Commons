@@ -3,7 +3,7 @@
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
-      oer.profile.init_roles();
+      oer.profile.init_educator();
     });
   </script>
 {% endblock %}
@@ -17,14 +17,14 @@
   <table class="profile" cellpadding="0" cellspacing="0">
   <thead>
     <tr>
-        <th class="roles"><span>Your Role</span></th>
+        <th class="educator"><span>Educator Details</span></th>
     </tr>
   </thead>
   <tbody><tr>
-    <td class="roles">
-      <form method="post" class="formatted roles" name="roles" action="{% url users:profile_roles %}">
+    <td class="educator">
+      <form method="post" class="formatted educator" name="educator" action="{% url users:profile_educator %}">
     
-        {% with form.roles as field %}
+        {% with form.educator_student_levels as field %}
           {% include "include/form-field.html" %}
         {% endwith %}
 
