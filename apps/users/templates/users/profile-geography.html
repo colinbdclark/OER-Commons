@@ -14,10 +14,14 @@
 
 {% block content %}
 
+  <div class="map" style="float: right;">
+    <img src="http://placehold.it/500x300&text=Map%20goes%20here" />
+  </div>
+
   <table class="profile" cellpadding="0" cellspacing="0">
   <thead>
     <tr>
-        <th colspan="2" class="geography"><span>Where are you in the world?</span></th>
+        <th class="geography"><span>Where are you in the world?</span></th>
     </tr>
   </thead>
   <tbody><tr>
@@ -48,8 +52,6 @@
         </div>
       </form>
     </td>
-    <td class="map">
-    </td>
   </tr></tbody></table>
-
+  
 {% endblock %}
