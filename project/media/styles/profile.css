@@ -80,3 +80,9 @@ table.profile form input.text {
 table.profile .avatar img {
   margin-top: 25px;
 }
+
+table.profile form.wish textarea {
+  width: 500px;
+  font-size: 14px;
+  padding: 2px 4px; 
+}
