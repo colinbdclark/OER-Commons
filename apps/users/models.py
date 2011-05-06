@@ -114,6 +114,11 @@ class Profile(models.Model):
     role = models.CharField(max_length=20, blank=True, choices=MEMBER_ROLES,
                             verbose_name=_(u"Role"))
 
+    country = models.ForeignKey(Country, blank=True, null=True)
+
+    connect_with = models.CharField(max_length=20, choices=CONNECT_OPTIONS,
+                                    blank=True, null=True)
+    
     roles = models.ManyToManyField(Role, null=True, blank=True)
     
     educator_student_levels = models.ManyToManyField(StudentLevel, null=True,
@@ -124,6 +129,7 @@ class Profile(models.Model):
     
     about_me = models.TextField(blank=True, null=True)
     
+
 
 def gen_confirmation_key():
     return User.objects.make_random_password(length=20)
