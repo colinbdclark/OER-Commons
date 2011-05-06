@@ -15,5 +15,6 @@ urlpatterns = patterns('users.views',
     url(r"^profile/geography/?$", "profile.geography", name="profile_geography"),
     url(r"^profile/roles/?$", "profile.roles", name="profile_roles"),
     url(r"^profile/educator/?$", "profile.educator", name="profile_educator"),
+    url(r"^profile/wish/?$", "profile.wish", name="profile_wish"),
 )
 

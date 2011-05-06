@@ -139,4 +139,18 @@ class EducatorForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ["educator_student_levels"]
+
+
+class WishForm(forms.ModelForm):
+
+    success_message = u"Your wish for education was saved."
+    error_message = u"Please correct the indicated errors."
+    
+    wish_for_education = forms.CharField(label=u"If you could fix anything in education, what would you fix?",
+                                     required=False,
+                                     widget=forms.Textarea)
+    
+    class Meta:
+        model = Profile
+        fields = ["wish_for_education"]
         
