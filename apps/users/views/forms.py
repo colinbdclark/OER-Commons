@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from users.backend import encrypt_password
 from geo.models import Country
-from users.models import Profile, CONNECT_OPTIONS, Role
+from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel
 
 
 class UserInfoForm(forms.ModelForm):
@@ -124,4 +124,19 @@ class RolesForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ["roles"]
+
+
+class EducatorForm(forms.ModelForm):
+
+    success_message = u"Your educator details were saved."
+    error_message = u"Please correct the indicated errors."
+    
+    educator_student_levels = forms.ModelMultipleChoiceField(StudentLevel.objects.all(),
+                                     label=u"I teach students at the following levels (check all that apply):",
+                                     required=False,
+                                     widget=forms.CheckboxSelectMultiple())
+    
+    class Meta:
+        model = Profile
+        fields = ["educator_student_levels"]
         
