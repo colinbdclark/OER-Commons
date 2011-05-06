@@ -28,6 +28,18 @@ CONNECT_OPTIONS = (
 )
 
 
+class Role(models.Model):
+    
+    title = models.CharField(max_length=100)
+    is_educator = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        ordering = ("id",)
+
+
 class Profile(models.Model):
 
     user = models.OneToOneField(User)
@@ -69,14 +81,18 @@ class Profile(models.Model):
     publish_profile = models.BooleanField(default=False,
                               verbose_name=_(u"Allow others to see "
                                               "you profile?"))
-
-    role = models.CharField(max_length=20, blank=True, choices=MEMBER_ROLES,
-                            verbose_name=_(u"Role"))
-
+    
     country = models.ForeignKey(Country, blank=True, null=True)
 
     connect_with = models.CharField(max_length=20, choices=CONNECT_OPTIONS,
                                     blank=True, null=True)
+
+    # This is an obsolete field. It is replaced with `roles` field now which
+    # allows multiple values.
+    role = models.CharField(max_length=20, blank=True, choices=MEMBER_ROLES,
+                            verbose_name=_(u"Role"))
+
+    roles = models.ManyToManyField(Role, null=True, blank=True)
     
 
 def gen_confirmation_key():
