@@ -94,5 +94,124 @@
       "is_educator": false, 
       "title": "Self-Learner"
     }
+  },
+  {
+    "pk": 1, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "Pre-K (age 4 or younger)"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "Kindergarten (ages 4-5)"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "1st Grade (ages 5-6)"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "2nd Grade (ages 6-7)"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "3rd Grade (ages 7-8)"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "4th Grade (ages 8-9)"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "5th Grade (ages 9-10)"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "6th Grade (ages 10-11)"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "7th Grade (ages 11-12)"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "8th Grade (ages 12-13)"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "9th Grade (ages 13-14)"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "10th Grade (ages 14-15)"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "11th Grade (ages 15-16)"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "12th Grade (ages 16-17)"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "College, Undergraduate"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "College, Graduate"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "users.studentlevel", 
+    "fields": {
+      "title": "Career Training / Vocational Education"
+    }
   }
 ]

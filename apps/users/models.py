@@ -40,6 +40,28 @@ class Role(models.Model):
         ordering = ("id",)
 
 
+class StudentLevel(models.Model):
+    
+    title = models.CharField(max_length=100)
+    
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        ordering = ("id",)
+
+
+class EducatorSubject(models.Model):
+    
+    title = models.CharField(max_length=100)
+    
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        ordering = ("id",)
+
+
 class Profile(models.Model):
 
     user = models.OneToOneField(User)
@@ -93,6 +115,12 @@ class Profile(models.Model):
                             verbose_name=_(u"Role"))
 
     roles = models.ManyToManyField(Role, null=True, blank=True)
+    
+    educator_student_levels = models.ManyToManyField(StudentLevel, null=True,
+                                                     blank=True) 
+
+    educator_subjects = models.ManyToManyField(EducatorSubject, null=True,
+                                               blank=True) 
     
 
 def gen_confirmation_key():
