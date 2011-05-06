@@ -122,6 +122,8 @@ class Profile(models.Model):
     educator_subjects = models.ManyToManyField(EducatorSubject, null=True,
                                                blank=True) 
     
+    wish_for_education = models.TextField(blank=True, null=True)
+    
 
 def gen_confirmation_key():
     return User.objects.make_random_password(length=20)
