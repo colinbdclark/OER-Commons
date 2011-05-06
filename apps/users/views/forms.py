@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from users.backend import encrypt_password
 from geo.models import Country
-from users.models import Profile, CONNECT_OPTIONS
+from users.models import Profile, CONNECT_OPTIONS, Role
 
 
 class UserInfoForm(forms.ModelForm):
@@ -109,4 +109,19 @@ class GeographyForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ["country", "connect_with"]
+
+
+class RolesForm(forms.ModelForm):
+
+    success_message = u"Your roles were saved."
+    error_message = u"Please correct the indicated errors."
+    
+    roles = forms.ModelMultipleChoiceField(Role.objects.all(),
+                                     label=u"Which of these roles best describe you? Check all that apply.",
+                                     required=False,
+                                     widget=forms.CheckboxSelectMultiple())
+    
+    class Meta:
+        model = Profile
+        fields = ["roles"]
         
