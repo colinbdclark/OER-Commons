@@ -12,5 +12,6 @@ urlpatterns = patterns('users.views',
     url(r"^reset-password/?$", "reset_password.init", name="reset_password_init"),
     url(r"^reset-password/(?P<key>[^/]+)/?$", "reset_password.reset_password", name="reset_password"),
     url(r"^profile/?$", "profile.profile", name="profile"),
+    url(r"^profile/geography?$", "profile.geography", name="profile_geography"),
 )
 
