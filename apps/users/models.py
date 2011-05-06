@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+from geo.models import Country
 from materials.models.common import GradeLevel
 from users.backend import encrypt_password
 
@@ -16,6 +17,14 @@ MEMBER_ROLES = (
     (u'researcher', _(u'Researcher')),
     (u'oer_administrator', _(u'Administrator')),
     (u'content_provider', _(u'Content provider')),
+)
+
+
+ONLY_COUNTRY = "country"
+WHOLE_WORLD = "world"
+CONNECT_OPTIONS = (
+    (ONLY_COUNTRY, u"Connect me only to people in my own country"),
+    (WHOLE_WORLD, u"Connect me to learners and educators around the world"),
 )
 
 
@@ -64,6 +73,11 @@ class Profile(models.Model):
     role = models.CharField(max_length=20, blank=True, choices=MEMBER_ROLES,
                             verbose_name=_(u"Role"))
 
+    country = models.ForeignKey(Country, blank=True, null=True)
+
+    connect_with = models.CharField(max_length=20, choices=CONNECT_OPTIONS,
+                                    blank=True, null=True)
+    
 
 def gen_confirmation_key():
     return User.objects.make_random_password(length=20)
