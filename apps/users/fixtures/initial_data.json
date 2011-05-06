@@ -1,0 +1,98 @@
+[
+  {
+    "pk": 1, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": true, 
+      "title": "Educator"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": true, 
+      "title": "Homeschool Instructor"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "Library Media Specialist / Librarian"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "Instructional Technology Expert"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "District Administrator"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "District Support Staff"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "School Administrator"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "School Support Staff"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "Parent / Caregiver"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "Student"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "Government Employee"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "users.role", 
+    "fields": {
+      "is_educator": false, 
+      "title": "Self-Learner"
+    }
+  }
+]
