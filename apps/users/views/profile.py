@@ -82,13 +82,15 @@ def geography(request):
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
 
-    initial = None
+    initial = {}
     if not profile.country:
         ip = request.META.get("REMOTE_ADDR", None)
         if ip:
             country = CountryIPDiapason.objects.get_country_by_ip(ip)
             if country:
                 initial = dict(country=country)
+    else:
+        initial["country"] = profile.country
 
     form = GeographyForm(instance=profile, initial=initial)
 
