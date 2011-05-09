@@ -14,8 +14,8 @@
 
 {% block content %}
 
-  <div class="map" style="float: right;">
-    <img src="http://placehold.it/500x300&text=Map%20goes%20here" />
+  <div id="map" style="float: right; width: 500px; height: 300px;">
+    
   </div>
 
   <table class="profile" cellpadding="0" cellspacing="0">
@@ -54,4 +54,8 @@
     </td>
   </tr></tbody></table>
   
+{% endblock %}
+
+{% block extra-footer %}
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
 {% endblock %}
