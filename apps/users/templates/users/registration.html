@@ -12,6 +12,10 @@
 {% block above-content %}{% endblock %}
 
 {% block content %}
+  <noscript>
+  <div class="status-message">Make sure you have Javascript enabled in your browser.
+    It is required to complete the registration.</div>
+  </noscript>
   <form method="post" class="formatted" name="registration" action="{% url users:registration %}">
     {% for field in form %}
       {% if field.name == "newsletter" %}

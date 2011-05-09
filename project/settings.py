@@ -1,5 +1,6 @@
-import os
 import djcelery
+import os
+import time
 
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -161,3 +162,21 @@ djcelery.setup_loader()
 
 
 HONEYPOT_FIELD_NAME = "address"
+
+# Honeypot value is current time as int
+HONEYPOT_VALUE = lambda: int(time.time())
+
+def honeypot_verifier(value):
+    try:
+        value = int(value)
+    except:
+        return False
+    # Check the difference between current time moment and honeypot value. 
+    # It must be positive and less than one hour.
+    now = int(time.time())
+    diff = now - value
+    if diff < 0 or diff > 3600:
+        return False
+    return True
+
+HONEYPOT_VERIFIER = honeypot_verifier

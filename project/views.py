@@ -1,9 +1,13 @@
+from annoying.decorators import ajax_request
 from cache_utils.decorators import cached
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
+from haystack.query import SearchQuerySet
 from materials.models.common import Keyword, GeneralSubject, GradeLevel
+from materials.models.microsite import Microsite
 from materials.utils import get_name_from_slug, get_facets_for_field
 from oauth_provider.models import Token
 from tags.models import Tag
@@ -11,8 +15,6 @@ from tags.tags_utils import get_tag_cloud
 import dateutil.parser
 import re
 import twitter
-from materials.models.microsite import Microsite
-from haystack.query import SearchQuerySet
 
 
 MAX_TAGS = 30
@@ -116,3 +118,12 @@ def oauth_callback(request, **kwargs):
 
     token = Token.objects.get(key=token)
     return direct_to_template(request, "oauth/callback.html", locals())
+
+
+
+@ajax_request
+def honeypot(request):
+    value = settings.HONEYPOT_VALUE
+    if callable(value):
+        value = value()
+    return dict(value=value)
