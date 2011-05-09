@@ -99,6 +99,7 @@ class GeographyForm(forms.ModelForm):
     
     country = forms.ModelChoiceField(Country.objects.all(),
                                      label=u"Country:",
+                                     to_field_name="code",
                                      required=False)
     
     connect_with = forms.ChoiceField(choices=CONNECT_OPTIONS,
