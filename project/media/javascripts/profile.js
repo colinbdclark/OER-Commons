@@ -116,6 +116,103 @@ oer.profile.init_geography = function() {
         }
     }
     });
+
+    // Map Widget
+    if (window.google !== undefined && window.google.maps !== undefined) {
+
+        var initial_location = new google.maps.LatLng(25, 0);
+
+        var options = {
+        zoom : 1,
+        center : initial_location,
+        mapTypeId : google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map"), options);
+        var marker = null;
+        var $select = $("select[name='country']");
+
+        var place_marker = function(location, set_center) {
+            if (set_center !== undefined && set_center) {
+                map.setCenter(location);
+            }
+            if (marker === null) {
+                marker = new google.maps.Marker({
+                map : map,
+                position : location
+                });
+            } else {
+                marker.setPosition(location);
+            }
+        };
+
+        var geocode_country = function(country_name) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+                'address' : country_name
+            }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    place_marker(results[0].geometry.location, true);
+
+                } else {
+                    if (window.console !== undefined) {
+                        console.log("Geocode was not successful for the following reason: " + status);
+                    }
+                }
+            });
+        };
+
+        // Select country from dropdown list
+        var select_country = function() {
+            var $selected = $select.find("option:selected");
+            if ($selected.val() !== "") {
+                var country_name = $selected.text();
+                geocode_country(country_name);
+            } else {
+                map.setCenter(initial_location);
+            }
+
+        };
+
+        $select.change(function(e) {
+            select_country();
+        });
+        select_country();
+
+        // Pick country on map widget
+        var pick_country = function(location) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+                'latLng' : location
+            }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    place_marker(results[0].geometry.location);
+                    var address_components = results[0].address_components; 
+                    for (var i = 0; i < address_components.length; i++) {
+                        var component = address_components[i];
+                        if (component.types[0] === "country") {
+                            var code = component.short_name;
+                            $select.unbind("change");
+                            $select.val(code);
+                            $select.change(function(e) {
+                                select_country();
+                            });
+                            break;
+                        }
+                    };
+                } else {
+                    if (window.console !== undefined) {
+                        console.log("Geocode was not successful for the following reason: " + status);
+                    }
+                }
+            });
+        };
+
+        google.maps.event.addListener(map, 'click', function(e) {
+            pick_country(e.latLng);
+        });
+
+    }
+
 };
 
 oer.profile.init_roles = function() {
@@ -185,7 +282,6 @@ oer.profile.init_educator = function() {
     }
     });
 };
-
 
 oer.profile.init_wish = function() {
     var $form = $("form.wish");
