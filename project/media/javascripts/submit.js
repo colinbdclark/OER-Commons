@@ -23,7 +23,7 @@ OER.showForm = function() {
     container2.style.top = "10px";
     container2.style.right = "10px";
     container2.style.width = "650px";
-    container2.style.height = "550px";
+    container2.style.height = "470px";
     container2.style.overflow = "hidden";
 
     container1.appendChild(container2);
