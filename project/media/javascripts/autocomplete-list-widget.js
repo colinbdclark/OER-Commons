@@ -57,7 +57,15 @@ oer.autocomplete_list_widget.init = function() {
                 $add_input.autocomplete("close");
             }
         });
-  
+        
+        $add_input.focusout(function(e) {
+            var value = $.trim($add_input.val());
+            if (value !== "") {
+                add_value(value);
+            }
+            $add_input.autocomplete("close");
+        });
+        
         $items.delegate("a.delete", "click", function(e) {
             e.preventDefault();
             var $this = $(this);
