@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
 from users.models import Profile
 from users.views.forms import UserInfoForm, ChangePasswordForm, GeographyForm,\
-    RolesForm, EducatorForm, WishForm
+    RolesForm, WishForm
 from utils.decorators import login_required
 from utils.shortcuts import ajax_form_success, ajax_form_error
 from django.shortcuts import redirect
@@ -122,6 +122,7 @@ def roles(request):
     profile = Profile.objects.get_or_create(user=user)[0]
 
     form = RolesForm(instance=profile)
+    is_educator = profile.roles.filter(is_educator=True).exists()
 
     if request.method == "POST":
         form = RolesForm(request.POST, instance=profile)
@@ -129,9 +130,6 @@ def roles(request):
             form.save()
             if request.is_ajax():
                 return ajax_form_success(form.success_message)
-            
-            if profile.roles.filter(is_educator=True).exists():
-                return redirect("users:profile_educator")
             
             return redirect("users:profile_wish")
         
@@ -142,35 +140,6 @@ def roles(request):
             messages.error(request, form.error_message)
 
     return direct_to_template(request, "users/profile-roles.html", locals())
-
-
-@login_required
-def educator(request):
-
-    page_title = u"My Profile"
-    breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
-
-    user = request.user
-    profile = Profile.objects.get_or_create(user=user)[0]
-
-    form = EducatorForm(instance=profile)
-
-    if request.method == "POST":
-        form = EducatorForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            if request.is_ajax():
-                return ajax_form_success(form.success_message)
-            
-            return redirect("users:profile_wish")
-        
-        else:
-            if request.is_ajax():
-                return ajax_form_error(form, form.error_message)
-            
-            messages.error(request, form.error_message)
-
-    return direct_to_template(request, "users/profile-educator.html", locals())
 
 
 @login_required
