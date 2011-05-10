@@ -121,25 +121,26 @@ class RolesForm(forms.ModelForm):
                                      label=u"Which of these roles best describe you? Check all that apply.",
                                      required=False,
                                      widget=forms.CheckboxSelectMultiple())
-    
-    class Meta:
-        model = Profile
-        fields = ["roles"]
 
-
-class EducatorForm(forms.ModelForm):
-
-    success_message = u"Your educator details were saved."
-    error_message = u"Please correct the indicated errors."
-    
     educator_student_levels = forms.ModelMultipleChoiceField(StudentLevel.objects.all(),
                                      label=u"I teach students at the following levels (check all that apply):",
                                      required=False,
                                      widget=forms.CheckboxSelectMultiple())
     
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        roles = cleaned_data.get("roles")
+        if roles:
+            is_educator = reduce(lambda x, y: getattr(x, "is_educator", x) or \
+                                              getattr(y, "is_educator", y),
+                                 roles, False)
+            if not is_educator:
+                cleaned_data["educator_student_levels"] = []
+        return cleaned_data
+    
     class Meta:
         model = Profile
-        fields = ["educator_student_levels"]
+        fields = ["roles", "educator_student_levels"]
 
 
 class WishForm(forms.ModelForm):
