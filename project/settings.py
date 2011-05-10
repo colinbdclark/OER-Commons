@@ -89,7 +89,6 @@ INSTALLED_APPS = (
     'users',
     'rating',
     'reviews',
-    'notes',
     'saveditems',
     'savedsearches',
     'myitems',

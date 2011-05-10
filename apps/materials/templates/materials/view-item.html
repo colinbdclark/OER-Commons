@@ -245,18 +245,6 @@
     {% endwith %}
   </div>
 
-  <div class="notes clear">
-    <a href="{{ add_note_url }}" class="button with-next-url"><img alt="Add Notes" src="{{ STATIC_URL}}images/add-notes-btn.png" /></a>
-    {% if user_note %}
-      <dl>
-        <dt>My Notes</dt>
-        <dd>
-          {{ user_note.text|linebreaksbr }}
-        </dd>
-      </dl>
-    {% endif %}
-  </div>
-  
 </div>
 
 {% include "include/cou-tooltips.html" %}

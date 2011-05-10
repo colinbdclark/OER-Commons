@@ -9,7 +9,6 @@ from materials.models.microsite import Microsite
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
-from notes.models import Note
 from visitcounts.models import Visit
 
 
@@ -59,14 +58,9 @@ def view_item(request, slug=None, model=None):
                 })
 
     user_tags = []
-    user_note = None
     save_url = None
     unsave_url = None
     if request.user.is_authenticated():
-        try:
-            user_note = item.notes.get(user=request.user)
-        except Note.DoesNotExist:
-            pass
         try:
             item.saved_items.get(user=request.user)
             unsave_url = reverse("materials:%s:unsave_item" % item.namespace,
@@ -80,8 +74,6 @@ def view_item(request, slug=None, model=None):
                        kwargs=dict(slug=item.slug))
 
     add_review_url = reverse("materials:%s:add_review" % item.namespace,
-                           kwargs=dict(slug=item.slug))
-    add_note_url = reverse("materials:%s:add_note" % item.namespace,
                            kwargs=dict(slug=item.slug))
 
     item.identifier = "%s.%s.%i" % (content_type.app_label,

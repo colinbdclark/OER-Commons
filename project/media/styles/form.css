@@ -145,20 +145,6 @@ form.review textarea.text {
   height: 200px;
 }
 
-form.note textarea.text {
-  width: 552px;
-  resize: none;
-  height: 200px;
-}
-
-form.note .buttons .field {
-  float: left;
-}
-
-form.note .buttons .field label {
-  font-weight: normal;
-}
-
 form.content-submission {
   background: #F3F7F8;
   border: 1px solid #BCCACD;

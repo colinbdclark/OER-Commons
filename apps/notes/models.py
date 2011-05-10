@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class Note(models.Model):
+    ''' This model is obsolete. It's not removed only to keep existing data
+    in databse. '''
 
     user = models.ForeignKey(User)
 

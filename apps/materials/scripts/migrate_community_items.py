@@ -8,7 +8,6 @@ from materials.models.common import Author, License, Country, GeneralSubject, \
 from materials.models.community import CommunityItem, CommunityTopic, \
     CommunityType
 from materials.utils import cleanup_keywords
-from notes.models import Note
 from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
@@ -74,14 +73,6 @@ def run():
             reviews_dict[item] = []
         if principal in cached_users:
             reviews_dict[item].append((text, cached_users[principal], timestamp))
-
-    notes_dict = {}
-    cursor.execute("SELECT * FROM _notes")
-    for item, principal, text, timestamp in cursor.fetchall():
-        if item not in notes_dict:
-            notes_dict[item] = []
-        if principal in cached_users:
-            notes_dict[item].append((text, cached_users[principal], timestamp))
 
     saved_items_dict = {}
     cursor.execute("SELECT * FROM _bookmarks")
@@ -221,13 +212,6 @@ def run():
                                 text=force_unicode(text), user=user)
                 review.timestamp = timestamp
                 review.save()
-
-        if int_id in notes_dict:
-            for text, user, timestamp in notes_dict[int_id]:
-                note = Note(object_id=id, content_type=content_type,
-                       text=force_unicode(text), user=user)
-                note.timestamp = timestamp
-                note.save()
 
         if int_id in saved_items_dict:
             for user, timestamp in saved_items_dict[int_id]:

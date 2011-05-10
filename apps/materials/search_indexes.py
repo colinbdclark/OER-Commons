@@ -60,7 +60,6 @@ class MaterialSearchIndex(SearchIndex):
     tagged_by = ByField(model_attr="tags")
     rated_by = ByField(model_attr="ratings")
     reviewed_by = ByField(model_attr="reviews")
-    noted_by = ByField(model_attr="notes")
 
     creator = IntegerField(model_attr="creator__id")
 

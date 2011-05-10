@@ -376,22 +376,22 @@
   visibility: hidden;
 }
 
-.view-item .reviews,.view-item .notes {
+.view-item .reviews {
   margin-top: 20px;
 }
 
-.view-item .reviews a.button,.view-item .notes a.button {
+.view-item .reviews a.button {
   float: right;
   margin-left: 10px;
   margin-bottom: 10px;
 }
 
-.view-item .reviews dt,.view-item .notes dt {
+.view-item .reviews dt {
   color: #616161;
   font-weight: bold;
 }
 
-.view-item .reviews dd,.view-item .notes dd {
+.view-item .reviews dd {
   margin: 10px 20px;
   font-style: italic;
 }

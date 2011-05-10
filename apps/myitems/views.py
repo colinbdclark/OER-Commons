@@ -65,11 +65,6 @@ def reviewed(request):
 
 
 @login_required
-def noted(request):
-    return myitems_index(request, "noted", u"My Noted Items", u"You have not added any note yet.", "noted_by")
-
-
-@login_required
 def submitted(request):
     return myitems_index(request, "submitted", u"My Submitted Items", u"You have not submitted any item yet.", "creator",
                          only_published=False)

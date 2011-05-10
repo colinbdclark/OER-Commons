@@ -12,7 +12,6 @@ from materials.models import License
 from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
 from materials.tasks import check_url_status
-from notes.models import Note
 from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
@@ -92,7 +91,6 @@ class Material(models.Model):
 
     tags = generic.GenericRelation(Tag)
     reviews = generic.GenericRelation(Review)
-    notes = generic.GenericRelation(Note)
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
     
