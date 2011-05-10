@@ -186,8 +186,8 @@ oer.profile.init_geography = function() {
             }, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     place_marker(results[0].geometry.location);
-                    var address_components = results[0].address_components; 
-                    for (var i = 0; i < address_components.length; i++) {
+                    var address_components = results[0].address_components;
+                    for ( var i = 0; i < address_components.length; i++) {
                         var component = address_components[i];
                         if (component.types[0] === "country") {
                             var code = component.short_name;
@@ -198,7 +198,8 @@ oer.profile.init_geography = function() {
                             });
                             break;
                         }
-                    };
+                    }
+                    ;
                 } else {
                     if (window.console !== undefined) {
                         console.log("Geocode was not successful for the following reason: " + status);
@@ -247,39 +248,38 @@ oer.profile.init_roles = function() {
         }
     }
     });
-};
 
-oer.profile.init_educator = function() {
-    var $form = $("form.educator");
-    var $header = $("table.profile th.educator");
-    var $save_btn = $form.find("input[type='submit'].save");
-    var $next_btn = $form.find("input[type='submit'].next");
-    $next_btn.click(function(e) {
-        $form.data("next", true);
-    });
-    var $inputs = $form.find(":input");
-    $save_btn.data("label", $save_btn.val());
-    var validator = $form.validate({
-    rules : {},
-    submitHandler : function(form) {
-        if ($form.data("next")) {
-            form.submit();
+    var $buttons_ct = $form.find("div.buttons");
+    var $educator_header = $form.find("th.educator");
+    var $educator_fields_ct = $form.find("td.educator");
+
+    var $roles_input = $inputs.filter("[name='roles']");
+
+    var EDUCATOR_ROLE_IDS = [ 1, 2 ];
+    $roles_input.change(function(e) {
+        var is_educator = false;
+        $roles_input.filter(":checked").each(function(index, el) {
+            var $el = $(el);
+            var value = $el.val();
+            if (is_educator) {
+                return;
+            }
+            if (EDUCATOR_ROLE_IDS.indexOf(parseInt(value)) != -1) {
+                is_educator = true;
+            }
+        });
+        if (is_educator) {
+            $buttons_ct.hide();
+            $buttons_ct.fadeIn(300);
+            $educator_header.fadeIn(300);
+            $educator_fields_ct.fadeIn(300);
         } else {
-            $header.addClass("loading");
-            $save_btn.val("Saving...");
-            var form_data = $form.serialize();
-            $.post($form.attr("action"), form_data, function(data) {
-                if (data.status === "success") {
-                    oer.status_message.success(data.message, true);
-                } else if (data.status === "error") {
-                    validator.showErrors(data.errors);
-                }
-                $header.removeClass("loading");
-                $save_btn.val($save_btn.data("label"));
-                $inputs.attr("disabled", "");
+            $buttons_ct.fadeOut(300, function() {
+                $buttons_ct.fadeIn(300)
             });
+            $educator_header.fadeOut(300);
+            $educator_fields_ct.fadeOut(300);
         }
-    }
     });
 };
 
