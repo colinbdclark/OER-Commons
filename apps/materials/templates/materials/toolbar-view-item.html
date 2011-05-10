@@ -67,7 +67,6 @@
           <li><a href="/"><img src="{{ STATIC_URL }}images/favicon.ico" alt="Home" class="logo" /></a></li>
           <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
           <li><a href="#" class="review">Review</a></li>
-          <li><a href="#" class="note">Note</a></li>
           <li>
             <a href="{{ save_url }}" class="save"{% if saved %} style="display: none;"{% endif %}>Save to collection</a>
             <a href="{{ unsave_url }}" class="unsave"{% if not saved %} style="display: none;"{% endif %}>Remove from collection</a>
@@ -114,25 +113,6 @@
         {% endwith %}
         <div class="buttons">
             <input type="submit" value="Add review" />        
-        </div>
-      </form>
-    </div>
-
-    <div id="note-dialog" style="display: none;">
-      <form action="{{ add_note_url }}" method="post" id="note-form" class="formatted note">
-        {% with note_form as form %}
-          {% with form.text as field %}
-            <div class="help">{{ field.help_text }}</div>
-            <div class="errors">
-              {% for error in field.errors %}
-                <label class="error">{{ error }}</label>
-              {% endfor %}
-            </div>
-            <div class="field">{{ field }}</div>
-          {% endwith %}
-        {% endwith %}
-        <div class="buttons">
-            <input type="submit" value="Add note" />        
         </div>
       </form>
     </div>
