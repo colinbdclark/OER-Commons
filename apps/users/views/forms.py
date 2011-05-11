@@ -1,9 +1,11 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from users.backend import encrypt_password
 from geo.models import Country
-from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel
+from users.backend import encrypt_password
+from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel, \
+    EducatorSubject
+from utils.forms import AutocompleteListField, AutocompleteListWidget
 
 
 class UserInfoForm(forms.ModelForm):
@@ -127,6 +129,12 @@ class RolesForm(forms.ModelForm):
                                      required=False,
                                      widget=forms.CheckboxSelectMultiple())
     
+    educator_subjects = AutocompleteListField(model=EducatorSubject,
+                                              autocomplete_field="title",
+                                              label=u"I teach my students the following subjects:",
+                                              widget=AutocompleteListWidget(new_item_label=u"Add subject"),
+                                              required=False)
+    
     def clean(self):
         cleaned_data = self.cleaned_data
         roles = cleaned_data.get("roles")
@@ -140,7 +148,7 @@ class RolesForm(forms.ModelForm):
     
     class Meta:
         model = Profile
-        fields = ["roles", "educator_student_levels"]
+        fields = ["roles", "educator_student_levels", "educator_subjects"]
 
 
 class WishForm(forms.ModelForm):
