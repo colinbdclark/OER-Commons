@@ -4,6 +4,7 @@
   <script type="text/javascript">
     $(function() {
       oer.profile.init_roles();
+      oer.autocomplete_list_widget.init();
     });
   </script>
 {% endblock %}
@@ -32,6 +33,10 @@
   
         <td class="educator"{% if not is_educator %} style="display: none;"{% endif %}>
           {% with form.educator_student_levels as field %}
+            {% include "include/form-field.html" %}
+          {% endwith %}
+
+          {% with form.educator_subjects as field %}
             {% include "include/form-field.html" %}
           {% endwith %}
         </td>
