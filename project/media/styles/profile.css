@@ -86,3 +86,8 @@
   font-size: 14px;
   padding: 2px 4px; 
 }
+
+.profile form.formatted .autocomplete-list-widget label {
+  font-size: 14px;
+  font-weight: normal; 
+}
