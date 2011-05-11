@@ -6,7 +6,7 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from geo.models import Country
-from materials.models.common import GradeLevel
+from materials.models.common import GradeLevel, AutoCreateManyToManyField
 from users.backend import encrypt_password
 
 
@@ -119,8 +119,8 @@ class Profile(models.Model):
     educator_student_levels = models.ManyToManyField(StudentLevel, null=True,
                                                      blank=True) 
 
-    educator_subjects = models.ManyToManyField(EducatorSubject, null=True,
-                                               blank=True) 
+    educator_subjects = AutoCreateManyToManyField(EducatorSubject, null=True,
+                                                  blank=True) 
     
     wish_for_education = models.TextField(blank=True, null=True)
     
