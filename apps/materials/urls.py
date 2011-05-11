@@ -96,7 +96,6 @@ urlpatterns = patterns('materials.views',
     url(r"^advanced-search/?$", "advanced_search.advanced_search", name="advanced_search"),
     url(r"^license-picker/issue/?$", "license_picker.issue"),
     url(r"^tags(?:/(?P<letter>[a-z]))?/?$", "tags_index.tags_index", name="tags"),
-    url(r'^autocomplete/(\w+)/(\w+)/(\w+)/?$', "autocomplete.autocomplete", name="autocomplete"),
     url(r'^(?P<microsite>[^/]+)/?$', "microsites.microsite", name="microsite"),
 )
 

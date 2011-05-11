@@ -1,8 +1,8 @@
-oer.keywords_widget = {};
+oer.autocomplete_list_widget = {};
 
-$.template("keywords-widget-item", '<li><a href="#" class="delete">Delete</a> <span>${name}</span></li>');
+$.template("autocomplete-list-widget-item", '<li><a href="#" class="delete">Delete</a> <span>${name}</span></li>');
 
-oer.keywords_widget.init = function() {
+oer.autocomplete_list_widget.init = function() {
 
     function get_values($input) {
         var value = $input.val();
@@ -16,30 +16,31 @@ oer.keywords_widget.init = function() {
         return $.unique(values);
     }
 
-    var $widgets = $(".keywords-widget");
+    var $widgets = $(".autocomplete-list-widget");
     $.each($widgets, function(i, widget) {
         var $widget = $(widget);
         var $input = $widget.find("input[type='hidden']");
         var $add_input = $widget.find("input[type='text']");
-        var $keywords = $widget.find("ul");
+        var $items = $widget.find("ul");
+        var autocomplete_url = $widget.data("url");
 
         function add_value(value) {
             var values = get_values($input);
             $add_input.val("");
             if ($.inArray(value, values) != -1) {
-                $keywords.find("span:contains('" + value + "')").closest("li").effect("bounce");
+                $items.find("span:contains('" + value + "')").closest("li").effect("bounce");
                 return;
             }
             values.push(value);
             $input.val(values.join(","));
-            $.tmpl("keywords-widget-item", {
+            $.tmpl("autocomplete-list-widget-item", {
                 name : value
-            }).appendTo($keywords);
+            }).appendTo($items);
         }
 
         $add_input.autocomplete({
         minLength : 2,
-        source : "/autocomplete/materials/keyword/name",
+        source : autocomplete_url,
         select: function(e, ui) {
             e.preventDefault();
             add_value(ui.item.value);
@@ -57,7 +58,7 @@ oer.keywords_widget.init = function() {
             }
         });
   
-        $keywords.delegate("a.delete", "click", function(e) {
+        $items.delegate("a.delete", "click", function(e) {
             e.preventDefault();
             var $this = $(this);
             var $li = $this.closest("li");

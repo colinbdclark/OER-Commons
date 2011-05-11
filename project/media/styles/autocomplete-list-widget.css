@@ -1,24 +1,26 @@
-.keywords-widget input.add-keyword {
+.autocomplete-list-widget input.add {
   width: 250px;
   margin-left: 5px;
 }
 
-form.formatted .field .keywords-widget ul,.keywords-widget ul {
+form.formatted .field .autocomplete-list-widget ul,.autocomplete-list-widget ul
+  {
   list-style-type: none;
   margin-bottom: 5px;
 }
 
-form.formatted .field .keywords-widget ul li,.keywords-widget ul li {
+form.formatted .field .autocomplete-list-widget ul li,.autocomplete-list-widget ul li
+  {
   padding: 3px 5px;
   float: left;
   margin-right: 5px;
 }
 
-.keywords-widget ul li:hover {
+.autocomplete-list-widget ul li:hover {
   background: #DDF0F6;
 }
 
-.keywords-widget ul:after {
+.autocomplete-list-widget ul:after {
   content: ".";
   display: block;
   height: 0;
@@ -26,7 +28,7 @@ form.formatted .field .keywords-widget ul li,.keywords-widget ul li {
   visibility: hidden;
 }
 
-.keywords-widget a.delete {
+.autocomplete-list-widget a.delete {
   float: right;
   width: 15px;
   height: 15px;

@@ -12,7 +12,7 @@ from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
 from materials.models.library import LibraryMaterialType
 from materials.models.microsite import Microsite, Topic
-from materials.views.forms import KeywordsField
+from utils.forms import AutocompleteListField
 
 
 site.register(Country, ModelAdmin)
@@ -46,7 +46,7 @@ class AdminKeywordsWidget(forms.Textarea):
 
 class MicrositeForm(forms.ModelForm):
 
-    keywords = KeywordsField(widget=AdminKeywordsWidget())
+    keywords = AutocompleteListField(model=Keyword, widget=AdminKeywordsWidget())
 
     class Meta:
         model = Microsite
@@ -62,7 +62,7 @@ site.register(Microsite, MicrositeAdmin)
 
 class TopicForm(forms.ModelForm):
 
-    keywords = KeywordsField(widget=AdminKeywordsWidget())
+    keywords = AutocompleteListField(model=Keyword, widget=AdminKeywordsWidget())
 
     class Meta:
         model = Topic

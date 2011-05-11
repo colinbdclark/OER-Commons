@@ -5,13 +5,14 @@ from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
 from materials.models.common import GeneralSubject, GradeLevel, Language, \
-    GeographicRelevance
+    GeographicRelevance, Keyword
 from materials.models.community import CommunityItem, CommunityType, \
     CommunityTopic
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
-from materials.views.forms import AuthorsField, KeywordsField, LICENSE_TYPES, \
+from materials.views.forms import AuthorsField, LICENSE_TYPES, \
     CC_OLD_LICENSES, LicenseTypeFieldRenderer, SubmissionFormBase, LanguagesField
 from utils.decorators import login_required
+from utils.forms import AutocompleteListField
 
 
 class AddForm(SubmissionFormBase, ModelForm):
@@ -44,7 +45,7 @@ class AddForm(SubmissionFormBase, ModelForm):
                                      widget=forms.Textarea(
                                      attrs={"class": "text wide"}))
 
-    keywords = KeywordsField(label=u"Keywords")
+    keywords = AutocompleteListField(model=Keyword, label=u"Keywords")
 
     community_types = forms.ModelMultipleChoiceField(
                                 CommunityType.objects.all(),

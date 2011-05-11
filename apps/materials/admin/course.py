@@ -14,11 +14,12 @@ from django.views.generic.simple import redirect_to
 from material import MaterialAdmin
 from materials.admin.fields import LicenseFields
 from materials.models.common import Author, GeneralSubject, GradeLevel, \
-    MediaFormat, Language, GeographicRelevance
+    MediaFormat, Language, GeographicRelevance, Keyword
 from materials.models.course import Course, CourseMaterialType
-from materials.views.forms import KeywordsField, RSSFields
+from materials.views.forms import RSSFields
 from materials.views.forms.course import InstitutionField, CollectionField, \
     DerivedFields, PrePostRequisitesFields
+from utils.forms import AutocompleteListField
 
 
 COURSE_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "collection", "workflow_state",
@@ -82,7 +83,7 @@ class CourseAddForm(forms.ModelForm, DerivedFields, PrePostRequisitesFields,
                                 required=False,
                                 widget=forms.CheckboxSelectMultiple())
 
-    keywords = KeywordsField()
+    keywords = AutocompleteListField(model=Keyword)
 
     curriculum_standards = forms.CharField(required=False,
                                        widget=forms.Textarea(

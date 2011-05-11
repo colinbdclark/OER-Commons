@@ -14,10 +14,11 @@ from material import MaterialAdmin
 from materials.admin.course import AuthorsFormSet
 from materials.admin.fields import LicenseFields
 from materials.models.common import Author, GeneralSubject, GradeLevel, \
-    MediaFormat, Language, GeographicRelevance
+    MediaFormat, Language, GeographicRelevance, Keyword
 from materials.models.library import Library, LibraryMaterialType
-from materials.views.forms import KeywordsField, RSSFields
+from materials.views.forms import RSSFields
 from materials.views.forms.course import InstitutionField, CollectionField
+from utils.forms import AutocompleteListField
 
 
 LIBRARY_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "collection", "workflow_state",
@@ -75,7 +76,7 @@ class LibraryAddForm(forms.ModelForm, LicenseFields, RSSFields):
                                 required=False,
                                 widget=forms.CheckboxSelectMultiple())
 
-    keywords = KeywordsField()
+    keywords = AutocompleteListField(model=Keyword)
 
     curriculum_standards = forms.CharField(required=False,
                                        widget=forms.Textarea(

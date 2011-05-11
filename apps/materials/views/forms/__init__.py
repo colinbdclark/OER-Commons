@@ -8,6 +8,7 @@ from materials.models.common import GeneralSubject, GradeLevel, License, \
     PUBLIC_DOMAIN_URL, PUBLIC_DOMAIN_NAME, GNU_FDL_URL, GNU_FDL_NAME, \
     CC_LICENSE_URL_RE, Author, Keyword
 from django.template.loader import render_to_string
+from django.core.urlresolvers import reverse
 
 
 LICENSE_TYPES = (
@@ -57,41 +58,6 @@ class AuthorsField(forms.Field):
         if value is None:
             return []
         values = sorted(set([v.strip() for v in value.split(u",") if v.strip()]))
-        return [{"name": v} for v in values]
-
-
-class KeywordsWidget(forms.Textarea):
-
-    def render(self, name, value, attrs=None):
-        if value and not isinstance(value, list):
-            value = [value]
-        return render_to_string("materials/forms/include/keywords-widget.html",
-                                dict(name=name, value=value, attrs=attrs))
-
-    def value_from_datadict(self, data, files, name):
-        values = [k for k in data.get(name, u"").split(",") if k]
-        return values
-
-
-class KeywordsField(forms.Field):
-
-    widget = KeywordsWidget
-
-    def prepare_value(self, value):
-        if not value:
-            return []
-        if isinstance(value, list):
-            values = []
-            for v in value:
-                if isinstance(v, int):
-                    values.append(Keyword.objects.get(id=v).name)
-                else:
-                    values.append(v)
-            return values
-        return list(value.values_list("name", flat=True))
-
-    def to_python(self, value):
-        values = sorted(set([v.strip() for v in value if v.strip()]))
         return [{"name": v} for v in values]
 
 

@@ -3,12 +3,12 @@
 {% block extrahead %}{{ block.super }}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all" />
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/materials-admin.css" media="all" />
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/keywords-widget.css" media="all" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/autocomplete-list-widget.css" media="all" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.tmpl.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/namespace.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}javascripts/keywords-widget.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}javascripts/autocomplete-list-widget.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/admin.js"></script>
 <script type="text/javascript">
   $(function() {
@@ -16,29 +16,29 @@
       $("#id_rss_timestamp_0").datepicker();
       $("#id_institution").autocomplete({
           minLength: 2,
-          source: "{% url materials:autocomplete "materials" "institution" "name" %}"
+          source: "{% url utils:autocomplete "materials" "institution" "name" %}"
       });
       $("#id_collection").autocomplete({
           minLength: 2,
-          source: "{% url materials:autocomplete "materials" "collection" "name" %}"
+          source: "{% url utils:autocomplete "materials" "collection" "name" %}"
       });
       $("fieldset.authors input[name$='name']").autocomplete({
           minLength: 2,
-          source: "{% url materials:autocomplete "materials" "author" "name" %}"
+          source: "{% url utils:autocomplete "materials" "author" "name" %}"
       });
       $("fieldset.authors input[name$='email']").autocomplete({
           minLength: 2,
-          source: "{% url materials:autocomplete "materials" "author" "email" %}"
+          source: "{% url utils:autocomplete "materials" "author" "email" %}"
       });
       $("#id_license_name").autocomplete({
           minLength: 2,
-          source: "{% url materials:autocomplete "materials" "license" "name" %}"
+          source: "{% url utils:autocomplete "materials" "license" "name" %}"
       });
       $("#id_license_url").autocomplete({
           minLength: 2,
-          source: "{% url materials:autocomplete "materials" "license" "url" %}"
+          source: "{% url utils:autocomplete "materials" "license" "url" %}"
       });
-      oer.keywords_widget.init();
+      oer.autocomplete_list_widget.init();
       oer.admin.tags.init();
   });
 </script>
