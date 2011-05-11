@@ -2,14 +2,14 @@ from django import forms
 from django.forms.models import ModelForm
 from django.http import HttpResponse, Http404
 from materials.models.common import GeneralSubject, GradeLevel, Language, \
-    GeographicRelevance, MediaFormat, Collection
+    GeographicRelevance, MediaFormat, Collection, Keyword
 from materials.models.course import Course, CourseMaterialType
 from materials.models.material import PENDING_STATE
 from materials.views.forms import SubmissionFormBase, AuthorsField, \
-    KeywordsField, LanguagesField, LicenseTypeFieldRenderer, CC_OLD_LICENSES, \
-    LICENSE_TYPES
+    LanguagesField, LicenseTypeFieldRenderer, CC_OLD_LICENSES, LICENSE_TYPES
 from materials.views.forms.course import InstitutionField
 from utils.decorators import login_required
+from utils.forms import AutocompleteListField
 import cjson
 
 
@@ -29,7 +29,7 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
                            widget=forms.TextInput(
                            attrs={"class": "wide"}))
 
-    keywords = KeywordsField(label=u"Keywords")
+    keywords = AutocompleteListField(model=Keyword, label=u"Keywords")
 
     general_subjects = forms.ModelMultipleChoiceField(
                                 GeneralSubject.objects.all(),
