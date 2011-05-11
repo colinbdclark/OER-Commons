@@ -5,6 +5,10 @@ from django.template.loader import render_to_string
 
 class AutocompleteListWidget(forms.Textarea):
 
+    def __init__(self, *args, **kwargs):
+        self.new_item_label = kwargs.pop("new_item_label", None)
+        super(AutocompleteListWidget, self).__init__(*args, **kwargs)
+
     def render(self, name, value, attrs=None):
         opts = self.model._meta
         app_label = opts.app_label
@@ -12,7 +16,7 @@ class AutocompleteListWidget(forms.Textarea):
         autocomplete_url = reverse("utils:autocomplete",
                                    args=(app_label, model_name, 
                                     self.autocomplete_field))
-        new_item_label = opts.verbose_name.lower()
+        new_item_label = self.new_item_label or u"Add new %s " % opts.verbose_name.lower()
         if value and not isinstance(value, list):
             value = [value]
         return render_to_string("utils/include/autocomplete-list-widget.html",

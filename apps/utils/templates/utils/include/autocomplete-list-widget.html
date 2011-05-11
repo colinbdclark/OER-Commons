@@ -7,6 +7,6 @@
   </ul>
   {% endspaceless %}
   <input type="hidden" id="id_{{ name }}" name="{{ name }}" value="{% if value %}{{ value|join:"," }}{% endif %}" />
-  <label for="add-{{ name }}">Add new {{ new_item_label }}:</label>
+  {% if new_item_label %}<label for="add-{{ name }}">{{ new_item_label }}:</label>{% endif %}
   <input type="text" id="add-{{ name }}" class="add" class="text" value="" />
 </div>
