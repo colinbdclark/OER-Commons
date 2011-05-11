@@ -18,7 +18,7 @@ oer.materials.toolbar.init = function() {
 oer.materials.toolbar.resize_iframe = function() {
     var $window = $(window);
     var $iframe = $("#resource");
-    var $toolbar = $("#toolbar");
+    var $toolbar = $("div.toolbar");
     $iframe.height($window.height() - $toolbar.outerHeight());
 };
 
@@ -58,7 +58,7 @@ oer.materials.toolbar.init_tags = function() {
 };
 
 oer.materials.toolbar.init_save = function() {
-    var $toolbar = $("#toolbar");
+    var $toolbar = $("div.toolbar");
     var $save_btn = $toolbar.find("a.save");
     var $unsave_btn = $toolbar.find("a.unsave");
 
@@ -110,7 +110,7 @@ oer.materials.toolbar.init_review = function() {
     title : "Add review"
     });
 
-    var $toolbar = $("#toolbar");
+    var $toolbar = $("div.toolbar");
     var $review_btn = $toolbar.find("a.review");
 
     $review_btn.click(function(e) {

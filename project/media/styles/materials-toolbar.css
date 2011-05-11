@@ -4,79 +4,108 @@ body.toolbar-view {
 }
 
 iframe#resource {
-  top: 33px;
+  top: 40px;
   position: absolute;
   width: 100%;
   height: 100px;
   z-index: 1;
 }
 
-#toolbar {
-  height: 23px;
+.toolbar {
+  height: 40px;
   position: absolute;
   width: 100%;
   z-index: 2;
-  background: url(../javascripts/jquery/Aristo/images/bg_fallback.png) 0 0
-    repeat-x;
-  background: -webkit-gradient(linear, left bottom, left top, color-stop(1, rgb(237,
-    237, 237) ), color-stop(0, rgb(196, 196, 196) ) );
-  background: -moz-linear-gradient(center top, rgb(237, 237, 237),
-    rgb(196, 196, 196) );
-  border-bottom: 1px solid #B6B6B6;
-  padding: 5px 0;
+  background-color: #fff;
 }
 
-#toolbar a {
+.toolbar .c1 {
+  background: url(../images/toolbar-circle-1.png) no-repeat 130px 0%;
+}
+
+.toolbar .c2 {
+  background: url(../images/toolbar-circle-2.png) no-repeat 30% 0%;
+}
+
+.toolbar .c3 {
+  background: url(../images/toolbar-circle-3.png) no-repeat 60% 0%;
+}
+
+.toolbar .c4 {
+  background: url(../images/toolbar-circle-4.png) no-repeat 90% 0%;
+}
+
+.toolbar .green-bar {
+  background: url(../images/toolbar-green-bar.png) repeat-x 0% 100%;
+  padding: 7px 30px 9px 120px;
+  height: 24px;
+}
+
+.toolbar a {
   text-decoration: none;
 }
 
-#toolbar a:hover {
+.toolbar a:hover {
   text-decoration: underline;
 }
 
-#toolbar .stars {
-  margin-bottom: -4px;
+.toolbar li.rating span {
+  vertical-align: top;
+}
+
+.toolbar .stars {
+  margin-top: -1px;
   display: inline-block;
 }
 
-#toolbar ul {
-  margin: 0 15px;
-  padding: 0;
+.toolbar ul {
+  margin: 0;
+  padding: 2px 1px 2px 0px;
   list-style-type: none;
-}
-
-#toolbar li {
-  line-height: 23px;
-  height: 23px;
-  vertical-align: middle;
-  display: inline-block;
-  margin-right: 10px;
-  padding-right: 11px;
+  float: left;
   background: url(../images/dotted-line-vert.gif) 100% 0% repeat-y;
 }
 
-#toolbar li img.logo {
-  margin-top: 3px;
+.toolbar li {
+  line-height: 18px;
+  height: 18px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 10px;
+  padding-right: 10px;
 }
 
-#toolbar li.last {
-  background: none;
+.toolbar li.sep {
+  padding-right: 11px;
+  border-right: 1px solid #0B7BA9;
 }
 
-#toolbar li a {
+.toolbar li a {
   display: inline-block;
 }
 
-#toolbar li a.loading {
+.toolbar li a.loading {
   padding-left: 20px;
   background: url(../images/ajax-loader.gif) 0% 50% no-repeat;
+}
+
+#logo {
+  display: block;
+  z-index: 10;
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  width: 110px;
+  height: 40px;
+  background: url(../images/toolbar-logo.png);
+  text-indent: -9999px;
 }
 
 #close-toolbar {
   display: block;
   z-index: 10;
   position: absolute;
-  top: 9px;
+  top: 11px;
   right: 15px;
   width: 16px;
   height: 16px;
@@ -91,7 +120,7 @@ iframe#resource {
 
 body.toolbar-view #status-messages {
   position: absolute;
-  top: 43px;
+  top: 54px;
   left: 10px;
   z-index: 10;
 }
@@ -101,12 +130,20 @@ body.toolbar-view #status-messages .status-message {
   clear: both;
 }
 
-#toolbar .view-item-navigation {
-  float: right;
-  margin-right: 20px;
+.toolbar .view-item-navigation {
+  float: left;
 }
 
-#toolbar .item {
+.toolbar .view-item-navigation ul {
+  float: none; 
+}
+
+.toolbar .add-this-ct {
+   float: right;
+   margin-top: 1px; 
+}
+
+.toolbar .item {
   overflow: hidden;
-  height: 23px; 
+  height: 24px; 
 }

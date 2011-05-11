@@ -35,23 +35,27 @@
   </head>
   <body class="toolbar-view {% if request.user.is_authenticated %} authenticated{% endif %}">
 
+    <a href="{% url frontpage %}" id="logo">OER Commons</a>
+
     <a href="javascript:window.location = '{{ item.url|escapejs }}';" id="close-toolbar">Close toolbar</a>
 
-    <div id="toolbar">
+    <div class="toolbar item" id="{{ item.identifier }}"><div class="c1"><div class="c2"><div class="c3"><div class="c4"><div class="green-bar">
     
       {% if came_from_index %}
       <div class="view-item-navigation">
+        {% spaceless %}
         <ul>
           {% if prev_item_url %}
-            <li><a class="item-link prev" href="{{ prev_item_url }}">&laquo; Previous Item</a></li>
+            <li class="sep"><a class="item-link prev" href="{{ prev_item_url }}">&laquo; Previous Item</a></li>
           {% endif %}
           {% if index_url %}
-            <li><a href="{{ index_url }}">Return to Search Results...</a></li>
+            <li{% if next_item_url %} class="sep"{% endif %}><a href="{{ index_url }}">Return to Search Results...</a></li>
           {% endif %}
           {% if next_item_url %}
-            <li class="last"><a class="item-link next" href="{{ next_item_url }}">Next Item &raquo;</a></li>
+            <li><a class="item-link next" href="{{ next_item_url }}">Next Item &raquo;</a></li>
           {% endif %}
         </ul>
+        {% endspaceless %}
         <form action="" method="post">
           <input type="hidden" name="index_path" value="{{ index_path }}" />
           <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
@@ -60,37 +64,43 @@
         </form>
       </div>
       {% endif %}
-    
-      <div class="item" id="{{ item.identifier }}">
-        {% spaceless %}
-        <ul>
-          <li><a href="/"><img src="{{ STATIC_URL }}images/favicon.ico" alt="Home" class="logo" /></a></li>
-          <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
-          <li><a href="#" class="review">Review</a></li>
-          <li>
-            <a href="{{ save_url }}" class="save"{% if saved %} style="display: none;"{% endif %}>Save to collection</a>
-            <a href="{{ unsave_url }}" class="unsave"{% if not saved %} style="display: none;"{% endif %}>Remove from collection</a>
-          </li>
-          <li>
-            <a href="{% url myitems:myitems %}">My items</a>
-          </li>
-          <li>Rating: {% stars item.rating %}</li>
-          <li class="last">
-            <div class="addthis_toolbox addthis_default_style ">
-              <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-              <a class="addthis_button_tweet"></a>
-            </div>
-            <script type="text/javascript">
-              addthis_url    = location.href;   
-              addthis_title  = document.title;  
-              addthis_pub    = 'oercommons';     
-            </script>
-            <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4dbe4f65120603bd"></script>
+
+      {% spaceless %}
+      <ul>
+        <li class="sep">
+          <a href="{{ save_url }}" class="save"{% if saved %} style="display: none;"{% endif %}>Save to My Items</a>
+          <a href="{{ unsave_url }}" class="unsave"{% if not saved %} style="display: none;"{% endif %}>Remove from My Items</a>
         </li>
-        </ul>
-        {% endspaceless %}
+        <li>
+          <a href="{% url myitems:myitems %}">My Items</a>
+        </li>
+      </ul>    
+      {% endspaceless %}
+       
+      {% spaceless %}
+      <ul>
+        <li class="rating"><span>Rating: </span>{% stars item.rating %}</li>
+        <li class="sep"><a href="#" class="review">Review</a></li>
+        <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
+      </ul>
+      {% endspaceless %}
+    
+      <div class="add-this-ct">
+        <div class="addthis_toolbox addthis_default_style ">
+          <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+          <a class="addthis_button_tweet"></a>
+        </div>
+        <script type="text/javascript">
+          addthis_url    = location.href;   
+          addthis_title  = document.title;  
+          addthis_pub    = 'oercommons';     
+        </script>
+        <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4dbe4f65120603bd"></script>
       </div>
-    </div>
+    
+    <div class="clear"
+      
+    </div></div></div></div></div></div>
 
     <div id="status-messages"></div>
 
