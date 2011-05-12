@@ -97,11 +97,7 @@
 {% endif %}
 
 <div class="view-item item" id="{{ item.identifier }}">
-  <div class="right">
-    {% stars item.rating %}
-    {% cou_bucket item.license.bucket %}
-  </div>
-  
+
   <div class="right add-this">
     <script type="text/javascript">
       addthis_url    = location.href;   
@@ -111,10 +107,15 @@
     <script src="http://s7.addthis.com/js/addthis_widget.php?v=12" type="text/javascript"></script>
   </div>
   
+  <div class="right clear">
+    {% stars item.rating %}
+    {% cou_bucket item.license.bucket %}
+  </div>
+  
   <div class="details">
     <h3>
-      <a href="{{ item.url }}" target="_blank">{{ item.title|safe }}</a>
-      <a href="{{ item.url }}" target="_blank"><img alt="{{ item.title }}" src="{{ STATIC_URL }}images/external-link-icon.gif" /></a>  
+      <a href="{{ item.url }}" target="_blank">
+        <img src="{{ STATIC_URL }}images/item-title-icon.png" alt="{{ item.title }}" />{{ item.title|safe }}</a>
     </h3>
 
     <dl>

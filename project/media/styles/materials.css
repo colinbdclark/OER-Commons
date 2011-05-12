@@ -8,7 +8,7 @@
   border: none;
 }
 
-.materials-index h3,.view-item h3,.view-item h3 a {
+.materials-index h3 {
   font-size: 14px;
   font-style: normal;
   font-weight: bold;
@@ -16,7 +16,27 @@
   color: #1F4D64;
 }
 
-.materials-index h3 img,.view-item h3 img {
+.view-item h3 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.view-item h3 a {
+  color: #1F4D64;
+}
+
+.view-item h3 a:hover {
+  text-decoration: underline;
+}
+
+.view-item h3 a img {
+  vertical-align: text-top;
+  margin-right: 1px; 
+}
+
+.materials-index h3 img {
   vertical-align: top;
 }
 
@@ -138,6 +158,10 @@
 
 .view-item .cou-bucket {
   margin-left: 5px;
+}
+
+.view-item .add-this {
+  margin-bottom: 10px; 
 }
 
 .view-item .add-this img {
@@ -779,5 +803,5 @@
 }
 
 .no-items-match {
-   font-size: 14px; 
+  font-size: 14px;
 }
