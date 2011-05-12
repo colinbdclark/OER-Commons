@@ -78,7 +78,7 @@ oer.iframe_submission.content_submission.init = function() {
     });
 
     oer.content_submission.init_autocomplete();
-    oer.keywords_widget.init();
+    oer.autocomplete_list_widget.init();
     oer.content_submission.init_license();
     $form.show();
 };

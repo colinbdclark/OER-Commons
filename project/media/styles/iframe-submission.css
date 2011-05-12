@@ -123,15 +123,15 @@ form.content-submission fieldset.step {
   margin: 0;
 }
 
-.content-submission .keywords-widget ul {
+.content-submission #keywords-widget ul {
   margin-bottom: 0;
 }
 
-.content-submission .keywords-widget label {
+.content-submission #keywords-widget label {
   display: none;
 }
 
-.content-submission .keywords-widget input.add-keyword {
+.content-submission #keywords-widget input.add {
   width: 520px;
   margin-left: 0;
 }
