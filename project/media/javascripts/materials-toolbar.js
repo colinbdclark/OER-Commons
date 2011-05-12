@@ -102,15 +102,17 @@ oer.materials.toolbar.init_save = function() {
 }
 
 oer.materials.toolbar.init_review = function() {
+    var $toolbar = $("div.toolbar");
+
     var $dialog = $("#review-dialog").dialog({
     modal : true,
     width : 583,
     autoOpen : false,
     resizable : false,
-    title : "Add review"
+    title : "Add review",
+    position: [$toolbar.width() - 583 - 30, $toolbar.height() + 10]
     });
 
-    var $toolbar = $("div.toolbar");
     var $review_btn = $toolbar.find("a.review");
 
     $review_btn.click(function(e) {
