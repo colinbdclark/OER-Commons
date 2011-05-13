@@ -50,6 +50,15 @@ oer.iframe_submission.content_submission.init = function() {
         return $license_type_radio.filter(":checked").val() !== "cc-old" || value !== "-";
     }, "This field is required.");
 
+    var $authors_input = $form.find("#id_authors");
+    var $copyright_holder_input = $form.find("#id_copyright_holder");
+    $authors_input.focusout(function(e) {
+        var authors_value = $authors_input.val();
+        if ($copyright_holder_input.val() === "") {
+            $copyright_holder_input.val(authors_value); 
+        }
+    });
+    
     $form.validate({
         rules : {
         title : "required",
@@ -68,7 +77,7 @@ oer.iframe_submission.content_submission.init = function() {
         license_cc_old : {
             license_cc_old : true
         },
-        license_custom_name : {
+        license_description : {
             required : function(el) {
                 return $license_type_radio.filter(":checked").val() === "custom";
             }

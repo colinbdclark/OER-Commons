@@ -61,16 +61,11 @@
     <fieldset title="Step 3">
       <legend></legend>
       {% include "materials/iframe-submission/license-field.html" %}
-    </fieldset>
-    <fieldset title="Step 4">
-      <legend></legend>
-        {% with form.license_description as field %}
-          {% include "include/form-field.html" %}
-        {% endwith %}
-        
-        {% with form.copyright_holder as field %}
-          {% include "include/form-field.html" %}
-        {% endwith %}
+      
+      {% with form.copyright_holder as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
     </fieldset>
     <a class="finish" href="#" style="display: inline-block;">Submit</a>
   </form>

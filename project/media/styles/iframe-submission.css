@@ -194,6 +194,10 @@ form.content-submission fieldset.step {
   height: 33px;
 }
 
+.iframe-submission form.content-submission #id_license_description {
+  height: 33px; 
+}
+
 .iframe-submission form.login {
   width: 230px;
   margin: 0; 

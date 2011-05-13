@@ -68,9 +68,8 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
                                        required=False,
                                        widget=forms.Select())
 
-    license_custom_name = forms.CharField(label=u"License Name:",
-                        required=False,
-                        widget=forms.TextInput(attrs={"class": "wide"}))
+    license_custom_name = forms.CharField(required=False, 
+                                          widget=forms.HiddenInput())
 
     license_custom_url = forms.URLField(label=u"License URL:",
                         required=False,
@@ -87,6 +86,28 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
                         widget=forms.TextInput(attrs={"class": "wide"}))
 
     license = forms.Field(label=u"Conditions of Use", required=False)
+
+    def clean_license_description(self):
+        value = self.cleaned_data["license_description"]
+        if self.cleaned_data.get("license_type") == "custom":
+            if not value:
+                raise forms.ValidationError(u"This field is required.")
+        else:
+            return u""
+        return value
+
+    def clean_license_custom_name(self):
+        return u"Custom License"
+
+    def clean_url(self):
+        value = self.cleaned_data["url"]
+        instance = getattr(self, "instance", None)
+        qs = Course.objects.filter(url=value)
+        if instance and instance.id:
+            qs = qs.exclude(id=instance.id)
+        if qs.count():
+            raise forms.ValidationError(u"This URL is registered already.")
+        return value
 
     def __init__(self, *args, **kwargs):
         super(SubmissionForm, self).__init__(*args, **kwargs)

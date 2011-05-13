@@ -1,6 +1,6 @@
 {% load materials_tags %}
 {% load utils %}
-<div class="cou fields">
+<div class="cou">
 
   <div class="field">
     <p class="help">Please indicate the existing license for this item. To
@@ -46,6 +46,9 @@
 
   <div class="custom-license{% if form.license_type|bound_field_value != "custom" %} hidden{% endif %}">
     {% with form.license_custom_name as field %}
+        {{ field }}
+    {% endwith %}
+    {% with form.license_description as field %}
       <div class="field required">
         <div class="label">{{ field.label_tag }}</div>
         <div class="errors">
