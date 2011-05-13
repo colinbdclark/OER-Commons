@@ -105,7 +105,7 @@ oer.materials.toolbar.init_review = function() {
     var $toolbar = $("div.toolbar");
 
     var $dialog = $("#review-dialog").dialog({
-    modal : true,
+    modal : false,
     width : 583,
     autoOpen : false,
     resizable : false,
