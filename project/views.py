@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
+from django.utils.html import escape
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import Keyword, GeneralSubject, GradeLevel
@@ -42,7 +43,7 @@ def get_tweets():
     tweets = []
     try:
         for tweet in api.GetUserTimeline(SCREEN_NAME):
-            tweets.append({"text": linkify_tweet(urlize(tweet.text)),
+            tweets.append({"text": linkify_tweet(urlize(escape(tweet.text))),
                            "date": dateutil.parser.parse(tweet.created_at)})
             if len(tweets) >= MAX_TWEETS:
                 break
