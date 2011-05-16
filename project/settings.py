@@ -88,6 +88,7 @@ INSTALLED_APPS = (
     'utils',
     'abtesting',
     'tags',
+    'curriculum',
     'materials',
     'users',
     'rating',
