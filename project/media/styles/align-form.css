@@ -1,0 +1,11 @@
+#align-form {
+  min-width: 500px;
+}
+
+#align-form label {
+  display: block;
+}
+
+#align-form div.grade,#align-form div.category,#align-form div.tag, #align-form div.buttons {
+  display: none;
+}
