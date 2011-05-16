@@ -1,0 +1,948 @@
+[
+  {
+    "pk": 1, 
+    "model": "curriculum.standard", 
+    "fields": {
+      "code": "CCM", 
+      "name": "Common Core Math"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "curriculum.grade", 
+    "fields": {
+      "code": "K", 
+      "name": "Kindergarten"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "curriculum.grade", 
+    "fields": {
+      "code": "1", 
+      "name": "1st Grade"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "curriculum.learningobjectivecategory", 
+    "fields": {
+      "code": "CC", 
+      "name": "Counting and Cardinality"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "curriculum.learningobjectivecategory", 
+    "fields": {
+      "code": "OA", 
+      "name": "Operations and Algebraic Thinking"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "curriculum.learningobjectivecategory", 
+    "fields": {
+      "code": "NBT", 
+      "name": "Number and Operations in Base Ten"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "curriculum.learningobjectivecategory", 
+    "fields": {
+      "code": "MD", 
+      "name": "Measurement and Data"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "curriculum.learningobjectivecategory", 
+    "fields": {
+      "code": "G", 
+      "name": "Geometry"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "1", 
+      "subcategory": "Know number names and the count sequence.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Count to 100 by ones and tens."
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "2", 
+      "subcategory": "Know number names and the count sequence.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Count forward beginning from a given number within the known sequence (instead of having to begin at 1)."
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "3", 
+      "subcategory": "Know number names and the count sequence.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Write numbers from 0 to 20. Represent a number of objects with a written numeral 0-20 (with 0 representing a count of no objects)."
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "4", 
+      "subcategory": "Count to tell the number of objects.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Understand the relationship between numbers and quantities; connect counting to cardinality."
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "4a", 
+      "subcategory": "Count to tell the number of objects.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "When counting objects, say the number names in the standard order, pairing each object with one and only one number name and each number name with one and only one object."
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "4b", 
+      "subcategory": "Count to tell the number of objects.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Understand that the last number name said tells the number of objects counted. The number of objects is the same regardless of their arrangement or the order in which they were counted."
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "4c", 
+      "subcategory": "Count to tell the number of objects.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Understand that each successive number name refers to a quantity that is one larger."
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "5", 
+      "subcategory": "Count to tell the number of objects.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Count to answer \"how many?\" questions about as many as 20 things arranged in a line, a rectangular array, or a circle, or as many as 10 things in a scattered configuration; given a number from 1-20, count out that many objects."
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "6", 
+      "subcategory": "Compare numbers.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Identify whether the number of objects in one group is greater than, less than, or equal to the number of objects in another group; e.g., by using matching and counting strategies."
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "CC"
+      ], 
+      "code": "7", 
+      "subcategory": "Compare numbers.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Compare two numbers between 1 and 10 presented as written numerals."
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "1", 
+      "subcategory": "Understand addition as putting together and adding to, and understand subtraction as taking apart and away from.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Represent addition and subtraction with objects, fingers, mental images, drawings, sounds (e.g. claps), acting out situations, verbal explanations, expressions, or equations."
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "2", 
+      "subcategory": "Understand addition as putting together and adding to, and understand subtraction as taking apart and away from.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Solve addition and subtraction word problems, and add and subtract within 10, e.g., by using objects or drawings to represent the problem."
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "3", 
+      "subcategory": "Understand addition as putting together and adding to, and understand subtraction as taking apart and away from.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Decompose numbers less than or equal to 10 into pairs in more than one way, e.g., by using objects or drawings, and record each decomposition by a drawing or equation (e.g., 5 = 2 + 3 and 5 = 4 + 1)."
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "4", 
+      "subcategory": "Understand addition as putting together and adding to, and understand subtraction as taking apart and away from.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "For any number from 1 to 9, find the number than makes 10 when added to the given number, e.g., by using objects or drawings, and record the answer with a drawing or equation."
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "5", 
+      "subcategory": "Understand addition as putting together and adding to, and understand subtraction as taking apart and away from.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Fluently add and subtract within 5."
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "1", 
+      "subcategory": "Work with numbers 11-19 to gain foundations for place value.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Compose and decompose numbers from 11 to 19 into ten ones and some further ones, e.g., by using objects or drawings, and record each composition by a drawing or equation (e.g. 18 = 10 + 8); understand that these numbers are composed of ten ones and one, two, three, four, five, six, seven, eight or nine ones."
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MD"
+      ], 
+      "code": "1", 
+      "subcategory": "Describe and compare measurable attributes.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Describe and measure attributes of objects, such as length or weight. Describe several measurable attributes of a single object."
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MD"
+      ], 
+      "code": "2", 
+      "subcategory": "Describe and compare measurable attributes.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Directly compare two objects with a measurable attribute in common, to see which object has \"more of\"/\"less of\" the attribute, and describe the difference. For example, directly compare the heights of two children and describe one child as taller/shorter."
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MD"
+      ], 
+      "code": "3", 
+      "subcategory": "Describe and compare measurable attributes.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Classify objects into given categories; count the numbers of objects in each category and sort the categories by count."
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "G"
+      ], 
+      "code": "1", 
+      "subcategory": "Identify and describe shapes (squares, circles, triangles, rectangles, hexagons, cubes, cones, cylinders, and spheres).", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": " Describe objects in the environment using names of shapes, and describe the relative positions of these objects using terms such as above, below, beside, in front of, behind, and next to."
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "G"
+      ], 
+      "code": "2", 
+      "subcategory": "Identify and describe shapes (squares, circles, triangles, rectangles, hexagons, cubes, cones, cylinders, and spheres).", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Correctly name shapes regardless of their orientations or overall size."
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "G"
+      ], 
+      "code": "3", 
+      "subcategory": "Identify and describe shapes (squares, circles, triangles, rectangles, hexagons, cubes, cones, cylinders, and spheres).", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Identify shapes as two-dimensional (lying in a plane, \"flat\") or three-dimensional (\"solid\")."
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "G"
+      ], 
+      "code": "4", 
+      "subcategory": "Analyze, compare, create, and compose shapes.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Analyze and compare two- and three-dimensional shapes, in different sizes and orientations, using informal language to describe their similarities, differences, parts (e.g. number of sides and vertices/\"corners\") and other attributes (e.g., having sides of equal length)."
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "G"
+      ], 
+      "code": "5", 
+      "subcategory": "Analyze, compare, create, and compose shapes.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Model shapes in the world by building shapes from components (e.g., sticks and clay balls) and drawing shapes."
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "G"
+      ], 
+      "code": "6", 
+      "subcategory": "Analyze, compare, create, and compose shapes.", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Compose simple shapes to form larger shapes. For example, \"can you join these two triangles with full sides touching to make a rectangle?\""
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "1", 
+      "subcategory": "Represent and solve problems involving addition and subtraction.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Use addition and subtraction within 20 to solve word problems involving situations of adding to, taking from, putting together, taking apart, and comparing, with unknowns in all positions, e.g., by using objects, drawings, and equations with a symbol for the unknown number to represent the problem."
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "2", 
+      "subcategory": "Represent and solve problems involving addition and subtraction.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Solve word problems that call for addition of three whole numbers whose sum is less than or equal to 20, e.g., by using objects, drawings, and equations with a symbol for the unknown number to represent the problem."
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "3", 
+      "subcategory": "Understand and apply properties of operations and the relationship between addition and subtraction.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Apply properties of operations as strategies to add and subtract. Examples: if 8+3=11 is known, then 3+8=11 is also known. (Commutative property of addition.) To add 2+6+4, the second two numbers can also be added to make a ten, so 2+6+4 = 2+10 = 12. (Associative property of addition.)"
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "4", 
+      "subcategory": "Understand and apply properties of operations and the relationship between addition and subtraction.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Understand subtraction as an unknown-addend problem. For example, subtract 10-8 by finding the number that makes 10 when added to 8."
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "5", 
+      "subcategory": "Add and subtract within 20.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Relate counting to addition and subtraction (e.g., by counting on 2 to add 2.)"
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "6", 
+      "subcategory": "Add and subtract within 20.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Add and subtract within 20, demonstrating fluency for addition and subtraction within 10. Use strategies such as counting on; making ten (e.g., 8+6 = 8+2+4 = 10+4 = 14); decomposing a number leading to a ten (e.g., 13-4 = 13-3-1 = 10-1 = 9); using the relationship between addition and subtraction (e.g., knowing that 8+4 = 12, one knows 12-8 = 4); and creating equivalent but easier known sums (e.g., adding 6+7 by creating the known equivalent 6+6+1 = 12+1 = 13)."
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "7", 
+      "subcategory": "Work with addition and subtraction equations.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Understand the meaning of the equal sign, and determine if equations involving addition and subtraction are true or false. For example, which of the following equations are true and which are false? 6 = 6, 7 = 8-1. 5+2 = 2+5, 4+1 = 5+2."
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "OA"
+      ], 
+      "code": "8", 
+      "subcategory": "Work with addition and subtraction equations.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Determine the unknown whole number in an addition or subtraction equation relating three whole numbers. For example, determine the unknown number that makes the equation true in each of the equations 8+?=11, 5=?-3. 6+6=?."
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "1", 
+      "subcategory": "Extend the counting sequence.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Count to 120, starting at any number less than 120. In this range, read and write numerals and represent a number of object with a written numeral."
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "2", 
+      "subcategory": "Understand place value.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Understand that the two digits of a two-digit number represent amounts of tens and ones. Understand 1.NBT2a through 1.NBT.2c as special cases."
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "2a", 
+      "subcategory": "Understand place value.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "10 can be thought of as a bundle of ones -- called a \"ten.\""
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "2b", 
+      "subcategory": "Understand place value.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "The numbers from 11 to 19 are composed of a ten and a one, two, three, four, five, six, seven, eight, or nine ones."
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "2c", 
+      "subcategory": "Understand place value.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "The numbers 10, 20, 30, 40, 50, 60, 70, 80, 90 refer to one, two, three, four, five, six, seven, eight, or nine tens (and 0 ones)."
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "3", 
+      "subcategory": "Understand place value.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Compare two two-digit numbers based on meanings of the tens and ones digits, recording the results of comparisons with the symbols < and >."
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "4", 
+      "subcategory": "Use place value understanding and properties of operations to add and subtract.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Add within 100, including adding a two-digit number and a one-digit number, and adding a two-digit number and a multiple of 10, using concrete models or drawings and strategies based on place value, properties of operations, and/or the relationship between addition and subtraction; relate the strategy to a written method and explain the reasoning used. Understand that in adding two-digit numbers, one adds tens, ones and ones; and sometimes it is necessary to compose a ten."
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "5", 
+      "subcategory": "Use place value understanding and properties of operations to add and subtract.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Given a two-digit number, mentally find 10 more or 10 less than the number, without having to count; explain the reasoning used."
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "NBT"
+      ], 
+      "code": "6", 
+      "subcategory": "Use place value understanding and properties of operations to add and subtract.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Subtract multiples of 10 in the range 10-90 from multiples of 10 in the range 10-90 (positive or zero differences), using concrete models or drawings and strategies based on place value, properties of operations, and/or the relationship between addition and subtraction; relate the strategy to a written method and explain the reasoning used."
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MD"
+      ], 
+      "code": "1", 
+      "subcategory": "Measure lengths indirectly and by iterating length units.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Order three objects by length; compare the lengths of two objects indirectly by using a third object."
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MD"
+      ], 
+      "code": "2", 
+      "subcategory": "Measure lengths indirectly and by iterating length units.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Express the length of an object as a whole number of length units, by laying multiple copies of a shorter object (the length unit) end to end; understand that the length measurement of an object is the number of same-size length units that span it with no gaps or overlaps. Limit to contexts where the object being measures is spanned by a whole number of length units with no gaps or overlaps."
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MD"
+      ], 
+      "code": "3 ", 
+      "subcategory": "Tell and write time.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Tell and write time in hours and half-hours using analog and digital clocks."
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MD"
+      ], 
+      "code": "4", 
+      "subcategory": "Represent and interpret data.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Organize, represent, and interpret data with up to three categories; ask and answer questions about the total number of data points, how many in each category, and how many more or less are in one category than in another."
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "G"
+      ], 
+      "code": "1", 
+      "subcategory": "Reason with shapes and their attributes.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Distinguish between defining attributes (e.g. triangles are closed and three-sided) versus non-defining attributes (e.g. color, orientation, overall size); build and draw shapes to possess defining atributes."
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "G"
+      ], 
+      "code": "2", 
+      "subcategory": "Reason with shapes and their attributes.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Compose two-dimensional shapes (rectangles, squares, trapezoids, triangles, half-circles, and quarter-circles) or three-dimensional shapes (cub"
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "G"
+      ], 
+      "code": "3", 
+      "subcategory": "Reason with shapes and their attributes.", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CCM"
+      ], 
+      "description": "Partition circles and rectangles into two and four equal shares, describe the shares using the words halves, fourths, and quarters, and use the phrases half of, fourth of, and quarter of. Describe the whole as two of, or four of the shares. Understand for these examples that decomposing into more equal shares creates smaller shares."
+    }
+  }
+]
