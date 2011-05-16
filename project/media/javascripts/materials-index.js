@@ -201,6 +201,7 @@ oer.materials.index.init_align_form = function() {
                 oer.align_form.reset();
             } else {
                 oer.align_form.init();
+                
             }
             $user_tags.empty();
             $.getJSON($form.attr("action").replace("/add/", "/get-tags/"), function(data, status) {
