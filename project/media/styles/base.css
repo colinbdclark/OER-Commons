@@ -211,6 +211,21 @@ div.box h3 {
   box-shadow: 2px 2px 3px #999;
 }
 
+.ui-dialog.dropdown .ui-dialog-titlebar {
+  display: none;
+}
+
+.ui-dialog.dropdown {
+  border-top: none;
+  position: fixed;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  -webkit-border-top-left-radius: 0px;
+  -webkit-border-top-right-radius: 0px;
+  -moz-border-top-left-radius: 0px;
+  -moz-border-top-right-radius: 0px;
+}
+
 .ui-dialog.loading .ui-dialog-title {
   padding-right: 22px;
   background: url(../images/ajax-loader.gif) no-repeat 100% 50%;

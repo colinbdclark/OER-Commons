@@ -30,12 +30,15 @@ oer.login.show_popup = function(callback) {
     var $body = $("body");
     if (!$popup.length) {
         $popup = $('<div id="login-popup"></div>').appendTo($body).dialog({
-        modal : true,
+        modal : false,
         draggable : false,
         resizable : false,
         title : "Log in",
         width : 265,
-        dialogClass : "loading"
+        dialogClass : "loading dropdown",
+        position: ["center", "top"],
+        show: "fade",
+        hide: "fade"
         });
         $popup.load("/login/form", function(response) {
             $popup.dialog("widget").removeClass("loading");
@@ -65,7 +68,8 @@ oer.login.show_popup = function(callback) {
                             $global_error_ct.append('<label class="error">' + response.errors.__all__ + '</label>');
                             delete response.errors.__all__
                         }
-                        validator.showErrors(response.errors);
+//                        validator.showErrors(response.errors);
+                        $popup.dialog("widget").effect("bounce", {"direction": "left", "distance": 20}, 200);
                     }
                     $popup.dialog("widget").removeClass("loading");
                     $button.button("option", "label", "Log in");
@@ -74,7 +78,6 @@ oer.login.show_popup = function(callback) {
                 return false;
             }
             });
-            $popup.dialog();
         });
     } else {
         $popup.dialog("open");
