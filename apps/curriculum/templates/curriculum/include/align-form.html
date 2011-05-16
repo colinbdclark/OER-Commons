@@ -1,0 +1,23 @@
+<form action="/" method="post" id="align-form" name="align-form" class="formatted">
+<div class="field standard">
+   <label for="id_curriculum_standard">Standard:</label>
+   <select name="standard" id="id_curriculum_standard" data-source="{% url curriculum:list_standards %}">
+     
+   </select>
+</div>
+<div class="field grade">
+   <label for="id_curriculum_grade">Grade:</label>
+   <select name="grade" id="id_curriculum_grade" data-source="{% url curriculum:list_grades %}"></select>
+</div>
+<div class="field category">
+   <label for="id_curriculum_category">Learning Objective Category:</label>
+   <select name="category" id="id_curriculum_category" data-source="{% url curriculum:list_categories %}"></select>
+</div>
+<div class="field tag">
+   <label for="id_curriculum_tag">Alignment Tag:</label>
+   <select name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_tags %}"></select>
+</div>
+<div class="buttons">
+  <input type="submit" value="Save" />
+</div>
+</form>
