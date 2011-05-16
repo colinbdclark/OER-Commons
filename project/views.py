@@ -82,10 +82,10 @@ def frontpage(request):
     microsites_ids = tuple(microsites.values_list("id", flat=True))
 
     featured_k12 = SearchQuerySet().filter(featured=True, grade_levels__in=(1, 2)).exclude(microsites__in=microsites_ids).order_by("-featured_on").load_all()[:3]
-    featured_k12 = [r.object for r in featured_k12]
+    featured_k12 = [r.object for r in featured_k12 if r]
 
     featured_highered = SearchQuerySet().filter(featured=True, grade_levels=3).exclude(microsites__in=microsites_ids).order_by("-featured_on").load_all()[:3]
-    featured_highered = [r.object for r in featured_highered]
+    featured_highered = [r.object for r in featured_highered if r]
 
     return direct_to_template(request, "frontpage.html",
                               dict(tagcloud=tagcloud,
