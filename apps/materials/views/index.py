@@ -324,6 +324,11 @@ def populate_item_from_search_result(result):
         item["toolbar_view_url"] = reverse(
                                "materials:%s:toolbar_view_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
+        item["align_url"] = reverse("curriculum:align", args=(
+                                    result.app_label,
+                                    result.model_name,
+                                    result.pk,
+                                ))
     else:
         item["get_absolute_url"] = result.object.get_absolute_url()
     return item

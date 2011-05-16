@@ -17,6 +17,9 @@
         {% if item.add_tags_url %}
           <li><a class="tag-item" href="{{ item.add_tags_url }}">Tag this item</a></li>
         {% endif %}
+        {% if item.align_url %}
+          <li><a class="align-item" href="{{ item.align_url }}">Align this item</a></li>
+        {% endif %}
       </ul>
       {% endspaceless %}
     </dd>

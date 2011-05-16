@@ -3,6 +3,7 @@
 {% load savedsearches_tags %}
 {% load sendthis_tags %}
 {% load tags_tags %}
+{% load curriculum_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -52,6 +53,10 @@
 
   <div id="add-tags-dialog" style="display: none;">
       {% add_tags_form %}
+  </div>
+
+  <div id="align-dialog" style="display: none;">
+      {% align_form %}
   </div>
   
 {% endblock %}

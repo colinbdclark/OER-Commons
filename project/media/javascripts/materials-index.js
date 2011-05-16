@@ -165,6 +165,59 @@ oer.materials.index.init_tags_form = function() {
     oer.tags_form.init();
 };
 
+oer.materials.index.init_align_form = function() {
+    var $dialog = $("#align-dialog").dialog({
+    modal : true,
+    width : "auto",
+    height : "auto",
+    autoOpen : false,
+    resizable : false
+    });
+
+    var $document = $(document);
+    $document.bind(oer.align_form.LOADING_EVENT, function(e) {
+        $dialog.dialog("widget").addClass("loading");
+    });
+    $document.bind(oer.align_form.LOADED_EVENT, function(e) {
+        $dialog.dialog("widget").removeClass("loading");
+    });
+
+    var $form = $("#align-form");
+
+    var $materials_index = $("#content div.materials-index");
+    $materials_index.delegate("dl.actions a.align-item", "click", function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $menu = $this.closest("dl.actions");
+        $menu.removeClass("active");
+        var $item = $this.closest("div.item");
+        
+        $document.unbind(oer.align_form.SUBMITTED_EVENT);
+        $document.bind(oer.align_form.SUBMITTED_EVENT, function(e, data) {
+            console.log(data);
+            if (data.status === "success") {
+                oer.materials.index.item_message($item, data.message);
+                $dialog.dialog("close");
+            }
+        });
+        
+        oer.login.check_login(function() {
+            $form.hide();
+            $form.attr("action", $this.attr("href"));
+            var initialized = !!$form.find("#id_curriculum_standard option").length;
+            if (initialized) {
+                oer.align_form.reset();
+            } else {
+                oer.align_form.init();
+                
+            }
+            $form.show();
+            $dialog.dialog("option", "title", "Align " + $item.find("h3 a").first().text());
+            $dialog.dialog("open");
+        });
+    });
+};
+
 oer.materials.index.init = function() {
 
     oer.materials.index.init_action_panel();
@@ -173,6 +226,7 @@ oer.materials.index.init = function() {
     oer.materials.index.init_item_links();
     oer.materials.index.init_actions_menus();
     oer.materials.index.init_tags_form();
+    oer.materials.index.init_align_form();
 
     var $filters_portlet = $("div.portlet.index-filters");
 
