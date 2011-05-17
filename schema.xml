@@ -99,6 +99,7 @@
     
     <field name="member_activities" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="rating" type="sfloat" indexed="true" stored="true" multiValued="false" />
+    <field name="alignment_tags" type="sint" indexed="true" stored="true" multiValued="true" />
 
     <field name="saved_by" type="sint" indexed="true" stored="true" multiValued="true" />
     <field name="tagged_by" type="sint" indexed="true" stored="true" multiValued="true" />
