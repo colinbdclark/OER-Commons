@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
+from haystack.sites import site
 from utils.decorators import login_required
 
 
@@ -55,6 +56,9 @@ def align(request, app_label, model, object_id):
     if form.is_valid():
         form.save()
         tag = form.cleaned_data["tag"]
+        
+        site.update_object(item)
+        
         return dict(status="success",
                     message=u"Item was tagged with %s" % tag.full_code)
     else:
@@ -62,24 +66,30 @@ def align(request, app_label, model, object_id):
     
     
 @ajax_request    
-def list_standards(request):
+def list_standards(request, existing=False):
+    if existing:
+        ids = TaggedMaterial.objects.all().values_list("tag__standard", flat=True).order_by().distinct()
+        return dict(options=list(Standard.objects.filter(id__in=ids).values("id", "name")))
     return dict(options=list(Standard.objects.values("id", "name")))
 
 
 @ajax_request
-def list_grades(request):
+def list_grades(request, existing=False):
     standard = request.POST.get("standard")
     try:
         standard = Standard.objects.get(id=int(standard))
     except:
         return HttpResponse(u"", status=400)
-    
-    grades = AlignmentTag.objects.filter(standard=standard).values_list("grade", flat=True).order_by().distinct() 
-    return dict(options=list(Grade.objects.filter(id__in=grades).values("id", "name")))
+
+    if existing:
+        ids = TaggedMaterial.objects.filter(tag__standard=standard).values_list("tag__grade", flat=True).order_by().distinct()
+    else:
+        ids = AlignmentTag.objects.filter(standard=standard).values_list("grade", flat=True).order_by().distinct() 
+    return dict(options=list(Grade.objects.filter(id__in=ids).values("id", "name")))
 
 
 @ajax_request
-def list_categories(request):
+def list_categories(request, existing=False):
     standard = request.POST.get("standard")
     try:
         standard = Standard.objects.get(id=int(standard))
@@ -92,13 +102,18 @@ def list_categories(request):
     except:
         return HttpResponse(u"", status=400)
 
-    categories = AlignmentTag.objects.filter(standard=standard,
-                                             grade=grade).values_list("category", flat=True).order_by().distinct() 
-    return dict(options=list(LearningObjectiveCategory.objects.filter(id__in=categories).values("id", "name")))
+    if existing:
+        ids = TaggedMaterial.objects.filter(tag__standard=standard,
+                                            tag__grade=grade).values_list("tag__category", flat=True).order_by().distinct()
+    else:
+        ids = AlignmentTag.objects.filter(standard=standard,
+                                          grade=grade).values_list("category",
+                                                                   flat=True).order_by().distinct() 
+    return dict(options=list(LearningObjectiveCategory.objects.filter(id__in=ids).values("id", "name")))
 
 
 @ajax_request
-def list_tags(request):
+def list_tags(request, existing=False):
     standard = request.POST.get("standard")
     try:
         standard = Standard.objects.get(id=int(standard))
@@ -117,8 +132,14 @@ def list_tags(request):
     except:
         return HttpResponse(u"", status=400)
 
-    tags = AlignmentTag.objects.filter(standard=standard, grade=grade,
-                                       category=category) 
+    if existing:
+        ids = TaggedMaterial.objects.filter(tag__standard=standard,
+                                            tag__grade=grade,
+                                            tag__category=category).values_list("tag", flat=True).order_by().distinct()
+        tags = AlignmentTag.objects.filter(id__in=ids)
+    else:
+        tags = AlignmentTag.objects.filter(standard=standard, grade=grade,
+                                           category=category) 
     
     optgroups = []
     items = []
@@ -142,7 +163,8 @@ def list_tags(request):
             title = tag.subcategory
             items = []
         items.append(dict(id=tag.id,
-                          name=unicode(tag)))
+                          name=unicode(tag),
+                          code=tag.full_code))
         
     if title and items:
         # Add the last optgroup to final results

@@ -3,7 +3,7 @@
 }
 
 #align-form label {
-  display: block;
+  display: inline-block;
 }
 
 #align-form div.grade,#align-form div.category,#align-form div.tag, #align-form div.buttons {
