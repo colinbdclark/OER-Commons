@@ -23,11 +23,14 @@ oer.materials.toolbar.resize_iframe = function() {
 };
 
 oer.materials.toolbar.init_tags = function() {
+    var $toolbar = $("div.toolbar");
+
     var $dialog = $("#add-tags-dialog").dialog({
-    modal : true,
+    modal : false,
     width : 400,
     autoOpen : false,
-    resizable : false
+    resizable : false,
+    position: [$toolbar.width() - 400 - 30, $toolbar.height() + 10]
     });
 
     var $form = $("#add-tags-form");
