@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 {% load compress %}
 {% load flatblock_tags %}
-<html lang="{{ request.LANGUAGE_CODE }}">
+<html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8"/>
     <title>{% block title %}{% if page_title %}{{ page_title }}{% if page_subtitle %}: {{ page_subtitle|safe }}{% endif %} | {% endif %}OER Commons{% endblock %}</title>
     {% block meta_description %}{% endblock %}
     <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico"/>
     {% include "include/css.html" %}
+    {% include "include/modernizr.html" %}
     {% block extra-css %}{% endblock %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
