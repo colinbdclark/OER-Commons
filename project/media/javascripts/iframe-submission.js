@@ -39,7 +39,8 @@ oer.iframe_submission.content_submission.init = function() {
             if (response.status === "success") {
                 $form.hide();
                 $container.find("ul.stepy-titles").hide();
-                $container.append($("<p>" + response.message + "</p>"));
+                var $message = $("<div>").addClass("success-message").html(response.message);
+                $container.append($message);
             }
         });
     });

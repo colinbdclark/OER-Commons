@@ -1,6 +1,8 @@
+from annoying.decorators import ajax_request
 from django import forms
 from django.forms.models import ModelForm
-from django.http import HttpResponse, Http404
+from django.http import Http404
+from django.template.loader import render_to_string
 from materials.models.common import GeneralSubject, GradeLevel, Language, \
     GeographicRelevance, MediaFormat, Collection, Keyword
 from materials.models.course import Course, CourseMaterialType
@@ -10,17 +12,16 @@ from materials.views.forms import SubmissionFormBase, AuthorsField, \
 from materials.views.forms.course import InstitutionField
 from utils.decorators import login_required
 from utils.forms import AutocompleteListField
-import cjson
 
 
-class SubmissionForm(SubmissionFormBase, ModelForm):    
+class SubmissionForm(SubmissionFormBase, ModelForm):
 
     url = forms.URLField(widget=forms.HiddenInput())
-    
+
     title = forms.CharField(widget=forms.TextInput(attrs={"class": "wide"}))
-    
+
     abstract = forms.CharField(widget=forms.Textarea(attrs={"class": "wide"}))
-    
+
     institution = InstitutionField(required=False,
                                   widget=forms.TextInput(
                                   attrs={"class": "wide"}))
@@ -68,7 +69,7 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
                                        required=False,
                                        widget=forms.Select())
 
-    license_custom_name = forms.CharField(required=False, 
+    license_custom_name = forms.CharField(required=False,
                                           widget=forms.HiddenInput())
 
     license_custom_url = forms.URLField(label=u"License URL:",
@@ -117,7 +118,7 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
         model = Course
         fields = ["title", "url", "abstract", "institution",
                   "authors", "keywords", "general_subjects",
-                  "grade_levels", "material_types", "media_formats", 
+                  "grade_levels", "material_types", "media_formats",
                   "languages", "geographic_relevance",
                   "license_type", "license_cc", "license_cc_old",
                   "license_custom_name", "license_custom_url", "license_description",
@@ -125,12 +126,13 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
 
 
 @login_required
+@ajax_request
 def submit(request):
-    
+
     if request.method == "POST":
-        
+
         form = SubmissionForm(request.POST)
-        
+
         if form.is_valid():
             object = form.save(commit=False)
             object.creator = request.user
@@ -138,12 +140,14 @@ def submit(request):
             object.collection = Collection.objects.get_or_create(name=u"Individual Authors")[0]
             object.save()
             form.save_m2m()
-            return HttpResponse(cjson.encode(dict(status="success",
-                                                  message=u"You have successfully submitted %s to OER Commons." % object.title)),
-                                content_type="application/json")
+            total_items_submitted = Course.objects.filter(creator=request.user).count()
+            return dict(status="success",
+                        message=render_to_string("materials/iframe-submission/success-message.html",
+                                                 dict(title=object.title,
+                                                      total_items_submitted=total_items_submitted))
+                                )
         else:
-            return HttpResponse(cjson.encode(dict(status="error",
-                                                  message=u"Please correct the indicated errors.")),
-                                content_type="application/json")
+            return dict(status="error",
+                        message=u"Please correct the indicated errors.")
 
     raise Http404()
