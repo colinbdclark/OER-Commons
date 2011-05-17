@@ -67,14 +67,16 @@ oer.align_form.init_dropdown = function($dropdown) {
     var $document = $(document);
     var $field = $dropdown.closest("div.field");
     var $next_fields = $field.nextAll("div.field");
+    var $next_dropdowns = $next_fields.find("select"); 
     var $prev_fields = $field.prevAll("div.field");
     var $prev_dropdowns = $prev_fields.find("select");
     var $next_field = $next_fields.first();
-    var $next_dropdown = $next_field.find("select");
+    var $next_dropdown = $next_dropdowns.first();
     $dropdown.change(function(e) {
        var value = $dropdown.val();
        if (value === "-") {
            $next_fields.hide();
+           $next_dropdowns.empty();
        } else {
            var data = {};
            data[$dropdown.attr("name")] = value;
@@ -83,10 +85,12 @@ oer.align_form.init_dropdown = function($dropdown) {
               data[$d.attr("name")] = $d.val();  
            });
            $document.trigger(oer.align_form.LOADING_EVENT);
+           $field.addClass("loading");
            $.post($next_dropdown.data("source"), data, function(data) {
               oer.align_form.load_options($next_dropdown, data);
               $next_field.show();
               $document.trigger(oer.align_form.LOADED_EVENT);
+              $field.removeClass("loading");
            });
        }
     });
@@ -98,13 +102,20 @@ oer.align_form.load_options = function($dropdown, data) {
     if ("options" in data) {
         $.each(data.options, function(i, item) {
             var $option = $("<option>").val(item.id).text(item.name);
+            if ("code" in item) {
+                $option.data("code", item.code);
+            }
             $dropdown.append($option);
         });
     } else if ("optgroups" in data) {
         $.each(data.optgroups, function(i, optgroup) {
             var $optgroup = $("<optgroup>").attr("label", optgroup.title);
             $.each(optgroup.items, function(j, item) {
-                $optgroup.append($("<option>").val(item.id).text(item.name));
+                var $option = $("<option>").val(item.id).text(item.name);
+                if ("code" in item) {
+                    $option.data("code", item.code);
+                }
+                $optgroup.append($option);
             });
             $dropdown.append($optgroup);
         });

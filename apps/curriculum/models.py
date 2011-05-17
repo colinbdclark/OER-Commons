@@ -78,9 +78,8 @@ class LearningObjectiveCategory(models.Model):
 class AlignmentTagManager(models.Manager):
 
     def get_by_natural_key(self, standard_code, grade_code, category_code, code):
-        category = LearningObjectiveCategory.objects.get_by_natural_key(
-                                (standard_code, grade_code, category_code))
-        return self.get(category=category, code=code)
+        return self.get(standard__code=standard_code, grade__code=grade_code,
+                        category__code=category_code, code=code)
 
 
 class AlignmentTag(models.Model):
