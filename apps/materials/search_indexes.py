@@ -43,6 +43,14 @@ class ByField(MultiValueField):
         return value.values_list("user__id", flat=True)
 
 
+class AlignmentTagsField(MultiValueField):
+
+    def convert(self, value):
+        if isinstance(value, list):
+            return list(set(value))
+        return value.values_list("tag__id", flat=True).order_by().distinct()
+
+
 class MaterialSearchIndex(SearchIndex):
 
     text = CharField(document=True, use_template=True)
@@ -74,6 +82,8 @@ class MaterialSearchIndex(SearchIndex):
     is_displayed = BooleanField(model_attr="is_displayed")
     
     visits = IntegerField(model_attr="visits")
+
+    alignment_tags = AlignmentTagsField(model_attr="alignment_tags") 
 
 
 class CourseIndex(MaterialSearchIndex):
