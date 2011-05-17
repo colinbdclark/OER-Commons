@@ -1,11 +1,11 @@
 from celery.decorators import task
-from haystack.sites import site
 import requests
 import urllib
 
 
 @task
 def check_url_status(item):
+    from haystack.sites import site
 
     url = item.url
     url = url.strip()
