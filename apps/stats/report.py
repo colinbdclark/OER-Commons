@@ -11,14 +11,17 @@ def send_report(interval=datetime.timedelta(days=7)):
         return
     now = datetime.datetime.now()
     from_date = now - interval
+    from_date = from_date.date()
+    to_date = from_date + interval
 
     stats = []
     for title, getter in STATS:
-        stats.append(dict(title=title, value=getter(from_date=from_date)))
+        stats.append(dict(title=title, value=getter(from_date=from_date,
+                                                    until_date=to_date)))
     
     body = render_to_string("stats/emails/report.html",
                                dict(stats=stats, from_date=from_date,
-                                    now=now))
+                                    to_date=to_date))
     message = EmailMessage(u"OER Commons Statisticts",
                            body, None, send_to)
     message.content_subtype = "html"

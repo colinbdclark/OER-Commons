@@ -1,7 +1,7 @@
 <html>
 <body>
 <p>OER Commons Statisticts</p>
-<p>{{ from_date|date:"DATETIME_FORMAT" }} - {{ now|date:"DATETIME_FORMAT" }}</p>
+<p>{{ from_date|date:"DATE_FORMAT" }} - {{ to_date|date:"DATE_FORMAT" }}</p>
 <table>
   <tbody>
     {% for stat in stats %}
