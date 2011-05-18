@@ -128,5 +128,5 @@ class TaggedMaterial(models.Model):
                                   unicode(self.user))
 
     class Meta:
-        unique_together = ("user", "content_type", "object_id")
+        unique_together = ("user", "tag", "content_type", "object_id")
         
