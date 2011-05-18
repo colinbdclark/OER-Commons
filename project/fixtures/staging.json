@@ -42,5 +42,23 @@
       "header": "", 
       "slug": "conversion-view-item"
     }
-  }
+  },
+  {
+    "pk": 7, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "", 
+      "header": "", 
+      "slug": "registration-tracking-step-1"
+    }
+  },  
+  {
+    "pk": 8, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "", 
+      "header": "", 
+      "slug": "registration-tracking-step-2"
+    }
+  } 
 ]

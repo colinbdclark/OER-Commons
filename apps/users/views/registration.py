@@ -1,13 +1,14 @@
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from honeypot.decorators import check_honeypot
-from users.backend import encrypt_password
+from users.backend import encrypt_password, BcryptBackend
 from users.models import MEMBER_ROLES, RegistrationConfirmation, Profile
 import mailchimp
 
@@ -217,13 +218,24 @@ def confirm(request):
         if form.is_valid():
             confirmation = RegistrationConfirmation.objects.get(key=form.cleaned_data["code"])
             confirmation.confirm()
-            messages.success(request, u"Thank you for registration. Your account was created. You may enter the site now.")
-            return HttpResponseRedirect(reverse("users:login"))
+            user = confirmation.user
+            backend = BcryptBackend()
+            user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            auth_login(request, user)
+            messages.success(request, u"Thank you for registration. Your account was created.")
+            return HttpResponseRedirect(reverse("users:welcome"))
         else:
             messages.error(request, u"Please correct the indicated errors.")
 
     return direct_to_template(request, "users/registration-confirm.html",
                               locals())
+
+
+def welcome(request):
+    
+    page_title = u"Welcome to OER Commons"
+    
+    return direct_to_template(request, "users/welcome.html", locals())
 
 
 def resend(request):

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load flatblock_tags %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+  <p>Hi {{ request.user.first_name }},</p>
+  {% endif %}
+
+  <p>Welcome to OER Commons, a place for you to find and share open educational resources.</p>
+
+  <p>ISKME created OER Commons, publicly launched in February 2007, to provide support for and build a knowledge base around the use and reuse of open educational resources (OER).</p> 
+
+  <p>Learn more about <a href="{% url information %}">OER Commons</a>, <a href="{% url materials:browse %}">browse content</a>, or <a href="{% url contribute %}">contribute</a> your own content to OER commons.</p>
+
+  <p>Thank you for registering for OER Commons!</p>
+  
+  {% flatblock "registration-tracking-step-2" %}
+  
+{% endblock %} 

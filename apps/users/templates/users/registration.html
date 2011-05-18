@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load honeypot %}
+{% load flatblock_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -31,4 +32,7 @@
       <input type="submit" class="button" value="Register" />
     </div>
   </form>
+
+  {% flatblock "registration-tracking-step-1" %}
+  
 {% endblock %}

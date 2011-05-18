@@ -42,5 +42,23 @@
       "header": "", 
       "slug": "conversion-view-item"
     }
-  }
+  },
+  {
+    "pk": 7, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<!-- Google Code for Registration - Lead Conversion Page -->\r\n<script type=\"text/javascript\">\r\n/* <![CDATA[ */\r\nvar google_conversion_id = 1049115598;\r\nvar google_conversion_language = \"en\";\r\nvar google_conversion_format = \"2\";\r\nvar google_conversion_color = \"ffffff\";\r\nvar google_conversion_label = \"c2BSCNK2gQIQzveg9AM\";\r\nvar google_conversion_value = 0;\r\n/* ]]> */\r\n</script>\r\n<script type=\"text/javascript\" src=\"http://www.googleadservices.com/pagead/conversion.js\">\r\n</script>\r\n<noscript>\r\n<div style=\"display:inline;\">\r\n<img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\" src=\"http://www.googleadservices.com/pagead/conversion/1049115598/?label=c2BSCNK2gQIQzveg9AM&amp;guid=ON&amp;script=0\"/>\r\n</div>\r\n</noscript>", 
+      "header": "", 
+      "slug": "registration-tracking-step-1"
+    }
+  },  
+  {
+    "pk": 8, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<!-- Google Code for Registration - Conversion Conversion Page -->\r\n<script type=\"text/javascript\">\r\n/* <![CDATA[ */\r\nvar google_conversion_id = 1049115598;\r\nvar google_conversion_language = \"en\";\r\nvar google_conversion_format = \"2\";\r\nvar google_conversion_color = \"ffffff\";\r\nvar google_conversion_label = \"Tbk9CMq3gQIQzveg9AM\";\r\nvar google_conversion_value = 0;\r\n/* ]]> */\r\n</script>\r\n<script type=\"text/javascript\" src=\"http://www.googleadservices.com/pagead/conversion.js\">\r\n</script>\r\n<noscript>\r\n<div style=\"display:inline;\">\r\n<img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\" src=\"http://www.googleadservices.com/pagead/conversion/1049115598/?label=Tbk9CMq3gQIQzveg9AM&amp;guid=ON&amp;script=0\"/>\r\n</div>\r\n</noscript>", 
+      "header": "", 
+      "slug": "registration-tracking-step-2"
+    }
+  } 
 ]
