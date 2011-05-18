@@ -183,7 +183,8 @@ oer.materials.index.init_align_form = function() {
     });
 
     var $form = $("#align-form");
-
+    var $user_tags = $("#align-user-tags");
+    
     var $materials_index = $("#content div.materials-index");
     $materials_index.delegate("dl.actions a.align-item", "click", function(e) {
         e.preventDefault();
@@ -191,15 +192,6 @@ oer.materials.index.init_align_form = function() {
         var $menu = $this.closest("dl.actions");
         $menu.removeClass("active");
         var $item = $this.closest("div.item");
-        
-        $document.unbind(oer.align_form.SUBMITTED_EVENT);
-        $document.bind(oer.align_form.SUBMITTED_EVENT, function(e, data) {
-            console.log(data);
-            if (data.status === "success") {
-                oer.materials.index.item_message($item, data.message);
-                $dialog.dialog("close");
-            }
-        });
         
         oer.login.check_login(function() {
             $form.hide();
@@ -209,9 +201,14 @@ oer.materials.index.init_align_form = function() {
                 oer.align_form.reset();
             } else {
                 oer.align_form.init();
-                
             }
-            $form.show();
+            $user_tags.empty();
+            $.getJSON($form.attr("action").replace("/add/", "/get-tags/"), function(data, status) {
+                $.each(data.tags, function(index, tag) {
+                    $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
+                });
+                $form.show();
+            });
             $dialog.dialog("option", "title", "Align " + $item.find("h3 a").first().text());
             $dialog.dialog("open");
         });
