@@ -24,17 +24,11 @@ class TagResourceForm(forms.Form):
             return
         content_type = ContentType.objects.get_for_model(self.instance)
         object_id = self.instance.id
-        try:
-            tagged = TaggedMaterial.objects.get(user=self.user,
-                                             content_type=content_type,
-                                             object_id=object_id)
-            tagged.tag = tag
-            tagged.save()
-        except TaggedMaterial.DoesNotExist:
-            TaggedMaterial.objects.create(user=self.user,
-                                          tag=tag,
-                                          content_type=content_type,
-                                          object_id=object_id)
+        tagged, created = TaggedMaterial.objects.get_or_create(user=self.user,
+                                                     tag=tag,
+                                                     content_type=content_type,
+                                                     object_id=object_id)
+        return tagged
 
 
 @login_required
@@ -54,15 +48,49 @@ def align(request, app_label, model, object_id):
 
     form = TagResourceForm(request.POST, instance=item, user=user)
     if form.is_valid():
-        form.save()
+        tagged = form.save()
         tag = form.cleaned_data["tag"]
         
         site.update_object(item)
         
         return dict(status="success",
-                    message=u"Item was tagged with %s" % tag.full_code)
+                    tag=dict(id=tagged.id, code=tag.full_code))
     else:
         return dict(status="error")
+    
+
+@login_required
+@ajax_request
+def list_user_tags(request, app_label, model, object_id):
+
+    content_type = get_object_or_404(ContentType, app_label=app_label,
+                                     model=model)
+    model = content_type.model_class()
+    object_id = int(object_id)
+        
+    tags = []
+    for tagged in TaggedMaterial.objects.filter(content_type=content_type,
+                                                object_id=object_id,
+                                                user=request.user).select_related():
+        tag = tagged.tag
+        tags.append(dict(id=tagged.id, code=tag.full_code))
+    
+    return dict(tags=tags)
+
+
+@login_required
+@ajax_request
+def delete_tag(request):
+    if request.method != "POST":
+        raise Http404()
+    
+    try:
+        tagged = TaggedMaterial.objects.get(id=int(request.POST["id"]))
+    except:
+        return dict(status="error")
+    
+    tagged.delete()
+    return dict(status="success")
     
     
 @ajax_request    
