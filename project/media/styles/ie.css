@@ -32,3 +32,10 @@
 .advanced-search .filter dd {
   background: none !important;
 }
+
+.toolbar .stars,
+.toolbar li,
+.toolbar li a {
+  zoom: 1;
+  display: inline; 
+}
