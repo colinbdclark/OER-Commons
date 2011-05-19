@@ -16,8 +16,17 @@ oer.content_submission.init_autocomplete = function() {
     function extractLast( term ) {
         return split( term ).pop();
     }
-    
-    $("#id_authors").autocomplete({
+
+    var $authors_input = $("#id_authors");
+    var $copyright_holder_input = $("#id_copyright_holder");
+    $authors_input.focusout(function(e) {
+        var authors_value = $authors_input.val();
+        if ($copyright_holder_input.val() === "") {
+            $copyright_holder_input.val(authors_value); 
+        }
+    });
+
+    $authors_input.autocomplete({
         source: function( request, response ) {
             $.getJSON( "/autocomplete/materials/author/name", {
                 term: extractLast( request.term )
