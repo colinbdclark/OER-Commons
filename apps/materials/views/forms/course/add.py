@@ -88,17 +88,13 @@ class AddForm(SubmissionFormBase, ModelForm):
                                        required=False,
                                        widget=forms.Select())
 
-    license_custom_name = forms.CharField(label=u"License Name:",
-                        required=False,
-                        widget=forms.TextInput(attrs={"class": "text wide"}))
-
     license_custom_url = forms.URLField(label=u"License URL:",
                         required=False,
                         widget=forms.TextInput(attrs={"class": "text wide"}))
 
     license_description = forms.CharField(label=u"License Description:",
                         required=False,
-                        help_text=u"Please enter any additional you might have about the license.",
+                        help_text=u"Please enter any additional information you might have about the license.",
                         widget=forms.Textarea(attrs={"class": "text wide"}))
 
     copyright_holder = forms.CharField(label=u"License / Copyright Holder:",
@@ -130,7 +126,7 @@ class AddForm(SubmissionFormBase, ModelForm):
                   "grade_levels", "material_types", "media_formats", 
                   "languages", "geographic_relevance",
                   "license_type", "license_cc", "license_cc_old",
-                  "license_custom_name", "license_custom_url", "license_description",
+                  "license_custom_url", "license_description",
                   "copyright_holder", "license"]
 
 
@@ -262,7 +258,7 @@ class AddFormStaff(DerivedFields, PrePostRequisitesFields, AddForm):
                   "postrequisite_2",
                   "featured", "in_rss", "rss_description", "rss_timestamp",
                   "license_type", "license_cc", "license_cc_old",
-                  "license_custom_name", "license_custom_url", "license_description",
+                  "license_custom_url", "license_description",
                   "copyright_holder", "license"]
 
 

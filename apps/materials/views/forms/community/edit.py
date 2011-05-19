@@ -42,7 +42,7 @@ class EditForm(AddFormStaff):
                   "grade_levels", "languages", "geographic_relevance",
                   "community_topics", "community_types",
                   "license_type", "license_cc", "license_cc_old",
-                  "license_custom_name", "license_custom_url", "license_description",
+                  "license_custom_url", "license_description",
                   "copyright_holder", "license"]
 
 
@@ -76,7 +76,7 @@ class EditFormStaff(AddFormStaff):
                   "community_topics", "community_types",
                   "in_rss", "rss_description", "rss_timestamp",
                   "license_type", "license_cc", "license_cc_old",
-                  "license_custom_name", "license_custom_url", "license_description",
+                  "license_custom_url", "license_description",
                   "copyright_holder", "license"]
 
 
