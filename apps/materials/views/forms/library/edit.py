@@ -44,7 +44,7 @@ class EditForm(AddFormStaff):
                   "grade_levels", "material_types", "media_formats", "languages",
                   "geographic_relevance", "curriculum_standards", "is_homepage",
                   "license_type", "license_cc", "license_cc_old",
-                  "license_custom_name", "license_custom_url", "license_description",
+                  "license_custom_url", "license_description",
                   "copyright_holder", "license"]
 
 
@@ -79,7 +79,7 @@ class EditFormStaff(AddFormStaff):
                   "geographic_relevance", "curriculum_standards", "is_homepage",
                   "featured", "in_rss", "rss_description", "rss_timestamp",
                   "license_type", "license_cc", "license_cc_old",
-                  "license_custom_name", "license_custom_url", "license_description",
+                  "license_custom_url", "license_description",
                   "copyright_holder", "license"]
 
 

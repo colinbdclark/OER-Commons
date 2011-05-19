@@ -69,16 +69,13 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
                                        required=False,
                                        widget=forms.Select())
 
-    license_custom_name = forms.CharField(required=False,
-                                          widget=forms.HiddenInput())
-
     license_custom_url = forms.URLField(label=u"License URL:",
                         required=False,
                         widget=forms.TextInput(attrs={"class": "wide"}))
 
     license_description = forms.CharField(label=u"License Description:",
                         required=False,
-                        help_text=u"Please enter any additional you might have about the license.",
+                        help_text=u"Please enter any additional information you might have about the license.",
                         widget=forms.Textarea(attrs={"class": "wide"}))
 
     copyright_holder = forms.CharField(label=u"License / Copyright Holder:",
@@ -87,18 +84,6 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
                         widget=forms.TextInput(attrs={"class": "wide"}))
 
     license = forms.Field(label=u"Conditions of Use", required=False)
-
-    def clean_license_description(self):
-        value = self.cleaned_data["license_description"]
-        if self.cleaned_data.get("license_type") == "custom":
-            if not value:
-                raise forms.ValidationError(u"This field is required.")
-        else:
-            return u""
-        return value
-
-    def clean_license_custom_name(self):
-        return u"Custom License"
 
     def clean_url(self):
         value = self.cleaned_data["url"]
@@ -121,7 +106,7 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
                   "grade_levels", "material_types", "media_formats",
                   "languages", "geographic_relevance",
                   "license_type", "license_cc", "license_cc_old",
-                  "license_custom_name", "license_custom_url", "license_description",
+                  "license_custom_url", "license_description",
                   "copyright_holder", "license"]
 
 
