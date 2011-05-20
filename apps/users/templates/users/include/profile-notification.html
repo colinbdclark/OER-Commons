@@ -1,0 +1,8 @@
+{% if completeness %}
+<div class="global-notification" id="profile-notification" data-total-fields="{{ total_fields }}" data-cookie-name="{{ cookie_name }}">
+  Your profile completeness is {{ completeness }}%. <a href="{% url users:profile %}">Click here</a> to complete your profile.
+  <div class="close">
+      <a href="#" class="dashed">close this message</a>
+  </div>
+</div>
+{% endif %}
