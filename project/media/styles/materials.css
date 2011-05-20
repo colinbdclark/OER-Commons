@@ -814,3 +814,18 @@
 .no-items-match {
   font-size: 14px;
 }
+
+.portlet.dotted.align-item-tags {
+  padding-bottom: 10px; 
+}
+
+.align-item-tags ul {
+  list-style-type: none; 
+  margin-left: 5px;
+  margin-bottom: 10px;
+}
+
+.align-item-tags ul li {
+  margin: 4px 0;
+  font-weight: bold; 
+}
