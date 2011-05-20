@@ -3,7 +3,13 @@
   {% for slide in slides %}
   <li>
     <div class="wrapper {{slide.title|slugify}}"{% if slide.image %} style="background-image: url({{slide.image.url}});"{% endif %}>
-      {{ slide.html|safe }}
+      {% if slide.url %}
+        <a href="{{ slide.url }}" style="display: block; height: 100%;"></a>
+      {% else %}
+        {% if slide.html %}
+          {{ slide.html|safe }}
+        {% endif %}
+      {% endif %}
     </div>
   </li>
   {% endfor %}
