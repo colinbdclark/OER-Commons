@@ -9,6 +9,7 @@ oer.materials.view_item.init = function() {
             $navigation.find("form").attr("action", $(this).attr("href")).submit();
         });
     }
+    oer.materials.view_item.init_align_form();
 };
 
 oer.materials.view_item.init_navigation = function() {
@@ -35,5 +36,54 @@ oer.materials.view_item.init_content_actions = function() {
 
     $(document).click(function(event) {
         $content_actions.find("dl").removeClass("active");
+    });
+};
+
+oer.materials.view_item.init_align_form = function() {
+    var $dialog = $("#align-dialog").dialog({
+    modal : true,
+    width : "auto",
+    height : "auto",
+    autoOpen : false,
+    resizable : false
+    });
+
+    var $document = $(document);
+    $document.bind(oer.align_form.LOADING_EVENT, function(e) {
+        $dialog.dialog("widget").addClass("loading");
+    });
+    $document.bind(oer.align_form.LOADED_EVENT, function(e) {
+        $dialog.dialog("widget").removeClass("loading");
+    });
+
+    var $form = $("#align-form");
+    var $user_tags = $("#align-user-tags");
+    
+    var $show_form_btn = $("#show-align-form");
+    
+    $show_form_btn.click(function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $item = $("#content div.item");
+        
+        oer.login.check_login(function() {
+            $form.hide();
+            $form.attr("action", $this.attr("href"));
+            var initialized = !!$form.find("#id_curriculum_standard option").length;
+            if (initialized) {
+                oer.align_form.reset();
+            } else {
+                oer.align_form.init();
+            }
+            $user_tags.empty();
+            $.getJSON($form.attr("action").replace("/add/", "/get-tags/"), function(data, status) {
+                $.each(data.tags, function(index, tag) {
+                    $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
+                });
+                $form.show();
+            });
+            $dialog.dialog("option", "title", "Align " + $item.find("h3 a").first().text());
+            $dialog.dialog("open");
+        });
     });
 };

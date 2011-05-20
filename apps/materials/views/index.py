@@ -190,7 +190,7 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
 PATH_FILTERS = ["general_subjects", "grade_levels", "course_material_types",
                 "library_material_types", "collection", "keywords", "license",
                 "course_or_module", "community_types",
-                "community_topics", "microsite", "topics"]
+                "community_topics", "microsite", "topics", "alignment"]
 
 
 class IndexParams:
@@ -341,6 +341,7 @@ def index(request, general_subjects=None, grade_levels=None,
           microsite=None, model=None, search=False, tags=None, subjects=None,
           format=None,
           topics=None,
+          alignment=None,
           facet_fields=["general_subjects", "grade_levels", "keywords",
                         "course_material_types", "media_formats",
                         "cou_bucket", "indexed_topics"]):
