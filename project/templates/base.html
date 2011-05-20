@@ -2,6 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 {% load compress %}
 {% load flatblock_tags %}
+{% load users_tags %}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ request.LANGUAGE_CODE }}" lang="{{ request.LANGUAGE_CODE }}">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -12,6 +13,10 @@
     {% block extra-css %}{% endblock %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
+    
+    {% block global-notification %}{% profile_notification %}{% endblock %}
+
+    <div class="page">
     {% include "include/header.html" %}
 
     {% block promo %}
@@ -68,6 +73,8 @@
     </form>
     
     {% include "include/footer.html" %}
+
+    </div>
 
     {% include "include/js.html" %}
     {% compress js %}

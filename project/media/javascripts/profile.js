@@ -1,5 +1,22 @@
 oer.profile = {};
 
+oer.profile.init_profile_notification = function() {
+    var $notification = $("#profile-notification");
+    if (!$notification.length) {
+        return;
+    }
+    var total_fields = $notification.data("total-fields");
+    var cookie_name = $notification.data("cookie-name");
+    $notification.find("div.close a").click(function(e) {
+        e.preventDefault();
+        var exdate = new Date();
+        exdate.setDate(exdate.getDate() + 365);
+        var cookie_value = escape(total_fields) + "; expires=" + exdate.toUTCString();
+        document.cookie = cookie_name + "=" + cookie_value;
+        $notification.remove();
+    });
+}
+
 oer.profile.init_user_info = function() {
     var $form = $("form.user-info");
     var $header = $("table.profile th.user-info");
