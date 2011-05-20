@@ -91,3 +91,7 @@
   font-size: 14px;
   font-weight: normal; 
 }
+
+.profile #profile-notification {
+  display: none; 
+}

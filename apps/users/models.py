@@ -128,6 +128,51 @@ class Profile(models.Model):
                                                   blank=True) 
     
     wish_for_education = models.TextField(blank=True, null=True)
+    
+    
+    @property
+    def total_fields(self):
+        fields = ["first_name",
+                   "last_name",
+                   "country",
+                   "connect_with",
+                   "roles",
+                   "wish_for_education"
+                ]
+        if self.roles.filter(is_educator=True).exists():
+            fields += ["educator_student_levels", "educator_subjects"]
+        return len(fields)
+    
+    @property
+    def filled_fields(self):
+        number = 0
+        user = self.user
+        if user.first_name:
+            number += 1
+        if user.last_name:
+            number += 1
+        if self.country:
+            number += 1
+        if self.connect_with:
+            number += 1
+        if self.roles.all().exists():
+            number += 1
+        if self.roles.filter(is_educator=True).exists():
+            if self.educator_student_levels.all().exists():
+                number += 1
+            if self.educator_subjects.all().exists():
+                number += 1
+        if self.wish_for_education:
+            number +=1
+        return number
+
+    @property
+    def completeness(self):
+        total_fields = self.total_fields
+        filled_fields = self.filled_fields
+        if not total_fields or filled_fields >= total_fields:
+            return 100
+        return int(filled_fields * 100 / total_fields)
 
 
 def gen_confirmation_key():

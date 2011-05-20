@@ -15,5 +15,6 @@ $(function() {
             $honeypot_field.val(data.value);
         });
     }
+    oer.profile.init_profile_notification();
 });
 
