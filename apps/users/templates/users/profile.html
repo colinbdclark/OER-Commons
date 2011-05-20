@@ -1,47 +1,56 @@
 {% extends "base.html" %}
+{% load simplegravatar %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
-      $("form[name='profile']").validate({rules: oer.validation.rules.profile});
-      $("form[name='change-password']").validate({rules: oer.validation.rules.change_password});
+      oer.profile.init_user_info();
+      oer.profile.init_change_password();
     });
   </script>
 {% endblock %}
+
+{% block bodyclass %}no-columns profile{% endblock %}
 
 {% block above-content %}{% endblock %}
 
 {% block content %}
 
-  <form method="post" class="formatted profile" name="profile" action="{% url users:profile %}">
-  
-    <p class="change-password-link"><a href="#change-password">Change password</a></p>
+  <table cellpadding="0" cellspacing="0">
+  <thead>
+  	<tr>
+        <th></th>
+  		<th class="user-info"><span>Basic Information</span></th>
+  		<th class="change-password"><span>Change Password</span></th>
+  	</tr>
+  </thead>
+  <tbody><tr>
+    <td class="avatar">
+      {% show_gravatar request.user.email 93 %}
+    </td>
+    <td class="user-info">
+      <form method="post" class="formatted user-info" name="user-info" action="{% url users:profile %}">
+      
+        {% for field in user_info_form %}
+          {% include "include/form-field.html" %}
+        {% endfor %}
+        <div class="buttons">
+          <input type="submit" name="user-info" class="save" value="Save" />
+          <input type="submit" name="user-info" class="next" value="Save and tell us more!" />
+        </div>
+      </form>
+    </td>
+    <td class="change-password">
+      <form method="post" class="formatted change-password"  name="change-password"
+            action="{% url users:profile %}" id="change-password">
+        {% for field in change_password_form %}
+          {% include "include/form-field.html" %}
+        {% endfor %}
+        <div class="buttons">
+          <input type="submit" name="change-password" class="save" value="Change" />
+        </div>
+      </form>
+    </td>
+  </tr></tbody></table>
 
-    {% for field in profile_form %}
-      {% include "include/form-field.html" %}
-    {% endfor %}
-    <div class="field">
-      <label>My Portrait:</label>
-      <p>If want to have a picture that will be shown in your profile and portfolio page you should 
-      upload it to <a href="http://gravatar.com">Globally Recognized Avatar (gravatar)</a> service.
-      This picture will be used on all Gravatar-enabled sites that you are registered in.</p>
-    </div>
-    <div class="buttons">
-      <input type="submit" name="save-profile" class="button" value="Save profile" />
-    </div>
-  </form>
-
-  <hr class="tall" />
-
-  <form method="post" class="formatted change-password"  name="change-password"
-        action="{% url users:profile %}" id="change-password">
-    <h3>Change password</h3>
-    {% for field in change_password_form %}
-      {% include "include/form-field.html" %}
-    {% endfor %}
-    <div class="buttons">
-      <input type="submit" name="change-password" class="button" value="Change password" />
-    </div>
-  </form>
-  
 {% endblock %}

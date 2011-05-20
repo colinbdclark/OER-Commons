@@ -5,7 +5,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-from materials.models.common import GradeLevel
+from geo.models import Country
+from materials.models.common import GradeLevel, AutoCreateManyToManyField
 from users.backend import encrypt_password
 
 
@@ -17,6 +18,48 @@ MEMBER_ROLES = (
     (u'oer_administrator', _(u'Administrator')),
     (u'content_provider', _(u'Content provider')),
 )
+
+
+ONLY_COUNTRY = "country"
+WHOLE_WORLD = "world"
+CONNECT_OPTIONS = (
+    (ONLY_COUNTRY, u"Connect me only to people in my own country"),
+    (WHOLE_WORLD, u"Connect me to learners and educators around the world"),
+)
+
+
+class Role(models.Model):
+    
+    title = models.CharField(max_length=100)
+    is_educator = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        ordering = ("id",)
+
+
+class StudentLevel(models.Model):
+    
+    title = models.CharField(max_length=100)
+    
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        ordering = ("id",)
+
+
+class EducatorSubject(models.Model):
+    
+    title = models.CharField(max_length=100)
+    
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        ordering = ("id",)
 
 
 class Profile(models.Model):
@@ -60,10 +103,27 @@ class Profile(models.Model):
     publish_profile = models.BooleanField(default=False,
                               verbose_name=_(u"Allow others to see "
                                               "you profile?"))
+    
+    country = models.ForeignKey(Country, blank=True, null=True)
 
+    connect_with = models.CharField(max_length=20, choices=CONNECT_OPTIONS,
+                                    blank=True, null=True)
+
+    # This is an obsolete field. It is replaced with `roles` field now which
+    # allows multiple values.
     role = models.CharField(max_length=20, blank=True, choices=MEMBER_ROLES,
                             verbose_name=_(u"Role"))
 
+    roles = models.ManyToManyField(Role, null=True, blank=True)
+    
+    educator_student_levels = models.ManyToManyField(StudentLevel, null=True,
+                                                     blank=True) 
+
+    educator_subjects = AutoCreateManyToManyField(EducatorSubject, null=True,
+                                                  blank=True) 
+    
+    wish_for_education = models.TextField(blank=True, null=True)
+    
 
 def gen_confirmation_key():
     return User.objects.make_random_password(length=20)

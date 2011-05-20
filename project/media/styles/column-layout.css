@@ -1,17 +1,35 @@
 .layout-columns {
-    background: url(../images/columns-bg.gif) repeat-y 190px 0;
-    margin-top: 20px;
+  background: url(../images/columns-bg.gif) repeat-y 190px 0;
+  margin-top: 20px;
 }
+
 .column-main {
-    padding: 0 20px;
-    width: 560px;
-    float: left;
+  padding: 0 20px;
+  width: 560px;
+  float: left;
 }
+
 .column-left {
-    float:left;
-    width:180px;
+  float: left;
+  width: 180px;
 }
+
 .column-right {
-    float:right;
-    width:180px;
+  float: right;
+  width: 180px;
+}
+
+body.no-columns .layout-columns {
+  background: none; 
+}
+
+body.no-columns .column-main {
+  padding: 0;
+  float: none;
+  width: auto; 
+}
+
+body.no-columns .column-left,
+body.no-columns .column-right {
+  display: none; 
 }

@@ -1,0 +1,93 @@
+.profile table {
+  width: auto;
+}
+
+.profile thead td,
+.profile thead th {
+  padding: 0;
+}
+
+.profile form.user-info {
+  width: 350px;
+}
+
+.profile thead th {
+   background: none;
+   font-size: 20px;
+   color: #0A546D;
+   font-weight: normal;
+   padding-bottom: 10px; 
+}
+
+.profile th span {
+  display: inline-block;
+}
+
+.profile th.loading span {
+   padding-right: 20px;
+   background: url(../images/ajax-loader.gif) no-repeat 100% 50%;
+}
+
+.profile th.user-info,.profile td.user-info {
+  padding-left: 35px;
+  padding-right: 35px;
+  border-right: 1px solid #ccc;
+}
+
+.profile form.user-info input.text {
+  width: 338px;
+}
+
+.profile form.change-password {
+  width: 250px;
+}
+
+.profile th.change-password,.profile td.change-password {
+  padding-left: 35px;
+}
+
+.profile form.change-password input.text {
+  width: 238px;
+}
+
+.profile form .field {
+  margin-bottom: 15px;
+}
+
+.profile form.formatted label {
+  font-size: 16px;
+  margin: 0;
+}
+
+.profile form.formatted label.error {
+  font-size: 12px; 
+}
+
+.profile div.label {
+  margin-bottom: 5px;
+}
+
+.profile form.formatted .required label {
+  background: none;
+}
+
+.profile form.formatted input.text {
+  font-size: 18px;
+  padding: 2px 4px;
+  margin: 0;
+}
+
+.profile .avatar img {
+  margin-top: 25px;
+}
+
+.profile form.wish textarea {
+  width: 500px;
+  font-size: 14px;
+  padding: 2px 4px; 
+}
+
+.profile form.formatted .autocomplete-list-widget label {
+  font-size: 14px;
+  font-weight: normal; 
+}

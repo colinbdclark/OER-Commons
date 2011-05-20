@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.profile.init_roles();
+      oer.autocomplete_list_widget.init();
+    });
+  </script>
+{% endblock %}
+
+{% block bodyclass %}no-columns profile{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+
+  <form method="post" class="formatted roles" name="roles" action="{% url users:profile_roles %}">
+    <table class="profile" cellpadding="0" cellspacing="0">
+    <thead>
+      <tr>
+        <th class="roles"><span>Your Role</span></th>
+        <th class="educator"{% if not is_educator %} style="display: none;"{% endif %}><span>Educator Details</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="roles">
+          {% with form.roles as field %}
+            {% include "include/form-field.html" %}
+          {% endwith %}
+        </td>
+  
+        <td class="educator"{% if not is_educator %} style="display: none;"{% endif %}>
+          {% with form.educator_student_levels as field %}
+            {% include "include/form-field.html" %}
+          {% endwith %}
+
+          {% with form.educator_subjects as field %}
+            {% include "include/form-field.html" %}
+          {% endwith %}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="buttons">
+            <input type="submit" class="save" value="Save" />
+            <input type="submit" class="next" value="Save and tell us more!" />
+          </div>
+        </td>
+      </tr>
+    </tbody></table>
+  </form>
+  
+{% endblock %}

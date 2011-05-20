@@ -9,14 +9,17 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from honeypot.decorators import check_honeypot
 from users.backend import encrypt_password, BcryptBackend
-from users.models import MEMBER_ROLES, RegistrationConfirmation, Profile
+from users.models import RegistrationConfirmation, Profile
 import mailchimp
 
 
 class RegistrationForm(forms.Form):
 
-    name = forms.CharField(max_length=61, label=u"Your name:",
-                           help_text=u"Enter your full name.",
+    first_name = forms.CharField(max_length=30, label=u"Your first name:",
+                           widget=forms.TextInput(attrs={"size": 50,
+                                                         "class": "text"}))
+
+    last_name = forms.CharField(max_length=30, label=u"Your last first name:",
                            widget=forms.TextInput(attrs={"size": 50,
                                                          "class": "text"}))
 
@@ -56,12 +59,6 @@ class RegistrationForm(forms.Form):
                              help_text=u"Re-enter your email address.",
                              widget=forms.TextInput(attrs={"size": 40,
                                                            "class": "text"}))
-
-    role = forms.ChoiceField(choices=((u"", u"Select one"),) + MEMBER_ROLES,
-                             required=False,
-                             label="Role:",
-                             help_text=u"Indicate your relationship to open "
-                             "educational resources.")
 
     newsletter = forms.BooleanField(label=u"Subscribe to the OER Commons Monthly Newsletter",
                                     widget=forms.CheckboxInput(),
@@ -166,17 +163,14 @@ def registration(request):
                 return direct_to_template(request, "users/registration.html", locals())
 
             else:
-                try:
-                    first_name, last_name = data["name"].split(None, 1)
-                except ValueError:
-                    first_name = data["name"]
-                    last_name = u""
+                first_name = data["first_name"]
+                last_name = data["last_name"]
                 password = encrypt_password(data["password"])
                 user = User(username=username, first_name=first_name,
                             last_name=last_name, email=email,
                             password=password, is_active=False)
                 user.save()
-                profile = Profile(user=user, role=data["role"])
+                profile = Profile(user=user)
                 profile.save()
                 confirmation = RegistrationConfirmation(user=user,
                                                         confirmed=False)
