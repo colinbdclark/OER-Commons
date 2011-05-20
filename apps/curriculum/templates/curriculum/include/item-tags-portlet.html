@@ -1,0 +1,17 @@
+{% load curriculum_tags %}
+<div class="portlet align-item-tags dotted">
+  <h4 class="dotted">Curriculum Standards</h4>
+  {% if tags %}
+     <ul>
+     {% for tag in tags %}
+       <li>
+         <a href="{% url materials:alignment_index alignment=tag.full_code %}">{{ tag.full_code }}</a>
+       </li>
+     {% endfor %}
+     </ul>
+  {% endif %}
+  <a class="dashed" id="show-align-form" href="{{ align_url }}">Align this item</a>
+</div>
+<div id="align-dialog">
+{% align_form %}
+</div>
