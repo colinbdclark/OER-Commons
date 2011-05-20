@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block contentclass %}blog{% endblock %}
+
+{% block content %}
+{% for post in posts %}
+  <div class="post">
+    <h4><a href="{{ post.url }}">{{ post.title|safe }}</a></h4>
+    {{ post.text|safe }}
+  </div>
+{% endfor %}
+{% endblock %}
+
+{% block column-right %}
+<div class="portlet blogroll dotted">
+  <h4 class="dotted">Blogroll</h4>
+  <ul>
+    {% for feed in feeds %}
+    <li>
+      <a class="rss" href="{{ feed.url }}">{{ feed.title }}</a>
+      <a class="link" href="{{ feed.site_url }}">{{ feed.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
