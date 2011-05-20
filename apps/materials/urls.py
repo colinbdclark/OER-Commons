@@ -25,6 +25,10 @@ keyword_patterns = patterns('materials.views',
     url(r"^/subject/(?P<subjects>[^/]+)/?$", "index.index", name="subject_index"), # TODO: set up redirect
 )
 
+alignment_patterns = patterns('materials.views',
+    url(r"^/alignment/(?P<alignment>[^/]+)/?$", "index.index", name="alignment_index"),
+)
+
 license_patterns = patterns('materials.views',
     url(r"^/license/(?P<license>[^/]+)/?$", "index.index", name="license_index"),
 )
@@ -36,8 +40,8 @@ general_subject_patterns + \
 grade_level_patterns + \
 collection_patterns + \
 license_patterns + \
-keyword_patterns
-
+keyword_patterns + \
+alignment_patterns
 
 course_patterns = browse_patterns + patterns('materials.views',
     url(r"^/add/?$", "forms.course.add.add", name="add"),
