@@ -71,9 +71,29 @@
         <input type="image" src="{{ STATIC_URL }}images/search-btn.png" />
       </div>
     </div>
-      
+
     <div class="box filters">
       <h3>Additional Search Criteria</h3>
+      <div id="align-form">
+        <div class="field standard">
+           <div class="label"><label for="id_curriculum_standard">Curriculum Standard:</label></div>
+           <select name="standard" id="id_curriculum_standard" data-source="{% url curriculum:list_existing_standards %}">
+           </select>
+        </div>
+        <div class="field grade">
+           <div class="label"><label for="id_curriculum_grade">Grade:</label></div>
+           <select name="grade" id="id_curriculum_grade" data-source="{% url curriculum:list_existing_grades %}"></select>
+        </div>
+        <div class="field category">
+           <div class="label"><label for="id_curriculum_category">Learning Objective Category:</label></div>
+           <select name="category" id="id_curriculum_category" data-source="{% url curriculum:list_existing_categories %}"></select>
+        </div>
+        <div class="field tag">
+           <div class="label"><label for="id_curriculum_tag">Alignment Tag:</label></div>
+           <select name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_existing_tags %}"></select>
+        </div>
+        <input type="hidden" name="f.alignment" value="" />
+      </div>
       <div class="languages">
         {% with filters.languages as filter %}
         <label for="{{ filter.request_name }}">Search by Language</label>

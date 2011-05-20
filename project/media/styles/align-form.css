@@ -1,0 +1,55 @@
+#align-form {
+  min-width: 500px;
+}
+
+#align-form label {
+  display: inline-block;
+}
+
+#align-form div.grade,#align-form div.category,#align-form div.tag,#align-form div.buttons
+  {
+  display: none;
+}
+
+#align-form h3 {
+   color: #1F4D64;
+   font-size: 14px;
+   font-weight: bold; 
+}
+
+#align-user-tags {
+  list-style-type: none;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  width: 500px;
+}
+
+#align-user-tags li {
+  padding: 3px 5px;
+  float: left;
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+#align-user-tags li:hover {
+  background: #DDF0F6;
+}
+
+#align-user-tags:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+#align-user-tags a.delete {
+  float: right;
+  width: 15px;
+  height: 15px;
+  display: block;
+  background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
+  text-indent: -9999px;
+  margin-left: 3px;
+}
+  

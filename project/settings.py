@@ -87,6 +87,7 @@ INSTALLED_APPS = (
     'utils',
     'tags',
     'geo',
+    'curriculum',
     'materials',
     'users',
     'rating',

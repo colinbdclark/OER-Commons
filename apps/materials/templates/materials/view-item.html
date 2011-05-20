@@ -4,6 +4,7 @@
 {% load sendthis_tags %}
 {% load tags_tags %}
 {% load flatblock_tags %}
+{% load curriculum_tags %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -258,7 +259,8 @@
 
 {% block column-right %}
   {% item_tags_portlet item %}
-
+  {% align_item_tags_portlet item %}
+  
   <div class="portlet item-keywords dotted">
     <h4 class="dotted">Keywords</h4>
     {% for keyword in item.keywords.all %}

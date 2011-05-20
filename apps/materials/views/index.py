@@ -190,7 +190,7 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
 PATH_FILTERS = ["general_subjects", "grade_levels", "course_material_types",
                 "library_material_types", "collection", "keywords", "license",
                 "course_or_module", "community_types",
-                "community_topics", "microsite", "topics"]
+                "community_topics", "microsite", "topics", "alignment"]
 
 
 class IndexParams:
@@ -324,6 +324,11 @@ def populate_item_from_search_result(result):
         item["toolbar_view_url"] = reverse(
                                "materials:%s:toolbar_view_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
+        item["align_url"] = reverse("curriculum:align", args=(
+                                    result.app_label,
+                                    result.model_name,
+                                    result.pk,
+                                ))
     else:
         item["get_absolute_url"] = result.object.get_absolute_url()
     return item
@@ -336,6 +341,7 @@ def index(request, general_subjects=None, grade_levels=None,
           microsite=None, model=None, search=False, tags=None, subjects=None,
           format=None,
           topics=None,
+          alignment=None,
           facet_fields=["general_subjects", "grade_levels", "keywords",
                         "course_material_types", "media_formats",
                         "cou_bucket", "indexed_topics"]):
