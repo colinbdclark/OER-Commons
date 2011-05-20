@@ -9,6 +9,7 @@ class Slide(models.Model):
     html = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True,
                               upload_to="upload/slider")
+    url = models.URLField(null=True, blank=True)
     microsite = models.ForeignKey(Microsite, null=True, blank=True)
     order = models.IntegerField(default=0)
 
