@@ -141,8 +141,8 @@ class SubmissionFormBase(RSSFields):
             return u""
         return value
 
-    def clean_license_custom_name(self):
-        value = self.cleaned_data["license_custom_name"]
+    def clean_license_description(self):
+        value = self.cleaned_data["license_description"]
         if self.cleaned_data.get("license_type") == "custom":
             if not value:
                 raise forms.ValidationError(u"This field is required.")
@@ -172,7 +172,7 @@ class SubmissionFormBase(RSSFields):
             name = GNU_FDL_NAME
         elif license_type == "custom":
             url = self.cleaned_data.get("license_custom_url")
-            name = self.cleaned_data.get("license_custom_name")
+            name = u"Custom License"
         description = self.cleaned_data.get("license_description")
         copyright_holder = self.cleaned_data.get("copyright_holder")
         license = {}
@@ -207,7 +207,6 @@ class SubmissionFormBase(RSSFields):
             self.fields["license_type"].initial = "gnu-fdl"
         elif license.type == "custom":
             self.fields["license_type"].initial = "custom"
-            self.fields["license_custom_name"].initial = license.name
             self.fields["license_custom_url"].initial = license.url
         self.fields["license_description"].initial = license.description
         self.fields["copyright_holder"].initial = license.copyright_holder
