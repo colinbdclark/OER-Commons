@@ -17,6 +17,9 @@
       "keywords": [
         [
           "Natural Resources"
+        ],
+        [
+          "Natural Resource"
         ]
       ], 
       "microsite": [
@@ -117,7 +120,13 @@
           "plants"
         ], 
         [
+          "plant"
+        ], 
+        [
           "forests"
+        ], 
+        [
+          "forest"
         ], 
         [
           "Plants and Forests"
@@ -147,7 +156,13 @@
           "animals"
         ], 
         [
+          "animal"
+        ], 
+        [
           "insects"
+        ], 
+        [
+          "insect"
         ], 
         [
           "Animals and Insects"
