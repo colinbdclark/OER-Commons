@@ -34,9 +34,14 @@ def reindex_microsite_topic(topic):
     
     # get all objects from this topic and all objects with this topic's keywords
     query = "topics:%s" % topic.id
-    keywords = topic.keywords.values_list("slug", flat=True)
-    if keywords:
-        query = "%s OR %s" % (query, " OR ".join(["keywords:%s" % kw for kw in keywords]))
+    topic_keywords = topic.keywords.values_list("slug", flat=True)
+    microsite_keywords = topic.microsite.keywords.values_list("slug", flat=True)
+    if topic_keywords and microsite_keywords:
+        query = "%s OR ((%s) AND (%s))" % (query,
+                                           " OR ".join(["keywords:%s" % kw for kw in topic_keywords]),
+                                           " OR ".join(["keywords:%s" % kw for kw in microsite_keywords]),)
+
+    print query
 
     for result in SearchQuerySet().narrow(query).load_all():
         instance = result.object
