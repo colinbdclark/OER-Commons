@@ -1930,15 +1930,6 @@
     }
   }, 
   {
-    "pk": 66, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Animals and Insects", 
-      "slug": "animals-and-insects"
-    }
-  }, 
-  {
     "pk": 3, 
     "model": "materials.keyword", 
     "fields": {
@@ -2029,15 +2020,6 @@
     }
   }, 
   {
-    "pk": 69, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Climate Change", 
-      "slug": "climate-change"
-    }
-  }, 
-  {
     "pk": 12, 
     "model": "materials.keyword", 
     "fields": {
@@ -2092,15 +2074,6 @@
     }
   }, 
   {
-    "pk": 82, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Eco Art and Culture", 
-      "slug": "eco-art-and-culture"
-    }
-  }, 
-  {
     "pk": 18, 
     "model": "materials.keyword", 
     "fields": {
@@ -2116,24 +2089,6 @@
       "suggested": true, 
       "name": "Education", 
       "slug": "education"
-    }
-  }, 
-  {
-    "pk": 72, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Endangered Species", 
-      "slug": "endangered-species"
-    }
-  }, 
-  {
-    "pk": 60, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Energy", 
-      "slug": "energy"
     }
   }, 
   {
@@ -2200,15 +2155,6 @@
     }
   }, 
   {
-    "pk": 85, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Green Building and Design", 
-      "slug": "green-building-and-design"
-    }
-  }, 
-  {
     "pk": 27, 
     "model": "materials.keyword", 
     "fields": {
@@ -2233,24 +2179,6 @@
       "suggested": true, 
       "name": "History", 
       "slug": "history"
-    }
-  }, 
-  {
-    "pk": 67, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Human Impact", 
-      "slug": "human-impact"
-    }
-  }, 
-  {
-    "pk": 75, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Industrial and Agricultural Impacts", 
-      "slug": "industrial-and-agricultural-impacts"
     }
   }, 
   {
@@ -2353,15 +2281,6 @@
     }
   }, 
   {
-    "pk": 55, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Natural Resources", 
-      "slug": "natural-resources"
-    }
-  }, 
-  {
     "pk": 41, 
     "model": "materials.keyword", 
     "fields": {
@@ -2389,39 +2308,12 @@
     }
   }, 
   {
-    "pk": 63, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Plants and Forests", 
-      "slug": "plants-and-forests"
-    }
-  }, 
-  {
-    "pk": 79, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Policy and Advocacy", 
-      "slug": "policy-and-advocacy"
-    }
-  }, 
-  {
     "pk": 44, 
     "model": "materials.keyword", 
     "fields": {
       "suggested": true, 
       "name": "Political Science", 
       "slug": "political-science"
-    }
-  }, 
-  {
-    "pk": 70, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Pollution", 
-      "slug": "pollution"
     }
   }, 
   {
@@ -2470,15 +2362,6 @@
     }
   }, 
   {
-    "pk": 58, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Soil and Land", 
-      "slug": "soil-and-land"
-    }
-  }, 
-  {
     "pk": 50, 
     "model": "materials.keyword", 
     "fields": {
@@ -2488,39 +2371,12 @@
     }
   }, 
   {
-    "pk": 89, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Sustainable Agriculture and Nutrition", 
-      "slug": "sustainable-agriculture-and-nutrition"
-    }
-  }, 
-  {
     "pk": 51, 
     "model": "materials.keyword", 
     "fields": {
       "suggested": true, 
       "name": "Theatre", 
       "slug": "theatre"
-    }
-  }, 
-  {
-    "pk": 76, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Tools for Change", 
-      "slug": "tools-for-change"
-    }
-  }, 
-  {
-    "pk": 59, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "Water", 
-      "slug": "water"
     }
   }, 
   {
@@ -2541,177 +2397,6 @@
       "slug": "writing"
     }
   }, 
-  {
-    "pk": 78, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "advocacy", 
-      "slug": "advocacy"
-    }
-  }, 
-  {
-    "pk": 87, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "agri", 
-      "slug": "agri"
-    }
-  }, 
-  {
-    "pk": 64, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "animals", 
-      "slug": "animals"
-    }
-  }, 
-  {
-    "pk": 83, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "building", 
-      "slug": "building"
-    }
-  }, 
-  {
-    "pk": 68, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "climate_change", 
-      "slug": "climate_change"
-    }
-  }, 
-  {
-    "pk": 84, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "design", 
-      "slug": "design"
-    }
-  }, 
-  {
-    "pk": 80, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "eco_art", 
-      "slug": "eco_art"
-    }
-  }, 
-  {
-    "pk": 81, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "eco_culture", 
-      "slug": "eco_culture"
-    }
-  }, 
-  {
-    "pk": 73, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "eco_impact", 
-      "slug": "eco_impact"
-    }
-  }, 
-  {
-    "pk": 71, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "endang_species", 
-      "slug": "endang_species"
-    }
-  }, 
-  {
-    "pk": 62, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "forests", 
-      "slug": "forests"
-    }
-  }, 
-  {
-    "pk": 54, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "greenoer", 
-      "slug": "greenoer"
-    }
-  }, 
-  {
-    "pk": 74, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "industrial", 
-      "slug": "industrial"
-    }
-  }, 
-  {
-    "pk": 65, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "insects", 
-      "slug": "insects"
-    }
-  }, 
-  {
-    "pk": 57, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "land", 
-      "slug": "land"
-    }
-  }, 
-  {
-    "pk": 88, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "nutrition", 
-      "slug": "nutrition"
-    }
-  }, 
-  {
-    "pk": 61, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "plants", 
-      "slug": "plants"
-    }
-  }, 
-  {
-    "pk": 77, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "policy", 
-      "slug": "policy"
-    }
-  }, 
-  {
-    "pk": 56, 
-    "model": "materials.keyword", 
-    "fields": {
-      "suggested": false, 
-      "name": "soil", 
-      "slug": "soil"
-    }
-  },
   {
     "pk": 1, 
     "model": "materials.generalsubject", 
@@ -4369,482 +4054,5 @@
       "name": "Policy", 
       "slug": "policy"
     }
-  }, 
-  {
-    "pk": 1, 
-    "model": "materials.microsite", 
-    "fields": {
-      "name": "Green", 
-      "slug": "green",
-      "keywords": [
-        ["greenoer"]
-      ] 
-    }
-  },
-  {
-    "pk": 1, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "Natural Resources"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "natural-resources", 
-      "name": "Natural Resources",
-      "tree_id": 1,
-      "level": 0,
-      "lft": 1,
-      "rght": 12
-    }
-  }, 
-  {
-    "pk": 2, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "soil"
-        ], 
-        [
-          "land"
-        ], 
-        [
-          "Soil and Land"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "soil-and-land", 
-      "parent": [
-        "Green", 
-        "Natural Resources"
-      ], 
-      "name": "Soil and Land",
-      "tree_id": 1,
-      "level": 1,
-      "lft": 2,
-      "rght": 3
-    }
-  }, 
-  {
-    "pk": 3, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "Water"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "water", 
-      "parent": [
-        "Green", 
-        "Natural Resources"
-      ], 
-      "name": "Water",
-      "tree_id": 1,
-      "level": 1,
-      "lft": 4,
-      "rght": 5
-    }
-  }, 
-  {
-    "pk": 4, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "Energy"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "energy", 
-      "parent": [
-        "Green", 
-        "Natural Resources"
-      ], 
-      "name": "Energy",
-      "tree_id": 1,
-      "level": 1,
-      "lft": 6,
-      "rght": 7
-    }
-  }, 
-  {
-    "pk": 5, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "plants"
-        ], 
-        [
-          "forests"
-        ], 
-        [
-          "Plants and Forests"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "plants-and-forests", 
-      "parent": [
-        "Green", 
-        "Natural Resources"
-      ], 
-      "name": "Plants and Forests",
-      "tree_id": 1,
-      "level": 1,
-      "lft": 8,
-      "rght": 9
-    }
-  }, 
-  {
-    "pk": 6, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "animals"
-        ], 
-        [
-          "insects"
-        ], 
-        [
-          "Animals and Insects"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "animals-and-insects", 
-      "parent": [
-        "Green", 
-        "Natural Resources"
-      ], 
-      "name": "Animals and Insects",
-      "tree_id": 1,
-      "level": 1,
-      "lft": 10,
-      "rght": 11
-    }
-  }, 
-  {
-    "pk": 7, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "Human Impact"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "human-impact", 
-      "name": "Human Impact",
-      "tree_id": 2,
-      "level": 0,
-      "lft": 1,
-      "rght": 10
-    }
-  }, 
-  {
-    "pk": 8, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "climate_change"
-        ], 
-        [
-          "Climate Change"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "climate-change", 
-      "parent": [
-        "Green", 
-        "Human Impact"
-      ], 
-      "name": "Climate Change",
-      "tree_id": 2,
-      "level": 1,
-      "lft": 2,
-      "rght": 3
-    }
-  }, 
-  {
-    "pk": 9, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "Pollution"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "pollution", 
-      "parent": [
-        "Green", 
-        "Human Impact"
-      ], 
-      "name": "Pollution",
-      "tree_id": 2,
-      "level": 1,
-      "lft": 4,
-      "rght": 5
-    }
-  }, 
-  {
-    "pk": 10, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "endang_species"
-        ], 
-        [
-          "Endangered Species"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "endangered-species", 
-      "parent": [
-        "Green", 
-        "Human Impact"
-      ], 
-      "name": "Endangered Species",
-      "tree_id": 2,
-      "level": 1,
-      "lft": 6,
-      "rght": 7
-    }
-  }, 
-  {
-    "pk": 11, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "eco_impact"
-        ], 
-        [
-          "industrial"
-        ], 
-        [
-          "Industrial and Agricultural Impacts"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "industrial-and-agricultural-impacts", 
-      "parent": [
-        "Green", 
-        "Human Impact"
-      ], 
-      "name": "Industrial and Agricultural Impacts",
-      "tree_id": 2,
-      "level": 1,
-      "lft": 8,
-      "rght": 9
-    }
-  }, 
-  {
-    "pk": 12, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "Tools for Change"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "tools-for-change", 
-      "name": "Tools for Change",
-      "tree_id": 3,
-      "level": 0,
-      "lft": 1,
-      "rght": 12
-    }
-  }, 
-  {
-    "pk": 13, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "policy"
-        ], 
-        [
-          "advocacy"
-        ], 
-        [
-          "Policy and Advocacy"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "policy-and-advocacy", 
-      "parent": [
-        "Green", 
-        "Tools for Change"
-      ], 
-      "name": "Policy and Advocacy",
-      "tree_id": 3,
-      "level": 1,
-      "lft": 2,
-      "rght": 3
-    }
-  }, 
-  {
-    "pk": 14, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "eco_art"
-        ], 
-        [
-          "eco_culture"
-        ], 
-        [
-          "Eco Art and Culture"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "eco-art-and-culture", 
-      "parent": [
-        "Green", 
-        "Tools for Change"
-      ], 
-      "name": "Eco Art and Culture",
-      "tree_id": 3,
-      "level": 1,
-      "lft": 4,
-      "rght": 5
-    }
-  }, 
-  {
-    "pk": 15, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "building"
-        ], 
-        [
-          "design"
-        ], 
-        [
-          "Green Building and Design"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "green-building-and-design", 
-      "parent": [
-        "Green", 
-        "Tools for Change"
-      ], 
-      "name": "Green Building and Design",
-      "tree_id": 3,
-      "level": 1,
-      "lft": 6,
-      "rght": 7
-    }
-  }, 
-  {
-    "pk": 16, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "Business"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "business", 
-      "parent": [
-        "Green", 
-        "Tools for Change"
-      ], 
-      "name": "Business",
-      "tree_id": 3,
-      "level": 1,
-      "lft": 8,
-      "rght": 9
-    }
-  }, 
-  {
-    "pk": 17, 
-    "model": "materials.topic", 
-    "fields": {
-      "keywords": [
-        [
-          "agri"
-        ], 
-        [
-          "nutrition"
-        ], 
-        [
-          "Sustainable Agriculture and Nutrition"
-        ]
-      ], 
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "sustainable-agriculture-and-nutrition", 
-      "parent": [
-        "Green", 
-        "Tools for Change"
-      ], 
-      "name": "Sustainable Agriculture and Nutrition",
-      "tree_id": 3,
-      "level": 1,
-      "lft": 10,
-      "rght": 11
-    }
-  },
-  {
-    "pk": 18, 
-    "model": "materials.topic", 
-    "fields": {
-      "microsite": [
-        "Green"
-      ], 
-      "slug": "other", 
-      "name": "Other",
-      "tree_id": 4,
-      "level": 0,
-      "lft": 1,
-      "rght": 2,
-      "other": true
-    }
-  }
+  } 
 ]
