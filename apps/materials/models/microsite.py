@@ -3,7 +3,9 @@ from cache_utils.decorators import cached
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import permalink
+from django.db.models.signals import post_save
 from materials.models.common import AutoCreateManyToManyField, Keyword
+from materials.tasks import reindex_microsite_topic
 from mptt.models import MPTTModel
 
 
@@ -83,6 +85,10 @@ class Topic(MPTTModel):
         ordering = ["microsite", "tree_id", "lft"]
         unique_together = (("name", "microsite"))
 
+
+def topic_post_save_reindex(sender, **kwargs):
+    reindex_microsite_topic.delay(kwargs["instance"])
+post_save.connect(topic_post_save_reindex, sender=Topic, dispatch_uid="topic_post_save_reindex")
 
 
 @cached(60 * 60 * 24)
