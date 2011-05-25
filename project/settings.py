@@ -50,6 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'preferences.middleware.PreferencesMiddleware',
     'depiction.middleware.ProfilerMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
@@ -102,6 +103,7 @@ INSTALLED_APPS = (
     'harvester',
     'visitcounts',
     'newsletter',
+    'preferences',
     'project',
 )
 

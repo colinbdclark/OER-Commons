@@ -56,6 +56,10 @@ body.authenticated .header-links li.anon {
   text-decoration: none;
 }
 
+.header-links a img {
+  vertical-align: middle; 
+}
+
 .header-links a.button-contribute {
   background: url(../images/contribute-btn.gif) no-repeat;
   display: block;

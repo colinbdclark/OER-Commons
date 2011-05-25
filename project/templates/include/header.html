@@ -3,6 +3,7 @@
   <div class="fixed-width">
     <a id="logo" title="OER Commons" href="{% if microsite %}{% url materials:microsite microsite=microsite.slug %}{% else %}{% url frontpage %}{% endif %}"></a>
     <ul class="header-links">
+      {% spaceless %}
       <li class="anon">
         <a rel="nofollow" href="{% url users:registration %}">Register Now!</a>
       </li>
@@ -21,10 +22,14 @@
       <li>
         <a href="{% url information %}">Help</a>
       </li>
+      <li>
+        <a href="{% url preferences:preferences %}"><img src="{{ STATIC_URL }}images/preferences-icon.png" alt="Preferences" /></a>
+      </li>
       <li class="last">
         <a title="Contribute Content" class="button-contribute"
            href="{% url contribute %}">Contribute Content</a>
       </li>
+      {% endspaceless %}
     </ul>
   </div>
 </div>
