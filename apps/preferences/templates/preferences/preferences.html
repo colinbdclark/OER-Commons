@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block bodyclass %}preferences{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+    <form method="post" class="formatted preferences" name="preferences" action="{% url preferences:preferences %}">
+    
+      {% with form.show_toolbar as field %}
+        {% include "include/form-field-checkbox.html" %}
+      {% endwith %}
+      <div class="buttons">
+        <input type="submit" value="Save" />
+      </div>
+    </form>
+
+{% endblock %}
