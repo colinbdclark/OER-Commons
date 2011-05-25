@@ -318,9 +318,6 @@
       "keywords": [
         [
           "Tools for Change"
-        ],
-        [
-          "Recycling"
         ]
       ], 
       "microsite": [
@@ -331,7 +328,7 @@
       "tree_id": 3,
       "level": 0,
       "lft": 1,
-      "rght": 12
+      "rght": 14
     }
   }, 
   {
@@ -476,6 +473,30 @@
       "level": 1,
       "lft": 10,
       "rght": 11
+    }
+  },
+  {
+    "pk": 19, 
+    "model": "materials.topic", 
+    "fields": {
+      "keywords": [
+        [
+          "Recycling"
+        ]
+      ], 
+      "microsite": [
+        "Green"
+      ], 
+      "slug": "recycling", 
+      "parent": [
+        "Green", 
+        "Tools for Change"
+      ], 
+      "name": "Recycling",
+      "tree_id": 3,
+      "level": 1,
+      "lft": 12,
+      "rght": 13
     }
   },
   {
