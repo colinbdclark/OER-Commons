@@ -5,6 +5,7 @@ from haystack.query import SearchQuerySet
 from materials.models import Microsite
 from materials.models.common import Keyword, GradeLevel
 from materials.models.course import CourseMaterialType
+from materials.models.material import PUBLISHED_STATE
 from materials.utils import get_name_from_slug
 from materials.views.index import populate_item_from_search_result, \
     MAX_TOP_KEYWORDS
@@ -61,12 +62,14 @@ def microsite(request, microsite):
                keyword["slug"]
         keyword["name"] = name
 
-    featured_k12 = SearchQuerySet().filter(featured=True, grade_levels__in=(1, 2), microsites=microsite.id).order_by("-featured_on").load_all()[:3]
+    featured_k12 = SearchQuerySet().filter(workflow_state=PUBLISHED_STATE, featured=True, grade_levels__in=(1, 2), microsites=microsite.id).order_by("-featured_on").load_all()[:3]
     featured_k12 = [r.object for r in featured_k12]
 
-    featured_highered = SearchQuerySet().filter(featured=True, grade_levels=3, microsites=microsite.id).order_by("-featured_on").load_all()[:3]
+    featured_highered = SearchQuerySet().filter(workflow_state=PUBLISHED_STATE, featured=True, grade_levels=3, microsites=microsite.id).order_by("-featured_on").load_all()[:3]
     featured_highered = [r.object for r in featured_highered]
 
     slides = Slide.objects.filter(microsite=microsite)
+
+    resource_number = SearchQuerySet().filter(workflow_state=PUBLISHED_STATE, microsites=microsite.id).count()
 
     return direct_to_template(request, "materials/microsites/%s.html" % microsite.slug, locals())
