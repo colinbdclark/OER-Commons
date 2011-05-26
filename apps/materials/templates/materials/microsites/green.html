@@ -25,12 +25,20 @@
 {% block promo %}{% endblock %}
 
 {% block above-content %}
+<div class="fixed-width">
+  <div class="frontpage-highlight left">
+    OER Commons Green is dedicated to <em>sustainability</em> and resource conservation 
+  </div>
+  <div class="frontpage-highlight right">
+    <ul>
+      <li>Free to Use</li>
+      <li>Openly Licensed</li>
+      <li><em>{{ resource_number }}</em> Resources</li>
+      <li>From K-12 to College Courses</li>
+    </ul> 
+    <a class="search-now" href="#">Search Now</a>
+  </div>
 {% include "include/slider.html" %}
-<div class="green-feature fixed-width">
-  <h2>Highlight</h2>
-  <p><a href="/courses/sun-curve-design-challenge-design-process-activity">Sun Curve Design Challenge</a>: A student-teacher collaborative<br/>
-     OER program focusing on scientific inquiry and green design<br/>
-     innovation to generate new ideas for sustainable agriculture.</p>
 </div>
 {% endblock %}
 
