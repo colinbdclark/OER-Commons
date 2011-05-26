@@ -1,0 +1,14 @@
+body.review form.review {
+  width: 458px;
+  float: left;
+}
+
+body.review form.review textarea.text {
+  width: 450px;
+  resize: none;
+  height: 300px;
+}
+
+body.review .guidelines {
+  margin-left: 480px 
+}

@@ -139,12 +139,6 @@ form.profile .change-password-link {
   text-align: right;
 }
 
-form.review textarea.text {
-  width: 552px;
-  resize: none;
-  height: 200px;
-}
-
 form.content-submission {
   background: #F3F7F8;
   border: 1px solid #BCCACD;
