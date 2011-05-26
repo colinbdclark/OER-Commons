@@ -52,7 +52,9 @@ oer.autocomplete_list_widget.init = function() {
                 e.preventDefault();
                 var value = $.trim($add_input.val());
                 if (value !== "") {
-                    add_value(value);
+                    $.each(get_values($add_input), function(i, v) {
+                        add_value(v);
+                    });
                 }
                 $add_input.autocomplete("close");
             }
@@ -61,7 +63,9 @@ oer.autocomplete_list_widget.init = function() {
         $add_input.focusout(function(e) {
             var value = $.trim($add_input.val());
             if (value !== "") {
-                add_value(value);
+                $.each(get_values($add_input), function(i, v) {
+                    add_value(v);
+                });
             }
             $add_input.autocomplete("close");
         });
