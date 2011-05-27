@@ -2,24 +2,45 @@ from annoying.decorators import JsonResponse
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.contrib.auth import authenticate, login as auth_login, \
+    logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
 from utils.shortcuts import redirect_to_next_url
 import re
 
 
+
 class LoginForm(AuthenticationForm):
 
-    username = forms.CharField(label=u"User name:",
+    username = forms.CharField(label=u"Your email or username:",
                              widget=forms.TextInput(attrs={"size": 25,
                                                            "class": "text"}))
 
     password = forms.CharField(label=u"Password:",
                              widget=forms.PasswordInput(attrs={"size": 25,
                                                            "class": "text"}))
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        if username and password:
+            self.user_cache = authenticate(username=username, password=password)
+            if self.user_cache is None:
+                raise forms.ValidationError(_("Please enter a correct email (username) and password. Note that password is cAsE-sEnsItiVe."))
+            elif not self.user_cache.is_active:
+                raise forms.ValidationError(_("This account is inactive. Make sure that you've followed the instructions in registration confirmation email."))
+
+        # TODO: determine whether this should move to its own method.
+        if self.request:
+            if not self.request.session.test_cookie_worked():
+                raise forms.ValidationError(_("Your Web browser doesn't appear to have cookies enabled. Cookies are required for logging in."))
+
+        return self.cleaned_data
 
 
 def login(request):
@@ -64,7 +85,7 @@ def login(request):
     
                 return HttpResponseRedirect(redirect_to)
             else:
-                messages.error(request, u"Invalid user name and/or password.")
+                messages.error(request, u"Invalid email and/or password.")
 
     else:
         form = LoginForm(request)
