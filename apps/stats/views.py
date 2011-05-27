@@ -9,6 +9,7 @@ from materials.models.library import Library
 from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
+from tags.models import Tag
 from users.models import Profile, MEMBER_ROLES
 from utils.decorators import login_required
 import datetime
@@ -63,6 +64,15 @@ def get_users_saveditems_count(from_date=None, until_date=None):
     return SavedItem.objects.filter(**filter).values("user__id").annotate(count=models.Count("user__id")).filter(count__gt=5).count()
 
 
+def get_users_tagged_count(from_date=None, until_date=None):
+    filter = {}
+    if from_date:
+        filter["timestamp__gte"] = from_date
+    if until_date:
+        filter["timestamp__lt"] = until_date
+    return Tag.objects.filter(**filter).values_list("user__id").distinct().count()
+
+
 def get_registrations_count(from_date=None, until_date=None):
     filter = {}
     if from_date:
@@ -77,6 +87,7 @@ STATS = (
     (u"How many users have submitted resources?", get_users_submitted_count),
     (u"How many users have commented on at least one item?", get_users_commented_count),
     (u"How many users have rated at least one item?", get_users_rated_count),
+    (u"How many users have tagged at least one item?", get_users_tagged_count),
     (u"How many users have more than five items bookmarked?", get_users_saveditems_count),
     (u"New registered members", get_registrations_count),
 )
