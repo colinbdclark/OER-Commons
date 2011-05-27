@@ -1,6 +1,7 @@
-from django.contrib.auth.models import User
-import bcrypt
 from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.models import User
+from django.db.models import Q
+import bcrypt
 
 
 BCRYPT_PREFIX = "bcrypt$"
@@ -30,17 +31,16 @@ class BcryptBackend(ModelBackend):
         if username is None or password is None:
             return None
 
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return None
-
-        if not user.password.startswith(BCRYPT_PREFIX):
-            return super(BcryptBackend, self).authenticate(username, password)
-
-        if check_password(user.password, password):
-            return user
-
+        for user in User.objects.filter(Q(username=username) | Q(email__iexact=username)):
+            
+            if not user.password.startswith(BCRYPT_PREFIX):
+                result = super(BcryptBackend, self).authenticate(user.username, password)
+                if result:
+                    return result
+    
+            elif check_password(user.password, password):
+                return user
+    
         return None
 
     def get_user(self, user_id):
