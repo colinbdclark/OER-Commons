@@ -23,14 +23,14 @@ class RegistrationForm(forms.Form):
                            widget=forms.TextInput(attrs={"size": 50,
                                                          "class": "text"}))
 
-    username = forms.RegexField(label="User name", max_length=30,
-                                regex=r'^[\w.@+-]+$',
-                                error_messages={'invalid': "This value may "
-                                "contain only letters, numbers and @/./+/-/_ "
-                                "characters."},
-                                help_text=u"Enter your user name, with no spaces or special characters. Your user name is used for your login, and is case sensitive.",
-                                widget=forms.TextInput(attrs={"size": 30,
-                                                      "class": "text"}))
+    email = forms.EmailField(label=u"Email:", max_length=75,
+                             help_text=u"Enter your email address. This is "
+                             "used to confirm your registration, so please "
+                             "use a valid email address. We respect your "
+                             "privacy, and will not share your information "
+                             "with third parties.",
+                             widget=forms.TextInput(attrs={"size": 40,
+                                                           "class": "text"}))
 
     password = forms.CharField(min_length=5, label=u"Password:",
                                help_text=u"Minimum of five characters, "
@@ -46,24 +46,16 @@ class RegistrationForm(forms.Form):
                                                          "class": "text",
                                                      "autocomplete": "off"}))
 
-    email = forms.EmailField(label=u"Email:", max_length=75,
-                             help_text=u"Enter your email address. This is "
-                             "used to confirm your registration, so please "
-                             "use a valid email address. We respect your "
-                             "privacy, and will not share your information "
-                             "with third parties.",
-                             widget=forms.TextInput(attrs={"size": 40,
-                                                           "class": "text"}))
-
-    confirm_email = forms.EmailField(label=u"Confirm email", max_length=75,
-                             help_text=u"Re-enter your email address.",
-                             widget=forms.TextInput(attrs={"size": 40,
-                                                           "class": "text"}))
-
     newsletter = forms.BooleanField(label=u"Subscribe to the OER Commons Monthly Newsletter",
                                     widget=forms.CheckboxInput(),
                                     required=False,
                                     initial=True)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if email:
+            email = email.lower()
+        return email
 
     def clean_confirm_password(self):
         password = self.cleaned_data.get("password", "")
@@ -71,13 +63,6 @@ class RegistrationForm(forms.Form):
         if password != confirm_password:
             raise forms.ValidationError(u"The two passwords do not match.")
         return confirm_password
-
-    def clean_confirm_email(self):
-        email = self.cleaned_data.get("email", "")
-        confirm_email = self.cleaned_data["confirm_email"]
-        if email != confirm_email:
-            raise forms.ValidationError(u"The two emails do not match.")
-        return confirm_email
 
 
 class ConfirmationForm(forms.Form):
@@ -111,54 +96,29 @@ def registration(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            username = data["username"]
             email = data["email"]
-            username_taken = False
-            username_pending = False
+            username = email
             email_taken = False
             email_pending = False
-            if User.objects.filter(username=username).count():
-                username_taken = True
-                user = User.objects.get(username=username)
-                if RegistrationConfirmation.objects.filter(user=user, confirmed=False).count():
-                    username_pending = True
-            if User.objects.filter(email=email).count():
+            if User.objects.filter(email=email).exists():
                 email_taken = True
                 user = User.objects.get(email=email)
                 if RegistrationConfirmation.objects.filter(user=user, confirmed=False).count():
                     email_pending = True
 
-            if username_pending or email_pending:
+            if email_pending:
                 resend_confirmation_url = reverse("users:registration_resend")
-                if username_pending and email_pending:
-                    message = u"A registration request for the user account with username <em>%(username)s</em> and email <em>%(email)s</em> needs to be confirmed. <a href=\"%(url)s?username=%(username)s&amp;email=%(email)s\">Click here</a> to re-send the confirmation email."
-                    message = message % dict(username=username, email=email,
-                                             url=resend_confirmation_url)
-                elif username_pending:
-                    message = u"A registration request for the user account with username <em>%(username)s</em> needs to be confirmed. <a href=\"%(url)s?username=%(username)s\">Click here</a> to re-send the confirmation email."
-                    message = message % dict(username=username,
-                                             url=resend_confirmation_url)
-                else:
-                    message = u"A registration request for the user account with email <em>%(email)s</em> needs to be confirmed. <a href=\"%(url)s?email=%(email)s\">Click here</a> to re-send the confirmation email."
-                    message = message % dict(email=email,
-                                             url=resend_confirmation_url)
+                message = u"A registration request for the user account with email <em>%(email)s</em> needs to be confirmed. <a href=\"%(url)s?email=%(email)s\">Click here</a> to re-send the confirmation email."
+                message = message % dict(email=email,
+                                         url=resend_confirmation_url)
                 messages.warning(request, message)
                 return direct_to_template(request, "users/registration.html", locals())
 
-            elif username_taken or email_taken:
+            elif email_taken:
                 reset_password_url = reverse("users:reset_password_init")
-                if username_taken and email_taken:
-                    message = u"User with username <em>%(username)s</em> and email <em>%(email)s</em> is registered already. If you forgot your password you can <a href=\"%(url)s\"> click here</a> to reset it. "
-                    message = message % dict(username=username, email=email,
-                                             url=reset_password_url)
-                elif username_taken:
-                    message = u"User with username <em>%(username)s</em> is registered already. If you forgot your password you can <a href=\"%(url)s\">click here</a> to reset it."
-                    message = message % dict(username=username,
-                                             url=reset_password_url)
-                else:
-                    message = u"User with email <em>%(email)s</em> is registered already. If you forgot your password you can <a href=\"%(url)s\">click here</a> to reset it."
-                    message = message % dict(email=email,
-                                             url=reset_password_url)
+                message = u"User with email <em>%(email)s</em> is registered already. If you forgot your password you can <a href=\"%(url)s\">click here</a> to reset it."
+                message = message % dict(email=email,
+                                         url=reset_password_url)
                 messages.warning(request, message)
                 return direct_to_template(request, "users/registration.html", locals())
 
