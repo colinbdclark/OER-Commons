@@ -52,6 +52,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'preferences.middleware.PreferencesMiddleware',
     'depiction.middleware.ProfilerMiddleware',
+    'abtesting.middleware.ABTestingMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
@@ -86,6 +87,7 @@ INSTALLED_APPS = (
     'mailchimp',
     'simplegravatar',
     'utils',
+    'abtesting',
     'tags',
     'geo',
     'curriculum',
