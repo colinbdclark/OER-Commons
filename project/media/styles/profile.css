@@ -95,3 +95,7 @@
 .profile #profile-notification {
   display: none; 
 }
+
+#profile-notification.status-message {
+  text-align: center; 
+}
