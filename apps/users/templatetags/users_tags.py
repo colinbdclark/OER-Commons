@@ -8,7 +8,7 @@ PROFILE_NOTIFICATION_HIDE_COOKIE_NAME = "_hpn"
 
 
 @register.inclusion_tag("users/include/profile-notification.html", takes_context=True)
-def profile_notification(context):
+def profile_notification(context, notification_class):
     request = context["request"]
     user = request.user
     
@@ -27,5 +27,6 @@ def profile_notification(context):
         return
     
     return dict(completeness=completeness, total_fields=total_fields,
-                cookie_name=PROFILE_NOTIFICATION_HIDE_COOKIE_NAME)
+                cookie_name=PROFILE_NOTIFICATION_HIDE_COOKIE_NAME,
+                notification_class=notification_class)
     
