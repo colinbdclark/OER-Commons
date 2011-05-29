@@ -1,6 +1,6 @@
 {% if completeness %}
 <div class="{{ notification_class }}" id="profile-notification" data-total-fields="{{ total_fields }}" data-cookie-name="{{ cookie_name }}">
-  Your profile completeness is {{ completeness }}%. <a href="{% url users:profile %}?from={{ notification_class }}">Complete your profile</a>
+  Your profile completeness is {{ completeness }}%. <a href="{% url users:profile %}?from={{ notification_class }}">Complete your profile now.</a>
   <div class="close">
       <a href="#" class="dashed">close this message</a>
   </div>
