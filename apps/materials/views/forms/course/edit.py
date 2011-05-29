@@ -53,7 +53,7 @@ class EditForm(AddFormStaff):
                   "postrequisite_1", "postrequisite_2_title", "postrequisite_2_url",
                   "postrequisite_2",
                   "license_type", "license_cc", "license_cc_old",
-                  "license_custom_name", "license_custom_url", "license_description",
+                  "license_custom_url", "license_description",
                   "copyright_holder", "license"]
 
 
@@ -97,7 +97,7 @@ class EditFormStaff(AddFormStaff):
                   "postrequisite_2",
                   "featured", "in_rss", "rss_description", "rss_timestamp",
                   "license_type", "license_cc", "license_cc_old",
-                  "license_custom_name", "license_custom_url", "license_description",
+                  "license_custom_url", "license_description",
                   "copyright_holder", "license"]
 
 
