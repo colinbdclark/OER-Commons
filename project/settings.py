@@ -52,6 +52,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'preferences.middleware.PreferencesMiddleware',
     'depiction.middleware.ProfilerMiddleware',
+    'abtesting.middleware.ABTestingMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
@@ -85,6 +86,7 @@ INSTALLED_APPS = (
     'honeypot',
     'mailchimp',
     'utils',
+    'abtesting',
     'tags',
     'materials',
     'users',
