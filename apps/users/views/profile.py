@@ -18,6 +18,7 @@ def profile(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -78,6 +79,7 @@ def geography(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -117,6 +119,7 @@ def roles(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -147,6 +150,7 @@ def wish(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]

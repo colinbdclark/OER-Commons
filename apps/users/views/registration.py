@@ -140,6 +140,8 @@ def registration(request):
 def confirm(request):
 
     page_title = u"Confirm Registration"
+    hide_global_notifications = True
+
     form = ConfirmationForm()
 
     if "code" in request.REQUEST:
@@ -164,7 +166,8 @@ def confirm(request):
 def welcome(request):
     
     page_title = u"Welcome to OER Commons"
-    
+    hide_global_notifications = True
+
     return direct_to_template(request, "users/welcome.html", locals())
 
 
