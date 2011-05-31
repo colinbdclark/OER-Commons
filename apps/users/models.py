@@ -210,8 +210,9 @@ class RegistrationConfirmation(models.Model):
     def confirm(self):
         if self.confirmed:
             return False
-        self.user.is_active = True
-        self.user.save()
+        if not self.user.is_active:
+            self.user.is_active = True
+            self.user.save()
         self.confirmed = True
         self.save()
         return True
