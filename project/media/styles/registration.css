@@ -1,0 +1,8 @@
+.confirm-registration #confirmation-notification,
+.confirm-registration #profile-notification {
+  display: none; 
+}
+
+#confirmation-notification.status-message {
+  text-align: center; 
+}
