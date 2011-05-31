@@ -1,4 +1,3 @@
-from users.models import RegistrationConfirmation
 
 
 class LazyConfirmedPropery(object):
@@ -8,6 +7,7 @@ class LazyConfirmedPropery(object):
         self.confirmed = None
 
     def __nonzero__(self):
+        from users.models import RegistrationConfirmation
         if self.confirmed is None:
             self.confirmed = True
             try:
@@ -15,7 +15,6 @@ class LazyConfirmedPropery(object):
             except RegistrationConfirmation.DoesNotExist:
                 pass
         return self.confirmed
-            
         
     def __repr__(self):
         return str(self.__nonzero__())
