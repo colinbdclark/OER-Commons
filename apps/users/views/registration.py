@@ -147,11 +147,12 @@ def confirm(request):
         if form.is_valid():
             confirmation = RegistrationConfirmation.objects.get(key=form.cleaned_data["code"])
             confirmation.confirm()
-            user = confirmation.user
-            backend = BcryptBackend()
-            user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-            auth_login(request, user)
-            messages.success(request, u"Your account was confirmed.")
+            if request.user.is_anonymous():
+                user = confirmation.user
+                backend = BcryptBackend()
+                user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+                auth_login(request, user)
+            messages.success(request, u"Your account was confirmed. Thank you.")
             return redirect("frontpage")
         else:
             messages.error(request, u"Please correct the indicated errors.")
@@ -169,7 +170,7 @@ def welcome(request):
 
 def resend(request):
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_confirmed:
         return redirect("frontpage")
 
     username = request.REQUEST.get("username", u"").strip()
@@ -186,10 +187,6 @@ def resend(request):
 
     user = get_object_or_404(User, **kwargs)
     confirmation = get_object_or_404(RegistrationConfirmation, user=user)
-    if confirmation.confirmed:
-        messages.success(request, u"This user account is confirmed already.")
-        return redirect("users:login")
-    else:
-        confirmation.send_confirmation()
-        messages.success(request, u"Confirmation email was sent to you.")
-        return redirect("frontpage")
+    confirmation.send_confirmation()
+    messages.success(request, u"Confirmation email was sent to you.")
+    return redirect("frontpage")
