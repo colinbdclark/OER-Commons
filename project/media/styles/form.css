@@ -35,6 +35,14 @@ form.formatted .required label {
   background: url(../images/asterisk.gif) no-repeat 100% 0;
 }
 
+form.formatted  label.show-password {
+  padding-right: 0;
+  padding-left: 10px;
+  background: none;
+  font-weight: normal
+}
+
+
 form.formatted .field ul {
   list-style-type: none;
   margin: 0;

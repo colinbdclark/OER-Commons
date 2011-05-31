@@ -6,6 +6,7 @@
   <script type="text/javascript">
     $(function() {
       $("form[name='registration']").validate({rules: oer.validation.rules.registration});
+      $("#id_password").showPasswordCheckbox();
     });
   </script>
 {% endblock %}
@@ -18,15 +19,17 @@
     It is required to complete the registration.</div>
   </noscript>
   <form method="post" class="formatted" name="registration" action="{% url users:registration %}">
-    {% for field in form %}
-      {% if field.name == "newsletter" %}
-        <div class="field">
-          {{ field }} {{ field.label_tag }}
-        </div>
-      {% else %}
-        {% include "include/form-field.html" %}
-      {% endif %}
-    {% endfor %}
+    {% with form.email as field %}
+      {% include "include/form-field.html" %}
+    {% endwith %}
+    {% with form.password as field %}
+      {% include "include/form-field.html" %}
+    {% endwith %}
+    {% with form.newsletter as field %}
+      <div class="field">
+        {{ field }} {{ field.label_tag }}
+      </div>
+    {% endwith %}
     {% render_honeypot_field %}
     <div class="buttons">
       <input type="submit" class="button" value="Register" />

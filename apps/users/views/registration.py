@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic.simple import direct_to_template
 from honeypot.decorators import check_honeypot
 from users.backend import encrypt_password, BcryptBackend
@@ -14,14 +14,6 @@ import mailchimp
 
 
 class RegistrationForm(forms.Form):
-
-    first_name = forms.CharField(max_length=30, label=u"Your first name:",
-                           widget=forms.TextInput(attrs={"size": 50,
-                                                         "class": "text"}))
-
-    last_name = forms.CharField(max_length=30, label=u"Your last first name:",
-                           widget=forms.TextInput(attrs={"size": 50,
-                                                         "class": "text"}))
 
     email = forms.EmailField(label=u"Email:", max_length=75,
                              help_text=u"Enter your email address. This is "
@@ -39,13 +31,6 @@ class RegistrationForm(forms.Form):
                                                          "class": "text",
                                                       "autocomplete": "off"}))
 
-    confirm_password = forms.CharField(min_length=5,
-                            label=u"Confirm password:",
-                            help_text=u"Re-enter your password.",
-                            widget=forms.PasswordInput(attrs={"size": 15,
-                                                         "class": "text",
-                                                     "autocomplete": "off"}))
-
     newsletter = forms.BooleanField(label=u"Subscribe to the OER Commons Monthly Newsletter",
                                     widget=forms.CheckboxInput(),
                                     required=False,
@@ -56,14 +41,7 @@ class RegistrationForm(forms.Form):
         if email:
             email = email.lower()
         return email
-
-    def clean_confirm_password(self):
-        password = self.cleaned_data.get("password", "")
-        confirm_password = self.cleaned_data["confirm_password"]
-        if password != confirm_password:
-            raise forms.ValidationError(u"The two passwords do not match.")
-        return confirm_password
-
+    
 
 class ConfirmationForm(forms.Form):
 
@@ -86,7 +64,7 @@ class ConfirmationForm(forms.Form):
 def registration(request):
 
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse("frontpage"))
+        return redirect("frontpage")
 
     page_title = u"Registration"
     breadcrumbs = [{"url": reverse("users:registration"), "title": page_title}]
@@ -123,15 +101,12 @@ def registration(request):
                 return direct_to_template(request, "users/registration.html", locals())
 
             else:
-                first_name = data["first_name"]
-                last_name = data["last_name"]
                 password = encrypt_password(data["password"])
-                user = User(username=username, first_name=first_name,
-                            last_name=last_name, email=email,
-                            password=password, is_active=False)
+                user = User(username=username, first_name=u"",
+                            last_name=u"", email=email,
+                            password=password, is_active=True)
                 user.save()
-                profile = Profile(user=user)
-                profile.save()
+                Profile.objects.create(user=user)
                 confirmation = RegistrationConfirmation(user=user,
                                                         confirmed=False)
                 confirmation.save()
@@ -145,16 +120,16 @@ def registration(request):
                         try:
                             list = mailchimp.utils.get_connection().get_list_by_id(list_id)
                             user_data = {"EMAIL": email}
-                            if first_name:
-                                user_data["FNAME"] = first_name
-                            if last_name:
-                                user_data["LNAME"] = last_name
                             list.subscribe(email, user_data)
                         except:
                             pass
                 
                 messages.success(request, u"Confirmation email was sent to you.")
-                return HttpResponseRedirect(reverse("frontpage"))
+                backend = BcryptBackend()
+                user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+                auth_login(request, user)
+                
+                return redirect("users:welcome")
 
         else:
             messages.error(request, u"Please correct the indicated errors.")
@@ -165,6 +140,8 @@ def registration(request):
 def confirm(request):
 
     page_title = u"Confirm Registration"
+    hide_global_notifications = True
+
     form = ConfirmationForm()
 
     if "code" in request.REQUEST:
@@ -172,12 +149,13 @@ def confirm(request):
         if form.is_valid():
             confirmation = RegistrationConfirmation.objects.get(key=form.cleaned_data["code"])
             confirmation.confirm()
-            user = confirmation.user
-            backend = BcryptBackend()
-            user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-            auth_login(request, user)
-            messages.success(request, u"Thank you for registration. Your account was created.")
-            return HttpResponseRedirect(reverse("users:welcome"))
+            if request.user.is_anonymous():
+                user = confirmation.user
+                backend = BcryptBackend()
+                user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+                auth_login(request, user)
+            messages.success(request, u"Your account was confirmed. Thank you.")
+            return redirect("frontpage")
         else:
             messages.error(request, u"Please correct the indicated errors.")
 
@@ -188,14 +166,15 @@ def confirm(request):
 def welcome(request):
     
     page_title = u"Welcome to OER Commons"
-    
+    hide_global_notifications = True
+
     return direct_to_template(request, "users/welcome.html", locals())
 
 
 def resend(request):
 
-    if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse("frontpage"))
+    if request.user.is_authenticated() and request.user.is_confirmed:
+        return redirect("frontpage")
 
     username = request.REQUEST.get("username", u"").strip()
     email = request.REQUEST.get("email", u"").strip()
@@ -211,10 +190,6 @@ def resend(request):
 
     user = get_object_or_404(User, **kwargs)
     confirmation = get_object_or_404(RegistrationConfirmation, user=user)
-    if confirmation.confirmed:
-        messages.success(request, u"This user account is confirmed already.")
-        return HttpResponseRedirect(reverse("users:login"))
-    else:
-        confirmation.send_confirmation()
-        messages.success(request, u"Confirmation email was sent to you.")
-        return HttpResponseRedirect(reverse("frontpage"))
+    confirmation.send_confirmation()
+    messages.success(request, u"Confirmation email was sent to you.")
+    return redirect("frontpage")

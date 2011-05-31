@@ -19,20 +19,8 @@ class UserInfoForm(forms.ModelForm):
     last_name = forms.CharField(max_length=30, label=u"Last name:",
                            widget=forms.TextInput(attrs={"class": "text"}))
 
-    username = forms.CharField(max_length=30, label=u"Username:",
-                           widget=forms.TextInput(attrs={"class": "text"}))
-
     email = forms.EmailField(label=u"Email:",
                              widget=forms.TextInput(attrs={"class": "text"}))
-
-    def clean_username(self):
-        username = self.cleaned_data["username"]
-        instance = getattr(self, "instance", None)
-        if instance is not None:
-            if User.objects.filter(username=username).exclude(pk=instance.id).exists():
-                raise forms.ValidationError(u"This username is used by "
-                                            "another user.")
-        return username
 
     def clean_email(self):
         email = self.cleaned_data["email"]
@@ -45,7 +33,7 @@ class UserInfoForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "username", "email"]
+        fields = ["first_name", "last_name", "email"]
 
 
 class ChangePasswordForm(forms.ModelForm):

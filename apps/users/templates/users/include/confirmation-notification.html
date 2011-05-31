@@ -1,0 +1,10 @@
+{% if notification_class %}
+<div class="{{ notification_class }}" id="confirmation-notification">
+  You haven't confirmed your email address yet. Please follow the instructions in confirmation email that we have sent to you.
+  Otherwise your account will be deleted 
+  {% if days_to_delete >= 2 %}in {{ days_to_delete }} days.{% endif %}
+  {% if days_to_delete < 2 and days_to_delete >= 1 %}{{ days_to_delete }}tomorrow.{% endif %}
+  {% if days_to_delete < 1 %}today.{% endif %}
+  <br/><a href="{{ resend_url }}">Resend confirmation email.</a>
+</div>
+{% endif %}
