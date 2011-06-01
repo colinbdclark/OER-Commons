@@ -42,7 +42,6 @@
 </header>
 
 <section class="global-tabs fixed-width">
-  {% navigation %}
   <section id="global-search-box">
     <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
       <label class="inline" for="search-input">{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}</label>
@@ -51,4 +50,5 @@
       <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" /> 
     </form>
   </section>  
+  {% navigation %}
 </section>
