@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load compress %}
 {% load flatblock_tags %}
-<html lang="{{ request.LANGUAGE_CODE }}">
+<html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
     <meta charset="utf-8"/>
     {% compress css %}
@@ -24,7 +24,8 @@
       <link rel="stylesheet" href="{{ STATIC_URL }}styles/ie.css" media="all" />
       {% endcompress %}
     <![endif]-->
-    
+
+    {% include "include/modernizr.html" %}    
   </head>
   <body class="iframe-submission{% if request.user.is_authenticated %} authenticated{% endif %}">
   
