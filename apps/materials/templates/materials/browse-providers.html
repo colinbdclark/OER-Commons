@@ -3,17 +3,17 @@
 
 
 {% block column-left %}
-  <div class="portlet browse-materials">
+  <section class="portlet browse-materials">
     <a href="{% url materials:browse %}">Browse OER Materials</a>
-  </div>
+  </section>
 
-  <div class="portlet featured-provider">
-  <h4 class="dotted">Featured Collection Provider</h4>
-  <dl>
-    <dt><a href="/browse/collection/stories-of-the-american-south">Stories of the American South</a></dt>
-    <dd>The library of the University of North Carolina at Chapel Hill presents Stories of the American South.</dd>
-  </dl>
-  </div>
+  <section class="portlet featured-provider">
+    <h1 class="dotted">Featured Collection Provider</h1>
+    <dl>
+      <dt><a href="/browse/collection/stories-of-the-american-south">Stories of the American South</a></dt>
+      <dd>The library of the University of North Carolina at Chapel Hill presents Stories of the American South.</dd>
+    </dl>
+  </section>
 {% endblock %}
 
 

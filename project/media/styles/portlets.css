@@ -11,18 +11,18 @@
   padding-bottom: 17px;
 }
 
-.portlet h4 {
+.portlet h1 {
   color: #666666;
   font-size: 16px;
   font-weight: normal;
   margin-bottom:5px;
 }
 
-.portlet h4.green {
+.portlet h1.green {
   color: #679801;
 }
 
-.portlet h5 {
+.portlet h2 {
   color: #0A546D;
   font-size: 13px;
   font-weight: bold;
@@ -30,7 +30,7 @@
   margin-top: 10px;
 }
 
-.portlet h5 a, .portlet h5 a:visited {
+.portlet h2 a, .portlet h2 a:visited {
   color: #0A546D;
 }
 

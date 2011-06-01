@@ -81,11 +81,7 @@ body.green {
   padding-top: 5px;
 }
 
-.green .portlet.oermaterials h4 {
-  
-}
-
-.green .portlet.oermaterials h6 {
+.green .portlet.oermaterials hgroup h2 {
   color: #666;
   font-size: 13px;
   font-weight: bold;

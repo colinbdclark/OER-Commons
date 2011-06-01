@@ -1,7 +1,7 @@
 oer.materials.index = {};
 
 oer.materials.index.init_action_panel = function() {
-    var $filters_portlet = $("div.portlet.index-filters");
+    var $filters_portlet = $("section.portlet.index-filters");
     var $form = $filters_portlet.find("form[name='index-filters']");
     var $action_panel = $("div.action-panel");
 
@@ -20,7 +20,7 @@ oer.materials.index.init_action_panel = function() {
 };
 
 oer.materials.index.init_filters = function() {
-    var $filters_portlet = $("div.portlet.index-filters");
+    var $filters_portlet = $("section.portlet.index-filters");
     var $form = $filters_portlet.find("form[name='index-filters']");
 
     $form.find("div.search input[type='submit']").click(function() {
@@ -67,7 +67,7 @@ oer.materials.index.init_filters = function() {
 };
 
 oer.materials.index.init_top_keywords = function() {
-    var $top_keywords_portlet = $("div.portlet.top-keywords");
+    var $top_keywords_portlet = $("section.portlet.top-keywords");
     $top_keywords_portlet.find("a.see-more").click(function(e) {
         e.preventDefault();
         $(this).hide();
@@ -77,7 +77,7 @@ oer.materials.index.init_top_keywords = function() {
 };
 
 oer.materials.index.init_item_links = function() {
-    var $filters_portlet = $("div.portlet.index-filters");
+    var $filters_portlet = $("section.portlet.index-filters");
     var $form = $filters_portlet.find("form[name='index-filters']");
     $("#content div.materials-index").delegate("h3 a", "click", function(e) {
         e.preventDefault();
@@ -174,7 +174,7 @@ oer.materials.index.init = function() {
     oer.materials.index.init_actions_menus();
     oer.materials.index.init_tags_form();
 
-    var $filters_portlet = $("div.portlet.index-filters");
+    var $filters_portlet = $("section.portlet.index-filters");
 
     oer.collapsibles.init($("#content"));
     oer.collapsibles.init($filters_portlet);

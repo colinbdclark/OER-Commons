@@ -5,7 +5,7 @@
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
-      oer.accordion.init($("div.portlet.oermaterials div.accordion"));
+      oer.accordion.init($("section.portlet.oermaterials div.accordion"));
       oer.collapsibles.init($("#content"));
       oer.materials.index.init_actions_menus();
       oer.rating.init();
@@ -30,13 +30,15 @@
 
 
 {% block column-left %}
-<div class="portlet oermaterials clearfix">
-  <h4 class="dotted">Browse Resources</h4>
-  <h6>by Green Subtopic</h6>
+<section class="portlet oermaterials clearfix">
+  <hgroup>
+    <h1 class="dotted">Browse Resources</h1>
+    <h2>by Green Subtopic</h2>
+  </hgroup>
   <div class="accordion dotted clearfix">
   {% for topic, tree_info in topics %}
     {% if topic.level == 0 %}
-      <h5{% if not tree_info.closed_levels %} class="accordion-header"{% endif %}><a href="{% url materials:topic_index topics=topic.slug, microsite=microsite.slug %}" title="{{ topic.name }}">{{ topic.name }} ({{ topic.count }})</a></h5>
+      <h2{% if not tree_info.closed_levels %} class="accordion-header"{% endif %}><a href="{% url materials:topic_index topics=topic.slug, microsite=microsite.slug %}" title="{{ topic.name }}">{{ topic.name }} ({{ topic.count }})</a></h2>
     {% else %}
       {% if tree_info.new_level %}
       <div class="accordion-body"><ul>
@@ -52,7 +54,7 @@
   </div>
   
   <div class="accordion dotted clearfix">
-    <h5 class="accordion-header"><a href="#">Grade Level</a></h5>
+    <h2 class="accordion-header"><a href="#">Grade Level</a></h2>
     <div class="accordion-body">
       <ul>
         {% for level in grade_levels %}
@@ -60,7 +62,7 @@
         {% endfor %}
       </ul>
     </div>
-  	<h5 class="accordion-header"><a href="#">Material Type</a></h5>
+  	<h2 class="accordion-header"><a href="#">Material Type</a></h2>
   	<div class="accordion-body">
   		<ul>
   		  {% for material_type in course_material_types %}
@@ -69,11 +71,10 @@
   		</ul>
   	</div>
   </div>
-  
-</div>
+</section>
 
-<div class="portlet" id="green-sponsors-portlet">
-  <h4 class="green">Sponsorship</h4>
+<secton class="portlet" id="green-sponsors-portlet">
+  <h1 class="green">Sponsorship</h1>
   <p>Green OER is a project in OER Commons developed by 
      <a href="http://www.iskme.org">ISKME</a> in
      partnership with <a href="http://www.agroknow.gr">Agro-Know</a></p>
@@ -87,7 +88,7 @@
       <img alt="Agro-Know Technologies" src="{{STATIC_URL }}images/agro-know.png">
     </a>
   </div>
-</div>
+</section>
 {% endblock %}
 
 {% block content %}
@@ -102,12 +103,12 @@
 {% endblock %}
 
 {% block column-right %}
-   <div class="portlet top-keywords dotted">
+   <section class="portlet top-keywords dotted">
      <h4 class="dotted"><span class="icon"></span> Top Keywords</h4>
      <div class="tag-cloud">
        {% for keyword in keywords %}
          <a href="{% url materials:keyword_index keywords=keyword.slug microsite=microsite.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
        {% endfor %}
      </div>
-   </div>
+   </section>
 {% endblock %}

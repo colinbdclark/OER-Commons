@@ -1,5 +1,5 @@
-<div class="portlet item-tags dotted">
-  <h4 class="dotted">Tags</h4>
+<section class="portlet item-tags dotted">
+  <h1 class="dotted">Tags</h1>
   {% if tags %}
      <div class="tag-cloud dotted">
      {% for tag in tags %}
@@ -8,7 +8,7 @@
      </div>
   {% endif %}
   
-  <h5>Your Tags</h5>
+  <h2>Your Tags</h2>
   {% spaceless %}
   <ul class="user-tags">
     {% for tag in user_tags %}
@@ -27,4 +27,4 @@
   <div class="login">
       <a href="{% url users:login %}">Log in</a> to add tags to this item.
   </div>
-</div>
+</section>
