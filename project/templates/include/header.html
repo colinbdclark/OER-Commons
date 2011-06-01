@@ -1,7 +1,12 @@
 {% load navigation %}
 <div id="header">
   <div class="fixed-width">
-    <a id="logo" title="OER Commons" href="{% if microsite %}{% url materials:microsite microsite=microsite.slug %}{% else %}{% url frontpage %}{% endif %}"></a>
+    {% if microsite and microsite.slug == "green" %}
+      <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
+      <a id="logo-green" title="Green OER" href="{% url materials:microsite microsite=microsite.slug %}"></a>
+    {% else %}
+      <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
+    {% endif %}
     <ul class="header-links">
       {% spaceless %}
       <li class="anon">

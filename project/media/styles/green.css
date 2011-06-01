@@ -8,7 +8,16 @@ body.green {
 
 .green #logo {
   background-image: url(../images/green-logo.jpg);
-  width: 273px;
+  width: 135px;
+}
+
+.green #logo-green {
+  background: url(../images/green-logo.jpg) no-repeat -135px -43px;
+  width: 140px;
+  height: 40px;
+  display: block;
+  float: left;
+  margin-top: 55px;
 }
 
 .green-feature {
