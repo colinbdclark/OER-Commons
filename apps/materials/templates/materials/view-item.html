@@ -266,12 +266,12 @@
   {% item_tags_portlet item %}
   {% align_item_tags_portlet item %}
   
-  <div class="portlet item-keywords dotted">
-    <h4 class="dotted">Keywords</h4>
+  <section class="portlet item-keywords dotted">
+    <h1 class="dotted">Keywords</h1>
     {% for keyword in item.keywords.all %}
       <a href="{% url materials:keyword_index keywords=keyword.slug %}">{{ keyword.name }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}
-  </div>
+  </section>
 {% endblock %}
 
 {% block extra-footer %}

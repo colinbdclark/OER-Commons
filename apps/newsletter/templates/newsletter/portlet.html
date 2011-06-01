@@ -1,6 +1,6 @@
 {% if form %}
-<div class="portlet dotted" id="portlet-newsletter">
-  <h4 class="dotted green">Newsletter Sign Up</h4>
+<section class="portlet dotted" id="portlet-newsletter">
+  <h1 class="dotted green">Newsletter Sign Up</h1>
   <form action="{% url newsletter:subscribe %}" method="post"
         id="newsletter-subscribe" class="formatted">
     {% with form.email as field %}
@@ -14,5 +14,5 @@
       <input type="submit" value="Sign up" class="button" />
     </div>
   </form>
-</div>
+</section>
 {% endif %}

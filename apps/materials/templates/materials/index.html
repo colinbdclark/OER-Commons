@@ -12,7 +12,7 @@
       oer.saved_search.init();
       oer.send_this.init();
       oer.rating.init();
-      $("div.portlet.cou a").cluetip({local:true, arrows: true, width: 300});
+      $("section.portlet.cou a").cluetip({local:true, arrows: true, width: 300});
       $("#content div.cou-bucket").cluetip({local:true, arrows: true, width: 300});
     });
   </script>
@@ -63,8 +63,8 @@
 
 {% block column-right %}
    {% if items %}
-   <div class="portlet top-keywords dotted">
-     <h4 class="dotted">{% if microsite %}<span class="icon"></span> {% endif %}Top Keywords</h4>
+   <section class="portlet top-keywords dotted">
+     <h1 class="dotted">{% if microsite %}<span class="icon"></span> {% endif %}Top Keywords</h1>
      <div class="tag-cloud top dotted">
        {% for keyword in top_keywords %}
          <a href="{% url materials:keyword_index keywords=keyword.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
@@ -78,7 +78,7 @@
        {% endfor %}
      </div>
      {% endif %}
-   </div>
+   </section>
    {% endif %}
    
    {% include "include/portlets/cou.html" %}

@@ -2,13 +2,22 @@ body.green .page {
   background-image: url(../images/green-main-bg.png);
 }
 
-.green #header {
+.green header.global {
   background-image: url(../images/green-header-bg.jpg);
 }
 
 .green #logo {
   background-image: url(../images/green-logo.jpg);
-  width: 273px;
+  width: 135px;
+}
+
+.green #logo-green {
+  background: url(../images/green-logo.jpg) no-repeat -135px -43px;
+  width: 140px;
+  height: 40px;
+  display: block;
+  float: left;
+  margin-top: 55px;
 }
 
 .green .frontpage-highlight {
@@ -111,11 +120,7 @@ body.green .page {
   padding-top: 5px;
 }
 
-.green .portlet.oermaterials h4 {
-  
-}
-
-.green .portlet.oermaterials h6 {
+.green .portlet.oermaterials hgroup h2 {
   color: #666;
   font-size: 13px;
   font-weight: bold;

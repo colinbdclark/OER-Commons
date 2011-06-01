@@ -1,15 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 {% load compress %}
 {% load flatblock_tags %}
 {% load users_tags %}
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ request.LANGUAGE_CODE }}" lang="{{ request.LANGUAGE_CODE }}">
+<html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8"/>
     <title>{% block title %}{% if page_title %}{{ page_title }}{% if page_subtitle %}: {{ page_subtitle|safe }}{% endif %} | {% endif %}OER Commons{% endblock %}</title>
     {% block meta_description %}{% endblock %}
     <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico"/>
     {% include "include/css.html" %}
+    {% include "include/modernizr.html" %}
     {% block extra-css %}{% endblock %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
@@ -81,7 +81,7 @@
 
     </div>
     
-    <form name="next-url" action="" method="get">
+    <form name="next-url" action="/" method="get">
       <input type="hidden" name="next" value="{{ request.get_full_path }}" />
     </form>
     

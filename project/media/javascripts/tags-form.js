@@ -56,7 +56,7 @@ oer.tags_portlet.init = function() {
     if ($body.hasClass("authenticated")) {
         return;
     }
-    var $portlet = $("div.portlet.item-tags");
+    var $portlet = $("section.portlet.item-tags");
     $portlet.find(".login a").click(function(e) {
         e.preventDefault();
         oer.login.show_popup(function() {
