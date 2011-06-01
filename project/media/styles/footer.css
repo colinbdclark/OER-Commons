@@ -1,4 +1,4 @@
-#footer {
+footer.global {
   border-top: 2px solid #999999;
   color: #666666;
   margin-top: 20px;
@@ -7,29 +7,29 @@
   padding-top: 10px;
 }
 
-.cc-button {
+footer.global .cc-button {
   float: right;
 }
 
-.footer-links {
+footer.global nav ul {
   list-style-type: none;
   margin-bottom: 5px;
 }
 
-.footer-links li {
+footer.global nav li {
   display: inline;
   border-left: 1px solid #666666;
   padding-left: 5px;
   padding-right: 3px;
 }
 
-.footer-links .first {
+footer.global nav .first {
   padding-left: 0px;
   border: none;
 }
 
-.footer-links a,
-.footer-links a:visited {
+footer.global nav a,
+footer.global nav a:visited {
   color: #0D7BAC;
   text-decoration: none;
   line-height: 15px;

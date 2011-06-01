@@ -1,18 +1,20 @@
-<div id="footer" class="fixed-width">
+<footer class="global fixed-width">
   <a class="cc-button" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" title="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License.">
     <img src="{{ STATIC_URL}}images/cc-button.png" alt="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License." width="80" height="15" />
   </a>
-  <ul class="footer-links">
-    <li class="first"><a href="{% url frontpage %}">Home</a></li>
-    <li><a href="{% url materials:browse %}">Browse All</a></li>
-    <li><a href="{% url materials:community %}">OER Landscape</a></li>
-    <li><a href="{% url myitems:myitems %}">My Items</a></li>
-    <li><a href="http://wiki.oercommons.org">OER Wiki</a></li>
-    <li><a href="{% url information %}">About</a></li>
-    <li><a href="{% url information %}">Help</a></li>
-    <li><a href="{% url feedback %}">Feedback</a></li>
-  </ul>
+  <nav>
+    <ul>
+      <li class="first"><a href="{% url frontpage %}">Home</a></li>
+      <li><a href="{% url materials:browse %}">Browse All</a></li>
+      <li><a href="{% url materials:community %}">OER Landscape</a></li>
+      <li><a href="{% url myitems:myitems %}">My Items</a></li>
+      <li><a href="http://wiki.oercommons.org">OER Wiki</a></li>
+      <li><a href="{% url information %}">About</a></li>
+      <li><a href="{% url information %}">Help</a></li>
+      <li><a href="{% url feedback %}">Feedback</a></li>
+    </ul>
+  </nav>
   <p>© 2007 - OER Commons, a project created by ISKME. Except where otherwise
      noted, content created on this site is licensed under a<br />
      Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License.</p> 
-</div>
+</footer>
