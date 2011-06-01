@@ -1,9 +1,9 @@
-#header {
+header.global {
   height: 110px;
   background: url(../images/header-bg.png) no-repeat 50% 50%;
 }
 
-#header .fixed-width {
+header.global.fixed-width {
   width: 965px;
 }
 
@@ -17,7 +17,7 @@
   width: 130px;
 }
 
-.header-links {
+header.global nav ul {
   list-style-type: none;
   text-align: right;
   float: right;
@@ -25,30 +25,30 @@
   top: 80px;
 }
 
-.header-links li {
+header.global nav li {
   float: left;
   background: url(../images/header-link-sep.gif) no-repeat 100% 50%;
   padding: 0 10px;
 }
 
-.header-links li.auth {
+header.global nav li.auth {
   display: none;
 }
 
-body.authenticated .header-links li.auth {
+body.authenticated header.global nav li.auth {
   display: list-item;
 }
 
-body.authenticated .header-links li.anon {
+body.authenticated header.global nav li.anon {
   display: none;
 }
 
-.header-links .last {
+header.global nav .last {
   background: none;
   padding: 0;
 }
 
-.header-links a {
+header.global nav a {
   color: #707070;
   line-height: 22px;
   font-weight: bolder;
@@ -56,11 +56,11 @@ body.authenticated .header-links li.anon {
   text-decoration: none;
 }
 
-.header-links a img {
+header.global nav a img {
   vertical-align: middle; 
 }
 
-.header-links a.button-contribute {
+header.global nav a.button-contribute {
   background: url(../images/contribute-btn.gif) no-repeat;
   display: block;
   height: 22px;
@@ -71,19 +71,19 @@ body.authenticated .header-links li.anon {
   overflow: hidden;
 }
 
-.navigation-ct {
+.global-tabs nav {
   height: 40px;
   margin-bottom: 10px;
 }
 
-.navigation {
+.global-tabs nav ul {
   list-style-type: none;
   float: left;
   background: url(../images/section-sep.gif) no-repeat 100% 50%;
   padding-right: 1px;
 }
 
-.navigation li {
+.global-tabs nav li {
   float: left;
   height: 40px;
   padding-left: 3px;
@@ -91,17 +91,17 @@ body.authenticated .header-links li.anon {
   background: url(../images/section-sep.gif) no-repeat 0% 50%;
 }
 
-.navigation li span {
+.global-tabs nav li span {
   display: block;
   padding: 0 16px;
   height: 40px;
 }
 
-.navigation li.selected span {
+.global-tabs nav li.selected span {
   background: url(../images/section-active-bg.png) repeat-x;
 }
 
-.navigation li a {
+.global-tabs nav li a {
   font-size: 14px;
   font-weight: bold;
   line-height: 40px;
@@ -109,7 +109,7 @@ body.authenticated .header-links li.anon {
   color: #0C5670;
 }
 
-.navigation li.selected a {
+.global-tabs nav li.selected a {
   color: #fff;
 }
 

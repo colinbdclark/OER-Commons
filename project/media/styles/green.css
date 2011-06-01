@@ -2,7 +2,7 @@ body.green {
   background-image: url(../images/green-main-bg.png);
 }
 
-.green #header {
+.green header.global {
   background-image: url(../images/green-header-bg.jpg);
 }
 

@@ -1,5 +1,5 @@
 {% load navigation %}
-<div id="header">
+<header class="global">
   <div class="fixed-width">
     {% if microsite and microsite.slug == "green" %}
       <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
@@ -7,46 +7,48 @@
     {% else %}
       <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
     {% endif %}
-    <ul class="header-links">
+    <nav>
       {% spaceless %}
-      <li class="anon">
-        <a rel="nofollow" href="{% url users:registration %}">Register Now!</a>
-      </li>
-      <li class="anon">
-        <a rel="nofollow" class="login" href="{% url users:login %}">Log In</a>
-      </li>
-      <li class="auth">
-        <a rel="nofollow" href="{% url users:profile %}">My Profile</a>
-      </li>
-      <li class="auth">
-        <a rel="nofollow" href="{% url users:logout %}">Logout</a>
-      </li>
-      <li>
-        <a href="{% url feedback %}">Feedback</a>
-      </li>
-      <li>
-        <a href="{% url information %}">Help</a>
-      </li>
-      <li>
-        <a href="{% url preferences:preferences %}"><img src="{{ STATIC_URL }}images/preferences-icon.png" alt="Preferences" /></a>
-      </li>
-      <li class="last">
-        <a title="Contribute Content" class="button-contribute"
-           href="{% url contribute %}">Contribute Content</a>
-      </li>
+      <ul>
+        <li class="anon">
+          <a rel="nofollow" href="{% url users:registration %}">Register Now!</a>
+        </li>
+        <li class="anon">
+          <a rel="nofollow" class="login" href="{% url users:login %}">Log In</a>
+        </li>
+        <li class="auth">
+          <a rel="nofollow" href="{% url users:profile %}">My Profile</a>
+        </li>
+        <li class="auth">
+          <a rel="nofollow" href="{% url users:logout %}">Logout</a>
+        </li>
+        <li>
+          <a href="{% url feedback %}">Feedback</a>
+        </li>
+        <li>
+          <a href="{% url information %}">Help</a>
+        </li>
+        <li>
+          <a href="{% url preferences:preferences %}"><img src="{{ STATIC_URL }}images/preferences-icon.png" alt="Preferences" /></a>
+        </li>
+        <li class="last">
+          <a title="Contribute Content" class="button-contribute"
+             href="{% url contribute %}">Contribute Content</a>
+        </li>
+      </ul>
       {% endspaceless %}
-    </ul>
+    </nav>
   </div>
-</div>
+</header>
 
-<div class="navigation-ct fixed-width">
+<section class="global-tabs fixed-width">
   {% navigation %}
-  <div id="global-search-box">
+  <section id="global-search-box">
     <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
       <label class="inline" for="search-input">{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}</label>
       <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" />
       <input type="submit" value="Search" class="button" />
       <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" /> 
     </form>
-  </div>  
-</div>
+  </section>  
+</section>
