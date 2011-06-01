@@ -4,7 +4,7 @@
 {% load rating_tags %}
 {% load tags_tags %}
 {% load materials_tags %}
-<html lang="{{ request.LANGUAGE_CODE }}">
+<html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
     <meta charset="utf-8"/>
     {% compress css %}
@@ -30,7 +30,8 @@
     
     <title>{{ item.title }} | OER Commons</title>
     <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico"/> 
-    
+
+    {% include "include/modernizr.html" %}
   </head>
   <body class="toolbar-view {% if request.user.is_authenticated %} authenticated{% endif %}">
 
