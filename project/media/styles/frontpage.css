@@ -1,3 +1,42 @@
+.frontpage-highlight {
+  width: 180px;
+  color: #8AC239;
+  font-size: 18px;
+}
+
+.frontpage-highlight em {
+  font-style: normal;
+  color: #F3C237;
+}
+
+.frontpage-highlight ul {
+  margin-left: 10px;
+}
+
+.frontpage-highlight.left {
+  float: left;
+  text-align: center;
+  padding-top: 35px;
+}
+
+.frontpage-highlight.right {
+  float: right;
+  padding-top: 25px;
+}
+
+.frontpage-highlight.right a.button {
+  display: block;
+  width: 118px;
+  height: 25px;
+  margin: 10px auto 0;
+  text-decoration: none;
+  color: white;
+  background: url(../images/search-now.png) no-repeat;
+  font-size: 17px;
+  line-height: 25px;
+  text-align: center;
+}
+
 .frontpage-block {
   margin: 0 15px;
 }
