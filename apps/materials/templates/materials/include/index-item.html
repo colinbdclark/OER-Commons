@@ -1,10 +1,10 @@
 {% load materials_tags %}
-<div class="item clearfix collapsible{% if forloop.last %} last{% endif %}"
+<article class="item clearfix collapsible{% if forloop.last %} last{% endif %}"
      id="{{ item.identifier }}">
   <a class="expand-button collapsed" href="#"></a>
   {% include "materials/include/index-item-right.html" %}
   <div class="details">
-    <h3>
+    <h1>
       <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
       {% if request.preferences.show_toolbar %}
         <a href="{{ item.toolbar_view_url }}">
@@ -13,7 +13,7 @@
       {% endif %}
         <img alt="{{ item.title }}" src="{{ STATIC_URL }}images/external-link-icon.gif" />
       </a>  
-    </h3>
+    </h1>
     {% include "materials/include/index-item-details.html" %}
   </div>
-</div>
+</article>

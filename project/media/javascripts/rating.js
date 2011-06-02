@@ -24,7 +24,7 @@ oer.rating.submit = function(e) {
                 $this.removeClass(oer.rating.get_class($this)).addClass(class_name);
                 $this.data("initial_class", class_name);
                 if (is_materials_index) {
-                    oer.materials.index.item_message($this.closest("div.item"), data.message);
+                    oer.materials.index.item_message($this.closest("article.item"), data.message);
                 } else {
                     oer.status_message.success(data.message, true);
                 }
@@ -32,7 +32,7 @@ oer.rating.submit = function(e) {
                 $this.removeClass("hover");
                 $this.removeClass(oer.rating.get_class($this)).addClass($this.data("initial_class"));
                 if (is_materials_index) {
-                    oer.materials.index.item_message($this.closest("div.item"), data.message);
+                    oer.materials.index.item_message($this.closest("article.item"), data.message);
                 } else {
                     oer.status_message.error(data.message, true);
                 }
@@ -43,14 +43,14 @@ oer.rating.submit = function(e) {
 
 oer.rating.init = function(submit_success, submit_error) {
 
-    var $ratings = $("div.item div.stars");
+    var $ratings = $("article.item div.stars");
 
     var star_width = $ratings.first().width() / 5;
 
     $.each($ratings, function(i, rating) {
         var $rating = $(rating);
         $rating.data("initial_class", oer.rating.get_class($rating));
-        var $item = $rating.closest("div.item");
+        var $item = $rating.closest("article.item");
         $rating.data("identifier", $item.attr("id"));
         $rating.data("width", $rating.width());
 

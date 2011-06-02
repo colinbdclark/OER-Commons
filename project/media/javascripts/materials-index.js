@@ -79,7 +79,7 @@ oer.materials.index.init_top_keywords = function() {
 oer.materials.index.init_item_links = function() {
     var $filters_portlet = $("section.portlet.index-filters");
     var $form = $filters_portlet.find("form[name='index-filters']");
-    $("#content div.materials-index").delegate("h3 a", "click", function(e) {
+    $("#content div.materials-index").delegate("h1 a", "click", function(e) {
         e.preventDefault();
         $form.attr("action", $(this).attr("href")).attr("method", "post");
         $form.find("input[name='index_path']").attr("disabled", false);
@@ -118,7 +118,7 @@ oer.materials.index.init_actions_menus = function() {
         var $this = $(this);
         oer.login.check_login(function() {
             $.post($this.attr("href"), function(data) {
-                oer.materials.index.item_message($this.closest("div.item"), data.message);
+                oer.materials.index.item_message($this.closest("article.item"), data.message);
             });
         });
         var $menu = $this.closest("dl.actions");
@@ -158,7 +158,7 @@ oer.materials.index.init_tags_form = function() {
                 });
                 $form.show();
             });
-            $dialog.dialog("option", "title", "Add tags to " + $this.closest("div.item").find("h3 a").first().text());
+            $dialog.dialog("option", "title", "Add tags to " + $this.closest("article.item").find("h1 a").first().text());
             $dialog.dialog("open");
         });
     });

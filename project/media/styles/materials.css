@@ -8,7 +8,7 @@
   border: none;
 }
 
-.materials-index h3 {
+.materials-index h1 {
   font-size: 14px;
   font-style: normal;
   font-weight: bold;
@@ -16,27 +16,27 @@
   color: #1F4D64;
 }
 
-.view-item h3 {
+.view-item h1 {
   font-size: 20px;
   font-style: normal;
   font-weight: bold;
   margin-bottom: 4px;
 }
 
-.view-item h3 a {
+.view-item h1 a {
   color: #1F4D64;
 }
 
-.view-item h3 a:hover {
+.view-item h1 a:hover {
   text-decoration: underline;
 }
 
-.view-item h3 a img {
+.view-item h1 a img {
   vertical-align: text-top;
   margin-right: 1px; 
 }
 
-.materials-index h3 img {
+.materials-index h1 img {
   vertical-align: top;
 }
 
@@ -44,7 +44,7 @@
   text-decoration: none;
 }
 
-.materials-index h3 a {
+.materials-index h1 a {
   color: #1F4D64;
 }
 

@@ -4,7 +4,7 @@ oer.materials.view_item.init = function() {
     oer.materials.view_item.init_navigation();
     var $navigation = $("div.view-item-navigation");
     if ($navigation.length > 0) {
-        $("div.details h3 a").click(function(e) {
+        $("div.details h1 a").click(function(e) {
             e.preventDefault();
             $navigation.find("form").attr("action", $(this).attr("href")).submit();
         });
