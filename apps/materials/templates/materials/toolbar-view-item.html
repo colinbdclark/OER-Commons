@@ -39,68 +39,72 @@
 
     <a href="javascript:window.location = '{{ item.url|escapejs }}';" id="close-toolbar">Close toolbar</a>
 
-    <div class="toolbar item" id="{{ item.identifier }}"><div class="c1"><div class="c2"><div class="c3"><div class="c4"><div class="green-bar">
-    
-      {% if came_from_index %}
-      <div class="view-item-navigation">
+    <div id="toolbar">
+
+      <article class="item" id="{{ item.identifier }}"><div class="c1"><div class="c2"><div class="c3"><div class="c4"><div class="green-bar">
+      
+        {% if came_from_index %}
+        <div class="view-item-navigation">
+          {% spaceless %}
+          <ul>
+            {% if prev_item_url %}
+              <li class="sep"><a class="item-link prev" href="{{ prev_item_url }}">&laquo; Previous Item</a></li>
+            {% endif %}
+            {% if index_url %}
+              <li{% if next_item_url %} class="sep"{% endif %}><a href="{{ index_url }}">Return to Search Results...</a></li>
+            {% endif %}
+            {% if next_item_url %}
+              <li><a class="item-link next" href="{{ next_item_url }}">Next Item &raquo;</a></li>
+            {% endif %}
+          </ul>
+          {% endspaceless %}
+          <form action="" method="post">
+            <input type="hidden" name="index_path" value="{{ index_path }}" />
+            <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
+            <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
+            {% hidden_filters hidden_filters %}
+          </form>
+        </div>
+        {% endif %}
+  
         {% spaceless %}
         <ul>
-          {% if prev_item_url %}
-            <li class="sep"><a class="item-link prev" href="{{ prev_item_url }}">&laquo; Previous Item</a></li>
-          {% endif %}
-          {% if index_url %}
-            <li{% if next_item_url %} class="sep"{% endif %}><a href="{{ index_url }}">Return to Search Results...</a></li>
-          {% endif %}
-          {% if next_item_url %}
-            <li><a class="item-link next" href="{{ next_item_url }}">Next Item &raquo;</a></li>
-          {% endif %}
+          <li class="sep">
+            <a href="{{ save_url }}" class="save"{% if saved %} style="display: none;"{% endif %}>Save to My Items</a>
+            <a href="{{ unsave_url }}" class="unsave"{% if not saved %} style="display: none;"{% endif %}>Remove from My Items</a>
+          </li>
+          <li>
+            <a href="{% url myitems:myitems %}">My Items</a>
+          </li>
+        </ul>    
+        {% endspaceless %}
+         
+        {% spaceless %}
+        <ul>
+          <li class="rating"><span>Rating: </span>{% stars item.rating %}</li>
+          <li class="sep"><a href="#" class="review">Review</a></li>
+          <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
         </ul>
         {% endspaceless %}
-        <form action="" method="post">
-          <input type="hidden" name="index_path" value="{{ index_path }}" />
-          <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
-          <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
-          {% hidden_filters hidden_filters %}
-        </form>
-      </div>
-      {% endif %}
-
-      {% spaceless %}
-      <ul>
-        <li class="sep">
-          <a href="{{ save_url }}" class="save"{% if saved %} style="display: none;"{% endif %}>Save to My Items</a>
-          <a href="{{ unsave_url }}" class="unsave"{% if not saved %} style="display: none;"{% endif %}>Remove from My Items</a>
-        </li>
-        <li>
-          <a href="{% url myitems:myitems %}">My Items</a>
-        </li>
-      </ul>    
-      {% endspaceless %}
-       
-      {% spaceless %}
-      <ul>
-        <li class="rating"><span>Rating: </span>{% stars item.rating %}</li>
-        <li class="sep"><a href="#" class="review">Review</a></li>
-        <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
-      </ul>
-      {% endspaceless %}
-    
-      <div class="add-this-ct">
-        <div class="addthis_toolbox addthis_default_style ">
-          <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-          <a class="addthis_button_tweet"></a>
-        </div>
-        <script type="text/javascript">
-          addthis_url    = location.href;   
-          addthis_title  = document.title;  
-          addthis_pub    = 'oercommons';     
-        </script>
-        <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4dbe4f65120603bd"></script>
-      </div>
-    
-    <div class="clear"></div>
       
-    </div></div></div></div></div></div>
+        <div class="add-this-ct">
+          <div class="addthis_toolbox addthis_default_style ">
+            <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+            <a class="addthis_button_tweet"></a>
+          </div>
+          <script type="text/javascript">
+            addthis_url    = location.href;   
+            addthis_title  = document.title;  
+            addthis_pub    = 'oercommons';     
+          </script>
+          <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4dbe4f65120603bd"></script>
+        </div>
+      
+      <div class="clear"></div>
+        
+      </div></div></div></div></div></article>
+
+    </div>
 
     <div id="status-messages"></div>
 

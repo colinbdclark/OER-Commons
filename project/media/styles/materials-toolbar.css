@@ -11,7 +11,7 @@ iframe#resource {
   z-index: 1;
 }
 
-.toolbar {
+#toolbar {
   height: 40px;
   position: absolute;
   width: 100%;
@@ -19,46 +19,46 @@ iframe#resource {
   background-color: #fff;
 }
 
-.toolbar .c1 {
+#toolbar .c1 {
   background: url(../images/toolbar-circle-1.png) no-repeat 130px 0%;
 }
 
-.toolbar .c2 {
+#toolbar .c2 {
   background: url(../images/toolbar-circle-2.png) no-repeat 30% 0%;
 }
 
-.toolbar .c3 {
+#toolbar .c3 {
   background: url(../images/toolbar-circle-3.png) no-repeat 60% 0%;
 }
 
-.toolbar .c4 {
+#toolbar .c4 {
   background: url(../images/toolbar-circle-4.png) no-repeat 90% 0%;
 }
 
-.toolbar .green-bar {
+#toolbar .green-bar {
   background: url(../images/toolbar-green-bar.png) repeat-x 0% 100%;
   padding: 7px 30px 9px 120px;
   height: 24px;
 }
 
-.toolbar a {
+#toolbar a {
   text-decoration: none;
 }
 
-.toolbar a:hover {
+#toolbar a:hover {
   text-decoration: underline;
 }
 
-.toolbar li.rating span {
+#toolbar li.rating span {
   vertical-align: top;
 }
 
-.toolbar .stars {
+#toolbar .stars {
   margin-top: -1px;
   display: inline-block;
 }
 
-.toolbar ul {
+#toolbar ul {
   margin: 0;
   padding: 2px 1px 2px 0px;
   list-style-type: none;
@@ -66,7 +66,7 @@ iframe#resource {
   background: url(../images/dotted-line-vert.gif) 100% 0% repeat-y;
 }
 
-.toolbar li {
+#toolbar li {
   line-height: 18px;
   height: 18px;
   vertical-align: middle;
@@ -75,16 +75,16 @@ iframe#resource {
   padding-right: 10px;
 }
 
-.toolbar li.sep {
+#toolbar li.sep {
   padding-right: 11px;
   border-right: 1px solid #0B7BA9;
 }
 
-.toolbar li a {
+#toolbar li a {
   display: inline-block;
 }
 
-.toolbar li a.loading {
+#toolbar li a.loading {
   padding-left: 20px;
   background: url(../images/ajax-loader.gif) 0% 50% no-repeat;
 }
@@ -130,20 +130,15 @@ body.toolbar-view #status-messages .status-message {
   clear: both;
 }
 
-.toolbar .view-item-navigation {
+#toolbar .view-item-navigation {
   float: left;
 }
 
-.toolbar .view-item-navigation ul {
+#toolbar .view-item-navigation ul {
   float: none; 
 }
 
-.toolbar .add-this-ct {
+#toolbar .add-this-ct {
    float: right;
    margin-top: 1px; 
-}
-
-.toolbar .item {
-  overflow: hidden;
-  height: 24px; 
 }

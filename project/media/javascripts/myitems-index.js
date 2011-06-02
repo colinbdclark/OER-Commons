@@ -32,7 +32,7 @@ oer.myitems.index.init_saved_items = function() {
   $confirmation.find("a.unsave").click(
     function(e) {
       e.preventDefault();
-      var $item = $confirmation.closest("div.item");
+      var $item = $confirmation.closest("article.item");
       $confirmation.hide().detach();
       var url = $item.find("a.unsave-item").attr("href");
       $.post(url,
@@ -46,7 +46,7 @@ oer.myitems.index.init_saved_items = function() {
     function(e) {
       e.preventDefault();
       var $this = $(this);
-      $details = $this.closest("div.item").find("div.details");
+      $details = $this.closest("article.item").find("div.details");
       $confirmation.detach().appendTo($details).fadeIn(300);
     }
   );

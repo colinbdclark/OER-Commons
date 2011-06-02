@@ -146,10 +146,10 @@ oer.iframe_submission.existing_resource.init = function() {
                 var class_name = data.stars_class;
                 $this.removeClass(oer.rating.get_class($this)).addClass(class_name);
                 $this.data("initial_class", class_name);
-                show_message($this.closest("div.item"), data.message);
+                show_message($this.closest("article.item"), data.message);
             } else if (data.status === "error") {
                 $this.removeClass(oer.rating.get_class($this)).addClass($this.data("initial_class"));
-                show_message($this.closest("div.item"), data.message);
+                show_message($this.closest("article.item"), data.message);
             }
         });
     };
