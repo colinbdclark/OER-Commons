@@ -9,6 +9,7 @@ from django.utils.html import escape
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import Keyword, GeneralSubject, GradeLevel
+from materials.models.material import PUBLISHED_STATE
 from materials.models.microsite import Microsite
 from materials.utils import get_name_from_slug, get_facets_for_field
 from oauth_provider.models import Token
@@ -96,6 +97,8 @@ def frontpage(request):
     featured_highered = SearchQuerySet().filter(featured=True, grade_levels=3).exclude(microsites__in=microsites_ids).order_by("-featured_on").load_all()[:3]
     featured_highered = [r.object for r in featured_highered if r]
 
+    resource_number = SearchQuerySet().filter(workflow_state=PUBLISHED_STATE).count()
+
     return direct_to_template(request, "frontpage.html",
                               dict(tagcloud=tagcloud,
                                    general_subjects=general_subjects,
@@ -106,6 +109,7 @@ def frontpage(request):
                                    featured_k12=featured_k12,
                                    featured_highered=featured_highered,
                                    blog_posts=blog_posts,
+                                   resource_number=resource_number,
                                ))
 
 
