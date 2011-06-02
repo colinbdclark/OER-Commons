@@ -21,7 +21,23 @@
 
 {% block promo %}{% endblock %}
 
-{% block above-content %}{% include "include/slider.html" %}{% endblock %}
+{% block above-content %}
+<div class="fixed-width">
+  <div class="frontpage-highlight left">
+    Find Free-to-Use Teaching and Learning Content from Around the World     
+  </div>
+  <div class="frontpage-highlight right">
+    <ul>
+      <li>Free to Use</li>
+      <li>Openly Licensed</li>
+      <li><em>{{ resource_number }}</em> Resources</li>
+      <li>From K-12 to College Courses</li>
+    </ul> 
+    <a class="button" href="{% url materials:browse %}">Browse Now</a>
+  </div>
+{% include "include/slider.html" %}
+</div>
+{% endblock %}
 
 {% block column-left %}
 <section class="portlet oermaterials"> 
