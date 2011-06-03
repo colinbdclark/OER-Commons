@@ -257,7 +257,17 @@
       </dl>
       {% endif %}
     {% endwith %}
+    {% for rating in item.ratings.all %}
+      <span itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
+        <span itemprop="reviewRating" itemscope="itemscope" itemtype="http://schema.org/Rating">
+           <meta itemprop="ratingValue" content="{{ rating.value }}" />
+           <meta itemprop="bestRating" content="5" />      
+        </span>
+      </span>
+    {% endfor %}
+
   </div>
+  
 
 </article>
 
