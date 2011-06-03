@@ -13,5 +13,3 @@ def get_rating_stars_class(rating):
     else:
         parts[1] = 5
     return "s%i%i" % tuple(parts)
-
-
