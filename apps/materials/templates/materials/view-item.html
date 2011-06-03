@@ -96,7 +96,8 @@
    </div>
 {% endif %}
 
-<article class="view-item item" id="{{ item.identifier }}">
+<article class="view-item item" id="{{ item.identifier }}" itemscope="itemscope"
+         itemtype="http://schema.org/ScholarlyArticle">
 
   <div class="right add-this">
     <script type="text/javascript">
@@ -108,12 +109,12 @@
   </div>
   
   <div class="right clear">
-    {% stars item.rating %}
+    {% stars item.ratings %}
     {% cou_bucket item.license.bucket %}
   </div>
   
   <div class="details">
-    <h1>
+    <h1 itemprop="name">
       {% if request.preferences.show_toolbar %}
         <a href="{{ toolbar_view_url }}">
       {% else %}
@@ -123,10 +124,17 @@
       </a>
     </h1>
 
+    <meta itemprop="url" content="{{ item.url }}" />
+    <meta itemprop="keywords" content="{{ item.keyword_names|join:", " }}" />
+
     <dl>
       {% if item.authors.all.count %}
       <dt>Author:</dt>
-      <dd>{{ item.authors.all|join:", " }}</dd>
+      <dd>
+        {% for author in item.authors.all %}
+          <span itemprop="author">{{ author }}</span>{% if not forloop.last %},{% endif %}  
+        {% endfor %}
+      </dd>
       {% endif %}
 
       {% if item.general_subjects.all.count %}
@@ -165,7 +173,7 @@
     
     <dl>
       <dt>Abstract:</dt>
-      <dd>{{ item.abstract|linebreaks }}</dd>
+      <dd itemprop="description">{{ item.abstract|linebreaks }}</dd>
     </dl>
 
     <dl>
@@ -239,10 +247,10 @@
       <dl>
         <dt>Reviews</dt>
         {% for review in reviews %}
-          <dd>
-            {{ review.text|linebreaksbr }}
+          <dd itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
+            <span itemprop="reviewBody">{{ review.text|linebreaksbr }}</span>
             {% with review.user as author %}
-            <span class="by">- {{ author.first_name }} {{ author.last_name }}</span>
+            <span class="by">- <span itemprop="author">{{ author.first_name }} {{ author.last_name }}</span></span>
             {% endwith %}
           </dd>
         {% endfor %}

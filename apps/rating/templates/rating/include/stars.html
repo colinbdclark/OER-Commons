@@ -1,1 +1,11 @@
+{% if rating_value %}
+<div itemscope="itemscope" itemprop="aggregateRating"
+     itemtype="http://schema.org/AggregateRating"
+     class="stars {{ class }}">
+  <meta itemprop="ratingValue" content="{{ rating_value }}" />
+  <meta itemprop="bestRating" content="5" />
+  <meta itemprop="ratingCount" content="{{ rating_count }}" />
+</div>
+{% else %}
 <div class="stars {{ class }}"></div>
+{% endif %}
