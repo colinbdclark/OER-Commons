@@ -255,7 +255,7 @@ oer.profile.init_roles = function() {
 
     var $roles_input = $inputs.filter("[name='roles']");
 
-    var EDUCATOR_ROLE_IDS = [ 1, 2 ];
+    var EDUCATOR_ROLE_IDS = [ 1, 2, 3 ];
     $roles_input.change(function(e) {
         var is_educator = false;
         $roles_input.filter(":checked").each(function(index, el) {
