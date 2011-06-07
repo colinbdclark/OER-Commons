@@ -36,6 +36,7 @@ def profile(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user_info_form = UserInfoForm(instance=user)
     change_password_form = ChangePasswordForm()
@@ -94,6 +95,7 @@ def geography(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -133,6 +135,7 @@ def roles(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -163,6 +166,7 @@ def about(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
