@@ -4,13 +4,13 @@ from django.core.mail.message import EmailMessage
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
-from users.models import Profile
-from users.views.forms import UserInfoForm, ChangePasswordForm, GeographyForm,\
-    RolesForm, WishForm
-from utils.decorators import login_required
-from utils.shortcuts import ajax_form_success, ajax_form_error
 from django.shortcuts import redirect
 from geo.models import CountryIPDiapason
+from users.models import Profile
+from users.views.forms import UserInfoForm, ChangePasswordForm, GeographyForm,\
+    RolesForm, AboutMeForm
+from utils.decorators import login_required
+from utils.shortcuts import ajax_form_success, ajax_form_error
 
 
 @login_required
@@ -131,7 +131,7 @@ def roles(request):
             if request.is_ajax():
                 return ajax_form_success(form.success_message)
             
-            return redirect("users:profile_wish")
+            return redirect("users:profile_about")
         
         else:
             if request.is_ajax():
@@ -143,7 +143,7 @@ def roles(request):
 
 
 @login_required
-def wish(request):
+def about(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
@@ -151,10 +151,10 @@ def wish(request):
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
 
-    form = WishForm(instance=profile)
+    form = AboutMeForm(instance=profile)
 
     if request.method == "POST":
-        form = WishForm(request.POST, instance=profile)
+        form = AboutMeForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
             if request.is_ajax():
@@ -168,4 +168,4 @@ def wish(request):
             
             messages.error(request, form.error_message)
 
-    return direct_to_template(request, "users/profile-wish.html", locals())
+    return direct_to_template(request, "users/profile-about.html", locals())
