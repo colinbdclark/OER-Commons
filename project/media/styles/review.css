@@ -10,5 +10,19 @@ body.review form.review textarea.text {
 }
 
 body.review .guidelines {
-  margin-left: 480px 
+  margin-left: 480px;
+}
+
+body.review .guidelines ul.collapsed {
+  display: none;
+}
+
+body.review .guidelines section h1 {
+  font-size: 1.2em;
+  margin-top: 0.7em;
+  margin-bottom: 0.5em;
+}
+
+body.review .guidelines section h1 a.expand-button {
+  margin-right: 5px;
 }
