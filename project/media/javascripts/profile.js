@@ -272,7 +272,7 @@ oer.profile.init_roles = function() {
 
     var $roles_input = $inputs.filter("[name='roles']");
 
-    var EDUCATOR_ROLE_IDS = [ 1, 2 ];
+    var EDUCATOR_ROLE_IDS = [ 1, 2, 3 ];
     $roles_input.change(function(e) {
         var is_educator = false;
         $roles_input.filter(":checked").each(function(index, el) {
@@ -300,9 +300,9 @@ oer.profile.init_roles = function() {
     });
 };
 
-oer.profile.init_wish = function() {
-    var $form = $("form.wish");
-    var $header = $("table.profile th.wish");
+oer.profile.init_about = function() {
+    var $form = $("form.about");
+    var $header = $("table.profile th.about");
     var $save_btn = $form.find("input[type='submit'].save");
     var $next_btn = $form.find("input[type='submit'].next");
     $next_btn.click(function(e) {
