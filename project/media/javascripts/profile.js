@@ -283,9 +283,9 @@ oer.profile.init_roles = function() {
     });
 };
 
-oer.profile.init_wish = function() {
-    var $form = $("form.wish");
-    var $header = $("table.profile th.wish");
+oer.profile.init_about = function() {
+    var $form = $("form.about");
+    var $header = $("table.profile th.about");
     var $save_btn = $form.find("input[type='submit'].save");
     var $next_btn = $form.find("input[type='submit'].next");
     $next_btn.click(function(e) {
