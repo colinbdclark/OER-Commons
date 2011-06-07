@@ -19,7 +19,7 @@
     "pk": 3, 
     "model": "users.role", 
     "fields": {
-      "is_educator": false, 
+      "is_educator": true,
       "title": "Library Media Specialist / Librarian"
     }
   }, 
