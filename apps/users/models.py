@@ -136,7 +136,7 @@ class Profile(models.Model):
                    "country",
                    "connect_with",
                    "roles",
-                   "wish_for_education"
+                   "about_me"
                 ]
         if self.roles.filter(is_educator=True).exists():
             fields += ["educator_student_levels", "educator_subjects"]
@@ -161,7 +161,7 @@ class Profile(models.Model):
                 number += 1
             if self.educator_subjects.all().exists():
                 number += 1
-        if self.wish_for_education:
+        if self.about_me:
             number +=1
         return number
 
