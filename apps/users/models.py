@@ -122,7 +122,7 @@ class Profile(models.Model):
     educator_subjects = AutoCreateManyToManyField(EducatorSubject, null=True,
                                                   blank=True) 
     
-    wish_for_education = models.TextField(blank=True, null=True)
+    about_me = models.TextField(blank=True, null=True)
     
 
 def gen_confirmation_key():
