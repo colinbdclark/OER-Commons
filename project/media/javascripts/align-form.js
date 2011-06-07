@@ -102,10 +102,9 @@ oer.align_form.init_dropdown = function($dropdown) {
     $dropdown.change(function(e) {
         var value = $dropdown.val();
         $buttons.hide();
-        if (value === "-") {
-            $next_fields.hide();
-            $next_dropdowns.empty();
-        } else {
+        $next_fields.hide();
+        $next_dropdowns.empty();
+        if (value !== "-") {
             var data = {};
             data[$dropdown.attr("name")] = value;
             $prev_dropdowns.each(function(i) {
