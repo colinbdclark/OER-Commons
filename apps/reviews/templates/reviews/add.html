@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% load utils %}
 
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.collapsibles.init($(".guidelines"));
+    });
+  </script>
+{% endblock %}
+
 {% block above-content %}{% endblock %}
 
 {% block bodyclass %}no-columns review{% endblock %}
@@ -20,30 +28,59 @@
     </div>
   </form>
   
-  <div class="guidelines">
+  <div class="guidelines collapsibles">
     <h3>Factors to consider when reviewing materials:</h3>
-    <h4>Use</h4>
-    <ul>
-      <li>How did you use this material? In which courses or programs did you use the material?</li>
-      <li>Did you augment the material? How?</li>
-    </ul>
-      
-    <h4>Overall Quality</h4>
-    <ul>
-      <li>Clarity: Is there a sufficient level of clarity and comprehensibility of written content?</li>
-      <li>Consistency: Is there consistency in the language and use of key terms? Is the language suitable for novice users?</li>
-      <li>Content Errors: Did you find factual, grammatical, or typographical errors?</li>
-      <li>Interface: Did you find technological issues, such as broken links? How is the ease of navigation?</li>
-      <li>Suggested Changes: What top three issues need addressing, if any?</li>
-      <li>Exemplary Features: What are the top three features that are notable or unique?</li>
-    </ul>
-        
-    <h4>Usefulness and Recommendations for Future Use</h4>
-    <ul>
-      <li>What knowledge and skills do you need to use it? What knowledge and skills must students have to use this material?</li>
-      <li>Is the material more (or less) appropriate for a specific audience, grade level, or student learning style?</li>
-      <li>Did using the material lead to successful or identifiable outcomes? This can include examples of student work, student learning, improved instruction, etc.</li>
-      <li>Is the material suitable for reuse? In terms of augmenting it, creating new derivative works from it, or localizing it in any way to meet your own needs, what is most notable?</li>
-    </ul>
+    <section class="collapsible">
+      <h1><a href="#" class="expand-button expanded"></a> Use</h1>
+      <ul class="expanded">
+        <li>How did you use this material? In which courses or programs did you use the material?</li>
+        <li>Did you augment the material? How?</li>
+      </ul>
+    </section>
+
+    <section class="collapsible">
+      <h1><a href="#" class="expand-button collapsed"></a> Overall
+        Quality</h1>
+      <ul class="collapsed">
+        <li>Clarity: Is there a sufficient level of clarity and
+          comprehensibility of written content?
+        </li>
+        <li>Consistency: Is there consistency in the language and use of key
+          terms? Is the language suitable for novice users?
+        </li>
+        <li>Content Errors: Did you find factual, grammatical, or typographical
+          errors?
+        </li>
+        <li>Interface: Did you find technological issues, such as broken links?
+          How is the ease of navigation?
+        </li>
+        <li>Suggested Changes: What top three issues need addressing, if any?
+        </li>
+        <li>Exemplary Features: What are the top three features that are
+          notable or unique?
+        </li>
+      </ul>
+    </section>
+
+    <section class="collapsible">
+      <h1><a href="#" class="expand-button collapsed"></a> Usefulness and
+      Recommendations for Future Use</h1>
+      <ul class="collapsed">
+        <li>What knowledge and skills do you need to use it? What knowledge and
+          skills must students have to use this material?
+        </li>
+        <li>Is the material more (or less) appropriate for a specific audience,
+          grade level, or student learning style?
+        </li>
+        <li>Did using the material lead to successful or identifiable outcomes?
+          This can include examples of student work, student learning, improved
+          instruction, etc.
+        </li>
+        <li>Is the material suitable for reuse? In terms of augmenting it,
+          creating new derivative works from it, or localizing it in any way to
+          meet your own needs, what is most notable?
+        </li>
+      </ul>
+    </section>
   </div>
 {% endblock %}
