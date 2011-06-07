@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect
-import mailchimp
+from newsletter.tasks import subscribe as do_subscribe
 
 
 class SubscribeForm(forms.Form):
@@ -27,18 +27,12 @@ def subscribe(request):
     form = SubscribeForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data["email"]
-        try:
-            list = mailchimp.utils.get_connection().get_list_by_id(list_id)
-            user_data = {"EMAIL": email}
-            if user.is_authenticated():
-                if user.first_name:
-                    user_data["FNAME"] = user.first_name
-                if user.last_name:
-                    user_data["LNAME"] = user.last_name
-            list.subscribe(email, user_data)
-            messages.success(request, u"A confirmation email has been sent to you. Check your inbox.")
-        except:
-            messages.success(request, u"Oops! Something went wrong. Please try again later.")
-            
+        kwargs = {}
+        if user.is_authenticated():
+            kwargs["first_name"] = user.first_name
+            kwargs["last_name"] = user.last_name
+        do_subscribe.delay(email, **kwargs)
+        messages.success(request, u"You are subscribed to OER Commons newsletter now.")
+
     return redirect("frontpage")
     
