@@ -139,16 +139,16 @@ class RolesForm(forms.ModelForm):
         fields = ["roles", "educator_student_levels", "educator_subjects"]
 
 
-class WishForm(forms.ModelForm):
+class AboutMeForm(forms.ModelForm):
 
-    success_message = u"Your wish for education was saved."
+    success_message = u"Your profile was saved."
     error_message = u"Please correct the indicated errors."
     
-    wish_for_education = forms.CharField(label=u"If you could fix anything in education, what would you fix?",
-                                     required=False,
-                                     widget=forms.Textarea)
+    about_me = forms.CharField(label=u"",
+                               required=False,
+                               widget=forms.Textarea)
     
     class Meta:
         model = Profile
-        fields = ["wish_for_education"]
+        fields = ["about_me"]
         
