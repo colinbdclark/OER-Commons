@@ -1,5 +1,4 @@
 from celery.decorators import task
-from haystack.query import SearchQuerySet
 import requests
 import urllib
 
@@ -31,6 +30,7 @@ def check_url_status(item):
 @task
 def reindex_microsite_topic(topic):
     from haystack.sites import site
+    from haystack.query import SearchQuerySet
 
     objects = set()
     
