@@ -12,6 +12,10 @@ a {
   color: #0B7BA9;
 }
 
+.align-center {
+  text-align: center;
+}
+
 a.dashed {
   border-bottom-width: 1px;
   border-bottom-style: dashed;
@@ -244,4 +248,35 @@ div.box h3 {
 
 .status-message .close {
   margin-top: 5px;
+}
+
+.r3 {
+  border-right: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
+.r5 {
+  border-right: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+
+.r10 {
+  border-right: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+
+.button-blue-big {
+  display: inline-block;
+  margin: 3px;
+  text-decoration: none;
+  color: white;
+  background-color: #0B7BA8;
+  font-size: 17px;
+  line-height: 24px;
+  text-align: center;
+  padding: 2px 10px;
+  text-shadow: 1px 1px 1px #333;
 }

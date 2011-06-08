@@ -23,7 +23,7 @@
 
 {% block above-content %}
 <div class="fixed-width">
-  <div class="frontpage-highlight left">
+  <div class="frontpage-highlight left align-center">
     Find Free-to-Use Teaching and Learning Content from Around the World     
   </div>
   <div class="frontpage-highlight right">
@@ -32,8 +32,10 @@
       <li>Openly Licensed</li>
       <li><em>{{ resource_number }}</em> Resources</li>
       <li>From K-12 to College Courses</li>
-    </ul> 
-    <a class="button" href="{% url materials:browse %}">Browse Now</a>
+    </ul>
+    <div class="align-center">
+      <a class="button-blue-big r5" href="{% url materials:browse %}">Browse Now</a>
+    </div>
   </div>
 {% include "include/slider.html" %}
 </div>

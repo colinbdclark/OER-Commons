@@ -35,7 +35,8 @@
 
 .toolbar .stars,
 .toolbar li,
-.toolbar li a {
+.toolbar li a,
+.button-blue-big {
   zoom: 1;
   display: inline; 
 }
