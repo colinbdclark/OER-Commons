@@ -15,7 +15,6 @@
 
 .frontpage-highlight.left {
   float: left;
-  text-align: center;
   padding-top: 35px;
 }
 
@@ -24,17 +23,8 @@
   padding-top: 25px;
 }
 
-.frontpage-highlight.right a.button {
-  display: block;
-  width: 114px;
-  height: 24px;
-  margin: 10px auto 0;
-  text-decoration: none;
-  color: white;
-  background: url(../images/search-now.png) no-repeat;
-  font-size: 17px;
-  line-height: 24px;
-  text-align: center;
+.frontpage-highlight .button-blue-big {
+  margin-top: 10px;
 }
 
 .frontpage-block {

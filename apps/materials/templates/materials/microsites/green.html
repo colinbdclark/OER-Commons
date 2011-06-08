@@ -26,7 +26,7 @@
 
 {% block above-content %}
 <div class="fixed-width">
-  <div class="frontpage-highlight left">
+  <div class="frontpage-highlight left align-center">
     OER Commons Green is dedicated to <em>sustainability</em> and resource conservation 
   </div>
   <div class="frontpage-highlight right">
@@ -35,8 +35,10 @@
       <li>Openly Licensed</li>
       <li><em>{{ resource_number }}</em> Resources</li>
       <li>From K-12 to College Courses</li>
-    </ul> 
-    <a class="button" href="#">Search Now</a>
+    </ul>
+    <div class="align-center">
+      <a class="button-blue-big r5" href="#">Search Now</a>
+    </div>
   </div>
 {% include "include/slider.html" %}
 </div>
