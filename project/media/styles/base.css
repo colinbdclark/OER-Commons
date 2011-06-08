@@ -241,3 +241,16 @@ div.box h3 {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
 }
+
+.button-blue-big {
+  display: inline-block;
+  margin: 3px;
+  text-decoration: none;
+  color: white;
+  background-color: #0B7BA8;
+  font-size: 17px;
+  line-height: 24px;
+  text-align: center;
+  padding: 2px 10px;
+  text-shadow: 1px 1px 1px #333;
+}
