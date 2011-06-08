@@ -3,6 +3,9 @@ oer.send_this = {};
 oer.send_this.init = function() {
     var $form = $("form[name='send-this']");
     var $show_form_link = $("a.send-this");
+    if (!$show_form_link.length) {
+      return;
+    }
 
     var coordinates = $show_form_link.offset();
 
