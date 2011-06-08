@@ -1,6 +1,6 @@
 .frontpage-highlight {
   width: 180px;
-  color: #8AC239;
+  color: #679801;
   font-size: 18px;
 }
 
@@ -26,14 +26,14 @@
 
 .frontpage-highlight.right a.button {
   display: block;
-  width: 118px;
-  height: 25px;
+  width: 114px;
+  height: 24px;
   margin: 10px auto 0;
   text-decoration: none;
   color: white;
   background: url(../images/search-now.png) no-repeat;
   font-size: 17px;
-  line-height: 25px;
+  line-height: 24px;
   text-align: center;
 }
 
