@@ -56,6 +56,7 @@ hr.tall {
   background: url(../images/dotted-line-hor.gif) repeat-x scroll 0 100%
     transparent;
   padding-bottom: 4px;
+  text-decoration: none;
 }
 
 .breadcrumbs {
