@@ -1,5 +1,5 @@
 .clearfix {
-  zoom: 1;     /* triggers hasLayout */
+  zoom: 1; /* triggers hasLayout */
 }
 
 .index-filters .filter input, .advanced-search .filter input {
@@ -38,5 +38,9 @@
 .toolbar li a,
 .button-blue-big {
   zoom: 1;
-  display: inline; 
+  display: inline;
+}
+
+.rocon {
+  text-align: left;
 }
