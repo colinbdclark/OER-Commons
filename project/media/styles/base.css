@@ -219,3 +219,21 @@ div.box h3 {
   padding-right: 22px;
   background: url(../images/ajax-loader.gif) no-repeat 100% 50%;
 }
+
+.r3 {
+  border-right: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
+.r5 {
+  border-right: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+
+.r10 {
+  border-right: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
