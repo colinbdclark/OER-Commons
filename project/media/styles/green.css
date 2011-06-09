@@ -130,3 +130,12 @@ body.green .top-keywords h4 {
 .portlet.oermaterials .topics li a.green {
   background: url(../images/green-icon-small.png) no-repeat 0 50%;
 }
+
+.portlet.item-tags li.green {
+  background: #D8E5C3 url(../images/green-icon-small-green-bg.png) no-repeat 3px 50%;
+  padding-left: 24px;
+}
+
+.portlet.item-tags li.green a {
+  color: #64972B;
+}

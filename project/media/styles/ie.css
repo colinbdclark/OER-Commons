@@ -33,11 +33,14 @@
   background: none !important;
 }
 
+/* Items with display: inline-block */
 .toolbar .stars,
 .toolbar li,
 .toolbar li a,
 .button-blue-big,
-.portlet.bookmarklet a {
+.portlet.bookmarklet a,
+.portlet.item-tags li,
+.portlet.save a {
   zoom: 1;
   display: inline;
 }
