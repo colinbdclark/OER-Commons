@@ -38,7 +38,7 @@
       <div class="action-panel empty fixed-width"></div>
     {% endblock %}
     
-    <div class="layout-columns fixed-width clearfix">
+    <div class="layout-columns fixed-width clearfix" {% block content-itemscope-attrs %}{# this is a placeholder to insert microdata itemscope attribute on resource page #}{% endblock %}>
 
       <div class="column-left">
         {% block column-left %}

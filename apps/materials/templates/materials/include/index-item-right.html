@@ -1,7 +1,7 @@
 {% load materials_tags %}
 {% load rating_tags %}
 <div class="right">
-  {% stars item.rating %}
+  {% stars item.identifier item.rating %}
   {% cou_bucket item.cou_bucket %}
   <dl class="actions">
     <dt><a href="#"><img src="{{ STATIC_URL }}images/actions-menu-btn.png" alt="Actions" /></a></dt>
