@@ -43,15 +43,13 @@ oer.rating.submit = function(e) {
 
 oer.rating.init = function(submit_success, submit_error) {
 
-    var $ratings = $("article.item div.stars");
+    var $ratings = $("div.stars");
 
     var star_width = $ratings.first().width() / 5;
 
     $.each($ratings, function(i, rating) {
         var $rating = $(rating);
         $rating.data("initial_class", oer.rating.get_class($rating));
-        var $item = $rating.closest("article.item");
-        $rating.data("identifier", $item.attr("id"));
         $rating.data("width", $rating.width());
 
         $rating.mouseout(function(e) {

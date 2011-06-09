@@ -1,6 +1,6 @@
 oer.tags_form = {};
 
-$.template("user-tags-item", '<li id="tag${id}"><a href="#" class="delete">Delete</a><div><a href="${url}">${name}</a></div></li>');
+$.template("user-tags-item", '<li data-id="${id}" class="tag rc3"><a href="${url}">${name}</a> <a href="#" class="delete">Delete</a></li>');
 
 oer.tags_form.init = function() {
     var $form = $("#add-tags-form");
@@ -28,7 +28,10 @@ oer.tags_form.init = function() {
         }, function(response, status, request) {
             $input.removeClass("loading");
             $.each(response.tags, function(i, tag) {
-                $.tmpl("user-tags-item", tag).appendTo($user_tags);
+                var $tag = $.tmpl("user-tags-item", tag).appendTo($user_tags);
+                if (window.rocon != undefined) {
+                  rocon.update($tag.get(0));
+                }
             });
             $input.val("");
         });
@@ -41,7 +44,7 @@ oer.tags_form.init = function() {
         $li.fadeOut(250, function() {
             $(this).detach();
         });
-        var tag_id = $li.attr("id").slice(3);
+        var tag_id = $li.data("id");
         $.post("/tags/delete", {
             id : tag_id
         }, function(response, status, request) {
@@ -64,10 +67,14 @@ oer.tags_portlet.init = function() {
             $user_tags.empty().hide();
             var $form = $("#add-tags-form");
             $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/"), function(data, status) {
-                var item_tags = data.tags;
                 var user_tags = data.user_tags;
+                var $item_tags = $portlet.find("ul:first li.tag");
                 $.each(user_tags, function(index, tag) {
-                    $.tmpl("user-tags-item", tag).appendTo($user_tags);
+                    $item_tags.filter(":contains(" + tag.name + ")").fadeOut(300);
+                    var $tag = $.tmpl("user-tags-item", tag).appendTo($user_tags);
+                  if (window.rocon != undefined) {
+                    rocon.update($tag.get(0));
+                  }
                 });
                 $user_tags.fadeIn(300);
             });

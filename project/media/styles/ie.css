@@ -1,5 +1,5 @@
 .clearfix {
-  zoom: 1;     /* triggers hasLayout */
+  zoom: 1; /* triggers hasLayout */
 }
 
 .index-filters .filter input, .advanced-search .filter input {
@@ -33,10 +33,17 @@
   background: none !important;
 }
 
+/* Items with display: inline-block */
 .toolbar .stars,
 .toolbar li,
 .toolbar li a,
-.button-blue-big {
+.button-blue-big,
+.portlet.item-tags li,
+.portlet.save a {
   zoom: 1;
-  display: inline; 
+  display: inline;
+}
+
+.rocon {
+  text-align: left;
 }

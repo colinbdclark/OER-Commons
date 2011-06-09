@@ -13,12 +13,6 @@ $(function() {
         });        
     }
 
-    if (!Modernizr.borderradius) {
-      $(".r10").corner("10px");
-      $(".r5").corner("5px");
-      $(".r3").corner("3px");
-    }
-
     oer.next_url.init();
     oer.login.init();
     var $honeypot_field = $("input[name='" + HONEYPOT_FIELD_NAME + "']");

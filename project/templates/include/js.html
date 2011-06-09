@@ -32,3 +32,9 @@
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/newsletter.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/global-init.js"></script>
 {% endcompress %}
+
+<!--[if lt IE 9]>
+  {% compress js %}
+  <script type="text/javascript" src="{{ STATIC_URL }}javascripts/rounded-corners-min.js"></script>
+  {% endcompress %}
+<![endif]-->
