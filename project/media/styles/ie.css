@@ -39,6 +39,10 @@
 .toolbar li a,
 .button-blue-big,
 .portlet.bookmarklet a,
+.user-tags li.tag,
+.portlet.item-tags .user-tags li.tag,
+.user-tags li.tag a,
+.portlet.item-tags .user-tags li.tag a,
 .portlet.item-tags li,
 .portlet.save a {
   zoom: 1;
