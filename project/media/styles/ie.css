@@ -39,7 +39,8 @@
 .toolbar li a,
 .button-blue-big,
 .portlet.item-tags li,
-.portlet.save a {
+.portlet.save a,
+.portlet.bookmarklet a {
   zoom: 1;
   display: inline;
 }
