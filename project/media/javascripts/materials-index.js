@@ -150,7 +150,7 @@ oer.materials.index.init_tags_form = function() {
             $user_tags.empty();
             $form.attr("action", $this.attr("href"));
             $input.val("");
-            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/"), function(data, status) {
+            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
                 var item_tags = data.tags;
                 var user_tags = data.user_tags;
                 $.each(user_tags, function(index, tag) {
@@ -203,7 +203,7 @@ oer.materials.index.init_align_form = function() {
                 oer.align_form.init();
             }
             $user_tags.empty();
-            $.getJSON($form.attr("action").replace("/add/", "/get-tags/"), function(data, status) {
+            $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
                 $.each(data.tags, function(index, tag) {
                     $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
                 });
