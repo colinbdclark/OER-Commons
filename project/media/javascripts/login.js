@@ -1,5 +1,8 @@
 oer.login = {};
 
+oer.login.LOGGED_IN_EVENT = "oer-login-logged-in";
+oer.login.LOGGED_OUT_EVENT = "oer-login-logged-out";
+
 oer.login.init = function() {
     $("#header a.login").click(function(e) {
         e.preventDefault();
@@ -28,6 +31,7 @@ oer.login.init = function() {
 oer.login.show_popup = function(callback) {
     var $popup = $("#login-popup");
     var $body = $("body");
+    var $document = $(document);
     if (!$popup.length) {
         $popup = $('<div id="login-popup"></div>').appendTo($body).dialog({
         modal : true,
@@ -60,6 +64,7 @@ oer.login.show_popup = function(callback) {
                         if (callback !== undefined) {
                             callback();
                         }
+                        $document.trigger(oer.login.LOGGED_IN_EVENT);
                     } else if (response.status === "error") {
                         if (response.errors.__all__ !== undefined) {
                             $global_error_ct.append('<label class="error">' + response.errors.__all__ + '</label>');
