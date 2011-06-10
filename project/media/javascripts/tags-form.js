@@ -22,7 +22,7 @@ oer.tags_form.init = function() {
         if (value === "") {
             return;
         }
-        var $existing_tag = $user_tags.find("a:contains(" + value + ")").closest("li");
+        var $existing_tag = $user_tags.find("a:econtains(" + value + ")").closest("li");
         if ($existing_tag.length) {
             $existing_tag.effect("pulsate", 200);
             return;
@@ -79,7 +79,7 @@ oer.tags_portlet.init = function() {
           var user_tags = data.user_tags;
           var $item_tags = $portlet.find("ul:first li.tag");
           $.each(user_tags, function(index, tag) {
-              $item_tags.filter(":contains(" + tag.name + ")").fadeOut(300);
+              $item_tags.filter(":econtains(" + tag.name + ")").fadeOut(300);
               var $tag = $.tmpl("user-tags-item", tag).appendTo($user_tags);
             if (window.rocon != undefined) {
               rocon.update($tag.get(0));

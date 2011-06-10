@@ -1,6 +1,11 @@
 IS_AUTHENTICATED = $("body").hasClass("authenticated");
 HONEYPOT_FIELD_NAME = "address";
 
+/* :econtains() filter for jQuery */
+$.expr[":"].econtains = function(obj, index, meta, stack){
+  return $.trim((obj.textContent || obj.innerText || $(obj).text() || "")).toLowerCase() == $.trim(meta[3]).toLowerCase();
+}
+
 $(function() {
     oer.search_box.init();
     if (!Modernizr.input.placeholder) {
