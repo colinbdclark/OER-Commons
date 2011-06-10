@@ -36,7 +36,8 @@
 .toolbar .stars,
 .toolbar li,
 .toolbar li a,
-.button-blue-big {
+.button-blue-big,
+.portlet.bookmarklet a {
   zoom: 1;
   display: inline;
 }
