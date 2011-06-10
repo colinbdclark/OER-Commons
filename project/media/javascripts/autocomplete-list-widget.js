@@ -28,7 +28,7 @@ oer.autocomplete_list_widget.init = function() {
             var values = get_values($input);
             $add_input.val("");
             if ($.inArray(value, values) != -1) {
-                $items.find("span:contains('" + value + "')").closest("li").effect("bounce");
+                $items.find("span:econtains('" + value + "')").closest("li").effect("bounce");
                 return;
             }
             values.push(value);
