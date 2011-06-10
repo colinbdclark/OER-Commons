@@ -75,7 +75,7 @@ oer.tags_portlet.init = function() {
       var $user_tags = $("ul.user-tags");
       $user_tags.empty().hide();
       var $form = $("#add-tags-form");
-      $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/"), function(data, status) {
+      $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
           var user_tags = data.user_tags;
           var $item_tags = $portlet.find("ul:first li.tag");
           $.each(user_tags, function(index, tag) {
