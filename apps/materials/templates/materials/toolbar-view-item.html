@@ -41,7 +41,7 @@
 
     <div id="toolbar">
 
-      <article class="item" id="{{ item.identifier }}"><div class="c1"><div class="c2"><div class="c3"><div class="c4"><div class="green-bar">
+      <div class="c1"><div class="c2"><div class="c3"><div class="c4"><div class="green-bar">
       
         {% if came_from_index %}
         <div class="view-item-navigation">
@@ -81,7 +81,7 @@
          
         {% spaceless %}
         <ul>
-          <li class="rating"><span>Rating: </span>{% stars item.rating %}</li>
+          <li class="rating"><span>Rating: </span>{% stars item.identifier item.rating %}</li>
           <li class="sep"><a href="#" class="review">Review</a></li>
           <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
         </ul>
@@ -102,7 +102,7 @@
       
       <div class="clear"></div>
         
-      </div></div></div></div></div></article>
+      </div></div></div></div></div>
 
     </div>
 

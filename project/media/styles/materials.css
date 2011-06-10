@@ -366,13 +366,11 @@
 
 .view-item-navigation {
   text-align: center;
-  width: 580px;
-  margin: 2px auto 0 auto;
+  margin-bottom: 20px;
 }
 
 .view-item-navigation a {
   font-size: 14px;
-  color: #000;
   text-decoration: none;
 }
 
@@ -396,12 +394,6 @@
   margin-top: 20px;
 }
 
-.view-item .reviews a.button {
-  float: right;
-  margin-left: 10px;
-  margin-bottom: 10px;
-}
-
 .view-item .reviews dt {
   color: #616161;
   font-weight: bold;
@@ -417,6 +409,17 @@
   font-weight: bold;
   font-style: normal;
   text-align: right;
+}
+
+.portlet.save a {
+  font-size: 18px;
+  display: inline-block;
+  line-height: 27px;
+}
+
+.portlet.save a.save {
+  padding-left: 35px;
+  background: url(../images/icon-save.png) no-repeat 0% 50%;
 }
 
 /* Browse All */

@@ -20,16 +20,33 @@
 }
 
 body.no-columns .layout-columns {
-  background: none; 
+  background: none;
 }
 
 body.no-columns .column-main {
   padding: 0;
   float: none;
-  width: auto; 
+  width: auto;
 }
 
 body.no-columns .column-left,
 body.no-columns .column-right {
-  display: none; 
+  display: none;
+}
+
+body.wide-right-column .layout-columns {
+  background: url(../images/dotted-line-vert.gif) repeat-y 690px 0;
+}
+
+body.wide-right-column .column-left {
+  display: none;
+}
+
+body.wide-right-column .column-main {
+  width: 670px;
+  padding-left: 0;
+}
+
+body.wide-right-column .column-right {
+  width: 250px;
 }

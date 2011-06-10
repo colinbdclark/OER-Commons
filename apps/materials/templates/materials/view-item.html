@@ -24,21 +24,16 @@
   </script>
 {% endblock %}
 
-{% block above-content %}
-<div class="action-panel fixed-width">
-  <ul class="right">
-    <li>
-      <a class="email-icon send-this" href="#" title="Send this">Send this</a>
-    </li>
-    {% if save_url %}
-      <li class="last"><a href="{{ save_url }}" class="require-login">Save this item</a></li>
-    {% endif %}
-    {% if unsave_url %}
-      <li class="last"><a href="{{ unsave_url }}" class="require-login">Remove from collection</a></li>
-    {% endif %}
-  </ul>
+{% block bodyclass %}wide-right-column{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block content-itemscope-attrs %} itemscope="itemscope" itemtype="http://schema.org/ScholarlyArticle"{% endblock %}
+
+{% block content %}
+
   {% if came_from_index %}
-  <div class="view-item-navigation">
+  <nav class="view-item-navigation">
     {% if prev_item_url %}
       <a class="item-link prev" href="{{ prev_item_url }}">&laquo; Previous Item</a>
     {% else %}
@@ -58,13 +53,10 @@
       <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
       {% hidden_filters hidden_filters %}
     </form>
-  </div>
+  </nav>
   {% endif %}
-</div>
-{% endblock %}
 
-{% block content %}
-{% if content_actions or workflow_actions %}
+  {% if content_actions or workflow_actions %}
   <div class="content-actions">
     {% spaceless %}
     <ul class="clearfix">
@@ -97,20 +89,9 @@
    </div>
 {% endif %}
 
-<article class="view-item item" id="{{ item.identifier }}" itemscope="itemscope"
-         itemtype="http://schema.org/ScholarlyArticle">
+<article class="view-item item" id="{{ item.identifier }}">
 
-  <div class="right add-this">
-    <script type="text/javascript">
-      addthis_url    = location.href;   
-      addthis_title  = document.title;  
-      addthis_pub    = 'oercommons';     
-    </script>
-    <script src="http://s7.addthis.com/js/addthis_widget.php?v=12" type="text/javascript"></script>
-  </div>
-  
   <div class="right clear">
-    {% stars item.ratings %}
     {% cou_bucket item.license.bucket %}
   </div>
   
@@ -159,17 +140,6 @@
       <dt>Grade Level:</dt>
       <dd>{{ item.grade_levels.all|join:", " }}</dd>
       {% endif %}
-
-      {% if item.topics %}
-      <dt class="topics">SubTopics:</dt>
-      <dd class="topics clearfix">
-        {% for topic in item.topics %}
-          <a href="{% url materials:topic_index topics=topic.slug, microsite=topic.microsite.slug %}"
-             class="{{ topic.microsite.slug }}">{{ topic.name }}</a>{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      </dd>
-      {% endif %}
-      
     </dl>
     
     <dl>
@@ -240,9 +210,14 @@
       {% endif %}
     </dl>
   </div>
-  
+
+  <div class="align-right">
+    <a {% if request.preferences.show_toolbar %}href="{{ toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
+       class="button-blue-big rc5">Go to OER Item</a>
+  </div>
+
+
   <div class="reviews">
-    <a href="{{ add_review_url }}" class="button with-next-url"><img alt="Review This Item" src="{{ STATIC_URL}}images/add-review-btn.png" /></a>
     {% with item.reviews.all as reviews %}
       {% if reviews %}
       <dl>
@@ -256,6 +231,9 @@
           </dd>
         {% endfor %}
       </dl>
+      <div class="align-right">
+        <a href="{{ add_review_url }}" class="button-blue-big rc5 require-login with-next-url">Write a Review</a>
+      </div>
       {% endif %}
     {% endwith %}
     {% for rating in item.ratings.all %}
@@ -281,15 +259,70 @@
 {% endblock %}
 
 {% block column-right %}
-  {% item_tags_portlet item %}
-  {% align_item_tags_portlet item %}
-
-  <section class="portlet item-keywords dotted">
-    <h1 class="dotted">Keywords</h1>
-    {% for keyword in item.keywords.all %}
-      <a href="{% url materials:keyword_index keywords=keyword.slug %}">{{ keyword.name }}</a>{% if not forloop.last %}, {% endif %}
-    {% endfor %}
+  <section class="portlet dotted save">
+    {% if save_url %}
+      <a href="{{ save_url }}" class="require-login save">Add to My Items</a>
+    {% endif %}
+    {% if unsave_url %}
+      <a href="{{ unsave_url }}" class="require-login">Remove from My Items</a>
+    {% endif %}
   </section>
+
+  <section class="portlet dotted">
+    <h1>Rate and Review</h1>
+    {% stars item.identifier item.ratings.all %}
+    <div>
+      <a href="{{ add_review_url }}" class="button-blue-big rc5 require-login with-next-url">Write a Review</a>
+    </div>
+  </section>
+
+  <section class="portlet addthis dotted">
+    <h1>Share</h1>
+      <div class="addthis_toolbox addthis_32x32_style addthis_default_style">
+          <a class="addthis_button_facebook"></a>
+          <a class="addthis_button_twitter"></a>
+          <a class="addthis_button_email"></a>
+          <a class="addthis_button_compact"></a>
+      </div>
+      <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=oercommons"></script>
+  </section>
+
+  <section class="portlet item-tags">
+    <h1>Tags</h1>
+    <p>Keywords, descriptive words, interested groups &amp; more</p>
+    <ul>
+      {% for tag in tags %}
+        {% if tag.class == "topic" %}
+          <li class="rc3 topic {{ tag.microsite }}">
+            <a href="{% url materials:topic_index topics=tag.slug, microsite=tag.microsite %}">{{ tag.name }}</a>
+          </li>
+        {% else %}
+          <li class="rc3 {{ tag.class }}">
+            <a href="{% url materials:keyword_index keywords=tag.slug %}">{{ tag.name }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <ul class="user-tags">
+      {% for tag in user_tags %}
+        <li class="rc3 tag" data-id="{{ tag.id }}">
+          <a href="#" class="delete">x</a>
+          <a href="{% url materials:keyword_index keywords=tag.slug %}">{{ tag.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <form action="{% url tags:add_tags content_type.app_label,content_type.model,item.id %}"
+          method="post" id="add-tags-form" name="add-tags-form">
+      <label for="id_tags">Add new tag:</label>
+      <input type="text" name="tags" id="id_tags" value="" class="text" />
+    </form>
+    <div class="login">
+        <a href="{% url users:login %}" class="dashed">Log in</a> to add tags to this item.
+    </div>
+
+  </section>
+
 {% endblock %}
 
 {% block extra-footer %}
