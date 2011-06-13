@@ -168,7 +168,7 @@ oer.materials.index.init_tags_form = function() {
 oer.materials.index.init_align_form = function() {
     var $dialog = $("#align-dialog").dialog({
     modal : true,
-    width : "auto",
+    width : "650",
     height : "auto",
     autoOpen : false,
     resizable : false
@@ -183,15 +183,17 @@ oer.materials.index.init_align_form = function() {
     });
 
     var $form = $("#align-form");
-    var $user_tags = $("#align-user-tags");
-    
+    var $user_tags = $("ul.align-user-tags");
+
+    oer.align_form.init_user_tags($user_tags, $form);
+
     var $materials_index = $("#content div.materials-index");
     $materials_index.delegate("dl.actions a.align-item", "click", function(e) {
         e.preventDefault();
         var $this = $(this);
         var $menu = $this.closest("dl.actions");
         $menu.removeClass("active");
-        var $item = $this.closest("div.item");
+        var $item = $this.closest("article.item");
         
         oer.login.check_login(function() {
             $form.hide();
@@ -209,7 +211,7 @@ oer.materials.index.init_align_form = function() {
                 });
                 $form.show();
             });
-            $dialog.dialog("option", "title", "Align " + $item.find("h3 a").first().text());
+            $dialog.dialog("option", "title", "Align " + $item.find("h1 a").first().text());
             $dialog.dialog("open");
         });
     });
