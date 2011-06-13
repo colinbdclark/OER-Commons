@@ -1,6 +1,6 @@
 oer.tags_form = {};
 
-$.template("user-tags-item", '<li data-id="${id}" class="tag rc3"><a href="${url}">${name}</a> <a href="#" class="delete">Delete</a></li>');
+$.template("user-tags-item", '<li data-id="${id}" class="tag rc3"><a href="${url}">${name}</a> <a href="#" class="delete">x</a></li>');
 
 oer.tags_form.init = function() {
     var $form = $("#add-tags-form");
@@ -20,6 +20,11 @@ oer.tags_form.init = function() {
         e.preventDefault();
         var value = $.trim($input.val());
         if (value === "") {
+            return;
+        }
+        var $existing_tag = $user_tags.find("a:econtains(" + value + ")").closest("li");
+        if ($existing_tag.length) {
+            $existing_tag.effect("pulsate", 200);
             return;
         }
         $input.addClass("loading");
@@ -62,22 +67,25 @@ oer.tags_portlet.init = function() {
     var $portlet = $("section.portlet.item-tags");
     $portlet.find(".login a").click(function(e) {
         e.preventDefault();
-        oer.login.show_popup(function() {
-            var $user_tags = $("ul.user-tags");
-            $user_tags.empty().hide();
-            var $form = $("#add-tags-form");
-            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/"), function(data, status) {
-                var user_tags = data.user_tags;
-                var $item_tags = $portlet.find("ul:first li.tag");
-                $.each(user_tags, function(index, tag) {
-                    $item_tags.filter(":contains(" + tag.name + ")").fadeOut(300);
-                    var $tag = $.tmpl("user-tags-item", tag).appendTo($user_tags);
-                  if (window.rocon != undefined) {
-                    rocon.update($tag.get(0));
-                  }
-                });
-                $user_tags.fadeIn(300);
-            });
-        });
+        oer.login.show_popup();
+    });
+
+    var $document = $(document);
+    $document.bind(oer.login.LOGGED_IN_EVENT, function(e) {
+      var $user_tags = $("ul.user-tags");
+      $user_tags.empty().hide();
+      var $form = $("#add-tags-form");
+      $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
+          var user_tags = data.user_tags;
+          var $item_tags = $portlet.find("ul:first li.tag");
+          $.each(user_tags, function(index, tag) {
+              $item_tags.filter(":econtains(" + tag.name + ")").fadeOut(300);
+              var $tag = $.tmpl("user-tags-item", tag).appendTo($user_tags);
+            if (window.rocon != undefined) {
+              rocon.update($tag.get(0));
+            }
+          });
+          $user_tags.fadeIn(300);
+      });
     });
 };

@@ -45,7 +45,7 @@ oer.materials.toolbar.init_tags = function() {
             $user_tags.empty();
             $form.attr("action", $this.attr("href"));
             $input.val("");
-            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/"), function(data, status) {
+            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
                 var item_tags = data.tags;
                 var user_tags = data.user_tags;
                 $.each(user_tags, function(index, tag) {

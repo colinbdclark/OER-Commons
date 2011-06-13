@@ -44,7 +44,13 @@
 .portlet.item-tags .user-tags li.tag a,
 .portlet.item-tags li,
 .portlet.save a,
-.portlet.bookmarklet a {
+.portlet.bookmarklet a,
+#align-form label,
+.portlet.align-item-tags li,
+.align-user-tags li.tag,
+.portlet.align-item-tags .align-user-tags li.tag,
+.align-user-tags li.tag a,
+.portlet.align-item-tags .align-user-tags li.tag a {
   zoom: 1;
   display: inline;
 }
