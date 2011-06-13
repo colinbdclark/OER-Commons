@@ -1,6 +1,6 @@
 oer.tags_form = {};
 
-$.template("user-tags-item", '<li data-id="${id}" class="tag rc3"><a href="${url}">${name}</a> <a href="#" class="delete">Delete</a></li>');
+$.template("user-tags-item", '<li data-id="${id}" class="tag rc3"><a href="${url}">${name}</a> <a href="#" class="delete">x</a></li>');
 
 oer.tags_form.init = function() {
     var $form = $("#add-tags-form");
