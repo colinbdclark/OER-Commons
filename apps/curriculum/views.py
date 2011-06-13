@@ -3,6 +3,7 @@ from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade, \
     LearningObjectiveCategory
 from django import forms
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from haystack.sites import site
@@ -54,7 +55,9 @@ def align(request, app_label, model, object_id):
         site.update_object(item)
         
         return dict(status="success",
-                    tag=dict(id=tagged.id, code=tag.full_code))
+                    tag=dict(id=tagged.id, code=tag.full_code,
+                             url=reverse("materials:alignment_index",
+                                        kwargs=dict(alignment=tag.full_code))))
     else:
         return dict(status="error")
     
@@ -73,8 +76,10 @@ def list_user_tags(request, app_label, model, object_id):
                                                 object_id=object_id,
                                                 user=request.user).select_related():
         tag = tagged.tag
-        tags.append(dict(id=tagged.id, code=tag.full_code))
-    
+        tags.append(dict(id=tagged.id, code=tag.full_code,
+                         url=reverse("materials:alignment_index",
+                                     kwargs=dict(alignment=tag.full_code))))
+
     return dict(tags=tags)
 
 
