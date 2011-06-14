@@ -44,7 +44,8 @@
 .user-tags li.tag a,
 .portlet.item-tags .user-tags li.tag a,
 .portlet.item-tags li,
-.portlet.save a {
+.portlet.save a,
+.green-browse #content section.column {
   zoom: 1;
   display: inline;
 }
