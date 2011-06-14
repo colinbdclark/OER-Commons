@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load rating_tags %}
+{% load materials_tags %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.collapsibles.init($("section.index-filters"));
+      oer.materials.index.init_filters();
+      oer.accordion.init($("#content div.accordion"));
+      $("#search-now").click(function(e) {
+        e.preventDefault();
+        $(this).closest("form").submit();
+      });
+    });
+  </script>
+{% endblock %}
+
+
+{% block page-title %}{% endblock %}
+{% block promo %}{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block bodyclass %}green-browse{% endblock %}
+
+
+{% block content %}
+<section>
+  <hgroup>
+    <h1>Find Green OER</h1>
+    <h2>You can find Green Open Educational Resource (OER) by searching or browsing</h2>
+  </hgroup>
+</section>
+
+<div class="columns dotted">
+  <section class="column">
+    <h1>Browse</h1>
+
+    <div class="accordion clearfix">
+      <h2 class="accordion-header"><a href="#">Recently Added</a></h2>
+      <div class="accordion-body">
+        <ul>
+          {% for item in recently_added %}
+            <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <h2 class="accordion-header"><a href="#">Grade Level</a></h2>
+      <div class="accordion-body">
+        <ul>
+          {% for level in grade_levels %}
+            <li><a href="{% url materials:grade_level_index grade_levels=level.slug,microsite=microsite.slug %}" title="{{ level.name }}">{{ level.name }} ({{ level.count }})</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <h2 class="accordion-header"><a href="#">Material Type</a></h2>
+      <div class="accordion-body">
+        <ul>
+          {% for material_type in course_material_types %}
+            <li><a href="{% url materials:material_type_index course_material_types=material_type.slug,microsite=microsite.slug %}" title="{{ material_type.name }}">{{ material_type.name }} ({{ material_type.count }})</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="column clearfix">
+    <h1>Browse by Subtopic</h1>
+    <div class="accordion clearfix">
+    {% for topic, tree_info in topics %}
+      {% if topic.level == 0 %}
+        <h2{% if not tree_info.closed_levels %} class="accordion-header"{% endif %}><a href="{% url materials:topic_index topics=topic.slug,microsite=microsite.slug %}" title="{{ topic.name }}">{{ topic.name }} ({{ topic.count }})</a></h2>
+      {% else %}
+        {% if tree_info.new_level %}
+        <div class="accordion-body"><ul>
+        {% endif %}
+          <li>
+            <a href="{% url materials:topic_index topics=topic.slug,microsite=microsite.slug %}" title="{{ topic.name }}">{{ topic.name }} ({{ topic.count }})</a>
+          </li>
+        {% if tree_info.closed_levels %}
+        </ul></div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    </div>
+  </section>
+</div>
+  
+<section>
+  <h1>Browse by Keyword</h1>
+  <div class="tag-cloud">
+    {% for keyword in keywords %}
+      <a href="{% url materials:keyword_index keywords=keyword.slug microsite=microsite.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
+
+{% block column-right %}
+<section class="portlet index-filters">
+  <form name="index-filters" action="{% url materials:search microsite=microsite.slug %}">
+
+    <div class="search">
+      <input type="text" class="text" name="f.search" value="" placeholder="Search Green OER" id="search-green-oer" />
+    </div>
+
+    {% with index_filters.grade_levels as filter %}
+      {% if filter.options %}
+      <dl class="filter grade-levels collapsible clearfix">
+        <dt>
+           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+           <label for="{{ filter.name }}">
+             <input type="checkbox" name="{{ filter.name }}"
+                    id="{{ filter.name }}" value="yes"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             <span>{{ filter.title }}</span>
+           </label>
+        </dt>
+        {% for option in filter.options %}
+        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
+             <input type="checkbox" name="{{ filter.request_name }}"
+                    id="{{ option.input_id }}" value="{{ option.slug }}"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ option.name|shrink:18 }} ({{ option.count }})</label>
+        </dd>
+        {% endfor %}
+      </dl>
+      {% endif %}
+    {% endwith %}
+
+    <div class="align-right">
+      <a href="#" id="search-now" class="button-blue-big rc5">Search Now</a>
+    </div>
+
+  </form>
+</section>
+{% endblock %}
