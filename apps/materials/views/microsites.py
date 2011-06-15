@@ -113,11 +113,9 @@ def green_browse(request):
                keyword["slug"]
         keyword["name"] = name
 
-    index_filters = build_index_filters(["grade_levels"], facets, {}, None)
-
     query = SearchQuerySet().narrow("is_displayed:true")
     query = query.narrow("microsites:%i" % microsite.id)
     query = query.order_by("-published_on").load_all()
-    recently_added = [r.object for r in query[:5]]
+    recently_added = [r.object for r in query[:7]]
 
     return direct_to_template(request, "materials/microsites/green-browse.html", locals())

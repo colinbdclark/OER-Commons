@@ -5,8 +5,6 @@
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
-      oer.collapsibles.init($("section.index-filters"));
-      oer.materials.index.init_filters();
       oer.accordion.init($("#content div.accordion"));
       $("#search-now").click(function(e) {
         e.preventDefault();
@@ -24,12 +22,18 @@
 
 {% block bodyclass %}green-browse{% endblock %}
 
+{% block column-left %}
+  <div class="align-center">
+    <img src="{{ STATIC_URL }}images/green-browse-graphics.png" alt="" />
+  </div>
+{% endblock %}
+
 
 {% block content %}
 <section>
   <hgroup>
     <h1>Find Green OER</h1>
-    <h2>You can find Green Open Educational Resource (OER) by searching or browsing</h2>
+    <h2>You can find Green Open Educational Resource (OER) by searching above or browsing</h2>
   </hgroup>
 </section>
 
@@ -38,14 +42,6 @@
     <h1>Browse</h1>
 
     <div class="accordion clearfix">
-      <h2 class="accordion-header"><a href="#">Recently Added</a></h2>
-      <div class="accordion-body">
-        <ul>
-          {% for item in recently_added %}
-            <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
       <h2 class="accordion-header"><a href="#">Grade Level</a></h2>
       <div class="accordion-body">
         <ul>
@@ -99,42 +95,12 @@
 {% endblock %}
 
 {% block column-right %}
-<section class="portlet index-filters">
-  <form name="index-filters" action="{% url materials:search microsite=microsite.slug %}">
-
-    <div class="search">
-      <input type="text" class="text" name="f.search" value="" placeholder="Search Green OER" id="search-green-oer" />
-    </div>
-
-    {% with index_filters.grade_levels as filter %}
-      {% if filter.options %}
-      <dl class="filter grade-levels collapsible clearfix">
-        <dt>
-           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <label for="{{ filter.name }}">
-             <input type="checkbox" name="{{ filter.name }}"
-                    id="{{ filter.name }}" value="yes"
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             <span>{{ filter.title }}</span>
-           </label>
-        </dt>
-        {% for option in filter.options %}
-        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
-             <input type="checkbox" name="{{ filter.request_name }}"
-                    id="{{ option.input_id }}" value="{{ option.slug }}"
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ option.name|shrink:18 }} ({{ option.count }})</label>
-        </dd>
-        {% endfor %}
-      </dl>
-      {% endif %}
-    {% endwith %}
-
-    <div class="align-right">
-      <a href="#" id="search-now" class="button-blue-big rc5">Search Now</a>
-    </div>
-
-  </form>
+<section class="portlet recently-added">
+  <h1 class="green">Recently Added</h1>
+  <ul>
+    {% for item in recently_added %}
+      <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+    {% endfor %}
+  </ul>
 </section>
 {% endblock %}
