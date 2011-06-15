@@ -7,7 +7,7 @@ from materials.models.common import Keyword, GradeLevel
 from materials.models.course import CourseMaterialType
 from materials.utils import get_name_from_slug
 from materials.views.index import populate_item_from_search_result, \
-    MAX_TOP_KEYWORDS, build_index_filters
+    MAX_TOP_KEYWORDS
 from mptt.utils import tree_item_iterator
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
@@ -107,11 +107,9 @@ def green_browse(request):
                keyword["slug"]
         keyword["name"] = name
 
-    index_filters = build_index_filters(["grade_levels"], facets, {}, None)
-
     query = SearchQuerySet().narrow("is_displayed:true")
     query = query.narrow("microsites:%i" % microsite.id)
     query = query.order_by("-published_on").load_all()
-    recently_added = [r.object for r in query[:5]]
+    recently_added = [r.object for r in query[:7]]
 
     return direct_to_template(request, "materials/microsites/green-browse.html", locals())
