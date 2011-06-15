@@ -151,7 +151,7 @@ body.green .top-keywords h4 {
 }
 
 .green-browse #content section hgroup h2 {
-  font-size: 14px;
+  font-size: 15px;
   color: #666;
   font-weight: normal;
   margin: 0 0 5px 0;
@@ -188,4 +188,14 @@ body.green .top-keywords h4 {
 .green-browse #content .accordion li a {
   text-decoration: none;
   font-size: 11px;
+}
+
+.green-browse .portlet.recently-added ul {
+  list-style-position: inside;
+  font-size: 14px;
+  color: #0B7BA9;
+}
+
+.green-browse .portlet.recently-added li {
+  margin-bottom: 10px;
 }
