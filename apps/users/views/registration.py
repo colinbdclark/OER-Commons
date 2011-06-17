@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db.models.aggregates import Max
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
@@ -99,7 +100,7 @@ def registration(request):
         if form.is_valid():
             data = form.cleaned_data
             email = data["email"]
-            username = email
+            username = "user%i" % (User.objects.aggregate(Max("id"))["id__max"] + 1)
             email_taken = False
             email_pending = False
             if User.objects.filter(email=email).exists():
