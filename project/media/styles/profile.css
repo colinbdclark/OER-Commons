@@ -77,8 +77,36 @@
   margin: 0;
 }
 
-.profile .avatar img {
+.profile td.avatar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.profile td.avatar li {
+  padding: 0;
+  margin: 5px 0 0 0;
+}
+
+.profile td.avatar .avatar {
+  width: 93px;
+  height: 93px;
+  padding: 2px;
+  border: 1px solid #ccc;
   margin-top: 25px;
+}
+
+.profile td.avatar .avatar.loading {
+  background: url(../images/ajax-loader-big.gif) no-repeat 50% 50%;
+}
+
+.profile td.avatar .avatar.loading img {
+  display: none;
+}
+
+.profile #upload-avatar-btn {
+  display: inline-block;
+  height: 16px;
 }
 
 .profile form.about textarea {

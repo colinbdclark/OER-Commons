@@ -82,6 +82,11 @@ class ChangePasswordForm(forms.ModelForm):
         fields = ["current_password", "new_password", "confirm_new_password"]
 
 
+class AvatarForm(forms.Form):
+
+    file = forms.ImageField()
+
+
 class GeographyForm(forms.ModelForm):
 
     success_message = u"Your geography information was saved."
