@@ -1,13 +1,18 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from geo.models import Country
 from materials.models.common import GradeLevel, AutoCreateManyToManyField
+from sorl.thumbnail.shortcuts import get_thumbnail
 from users.backend import encrypt_password
+import hashlib
+import urllib
 
 
 MEMBER_ROLES = (
@@ -68,6 +73,10 @@ class Profile(models.Model):
 
     principal_id = models.CharField(max_length=20)
 
+    avatar = models.ImageField(blank=True, null=True, upload_to="upload/avatars")
+
+    hide_avatar = models.BooleanField(default=False)
+
     homepage = models.URLField(max_length=200, blank=True, default=u"",
                                verbose_name=_(u"Homepage"))
 
@@ -123,7 +132,37 @@ class Profile(models.Model):
                                                   blank=True) 
     
     about_me = models.TextField(blank=True, null=True)
-    
+
+    def get_avatar_url(self):
+        if self.hide_avatar:
+            return settings.DEFAULT_AVATAR
+        if self.avatar:
+            thumbnail = get_thumbnail(self.avatar,
+                                      "%(size)ix%(size)i" % dict(size=settings.AVATAR_SIZE),
+                                      crop="center")
+            return thumbnail.url
+        elif self.user.email:
+            try:
+                default = "http://%s%s" % (Site.objects.get_current().domain, settings.DEFAULT_AVATAR)
+                url = "%s/%s.jpg?%s" % (settings.GRAVATAR_BASE,
+                                        hashlib.md5(self.user.email).hexdigest(),
+                                        urllib.urlencode({
+                                            'size': str(settings.AVATAR_SIZE),
+                                            'rating': "g",
+                                            'default': default,
+                                        }))
+            except:
+                import traceback
+                print traceback.format_exc()
+                raise
+            return url
+
+        return settings.DEFAULT_AVATAR
+
+    def get_avatar_img(self):
+        return mark_safe("""<img src="%(url)s" width="%(size)i" height="%(size)i" />""" % dict(
+                            url=self.get_avatar_url(), size=settings.AVATAR_SIZE))
+
 
 def gen_confirmation_key():
     return User.objects.make_random_password(length=20)

@@ -1,16 +1,21 @@
+from annoying.decorators import ajax_request
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
 from django.shortcuts import redirect
 from geo.models import CountryIPDiapason
+from sorl.thumbnail.shortcuts import delete
 from users.models import Profile
 from users.views.forms import UserInfoForm, ChangePasswordForm, GeographyForm,\
-    RolesForm, AboutMeForm
+    RolesForm, AboutMeForm, AvatarForm
 from utils.decorators import login_required
 from utils.shortcuts import ajax_form_success, ajax_form_error
+import json
+import time
 
 
 @login_required
@@ -71,6 +76,62 @@ def profile(request):
                 messages.error(request, change_password_form.error_message)
 
     return direct_to_template(request, "users/profile.html", locals())
+
+
+@login_required
+def avatar_update(request):
+    response = dict(status="error", message=u"")
+
+    form = AvatarForm(request.POST, request.FILES)
+
+    if form.is_valid():
+        user = request.user
+        profile = Profile.objects.get_or_create(user=user)[0]
+        if profile.avatar:
+            delete(profile.avatar)
+        avatar = form.cleaned_data["file"]
+        if avatar.content_type == "image/jpeg":
+            extension = ".jpg"
+        elif avatar.content_type == "image/png":
+            extension = ".png"
+        elif avatar.content_type == "image/gif":
+            extension = ".gif"
+        else:
+            extension = ""
+        filename = "%i%s" % (user.id, extension)
+        profile.avatar.save(filename, avatar, save=False)
+        profile.hide_avatar = False
+        profile.save()
+
+        response["status"] = "success"
+        response["message"] = u"Your picture is saved."
+        response["url"] = profile.get_avatar_url() + "?" + str(int(time.time()))
+
+    else:
+        response["message"] = form.errors["file"][0]
+        return response
+
+    # We don't use application/json content type here because IE misinterprets it.
+    return HttpResponse(json.dumps(response))
+
+
+
+@login_required
+@ajax_request
+def avatar_delete(request):
+    response = dict(status="error", message=u"")
+
+    user = request.user
+    profile = Profile.objects.get_or_create(user=user)[0]
+    if profile.avatar:
+        delete(profile.avatar)
+    profile.hide_avatar = True
+    profile.save()
+
+    response["status"] = "success"
+    response["message"] = u"Your picture is deleted."
+    response["url"] = profile.get_avatar_url()
+    return response
 
 
 @login_required
