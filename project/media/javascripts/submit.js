@@ -30,7 +30,7 @@ OER.showForm = function() {
 
     var iframe = document.createElement("iframe");
     var load_counter = 0;
-    iframe.src = OER_HOST + "/submit?url=" + document.location.href;
+    iframe.src = OER_HOST + "/submit?url=" + encodeURIComponent(document.location.href);
     iframe.style.width = "100%";
     iframe.style.height = "100%";
     iframe.style.border = "0px";
