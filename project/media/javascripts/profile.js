@@ -374,7 +374,15 @@ oer.profile.init_about = function() {
     var $inputs = $form.find(":input");
     $save_btn.data("label", $save_btn.val());
     var validator = $form.validate({
-        rules : {},
+        rules : {
+            website_url: "url",
+            facebook_id: {
+                minlength: 5
+            },
+            skype_id: {
+                minlength: 6
+            }
+        },
         submitHandler : function(form) {
             if ($form.data("next")) {
                 form.submit();
