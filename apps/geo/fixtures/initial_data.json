@@ -2203,5 +2203,455 @@
       "slug": "serbia",
       "code": "RS"
     }
+  },
+  {
+    "pk": 1,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "AL",
+      "name": "Alabama",
+      "slug": "alabama"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "AK",
+      "name": "Alaska",
+      "slug": "alaska"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "AZ",
+      "name": "Arizona",
+      "slug": "arizona"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "AR",
+      "name": "Arkansas",
+      "slug": "arkansas"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "CA",
+      "name": "California",
+      "slug": "california"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "CO",
+      "name": "Colorado",
+      "slug": "colorado"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "CT",
+      "name": "Connecticut",
+      "slug": "connecticut"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "DE",
+      "name": "Delaware",
+      "slug": "delaware"
+    }
+  },
+  {
+    "pk": 9,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "FL",
+      "name": "Florida",
+      "slug": "florida"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "GA",
+      "name": "Georgia",
+      "slug": "georgia"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "HI",
+      "name": "Hawaii",
+      "slug": "hawaii"
+    }
+  },
+  {
+    "pk": 12,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "ID",
+      "name": "Idaho",
+      "slug": "idaho"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "IL",
+      "name": "Illinois",
+      "slug": "illinois"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "IN",
+      "name": "Indiana",
+      "slug": "indiana"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "IA",
+      "name": "Iowa",
+      "slug": "iowa"
+    }
+  },
+  {
+    "pk": 16,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "KS",
+      "name": "Kansas",
+      "slug": "kansas"
+    }
+  },
+  {
+    "pk": 17,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "KY",
+      "name": "Kentucky",
+      "slug": "kentucky"
+    }
+  },
+  {
+    "pk": 18,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "LA",
+      "name": "Louisiana",
+      "slug": "louisiana"
+    }
+  },
+  {
+    "pk": 19,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "ME",
+      "name": "Maine",
+      "slug": "maine"
+    }
+  },
+  {
+    "pk": 20,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "MD",
+      "name": "Maryland",
+      "slug": "maryland"
+    }
+  },
+  {
+    "pk": 21,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "MA",
+      "name": "Massachusetts",
+      "slug": "massachusetts"
+    }
+  },
+  {
+    "pk": 22,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "MI",
+      "name": "Michigan",
+      "slug": "michigan"
+    }
+  },
+  {
+    "pk": 23,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "MN",
+      "name": "Minnesota",
+      "slug": "minnesota"
+    }
+  },
+  {
+    "pk": 24,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "MS",
+      "name": "Mississippi",
+      "slug": "mississippi"
+    }
+  },
+  {
+    "pk": 25,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "MO",
+      "name": "Missouri",
+      "slug": "missouri"
+    }
+  },
+  {
+    "pk": 26,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "MT",
+      "name": "Montana",
+      "slug": "montana"
+    }
+  },
+  {
+    "pk": 27,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "NE",
+      "name": "Nebraska",
+      "slug": "nebraska"
+    }
+  },
+  {
+    "pk": 28,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "NV",
+      "name": "Nevada",
+      "slug": "nevada"
+    }
+  },
+  {
+    "pk": 29,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "NH",
+      "name": "New Hampshire",
+      "slug": "new-hampshire"
+    }
+  },
+  {
+    "pk": 30,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "NJ",
+      "name": "New Jersey",
+      "slug": "new-jersey"
+    }
+  },
+  {
+    "pk": 31,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "NM",
+      "name": "New Mexico",
+      "slug": "new-mexico"
+    }
+  },
+  {
+    "pk": 32,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "NY",
+      "name": "New York",
+      "slug": "new-york"
+    }
+  },
+  {
+    "pk": 33,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "NC",
+      "name": "North Carolina",
+      "slug": "north-carolina"
+    }
+  },
+  {
+    "pk": 34,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "ND",
+      "name": "North Dakota",
+      "slug": "north-dakota"
+    }
+  },
+  {
+    "pk": 35,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "OH",
+      "name": "Ohio",
+      "slug": "ohio"
+    }
+  },
+  {
+    "pk": 36,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "OK",
+      "name": "Oklahoma",
+      "slug": "oklahoma"
+    }
+  },
+  {
+    "pk": 37,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "OR",
+      "name": "Oregon",
+      "slug": "oregon"
+    }
+  },
+  {
+    "pk": 38,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "PA",
+      "name": "Pennsylvania",
+      "slug": "pennsylvania"
+    }
+  },
+  {
+    "pk": 39,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "RI",
+      "name": "Rhode Island",
+      "slug": "rhode-island"
+    }
+  },
+  {
+    "pk": 40,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "SC",
+      "name": "South Carolina",
+      "slug": "south-carolina"
+    }
+  },
+  {
+    "pk": 41,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "SD",
+      "name": "South Dakota",
+      "slug": "south-dakota"
+    }
+  },
+  {
+    "pk": 42,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "TN",
+      "name": "Tennessee",
+      "slug": "tennessee"
+    }
+  },
+  {
+    "pk": 43,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "TX",
+      "name": "Texas",
+      "slug": "texas"
+    }
+  },
+  {
+    "pk": 44,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "UT",
+      "name": "Utah",
+      "slug": "utah"
+    }
+  },
+  {
+    "pk": 45,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "VT",
+      "name": "Vermont",
+      "slug": "vermont"
+    }
+  },
+  {
+    "pk": 46,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "VA",
+      "name": "Virginia",
+      "slug": "virginia"
+    }
+  },
+  {
+    "pk": 47,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "WA",
+      "name": "Washington",
+      "slug": "washington"
+    }
+  },
+  {
+    "pk": 48,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "WV",
+      "name": "West Virginia",
+      "slug": "west-virginia"
+    }
+  },
+  {
+    "pk": 49,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "WI",
+      "name": "Wisconsin",
+      "slug": "wisconsin"
+    }
+  },
+  {
+    "pk": 50,
+    "model": "geo.usstate",
+    "fields": {
+      "code": "WY",
+      "name": "Wyoming",
+      "slug": "wyoming"
+    }
   }
 ]
