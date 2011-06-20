@@ -7,7 +7,7 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from geo.models import Country
+from geo.models import Country, USState
 from materials.models.common import GradeLevel, AutoCreateManyToManyField
 from sorl.thumbnail.shortcuts import get_thumbnail
 from users.backend import encrypt_password
@@ -115,6 +115,8 @@ class Profile(models.Model):
     
     country = models.ForeignKey(Country, blank=True, null=True)
 
+    us_state = models.ForeignKey(USState, blank=True, null=True)
+
     connect_with = models.CharField(max_length=20, choices=CONNECT_OPTIONS,
                                     blank=True, null=True)
 
@@ -192,7 +194,7 @@ class RegistrationConfirmation(models.Model):
         body = render_to_string("users/emails/registration-confirmation.html",
                                    dict(url=url, key=self.key, user=self.user))
         message = EmailMessage(u"Confirm your registration at OER Commons",
-                               body, None, [self.user.email])
+                               body, to=[self.user.email])
         message.content_subtype = "html"
         message.send()
 
@@ -229,7 +231,7 @@ class ResetPasswordConfirmation(models.Model):
         body = render_to_string("users/emails/reset-password-confirmation.html",
                                    dict(url=url, user=self.user))
         message = EmailMessage(u"Reset your OER Commons password",
-                               body, None, [self.user.email])
+                               body, to=[self.user.email])
         message.content_subtype = "html"
         message.send()
 

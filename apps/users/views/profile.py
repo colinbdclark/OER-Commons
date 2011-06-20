@@ -58,7 +58,7 @@ def profile(request):
                    new_password=change_password_form.cleaned_data["new_password"],
                    domain=Site.objects.get_current().domain))
                 message = EmailMessage(u"OER Commons: Password Changed",
-                                       body, None, [user.email])
+                                       body, to=[user.email])
                 message.content_subtype = "html"
                 message.send()
                 
@@ -143,15 +143,15 @@ def geography(request):
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
 
-    initial = {}
-    if not profile.country:
+    country = profile.country
+    if not country:
         ip = request.META.get("REMOTE_ADDR", None)
         if ip:
             country = CountryIPDiapason.objects.get_country_by_ip(ip)
-            if country:
-                initial = dict(country=country)
-    else:
-        initial["country"] = profile.country
+            
+    initial = {"country": country, "us_state": profile.us_state}
+
+    is_US = country and country.code == "US"
 
     form = GeographyForm(instance=profile, initial=initial)
 

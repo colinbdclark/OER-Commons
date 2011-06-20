@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from geo.models import Country
+from geo.models import Country, USState
 from users.backend import encrypt_password
 from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel, \
     EducatorSubject
@@ -96,15 +96,27 @@ class GeographyForm(forms.ModelForm):
                                      label=u"Country:",
                                      to_field_name="code",
                                      required=False)
-    
+
+    us_state = forms.ModelChoiceField(USState.objects.all(),
+                                      label=u"State:",
+                                      to_field_name="code",
+                                      required=False)
+
     connect_with = forms.ChoiceField(choices=CONNECT_OPTIONS,
                                         widget=forms.RadioSelect(),
                                         label=u"",
                                         required=False)
-    
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        country = cleaned_data.get("country")
+        if not country or country.code != "US":
+            cleaned_data["us_state"] = None
+        return cleaned_data
+
     class Meta:
         model = Profile
-        fields = ["country", "connect_with"]
+        fields = ["country", "us_state", "connect_with"]
 
 
 class RolesForm(forms.ModelForm):
@@ -132,9 +144,7 @@ class RolesForm(forms.ModelForm):
         cleaned_data = self.cleaned_data
         roles = cleaned_data.get("roles")
         if roles:
-            is_educator = reduce(lambda x, y: getattr(x, "is_educator", x) or \
-                                              getattr(y, "is_educator", y),
-                                 roles, False)
+            is_educator = any([role.is_educator for role in roles])
             if not is_educator:
                 cleaned_data["educator_student_levels"] = []
         return cleaned_data
