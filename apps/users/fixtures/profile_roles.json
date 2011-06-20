@@ -94,5 +94,13 @@
       "is_educator": false, 
       "title": "Self-Learner"
     }
+  },
+  {
+    "pk": 13,
+    "model": "users.role",
+    "fields": {
+      "is_educator": false,
+      "title": "Tutor"
+    }
   }
 ]
