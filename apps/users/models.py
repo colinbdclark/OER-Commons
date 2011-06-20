@@ -184,10 +184,16 @@ class Profile(models.Model):
                    "country",
                    "connect_with",
                    "roles",
-                   "about_me"
+                   "about_me",
+                   "website_url",
+                   "facebook_id",
+                   "twitter_id",
+                   "skype_id",
                 ]
         if self.roles.filter(is_educator=True).exists():
             fields += ["educator_student_levels", "educator_subjects"]
+        if self.country and self.country.code == "US":
+            fields += ["us_state"]
         return len(fields)
     
     @property
@@ -209,8 +215,19 @@ class Profile(models.Model):
                 number += 1
             if self.educator_subjects.all().exists():
                 number += 1
+        if self.country and self.country.code == "US" and self.us_state:
+            number += 1
         if self.about_me:
             number +=1
+        if self.website_url:
+            number +=1
+        if self.facebook_id:
+            number +=1
+        if self.twitter_id:
+            number +=1
+        if self.skype_id:
+            number +=1
+
         return number
 
     @property

@@ -28,7 +28,9 @@ def profile(request):
     # to the next not-filled subform
     if "unfilled" in request.GET:
         if user.first_name and user.last_name and user.email:
-            if not profile.country or not profile.connect_with:
+            if not all([profile.country, profile.connect_with]):
+                return redirect("users:profile_geography")
+            if profile.country and profile.country.code == "US" and not profile.us_state:
                 return redirect("users:profile_geography")
             if not profile.roles.exists():
                 return redirect("users:profile_roles")
@@ -36,7 +38,9 @@ def profile(request):
             .educator_student_levels.exists() or not profile.educator_subjects\
             .exists()):
                 return redirect("users:profile_roles")
-            if not profile.about_me:
+            if not all([profile.about_me, profile.website_url,
+                        profile.facebook_id, profile.twitter_id,
+                        profile.skype_id]):
                 return redirect("users:profile_about")
 
     page_title = u"My Profile"
