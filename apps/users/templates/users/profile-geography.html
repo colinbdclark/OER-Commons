@@ -32,6 +32,12 @@
           {% include "include/form-field.html" %}
         {% endwith %}
 
+        <div{% if not is_US %} style="display: none;"{% endif %}>
+          {% with form.us_state as field %}
+            {% include "include/form-field.html" %}
+          {% endwith %}
+        </div>
+
         {% with form.connect_with as field %}
           <div class="field{% if field.field.required %} required{% endif %}">
             {% if field.help_text %}
