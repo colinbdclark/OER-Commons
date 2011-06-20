@@ -22,42 +22,76 @@ oer.profile.init_user_info = function() {
     var $header = $("table.profile th.user-info");
     var $save_btn = $form.find("input[type='submit'].save");
     var $next_btn = $form.find("input[type='submit'].next");
-    $next_btn.click(function(e) {
+    $next_btn.click(function() {
         $form.data("next", true);
     });
     $save_btn.data("label", $save_btn.val());
     var $inputs = $form.find(":input");
     var validator = $form.validate({
-    rules : {
-    first_name : "required",
-    last_name : "required",
-    username : "required",
-    email : {
-    required : true,
-    email : true
-    }
-    },
-    submitHandler : function(form) {
-        if ($form.data("next")) {
-            form.submit();
-        } else {
-            $header.addClass("loading");
-            $save_btn.val("Saving...");
-            var form_data = $form.serialize();
-            $inputs.attr("disabled", "disabled");
-            $.post($form.attr("action"), form_data, function(data) {
-                if (data.status === "success") {
-                    oer.status_message.success(data.message, true);
-                } else if (data.status === "error") {
-                    validator.showErrors(data.errors);
-                }
-                $header.removeClass("loading");
-                $save_btn.val($save_btn.data("label"));
-                $inputs.attr("disabled", "");
-            });
+        rules : {
+            first_name : "required",
+            last_name : "required",
+            username : "required",
+            email : {
+                required : true,
+                email : true
+            }
+        },
+        submitHandler : function(form) {
+            if ($form.data("next")) {
+                form.submit();
+            } else {
+                $header.addClass("loading");
+                $save_btn.val("Saving...");
+                var form_data = $form.serialize();
+                $inputs.attr("disabled", "disabled");
+                $.post($form.attr("action"), form_data, function(data) {
+                    if (data.status === "success") {
+                        oer.status_message.success(data.message, true);
+                    } else if (data.status === "error") {
+                        validator.showErrors(data.errors);
+                    }
+                    $header.removeClass("loading");
+                    $save_btn.val($save_btn.data("label"));
+                    $inputs.attr("disabled", "");
+                });
+            }
         }
-    }
     });
+
+    /* Avatar */
+    var $upload_btn = $("#upload-avatar-btn");
+    var $avatar = $("td.avatar div.avatar");
+    var $avatar_img = $avatar.find("img");
+    $upload_btn.upload({
+        action: $upload_btn.attr("href"),
+        onComplete: function(response) {
+            response = $.parseJSON(response);
+            if (response.status === "error") {
+                oer.status_message.error(response.message, true);
+            } else if (response.status === "success") {
+                $avatar_img.attr("src", response.url);
+            }
+            $avatar.removeClass("loading");
+        },
+        onSubmit: function() {
+            $avatar.addClass("loading");
+        }
+    });
+    var $delete_btn = $("#delete-avatar-btn");
+    $delete_btn.click(function(e) {
+        e.preventDefault();
+        $avatar.addClass("loading");
+        $.post($delete_btn.attr("href"), function(response) {
+            if (response.status === "error") {
+                oer.status_message.error(response.message, true);
+            } else if (response.status === "success") {
+                $avatar_img.attr("src", response.url);
+            }
+            $avatar.removeClass("loading");
+        });
+    });
+
 };
 
 oer.profile.init_change_password = function() {
@@ -67,62 +101,29 @@ oer.profile.init_change_password = function() {
     $save_btn.data("label", $save_btn.val());
     var $inputs = $form.find(":input");
     var validator = $form.validate({
-    rules : {
-    current_password : {
-        required : true
-    },
-    new_password : {
-    required : true,
-    minlength : 5
-    },
-    confirm_new_password : {
-    required : true,
-    minlength : 5,
-    equalTo : "[name='new_password']"
-    }
-    },
-    submitHandler : function(form) {
-        $header.addClass("loading");
-        $save_btn.val("Changing...");
-        var form_data = $form.serialize();
-        $inputs.attr("disabled", "disabled");
-        $.post($form.attr("action"), form_data, function(data) {
-            if (data.status === "success") {
-                oer.status_message.success(data.message, true);
-                $inputs.filter(":password").val("");
-            } else if (data.status === "error") {
-                validator.showErrors(data.errors);
+        rules : {
+            current_password : {
+                required : true
+            },
+            new_password : {
+                required : true,
+                minlength : 5
+            },
+            confirm_new_password : {
+                required : true,
+                minlength : 5,
+                equalTo : "[name='new_password']"
             }
-            $header.removeClass("loading");
-            $save_btn.val($save_btn.data("label"));
-            $inputs.attr("disabled", "");
-        });
-    }
-    });
-};
-
-oer.profile.init_geography = function() {
-    var $form = $("form.geography");
-    var $header = $("table.profile th.geography");
-    var $save_btn = $form.find("input[type='submit'].save");
-    var $next_btn = $form.find("input[type='submit'].next");
-    $next_btn.click(function(e) {
-        $form.data("next", true);
-    });
-    var $inputs = $form.find(":input");
-    $save_btn.data("label", $save_btn.val());
-    var validator = $form.validate({
-    rules : {},
-    submitHandler : function(form) {
-        if ($form.data("next")) {
-            form.submit();
-        } else {
+        },
+        submitHandler : function() {
             $header.addClass("loading");
-            $save_btn.val("Saving...");
+            $save_btn.val("Changing...");
             var form_data = $form.serialize();
+            $inputs.attr("disabled", "disabled");
             $.post($form.attr("action"), form_data, function(data) {
                 if (data.status === "success") {
                     oer.status_message.success(data.message, true);
+                    $inputs.filter(":password").val("");
                 } else if (data.status === "error") {
                     validator.showErrors(data.errors);
                 }
@@ -131,22 +132,61 @@ oer.profile.init_geography = function() {
                 $inputs.attr("disabled", "");
             });
         }
-    }
     });
+};
+
+oer.profile.init_geography = function() {
+    var $form = $("form.geography");
+    var $header = $("table.profile th.geography");
+    var $save_btn = $form.find("input[type='submit'].save");
+    var $next_btn = $form.find("input[type='submit'].next");
+    $next_btn.click(function() {
+        $form.data("next", true);
+    });
+    var $inputs = $form.find(":input");
+    $save_btn.data("label", $save_btn.val());
+    var validator = $form.validate({
+        rules : {},
+        submitHandler : function(form) {
+            if ($form.data("next")) {
+                form.submit();
+            } else {
+                $header.addClass("loading");
+                $save_btn.val("Saving...");
+                var form_data = $form.serialize();
+                $.post($form.attr("action"), form_data, function(data) {
+                    if (data.status === "success") {
+                        oer.status_message.success(data.message, true);
+                    } else if (data.status === "error") {
+                        validator.showErrors(data.errors);
+                    }
+                    $header.removeClass("loading");
+                    $save_btn.val($save_btn.data("label"));
+                    $inputs.attr("disabled", "");
+                });
+            }
+        }
+    });
+
+    var $country_field = $("#id_country");
+    var $us_state_field = $("#id_us_state");
+    var $us_state_field_ct = $("#id_us_state").parent().parent();
+    var map = null;
+    var initial_location = null;
+    var geocode_address = null;
 
     // Map Widget
     if (window.google !== undefined && window.google.maps !== undefined) {
 
-        var initial_location = new google.maps.LatLng(25, 0);
+        initial_location = new google.maps.LatLng(25, 0);
 
         var options = {
-        zoom : 1,
-        center : initial_location,
-        mapTypeId : google.maps.MapTypeId.ROADMAP
+            zoom : 1,
+            center : initial_location,
+            mapTypeId : google.maps.MapTypeId.ROADMAP
         };
-        var map = new google.maps.Map(document.getElementById("map"), options);
+        map = new google.maps.Map(document.getElementById("map"), options);
         var marker = null;
-        var $select = $("select[name='country']");
 
         var place_marker = function(location, set_center) {
             if (set_center !== undefined && set_center) {
@@ -154,18 +194,18 @@ oer.profile.init_geography = function() {
             }
             if (marker === null) {
                 marker = new google.maps.Marker({
-                map : map,
-                position : location
+                    map : map,
+                    position : location
                 });
             } else {
                 marker.setPosition(location);
             }
         };
 
-        var geocode_country = function(country_name) {
+        geocode_address = function(address) {
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({
-                'address' : country_name
+                'address' : address
             }, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     place_marker(results[0].geometry.location, true);
@@ -178,23 +218,6 @@ oer.profile.init_geography = function() {
             });
         };
 
-        // Select country from dropdown list
-        var select_country = function() {
-            var $selected = $select.find("option:selected");
-            if ($selected.val() !== "") {
-                var country_name = $selected.text();
-                geocode_country(country_name);
-            } else {
-                map.setCenter(initial_location);
-            }
-
-        };
-
-        $select.change(function(e) {
-            select_country();
-        });
-        select_country();
-
         // Pick country on map widget
         var pick_country = function(location) {
             var geocoder = new google.maps.Geocoder();
@@ -204,19 +227,33 @@ oer.profile.init_geography = function() {
                 if (status == google.maps.GeocoderStatus.OK) {
                     place_marker(results[0].geometry.location);
                     var address_components = results[0].address_components;
-                    for ( var i = 0; i < address_components.length; i++) {
+                    for (var i = 0; i < address_components.length; i++) {
                         var component = address_components[i];
                         if (component.types[0] === "country") {
                             var code = component.short_name;
-                            $select.unbind("change");
-                            $select.val(code);
-                            $select.change(function(e) {
+                            $country_field.unbind("change");
+                            $country_field.val(code);
+                            $country_field.change(function() {
                                 select_country();
+                                set_map_pin();
                             });
-                            break;
+                            if (code === "US") {
+                                $us_state_field_ct.show();
+                            } else {
+                                $us_state_field_ct.hide();
+                            }
+                        }
+                        if (component.types[0] === "administrative_area_level_1") {
+                            var code = component.short_name;
+                            if ($us_state_field.find("option[value='" + code + "']").length) {
+                                $us_state_field.unbind("change");
+                                $us_state_field.val(code);
+                                $us_state_field.change(function() {
+                                    set_map_pin();
+                                });
+                            }
                         }
                     }
-                    ;
                 } else {
                     if (window.console !== undefined) {
                         console.log("Geocode was not successful for the following reason: " + status);
@@ -231,6 +268,49 @@ oer.profile.init_geography = function() {
 
     }
 
+    // Select country from dropdown list
+    var select_country = function() {
+        var $selected = $country_field.find("option:selected");
+        if ($selected.val() === "US") {
+            $us_state_field_ct.show();
+        } else {
+            $us_state_field_ct.hide();
+        }
+
+    };
+
+    var set_map_pin = function() {
+        if (map == null) {
+            return;
+        }
+        var $selected_country = $country_field.find("option:selected");
+        if ($selected_country.val() === "") {
+            map.setCenter(initial_location);
+            return;
+        }
+
+        var address = $selected_country.text();
+        if ($selected_country.val() === "US") {
+            var $selected_state = $us_state_field.find("option:selected");
+            if ($selected_state.val() !== "") {
+                address = $selected_state.text() + " " + address;
+            }
+        }
+        geocode_address(address);
+
+    }
+
+    $country_field.change(function() {
+        select_country();
+        set_map_pin();
+    });
+
+    $us_state_field.change(function() {
+        set_map_pin();
+    })
+
+    set_map_pin();
+
 };
 
 oer.profile.init_roles = function() {
@@ -238,32 +318,32 @@ oer.profile.init_roles = function() {
     var $header = $("table.profile th.roles");
     var $save_btn = $form.find("input[type='submit'].save");
     var $next_btn = $form.find("input[type='submit'].next");
-    $next_btn.click(function(e) {
+    $next_btn.click(function() {
         $form.data("next", true);
     });
     var $inputs = $form.find(":input");
     $save_btn.data("label", $save_btn.val());
     var validator = $form.validate({
-    rules : {},
-    submitHandler : function(form) {
-        if ($form.data("next")) {
-            form.submit();
-        } else {
-            $header.addClass("loading");
-            $save_btn.val("Saving...");
-            var form_data = $form.serialize();
-            $.post($form.attr("action"), form_data, function(data) {
-                if (data.status === "success") {
-                    oer.status_message.success(data.message, true);
-                } else if (data.status === "error") {
-                    validator.showErrors(data.errors);
-                }
-                $header.removeClass("loading");
-                $save_btn.val($save_btn.data("label"));
-                $inputs.attr("disabled", "");
-            });
+        rules : {},
+        submitHandler : function(form) {
+            if ($form.data("next")) {
+                form.submit();
+            } else {
+                $header.addClass("loading");
+                $save_btn.val("Saving...");
+                var form_data = $form.serialize();
+                $.post($form.attr("action"), form_data, function(data) {
+                    if (data.status === "success") {
+                        oer.status_message.success(data.message, true);
+                    } else if (data.status === "error") {
+                        validator.showErrors(data.errors);
+                    }
+                    $header.removeClass("loading");
+                    $save_btn.val($save_btn.data("label"));
+                    $inputs.attr("disabled", "");
+                });
+            }
         }
-    }
     });
 
     var $buttons_ct = $form.find("div.buttons");
@@ -273,7 +353,7 @@ oer.profile.init_roles = function() {
     var $roles_input = $inputs.filter("[name='roles']");
 
     var EDUCATOR_ROLE_IDS = [ 1, 2, 3 ];
-    $roles_input.change(function(e) {
+    $roles_input.change(function() {
         var is_educator = false;
         $roles_input.filter(":checked").each(function(index, el) {
             var $el = $(el);
@@ -305,31 +385,39 @@ oer.profile.init_about = function() {
     var $header = $("table.profile th.about");
     var $save_btn = $form.find("input[type='submit'].save");
     var $next_btn = $form.find("input[type='submit'].next");
-    $next_btn.click(function(e) {
+    $next_btn.click(function() {
         $form.data("next", true);
     });
     var $inputs = $form.find(":input");
     $save_btn.data("label", $save_btn.val());
     var validator = $form.validate({
-    rules : {},
-    submitHandler : function(form) {
-        if ($form.data("next")) {
-            form.submit();
-        } else {
-            $header.addClass("loading");
-            $save_btn.val("Saving...");
-            var form_data = $form.serialize();
-            $.post($form.attr("action"), form_data, function(data) {
-                if (data.status === "success") {
-                    oer.status_message.success(data.message, true);
-                } else if (data.status === "error") {
-                    validator.showErrors(data.errors);
-                }
-                $header.removeClass("loading");
-                $save_btn.val($save_btn.data("label"));
-                $inputs.attr("disabled", "");
-            });
+        rules : {
+            website_url: "url",
+            facebook_id: {
+                minlength: 5
+            },
+            skype_id: {
+                minlength: 6
+            }
+        },
+        submitHandler : function(form) {
+            if ($form.data("next")) {
+                form.submit();
+            } else {
+                $header.addClass("loading");
+                $save_btn.val("Saving...");
+                var form_data = $form.serialize();
+                $.post($form.attr("action"), form_data, function(data) {
+                    if (data.status === "success") {
+                        oer.status_message.success(data.message, true);
+                    } else if (data.status === "error") {
+                        validator.showErrors(data.errors);
+                    }
+                    $header.removeClass("loading");
+                    $save_btn.val($save_btn.data("label"));
+                    $inputs.attr("disabled", "");
+                });
+            }
         }
-    }
     });
 };

@@ -45,7 +45,9 @@
 .portlet.item-tags .user-tags li.tag a,
 .portlet.item-tags li,
 .portlet.save a,
-.green-browse #content section.column {
+.green-browse #content section.column,
+.profile #upload-avatar-btn,
+.profile .about span.prefix {
   zoom: 1;
   display: inline;
 }

@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from geo.models import Country
+from django.utils.safestring import mark_safe
+from geo.models import Country, USState
 from users.backend import encrypt_password
 from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel, \
     EducatorSubject
@@ -82,6 +83,11 @@ class ChangePasswordForm(forms.ModelForm):
         fields = ["current_password", "new_password", "confirm_new_password"]
 
 
+class AvatarForm(forms.Form):
+
+    file = forms.ImageField()
+
+
 class GeographyForm(forms.ModelForm):
 
     success_message = u"Your geography information was saved."
@@ -91,15 +97,27 @@ class GeographyForm(forms.ModelForm):
                                      label=u"Country:",
                                      to_field_name="code",
                                      required=False)
-    
+
+    us_state = forms.ModelChoiceField(USState.objects.all(),
+                                      label=u"State:",
+                                      to_field_name="code",
+                                      required=False)
+
     connect_with = forms.ChoiceField(choices=CONNECT_OPTIONS,
                                         widget=forms.RadioSelect(),
                                         label=u"",
                                         required=False)
-    
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        country = cleaned_data.get("country")
+        if not country or country.code != "US":
+            cleaned_data["us_state"] = None
+        return cleaned_data
+
     class Meta:
         model = Profile
-        fields = ["country", "connect_with"]
+        fields = ["country", "us_state", "connect_with"]
 
 
 class RolesForm(forms.ModelForm):
@@ -127,9 +145,7 @@ class RolesForm(forms.ModelForm):
         cleaned_data = self.cleaned_data
         roles = cleaned_data.get("roles")
         if roles:
-            is_educator = reduce(lambda x, y: getattr(x, "is_educator", x) or \
-                                              getattr(y, "is_educator", y),
-                                 roles, False)
+            is_educator = any([role.is_educator for role in roles])
             if not is_educator:
                 cleaned_data["educator_student_levels"] = []
         return cleaned_data
@@ -139,16 +155,47 @@ class RolesForm(forms.ModelForm):
         fields = ["roles", "educator_student_levels", "educator_subjects"]
 
 
+class TextInputWithPrefix(forms.TextInput):
+
+    def __init__(self, *args, **kwargs):
+        self.prefix = kwargs.pop("prefix", None)
+        super(TextInputWithPrefix, self).__init__(*args, **kwargs)
+
+    def render(self, *args, **kwargs):
+        rendered = super(TextInputWithPrefix, self).render(*args, **kwargs)
+        if self.prefix:
+            rendered = ("""<span class="prefix">%s</span> """ % self.prefix) + rendered
+        return mark_safe(rendered)
+
+
 class AboutMeForm(forms.ModelForm):
 
     success_message = u"Your profile was saved."
     error_message = u"Please correct the indicated errors."
     
-    about_me = forms.CharField(label=u"",
+    about_me = forms.CharField(label=u"About me",
                                required=False,
-                               widget=forms.Textarea)
-    
+                               widget=forms.Textarea(attrs={"class": "text"}))
+
+    website_url = forms.URLField(label=u"Website or blog",
+                                 widget=forms.TextInput(
+                                    attrs={"placeholder": "http://",
+                                           "class": "text"}),
+                                 required=False)
+
+    facebook_id = forms.CharField(label=u"Facebook", required=False,
+                                  widget=TextInputWithPrefix(prefix="https://www.facebook.com/",
+                                                             attrs={"class": "text"}))
+
+    twitter_id = forms.CharField(label=u"Twitter", required=False,
+                                 widget=TextInputWithPrefix(prefix="https://twitter.com/",
+                                                            attrs={"class": "text"}))
+
+    skype_id = forms.CharField(label=u"Skype", required=False,
+                               widget=forms.TextInput(attrs={"class": "text"}))
+                               
     class Meta:
         model = Profile
-        fields = ["about_me"]
+        fields = ["about_me", "website_url", "facebook_id", "twitter_id",
+                  "skype_id"]
         

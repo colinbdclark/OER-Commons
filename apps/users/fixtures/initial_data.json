@@ -96,6 +96,14 @@
     }
   },
   {
+    "pk": 13,
+    "model": "users.role",
+    "fields": {
+      "is_educator": false,
+      "title": "Tutor"
+    }
+  },
+  {
     "pk": 1, 
     "model": "users.studentlevel", 
     "fields": {
