@@ -65,7 +65,7 @@ sub    { line-height: 0; }
 .content li ul,
 .content li ol       { margin: 0; }
 .content ul,
-.content ol      { 10px 0 }
+.content ol      {}
 
 .content ul li,
 .content ol li { margin-bottom:3px;  margin-left:20px; } 

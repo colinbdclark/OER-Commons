@@ -51,7 +51,9 @@
 .portlet.align-item-tags .align-user-tags li.tag,
 .align-user-tags li.tag a,
 .portlet.align-item-tags .align-user-tags li.tag a,
-.green-browse #content section.column {
+.green-browse #content section.column,
+.profile #upload-avatar-btn,
+.profile .about span.prefix {
   zoom: 1;
   display: inline;
 }

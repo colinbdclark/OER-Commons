@@ -21,7 +21,8 @@ import urllib
 MAX_TOP_KEYWORDS = 25
 
 
-def serialize_query_string_params(query_string_params, ignore_params=[]):
+def serialize_query_string_params(query_string_params, ignore_params=None):
+    if not ignore_params: ignore_params = []
     params = []
     for key, value in query_string_params.items():
         if key in ignore_params:
@@ -63,7 +64,7 @@ class Pagination:
                 total_pages += 1
             current_page = batch_start / batch_size
 
-            if current_page != 0:
+            if current_page:
                 self.first_page_url = path + serialize_query_string_params(query_string_params, ["batch_start"])
 
                 params = query_string_params.copy()
@@ -118,14 +119,13 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
             continue
         counts = dict(facets[filter.index_name])
         values = filter_values.get(filter_name, [])
-        filter_data = {}
-        filter_data["name"] = filter_name
-        filter_data["title"] = filter.title
-        filter_data["disabled"] = filter_name == path_filter
-        filter_data["options"] = []
-        filter_data["all_checked"] = not bool(values)
-        filter_data["request_name"] = filter.request_name
-        filter_data["collapsed"] = collapsed
+        filter_data = {"name": filter_name,
+                       "title": filter.title,
+                       "disabled": filter_name == path_filter,
+                       "options": [],
+                       "all_checked": not bool(values),
+                       "request_name": filter.request_name,
+                       "collapsed": collapsed}
         if values:
             filter_data["collapsed"] = False
         if isinstance(filter, VocabularyFilter):
@@ -142,10 +142,7 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
             if not isinstance(values, list):
                 values = [values]
             for i, (slug, name) in enumerate(filter.choices):
-                option = {}
-                option["id"] = i
-                option["slug"] = slug
-                option["name"] = name
+                option = {"id": i, "slug": slug, "name": name}
                 count = counts.get(slug, 0)
                 option["count"] = count
                 if filter_data["all_checked"] or slug in values:
@@ -163,14 +160,13 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
             return filters
         counts = dict(facets[filter.index_name])
         values = filter_values.get(filter_name, [])
-        filter_data = {}
-        filter_data["name"] = filter_name
-        filter_data["title"] = u"%s %s" % (microsite.name, filter.title)
-        filter_data["disabled"] = filter_name == path_filter
-        filter_data["options"] = []
-        filter_data["all_checked"] = not bool(values)
-        filter_data["request_name"] = filter.request_name
-        filter_data["collapsed"] = False
+        filter_data = {"name": filter_name,
+                       "title": u"%s %s" % (microsite.name, filter.title),
+                       "disabled": filter_name == path_filter,
+                       "options": [],
+                       "all_checked": not bool(values),
+                       "request_name": filter.request_name,
+                       "collapsed": False}
         if not isinstance(values, list):
             values = [values]
         for option in Topic.objects.filter(microsite=microsite).values("id", "slug", "name").order_by("id"):
@@ -221,14 +217,14 @@ class IndexParams:
 
         try:
             self.batch_start = int(request.REQUEST.get("batch_start", 0))
-        except:
+        except ValueError:
             pass
 
         try:
             batch_size = int(request.REQUEST.get("batch_size", 0))
             if batch_size in self.BATCH_SIZE_OPTIONS:
                 self.batch_size = batch_size
-        except:
+        except ValueError:
             pass
 
         sort_by = request.REQUEST.get("sort_by", request.REQUEST.get("sort_on"))
@@ -336,16 +332,16 @@ def populate_item_from_search_result(result):
 
 def index(request, general_subjects=None, grade_levels=None,
           course_material_types=None, library_material_types=None,
-          collection=None, keywords=None, license=None,
-          course_or_module=None, community_types=None, community_topics=None,
-          microsite=None, model=None, search=False, tags=None, subjects=None,
-          format=None,
-          topics=None,
-          alignment=None,
-          facet_fields=["general_subjects", "grade_levels", "keywords",
-                        "course_material_types", "media_formats",
-                        "cou_bucket", "indexed_topics"]):
+          collection=None, keywords=None, license=None, course_or_module=None,
+          community_types=None, community_topics=None, microsite=None,
+          model=None, search=False, tags=None, subjects=None, format=None,
+          topics=None, alignment=None, facet_fields=None):
 
+    if not facet_fields: facet_fields = ["general_subjects", "grade_levels",
+                                         "keywords",
+                                         "course_material_types",
+                                         "media_formats",
+                                         "cou_bucket", "indexed_topics"]
     if model:
         index_namespace = model.namespace
     else:
@@ -572,15 +568,17 @@ def index(request, general_subjects=None, grade_levels=None,
 
         for result in results:
             data = result.get_stored_fields()
-            item = {}
-            item["id"] = result.id
-            item["title"] = data["title"]
-            item["abstract"] = data["abstract"]
-            item["url"] = data["url"]
-            item["keywords"] = data["keywords_names"]
-            item["subject"] = [get_slug_from_id(GeneralSubject, id) for id in (data["general_subjects"] or [])]
-            item["grade_level"] = [get_slug_from_id(GradeLevel, id) for id in (data["grade_levels"] or [])]
-            item["collection"] = data["collection"] and get_name_from_id(Collection, data["collection"]) or None
+            item = {"id": result.id,
+                    "title": data["title"],
+                    "abstract": data["abstract"],
+                    "url": data["url"],
+                    "keywords": data["keywords_names"],
+                    "subject": [get_slug_from_id(GeneralSubject, id) for id in
+                        (data["general_subjects"] or [])],
+                    "grade_level": [get_slug_from_id(GradeLevel, id) for id in
+                        (data["grade_levels"] or [])],
+                    "collection": data["collection"] and get_name_from_id(
+                        Collection, data["collection"]) or None}
             items.append(item)
 
         return JsonResponse(items)
@@ -592,10 +590,8 @@ def index(request, general_subjects=None, grade_levels=None,
         for result in results:
             object = result.object
             data = result.get_stored_fields()
-            item = {}
-            
-            item["url"] = data["url"]
-            item["title"] = data["title"]
+            item = {"url": data["url"],
+                    "title": data["title"]}
             if data.get("authors"):
                 item["author"] = data["authors"][0] 
             if data.get("institution"):

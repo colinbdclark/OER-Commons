@@ -26,12 +26,11 @@ def advanced_search(request):
 
     for filter_name, collapsed in ADVANCED_SEARCH_FILTERS:
         filter = FILTERS[filter_name]
-        filter_data = {}
-        filter_data["name"] = filter_name
-        filter_data["title"] = filter.title
-        filter_data["options"] = []
-        filter_data["request_name"] = filter.request_name
-        filter_data["collapsed"] = collapsed
+        filter_data = {"name": filter_name,
+                       "title": filter.title,
+                       "options": [],
+                       "request_name": filter.request_name,
+                       "collapsed": collapsed}
         if isinstance(filter, VocabularyFilter):
             for option in filter.model.objects.values("id", "slug", "name"):
                 option["input_id"] = "%s-%i" % \
@@ -40,10 +39,7 @@ def advanced_search(request):
                 filter_data["options"].append(option)
         elif isinstance(filter, ChoicesFilter):
             for i, (slug, name) in enumerate(filter.choices):
-                option = {}
-                option["id"] = i
-                option["slug"] = slug
-                option["name"] = name
+                option = {"id": i, "slug": slug, "name": name}
                 option["input_id"] = "%s-%i" % \
                                 (filter_data["request_name"].replace(".", "-"),
                                  option["id"])
@@ -56,10 +52,9 @@ def advanced_search(request):
     for option in filters["cou_bucket"]["options"]:
         option["options"] = []
         for i, license_type in enumerate(license_hierarchy_dict[option["slug"]]):
-            sub_option = {}
-            sub_option["id"] = i
-            sub_option["slug"] = license_type
-            sub_option["name"] = license_types_dict[license_type]
+            sub_option = {"id": i,
+                          "slug": license_type,
+                          "name": license_types_dict[license_type]}
             sub_option["input_id"] = "%s-%i%i" % \
                                 (filters["cou_bucket"]["sub_option_request_name"].replace(".", "-"),
                                  option["id"], sub_option["id"])

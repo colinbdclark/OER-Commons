@@ -86,7 +86,7 @@ INSTALLED_APPS = (
     'oauth_provider',
     'honeypot',
     'mailchimp',
-    'simplegravatar',
+    'sorl.thumbnail',
     'utils',
     'abtesting',
     'tags',
@@ -189,3 +189,7 @@ def honeypot_verifier(value):
     return True
 
 HONEYPOT_VERIFIER = honeypot_verifier
+
+DEFAULT_AVATAR = STATIC_URL + "images/no-picture.jpg"
+AVATAR_SIZE = 93
+GRAVATAR_BASE = "http://www.gravatar.com/avatar"
