@@ -49,6 +49,7 @@
 .portlet.item-tags li,
 .portlet.save a,
 .profile #upload-avatar-btn,
+.profile .about span.prefix,
 .user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
 .user-tags li.tag, .portlet.item-tags .user-tags li.tag,
 fieldset.step p.content-submission-buttons a {

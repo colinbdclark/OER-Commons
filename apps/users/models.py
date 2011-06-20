@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.core import validators
 from django.core.mail.message import EmailMessage
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -134,6 +135,18 @@ class Profile(models.Model):
                                                   blank=True) 
     
     about_me = models.TextField(blank=True, null=True)
+
+    website_url = models.URLField(blank=True, null=True)
+
+    facebook_id = models.CharField(max_length=50, blank=True, null=True,
+                                   validators=[validators.RegexValidator(r"^[a-z\d.]{5,}$")])
+
+    twitter_id = models.CharField(max_length=30, blank=True, null=True,
+                                  validators=[validators.RegexValidator(r"^[a-zA-Z\d_]+$")])
+
+    skype_id = models.CharField(max_length=50, blank=True, null=True,
+                                validators=[validators.RegexValidator(r"^[a-zA-Z\d_.\-]{6,}$")])
+
 
     def get_avatar_url(self):
         if self.hide_avatar:
