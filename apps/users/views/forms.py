@@ -1,11 +1,10 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.utils.safestring import mark_safe
 from geo.models import Country, USState
 from users.backend import encrypt_password
 from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel, \
-    EducatorSubject
+    EducatorSubject, FACEBOOK_URL_RE, TWITTER_URL_RE
 from utils.forms import AutocompleteListField, AutocompleteListWidget
 
 
@@ -155,19 +154,6 @@ class RolesForm(forms.ModelForm):
         fields = ["roles", "educator_student_levels", "educator_subjects"]
 
 
-class TextInputWithPrefix(forms.TextInput):
-
-    def __init__(self, *args, **kwargs):
-        self.prefix = kwargs.pop("prefix", None)
-        super(TextInputWithPrefix, self).__init__(*args, **kwargs)
-
-    def render(self, *args, **kwargs):
-        rendered = super(TextInputWithPrefix, self).render(*args, **kwargs)
-        if self.prefix:
-            rendered = ("""<span class="prefix">%s</span> """ % self.prefix) + rendered
-        return mark_safe(rendered)
-
-
 class AboutMeForm(forms.ModelForm):
 
     success_message = u"Your profile was saved."
@@ -184,16 +170,31 @@ class AboutMeForm(forms.ModelForm):
                                  required=False)
 
     facebook_id = forms.CharField(label=u"Facebook", required=False,
-                                  widget=TextInputWithPrefix(prefix="https://www.facebook.com/",
-                                                             attrs={"class": "text"}))
+                                  widget=forms.TextInput(
+                                      attrs={"class": "text",
+                   "placeholder": "https://www.facebook.com/your_username"}))
 
     twitter_id = forms.CharField(label=u"Twitter", required=False,
-                                 widget=TextInputWithPrefix(prefix="https://twitter.com/",
-                                                            attrs={"class": "text"}))
+                                 widget=forms.TextInput(attrs={"class": "text",
+                       "placeholder": "https://twitter.com/your_username"}))
 
     skype_id = forms.CharField(label=u"Skype", required=False,
                                widget=forms.TextInput(attrs={"class": "text"}))
-                               
+
+    def clean_facebook_id(self):
+        facebook_id = self.cleaned_data["facebook_id"]
+        r = FACEBOOK_URL_RE.search(facebook_id)
+        if r:
+            facebook_id = r.groupdict()["facebook_id"]
+        return facebook_id
+
+    def clean_twitter_id(self):
+        twitter_id = self.cleaned_data["twitter_id"]
+        r = TWITTER_URL_RE.search(twitter_id)
+        if r:
+            twitter_id = r.groupdict()["twitter_id"]
+        return twitter_id
+
     class Meta:
         model = Profile
         fields = ["about_me", "website_url", "facebook_id", "twitter_id",
