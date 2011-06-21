@@ -207,7 +207,8 @@ oer.materials.index.init_align_form = function() {
             $user_tags.empty();
             $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
                 $.each(data.tags, function(index, tag) {
-                    $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
+                    var $tags = $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
+                    oer.align_form.init_tag_tooltip($tags.find("a:first"));
                 });
                 $form.show();
             });
@@ -232,15 +233,10 @@ oer.materials.index.init = function() {
     oer.collapsibles.init($("#content"));
     oer.collapsibles.init($filters_portlet);
 
-    $filters_portlet.find("dl.cou a.tooltip-button").cluetip({
-    local : true,
-    arrows : true,
-    width : 300
-    });
-    $filters_portlet.find("dl.grade-levels a.tooltip-button").cluetip({
-    local : true,
-    arrows : true,
-    width : 200
-    });
+    $("dl.cou a.tooltip-button").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
+    $("dl.grade-levels a.tooltip-button").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
+
+    $("section.portlet.cou li a").qtip(DEFAULT_TOOLTIP_OPTIONS);
+    $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
 
 };

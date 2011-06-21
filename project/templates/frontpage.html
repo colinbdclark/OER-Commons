@@ -6,7 +6,7 @@
 <script type="text/javascript"> 
   $(function() {
     oer.accordion.init($("section.portlet.oermaterials div.accordion"));
-    $("section.portlet.cou li a").cluetip({local:true, arrows: true, width: 300});
+    $("section.portlet.cou li a").qtip(DEFAULT_TOOLTIP_OPTIONS);
     $(".slider").anythingSlider({
       width: 540,
       height: 190,

@@ -20,7 +20,7 @@
       {% if content_actions or workflow_actions %}
         oer.materials.view_item.init_content_actions();
       {% endif %}
-      $("#content div.cou-bucket").cluetip({local:true, arrows: true, width: 300});
+      $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
     });
   </script>
 {% endblock %}
