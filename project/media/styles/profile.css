@@ -55,7 +55,6 @@
 }
 
 .profile form.formatted label {
-  font-size: 16px;
   margin: 0;
 }
 
@@ -72,7 +71,8 @@
 }
 
 .profile form.formatted input.text {
-  font-size: 18px;
+  font-size: 14px;
+  height: 18px;
   padding: 2px 4px;
   margin: 0;
 }
@@ -99,7 +99,7 @@
   height: 93px;
   padding: 2px;
   border: 1px solid #ccc;
-  margin-top: 25px;
+  margin-top: 21px;
 }
 
 .profile td.avatar .avatar.loading {
@@ -126,8 +126,6 @@
 
 .profile #id_website_url {
   width: 350px;
-  font-size: 14px;
-  height: 21px;
 }
 
 .profile .about span.prefix {
@@ -147,6 +145,5 @@
 }
 
 .profile form.formatted .autocomplete-list-widget label {
-  font-size: 14px;
-  font-weight: normal; 
+  font-weight: normal;
 }
