@@ -121,26 +121,10 @@
 
 .profile .about textarea {
   width: 400px;
-  height: 222px;
+  height: 198px;
 }
 
-.profile #id_website_url {
-  width: 350px;
-}
-
-.profile .about span.prefix {
-  color: #999;
-  display: inline-block;
-  text-align: right;
-  width: 160px;
-}
-
-.profile #id_facebook_id,
-.profile #id_twitter_id {
-  width: 186px;
-}
-
-.profile #id_skype_id {
+.profile .about input.text {
   width: 350px;
 }
 
