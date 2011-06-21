@@ -1,3 +1,4 @@
+from curriculum.models import AlignmentTag
 from django import forms
 from django.conf import settings
 from django.contrib.admin.util import unquote
@@ -275,6 +276,8 @@ class CourseAdmin(MaterialAdmin):
             authors_formset = AuthorsFormSet(prefix="authors", queryset=obj.authors.all())
 
         tags = obj.tags.distinct().values_list("name", flat=True)
+        alignment_tags = obj.alignment_tags.values_list("tag", flat=True).distinct()
+        alignment_tags = AlignmentTag.objects.filter(id__in=alignment_tags)
 
         context = {
             'title': _('Change %s') % force_unicode(opts.verbose_name),
@@ -282,6 +285,7 @@ class CourseAdmin(MaterialAdmin):
             'authors_formset': authors_formset,
             'main_fields': MAIN_FIELDS_CHANGE,
             'tags': tags,
+            'alignment_tags': alignment_tags,
             'object_id': object_id,
             'original': obj,
             'root_path': self.admin_site.root_path,

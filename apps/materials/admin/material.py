@@ -7,6 +7,7 @@ from haystack.sites import site
 from materials.models.material import PUBLISHED_STATE
 
 
+#noinspection PyUnusedLocal
 def publish(modeladmin, request, queryset):
     for obj in queryset:
         obj.workflow_state = PUBLISHED_STATE
@@ -40,7 +41,10 @@ class MaterialAdmin(ModelAdmin):
             url(r'^(.+)/delete_tag/$',
                 wrap(self.delete_tag),
                 name='%s_%s_delete_tag' % info),
-            
+            url(r'^(.+)/delete_align_tag/$',
+                wrap(self.delete_align_tag),
+                name='%s_%s_delete_align_tag' % info),
+
         ) + super(MaterialAdmin, self).get_urls()
         
         return urlpatterns
@@ -68,4 +72,29 @@ class MaterialAdmin(ModelAdmin):
         site.update_object(obj)
         
         return dict(status="success")
+
+    @ajax_request
+    def delete_align_tag(self, request, object_id):
+
+        if not request.is_ajax():
+            raise Http404()
+
+        obj = get_object_or_404(self.model, id=int(object_id))
+
+        tag_id = request.POST.get("id")
+        if not tag_id:
+            return dict(status="error",
+                        message=u"Tag ID is missing.")
+
+        tag_id = int(tag_id)
         
+        tags = obj.alignment_tags.filter(tag=tag_id)
+        if not tags.exists():
+            return dict(status="error",
+                        message=u"Tag with specified ID does not exist.")
+
+        tags.delete()
+
+        site.update_object(obj)
+
+        return dict(status="success")
