@@ -55,7 +55,6 @@
 }
 
 .profile form.formatted label {
-  font-size: 16px;
   margin: 0;
 }
 
@@ -72,7 +71,8 @@
 }
 
 .profile form.formatted input.text {
-  font-size: 18px;
+  font-size: 14px;
+  height: 18px;
   padding: 2px 4px;
   margin: 0;
 }
@@ -99,7 +99,7 @@
   height: 93px;
   padding: 2px;
   border: 1px solid #ccc;
-  margin-top: 25px;
+  margin-top: 21px;
 }
 
 .profile td.avatar .avatar.loading {
@@ -121,32 +121,13 @@
 
 .profile .about textarea {
   width: 400px;
-  height: 222px;
+  height: 198px;
 }
 
-.profile #id_website_url {
-  width: 350px;
-  font-size: 14px;
-  height: 21px;
-}
-
-.profile .about span.prefix {
-  color: #999;
-  display: inline-block;
-  text-align: right;
-  width: 160px;
-}
-
-.profile #id_facebook_id,
-.profile #id_twitter_id {
-  width: 186px;
-}
-
-.profile #id_skype_id {
+.profile .about input.text {
   width: 350px;
 }
 
 .profile form.formatted .autocomplete-list-widget label {
-  font-size: 14px;
-  font-weight: normal; 
+  font-weight: normal;
 }

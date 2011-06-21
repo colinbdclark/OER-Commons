@@ -14,6 +14,7 @@ from sorl.thumbnail.shortcuts import get_thumbnail
 from users.backend import encrypt_password
 import hashlib
 import urllib
+import re
 
 
 MEMBER_ROLES = (
@@ -32,6 +33,11 @@ CONNECT_OPTIONS = (
     (ONLY_COUNTRY, u"Connect me only to people in my own country"),
     (WHOLE_WORLD, u"Connect me to learners and educators around the world"),
 )
+
+FACEBOOK_ID_RE = re.compile(r"^[a-z\d.]{5,}$")
+FACEBOOK_URL_RE = re.compile(r"^https?://(www.)?facebook.com/(?P<facebook_id>[a-z\d.]{5,})$")
+TWITTER_ID_RE = re.compile(r"^[a-zA-Z\d_]+$")
+TWITTER_URL_RE = re.compile(r"^https?://twitter.com/(#!/)?(?P<twitter_id>[a-zA-Z\d_]+)$")
 
 
 class Role(models.Model):
@@ -139,10 +145,10 @@ class Profile(models.Model):
     website_url = models.URLField(blank=True, null=True)
 
     facebook_id = models.CharField(max_length=50, blank=True, null=True,
-                                   validators=[validators.RegexValidator(r"^[a-z\d.]{5,}$")])
+                                   validators=[validators.RegexValidator(FACEBOOK_ID_RE)])
 
     twitter_id = models.CharField(max_length=30, blank=True, null=True,
-                                  validators=[validators.RegexValidator(r"^[a-zA-Z\d_]+$")])
+                                  validators=[validators.RegexValidator(TWITTER_ID_RE)])
 
     skype_id = models.CharField(max_length=50, blank=True, null=True,
                                 validators=[validators.RegexValidator(r"^[a-zA-Z\d_.\-]{6,}$")])
