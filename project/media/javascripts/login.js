@@ -60,7 +60,6 @@ oer.login.show_popup = function(callback) {
                     if (response.status === "success") {
                         $body.addClass("authenticated");
                         $popup.dialog("close");
-                        oer.status_message.success(response.message, true);
                         if (callback !== undefined) {
                             callback();
                         }
