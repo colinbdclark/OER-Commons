@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.views.generic.simple import direct_to_template
 from haystack.sites import site
 from utils.decorators import login_required
 
@@ -204,3 +205,15 @@ def list_tags(request, existing=False):
         optgroups.append(dict(title=title, items=items))
         
     return dict(optgroups=optgroups)
+
+
+def get_tag_description(request, standard, grade, category, code):
+    tag = get_object_or_404(AlignmentTag,
+                            standard__code=standard,
+                            grade__code=grade,
+                            category__code=category,
+                            code=code)
+
+    return direct_to_template(request,
+                              "curriculum/tag-description-tooltip.html",
+                              dict(tag=tag))

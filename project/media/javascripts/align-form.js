@@ -7,6 +7,29 @@ oer.align_form.LOADED_EVENT = "oer-align-form-loaded";
 
 $.template("align-user-tags-item", '<li data-id="${id}" class="tag rc3"><a href="${url}">${code}</a> <a href="#" class="delete">x</a></li>');
 
+oer.align_form.init_tag_tooltip = function($a) {
+  $a.each(function() {
+    var $this = $(this);
+    $this.qtip({
+        content: {
+            text: 'Loading...',
+            ajax: {
+                url: "/curriculum/get_tag_description/" + $this.text()
+            }
+        },
+        position: {
+            target: "event",
+            my: "bottom center",
+            at: "top center",
+            effect: false
+        },
+        style: {
+            classes: "ui-tooltip-shadow ui-tooltip-rounded"
+        }
+    });
+  });
+};
+
 oer.align_form.init_user_tags = function($user_tags, $form) {
     $user_tags.delegate("a.delete", "click", function(e) {
         e.preventDefault();
@@ -87,6 +110,7 @@ oer.align_form.init = function() {
                                 rocon.update(el);
                             });
                         }
+                        oer.align_form.init_tag_tooltip($tags.find("a:first"));
                     }
                     $document.trigger(oer.align_form.LOADED_EVENT);
                 });
@@ -199,8 +223,11 @@ oer.align_tags_portlet.init = function() {
     var $portlet_user_tags = $portlet.find("ul.align-user-tags");
 
     var $all_user_tags = $("ul.align-user-tags");
-
     oer.align_form.init_user_tags($all_user_tags, $form);
+    oer.align_form.init_tag_tooltip($all_user_tags.find("a:first"));
+
+    var $item_tags = $portlet.find("ul:first li.tag");
+    oer.align_form.init_tag_tooltip($item_tags.find("a:first"));
 
     $portlet.find(".login a").click(function(e) {
         e.preventDefault();
@@ -209,7 +236,6 @@ oer.align_tags_portlet.init = function() {
 
     $document.bind(oer.login.LOGGED_IN_EVENT, function(e) {
         $portlet_user_tags.empty();
-        var $item_tags = $portlet.find("ul:first li.tag");
         $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
             $.each(data.tags, function(index, tag) {
                 $item_tags.filter(":econtains(" + tag.code + ")").fadeOut(300);
@@ -217,6 +243,7 @@ oer.align_tags_portlet.init = function() {
                 if (window.rocon != undefined) {
                     rocon.update($tag.get(0));
                 }
+                oer.align_form.init_tag_tooltip($tag.find("a:first"));
             });
         });
     });

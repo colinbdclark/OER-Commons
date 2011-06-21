@@ -270,39 +270,32 @@ div.box h3 {
   text-shadow: 0px 0px 1px #333;
 }
 
-.global-notification {
-  padding: 3px 0;
-  font-size: 14px;
-  background-color: #FC6;
-  border-bottom: 1px solid #A88743;
-  color: #544322;
+.qtip {
+  font-size: 13px;
+  line-height: 1.3em;
+}
+
+.qtip dt {
   font-weight: bold;
-  text-align: center;
-  line-height: 1.7;
 }
 
-.global-notification .close a,.status-message .close a {
-  font-size: 11px;
-  font-weight: normal;
-  color: #544322;
+.qtip dd {
+  margin: 0.2em 0 0.5em 1em;
 }
 
-.status-message .close {
-  margin-top: 5px;
+.qtip dd.last {
+  margin-bottom: 0;
 }
 
 .ui-tooltip-dark-blue .ui-tooltip-titlebar {
   background-color: #418ba8;
   color: #fff;
   border: none;
-  font-size: 13px;
 }
 
 .ui-tooltip-dark-blue .ui-tooltip-content {
   background-color: #c9e7f2;
   border: none;
-  font-size: 13px;
-  line-height: 1.3em;
   color: #000;
 }
 
