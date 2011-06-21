@@ -30,6 +30,8 @@
           source: "{% url utils:autocomplete "materials" "license" "url" %}"
       });
       oer.autocomplete_list_widget.init();
+      oer.admin.tags.init();
+      oer.admin.align_tags.init();
   });
 </script>
 {% endblock %}
@@ -56,6 +58,8 @@
       {% include "admin/materials/include/form-field.html" %}
     {% endif %}
   {% endfor %}
+  {% include "admin/materials/include/tags-field.html" %}
+  {% include "admin/materials/include/alignment-tags-field.html" %}
   </fieldset>
   {% include "admin/materials/include/license-fieldset.html" %}
   {% include "admin/materials/include/authors-formset.html" %}
