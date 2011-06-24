@@ -20,7 +20,7 @@
   font-size: 20px;
   font-style: normal;
   font-weight: bold;
-  margin-bottom: 4px;
+  margin-bottom: 15px;
 }
 
 .view-item h1 a {
@@ -57,20 +57,15 @@
 }
 
 .materials-index .details dt,.view-item .details dt {
-  float: left;
   margin-right: 4px;
   color: #616161;
   font-weight: bold;
-  clear: left;
+  float: left;
 }
 
 .materials-index .details dd,.view-item .details dd {
   margin-left: 0;
   margin-bottom: 2px;
-}
-
-.materials-index .details dd.clear,.view-item .details dd.clear {
-  clear: left;
 }
 
 .materials-index .details dl.collapsed {
@@ -388,6 +383,16 @@
 
 .view-item-navigation a.item-link.hidden {
   visibility: hidden;
+}
+
+.view-item .details .left {
+  float: left;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.view-item .details dl.license {
+  clear: left;
 }
 
 .view-item .reviews {
