@@ -5,6 +5,7 @@
 {% load tags_tags %}
 {% load flatblock_tags %}
 {% load curriculum_tags %}
+{% load thumbnail %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -92,9 +93,11 @@
 
 <article class="view-item item" id="{{ item.identifier }}">
 
+  {% if not item.screenshot %}
   <div class="right clear">
     {% cou_bucket item.license.bucket %}
   </div>
+  {% endif %}
   
   <div class="details">
     <h1 itemprop="name">
@@ -110,6 +113,14 @@
     <meta itemprop="url" content="{{ item.url }}" />
     <meta itemprop="keywords" content="{{ item.keyword_names|join:", " }}" />
 
+    {% if item.screenshot %}
+      <div class="left">
+        {% thumbnail item.screenshot "300x250" crop="0px 0px" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% endthumbnail %}
+        {% cou_bucket item.license.bucket %}
+      </div>
+    {% endif %}
     <dl>
       {% if item.authors.all.count %}
       <dt>Author:</dt>
@@ -190,7 +201,7 @@
       {% endif %}
     </dl>
     
-    <dl>
+    <dl class="license">
       {% if item.license %}
         {% with item.license as license %}
           <dt>Conditions of Use:</dt>
