@@ -11,7 +11,11 @@ import pprocess
 class Processor(pprocess.Exchange):
 
     def store_data(self, ch):
-        result = ch.receive()
+        try:
+            result = ch.receive()
+        except:
+            # Don't break everyting on unhandled errors
+            pass
         self.cnt += 1
         print "%i of %i..." % (self.cnt, self.total_items)
 
@@ -73,7 +77,7 @@ class Command(BaseCommand):
 
         for model in models:
             content_type = ContentType.objects.get_for_model(model)
-            for object_id in model.objects.filter(**filters).values_list("id", flat=True)[:10]:
+            for object_id in model.objects.filter(**filters).values_list("id", flat=True):
                 process(content_types, content_type.id, object_id)
 
         processor.finish()
