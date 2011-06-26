@@ -7,7 +7,6 @@ import os
 import shlex
 import subprocess
 import sys
-import signal
 import urllib
 import httplib
 
@@ -44,6 +43,32 @@ class TimeoutError(Exception):
         return repr(self.value)
 
 
+def timeout(function=None, timeout_duration=10, default=None):
+
+    def raise_timeout(signum, frame):
+        raise TimeoutError()
+
+    def wrapper(func):
+
+        def wrapped(*args, **kwargs):
+            import signal
+            signal.signal(signal.SIGALRM, raise_timeout)
+            signal.alarm(timeout_duration)
+            try:
+                return func(*args, **kwargs)
+            except TimeoutError:
+                return default
+            finally:
+                signal.alarm(0)
+
+        return wrapped
+
+    if function:
+        return wrapper(function)
+
+    return wrapper
+
+
 def get_url_status_code(url):
     url = url.strip()
     url = urllib.quote(url, safe="%/:=&?~#+!$,;'@()*[]")
@@ -56,25 +81,19 @@ def get_url_status_code(url):
     except:
         return None
 
-    def timeout_handler(signum, frame):
-        raise TimeoutError()
+    @timeout(timeout_duration=60)
+    def get_status(host, path):
+        try:
+            conn = httplib.HTTPConnection(host)
+            conn.request("HEAD", path)
+            response = conn.getresponse()
+            return response.status
+        except TimeoutError:
+            raise
+        except:
+            return None
 
-    old_handler = signal.signal(signal.SIGALRM, timeout_handler)
-    timeout = 60
-    signal.alarm(timeout)
-
-    conn = httplib.HTTPConnection(host)
-    try:
-        conn.request("GET", "/" + path)
-        http_response = conn.getresponse()
-        status_code = http_response.status
-    except:
-        status_code = None
-    finally:
-        signal.signal(signal.SIGALRM, old_handler)
-        conn.close()
-
-    signal.alarm(0)
+    status_code = get_status(host, path)
 
     return status_code
 
@@ -136,10 +155,28 @@ def update_screenshot(item):
     if isinstance(executable, unicode):
         executable = executable.encode(sys.getfilesystemencoding())
     args = shlex.split(executable)
-    subprocess.call(args)
-    if os.path.exists(full_path):
-        item.screenshot = filename
-        item.save()
+
+    @timeout(timeout_duration=60*2)
+    def fetch_screenshot(args):
+        p = subprocess.Popen(args)
+        try:
+            p.wait()
+            return 1
+        except TimeoutError:
+            p.kill()
+            raise
+        finally:
+            try:
+                p.terminate()
+            except OSError:
+                pass
+        return None
+
+    result = fetch_screenshot(args)
+    if result:
+        if os.path.exists(full_path):
+            item.screenshot = filename
+            item.save()
     else:
         item.screenshot = None
         item.save()
