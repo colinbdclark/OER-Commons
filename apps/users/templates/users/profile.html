@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.ocupload.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      oer.profile.init_avatar();
+    });
+  </script>
+{% endblock %}
+
+{% block bodyclass %}profile profile-view{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block column-left %}
+  <a href="{% url users:profile_edit %}" class="edit rc10">Edit My Profile</a>
+{% endblock %}
+
+{% block content %}
+
+  <section class="avatar">
+    <div class="wrap">
+      {{ profile.get_avatar_img }}
+      <span{% if profile.hide_avatar %} style="display: none;"{% endif %}><a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete</a></span>
+    </div>
+    <a id="upload-avatar-btn" href="{% url users:profile_avatar_update %}" class="dashed">Change picture</a>
+  </section>
+  <section class="basic">
+    <ul>
+      <li class="name">
+        {{ request.user.first_name }} {{ request.user.last_name }}
+      </li>
+      <li>{{ request.user.email }}</li>
+      {% if profile.country %}
+        <li>
+          {% if profile.country.code == "US" and profile.us_state %}{{ profile.us_state }},{% endif %}
+          {{ profile.country }}
+        </li>
+      {% endif %}
+    </ul>
+  </section>
+  {% if profile.roles.exists %}
+    <section class="roles">
+      <h1>Roles</h1>
+      <ul>
+        {% for role in profile.roles.all %}
+          <li>{{ role }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+  {% if profile.educator_student_levels.exists %}
+    <section class="levels">
+      <h1>Levels</h1>
+      <ul>
+        {% for level in profile.educator_student_levels.all %}
+          <li>{{ level }}</li>
+        {% endfor %}
+      </ul>
+      {% if profile.educator_subjects.exists %}
+        <h1>Subjects</h1>
+        <ul>
+          {% for subject in profile.educator_subjects.all %}
+            <li>{{ subject }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+    {% if profile.about_me %}
+      <section class="about">
+        <h1>About me</h1>
+        <p>{{ profile.about_me }}</p>
+      </section>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}
+
+{% block column-right %}
+  <section class="portlet links rc10">
+    <h1>Social Media</h1>
+    {% if profile.website_url %}
+      <p class="website">
+        <span>Website or Blog</span>
+        {{ profile.website_url|urlizetrunc:30 }}
+      </p>
+    {% endif %}
+    <ul class="social">
+      {% if profile.facebook_id %}
+        <li><a class="facebook" href="https://www.facebook.com/{{ profile.facebook_id }}">{{ profile.facebook_id }}</a></li>
+      {% endif %}
+      {% if profile.twitter_id %}
+        <li><a class="twitter" href="https://twitter.com/{{ profile.twitter_id }}">{{ profile.twitter_id }}</a></li>
+      {% endif %}
+      {% if profile.skype_id %}
+        <li><a class="skype" href="skype:{{ profile.skype_id }}?call">{{ profile.skype_id }}</a></li>
+      {% endif %}
+    </ul>
+  </section>
+{% endblock %}

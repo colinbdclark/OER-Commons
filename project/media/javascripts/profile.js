@@ -1,5 +1,43 @@
 oer.profile = {};
 
+oer.profile.init_avatar = function() {
+    var $upload_btn = $("#upload-avatar-btn");
+    var $avatar = $("section.avatar div.wrap");
+    var $avatar_img = $avatar.find("img");
+    var $delete_btn = $("#delete-avatar-btn");
+    var $delete_btn_wrap = $delete_btn.closest("span");
+
+    $upload_btn.upload({
+        action: $upload_btn.attr("href"),
+        onComplete: function(response) {
+            response = $.parseJSON(response);
+            if (response.status === "error") {
+                oer.status_message.error(response.message, true);
+            } else if (response.status === "success") {
+                $avatar_img.attr("src", response.url);
+                $delete_btn_wrap.show();
+            }
+            $avatar.removeClass("loading");
+        },
+        onSubmit: function() {
+            $avatar.addClass("loading");
+        }
+    });
+    $delete_btn.click(function(e) {
+        e.preventDefault();
+        $avatar.addClass("loading");
+        $.post($delete_btn.attr("href"), function(response) {
+            if (response.status === "error") {
+                oer.status_message.error(response.message, true);
+            } else if (response.status === "success") {
+                $avatar_img.attr("src", response.url);
+                $delete_btn_wrap.hide();
+            }
+            $avatar.removeClass("loading");
+        });
+    });
+};
+
 oer.profile.init_user_info = function() {
     var $form = $("form.user-info");
     var $header = $("table.profile th.user-info");
@@ -41,40 +79,6 @@ oer.profile.init_user_info = function() {
             }
         }
     });
-
-    /* Avatar */
-    var $upload_btn = $("#upload-avatar-btn");
-    var $avatar = $("td.avatar div.avatar");
-    var $avatar_img = $avatar.find("img");
-    $upload_btn.upload({
-        action: $upload_btn.attr("href"),
-        onComplete: function(response) {
-            response = $.parseJSON(response);
-            if (response.status === "error") {
-                oer.status_message.error(response.message, true);
-            } else if (response.status === "success") {
-                $avatar_img.attr("src", response.url);
-            }
-            $avatar.removeClass("loading");
-        },
-        onSubmit: function() {
-            $avatar.addClass("loading");
-        }
-    });
-    var $delete_btn = $("#delete-avatar-btn");
-    $delete_btn.click(function(e) {
-        e.preventDefault();
-        $avatar.addClass("loading");
-        $.post($delete_btn.attr("href"), function(response) {
-            if (response.status === "error") {
-                oer.status_message.error(response.message, true);
-            } else if (response.status === "success") {
-                $avatar_img.attr("src", response.url);
-            }
-            $avatar.removeClass("loading");
-        });
-    });
-
 };
 
 oer.profile.init_change_password = function() {

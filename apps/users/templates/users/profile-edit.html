@@ -2,7 +2,6 @@
 {% load thumbnail %}
 
 {% block extra-js %}
-  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.ocupload.js"></script>
   <script type="text/javascript">
     $(function() {
       oer.profile.init_user_info();
@@ -11,7 +10,7 @@
   </script>
 {% endblock %}
 
-{% block bodyclass %}no-columns profile{% endblock %}
+{% block bodyclass %}no-columns profile profile-edit{% endblock %}
 
 {% block above-content %}{% endblock %}
 
@@ -20,29 +19,13 @@
   <table cellpadding="0" cellspacing="0">
   <thead>
   	<tr>
-      <th></th>
   		<th class="user-info"><span>Basic Information</span></th>
   		<th class="change-password"><span>Change Password</span></th>
   	</tr>
   </thead>
   <tbody><tr>
-    <td class="avatar">
-      {% spaceless %}
-      <div class="avatar">
-        {{ profile.get_avatar_img }}
-      </div>
-      {% endspaceless %}
-      <ul>
-        <li>
-          <a id="upload-avatar-btn" href="{% url users:profile_avatar_update %}" class="dashed">Change picture</a>
-        </li>
-        <li>
-          <a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete picture</a>
-        </li>
-      </ul>
-    </td>
     <td class="user-info">
-      <form method="post" class="formatted user-info" name="user-info" action="{% url users:profile %}">
+      <form method="post" class="formatted user-info" name="user-info" action="{% url users:profile_edit %}">
       
         {% for field in user_info_form %}
           {% include "include/form-field.html" %}

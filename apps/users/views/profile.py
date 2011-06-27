@@ -19,10 +19,22 @@ import time
 
 
 @login_required
-def profile(request):
+def profile_view(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+
+    user = request.user
+    profile = Profile.objects.get_or_create(user=user)[0]
+
+    return direct_to_template(request, "users/profile.html", locals())
+
+
+@login_required
+def profile_edit(request):
+
+    page_title = u"My Profile"
+    breadcrumbs = [{"url": reverse("users:profile_edit"), "title": page_title}]
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -75,7 +87,7 @@ def profile(request):
                     
                 messages.error(request, change_password_form.error_message)
 
-    return direct_to_template(request, "users/profile.html", locals())
+    return direct_to_template(request, "users/profile-edit.html", locals())
 
 
 @login_required
@@ -221,7 +233,7 @@ def about(request):
             if request.is_ajax():
                 return ajax_form_success(form.success_message)
             
-            return redirect("frontpage")
+            return redirect("users:profile")
         
         else:
             if request.is_ajax():
