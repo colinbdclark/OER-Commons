@@ -74,7 +74,9 @@
     {% block extra-js %}{% endblock %}
     {% endcompress %}
 
-    {% flatblock "google-analytics" %}
+    {% if not debug %}
+      {% flatblock "google-analytics" %}
+    {% endif %}
 
     {% block extra-footer %}
     {% endblock %} 
