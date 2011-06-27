@@ -34,10 +34,13 @@
 }
 
 /* Items with display: inline-block */
+#align-form label,
 #toolbar .stars,
 #toolbar li,
 #toolbar li a,
 .accordion .accordion-header a,
+.align-user-tags li.tag a, .portlet.align-item-tags .align-user-tags li.tag a,
+.align-user-tags li.tag, .portlet.align-item-tags .align-user-tags li.tag,
 .button-blue-big,
 .content-submission .label label,
 .form-row.tags a.delete,
@@ -45,9 +48,12 @@
 .green-browse #content section.column,
 .iframe-submission .existing-resource .user-tags li,
 .materials-index .details dd.topics a, .view-item .details dd.topics a,
+.portlet.align-item-tags li,
 .portlet.bookmarklet a,
 .portlet.item-tags li,
 .portlet.save a,
+.profile #upload-avatar-btn,
+.profile th span,
 .user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
 .user-tags li.tag, .portlet.item-tags .user-tags li.tag,
 fieldset.step p.content-submission-buttons a {
