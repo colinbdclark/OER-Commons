@@ -1,6 +1,5 @@
 body.iframe-submission {
-  background-image: none;
-  background-color: #fff;
+  background: #fff none;
   padding: 10px;
 }
 
@@ -49,9 +48,9 @@ ul.stepy-titles li span {
   font-size: 13px;
   line-height: 15px;
   padding-left: 15px;
-  background: url(../images/icon-delete-gray.png) no-repeat 0% 50%;
+  background: url(../images/icon-delete-gray.png) no-repeat 0 50%;
   margin-top: -5px;
-  meright-right: -7px;
+  margin-right: -7px;
 }
 
 form.content-submission {
@@ -68,7 +67,7 @@ form.content-submission {
 
 .content-submission .required .label label {
   padding-right: 12px;
-  background: url(../images/asterisk.gif) no-repeat 100% 0%;
+  background: url(../images/asterisk.gif) no-repeat 100% 0;
 }
 
 .content-submission td.label {
@@ -162,7 +161,7 @@ form.content-submission fieldset.step {
 }
 
 .iframe-submission form.content-submission .help {
-  margin-bottom: 0px;
+  margin-bottom: 0;
   font-size: 12px;
   color: #666;
 }
@@ -262,5 +261,5 @@ form.content-submission fieldset.step {
 
 .iframe-submission .success-message p {
   font-size: 14px;
-  margin-bottom: 10px;;
+  margin-bottom: 10px;
 }
