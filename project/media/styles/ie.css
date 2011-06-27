@@ -48,8 +48,11 @@
 .portlet.bookmarklet a,
 .portlet.item-tags li,
 .portlet.save a,
-.profile #upload-avatar-btn,
-.profile .about span.prefix,
+.profile th span,
+.profile-view #upload-avatar-btn,
+.profile-view .portlet.links ul li a,
+.profile-view a.edit,
+.profile-view section.avatar, .profile-view section.basic, .profile-view section.roles, .profile-view section.levels,
 .user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
 .user-tags li.tag, .portlet.item-tags .user-tags li.tag,
 fieldset.step p.content-submission-buttons a {
