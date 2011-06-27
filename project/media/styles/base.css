@@ -283,3 +283,19 @@ div.box h3 {
 .status-message .close {
   margin-top: 5px;
 }
+
+.ui-tooltip-dark-blue .ui-tooltip-titlebar {
+  background-color: #418ba8;
+  color: #fff;
+  border: none;
+  font-size: 13px;
+}
+
+.ui-tooltip-dark-blue .ui-tooltip-content {
+  background-color: #c9e7f2;
+  border: none;
+  font-size: 13px;
+  line-height: 1.3em;
+  color: #000;
+}
+
