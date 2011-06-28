@@ -57,8 +57,11 @@ def login(request):
         form = LoginForm(data=request.POST)
         if request.is_ajax():
             if form.is_valid():
-                auth_login(request, form.get_user())
-                return JsonResponse(dict(status="success"))
+                user = form.get_user()
+                auth_login(request, user)
+                return JsonResponse(dict(status="success",
+                                         user_name=u"%s %s" % (user.first_name,
+                                                               user.last_name)))
             else:
                 errors = {}
                 for field_name, errors_list in form.errors.items():
