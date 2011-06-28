@@ -259,3 +259,19 @@ div.box h3 {
   padding: 2px 10px;
   text-shadow: 0px 0px 1px #333;
 }
+
+.ui-tooltip-dark-blue .ui-tooltip-titlebar {
+  background-color: #418ba8;
+  color: #fff;
+  border: none;
+  font-size: 13px;
+}
+
+.ui-tooltip-dark-blue .ui-tooltip-content {
+  background-color: #c9e7f2;
+  border: none;
+  font-size: 13px;
+  line-height: 1.3em;
+  color: #000;
+}
+
