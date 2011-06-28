@@ -17,6 +17,9 @@
           <a rel="nofollow" class="login" href="{% url users:login %}">Log In</a>
         </li>
         <li class="auth">
+          <span class="user-name">{% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name }}{% endif %}</span>
+        </li>
+        <li class="auth">
           <a rel="nofollow" href="{% url users:profile %}">My Profile</a>
         </li>
         <li class="auth">
