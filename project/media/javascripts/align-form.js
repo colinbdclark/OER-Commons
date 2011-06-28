@@ -24,7 +24,7 @@ oer.align_form.init_tag_tooltip = function($a) {
             effect: false
         },
         style: {
-            classes: "ui-tooltip-shadow ui-tooltip-rounded"
+            classes: "align-tag-tooltip ui-tooltip-shadow ui-tooltip-rounded"
         }
     });
   });
