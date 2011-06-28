@@ -81,3 +81,9 @@ body.authenticated .portlet.align-item-tags .login {
   padding: 0;
   margin: 0;
 }
+
+.align-tag-tooltip .ui-tooltip-titlebar,
+.align-tag-tooltip .ui-tooltip-content {
+  border-color: #FFE4B8;
+  background-color: #FFE4B8;
+}
