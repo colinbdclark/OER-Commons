@@ -4,6 +4,11 @@
   border-bottom: 1px solid #BFC7CA;
 }
 
+.materials-index.loading {
+  height: 200px;
+  background: url(../images/ajax-loader-big.gif) no-repeat 50% 50%;
+}
+
 .materials-index .item.last {
   border: none;
 }
