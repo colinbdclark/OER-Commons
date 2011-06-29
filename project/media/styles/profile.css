@@ -104,19 +104,24 @@
 }
 
 .profile-view .portlet.links {
-  background-color: #0b7ba9;
+  background-color: #CED9DD;
   padding: 1em;
-  color: #fff;
+  color: #0A546D;
 }
 
 .profile-view .portlet.links h1 {
-  color: #fff;
+  color: #0A546D;
   text-align: center;
   margin-bottom: 1em;
 }
 
 .profile-view .portlet.links a {
-  color: #fff;
+  color: #0A546D;
+  text-decoration: underline;
+}
+
+.profile-view .portlet.links p {
+  margin-bottom: 1em;
 }
 
 .profile-view .portlet.links p.website span {
@@ -146,6 +151,7 @@
   line-height: 32px;
   padding-left: 40px;
   background: no-repeat 0 50%;
+  text-decoration: none;
 }
 
 .profile-view .portlet.links ul li a.facebook {
@@ -245,16 +251,16 @@
   resize: none;
 }
 
-.profile .about {
+.profile form.about {
   width: 800px;
 }
 
-.profile .about textarea {
+.profile form.about textarea {
   width: 400px;
   height: 198px;
 }
 
-.profile .about input.text {
+.profile form.about input.text {
   width: 350px;
 }
 

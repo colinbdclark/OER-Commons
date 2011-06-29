@@ -68,35 +68,40 @@
         </ul>
       {% endif %}
     </section>
-    {% if profile.about_me %}
-      <section class="about">
-        <h1>About me</h1>
-        <p>{{ profile.about_me }}</p>
-      </section>
-    {% endif %}
+  {% endif %}
+
+  {% if profile.about_me %}
+    <section class="about">
+      <h1>About me</h1>
+      <p>{{ profile.about_me }}</p>
+    </section>
   {% endif %}
 
 {% endblock %}
 
 {% block column-right %}
   <section class="portlet links rc10">
-    <h1>Social Media</h1>
+    <h1>Connect on the Web</h1>
     {% if profile.website_url %}
       <p class="website">
         <span>Website or Blog</span>
         {{ profile.website_url|urlizetrunc:30 }}
       </p>
     {% endif %}
-    <ul class="social">
-      {% if profile.facebook_id %}
-        <li><a class="facebook" href="https://www.facebook.com/{{ profile.facebook_id }}">{{ profile.facebook_id }}</a></li>
-      {% endif %}
-      {% if profile.twitter_id %}
-        <li><a class="twitter" href="https://twitter.com/{{ profile.twitter_id }}">{{ profile.twitter_id }}</a></li>
-      {% endif %}
-      {% if profile.skype_id %}
-        <li><a class="skype" href="skype:{{ profile.skype_id }}?call">{{ profile.skype_id }}</a></li>
-      {% endif %}
-    </ul>
+    {% if profile.facebook_id or profile.twitter_id or profile.skype_id %}
+      <ul class="social">
+        {% if profile.facebook_id %}
+          <li><a class="facebook" href="https://www.facebook.com/{{ profile.facebook_id }}">{{ profile.facebook_id }}</a></li>
+        {% endif %}
+        {% if profile.twitter_id %}
+          <li><a class="twitter" href="https://twitter.com/{{ profile.twitter_id }}">{{ profile.twitter_id }}</a></li>
+        {% endif %}
+        {% if profile.skype_id %}
+          <li><a class="skype" href="skype:{{ profile.skype_id }}?call">{{ profile.skype_id }}</a></li>
+        {% endif %}
+      </ul>
+    {% else %}
+      <p><a href="{% url users:profile_about %}">Add a link to your website, Facebook, Twitter or Skype accounts</a></p>
+    {% endif %}
   </section>
 {% endblock %}
