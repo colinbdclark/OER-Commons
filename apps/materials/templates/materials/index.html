@@ -30,17 +30,7 @@
   <div class="materials-index collapsibles">
 
   {% if items %}
-    {% with "top" as class %}
-      {% include "materials/include/index-navigation.html" %}
-    {% endwith %}
-  
-    {% for item in items %}
-      {% include "materials/include/index-item.html" %}
-    {% endfor %}
-  
-    {% with "bottom" as class %}
-      {% include "materials/include/index-navigation.html" %}
-    {% endwith %}
+    {% include "materials/include/index-items.html" %}
   {% else %}
   <p class="no-items-match">No items match your search.</p>
   {% endif %}

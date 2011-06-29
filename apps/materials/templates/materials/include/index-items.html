@@ -1,0 +1,13 @@
+{% with "top" as class %}
+  {% include "materials/include/index-navigation.html" %}
+{% endwith %}
+
+<div class="index-items">
+  {% for item in items %}
+    {% include "materials/include/index-item.html" %}
+  {% endfor %}
+</div>
+
+{% with "bottom" as class %}
+  {% include "materials/include/index-navigation.html" %}
+{% endwith %}

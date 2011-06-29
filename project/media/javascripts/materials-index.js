@@ -6,13 +6,13 @@ oer.materials.index.init_action_panel = function() {
     var $action_panel = $("div.action-panel");
 
     $action_panel.find("select[name='batch_size']").change(function() {
-        $this = $(this);
+        var $this = $(this);
         $form.find("input[name='batch_size']").val($this.val());
         $form.submit();
     });
 
     $action_panel.find("select[name='sort_by']").change(function() {
-        $this = $(this);
+        var $this = $(this);
         $form.find("input[name='sort_by']").val($this.val());
         $form.submit();
     });
@@ -29,21 +29,41 @@ oer.materials.index.init_filters = function() {
         }
     });
 
-    $form.submit(function() {
+    $form.submit(function(e) {
+        var disabled_filters = [];
         $form.find("dl.filter").each(function() {
-            $filter = $(this);
+            var $filter = $(this);
             if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
-                $filter.find(":checkbox").attr("disabled", true);
+                var $checkbox = $filter.find(":checkbox");
+                $checkbox.attr("disabled", "disabled");
+                disabled_filters.push($checkbox);
             }
         });
-        if ($form.find("input[name='f.search']").val() === "") {
-            $form.find("input[name='f.search']").attr("disabled", true);
+        var $search_filter = $form.find("input[name='f.search']");
+        if ($search_filter.val() === "") {
+            $search_filter.attr("disabled", "disabled");
+            disabled_filters.push($search_filter);
+        }
+        if (History.enabled) {
+            e.preventDefault();
+            var url = $form.attr("action") + "?" + $form.serialize();
+            $.each(disabled_filters, function(i, f) {
+                $(f).removeAttr("disabled");
+            });
+            var $materials_index = $("#content div.materials-index");
+            if (url !== (window.location.pathname + window.location.search)) {
+                $materials_index.fadeOut("fast", function() {
+                    $materials_index.empty();
+                    $materials_index.addClass("loading").show();
+                    History.pushState({}, null, url);
+                });
+            }
         }
     });
 
-    $form.delegate("dl.filter dd :checkbox", "click", function(e) {
-        $checkbox = $(this);
-        $filter = $checkbox.parents("dl.filter").first();
+    $form.delegate("dl.filter dd :checkbox", "click", function() {
+        var $checkbox = $(this);
+        var $filter = $checkbox.parents("dl.filter").first();
         if ($checkbox.attr("checked")) {
             if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
                 $filter.find("dt :checkbox").attr("checked", true);
@@ -51,16 +71,22 @@ oer.materials.index.init_filters = function() {
         } else {
             $filter.find("dt :checkbox").attr("checked", false);
         }
+        if (History.enabled) {
+            $form.submit();
+        }
     });
 
     $form.delegate("dl.filter dt :checkbox", "click", function(e) {
-        $checkbox = $(this);
-        $filter = $checkbox.parents("dl.filter").first();
+        var $checkbox = $(this);
+        var $filter = $checkbox.parents("dl.filter").first();
         $filter.find(".collapsed").removeClass("collapsed").addClass("expanded");
         if ($checkbox.attr("checked")) {
             $filter.find("dd :checkbox").attr("checked", true);
         } else {
             $filter.find("dd :checkbox").attr("checked", false);
+        }
+        if (History.enabled) {
+            $form.submit();
         }
     });
 
@@ -109,7 +135,7 @@ oer.materials.index.init_actions_menus = function() {
         }
     });
 
-    $(document).click(function(e) {
+    $(document).click(function() {
         $materials_index.find("dl.actions").removeClass("active");
     });
 
@@ -151,7 +177,6 @@ oer.materials.index.init_tags_form = function() {
             $form.attr("action", $this.attr("href"));
             $input.val("");
             $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
-                var item_tags = data.tags;
                 var user_tags = data.user_tags;
                 $.each(user_tags, function(index, tag) {
                     $.tmpl("user-tags-item", tag).appendTo($user_tags);
@@ -239,4 +264,47 @@ oer.materials.index.init = function() {
     $("section.portlet.cou li a").qtip(DEFAULT_TOOLTIP_OPTIONS);
     $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
 
+    if (History.enabled) {
+        var $materials_index = $("#content div.materials-index");
+        var $action_panel = $("div.action-panel");
+        var $first_item_number = $action_panel.find("span.first-item-number");
+        var $last_item_number = $action_panel.find("span.last-item-number");
+        var $total_items = $action_panel.find("strong.total-items");
+        var $title = $("title");
+        var base_window_title = $.trim($title.text().split("|").pop());
+        var $page_title = $("h1.page-title");
+        $materials_index.delegate("ul.pagination a", "click", function(e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            $materials_index.fadeOut("fast", function() {
+                $materials_index.empty();
+                $materials_index.addClass("loading").show();
+                History.pushState({}, null, url);
+            });
+        });
+        History.Adapter.bind(window, "statechange", function() {
+            var state = History.getState();
+            var url = state.url;
+            $.getJSON(url, function(response) {
+                $materials_index.hide().removeClass("loading");
+                $materials_index.html(response.items);
+                oer.rating.init();
+                $first_item_number.text(response.first_item_number);
+                $last_item_number.text(response.last_item_number);
+                $total_items.text(response.total_items);
+                var title = null;
+                var page_title = null;
+                if (response.page_subtitle !== "") {
+                    title = response.page_title + " : " + response.page_subtitle + " | " + base_window_title;
+                    page_title = response.page_title + ": <span>" + response.page_subtitle + "</span>";
+                } else {
+                    title = response.page_title + " : " + base_window_title;
+                    page_title = response.page_title;
+                }
+                $title.text(title);
+                $page_title.html(page_title);
+                $materials_index.fadeIn("fast");
+            });
+        });
+    }
 };
