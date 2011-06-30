@@ -130,7 +130,7 @@ class RolesForm(forms.ModelForm):
                                      widget=forms.CheckboxSelectMultiple())
 
     educator_student_levels = forms.ModelMultipleChoiceField(StudentLevel.objects.all(),
-                                     label=u"I teach students at the following levels (check all that apply):",
+                                     label=u"I teach students at the following levels. Check all that apply.",
                                      required=False,
                                      widget=forms.CheckboxSelectMultiple())
     
