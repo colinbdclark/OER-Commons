@@ -39,8 +39,8 @@ oer.profile.init_avatar = function() {
 };
 
 oer.profile.init_user_info = function() {
-    var $form = $("form.user-info");
-    var $header = $("table.profile th.user-info");
+    var $form = $("form[name='user-info']");
+    var $header = $("section.user-info h1");
     var $save_btn = $form.find("input[type='submit'].save");
     var $next_btn = $form.find("input[type='submit'].next");
     $next_btn.click(function() {
@@ -82,8 +82,8 @@ oer.profile.init_user_info = function() {
 };
 
 oer.profile.init_change_password = function() {
-    var $form = $("form.change-password");
-    var $header = $("table.profile th.change-password");
+    var $form = $("form[name='change-password']");
+    var $header = $("section.change-password h1");
     var $save_btn = $form.find("input[type='submit'].save");
     $save_btn.data("label", $save_btn.val());
     var $inputs = $form.find(":input");
@@ -123,8 +123,8 @@ oer.profile.init_change_password = function() {
 };
 
 oer.profile.init_geography = function() {
-    var $form = $("form.geography");
-    var $header = $("table.profile th.geography");
+    var $form = $("form[name='geography']");
+    var $header = $("section.geography h1");
     var $save_btn = $form.find("input[type='submit'].save");
     var $next_btn = $form.find("input[type='submit'].next");
     $next_btn.click(function() {
@@ -301,8 +301,8 @@ oer.profile.init_geography = function() {
 };
 
 oer.profile.init_roles = function() {
-    var $form = $("form.roles");
-    var $header = $("table.profile th.roles");
+    var $form = $("form[name='roles']");
+    var $header = $("section.roles h1");
     var $save_btn = $form.find("input[type='submit'].save");
     var $next_btn = $form.find("input[type='submit'].next");
     $next_btn.click(function() {
@@ -334,8 +334,8 @@ oer.profile.init_roles = function() {
     });
 
     var $buttons_ct = $form.find("div.buttons");
-    var $educator_header = $form.find("th.educator");
-    var $educator_fields_ct = $form.find("td.educator");
+    var $educator_header = $form.find("section.educator h1");
+    var $educator_fields_ct = $form.find("section.educator");
 
     var $roles_input = $inputs.filter("[name='roles']");
 
@@ -368,8 +368,8 @@ oer.profile.init_roles = function() {
 };
 
 oer.profile.init_about = function() {
-    var $form = $("form.about");
-    var $header = $("table.profile th.about");
+    var $form = $("form[name='about']");
+    var $header = $("section.about h1");
     var $save_btn = $form.find("input[type='submit'].save");
     var $next_btn = $form.find("input[type='submit'].next");
     $next_btn.click(function() {

@@ -1,32 +1,36 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load users_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
+      oer.profile.init_avatar();
       oer.profile.init_user_info();
       oer.profile.init_change_password();
     });
   </script>
 {% endblock %}
 
-{% block bodyclass %}no-columns profile profile-edit{% endblock %}
+{% block bodyclass %}no-columns profile-edit{% endblock %}
 
 {% block above-content %}{% endblock %}
 
 {% block content %}
 
-  <table cellpadding="0" cellspacing="0">
-  <thead>
-  	<tr>
-  		<th class="user-info"><span>Basic Information</span></th>
-  		<th class="change-password"><span>Change Password</span></th>
-  	</tr>
-  </thead>
-  <tbody><tr>
-    <td class="user-info">
-      <form method="post" class="formatted user-info" name="user-info" action="{% url users:profile_edit %}">
-      
+    {% profile_views %}
+
+    <section class="avatar">
+      <div class="wrap">
+        {{ profile.get_avatar_img }}
+        <span{% if profile.hide_avatar %} style="display: none;"{% endif %}><a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete</a></span>
+      </div>
+      <a id="upload-avatar-btn" href="{% url users:profile_avatar_update %}" class="dashed">Change picture</a>
+    </section>
+
+    <section class="user-info">
+      <h1>Basic Information</h1>
+      <form method="post" class="formatted" name="user-info" action="{% url users:profile_edit %}">
         {% for field in user_info_form %}
           {% include "include/form-field.html" %}
         {% endfor %}
@@ -35,9 +39,11 @@
           <input type="submit" name="user-info" class="next" value="Save and tell us more!" />
         </div>
       </form>
-    </td>
-    <td class="change-password">
-      <form method="post" class="formatted change-password"  name="change-password"
+    </section>
+  
+    <section class="change-password">
+      <h1>Change Password</h1>
+      <form method="post" class="formatted"  name="change-password"
             action="{% url users:profile %}" id="change-password">
         {% for field in change_password_form %}
           {% include "include/form-field.html" %}
@@ -46,7 +52,6 @@
           <input type="submit" name="change-password" class="save" value="Change" />
         </div>
       </form>
-    </td>
-  </tr></tbody></table>
+    </section>
 
 {% endblock %}

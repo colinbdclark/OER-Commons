@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load users_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -8,58 +9,54 @@
   </script>
 {% endblock %}
 
-{% block bodyclass %}no-columns profile{% endblock %}
+{% block bodyclass %}no-columns profile-edit{% endblock %}
 
 {% block above-content %}{% endblock %}
 
 {% block content %}
 
-  <div id="map" style="float: right; width: 500px; height: 300px;">
-    
-  </div>
+  {% profile_views %}
 
-  <table cellpadding="0" cellspacing="0">
-  <thead>
-    <tr>
-        <th class="geography"><span>Where are you in the world?</span></th>
-    </tr>
-  </thead>
-  <tbody><tr>
-    <td class="geography">
-      <form method="post" class="formatted geography" name="geography" action="{% url users:profile_geography %}">
-    
-        {% with form.country as field %}
+  <section class="geography">
+    <h1>Where are you in the world?</h1>
+
+    <form method="post" class="formatted" name="geography" action="{% url users:profile_geography %}">
+
+      {% with form.country as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      <div{% if not is_US %} style="display: none;"{% endif %}>
+        {% with form.us_state as field %}
           {% include "include/form-field.html" %}
         {% endwith %}
+      </div>
 
-        <div{% if not is_US %} style="display: none;"{% endif %}>
-          {% with form.us_state as field %}
-            {% include "include/form-field.html" %}
-          {% endwith %}
-        </div>
-
-        {% with form.connect_with as field %}
-          <div class="field{% if field.field.required %} required{% endif %}">
-            {% if field.help_text %}
-              <div class="help">{{ field.help_text }}</div>
-            {% endif %}
-            <div class="errors">
-              {% for error in field.errors %}
-                <label class="error">{{ error|safe }}</label>
-              {% endfor %}
-            </div>
-            {{ field }}
+      {% with form.connect_with as field %}
+        <div class="field{% if field.field.required %} required{% endif %}">
+          {% if field.help_text %}
+            <div class="help">{{ field.help_text }}</div>
+          {% endif %}
+          <div class="errors">
+            {% for error in field.errors %}
+              <label class="error">{{ error|safe }}</label>
+            {% endfor %}
           </div>
-        {% endwith %}
-              
-        <div class="buttons">
-          <input type="submit" class="save" value="Save" />
-          <input type="submit" class="next" value="Save and tell us more!" />
+          {{ field }}
         </div>
-      </form>
-    </td>
-  </tr></tbody></table>
-  
+      {% endwith %}
+
+      <div class="buttons">
+        <input type="submit" class="save" value="Save" />
+        <input type="submit" class="next" value="Save and tell us more!" />
+      </div>
+    </form>
+
+  </section>
+
+  <section id="map"></section>
+
+
 {% endblock %}
 
 {% block extra-footer %}
