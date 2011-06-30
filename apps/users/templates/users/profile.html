@@ -5,65 +5,103 @@
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.ocupload.js"></script>
   <script type="text/javascript">
     $(function() {
-      oer.profile.init_user_info();
-      oer.profile.init_change_password();
+      oer.profile.init_avatar();
     });
   </script>
 {% endblock %}
 
-{% block bodyclass %}no-columns profile{% endblock %}
+{% block bodyclass %}profile profile-view{% endblock %}
 
 {% block above-content %}{% endblock %}
 
+{% block column-left %}
+  <a href="{% url users:profile_edit %}" class="edit rc10">Edit My Profile</a>
+{% endblock %}
+
 {% block content %}
 
-  <table cellpadding="0" cellspacing="0">
-  <thead>
-  	<tr>
-      <th></th>
-  		<th class="user-info"><span>Basic Information</span></th>
-  		<th class="change-password"><span>Change Password</span></th>
-  	</tr>
-  </thead>
-  <tbody><tr>
-    <td class="avatar">
-      {% spaceless %}
-      <div class="avatar">
-        {{ profile.get_avatar_img }}
-      </div>
-      {% endspaceless %}
+  <section class="avatar">
+    <div class="wrap">
+      {{ profile.get_avatar_img }}
+      <span{% if profile.hide_avatar %} style="display: none;"{% endif %}><a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete</a></span>
+    </div>
+    <a id="upload-avatar-btn" href="{% url users:profile_avatar_update %}" class="dashed">Change picture</a>
+  </section>
+  <section class="basic">
+    <ul>
+      <li class="name">
+        {{ request.user.first_name }} {{ request.user.last_name }}
+      </li>
+      <li>{{ request.user.email }}</li>
+      {% if profile.country %}
+        <li>
+          {% if profile.country.code == "US" and profile.us_state %}{{ profile.us_state }},{% endif %}
+          {{ profile.country }}
+        </li>
+      {% endif %}
+    </ul>
+  </section>
+  {% if profile.roles.exists %}
+    <section class="roles">
+      <h1>Roles</h1>
       <ul>
-        <li>
-          <a id="upload-avatar-btn" href="{% url users:profile_avatar_update %}" class="dashed">Change picture</a>
-        </li>
-        <li>
-          <a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete picture</a>
-        </li>
+        {% for role in profile.roles.all %}
+          <li>{{ role }}</li>
+        {% endfor %}
       </ul>
-    </td>
-    <td class="user-info">
-      <form method="post" class="formatted user-info" name="user-info" action="{% url users:profile %}">
-      
-        {% for field in user_info_form %}
-          {% include "include/form-field.html" %}
+    </section>
+  {% endif %}
+  {% if profile.educator_student_levels.exists %}
+    <section class="levels">
+      <h1>Levels</h1>
+      <ul>
+        {% for level in profile.educator_student_levels.all %}
+          <li>{{ level }}</li>
         {% endfor %}
-        <div class="buttons">
-          <input type="submit" name="user-info" class="save" value="Save" />
-          <input type="submit" name="user-info" class="next" value="Save and tell us more!" />
-        </div>
-      </form>
-    </td>
-    <td class="change-password">
-      <form method="post" class="formatted change-password"  name="change-password"
-            action="{% url users:profile %}" id="change-password">
-        {% for field in change_password_form %}
-          {% include "include/form-field.html" %}
-        {% endfor %}
-        <div class="buttons">
-          <input type="submit" name="change-password" class="save" value="Change" />
-        </div>
-      </form>
-    </td>
-  </tr></tbody></table>
+      </ul>
+      {% if profile.educator_subjects.exists %}
+        <h1>Subjects</h1>
+        <ul>
+          {% for subject in profile.educator_subjects.all %}
+            <li>{{ subject }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+  {% endif %}
 
+  {% if profile.about_me %}
+    <section class="about">
+      <h1>About me</h1>
+      <p>{{ profile.about_me }}</p>
+    </section>
+  {% endif %}
+
+{% endblock %}
+
+{% block column-right %}
+  <section class="portlet links rc10">
+    <h1>Connect on the Web</h1>
+    {% if profile.website_url %}
+      <p class="website">
+        <span>Website or Blog</span>
+        {{ profile.website_url|urlizetrunc:30 }}
+      </p>
+    {% endif %}
+    {% if profile.facebook_id or profile.twitter_id or profile.skype_id %}
+      <ul class="social">
+        {% if profile.facebook_id %}
+          <li><a class="facebook" href="https://www.facebook.com/{{ profile.facebook_id }}">{{ profile.facebook_id }}</a></li>
+        {% endif %}
+        {% if profile.twitter_id %}
+          <li><a class="twitter" href="https://twitter.com/{{ profile.twitter_id }}">{{ profile.twitter_id }}</a></li>
+        {% endif %}
+        {% if profile.skype_id %}
+          <li><a class="skype" href="skype:{{ profile.skype_id }}?call">{{ profile.skype_id }}</a></li>
+        {% endif %}
+      </ul>
+    {% else %}
+      <p><a href="{% url users:profile_about %}">Add a link to your website, Facebook, Twitter or Skype accounts</a></p>
+    {% endif %}
+  </section>
 {% endblock %}
