@@ -192,7 +192,7 @@ def honeypot_verifier(value):
 
 HONEYPOT_VERIFIER = honeypot_verifier
 
-DEFAULT_AVATAR = STATIC_URL + "images/no-picture.jpg"
+DEFAULT_AVATAR = STATIC_URL + "images/default-avatar.png"
 AVATAR_SIZE = 140
 GRAVATAR_BASE = "http://www.gravatar.com/avatar"
 
