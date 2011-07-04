@@ -113,12 +113,7 @@ def registration(request):
                 confirmation.send_confirmation()
                 
                 if data["newsletter"]:
-                    kwargs = {}
-                    if first_name:
-                        kwargs["first_name"] = first_name
-                    if last_name:
-                        kwargs["last_name"] = last_name
-                    subscribe.delay(email, **kwargs)
+                    subscribe.delay(email)
 
                 messages.success(request, u"Confirmation email was sent to you.")
                 backend = BcryptBackend()
