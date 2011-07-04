@@ -87,6 +87,7 @@ INSTALLED_APPS = (
     'honeypot',
     'mailchimp',
     'sorl.thumbnail',
+    'django_coverage',
     'utils',
     'abtesting',
     'tags',
