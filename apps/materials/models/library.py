@@ -7,7 +7,7 @@ from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel,
     Language, GeographicRelevance, MediaFormat, Institution, Collection, \
     AutoCreateManyToManyField, AutoCreateForeignKey
 from materials.models.material import Material, mark_for_reindex, \
-    unindex_material, check_material_url
+    unindex_material, material_post_save
 
 
 class LibraryMaterialType(models.Model):
@@ -29,7 +29,7 @@ class LibraryMaterialType(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ("materials:libraries:material_type_index", [], {"library_material_types": self.slug}) 
+        return "materials:libraries:material_type_index", [], {"library_material_types": self.slug}
 
 
 class Library(Material):
@@ -86,6 +86,6 @@ class Library(Material):
 
 
 post_save.connect(mark_for_reindex, sender=Library, dispatch_uid="library_post_save_reindex")
-post_save.connect(check_material_url, sender=Library, dispatch_uid="library_post_save_check_url")
+post_save.connect(material_post_save, sender=Library, dispatch_uid="library_post_save")
 m2m_changed.connect(mark_for_reindex, sender=Library, dispatch_uid="library_m2m_changed_reindex")
 pre_delete.connect(unindex_material, sender=Library, dispatch_uid="library_pre_delete_unindex")

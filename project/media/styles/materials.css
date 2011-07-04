@@ -20,7 +20,7 @@
   font-size: 20px;
   font-style: normal;
   font-weight: bold;
-  margin-bottom: 4px;
+  margin-bottom: 15px;
 }
 
 .view-item h1 a {
@@ -57,20 +57,15 @@
 }
 
 .materials-index .details dt,.view-item .details dt {
-  float: left;
   margin-right: 4px;
   color: #616161;
   font-weight: bold;
-  clear: left;
+  float: left;
 }
 
 .materials-index .details dd,.view-item .details dd {
   margin-left: 0;
   margin-bottom: 2px;
-}
-
-.materials-index .details dd.clear,.view-item .details dd.clear {
-  clear: left;
 }
 
 .materials-index .details dl.collapsed {
@@ -366,13 +361,11 @@
 
 .view-item-navigation {
   text-align: center;
-  width: 580px;
-  margin: 2px auto 0 auto;
+  margin-bottom: 20px;
 }
 
 .view-item-navigation a {
   font-size: 14px;
-  color: #000;
   text-decoration: none;
 }
 
@@ -392,14 +385,18 @@
   visibility: hidden;
 }
 
-.view-item .reviews {
-  margin-top: 20px;
+.view-item .details .left {
+  float: left;
+  margin-right: 15px;
+  margin-bottom: 15px;
 }
 
-.view-item .reviews a.button {
-  float: right;
-  margin-left: 10px;
-  margin-bottom: 10px;
+.view-item .details dl.license {
+  clear: left;
+}
+
+.view-item .reviews {
+  margin-top: 20px;
 }
 
 .view-item .reviews dt {
@@ -417,6 +414,17 @@
   font-weight: bold;
   font-style: normal;
   text-align: right;
+}
+
+.portlet.save a {
+  font-size: 18px;
+  display: inline-block;
+  line-height: 27px;
+}
+
+.portlet.save a.save {
+  padding-left: 35px;
+  background: url(../images/icon-save.png) no-repeat 0% 50%;
 }
 
 /* Browse All */
@@ -796,4 +804,27 @@
 
 .no-items-match {
   font-size: 14px;
+}
+
+#content.contribute h2 {
+  font-size: 16px;
+  font-weight: normal;
+  color: #679801;
+}
+
+#content.contribute dt,
+#content.contribute dd {
+  margin-bottom: 1em;
+}
+
+#content.contribute dd,
+#content.contribute p {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+#content.contribute p.footnote {
+  margin-left: 0;
+  margin-right: 0;
+  font-size: 12px;
 }

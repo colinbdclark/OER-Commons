@@ -9,6 +9,13 @@
       oer.collapsibles.init($("#content"));
       oer.materials.index.init_actions_menus();
       oer.rating.init();
+      $(".slider").anythingSlider({
+          width: 540,
+          height: 190,
+          buildNavigation: false,
+          autoPlay: false,
+          startStopped: true
+        });
     });
   </script>
 {% endblock %}
@@ -18,11 +25,22 @@
 {% block promo %}{% endblock %}
 
 {% block above-content %}
-<div class="green-feature fixed-width">
-  <h2>Highlight</h2>
-  <p><a href="/courses/sun-curve-design-challenge-design-process-activity">Sun Curve Design Challenge</a>: A student-teacher collaborative<br/>
-     OER program focusing on scientific inquiry and green design<br/>
-     innovation to generate new ideas for sustainable agriculture.</p>
+<div class="fixed-width">
+  <div class="frontpage-highlight left align-center">
+    OER Commons Green is dedicated to <em>sustainability</em> and resource conservation 
+  </div>
+  <div class="frontpage-highlight right">
+    <ul>
+      <li>Free to Use</li>
+      <li>Openly Licensed</li>
+      <li><em>{{ resource_number }}</em> Resources</li>
+      <li>From K-12 to College Courses</li>
+    </ul>
+    <div class="align-center">
+      <a class="button-blue-big rc5" href="{% url materials:green_browse %}">Browse Now</a>
+    </div>
+  </div>
+{% include "include/slider.html" %}
 </div>
 {% endblock %}
 
@@ -73,7 +91,7 @@
   </div>
 </section>
 
-<secton class="portlet" id="green-sponsors-portlet">
+<section class="portlet" id="green-sponsors-portlet">
   <h1 class="green">Sponsorship</h1>
   <p>Green OER is a project in OER Commons developed by 
      <a href="http://www.iskme.org">ISKME</a> in

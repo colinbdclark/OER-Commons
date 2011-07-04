@@ -21,7 +21,7 @@ class Migration(SchemaMigration):
         db.delete_column('harvester_job', 'created_at')
 
         # Adding field 'Job.created_on'
-        db.add_column('harvester_job', 'created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=None, blank=True), keep_default=False)
+        db.add_column('harvester_job', 'created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime.now(), blank=True), keep_default=False)
 
         # Adding field 'Job.finished_on'
         db.add_column('harvester_job', 'finished_on', self.gf('django.db.models.fields.DateField')(null=True, blank=True), keep_default=False)

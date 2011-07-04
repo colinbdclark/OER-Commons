@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
     Language, GeographicRelevance, AutoCreateManyToManyField
 from materials.models.material import Material, mark_for_reindex, \
-    unindex_material, check_material_url
+    unindex_material, material_post_save
 
 
 class CommunityType(models.Model):
@@ -28,7 +28,7 @@ class CommunityType(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ("materials:community:community_type_index", [], {"community_types": self.slug}) 
+        return "materials:community:community_type_index", [], {"community_types": self.slug}
 
 
 class CommunityTopic(models.Model):
@@ -50,7 +50,7 @@ class CommunityTopic(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ("materials:community:community_topic_index", [], {"community_topics": self.slug}) 
+        return "materials:community:community_topic_index", [], {"community_topics": self.slug}
 
 
 class CommunityItem(Material):
@@ -99,10 +99,10 @@ class CommunityItem(Material):
     @classmethod
     @permalink
     def get_parent_url(self):
-        return ("materials:community", [], {})
+        return "materials:community", [], {}
 
 
 post_save.connect(mark_for_reindex, sender=CommunityItem, dispatch_uid="community_item_post_save_reindex")
-post_save.connect(check_material_url, sender=CommunityItem, dispatch_uid="community_item_post_save_check_url")
+post_save.connect(material_post_save, sender=CommunityItem, dispatch_uid="community_item_post_save")
 m2m_changed.connect(mark_for_reindex, sender=CommunityItem, dispatch_uid="community_item_m2m_changed_reindex")
 pre_delete.connect(unindex_material, sender=CommunityItem, dispatch_uid="community_item_pre_delete_unindex")

@@ -2,7 +2,7 @@ oer.materials.view_item = {};
 
 oer.materials.view_item.init = function() {
     oer.materials.view_item.init_navigation();
-    var $navigation = $("div.view-item-navigation");
+    var $navigation = $("nav.view-item-navigation");
     if ($navigation.length > 0) {
         $("div.details h1 a").click(function(e) {
             e.preventDefault();
@@ -12,7 +12,7 @@ oer.materials.view_item.init = function() {
 };
 
 oer.materials.view_item.init_navigation = function() {
-    var $navigation = $("div.view-item-navigation");
+    var $navigation = $("nav.view-item-navigation");
     $navigation.find("a.item-link").click(function(e) {
         e.preventDefault();
         $navigation.find("form").attr("action", $(this).attr("href")).submit();

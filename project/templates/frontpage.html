@@ -6,25 +6,40 @@
 <script type="text/javascript"> 
   $(function() {
     oer.accordion.init($("section.portlet.oermaterials div.accordion"));
-    $("section.portlet.cou li a").cluetip({local:true, arrows: true, width: 300});
+    $("section.portlet.cou li a").qtip(DEFAULT_TOOLTIP_OPTIONS);
+    $(".slider").anythingSlider({
+      width: 540,
+      height: 190,
+      buildNavigation: false,
+      autoPlay: false,
+      startStopped: true
+    });
     oer.newsletter.init();
   });
 </script> 
 {% endblock %}
 
-{% block promo %}
-  <div id="frontpage-promo" class="fixed-width">
-    <div class="column1">
-      Learning is Sharing
-    </div>
-    <div class="column2">
-      Find <em>Free-to-Use</em> Teaching and Learning Content from around<br/>
-      the World. Organize K-12 Lessons, College Courses, and more.
+{% block promo %}{% endblock %}
+
+{% block above-content %}
+<div class="fixed-width">
+  <div class="frontpage-highlight left align-center">
+    Find Free-to-Use Teaching and Learning Content from Around the World     
+  </div>
+  <div class="frontpage-highlight right">
+    <ul>
+      <li>Free to Use</li>
+      <li>Openly Licensed</li>
+      <li><em>{{ resource_number }}</em> Resources</li>
+      <li>From K-12 to College Courses</li>
+    </ul>
+    <div class="align-center">
+      <a class="button-blue-big rc5" href="{% url materials:browse %}">Browse Now</a>
     </div>
   </div>
+{% include "include/slider.html" %}
+</div>
 {% endblock %}
-
-{% block above-content %}{% endblock %}
 
 {% block column-left %}
 <section class="portlet oermaterials"> 
@@ -86,6 +101,9 @@
 {% endblock %}
 
 {% block column-right %}
+
+{% include "include/portlets/bookmarklet.html" %}
+
 <section class="portlet twitter dotted clearfix"> 
   <h1 class="green">OER Commons Tweets</h1> 
   {% if tweets %}

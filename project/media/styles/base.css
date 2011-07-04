@@ -1,11 +1,8 @@
 body {
+  background: url(../images/main-bg.png) repeat-x;
   color: #333;
   font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
   font-size: 13px;
-}
-
-body .page {
-  background: url(../images/main-bg.png) repeat-x;
 }
 
 a {
@@ -15,7 +12,6 @@ a {
 a.dashed {
   border-bottom-width: 1px;
   border-bottom-style: dashed;
-  text-decoration: none;
 }
 
 hr.tall {
@@ -222,6 +218,52 @@ div.box h3 {
 .ui-dialog.loading .ui-dialog-title {
   padding-right: 22px;
   background: url(../images/ajax-loader.gif) no-repeat 100% 50%;
+}
+
+.rc3 {
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
+.rc5 {
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+
+.rc10 {
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+
+.button-blue-big {
+  display: inline-block;
+  margin: 3px;
+  text-decoration: none;
+  color: white;
+  background-color: #0B7BA8;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  padding: 2px 10px;
+  text-shadow: 0px 0px 1px #333;
+}
+
+.ui-tooltip-dark-blue .ui-tooltip-titlebar {
+  background-color: #418ba8;
+  color: #fff;
+  border: none;
+  font-size: 13px;
+}
+
+.ui-tooltip-dark-blue .ui-tooltip-content {
+  background-color: #c9e7f2;
+  border: none;
+  font-size: 13px;
+  line-height: 1.3em;
+  color: #000;
 }
 
 .global-notification {

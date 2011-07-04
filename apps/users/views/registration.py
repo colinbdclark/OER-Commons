@@ -1,16 +1,16 @@
 from django import forms
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db.models.aggregates import Max
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic.simple import direct_to_template
 from honeypot.decorators import check_honeypot
+from newsletter.tasks import subscribe
 from users.backend import encrypt_password, BcryptBackend
 from users.models import RegistrationConfirmation, Profile
-import mailchimp
 
 
 class RegistrationForm(forms.Form):
@@ -75,7 +75,7 @@ def registration(request):
         if form.is_valid():
             data = form.cleaned_data
             email = data["email"]
-            username = email
+            username = "user%i" % (User.objects.aggregate(Max("id"))["id__max"] + 1)
             email_taken = False
             email_pending = False
             if User.objects.filter(email=email).exists():
@@ -113,17 +113,8 @@ def registration(request):
                 confirmation.send_confirmation()
                 
                 if data["newsletter"]:
-                    api_key = getattr(settings, "MAILCHIMP_API_KEY", None)
-                    list_id = getattr(settings, "MAILCHIMP_LIST_ID", None)
-                    
-                    if api_key and list_id:
-                        try:
-                            list = mailchimp.utils.get_connection().get_list_by_id(list_id)
-                            user_data = {"EMAIL": email}
-                            list.subscribe(email, user_data)
-                        except:
-                            pass
-                
+                    subscribe.delay(email)
+
                 messages.success(request, u"Confirmation email was sent to you.")
                 backend = BcryptBackend()
                 user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)

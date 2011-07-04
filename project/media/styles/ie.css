@@ -1,5 +1,5 @@
 .clearfix {
-  zoom: 1;     /* triggers hasLayout */
+  zoom: 1; /* triggers hasLayout */
 }
 
 .index-filters .filter input, .advanced-search .filter input {
@@ -33,9 +33,28 @@
   background: none !important;
 }
 
-.toolbar .stars,
-.toolbar li,
-.toolbar li a {
-  zoom: 1;
-  display: inline; 
+/* Items with display: inline-block */
+#toolbar .stars,
+#toolbar li,
+#toolbar li a,
+.accordion .accordion-header a,
+.button-blue-big,
+.content-submission .label label,
+.form-row.tags a.delete,
+.form-row.tags ul li,
+.green-browse #content section.column,
+.iframe-submission .existing-resource .user-tags li,
+.materials-index .details dd.topics a, .view-item .details dd.topics a,
+.portlet.bookmarklet a,
+.portlet.item-tags li,
+.portlet.save a,
+.user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
+.user-tags li.tag, .portlet.item-tags .user-tags li.tag,
+fieldset.step p.content-submission-buttons a {
+    display: inline;
+    zoom: 1;
+}
+
+.rocon {
+  text-align: left;
 }

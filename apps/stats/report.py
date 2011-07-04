@@ -12,7 +12,7 @@ def send_report(interval=datetime.timedelta(days=7)):
     now = datetime.datetime.now()
     from_date = now - interval
     from_date = from_date.date()
-    to_date = from_date + interval
+    to_date = from_date + interval - datetime.timedelta(days=1)
 
     stats = []
     for title, getter in STATS:

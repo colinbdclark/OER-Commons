@@ -1,3 +1,32 @@
+.frontpage-highlight {
+  width: 180px;
+  color: #679801;
+  font-size: 18px;
+}
+
+.frontpage-highlight em {
+  font-style: normal;
+  color: #F3C237;
+}
+
+.frontpage-highlight ul {
+  margin-left: 10px;
+}
+
+.frontpage-highlight.left {
+  float: left;
+  padding-top: 35px;
+}
+
+.frontpage-highlight.right {
+  float: right;
+  padding-top: 25px;
+}
+
+.frontpage-highlight .button-blue-big {
+  margin-top: 10px;
+}
+
 .frontpage-block {
   margin: 0 15px;
 }

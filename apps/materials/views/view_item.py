@@ -62,7 +62,6 @@ def view_item(request, slug=None, model=None):
                     "title": transition["title"],
                 })
 
-    user_tags = []
     save_url = None
     unsave_url = None
     if request.user.is_authenticated():
@@ -84,7 +83,45 @@ def view_item(request, slug=None, model=None):
     item.identifier = "%s.%s.%i" % (content_type.app_label,
                                     content_type.model,
                                     item.id)
-    
+
+    tags = []
+    tags_slugs = set()
+    microsite_markers = set()
+    for microsite in Microsite.objects.all():
+        microsite_markers.update(microsite.keywords.values_list("slug", flat=True))
+
+
+    user_tags = []
+    if request.user.is_authenticated():
+        user_tags = item.tags.filter(user=request.user).values("id", "slug", "name")
+        for tag in user_tags:
+            tag["class"] = "tag"
+            tags_slugs.add(tag["slug"])
+
+    for topic in item.topics():
+        tag = {"class": "topic"}
+        tag["slug"] = topic.slug
+        tag["name"] = topic.name
+        tag["microsite"] = topic.microsite.slug
+        tags_slugs.add(tag["slug"])
+        tags.append(tag)
+
+    for tag in item.keywords.exclude(slug__in=tags_slugs | microsite_markers).values("id", "slug", "name"):
+        tag["class"] = "keyword"
+        tags_slugs.add(tag["slug"])
+        tags.append(tag)
+
+    for tag in item.tags.exclude(slug__in=tags_slugs | microsite_markers).values("id", "slug", "name"):
+        if tag["slug"] in tags_slugs:
+            continue
+        tag["class"] = "tag"
+        tags_slugs.add(tag["slug"])
+        tags.append(tag)
+
+    tags.sort(key=lambda tag: tag["slug"])
+
+
+
     microsite = None
     came_from_index = False
 

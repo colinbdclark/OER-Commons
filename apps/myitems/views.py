@@ -11,8 +11,8 @@ def myitems_index(request, view_name, page_title, no_items_message, index_name,
                   only_published=True, template="myitems/index.html"):
 
     breadcrumbs = [
-        {"url": "myitems:myitems", "title": u"My Items"},
-        {"url": "myitems:%s" % view_name, "title": page_title},
+        {"url": reverse("myitems:myitems"), "title": u"My Items"},
+        {"url": reverse("myitems:%s" % view_name), "title": page_title},
     ]
 
     query_string_params = {}
@@ -73,8 +73,8 @@ def submitted(request):
 def searches(request):
     page_title = u"My Saved Searches"
     breadcrumbs = [
-        {"url": "myitems:myitems", "title": u"My Items"},
-        {"url": "myitems:searches", "title": page_title},
+        {"url": reverse("myitems:myitems"), "title": u"My Items"},
+        {"url": reverse("myitems:searches"), "title": page_title},
     ]
 
     items = list(SavedSearch.objects.filter(user=request.user))

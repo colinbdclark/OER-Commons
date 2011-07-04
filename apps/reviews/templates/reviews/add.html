@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 {% load utils %}
 
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.collapsibles.init($(".guidelines"));
+    });
+  </script>
+{% endblock %}
+
 {% block above-content %}{% endblock %}
+
+{% block bodyclass %}no-columns review{% endblock %}
 
 {% block content %}
   <form name="review" class="formatted review" method="post" action="{{ form_action }}">
@@ -13,35 +23,81 @@
     {% endfor %}
     
     <div class="buttons">
-      <input class="button" type="submit" value="Submit" />
+      <input class="button" type="submit" value="Submit review" />
       <input class="button" type="submit" value="Cancel" name="cancel" />
     </div>
-
   </form>
+  
+  <section class="guidelines">
+    <h1>Factors to consider when reviewing materials:</h1>
+    <section>
+      <h1>Use</h1>
+      <section class="collapsible">
+        <h1><a href="#" class="expand-button collapsed"></a> How did you use
+          this material?</h1>
+        <p class="collapsed">In which courses or programs did
+          you use the material?</p>
+        <p class="collapsed">Did you augment the material? How?</p>
+      </section>
+    </section>
 
-  <h3>Factors to consider when reviewing materials:</h3>
-  <h4>Use</h4>
-  <ul>
-    <li>How did you use this material? In which courses or programs did you use the material?</li>
-    <li>Did you augment the material? How?</li>
-  </ul>
-    
-  <h4>Overall Quality</h4>
-  <ul>
-    <li>Clarity: Is there a sufficient level of clarity and comprehensibility of written content?</li>
-    <li>Consistency: Is there consistency in the language and use of key terms? Is the language suitable for novice users?</li>
-    <li>Content Errors: Did you find factual, grammatical, or typographical errors?</li>
-    <li>Interface: Did you find technological issues, such as broken links? How is the ease of navigation?</li>
-    <li>Suggested Changes: What top three issues need addressing, if any?</li>
-    <li>Exemplary Features: What are the top three features that are notable or unique?</li>
-  </ul>
-      
-  <h4>Usefulness and Recommendations for Future Use</h4>
-  <ul>
-    <li>What knowledge and skills do you need to use it? What knowledge and skills must students have to use this material?</li>
-    <li>Is the material more (or less) appropriate for a specific audience, grade level, or student learning style?</li>
-    <li>Did using the material lead to successful or identifiable outcomes? This can include examples of student work, student learning, improved instruction, etc.</li>
-    <li>Is the material suitable for reuse? In terms of augmenting it, creating new derivative works from it, or localizing it in any way to meet your own needs, what is most notable?</li>
-  </ul>
+    <section class="collapsibles">
+      <h1>Overall Quality
+        <a href="#" class="dashed expand-all collapsed">expand all</a>
+        <a href="#" class="dashed collapse-all collapsed">collapse all</a>
+      </h1>
+      <section class="collapsible">
+        <h1><a href="#" class="expand-button collapsed"></a> Clarity</h1>
+        <p class="collapsed">Is there a sufficient level of clarity and
+          comprehensibility of written content?</p>
+      </section>
+      <section class="collapsible">
+        <h1><a href="#" class="expand-button collapsed"></a> Consistency</h1>
+        <p class="collapsed">
+          Is there consistency in the language and use of key
+          terms? Is the language suitable for novice users?
+        </p>
+      </section>
+      <section class="collapsible">
+        <h1><a href="#" class="expand-button collapsed"></a> Content Errors</h1>
+        <p class="collapsed">
+          Did you find factual, grammatical, or typographical
+          errors?
+        </p>
+      </section>
+      <section class="collapsible">
+        <h1><a href="#" class="expand-button collapsed"></a> Interface</h1>
+        <p class="collapsed">
+          Did you find technological issues, such as broken links?
+          How is the ease of navigation?
+        </p>
+      </section>
+      <section class="collapsible">
+        <h1><a href="#" class="expand-button collapsed"></a> Suggested Changes</h1>
+        <p class="collapsed">
+          What top three issues need addressing, if any?
+        </p>
+      </section>
+      <section class="collapsible">
+        <h1><a href="#" class="expand-button collapsed"></a> Exemplary Features</h1>
+        <p class="collapsed">
+          What are the top three features that are
+          notable or unique?
+        </p>
+      </section>
+    </section>
 
+    <section class="collapsibles">
+      <h1>Usefulness and
+      Recommendations for Future Use</h1>
+      <section class="collapsible">
+        <h1><a href="#" class="expand-button collapsed"></a> Did using the
+          material lead to successful or identifiable outcomes?</h1>
+        <p class="collapsed">
+          This can include examples of student work, student learning, improved
+          instruction, etc.
+        </p>
+      </section>
+    </section>
+  </section>
 {% endblock %}

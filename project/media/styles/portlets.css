@@ -127,3 +127,30 @@
 .column-left .portlet.advanced-search p {
   margin: 5px 0;
 }
+
+.portlet.bookmarklet {
+  background: url(../images/bookmarklet-portlet-bg.png) no-repeat 50% 50%;
+  height: 188px;
+  padding: 10px;
+  text-align: center;
+}
+
+.portlet.bookmarklet h1 {
+  color: #1E4E62;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.portlet.bookmarklet p {
+  color: #1E4E62;
+}
+
+.portlet.bookmarklet a {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 15px;
+  background-color: #FFCA74;
+  color: #1E4E62;
+  border:  1px solid #F5A456;
+  margin: 10px 0;
+}

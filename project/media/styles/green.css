@@ -32,12 +32,11 @@ body.green .page {
 
 .green-feature h2 {
   color: #666;
-  font-size: 16px;
   font-weight: normal;
   font-size: 22px;
   width: 466px;
   padding-bottom: 8px;
-  background: url(../images/dotted-line-hor.gif) repeat-x 0% 100%;
+  background: url(../images/dotted-line-hor.gif) repeat-x 0 100%;
   margin-bottom: 12px;
 }
 
@@ -98,7 +97,6 @@ body.green .page {
   margin-bottom: 20px;
 }
 
-
 .green .portlet.oermaterials {
   margin-bottom: 0;
 }
@@ -129,4 +127,74 @@ body.green .top-keywords h4 {
 
 .portlet.oermaterials .topics li a.green {
   background: url(../images/green-icon-small.png) no-repeat 0 50%;
+}
+
+.portlet.item-tags li.green {
+  background: #D8E5C3 url(../images/green-icon-small-green-bg.png) no-repeat 3px 50%;
+  padding-left: 24px;
+}
+
+.portlet.item-tags li.green a {
+  color: #64972B;
+}
+
+.green-browse #content section {
+  margin: 0 10px 20px 10px;
+}
+
+.green-browse #content section h1 {
+  font-size: 18px;
+  color: #679801;
+  font-weight: normal;
+  margin: 0 0 10px 0;
+}
+
+.green-browse #content section hgroup h2 {
+  font-size: 15px;
+  color: #666;
+  font-weight: normal;
+  margin: 0 0 5px 0;
+}
+
+.green-browse #content .columns {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.green-browse #content section.column {
+  width: 250px;
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: 0;
+}
+
+.green-browse #content .accordion h2 {
+  color: #0A546D;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.green-browse #content .accordion h2 a {
+  color: #0A546D;
+  text-decoration: none;
+}
+
+.green-browse #content .accordion ul {
+  list-style-type: none;
+}
+
+.green-browse #content .accordion li a {
+  text-decoration: none;
+  font-size: 11px;
+}
+
+.green-browse .portlet.recently-added ul {
+  list-style-position: inside;
+  font-size: 14px;
+  color: #0B7BA9;
+}
+
+.green-browse .portlet.recently-added li {
+  margin-bottom: 10px;
 }

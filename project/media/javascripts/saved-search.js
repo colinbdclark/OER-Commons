@@ -3,7 +3,10 @@ oer.saved_search = {};
 oer.saved_search.init = function() {
     var $form = $("form[name='save-search']");
     var $show_form_link = $("a.save-search");
-
+    if (!$show_form_link.length) {
+      return;
+    }
+  
     var coordinates = $show_form_link.offset();
 
     $form.offset({
