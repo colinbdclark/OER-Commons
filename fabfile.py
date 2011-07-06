@@ -65,7 +65,8 @@ def restart(*args):
         celeryd_process = CONF[env.host]["celeryd-process"]
         run_command("./bin/django celeryd_multi restart %s" % celeryd_process)
     if "jetty" in args:
-        sudo("invoke-rc.d jetty restart")
+        sudo("invoke-rc.d jetty stop")
+        sudo("invoke-rc.d jetty start")
 
 
 def build():
@@ -91,4 +92,5 @@ def deploy(*args):
     if "celery" in args:
         restart_args.append("celery")
     restart(*restart_args)
-    coverage()
+    if "coverage" in args:
+        coverage()
