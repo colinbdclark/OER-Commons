@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding field 'Job.created_at'
-        db.add_column('harvester_job', 'created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=None, blank=True), keep_default=False)
+        db.add_column('harvester_job', 'created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime.now(), blank=True), keep_default=False)
 
         # Adding field 'Job.finished_at'
         db.add_column('harvester_job', 'finished_at', self.gf('django.db.models.fields.DateField')(null=True, blank=True), keep_default=False)

@@ -1,13 +1,14 @@
 from autoslug.fields import AutoSlugField
 from django.db import models
+from django.db.models import permalink
 from django.db.models.signals import post_save, m2m_changed, pre_delete
 from django.utils.translation import ugettext_lazy as _
+from materials.models import material_post_save
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
     Language, GeographicRelevance, MediaFormat, Institution, Collection, \
     AutoCreateManyToManyField, AutoCreateForeignKey
 from materials.models.material import Material, mark_for_reindex, \
-    unindex_material, check_material_url
-from django.db.models import permalink
+    unindex_material
 
 
 COURSE_OR_MODULE = (
@@ -41,7 +42,7 @@ class CourseMaterialType(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ("materials:courses:material_type_index", [], {"course_material_types": self.slug}) 
+        return "materials:courses:material_type_index", [], {"course_material_types": self.slug}
 
 
 class RelatedMaterial(models.Model):
@@ -137,7 +138,7 @@ class Course(Material):
 
 
 post_save.connect(mark_for_reindex, sender=Course, dispatch_uid="course_post_save_reindex")
-post_save.connect(check_material_url, sender=Course, dispatch_uid="course_post_save_check_url")
+post_save.connect(material_post_save, sender=Course, dispatch_uid="course_post_save")
 m2m_changed.connect(mark_for_reindex, sender=Course, dispatch_uid="course_m2m_changed_reindex")
 pre_delete.connect(unindex_material, sender=Course, dispatch_uid="course_pre_delete_unindex")
 

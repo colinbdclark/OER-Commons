@@ -1,6 +1,7 @@
 import djcelery
 import os
 import time
+import sys
 
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -85,6 +86,8 @@ INSTALLED_APPS = (
     'oauth_provider',
     'honeypot',
     'mailchimp',
+    'sorl.thumbnail',
+    'django_coverage',
     'utils',
     'abtesting',
     'tags',
@@ -185,3 +188,13 @@ def honeypot_verifier(value):
     return True
 
 HONEYPOT_VERIFIER = honeypot_verifier
+
+
+WEBKIT2PNG_EXECUTABLE = None
+
+if sys.platform == "darwin":
+    WEBKIT2PNG_EXECUTABLE = "/System/Library/Frameworks/Python.framework/Versions/2.6/bin/python %s -W %%(width)i -H %%(height)i -o %%(filename)s %%(url)s" % os.path.join(os.path.dirname(__file__), "webkit2png_osx.py")
+elif sys.platform == "linux2":
+    WEBKIT2PNG_EXECUTABLE = "python %s -x %%(width)i %%(height)i -g %%(width)i %%(height)i -F javascript -o %%(filename)s %%(url)s" % os.path.join(os.path.dirname(__file__), "webkit2png_linux.py")
+
+COVERAGE_REPORT_HTML_OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'coverage')
