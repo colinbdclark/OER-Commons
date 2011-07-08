@@ -28,6 +28,7 @@ MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 MEDIA_URL = '/media/'
 
 # Static file configuration
+STATICFILES_STORAGE = 'staticfiles.storage.StaticFileStorage'
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 STATIC_URL = MEDIA_URL
 STATICFILES_EXCLUDED_APPS = (
