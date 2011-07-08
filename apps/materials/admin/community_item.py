@@ -127,6 +127,8 @@ class CommunityItemAddForm(forms.ModelForm, LicenseFields, RSSFields):
 
 class CommunityItemChangeForm(CommunityItemAddForm):
 
+    slug = forms.SlugField()
+
     class Meta:
         model = CommunityItem
         fields = ["slug"] + COMMUNITY_ITEM_ADD_FIELDS
