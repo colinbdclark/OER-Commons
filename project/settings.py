@@ -159,6 +159,13 @@ FLATBLOCKS_AUTOCREATE_STATIC_BLOCKS = True
 
 AUTOSLUG_SLUGIFY_FUNCTION = "project.utils.slugify"
 
+CACHES = {
+    'default': {
+        'BACKEND': 'cache_utils.group_backend.CacheClass',
+        'LOCATION': '127.0.0.1:11211',
+    },
+}
+
 CACHE_VERSION = 1
 
 OAUTH_AUTHORIZE_VIEW = "project.views.oauth_authorize"
