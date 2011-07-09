@@ -20,6 +20,7 @@ downloads/
 virtualenv/
 project.db
 celerybeat-schedule
+.fabricrc
 project/media/CACHE/
 project/media/admin/
 project/media/debug_toolbar/
