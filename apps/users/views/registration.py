@@ -175,7 +175,7 @@ def resend(request):
     username = request.REQUEST.get("username", u"").strip()
     email = request.REQUEST.get("email", u"").strip()
 
-    if not email and not email:
+    if not username and not email:
         raise Http404()
 
     kwargs = {}
