@@ -16,7 +16,7 @@
     });
     oer.newsletter.init();
   });
-</script> 
+</script>
 {% endblock %}
 
 {% block promo %}{% endblock %}
@@ -24,7 +24,18 @@
 {% block above-content %}
 <div class="fixed-width">
   <div class="frontpage-highlight left align-center">
-    Find Free-to-Use Teaching and Learning Content from Around the World     
+    Find Free-to-Use Teaching and Learning Content from Around the World
+    {% spaceless %}
+    <ul class="buttons">
+      <li>
+        <fb:like href="" send="false" layout="button_count" show_faces="false" font=""></fb:like>
+        <div id="fb-root"></div>
+      </li>
+      <li class="google">
+        <g:plusone size="medium"></g:plusone>
+      </li>
+    </ul>
+    {% endspaceless %}
   </div>
   <div class="frontpage-highlight right">
     <ul>
@@ -140,4 +151,9 @@
 
 {% include "include/portlets/cou.html" %}
 
+{% endblock %}
+
+{% block extra-footer %}
+  <script src="http://connect.facebook.net/en_US/all.js#appId=101857373226557&amp;xfbml=1"></script>
+  <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 {% endblock %}

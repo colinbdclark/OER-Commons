@@ -137,6 +137,8 @@ class LibraryAddForm(forms.ModelForm, LicenseFields, RSSFields):
 
 class LibraryChangeForm(LibraryAddForm):
 
+    slug = forms.SlugField()
+
     class Meta:
         model = Library
         fields = ["slug"] + LIBRARY_ADD_FIELDS

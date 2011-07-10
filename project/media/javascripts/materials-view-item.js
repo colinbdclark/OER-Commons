@@ -13,9 +13,9 @@ oer.materials.view_item.init = function() {
 
 oer.materials.view_item.init_navigation = function() {
     var $navigation = $("nav.view-item-navigation");
+    var $form = $navigation.find("form");
     $navigation.find("a.item-link").click(function(e) {
-        e.preventDefault();
-        $navigation.find("form").attr("action", $(this).attr("href")).submit();
+        $.cookie("_i", $form.serialize(), {path: "/"});
     });
 }
 

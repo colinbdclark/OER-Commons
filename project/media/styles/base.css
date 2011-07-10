@@ -232,27 +232,6 @@ div.box h3 {
   background: url(../images/ajax-loader.gif) no-repeat 100% 50%;
 }
 
-.global-notification {
-  padding: 3px 0;
-  font-size: 14px;
-  background-color: #FC6;
-  border-bottom: 1px solid #A88743;
-  color: #544322;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.7;
-}
-
-.global-notification .close a,.status-message .close a {
-  font-size: 11px;
-  font-weight: normal;
-  color: #544322;
-}
-
-.status-message .close {
-  margin-top: 5px;
-}
-
 .rc3 {
   border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -313,3 +292,23 @@ div.box h3 {
   color: #000;
 }
 
+.global-notification {
+  padding: 3px 0;
+  font-size: 14px;
+  background-color: #FC6;
+  border-bottom: 1px solid #A88743;
+  color: #544322;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.global-notification .close a,.status-message .close a {
+  font-size: 11px;
+  font-weight: normal;
+  color: #544322;
+}
+
+.status-message .close {
+  margin-top: 5px;
+}

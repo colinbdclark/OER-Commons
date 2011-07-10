@@ -1,7 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, resolve
-from django.http import Http404
+from django.http import Http404, QueryDict, HttpRequest
 from django.shortcuts import get_object_or_404
+from django.utils.datastructures import MultiValueDict
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.material import WORKFLOW_TRANSITIONS
@@ -12,9 +13,20 @@ from materials.views.index import PATH_FILTERS, IndexParams, \
 from reviews.views import ReviewForm
 from saveditems.models import SavedItem
 from visitcounts.models import Visit
+import urllib
+
 
 # TODO: rewrite this to class based view when project is moved to Django 1.3
 # This would allow to avoid code duplication.
+
+
+class DummyRequest(HttpRequest):
+
+    def __init__(self, data=None):
+        if not data:
+            data = {}
+        self.REQUEST = MultiValueDict(data)
+        super(DummyRequest, self).__init__()
 
 
 def view_item(request, slug=None, model=None):
@@ -99,10 +111,8 @@ def view_item(request, slug=None, model=None):
             tags_slugs.add(tag["slug"])
 
     for topic in item.topics():
-        tag = {"class": "topic"}
-        tag["slug"] = topic.slug
-        tag["name"] = topic.name
-        tag["microsite"] = topic.microsite.slug
+        tag = {"class": "topic", "slug": topic.slug, "name": topic.name,
+               "microsite": topic.microsite.slug}
         tags_slugs.add(tag["slug"])
         tags.append(tag)
 
@@ -131,7 +141,16 @@ def view_item(request, slug=None, model=None):
     hidden_filters = {}
 
     kwargs = {}
-    index_path = request.REQUEST.get("index_path")
+
+    filters = {}
+    index_path = None
+
+    if "_i" in request.COOKIES:
+        filters = dict(QueryDict(urllib.unquote(request.COOKIES["_i"])))
+        index_path = filters.pop("index_path", None)
+        if index_path and isinstance(index_path, list):
+            index_path = index_path[0]
+            
     if index_path:
         try:
             kwargs = resolve(index_path)[2]
@@ -165,10 +184,11 @@ def view_item(request, slug=None, model=None):
                 path_filter = filter_name
                 break
 
+        dummy_request = DummyRequest(filters)
         for filter_name, filter in FILTERS.items():
             if filter_name == path_filter:
                 continue
-            value = filter.extract_value(request)
+            value = filter.extract_value(dummy_request)
             if value is not None:
                 query = filter.update_query(query, value)
                 hidden_filters[filter.request_name] = value
@@ -183,6 +203,7 @@ def view_item(request, slug=None, model=None):
             query = query.order_by(index_params.query_order_by)
 
         current_item_idx = 0
+        item_found = False
         for result in query:
             if result.model == model and int(result.pk) == item.id:
                 if current_item_idx > 0:
@@ -202,6 +223,7 @@ def view_item(request, slug=None, model=None):
                                                 kwargs=dict(slug=next_item.get_stored_fields()["slug"]))
                     else:
                         next_item_url = result.object.get_absolute_url()
+                item_found = True
                 break
             current_item_idx += 1
 
@@ -209,7 +231,8 @@ def view_item(request, slug=None, model=None):
         if batch_start:
             query_string_params["batch_start"] = batch_start
 
-        index_url = index_path + serialize_query_string_params(query_string_params)
+        if item_found:
+            index_url = index_path + serialize_query_string_params(query_string_params)
 
     toolbar_view_url = reverse("materials:%s:toolbar_view_item" % item.namespace,
                                    kwargs=dict(slug=item.slug))
@@ -267,7 +290,22 @@ def toolbar_view_item(request, slug=None, model=None):
     hidden_filters = {}
 
     kwargs = {}
-    index_path = request.REQUEST.get("index_path")
+    filters = {}
+    index_path = None
+
+    if "_i" in request.COOKIES:
+        filters = dict(QueryDict(urllib.unquote(request.COOKIES["_i"])))
+        index_path = filters.pop("index_path", None)
+        if index_path and isinstance(index_path, list):
+            index_path = index_path[0]
+
+    if index_path:
+        try:
+            kwargs = resolve(index_path)[2]
+            came_from_index = True
+        except Http404:
+            pass
+
     if index_path:
         try:
             kwargs = resolve(index_path)[2]
@@ -301,10 +339,11 @@ def toolbar_view_item(request, slug=None, model=None):
                 path_filter = filter_name
                 break
 
+        dummy_request = DummyRequest(filters)
         for filter_name, filter in FILTERS.items():
             if filter_name == path_filter:
                 continue
-            value = filter.extract_value(request)
+            value = filter.extract_value(dummy_request)
             if value is not None:
                 query = filter.update_query(query, value)
                 hidden_filters[filter.request_name] = value
@@ -319,6 +358,7 @@ def toolbar_view_item(request, slug=None, model=None):
             query = query.order_by(index_params.query_order_by)
 
         current_item_idx = 0
+        item_found = False
         for result in query:
             if result.model == model and int(result.pk) == item.id:
                 if current_item_idx > 0:
@@ -336,6 +376,7 @@ def toolbar_view_item(request, slug=None, model=None):
                         next_item_url = reverse("materials:%s:toolbar_view_item" % namespace, kwargs=dict(slug=next_item.get_stored_fields()["slug"]))
                     else:
                         next_item_url = result.object.get_absolute_url()
+                item_found = True
                 break
             current_item_idx += 1
 
@@ -343,7 +384,8 @@ def toolbar_view_item(request, slug=None, model=None):
         if batch_start:
             query_string_params["batch_start"] = batch_start
 
-        index_url = index_path + serialize_query_string_params(query_string_params)
+        if item_found:
+            index_url = index_path + serialize_query_string_params(query_string_params)
         
     Visit.objects.count(request, item)
 
