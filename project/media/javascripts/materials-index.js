@@ -210,6 +210,7 @@ oer.materials.index.init_align_form = function() {
                     var $tags = $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
                     oer.align_form.init_tag_tooltip($tags.find("a:first"));
                 });
+                $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
                 $form.show();
             });
             $dialog.dialog("option", "title", "Align " + $item.find("h1 a").first().text());
