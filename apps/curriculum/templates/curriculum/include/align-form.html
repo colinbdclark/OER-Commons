@@ -1,6 +1,11 @@
 <form action="{{ action }}" method="post" id="align-form" name="align-form" class="formatted"
       data-delete-url="{% url curriculum:delete_tag %}">
-<ul class="align-user-tags"></ul>
+<div id="align-tag-description" class="rc5"></div>
+<div class="align-user-tags-ct rc5 no-tags">
+  <span class="not-aligned">Not Yet Aligned</span>
+  <ul class="align-user-tags"></ul>
+  <span class="tags-number"></span>
+</div>
 <h3>Add new alignment tag:</h3>
 <div class="field standard">
    <div class="label"><label for="id_curriculum_standard">Select curriculum standard:</label></div>
@@ -14,7 +19,7 @@
    <div class="label"><label for="id_curriculum_category">Select learning objective category:</label></div>
    <select name="category" id="id_curriculum_category" data-source="{% url curriculum:list_categories %}"></select>
 </div>
-<div class="field tag">
+<div class="field tag clear">
    <div class="label"><label for="id_curriculum_tag">Select alignment tag:</label></div>
    <select name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_tags %}"></select>
 </div>
