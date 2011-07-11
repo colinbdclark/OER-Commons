@@ -12,9 +12,19 @@
             "last_login": "2011-06-20 02:48:20",
             "groups": [],
             "user_permissions": [],
-            "password": "bcrypt$$2a$12$0WwigBxseu7/3Km7cFE.muPHXIBsu654uzJ1.kmkSgf1XZsBKBETW",
+            "password": "bcrypt$$2a$12$5V5ZGlf.IH2O1qDvEg/2ceuFbLWB2UBhqQok4owqYU5IH3izwpswe",
             "email": "john@example.com",
             "date_joined": "2011-06-20 01:48:20"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "users.registrationconfirmation",
+        "fields": {
+            "user": 1,
+            "key": "3xVBJSXtBxYDtDRbZTVP",
+            "confirmed": true,
+            "timestamp": "2011-06-20 01:48:20"
         }
     },
     {
@@ -30,13 +40,13 @@
             "last_login": "2011-06-20 02:48:20",
             "groups": [],
             "user_permissions": [],
-            "password": "bcrypt$$2a$12$0WwigBxseu7/3Km7cFE.muPHXIBsu654uzJ1.kmkSgf1XZsBKBETW",
+            "password": "bcrypt$$2a$12$5V5ZGlf.IH2O1qDvEg/2ceuFbLWB2UBhqQok4owqYU5IH3izwpswe",
             "email": "joanna@example.com",
             "date_joined": "2011-06-20 01:48:20"
         }
     },
     {
-        "pk": 1,
+        "pk": 2,
         "model": "users.registrationconfirmation",
         "fields": {
             "user": 2,
