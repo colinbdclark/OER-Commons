@@ -6,50 +6,84 @@
   display: inline-block;
 }
 
-#align-form div.grade,#align-form div.category,#align-form div.tag,#align-form div.buttons
-  {
+#align-form div.grade, #align-form div.category, #align-form div.tag, #align-form div.buttons {
   display: none;
 }
 
 #align-form h3 {
-   color: #1F4D64;
-   font-size: 14px;
-   font-weight: bold; 
-}
-
-#align-user-tags {
-  list-style-type: none;
-  margin-bottom: 10px;
-  margin-top: 5px;
-  width: 500px;
-}
-
-#align-user-tags li {
-  padding: 3px 5px;
-  float: left;
-  margin-right: 5px;
+  color: #1F4D64;
+  font-size: 14px;
   font-weight: bold;
 }
 
-#align-user-tags li:hover {
-  background: #DDF0F6;
+.portlet.align-item-tags #show-align-form {
+  display: none;
+
 }
 
-#align-user-tags:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
+body.authenticated .portlet.align-item-tags #show-align-form {
+  display: inline;
 }
 
-#align-user-tags a.delete {
-  float: right;
-  width: 15px;
-  height: 15px;
+body.authenticated .portlet.align-item-tags .login {
+  display: none;
+}
+
+.portlet.align-item-tags ul,
+.align-user-tags {
+  list-style-type: none;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.portlet.align-item-tags li {
+  display: inline-block;
+  padding: 3px 5px;
+  margin: 3px 3px 3px 0;
+  background-color: #FFE4B8;
+}
+
+.portlet.align-item-tags li a {
+  color: #1E4E62;
+}
+
+.align-user-tags li.tag,
+.portlet.align-item-tags .align-user-tags li.tag {
+  border: 2px solid #FFE4B8;
+  background-color: #fff;
+  display: inline-block;
+  padding: 0px;
+  margin: 3px 6px 3px 0;
+  position: relative;
+}
+
+.align-user-tags li.tag a,
+.portlet.align-item-tags .align-user-tags li.tag a {
+  color: #1E4E62;
+  background-color: #FFE4B8;
+  display: inline-block;
+  margin-right: 20px;
+  padding: 1px 5px 1px 3px;
+  text-decoration: none;
+}
+
+.align-user-tags li.tag a.delete,
+.portlet.align-item-tags .align-user-tags li.tag a.delete {
   display: block;
-  background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
+  position: absolute;
+  right: 2px;
+  top: 0px;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  background: transparent url(../images/icon-delete-gray.png) no-repeat 50% 50%;
   text-indent: -9999px;
-  margin-left: 3px;
+  padding: 0;
+  margin: 0;
 }
-  
+
+.align-tag-tooltip .ui-tooltip-titlebar,
+.align-tag-tooltip .ui-tooltip-content {
+  border-color: #FFE4B8;
+  background-color: #FFE4B8;
+}
