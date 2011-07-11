@@ -12,13 +12,14 @@ from materials import globals
 from materials.models import License
 from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
-from materials.tasks import check_url_status
+from materials.tasks import material_post_save_task
 from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
 from tags.models import Tag
 from visitcounts.models import Visit
 import datetime
+import copy
 
 
 PUBLISHED_STATE = u"published"
@@ -56,6 +57,14 @@ MEMBER_ACTIVITY_TYPES = (
 
 class Material(models.Model):
 
+    cached_vars = ["url"]
+
+    def __init__(self, *args, **kwargs):
+        super(Material, self).__init__(*args, **kwargs)
+        self.var_cache = {}
+        for var in self.cached_vars:
+            self.var_cache[var] = copy.copy(getattr(self, var))
+            
     namespace = None
 
     title = models.CharField(max_length=500, verbose_name=_(u"Title"))
@@ -89,6 +98,7 @@ class Material(models.Model):
     featured_on = models.DateTimeField(null=True, blank=True)
     
     http_status = models.IntegerField(null=True, blank=True, verbose_name=_(u"HTTP Status"))
+    screenshot = models.ImageField(null=True, blank=True, upload_to="upload/materials/screenshots")
 
     tags = generic.GenericRelation(Tag)
     reviews = generic.GenericRelation(Review)
@@ -115,19 +125,18 @@ class Material(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ("materials:%s:view_item" % self.namespace, [], {"slug": self.slug})
+        return "materials:%s:view_item" % self.namespace, [], {"slug": self.slug}
 
     @classmethod
     @permalink
-    def get_parent_url(self):
-        return ("materials:%s:index" % self.namespace, [], {})
+    def get_parent_url(cls):
+        return "materials:%s:index" % cls.namespace, [], {}
 
     def breadcrumbs(self):
-        breadcrumbs = []
-        breadcrumbs.append({"url": self.get_parent_url(),
-                            "title": self._meta.verbose_name_plural})
-        breadcrumbs.append({"url": self.get_absolute_url(),
-                            "title": self.title})
+        breadcrumbs = [{"url": self.get_parent_url(),
+                        "title": self._meta.verbose_name_plural},
+                       {"url": self.get_absolute_url(),
+                        "title": self.title}]
         return breadcrumbs
 
     class Meta:
@@ -242,6 +251,10 @@ def unindex_material(sender, **kwargs):
     site.remove_object(instance)
 
 
-def check_material_url(sender, **kwargs):
+def material_post_save(sender, **kwargs):
     instance = kwargs["instance"]
-    check_url_status.delay(instance)
+    if hasattr(instance, "_post_save_processed"):
+        return
+    # Set this flat to ensure that handler is called only once
+    instance._post_save_processed = True
+    material_post_save_task.delay(instance)

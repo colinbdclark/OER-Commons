@@ -230,15 +230,10 @@ oer.materials.index.init = function() {
     oer.collapsibles.init($("#content"));
     oer.collapsibles.init($filters_portlet);
 
-    $filters_portlet.find("dl.cou a.tooltip-button").cluetip({
-    local : true,
-    arrows : true,
-    width : 300
-    });
-    $filters_portlet.find("dl.grade-levels a.tooltip-button").cluetip({
-    local : true,
-    arrows : true,
-    width : 200
-    });
+    $("dl.cou a.tooltip-button").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
+    $("dl.grade-levels a.tooltip-button").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
+
+    $("section.portlet.cou li a").qtip(DEFAULT_TOOLTIP_OPTIONS);
+    $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
 
 };

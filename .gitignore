@@ -20,6 +20,7 @@ downloads/
 virtualenv/
 project.db
 celerybeat-schedule
+.fabricrc
 project/media/CACHE/
 project/media/admin/
 project/media/debug_toolbar/
@@ -30,3 +31,4 @@ project/media/harvester/
 project/production.py
 project/development.py
 project/staging.py
+project/test_settings.py
