@@ -1,5 +1,8 @@
 oer.login = {};
 
+oer.login.LOGGED_IN_EVENT = "oer-login-logged-in";
+oer.login.LOGGED_OUT_EVENT = "oer-login-logged-out";
+
 oer.login.init = function() {
     $("#header a.login").click(function(e) {
         e.preventDefault();
@@ -28,58 +31,61 @@ oer.login.init = function() {
 oer.login.show_popup = function(callback) {
     var $popup = $("#login-popup");
     var $body = $("body");
+    var $document = $(document);
+    var $header_user_name = $("header.global span.user-name");
     if (!$popup.length) {
         $popup = $('<div id="login-popup"></div>').appendTo($body).dialog({
-        modal : true,
-        draggable : false,
-        resizable : false,
-        title : "Log in",
-        width : 265,
-        dialogClass : "loading"
+            modal : true,
+            draggable : false,
+            resizable : false,
+            title : "Log in",
+            width : 265,
+            dialogClass : "loading"
         });
-        $popup.load("/login/form", function(response) {
+        $popup.load("/login/form", function() {
             $popup.dialog("widget").removeClass("loading");
             var $form = $popup.find("form.login");
             var $button = $form.find("input[type='submit']").button();
             var $global_error_ct = $form.find(".errors.global");
             var validator = $form.validate({
-            rules : {
-            username : "required",
-            password : "required"
-            },
-            submitHandler : function(form) {
-                $popup.dialog("widget").addClass("loading");
-                $button.button("option", "label", "Logging in");
-                $button.button("option", "disabled", true);
-                $global_error_ct.empty();
-                $.post($form.attr("action"), $form.serialize(), function(response) {
-                    if (response.status === "success") {
-                        $body.addClass("authenticated");
-                        $popup.dialog("close");
-                        oer.status_message.success(response.message, true);
-                        if (callback !== undefined) {
-                            callback();
+                rules : {
+                    username : "required",
+                    password : "required"
+                },
+                submitHandler : function() {
+                    $popup.dialog("widget").addClass("loading");
+                    $button.button("option", "label", "Logging in");
+                    $button.button("option", "disabled", true);
+                    $global_error_ct.empty();
+                    $.post($form.attr("action"), $form.serialize(), function(response) {
+                        if (response.status === "success") {
+                            $header_user_name.text(response.user_name);
+                            $body.addClass("authenticated");
+                            $popup.dialog("close");
+                            if (callback !== undefined) {
+                                callback();
+                            }
+                            $document.trigger(oer.login.LOGGED_IN_EVENT);
+                        } else if (response.status === "error") {
+                            if (response.errors.__all__ !== undefined) {
+                                $global_error_ct.append('<label class="error">' + response.errors.__all__ + '</label>');
+                                delete response.errors.__all__;
+                            }
+                            validator.showErrors(response.errors);
                         }
-                    } else if (response.status === "error") {
-                        if (response.errors.__all__ !== undefined) {
-                            $global_error_ct.append('<label class="error">' + response.errors.__all__ + '</label>');
-                            delete response.errors.__all__
-                        }
-                        validator.showErrors(response.errors);
-                    }
-                    $popup.dialog("widget").removeClass("loading");
-                    $button.button("option", "label", "Log in");
-                    $button.button("option", "disabled", false);
-                });
-                return false;
-            }
+                        $popup.dialog("widget").removeClass("loading");
+                        $button.button("option", "label", "Log in");
+                        $button.button("option", "disabled", false);
+                    });
+                    return false;
+                }
             });
             $popup.dialog();
         });
     } else {
         $popup.dialog("open");
     }
-}
+};
 
 oer.login.check_login = function(callback) {
     var $body = $("body");
@@ -88,4 +94,4 @@ oer.login.check_login = function(callback) {
     } else {
         oer.login.show_popup(callback);
     }
-}
+};

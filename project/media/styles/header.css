@@ -48,7 +48,8 @@ header.global nav .last {
   padding: 0;
 }
 
-header.global nav a {
+header.global nav a,
+header.global nav span {
   color: #707070;
   line-height: 22px;
   font-weight: bolder;

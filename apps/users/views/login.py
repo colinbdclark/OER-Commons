@@ -57,9 +57,11 @@ def login(request):
         form = LoginForm(data=request.POST)
         if request.is_ajax():
             if form.is_valid():
-                auth_login(request, form.get_user())
+                user = form.get_user()
+                auth_login(request, user)
                 return JsonResponse(dict(status="success",
-                                         message=u"You are logged in now."))
+                                         user_name=u"%s %s" % (user.first_name,
+                                                               user.last_name)))
             else:
                 errors = {}
                 for field_name, errors_list in form.errors.items():
@@ -81,8 +83,7 @@ def login(request):
     
                 # Okay, security checks complete. Log the user in.
                 auth_login(request, form.get_user())
-                messages.success(request, u"You are logged in now.")
-    
+
                 return HttpResponseRedirect(redirect_to)
             else:
                 messages.error(request, u"Invalid email and/or password.")
@@ -100,6 +101,5 @@ def render_login_form(request):
 
 def logout(request):
     auth_logout(request)
-    messages.success(request, u"You are now logged out.")
     return redirect_to_next_url(request)
 

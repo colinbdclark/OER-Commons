@@ -9,11 +9,11 @@
   		<tr>
   			<td width="25%"">
               <h3>Rating</h3>
-              <article class="item" id="{{ item.identifier }}">
-                <div class="rating">
-                  {% stars item.rating %}
-                </div>
-              </article>
+                <article class="item">
+                  <div class="rating">
+                    {% stars item.identifier item.rating %}
+                  </div>
+                </article>
             </td>
   			<td>
               <h3>Tags</h3>
