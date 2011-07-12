@@ -4,6 +4,7 @@ oer.align_form = {};
 
 oer.align_form.LOADING_EVENT = "oer-align-form-loading";
 oer.align_form.LOADED_EVENT = "oer-align-form-loaded";
+oer.align_form.TAGS_CHANGED_EVENT = "oer-align-form-tags-changed";
 
 $.template("align-user-tags-item", '<li data-id="${id}" class="tag rc3"><a href="${url}">${code}</a> <a href="#" class="delete">x</a></li>');
 
@@ -44,6 +45,7 @@ oer.align_form.init_user_tags = function($user_tags, $form) {
         var $lis = $user_tags.find("a:econtains(" + code + ")").parent();
         $lis.fadeOut(250, function() {
             $(this).detach();
+            $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
         });
     });
 };
@@ -78,12 +80,40 @@ oer.align_form.init = function() {
         $document.trigger(oer.align_form.LOADED_EVENT);
     });
 
+    var $description = $("#align-tag-description");
     $tag.change(function() {
         var value = $tag.val();
         if (value === "-") {
             $buttons.hide();
+            $description.hide();
         } else {
             $buttons.show();
+            var code = $tag.find(":selected").data("code");
+            $document.trigger(oer.align_form.LOADING_EVENT);
+            $description.load("/curriculum/get_tag_description/" + code, function() {
+                $document.trigger(oer.align_form.LOADED_EVENT);
+                $description.fadeIn();
+            });
+        }
+    });
+
+    $document.bind(oer.align_form.TAGS_CHANGED_EVENT, function() {
+        var $user_tags_container = $user_tags.parent(".align-user-tags-ct");
+        var $tags_number_message = $user_tags_container.find("span.tags-number");
+        var tags_count = $user_tags_container.find("li").length;
+        if (tags_count) {
+            var message = null;
+            if (tags_count === 1) {
+                message = tags_count + " Alignment Tag.";
+            } else {
+                message = tags_count + " Alignment Tags.";
+            }
+            message += " Add Another?";
+            $tags_number_message.text(message);
+            $user_tags_container.removeClass("no-tags");
+        } else {
+            $user_tags_container.addClass("no-tags");
+            $tags_number_message.text("");
         }
     });
 
@@ -111,6 +141,7 @@ oer.align_form.init = function() {
                             });
                         }
                         oer.align_form.init_tag_tooltip($tags.find("a:first"));
+                        $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
                     }
                     $document.trigger(oer.align_form.LOADED_EVENT);
                 });
@@ -129,8 +160,10 @@ oer.align_form.init_dropdown = function($dropdown) {
     var $next_field = $next_fields.first();
     var $next_dropdown = $next_dropdowns.first();
     var $buttons = $form.find("#align-form-buttons");
+    var $description = $("#align-tag-description");
     $dropdown.change(function() {
         var value = $dropdown.val();
+        $description.hide();
         $buttons.hide();
         $next_fields.hide();
         $next_dropdowns.empty();
@@ -265,6 +298,7 @@ oer.align_tags_portlet.init = function() {
                     var $li = $(el).clone(true);
                     $form_user_tags.append($li);
                 });
+                $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
             }
             $dialog.dialog("open");
         });

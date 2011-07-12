@@ -10,6 +10,7 @@ from django.core import mail
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from mock import patch
 
 from users.views.registration import RegistrationForm, ConfirmationForm
 from users.models import RegistrationConfirmation, gen_confirmation_key
@@ -218,6 +219,21 @@ class RegistrationViewTest(TestCase):
         quoted_email = urllib.quote(data['email'])
         resend_link = '%s?email=%s' % (self.resend_confirmation, quoted_email)
         self.assertContains(response, resend_link)
+
+    @patch("newsletter.tasks.subscribe.delay")
+    def test_newsletter_signup(self, subscribe):
+        # Test that user is subscribed to newsletter (only) if newsletter
+        # checkbox is checked.
+        data = self.data
+        self.assertFalse("newsletter" in data)
+        self.client.post(self.registration, data)
+        self.assertFalse(subscribe.called)
+
+        data["email"] = 'test@example.com'
+        data["newsletter"] = 1
+        self.client.post(self.registration, data)
+        self.assertEquals(subscribe.call_count, 1)
+        self.assertEquals(subscribe.call_args, ((u'test@example.com',), {}))
 
 
 class ResendViewTest(TestCase):
