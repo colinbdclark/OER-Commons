@@ -10,6 +10,9 @@
     {% include "include/css.html" %}
     {% include "include/modernizr.html" %}
     {% block extra-css %}{% endblock %}
+    {% if not debug %}
+      {% flatblock "chartbeat-head" %}
+    {% endif %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
     {% include "include/header.html" %}
@@ -76,6 +79,7 @@
 
     {% if not debug %}
       {% flatblock "google-analytics" %}
+      {% flatblock "chartbeat-tracker" %}
     {% endif %}
 
     {% block extra-footer %}
