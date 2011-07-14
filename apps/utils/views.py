@@ -3,6 +3,26 @@ from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 
 
+class OERViewMixin(object):
+
+    def get_page_title(self, *args, **kwargs):
+        return None
+    page_title = property(get_page_title)
+
+    def get_page_subtitle(self, *args, **kwargs):
+        return None
+    page_subtitle = property(get_page_subtitle)
+
+    def get_breadcrumbs(self, *args, **kwargs):
+        return None
+    breadcrumbs = property(get_breadcrumbs)
+
+    def get_context_data(self, *args, **kwargs):
+        data = super(OERViewMixin, self).get_context_data(*args, **kwargs)
+        data["page_title"] = self.page_title
+        data["page_subtitle"] = self.page_subtitle
+
+
 MAX_RESULTS = 10
 
 
