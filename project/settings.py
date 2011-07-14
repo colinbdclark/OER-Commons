@@ -1,6 +1,7 @@
 import djcelery
 import os
 import time
+import sys
 
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -27,6 +28,7 @@ MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 MEDIA_URL = '/media/'
 
 # Static file configuration
+STATICFILES_STORAGE = 'staticfiles.storage.StaticFileStorage'
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 STATIC_URL = MEDIA_URL
 STATICFILES_EXCLUDED_APPS = (
@@ -86,6 +88,7 @@ INSTALLED_APPS = (
     'honeypot',
     'mailchimp',
     'sorl.thumbnail',
+    'django_coverage',
     'utils',
     'abtesting',
     'tags',
@@ -153,6 +156,13 @@ FLATBLOCKS_AUTOCREATE_STATIC_BLOCKS = True
 
 AUTOSLUG_SLUGIFY_FUNCTION = "project.utils.slugify"
 
+CACHES = {
+    'default': {
+        'BACKEND': 'cache_utils.group_backend.CacheClass',
+        'LOCATION': '127.0.0.1:11211',
+    },
+}
+
 CACHE_VERSION = 1
 
 OAUTH_AUTHORIZE_VIEW = "project.views.oauth_authorize"
@@ -191,3 +201,13 @@ HONEYPOT_VERIFIER = honeypot_verifier
 DEFAULT_AVATAR = STATIC_URL + "images/default-avatar.png"
 AVATAR_SIZE = 140
 GRAVATAR_BASE = "http://www.gravatar.com/avatar"
+
+WEBKIT2PNG_EXECUTABLE = None
+
+if sys.platform == "darwin":
+    WEBKIT2PNG_EXECUTABLE = "/System/Library/Frameworks/Python.framework/Versions/2.6/bin/python %s -W %%(width)i -H %%(height)i -o %%(filename)s %%(url)s" % os.path.join(os.path.dirname(__file__), "webkit2png_osx.py")
+elif sys.platform == "linux2":
+    WEBKIT2PNG_EXECUTABLE = "python %s -x %%(width)i %%(height)i -g %%(width)i %%(height)i -F javascript -o %%(filename)s %%(url)s" % os.path.join(os.path.dirname(__file__), "webkit2png_linux.py")
+
+COVERAGE_REPORT_HTML_OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'coverage')
+

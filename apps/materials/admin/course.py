@@ -197,6 +197,8 @@ class CourseAddForm(forms.ModelForm, DerivedFields, PrePostRequisitesFields,
 
 class CourseChangeForm(CourseAddForm):
 
+    slug = forms.SlugField()
+
     class Meta:
         model = Course
         fields = ["slug"] + COURSE_ADD_FIELDS

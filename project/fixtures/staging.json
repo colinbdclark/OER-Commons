@@ -60,5 +60,23 @@
       "header": "", 
       "slug": "registration-tracking-step-2"
     }
-  } 
+  },
+  {
+    "pk": 9,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "",
+      "header": "",
+      "slug": "chartbeat-head"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "",
+      "header": "",
+      "slug": "chartbeat-tracker"
+    }
+  }
 ]

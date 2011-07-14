@@ -296,7 +296,7 @@ class GeneralSubject(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ("materials:general_subject_index", [], {"general_subjects": self.slug}) 
+        return "materials:general_subject_index", [], {"general_subjects": self.slug}
     
 
 class GradeLevel(models.Model):
@@ -320,7 +320,7 @@ class GradeLevel(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ("materials:grade_level_index", [], {"grade_levels": self.slug}) 
+        return "materials:grade_level_index", [], {"grade_levels": self.slug}
 
 
 class Language(models.Model):

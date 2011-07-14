@@ -1,6 +1,10 @@
 var OER = {};
 
 OER.showForm = function() {
+    if (document.location.href.search(/^http/) == -1) {
+        return;
+    }
+
     var body = document.getElementsByTagName("body")[0];
 
     var container1 = document.createElement("div");

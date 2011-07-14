@@ -1,30 +1,14 @@
 from celery.decorators import task
-import requests
+from django.conf import settings
+from django.utils.encoding import smart_str
+from django.utils.hashcompat import md5_constructor
+from sorl.thumbnail.shortcuts import delete
+import os
+import shlex
+import subprocess
+import sys
 import urllib
-
-
-@task
-def check_url_status(item):
-    from haystack.sites import site
-
-    url = item.url
-    url = url.strip()
-    url = urllib.quote(url, safe="%/:=&?~#+!$,;'@()*[]")
-    if not url:
-        return
-
-    try:
-        response = requests.get(url)
-        status_code = response.status_code
-    except:
-        return
-
-    model = item.__class__
-
-    if item.http_status != status_code:
-        model.objects.filter(id=item.id).update(http_status=status_code)
-        item = model.objects.get(id=item.id)
-        site.update_object(item)
+import httplib
 
 
 @task
@@ -50,4 +34,159 @@ def reindex_microsite_topic(topic):
 
     for instance in objects:
         site.update_object(instance)
-        
+
+
+class TimeoutError(Exception):
+    def __init__(self, value="Timed Out"):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
+
+def timeout(function=None, timeout_duration=10, default=None):
+
+    def raise_timeout(signum, frame):
+        raise TimeoutError()
+
+    def wrapper(func):
+
+        def wrapped(*args, **kwargs):
+            import signal
+            signal.signal(signal.SIGALRM, raise_timeout)
+            signal.alarm(timeout_duration)
+            try:
+                return func(*args, **kwargs)
+            except TimeoutError:
+                return default
+            finally:
+                signal.alarm(0)
+
+        return wrapped
+
+    if function:
+        return wrapper(function)
+
+    return wrapper
+
+
+def get_url_status_code(url):
+    url = url.strip()
+    url = urllib.quote(url, safe="%/:=&?~#+!$,;'@()*[]")
+    if not url:
+        return
+
+    try:
+        host = url.split('/')[2]
+        path = "/".join(url.split('/')[3:])
+    except:
+        return None
+
+    @timeout(timeout_duration=60)
+    def get_status(host, path):
+        try:
+            conn = httplib.HTTPConnection(host)
+            conn.request("HEAD", path)
+            response = conn.getresponse()
+            return response.status
+        except TimeoutError:
+            raise
+        except:
+            return None
+
+    status_code = get_status(host, path)
+
+    return status_code
+
+
+def check_url_status(item):
+    from haystack.sites import site
+
+    status_code = get_url_status_code(item.url)
+
+    if item.http_status != status_code:
+        item.http_status = status_code
+        item.save()
+        site.update_object(item)
+
+
+def update_screenshot(item):
+    url = item.url
+
+    url = url.strip()
+    url = urllib.quote(url, safe="%/:=&?~#+!$,;'@()*[]")
+    if not url:
+        return
+
+    if item.http_status != 200:
+        if item.screenshot:
+            delete(item.screenshot)
+            item.screenshot = None
+            item.save()
+        return
+
+    url_hash = md5_constructor(smart_str(url)).hexdigest()
+    filename = "%s-%i-%s.png" % (item._meta.object_name.lower(), item.id, url_hash)
+    filename = os.path.join(item.screenshot.field.get_directory_name(), filename)
+    if item.screenshot:
+        try:
+            # check that the file actually exists
+            item.screenshot.size
+            if item.screenshot.name == filename:
+                return
+            else:
+                delete(item.screenshot)
+                item.screenshot = None
+                item.save()
+        except OSError:
+            pass
+
+    full_path = os.path.join(settings.MEDIA_ROOT, filename)
+    dirname = os.path.dirname(full_path)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
+    width = 1024
+    height = 768
+
+    executable = settings.WEBKIT2PNG_EXECUTABLE % dict(filename=full_path,
+                                                       url='"%s"' % url.replace('"', '\\"'),
+                                                       width=width,
+                                                       height=height)
+    if isinstance(executable, unicode):
+        executable = executable.encode(sys.getfilesystemencoding())
+    args = shlex.split(executable)
+
+    @timeout(timeout_duration=60*2)
+    def fetch_screenshot(args):
+        p = subprocess.Popen(args)
+        try:
+            p.wait()
+            return 1
+        except TimeoutError:
+            p.kill()
+            raise
+        finally:
+            try:
+                p.terminate()
+            except OSError:
+                pass
+        return None
+
+    result = fetch_screenshot(args)
+    if result:
+        if os.path.exists(full_path):
+            item.screenshot = filename
+            item.save()
+    else:
+        item.screenshot = None
+        item.save()
+
+
+@task
+def material_post_save_task(item):
+
+    # URL has changed
+    if item.var_cache.get("url") != item.url:
+        check_url_status(item)
+
+    update_screenshot(item)

@@ -402,6 +402,8 @@ class Readability:
         for tag in node.findAll(tag):
             # Allow youtube and vimeo videos through as people usually want to see those.
             if tag.name in ("embed", "object"):
+                if isinstance(tag.attrs, list):
+                    continue
                 for value in tag.attrs.values():
                     if VIDEOS.search(value):
                         continue
