@@ -1,3 +1,4 @@
+from common.models import StudentLevel
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -45,17 +46,6 @@ class Role(models.Model):
     title = models.CharField(max_length=100)
     is_educator = models.BooleanField(default=False)
 
-    def __unicode__(self):
-        return self.title
-
-    class Meta:
-        ordering = ("id",)
-
-
-class StudentLevel(models.Model):
-    
-    title = models.CharField(max_length=100)
-    
     def __unicode__(self):
         return self.title
 

@@ -1,6 +1,6 @@
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
-from users.models import RegistrationConfirmation, Role, StudentLevel
+from users.models import RegistrationConfirmation, Role
 
 
 def user(obj):
@@ -20,4 +20,3 @@ class RegistrationConfirmationAdmin(ModelAdmin):
 
 site.register(RegistrationConfirmation, RegistrationConfirmationAdmin)
 site.register(Role, ModelAdmin)
-site.register(StudentLevel, ModelAdmin)
