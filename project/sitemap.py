@@ -1,7 +1,8 @@
+from common.models import GeneralSubject
 from django.contrib.sitemaps import GenericSitemap as BaseGenericSitemap, \
     Sitemap
 from django.core.urlresolvers import reverse
-from materials.models.common import GeneralSubject, GradeLevel
+from materials.models.common import  GradeLevel
 from materials.models.community import CommunityItem, CommunityType, \
     CommunityTopic
 from materials.models.course import Course, CourseMaterialType

@@ -1,10 +1,11 @@
+from common.models import GeneralSubject
 from django import forms
 from django.forms.models import ModelForm, save_instance
 from django.forms.widgets import RadioFieldRenderer
 from django.utils.datastructures import MultiValueDict, MergeDict
 from django.utils.encoding import force_unicode
 from django.utils.safestring import mark_safe
-from materials.models.common import GeneralSubject, GradeLevel, License, \
+from materials.models.common import  GradeLevel, License, \
     PUBLIC_DOMAIN_URL, PUBLIC_DOMAIN_NAME, GNU_FDL_URL, GNU_FDL_NAME, \
     CC_LICENSE_URL_RE, Author, Keyword
 from django.template.loader import render_to_string

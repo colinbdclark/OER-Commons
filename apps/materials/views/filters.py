@@ -1,5 +1,6 @@
+from common.models import GeneralSubject
 from django.http import Http404
-from materials.models.common import Keyword, GeneralSubject, GradeLevel, \
+from materials.models.common import Keyword, GradeLevel, \
     MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS, \
     LICENSE_TYPES
 from materials.models.community import CommunityType, CommunityTopic

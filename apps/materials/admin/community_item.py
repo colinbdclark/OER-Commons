@@ -1,3 +1,4 @@
+from common.models import GeneralSubject
 from django import forms
 from django.conf import settings
 from django.contrib.admin.util import unquote
@@ -13,7 +14,7 @@ from django.views.generic.simple import redirect_to
 from material import MaterialAdmin
 from materials.admin.course import AuthorsFormSet
 from materials.admin.fields import LicenseFields
-from materials.models.common import Author, GeneralSubject, GradeLevel, Language, \
+from materials.models.common import Author, GradeLevel, Language, \
     GeographicRelevance, Keyword
 from materials.models.community import CommunityType, CommunityTopic, \
     CommunityItem

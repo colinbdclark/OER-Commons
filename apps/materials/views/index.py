@@ -1,11 +1,12 @@
 from annoying.decorators import JsonResponse
 from autoslug.settings import slugify
+from common.models import GeneralSubject
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
-from materials.models.common import GeneralSubject, GradeLevel, Collection, \
+from materials.models.common import  GradeLevel, Collection, \
     Keyword, GeographicRelevance, Institution
 from materials.models.community import CommunityItem
 from materials.models.microsite import Microsite, Topic
