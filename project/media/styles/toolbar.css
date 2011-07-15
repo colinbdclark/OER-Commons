@@ -1,0 +1,120 @@
+body.toolbar-view {
+  background: none;
+  font-size: 13px;
+}
+
+body.toolbar-view .layout-columns {
+  padding-top: 50px;
+  margin-top: 0;
+  background: none;
+}
+
+#toolbar {
+  height: 40px;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  background-color: #fff;
+}
+
+#toolbar .c1 {
+  background: url(../images/toolbar-circle-1.png) no-repeat 130px 0%;
+}
+
+#toolbar .c2 {
+  background: url(../images/toolbar-circle-2.png) no-repeat 30% 0%;
+}
+
+#toolbar .c3 {
+  background: url(../images/toolbar-circle-3.png) no-repeat 60% 0%;
+}
+
+#toolbar .c4 {
+  background: url(../images/toolbar-circle-4.png) no-repeat 90% 0%;
+}
+
+#toolbar .green-bar {
+  background: url(../images/toolbar-green-bar.png) repeat-x 0% 100%;
+  padding: 7px 30px 9px 120px;
+  height: 24px;
+}
+
+#toolbar a {
+  text-decoration: none;
+}
+
+#toolbar a:hover {
+  text-decoration: underline;
+}
+
+#toolbar ul {
+  margin: 0;
+  padding: 2px 1px 2px 0px;
+  list-style-type: none;
+  float: left;
+  background: url(../images/dotted-line-vert.gif) 100% 0% repeat-y;
+}
+
+#toolbar li {
+  line-height: 18px;
+  height: 18px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 10px;
+  padding-right: 10px;
+}
+
+#toolbar li.sep {
+  padding-right: 11px;
+  border-right: 1px solid #0B7BA9;
+}
+
+#toolbar li a {
+  display: inline-block;
+}
+
+#toolbar li a.loading {
+  padding-left: 20px;
+  background: url(../images/ajax-loader.gif) 0% 50% no-repeat;
+}
+
+#logo {
+  display: block;
+  z-index: 10;
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  width: 110px;
+  height: 40px;
+  background: url(../images/toolbar-logo.png);
+  text-indent: -9999px;
+}
+
+#close-toolbar {
+  display: block;
+  z-index: 10;
+  position: absolute;
+  top: 11px;
+  right: 15px;
+  width: 16px;
+  height: 16px;
+  background: url(../javascripts/jquery/Aristo/images/icon_sprite.png) 0px
+    -16px no-repeat;
+  text-indent: -9999px;
+}
+
+#close-toolbar:hover {
+  background-position: -16px -16px;
+}
+
+body.toolbar-view #status-messages {
+  position: absolute;
+  top: 54px;
+  left: 10px;
+  z-index: 10;
+}
+
+body.toolbar-view #status-messages .status-message {
+  float: left;
+  clear: both;
+}

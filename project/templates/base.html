@@ -43,26 +43,26 @@
     
     <div class="layout-columns fixed-width clearfix" {% block content-itemscope-attrs %}{# this is a placeholder to insert microdata itemscope attribute on resource page #}{% endblock %}>
 
-      <div class="column-left">
+      <aside class="column-left">
         {% block column-left %}
           &nbsp;
         {% endblock %}
-      </div>
+      </aside>
 
       <div class="column-main">
         {% include "include/status-messages.html" %}
   
-        <div id="content" class="content {% block contentclass %}{% endblock %}">
+        <section id="content" class="content {% block contentclass %}{% endblock %}">
           {% block content %}
           {% endblock %}
-        </div>
+        </section >
       </div>
 
-      <div class="column-right">
+      <aside class="column-right">
         {% block column-right %}
           &nbsp;
         {% endblock %}
-      </div>
+      </aside>
 
     </div>
     
