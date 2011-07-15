@@ -60,5 +60,32 @@
       "header": "", 
       "slug": "registration-tracking-step-2"
     }
-  } 
+  },
+  {
+    "pk": 9,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "",
+      "header": "",
+      "slug": "chartbeat-head"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "",
+      "header": "",
+      "slug": "chartbeat-tracker"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Open Education Resources (OER) are teaching and learning materials freely available online for everyone to use, whether you are an instructor, student, or self-learner. Examples of OER include: full courses, course modules, syllabi, lectures, homework assignments, quizzes, lab and classroom activities, pedagogical materials, games, simulations, and many more resources contained in digital media collections from around the world.",
+      "header": "",
+      "slug": "site-description"
+    }
+  }
 ]

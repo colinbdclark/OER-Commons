@@ -2,6 +2,10 @@
 {% load flatblock_tags %}
 {% load newsletter_tags %}
 
+{% block meta_description %}
+  <meta name="description" content="{% flatblock "site-description" %}">
+{% endblock %}
+
 {% block extra-js %}
 <script type="text/javascript"> 
   $(function() {

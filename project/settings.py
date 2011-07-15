@@ -92,6 +92,7 @@ INSTALLED_APPS = (
     'django_coverage',
     'utils',
     'abtesting',
+    'common',
     'tags',
     'geo',
     'curriculum',

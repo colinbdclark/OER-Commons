@@ -7,10 +7,14 @@
     <meta charset="utf-8"/>
     <title>{% block title %}{% if page_title %}{{ page_title }}{% if page_subtitle %}: {{ page_subtitle|safe }}{% endif %} | {% endif %}OER Commons{% endblock %}</title>
     {% block meta_description %}{% endblock %}
+    {% include "include/open-graph-meta.html" %}
     <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico"/>
     {% include "include/css.html" %}
     {% include "include/modernizr.html" %}
     {% block extra-css %}{% endblock %}
+    {% if not debug %}
+      {% flatblock "chartbeat-head" %}
+    {% endif %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
     
@@ -96,6 +100,7 @@
 
     {% if not debug %}
       {% flatblock "google-analytics" %}
+      {% flatblock "chartbeat-tracker" %}
     {% endif %}
 
     {% block extra-footer %}
