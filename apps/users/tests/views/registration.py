@@ -15,24 +15,21 @@ from mock import patch
 from users.views.registration import RegistrationForm, ConfirmationForm
 from users.models import RegistrationConfirmation, gen_confirmation_key
 
+from users.tests.utils import TestDataGenerator
 
-class RegistrationFormTest(TestCase):
+
+class RegistrationFormTest(TestCase, TestDataGenerator):
 
     def test_success(self):
         # Test that form is valid with correct data.
-        data = {
-            'email': 'john@example.com',
-            'password': 'password',
-            }
+        data = self.get_test_userdata()
         form = RegistrationForm(data)
         self.assertTrue(form.is_valid())
 
     def test_invalid_email(self):
         # Test that form is invalid with incorrect email.
-        data = {
-            'email': 'john#example.com',
-            'password': 'password',
-            }
+        data = self.get_test_userdata()
+        data['email'] = 'john#example.com'
         form = RegistrationForm(data)
 
         self.assertFalse(form.is_valid())
@@ -41,11 +38,8 @@ class RegistrationFormTest(TestCase):
 
     def test_invalid_password(self):
         # Test that form is invalid if password is too short.
-        data = {
-            'email': 'john@example.com',
-            'password': '123',
-            }
-
+        data = self.get_test_userdata()
+        data['password'] = '123'
         form = RegistrationForm(data)
 
         self.assertFalse(form.is_valid())
@@ -94,20 +88,12 @@ class ConfirmationFormTest(TestCase):
         )
 
 
-class RegistrationViewTest(TestCase):
+class RegistrationViewTest(TestCase, TestDataGenerator):
 
     fixtures = ['users_test_data.json']
 
     def setUp(self):
-        self.honeypot_value = settings.HONEYPOT_VALUE()
         self.honeypot_field = settings.HONEYPOT_FIELD_NAME
-
-        self.data = {
-            'email': 'john@example.com',
-            'password': 'password',
-            self.honeypot_field: self.honeypot_value,
-        }
-
         self.login = reverse('users:login')
         self.frontpage = reverse('frontpage')
         self.registration = reverse('users:registration')
@@ -117,7 +103,7 @@ class RegistrationViewTest(TestCase):
         # Test checking HONEYPOT_VALUE.
         incorrect_honeypot_value = int(time.time() - 60 * 60 * 2)
 
-        data = self.data
+        data = self.get_test_userdata()
         data[self.honeypot_field] = incorrect_honeypot_value
 
         response = self.client.post(self.registration, data)
@@ -125,6 +111,8 @@ class RegistrationViewTest(TestCase):
 
     def test_user_is_authenticated(self):
         #Test than view redirect to front page if user is already authenticated
+        data = self.get_test_userdata()
+        data[self.honeypot_field] = self.get_honeypot()
         login_data = {
             'username': 'john@example.com',
             'password': 'password',
@@ -133,27 +121,31 @@ class RegistrationViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith(self.frontpage))
 
-        response = self.client.post(self.registration, self.data)
+        response = self.client.post(self.registration, data)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith(self.frontpage))
 
     def test_user_already_exists(self):
         # Test that user is already exist.
         reset_password_url = reverse('users:reset_password_init')
-        email = self.data['email']
+        data = self.get_test_userdata()
+        data[self.honeypot_field] = self.get_honeypot()
+        data['email'] = 'john@example.com'
+        email = data['email']
         message = u'User with email <em>%(email)s</em> is registered already. If you forgot your password you can <a href="%(url)s">click here</a> to reset it.'
         message = message % dict(email=email, url=reset_password_url)
 
-        response = self.client.post(self.registration, self.data)
+        response = self.client.post(self.registration, data)
         self.assertContains(response, message)
 
     def test_account_confirm_required(self):
-        data = self.data
+        data = self.get_test_userdata()
+        data[self.honeypot_field] = self.get_honeypot()
         data['email'] = 'joanna@example.com'
 
         self.assertTrue(RegistrationConfirmation.objects.all().exists())
 
-        email = self.data['email']
+        email = data['email']
         message = u'A registration request for the user account with email <em>%(email)s</em> needs to be confirmed. <a href="%(url)s?email=%(email)s">Click here</a> to re-send the confirmation email.'
         message = message % dict(email=email, url=self.resend_confirmation)
 
@@ -162,7 +154,8 @@ class RegistrationViewTest(TestCase):
 
     def test_form_invalid(self):
         # Test that form is invalid
-        data = self.data
+        data = self.get_test_userdata()
+        data[self.honeypot_field] = self.get_honeypot()
         data['email'] = 'john#example.com'
 
         response = self.client.post(self.registration, data)
@@ -177,7 +170,8 @@ class RegistrationViewTest(TestCase):
     def test_success_registration(self):
         # Test that registration process completed successfully.
         welcome = reverse('users:welcome')
-        data = self.data
+        data = self.get_test_userdata()
+        data[self.honeypot_field] = self.get_honeypot()
         data['email'] = 'test@example.com'
 
         response = self.client.post(self.registration, data)
@@ -220,20 +214,27 @@ class RegistrationViewTest(TestCase):
         resend_link = '%s?email=%s' % (self.resend_confirmation, quoted_email)
         self.assertContains(response, resend_link)
 
-    @patch("newsletter.tasks.subscribe.delay")
-    def test_newsletter_signup(self, subscribe):
-        # Test that user is subscribed to newsletter (only) if newsletter
-        # checkbox is checked.
-        data = self.data
-        self.assertFalse("newsletter" in data)
+    @patch('newsletter.tasks.subscribe.delay')
+    def test_newsletter_signup_without_newsletter(self, subscribe):
+        # Test that subscribe function doesn't called if newsletter checkbox
+        # is not checked.
+        data = self.get_test_userdata()
+        data[self.honeypot_field] = self.get_honeypot()
+        self.assertFalse('newsletter' in data)
         self.client.post(self.registration, data)
         self.assertFalse(subscribe.called)
 
-        data["email"] = 'test@example.com'
-        data["newsletter"] = 1
+    @patch('newsletter.tasks.subscribe.delay')
+    def test_newsletter_signup_with_newsletter(self, subscribe):
+        # Test that user is subscribed to newsletter (only) if newsletter
+        # checkbox is checked.
+        data = self.get_test_userdata()
+        data[self.honeypot_field] = self.get_honeypot()
+        data['newsletter'] = '1'
+        self.assertTrue('newsletter' in data)
         self.client.post(self.registration, data)
         self.assertEquals(subscribe.call_count, 1)
-        self.assertEquals(subscribe.call_args, ((u'test@example.com',), {}))
+        self.assertEquals(subscribe.call_args, ((data['email'],), {}))
 
 
 class ResendViewTest(TestCase):
@@ -295,13 +296,10 @@ class ConfirmViewTest(TestCase):
     fixtures = ['users_test_data.json']
 
     def setUp(self):
-        self.data = {
-            'email': 'joanna@example.com',
-            'password': 'password'
-        }
+        email = 'joanna@example.com'
         self.frontpage = reverse('frontpage')
         self.registration_confirm = reverse("users:registration_confirm")
-        self.user = User.objects.get(email=self.data['email'])
+        self.user = User.objects.get(email=email)
         self.confirmation = RegistrationConfirmation.objects.get(user=self.user)
 
     def test_request_get(self):
