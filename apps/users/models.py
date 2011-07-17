@@ -1,12 +1,21 @@
+from common.models import StudentLevel
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.core import validators
 from django.core.mail.message import EmailMessage
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from materials.models.common import GradeLevel
+from geo.models import Country, USState
+from materials.models.common import GradeLevel, AutoCreateManyToManyField
+from sorl.thumbnail.shortcuts import get_thumbnail
 from users.backend import encrypt_password
+import hashlib
+import urllib
+import re
 
 
 MEMBER_ROLES = (
@@ -19,11 +28,51 @@ MEMBER_ROLES = (
 )
 
 
+ONLY_COUNTRY = "country"
+WHOLE_WORLD = "world"
+CONNECT_OPTIONS = (
+    (ONLY_COUNTRY, u"Connect me only to people in my own country"),
+    (WHOLE_WORLD, u"Connect me to learners and educators around the world"),
+)
+
+FACEBOOK_ID_RE = re.compile(r"^[a-z\d.]{5,}$")
+FACEBOOK_URL_RE = re.compile(r"^https?://(www.)?facebook.com/(?P<facebook_id>[a-z\d.]{5,})$")
+TWITTER_ID_RE = re.compile(r"^[a-zA-Z\d_]+$")
+TWITTER_URL_RE = re.compile(r"^https?://twitter.com/(#!/)?(?P<twitter_id>[a-zA-Z\d_]+)$")
+
+
+class Role(models.Model):
+    
+    title = models.CharField(max_length=100)
+    is_educator = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        ordering = ("id",)
+
+
+class EducatorSubject(models.Model):
+    
+    title = models.CharField(max_length=100)
+    
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        ordering = ("id",)
+
+
 class Profile(models.Model):
 
     user = models.OneToOneField(User)
 
     principal_id = models.CharField(max_length=20)
+
+    avatar = models.ImageField(blank=True, null=True, upload_to="upload/avatars")
+
+    hide_avatar = models.BooleanField(default=False)
 
     homepage = models.URLField(max_length=200, blank=True, default=u"",
                                verbose_name=_(u"Homepage"))
@@ -60,9 +109,70 @@ class Profile(models.Model):
     publish_profile = models.BooleanField(default=False,
                               verbose_name=_(u"Allow others to see "
                                               "you profile?"))
+    
+    country = models.ForeignKey(Country, blank=True, null=True)
 
+    us_state = models.ForeignKey(USState, blank=True, null=True)
+
+    connect_with = models.CharField(max_length=20, choices=CONNECT_OPTIONS,
+                                    blank=True, null=True)
+
+    # This is an obsolete field. It is replaced with `roles` field now which
+    # allows multiple values.
     role = models.CharField(max_length=20, blank=True, choices=MEMBER_ROLES,
                             verbose_name=_(u"Role"))
+
+    roles = models.ManyToManyField(Role, null=True, blank=True)
+    
+    educator_student_levels = models.ManyToManyField(StudentLevel, null=True,
+                                                     blank=True) 
+
+    educator_subjects = AutoCreateManyToManyField(EducatorSubject, null=True,
+                                                  blank=True) 
+    
+    about_me = models.TextField(blank=True, null=True)
+
+    website_url = models.URLField(blank=True, null=True)
+
+    facebook_id = models.CharField(max_length=50, blank=True, null=True,
+                                   validators=[validators.RegexValidator(FACEBOOK_ID_RE)])
+
+    twitter_id = models.CharField(max_length=30, blank=True, null=True,
+                                  validators=[validators.RegexValidator(TWITTER_ID_RE)])
+
+    skype_id = models.CharField(max_length=50, blank=True, null=True,
+                                validators=[validators.RegexValidator(r"^[a-zA-Z\d_.\-]{6,}$")])
+
+
+    def get_avatar_url(self):
+        if self.hide_avatar:
+            return settings.DEFAULT_AVATAR
+        if self.avatar:
+            thumbnail = get_thumbnail(self.avatar,
+                                      "%(size)ix%(size)i" % dict(size=settings.AVATAR_SIZE),
+                                      crop="center")
+            return thumbnail.url
+        elif self.user.email:
+            try:
+                default = "http://%s%s" % (Site.objects.get_current().domain, settings.DEFAULT_AVATAR)
+                url = "%s/%s.jpg?%s" % (settings.GRAVATAR_BASE,
+                                        hashlib.md5(self.user.email).hexdigest(),
+                                        urllib.urlencode({
+                                            'size': str(settings.AVATAR_SIZE),
+                                            'rating': "g",
+                                            'default': default,
+                                        }))
+            except:
+                import traceback
+                print traceback.format_exc()
+                raise
+            return url
+
+        return settings.DEFAULT_AVATAR
+
+    def get_avatar_img(self):
+        return mark_safe("""<img src="%(url)s" width="%(size)i" height="%(size)i" />""" % dict(
+                            url=self.get_avatar_url(), size=settings.AVATAR_SIZE))
 
 
 def gen_confirmation_key():
@@ -93,7 +203,7 @@ class RegistrationConfirmation(models.Model):
         body = render_to_string("users/emails/registration-confirmation.html",
                                    dict(url=url, key=self.key, user=self.user))
         message = EmailMessage(u"Confirm your registration at OER Commons",
-                               body, None, [self.user.email])
+                               body, to=[self.user.email])
         message.content_subtype = "html"
         message.send()
 
@@ -130,7 +240,7 @@ class ResetPasswordConfirmation(models.Model):
         body = render_to_string("users/emails/reset-password-confirmation.html",
                                    dict(url=url, user=self.user))
         message = EmailMessage(u"Reset your OER Commons password",
-                               body, None, [self.user.email])
+                               body, to=[self.user.email])
         message.content_subtype = "html"
         message.send()
 

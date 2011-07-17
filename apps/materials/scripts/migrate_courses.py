@@ -4,17 +4,17 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections
 from django.db.utils import DatabaseError
+from geo.models import Country
 from materials.models.common import Institution, Collection, Author, License, \
-    Country, GradeLevel, Keyword, Language, GeographicRelevance, \
-    MediaFormat
+    GradeLevel, Keyword, Language, GeographicRelevance, MediaFormat
 from materials.models.course import Course, RelatedMaterial, CourseMaterialType
+from materials.models.material import reindex_materials
 from materials.utils import cleanup_keywords
 from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
 from tags.models import Tag
 from users.models import Profile
-from materials.models.material import reindex_materials
 
 
 def force_unicode(o):

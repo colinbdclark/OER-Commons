@@ -93,6 +93,7 @@ INSTALLED_APPS = (
     'abtesting',
     'common',
     'tags',
+    'geo',
     'materials',
     'users',
     'rating',
@@ -199,6 +200,9 @@ def honeypot_verifier(value):
 
 HONEYPOT_VERIFIER = honeypot_verifier
 
+DEFAULT_AVATAR = STATIC_URL + "images/default-avatar.png"
+AVATAR_SIZE = 140
+GRAVATAR_BASE = "http://www.gravatar.com/avatar"
 
 WEBKIT2PNG_EXECUTABLE = None
 
@@ -208,3 +212,4 @@ elif sys.platform == "linux2":
     WEBKIT2PNG_EXECUTABLE = "python %s -x %%(width)i %%(height)i -g %%(width)i %%(height)i -F javascript -o %%(filename)s %%(url)s" % os.path.join(os.path.dirname(__file__), "webkit2png_linux.py")
 
 COVERAGE_REPORT_HTML_OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'coverage')
+

@@ -1,47 +1,106 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
-      $("form[name='profile']").validate({rules: oer.validation.rules.profile});
-      $("form[name='change-password']").validate({rules: oer.validation.rules.change_password});
+      oer.profile.init_avatar();
     });
   </script>
 {% endblock %}
 
+{% block bodyclass %}profile profile-view{% endblock %}
+
 {% block above-content %}{% endblock %}
+
+{% block column-left %}
+  <a href="{% url users:profile_edit %}" class="edit rc10">Edit My Profile</a>
+{% endblock %}
 
 {% block content %}
 
-  <form method="post" class="formatted profile" name="profile" action="{% url users:profile %}">
-  
-    <p class="change-password-link"><a href="#change-password">Change password</a></p>
-
-    {% for field in profile_form %}
-      {% include "include/form-field.html" %}
-    {% endfor %}
-    <div class="field">
-      <label>My Portrait:</label>
-      <p>If want to have a picture that will be shown in your profile and portfolio page you should 
-      upload it to <a href="http://gravatar.com">Globally Recognized Avatar (gravatar)</a> service.
-      This picture will be used on all Gravatar-enabled sites that you are registered in.</p>
+  <section class="avatar">
+    <div class="wrap">
+      {{ profile.get_avatar_img }}
+      <span{% if profile.hide_avatar %} style="display: none;"{% endif %}><a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete</a></span>
     </div>
-    <div class="buttons">
-      <input type="submit" name="save-profile" class="button" value="Save profile" />
-    </div>
-  </form>
+    <a id="upload-avatar-btn" href="{% url users:profile_avatar_update %}" class="dashed">Change picture</a>
+  </section>
+  <section class="basic">
+    <ul>
+      <li class="name">
+        {{ request.user.first_name }} {{ request.user.last_name }}
+      </li>
+      <li>{{ request.user.email }}</li>
+      {% if profile.country %}
+        <li>
+          {% if profile.country.code == "US" and profile.us_state %}{{ profile.us_state }},{% endif %}
+          {{ profile.country }}
+        </li>
+      {% endif %}
+    </ul>
+  </section>
+  {% if profile.roles.exists %}
+    <section class="roles">
+      <h1>Roles</h1>
+      <ul>
+        {% for role in profile.roles.all %}
+          <li>{{ role }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+  {% if profile.educator_student_levels.exists %}
+    <section class="levels">
+      <h1>Levels</h1>
+      <ul>
+        {% for level in profile.educator_student_levels.all %}
+          <li>{{ level }}</li>
+        {% endfor %}
+      </ul>
+      {% if profile.educator_subjects.exists %}
+        <h1>Subjects</h1>
+        <ul>
+          {% for subject in profile.educator_subjects.all %}
+            <li>{{ subject }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+  {% endif %}
 
-  <hr class="tall" />
+  {% if profile.about_me %}
+    <section class="about">
+      <h1>About me</h1>
+      <p>{{ profile.about_me }}</p>
+    </section>
+  {% endif %}
 
-  <form method="post" class="formatted change-password"  name="change-password"
-        action="{% url users:profile %}" id="change-password">
-    <h3>Change password</h3>
-    {% for field in change_password_form %}
-      {% include "include/form-field.html" %}
-    {% endfor %}
-    <div class="buttons">
-      <input type="submit" name="change-password" class="button" value="Change password" />
-    </div>
-  </form>
-  
+{% endblock %}
+
+{% block column-right %}
+  <section class="portlet links rc10">
+    <h1>Connect on the Web</h1>
+    {% if profile.website_url %}
+      <p class="website">
+        <span>Website or Blog</span>
+        {{ profile.website_url|urlizetrunc:30 }}
+      </p>
+    {% endif %}
+    {% if profile.facebook_id or profile.twitter_id or profile.skype_id %}
+      <ul class="social">
+        {% if profile.facebook_id %}
+          <li><a class="facebook" href="https://www.facebook.com/{{ profile.facebook_id }}">{{ profile.facebook_id }}</a></li>
+        {% endif %}
+        {% if profile.twitter_id %}
+          <li><a class="twitter" href="https://twitter.com/{{ profile.twitter_id }}">{{ profile.twitter_id }}</a></li>
+        {% endif %}
+        {% if profile.skype_id %}
+          <li><a class="skype" href="skype:{{ profile.skype_id }}?call">{{ profile.skype_id }}</a></li>
+        {% endif %}
+      </ul>
+    {% else %}
+      <p><a href="{% url users:profile_about %}">Add a link to your website, Facebook, Twitter or Skype accounts</a></p>
+    {% endif %}
+  </section>
 {% endblock %}
