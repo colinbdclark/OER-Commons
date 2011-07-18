@@ -43,7 +43,7 @@ STATICFILES_PREPEND_LABEL_APPS = (
 )
 
 ADMIN_MEDIA_ROOT = os.path.join(STATIC_ROOT, 'admin')
-ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin')
+ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin') + "/"
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
