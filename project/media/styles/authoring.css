@@ -1,0 +1,66 @@
+.authoring #content h1 {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.authoring .column-left,
+.authoring .column-right {
+  width: 220px;
+}
+
+.authoring .column-main {
+  width: 480px;
+}
+
+
+#edit-lesson-form aside .box {
+  padding: 10px;
+  background: #eee;
+  border: none;
+}
+
+#edit-lesson-form aside .box > ul {
+  margin-bottom: 1em;
+  list-style-position: inside;
+}
+
+#edit-lesson-form .student-levels .field ul {
+  display: none;
+}
+
+#edit-lesson-form .title input {
+  line-height: 20px;
+  font-size: 16px;
+  width: 470px;
+}
+
+#edit-lesson-form .subjects ul {
+  margin-top: 3px;
+}
+
+#edit-lesson-form .subjects li {
+  display: inline-block;
+  width: 200px;
+  margin-right: 10px;
+  vertical-align: top;
+}
+
+#edit-lesson-form .summary textarea {
+  width: 470px;
+}
+
+#edit-lesson-form .goals ul {
+  list-style: disc inside;
+}
+
+#edit-lesson-form .goals a {
+  display: inline-block;
+  margin-top: 5px;
+  margin-left: 15px;
+}
+
+#edit-lesson-form .goals input {
+  line-height: 18px;
+  font-size: 14px;
+  width: 200px;
+}

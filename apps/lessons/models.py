@@ -9,6 +9,8 @@ class Lesson(models.Model):
 
     author = models.ForeignKey(User, null=True)
     is_new = models.BooleanField(default=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     title = models.CharField(max_length=200, default=u"")
     slug = AutoSlugField(populate_from="title")
@@ -18,7 +20,7 @@ class Lesson(models.Model):
 
     summary = models.TextField(default=u"")
 
-    goals = SeparatedValuesField(default=[])
+    goals = SeparatedValuesField(default=u"")
 
     def __unicode__(self):
         return self.title or self.id

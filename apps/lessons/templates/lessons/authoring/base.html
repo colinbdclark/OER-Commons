@@ -29,7 +29,7 @@
 
     {% include "include/modernizr.html" %}
   </head>
-  <body class="toolbar-view {% block bodyclass %}{% endblock %} {% if request.user.is_authenticated %} authenticated{% endif %}">
+  <body class="toolbar-view authoring {% block bodyclass %}{% endblock %} {% if request.user.is_authenticated %} authenticated{% endif %}">
 
     <a href="{% url frontpage %}" id="logo">OER Commons</a>
 
@@ -63,29 +63,10 @@
 
     </div>
 
-    <div id="status-messages"></div>
-
-    <div class="layout-columns fixed-width clearfix">
-
-      <div class="column-left">
-        {% block column-left %}
-          &nbsp;
-        {% endblock %}
-      </div>
-
-      <div class="column-main">
-        <div id="content" class="content {% block contentclass %}{% endblock %}">
-          {% block content %}
-          {% endblock %}
-        </div>
-      </div>
-
-      <div class="column-right">
-        {% block column-right %}
-          &nbsp;
-        {% endblock %}
-      </div>
-
+    <div class="page fixed-width">
+      <div id="status-messages"></div>
+      {% block content %}
+      {% endblock %}
     </div>
 
     {% include "include/cdn-js.html" %}

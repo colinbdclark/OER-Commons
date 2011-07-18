@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.encoding import smart_unicode
 from south.modelsinspector import add_introspection_rules
 
 
@@ -6,7 +7,7 @@ class SeparatedValuesField(models.TextField):
     __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop('token', '|')
+        self.token = unicode(kwargs.pop('token', '|'))
         super(SeparatedValuesField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
@@ -18,16 +19,9 @@ class SeparatedValuesField(models.TextField):
             return value
         return value.split(self.token)
 
-    def get_db_prep_value(self, value):
-        if value is None:
-            return None
-        if not value:
-            return u""
-        assert(isinstance(value, list) or isinstance(value, tuple))
-        return self.token.join([unicode(s) for s in value])
-
-    def value_to_string(self, obj):
-        value = self._get_val_from_obj(obj)
-        return self.get_db_prep_value(value)
+    def get_prep_value(self, value):
+        if isinstance(value, (list, tuple)):
+            value = self.token.join(map(smart_unicode, value))
+        return super(SeparatedValuesField, self).get_prep_value(value)
 
 add_introspection_rules([], ["^common\.fields\.SeparatedValuesField"])

@@ -1,5 +1,71 @@
 {% extends "lessons/authoring/base.html" %}
 
 {% block content %}
-  <h1>Create an OER</h1>
+
+  <form action="{% url lessons:edit lesson_id=lesson.id %}" method="post"
+        class="formatted" id="edit-lesson-form">
+
+    <aside class="column-left">
+      <div class="progress-tracker">
+        <img src="http://placehold.it/220x40/dddddd/333333&text=Progress%20Tracker" />
+      </div>
+
+      <div class="student-levels box">
+        {% with form.student_levels as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+        <ul>
+          {% for level in lesson.student_levels.all %}
+            <li>{{ level }}</li>
+          {% endfor %}
+        </ul>
+        <a href="#" class="dashed">Edit</a>
+      </div>
+    </aside><section id="content" class="content column-main">
+      <h1>Create an OER</h1>
+
+      {% with form.title as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      {% with form.subjects as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      {% with form.summary as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      {% with form.goals as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+    </section><aside class="column-left">
+      <section class="box">
+        <img src="http://placehold.it/200x100/dddddd/333333" />
+        <h1>What is a lesson?</h1>
+        <ul>
+          <li>An activity</li>
+          <li>A lesson plan</li>
+          <li>A set of teaching strategies</li>
+          <li>Anything in between</li>
+        </ul>
+        <p>
+          The OER Commons Lesson Creator is an easy way to share ideas online
+          and create organized records of your lessons that include pictures,
+          links and multimedia content.
+        </p>
+      </section>
+    </aside>
+
+  </form>
+
+{% endblock %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.authoring.init_edit_lesson();
+    });
+  </script>
 {% endblock %}

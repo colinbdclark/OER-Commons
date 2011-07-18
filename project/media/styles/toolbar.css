@@ -3,10 +3,8 @@ body.toolbar-view {
   font-size: 13px;
 }
 
-body.toolbar-view .layout-columns {
+body.toolbar-view .page {
   padding-top: 50px;
-  margin-top: 0;
-  background: none;
 }
 
 #toolbar {

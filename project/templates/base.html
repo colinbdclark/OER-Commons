@@ -47,18 +47,14 @@
         {% block column-left %}
           &nbsp;
         {% endblock %}
-      </aside>
-
-      <div class="column-main">
+      </aside><div class="column-main">
         {% include "include/status-messages.html" %}
   
         <section id="content" class="content {% block contentclass %}{% endblock %}">
           {% block content %}
           {% endblock %}
         </section >
-      </div>
-
-      <aside class="column-right">
+      </div><aside class="column-right">
         {% block column-right %}
           &nbsp;
         {% endblock %}

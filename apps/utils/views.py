@@ -5,15 +5,15 @@ from django.shortcuts import get_object_or_404
 
 class OERViewMixin(object):
 
-    def get_page_title(self, *args, **kwargs):
+    def get_page_title(self):
         return None
     page_title = property(get_page_title)
 
-    def get_page_subtitle(self, *args, **kwargs):
+    def get_page_subtitle(self):
         return None
     page_subtitle = property(get_page_subtitle)
 
-    def get_breadcrumbs(self, *args, **kwargs):
+    def get_breadcrumbs(self):
         return None
     breadcrumbs = property(get_breadcrumbs)
 
