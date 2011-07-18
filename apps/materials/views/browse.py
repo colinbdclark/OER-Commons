@@ -1,6 +1,7 @@
+from common.models import GeneralSubject
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
-from materials.models.common import GeneralSubject, GradeLevel, Collection
+from materials.models.common import  GradeLevel, Collection
 from materials.models.community import CommunityTopic, CommunityType
 from materials.models.course import COURSE_OR_MODULE, CourseMaterialType, Course
 from materials.models.library import LibraryMaterialType, Library

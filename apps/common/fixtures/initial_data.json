@@ -1,6 +1,60 @@
 [
   {
     "pk": 1,
+    "model": "common.generalsubject",
+    "fields": {
+      "description": "Art, History, Cinema, Dance, Fine Arts, Music, Photography, Theatre, Visual Arts",
+      "name": "Arts",
+      "slug": "arts"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "common.generalsubject",
+    "fields": {
+      "description": "Accounting, E-Commerce, Economics, Finance, International Business, Management, Marketing",
+      "name": "Business",
+      "slug": "business"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "common.generalsubject",
+    "fields": {
+      "description": "History, Language and Literature, Library and Information Studies, Linguistics, Philosophy, Religion, Rhetoric, World Languages, Writing, Language Arts, Debate, Grammar, Journalism, Phonics, Reading, Speaking, Spelling, Storytelling, Vocabulary",
+      "name": "Humanities",
+      "slug": "humanities"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "common.generalsubject",
+    "fields": {
+      "description": "Mathematics, Statistics and Probability, Algebra, Arithmetic, Calculus, Geometry, Measurement, Number theory, Trigonometry",
+      "name": "Mathematics and Statistics",
+      "slug": "mathematics-and-statistics"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "common.generalsubject",
+    "fields": {
+      "description": "Agriculture, Architecture, Astronomy, Biology, Chemistry, Computer Sciences, Digital Media, Engineering, Environmental, Geology, Health Policy, Health Sciences, Information Technology, Nanotechnology, Physics, Psychiatry, Physical Education, Sports and Fitness, Life Sciences, Earth Science, Ecology, Meteorology, Oceanography, Paleontology, Pharmacology, Physical Sciences, Space Sciences",
+      "name": "Science and Technology",
+      "slug": "science-and-technology"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "common.generalsubject",
+    "fields": {
+      "description": "Anthropology, Archaeology, Business Law, Communication Studies, Criminal Justice, Education, Gender Studies, Geography, Law, Political Science, Psychology, Sociology, Social Studies, Civics, Current Events, Human Behavior, Human Relations, Social Work, State History, United States History, Urban Studies u",
+      "name": "Social Sciences",
+      "slug": "social-sciences"
+    }
+  },
+  {
+    "pk": 1,
     "model": "common.studentlevel",
     "fields": {
       "title": "Pre-K (age 4 or younger)"

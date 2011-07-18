@@ -6,17 +6,20 @@
 .column-main {
   padding: 0 20px;
   width: 560px;
-  float: left;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .column-left {
-  float: left;
+  display: inline-block;
   width: 180px;
+  vertical-align: top;
 }
 
 .column-right {
-  float: right;
+  display: inline-block;
   width: 180px;
+  vertical-align: top;
 }
 
 body.no-columns .layout-columns {
@@ -25,7 +28,6 @@ body.no-columns .layout-columns {
 
 body.no-columns .column-main {
   padding: 0;
-  float: none;
   width: auto;
 }
 

@@ -4,10 +4,8 @@ from django.contrib.admin.sites import site
 from materials.admin.community_item import CommunityItemAdmin
 from materials.admin.course import CourseAdmin
 from materials.admin.library import LibraryAdmin
-from materials.admin.material import MaterialAdmin
 from materials.models import Course, Library, CommunityItem
-from materials.models.common import GeneralSubject, GradeLevel, \
-    Language, MediaFormat, GeographicRelevance, Keyword, Author
+from materials.models.common import GradeLevel, Language, MediaFormat, GeographicRelevance, Keyword, Author
 from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
 from materials.models.library import LibraryMaterialType
@@ -15,7 +13,6 @@ from materials.models.microsite import Microsite, Topic
 from utils.forms import AutocompleteListField
 
 
-site.register(GeneralSubject, ModelAdmin)
 site.register(GradeLevel, ModelAdmin)
 site.register(Language, ModelAdmin)
 site.register(CourseMaterialType, ModelAdmin)

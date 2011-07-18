@@ -1,3 +1,4 @@
+from common.models import GeneralSubject
 from dateutil.parser import parse
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -5,7 +6,7 @@ from django.db import connections
 from django.db.utils import DatabaseError
 from geo.models import Country
 from materials.models.common import Institution, Collection, Author, License, \
-    GeneralSubject, GradeLevel, Keyword, Language, GeographicRelevance, MediaFormat
+    GradeLevel, Keyword, Language, GeographicRelevance, MediaFormat
 from materials.models.course import Course, RelatedMaterial, CourseMaterialType
 from materials.models.material import reindex_materials
 from materials.utils import cleanup_keywords
