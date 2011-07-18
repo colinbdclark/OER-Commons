@@ -5,6 +5,7 @@ body.toolbar-view {
 
 body.toolbar-view .page {
   padding-top: 50px;
+  background: none;
 }
 
 #toolbar {
