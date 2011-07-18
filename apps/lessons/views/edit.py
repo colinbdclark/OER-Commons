@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 from django.views.generic import TemplateView
 from lessons.models import Lesson
 from lessons.views import LessonViewMixin
-from sentry.views import login_required
+from utils.decorators import login_required
 from utils.views import OERViewMixin
 import string
 
