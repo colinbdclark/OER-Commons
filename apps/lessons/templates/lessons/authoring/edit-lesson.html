@@ -6,9 +6,11 @@
         class="formatted" id="edit-lesson-form">
 
     <aside class="column-left">
+      {% spaceless %}
       <div class="progress-tracker">
-        <img src="http://placehold.it/220x40/dddddd/333333&text=Progress%20Tracker" />
+        <img src="http://placehold.it/220x40/dddddd/333333&text=Progress%20tracker" />
       </div>
+      {% endspaceless %}
 
       <div class="student-levels box">
         {% with form.student_levels as field %}
@@ -21,6 +23,26 @@
         </ul>
         <a href="#" class="dashed">Edit</a>
       </div>
+
+      <div class="image">
+        <img src="{% if lesson.image %}{{ lesson.get_thumbnail.url }}{% else %}http://placehold.it/220x150/dddddd/333333&text=No%20image{% endif %}" />
+        <div class="controls">
+          <a href="{% url lessons:lesson_image_upload lesson_id=lesson.id %}" class="upload dashed">Upload</a>
+          <a href="{% url lessons:lesson_image_remove lesson_id=lesson.id %}" class="remove dashed"{% if not lesson.image %} style="display: none;"{% endif %}>Remove</a>
+        </div>
+        <p>
+          Choose an image for your lesson.
+          Try one of these:
+        </p>
+        <ul>
+          <li>Student work</li>
+          <li>Classroom</li>
+          <li>School</li>
+          <li>University logo</li>
+          <li>Neighborhood</li>
+        </ul>
+      </div>
+
     </aside><section id="content" class="content column-main">
       <h1>Create an OER</h1>
 
@@ -39,6 +61,10 @@
       {% with form.goals as field %}
         {% include "include/form-field.html" %}
       {% endwith %}
+
+      <div class="buttons">
+        <input type="submit" />
+      </div>
 
     </section><aside class="column-left">
       <section class="box">
