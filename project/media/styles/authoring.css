@@ -12,6 +12,9 @@
   width: 480px;
 }
 
+.authoring .progress-tracker {
+  margin-bottom: 10px;
+}
 
 #edit-lesson-form aside .box {
   padding: 10px;
@@ -63,4 +66,32 @@
   line-height: 18px;
   font-size: 14px;
   width: 200px;
+}
+
+#edit-lesson-form .image {
+  margin-top: 10px;
+}
+
+#edit-lesson-form .image.loading {
+  padding-top: 150px;
+  background: url(../images/ajax-loader-big.gif) no-repeat 50% 70px;
+}
+
+#edit-lesson-form .image .controls {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+#edit-lesson-form .image .controls div {
+  display: inline-block;
+}
+
+#edit-lesson-form .image .controls .remove {
+  position: absolute;
+  right: 0;
+}
+
+#edit-lesson-form .image ul {
+  list-style-position: inside;
+  margin-top: 5px;
 }

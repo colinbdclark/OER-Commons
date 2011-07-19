@@ -51,4 +51,5 @@ body.wide-right-column .column-main {
 
 body.wide-right-column .column-right {
   width: 250px;
+  margin-left: 20px;
 }

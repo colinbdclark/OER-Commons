@@ -3,6 +3,7 @@ from common.fields import SeparatedValuesField
 from common.models import StudentLevel, GeneralSubject
 from django.contrib.auth.models import User
 from django.db import models
+from sorl.thumbnail import get_thumbnail
 
 
 class Lesson(models.Model):
@@ -22,6 +23,9 @@ class Lesson(models.Model):
 
     goals = SeparatedValuesField(default=u"")
 
+    image = models.ImageField(null=True, blank=True,
+                              upload_to="upload/lessons/lesson")
+
     def __unicode__(self):
         return self.title or self.id
 
@@ -31,3 +35,8 @@ class Lesson(models.Model):
         else:
             self.is_new = False
         super(Lesson, self).save(*args, **kwargs)
+
+    def get_thumbnail(self):
+        if not self.image:
+            return None
+        return get_thumbnail(self.image, "220x500")
