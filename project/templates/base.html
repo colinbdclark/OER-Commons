@@ -6,6 +6,7 @@
     <meta charset="utf-8"/>
     <title>{% block title %}{% if page_title %}{{ page_title }}{% if page_subtitle %}: {{ page_subtitle|safe }}{% endif %} | {% endif %}OER Commons{% endblock %}</title>
     {% block meta_description %}{% endblock %}
+    {% include "include/open-graph-meta.html" %}
     <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico"/>
     {% include "include/css.html" %}
     {% include "include/modernizr.html" %}

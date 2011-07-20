@@ -213,11 +213,14 @@ class LibraryAdmin(MaterialAdmin):
             form = LibraryAddForm(instance=obj)
             authors_formset = AuthorsFormSet(prefix="authors", queryset=obj.authors.all())
 
+        tags = obj.tags.distinct().values_list("name", flat=True)
+
         context = {
             'title': _('Change %s') % force_unicode(opts.verbose_name),
             'form': form,
             'authors_formset': authors_formset,
             'main_fields': MAIN_FIELDS_CHANGE,
+            'tags': tags,
             'object_id': object_id,
             'original': obj,
             'root_path': self.admin_site.root_path,
