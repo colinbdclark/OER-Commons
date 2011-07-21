@@ -74,7 +74,7 @@ class EditLessonForm(forms.ModelForm):
 
 class EditLesson(LessonViewMixin, OERViewMixin, TemplateView):
 
-    template_name = "lessons/authoring/edit-lesson.html"
+    template_name = "lessons/authoring/lesson-edit.html"
     restrict_to_owner = True
 
     def get_page_title(self):
