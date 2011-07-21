@@ -154,3 +154,14 @@
   border:  1px solid #F5A456;
   margin: 10px 0;
 }
+
+#sponsors-portlet p {
+  color: #666;
+  line-height: 16px;
+  margin-right: 20px;
+}
+
+#sponsors-portlet div {
+  text-align: center;
+  margin: 15px 0;
+}
