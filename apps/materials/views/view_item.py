@@ -102,7 +102,9 @@ def view_item(request, slug=None, model=None):
         tag = {"class": "topic"}
         tag["slug"] = topic.slug
         tag["name"] = topic.name
-        tag["microsite"] = topic.microsite.slug
+        tag["microsite_slug"] = topic.microsite.slug
+        tag["microsite_name"] = topic.microsite.name
+        tag["other"] = topic.other
         tags_slugs.add(tag["slug"])
         tags.append(tag)
 

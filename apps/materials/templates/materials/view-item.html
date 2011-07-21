@@ -303,8 +303,8 @@
     <ul>
       {% for tag in tags %}
         {% if tag.class == "topic" %}
-          <li class="rc3 topic {{ tag.microsite }}">
-            <a href="{% url materials:topic_index topics=tag.slug, microsite=tag.microsite %}">{{ tag.name }}</a>
+          <li class="rc3 topic {{ tag.microsite_slug }}">
+            <a href="{% url materials:topic_index topics=tag.slug, microsite=tag.microsite_slug %}">{% if tag.other %}{{ tag.microsite_name }}{% else %}{{ tag.name }}{% endif %}</a>
           </li>
         {% else %}
           <li class="rc3 {{ tag.class }}">
