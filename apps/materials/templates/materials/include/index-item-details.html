@@ -18,8 +18,14 @@
   <dt class="topics">SubTopics:</dt>
   <dd class="topics clearfix">
     {% for topic in item.topics %}
-      <a href="{% url materials:topic_index topics=topic.slug, microsite=topic.microsite %}"
-         class="{{ topic.microsite }}">{{ topic.name }}</a>{% if not forloop.last %}, {% endif %}
+      {% if topic.other %}
+        <a href="{{ topic.microsite.get_absolute_url }}"
+           class="{{ topic.microsite.slug }}">{{ topic.microsite.name }}</a>
+      {% else %}
+        <a href="{% url materials:topic_index topics=topic.slug, microsite=topic.microsite.slug %}"
+           class="{{ topic.microsite.slug }}">{{ topic.name }}</a>
+      {% endif %}
+      {% if not forloop.last %}, {% endif %}
     {% endfor %}
   </dd>
   {% endif %}
