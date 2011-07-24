@@ -60,7 +60,7 @@ class LearningObjectiveCategoryManager(models.Manager):
 class LearningObjectiveCategory(models.Model):
 
     name = models.CharField(max_length=200, unique=True)
-    code = models.CharField(max_length=4, unique=True, db_index=True)
+    code = models.CharField(max_length=8, unique=True, db_index=True)
 
     objects = LearningObjectiveCategoryManager()
 
