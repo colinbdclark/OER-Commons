@@ -60,5 +60,32 @@
       "header": "", 
       "slug": "registration-tracking-step-2"
     }
-  } 
+  },
+  {
+    "pk": 9,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "<script type=\"text/javascript\">var _sf_startpt=(new Date()).getTime();</script>",
+      "header": "",
+      "slug": "chartbeat-head"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "<script type=\"text/javascript\">\r\nvar _sf_async_config={uid:26100,domain:\"oercommons.org\"};\r\n(function(){\r\nfunction loadChartbeat() {\r\nwindow._sf_endpt=(new Date()).getTime();\r\nvar e = document.createElement('script');\r\ne.setAttribute('language', 'javascript');\r\ne.setAttribute('type', 'text/javascript');\r\ne.setAttribute('src',\r\n((\"https:\" == document.location.protocol) ? \"https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/\" : \"http://static.chartbeat.com/\") +\r\n\"js/chartbeat.js\");\r\ndocument.body.appendChild(e);\r\n}\r\nvar oldonload = window.onload;\r\nwindow.onload = (typeof window.onload != 'function') ?\r\nloadChartbeat : function() { oldonload(); loadChartbeat(); };\r\n})();\r\n</script>",
+      "header": "",
+      "slug": "chartbeat-tracker"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Open Education Resources (OER) are teaching and learning materials freely available online for everyone to use, whether you are an instructor, student, or self-learner. Examples of OER include: full courses, course modules, syllabi, lectures, homework assignments, quizzes, lab and classroom activities, pedagogical materials, games, simulations, and many more resources contained in digital media collections from around the world.",
+      "header": "",
+      "slug": "site-description"
+    }
+  }
 ]

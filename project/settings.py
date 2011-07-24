@@ -28,6 +28,7 @@ MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 MEDIA_URL = '/media/'
 
 # Static file configuration
+STATICFILES_STORAGE = 'staticfiles.storage.StaticFileStorage'
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 STATIC_URL = MEDIA_URL
 STATICFILES_EXCLUDED_APPS = (
@@ -41,8 +42,8 @@ STATICFILES_PREPEND_LABEL_APPS = (
     'django.contrib.admin',
 )
 
-ADMIN_MEDIA_ROOT = os.path.join(STATIC_ROOT, 'admin_media')
-ADMIN_MEDIA_PREFIX = '/admin_media/'
+ADMIN_MEDIA_ROOT = os.path.join(STATIC_ROOT, 'admin')
+ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin') + "/"
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
@@ -90,6 +91,7 @@ INSTALLED_APPS = (
     'django_coverage',
     'utils',
     'abtesting',
+    'common',
     'tags',
     'curriculum',
     'materials',
@@ -126,7 +128,7 @@ TEMPLATE_DIRS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.i18n",
     "django.core.context_processors.request",
     "django.core.context_processors.media",
@@ -154,6 +156,13 @@ HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr/oercommons'
 FLATBLOCKS_AUTOCREATE_STATIC_BLOCKS = True
 
 AUTOSLUG_SLUGIFY_FUNCTION = "project.utils.slugify"
+
+CACHES = {
+    'default': {
+        'BACKEND': 'cache_utils.group_backend.CacheClass',
+        'LOCATION': '127.0.0.1:11211',
+    },
+}
 
 CACHE_VERSION = 1
 
