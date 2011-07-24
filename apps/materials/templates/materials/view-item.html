@@ -307,8 +307,12 @@
     <ul>
       {% for tag in tags %}
         {% if tag.class == "topic" %}
-          <li class="rc3 topic {{ tag.microsite_slug }}">
-            <a href="{% url materials:topic_index topics=tag.slug, microsite=tag.microsite_slug %}">{% if tag.other %}{{ tag.microsite_name }}{% else %}{{ tag.name }}{% endif %}</a>
+          <li class="rc3 topic {{ tag.microsite.slug }}">
+            {% if tag.other %}
+              <a href="{{ topic.microsite.get_absolute_url }}">{{ tag.microsite.name }}</a>
+            {% else %}
+              <a href="{% url materials:topic_index topics=tag.slug, microsite=tag.microsite.slug %}">{{ tag.name }}</a>
+            {% endif %}
           </li>
         {% else %}
           <li class="rc3 {{ tag.class }}">
