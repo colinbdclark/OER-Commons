@@ -210,7 +210,13 @@
       "keywords": [
         [
           "climate_change"
-        ], 
+        ],
+        [
+          "climate change"
+        ],
+        [
+          "climate"
+        ],
         [
           "Climate Change"
         ]
@@ -261,7 +267,10 @@
       "keywords": [
         [
           "endang_species"
-        ], 
+        ],
+        [
+          "species"
+        ],
         [
           "Endangered Species"
         ]
@@ -290,8 +299,14 @@
           "eco_impact"
         ], 
         [
+          "eco impact"
+        ],
+        [
           "industrial"
         ], 
+        [
+          "industrial impact"
+        ],
         [
           "Industrial and Agricultural Impacts"
         ]
@@ -328,7 +343,7 @@
       "tree_id": 3,
       "level": 0,
       "lft": 1,
-      "rght": 14
+      "rght": 16
     }
   }, 
   {
@@ -370,8 +385,14 @@
           "eco_art"
         ], 
         [
+          "eco art"
+        ],
+        [
           "eco_culture"
         ], 
+        [
+          "eco culture"
+        ],
         [
           "Eco Art and Culture"
         ]
@@ -400,8 +421,14 @@
           "building"
         ], 
         [
+          "green building"
+        ],
+        [
           "design"
         ], 
+        [
+          "green design"
+        ],
         [
           "Green Building and Design"
         ]
@@ -428,8 +455,11 @@
       "keywords": [
         [
           "Business"
+        ],
+        [
+          "economics"
         ]
-      ], 
+      ],
       "microsite": [
         "Green"
       ], 
@@ -453,6 +483,9 @@
         [
           "agri"
         ], 
+        [
+          "agriculture"
+        ],
         [
           "nutrition"
         ], 
@@ -482,21 +515,51 @@
       "keywords": [
         [
           "Recycling"
+        ],
+        [
+          "waste"
         ]
       ], 
       "microsite": [
         "Green"
       ], 
-      "slug": "recycling", 
+      "slug": "waste-and-recycling",
       "parent": [
         "Green", 
         "Tools for Change"
       ], 
-      "name": "Recycling",
+      "name": "Waste and Recycling",
       "tree_id": 3,
       "level": 1,
       "lft": 12,
       "rght": 13
+    }
+  },
+  {
+    "pk": 20,
+    "model": "materials.topic",
+    "fields": {
+      "keywords": [
+        [
+          "education"
+        ],
+        [
+          "Green Education"
+        ]
+      ],
+      "microsite": [
+        "Green"
+      ],
+      "slug": "green-education",
+      "parent": [
+        "Green",
+        "Tools for Change"
+      ],
+      "name": "Green Education",
+      "tree_id": 3,
+      "level": 1,
+      "lft": 14,
+      "rght": 15
     }
   },
   {
