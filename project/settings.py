@@ -55,6 +55,7 @@ MIDDLEWARE_CLASSES = (
     'preferences.middleware.PreferencesMiddleware',
     'depiction.middleware.ProfilerMiddleware',
     'abtesting.middleware.ABTestingMiddleware',
+    'users.middleware.ConfirmationMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 

@@ -2,26 +2,13 @@ oer.validation = {};
 oer.validation.rules = {};
 
 oer.validation.rules.registration = {
-  first_name: "required",
-  last_name: "required",
-  username: "required",
   email: {
     required: true,
     email: true
   },
-  confirm_email: {
-    required: true,
-    email: true,
-    equalTo: "[name='email']"
-  },
   password: {
     required: true,
     minlength: 5
-  },
-  confirm_password: {
-    required: true,
-    minlength: 5,
-    equalTo: "[name='password']"
   }
 };
 

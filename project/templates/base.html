@@ -22,6 +22,7 @@
       {% if not hide_global_notifications %}
         {% if request.abtesting == "a" %}
           {% profile_notification "global-notification" %}
+          {% confirmation_notification "global-notification" %}
         {% endif %}
       {% endif %}
     {% endblock %}
@@ -66,6 +67,7 @@
         {% if not hide_global_notifications %}
           {% if request.abtesting == "b" %}
             {% profile_notification "status-message" %}
+            {% confirmation_notification "status-message" %}
           {% endif %}
         {% endif %}
   
