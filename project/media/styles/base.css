@@ -15,6 +15,7 @@ a {
 a.dashed {
   border-bottom-width: 1px;
   border-bottom-style: dashed;
+  text-decoration: none;
 }
 
 hr.tall {
