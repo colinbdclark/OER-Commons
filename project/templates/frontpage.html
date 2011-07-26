@@ -2,6 +2,10 @@
 {% load flatblock_tags %}
 {% load newsletter_tags %}
 
+{% block meta_description %}
+  <meta name="description" content="{% flatblock "site-description" %}">
+{% endblock %}
+
 {% block extra-js %}
 <script type="text/javascript"> 
   $(function() {
@@ -53,7 +57,7 @@
 {% endblock %}
 
 {% block column-left %}
-<section class="portlet oermaterials"> 
+<section class="portlet oermaterials dotted">
   <h1 class="dotted">OER Materials</h1> 
   <div class="accordion clearfix"> 
     <h2 class="accordion-header"><a href="#">Subject Areas</a></h2> 
@@ -94,6 +98,16 @@
     </ul> 
   </div> 
   <h2><a href="{% url materials:browse_providers %}">Browse by Provider</a></h2>
+</section>
+
+<section class="portlet" id="sponsors-portlet">
+  <h1 class="green">Sponsorship</h1>
+  <p>OER Commons is a project of <a href="http://www.iskme.org">ISKME</a></p>
+  <div>
+    <a href="http://www.iskme.org">
+      <img alt="ISKME" src="{{STATIC_URL }}images/iskme.png">
+    </a>
+  </div>
 </section>
 {% endblock %}
 

@@ -288,13 +288,10 @@ def populate_item_from_search_result(result):
         topics = []
         for id in item["topics"]:
             topic = get_object(Topic, pk=id)
-            if not topic or topic.other:
+            if not topic:
                 continue
-            topics.append(dict(name=topic.name,
-                               slug=topic.slug,
-                               microsite=topic.microsite.slug))
+            topics.append(topic)
         item["topics"] = topics
-
 
     model = result.model
     
