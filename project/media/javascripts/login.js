@@ -48,6 +48,7 @@ oer.login.show_popup = function(callback) {
         $popup.load("/login/form", function() {
             $popup.dialog("widget").removeClass("loading");
             var $form = $popup.find("form.login");
+            $form.find(":input:first").focus();
             var $button = $form.find("input[type='submit']").button();
             var $global_error_ct = $form.find(".errors.global");
             var validator = $form.validate({
@@ -87,6 +88,7 @@ oer.login.show_popup = function(callback) {
         });
     } else {
         $popup.dialog("open");
+        $popup.find(":input:first").focus();
     }
 };
 
