@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load compress %}
 {% load flatblock_tags %}
+{% load users_tags %}
 <html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
     <meta charset="utf-8"/>
@@ -16,6 +17,16 @@
     {% endif %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
+    
+    {% block global-notification %}
+      {% if not hide_global_notifications %}
+        {% if request.abtesting == "a" %}
+          {% profile_notification "global-notification" %}
+        {% endif %}
+      {% endif %}
+    {% endblock %}
+
+    <div class="page">
     {% include "include/header.html" %}
 
     {% block promo %}
@@ -52,6 +63,11 @@
 
       <div class="column-main">
         {% include "include/status-messages.html" %}
+        {% if not hide_global_notifications %}
+          {% if request.abtesting == "b" %}
+            {% profile_notification "status-message" %}
+          {% endif %}
+        {% endif %}
   
         <div id="content" class="content {% block contentclass %}{% endblock %}">
           {% block content %}
@@ -72,6 +88,8 @@
     </form>
     
     {% include "include/footer.html" %}
+
+    </div>
 
     {% include "include/js.html" %}
     {% compress js %}

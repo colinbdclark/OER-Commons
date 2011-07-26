@@ -143,7 +143,6 @@ class Profile(models.Model):
     skype_id = models.CharField(max_length=50, blank=True, null=True,
                                 validators=[validators.RegexValidator(r"^[a-zA-Z\d_.\-]{6,}$")])
 
-
     def get_avatar_url(self):
         if self.hide_avatar:
             return settings.DEFAULT_AVATAR
@@ -173,6 +172,67 @@ class Profile(models.Model):
     def get_avatar_img(self):
         return mark_safe("""<img src="%(url)s" width="%(size)i" height="%(size)i" />""" % dict(
                             url=self.get_avatar_url(), size=settings.AVATAR_SIZE))
+
+    @property
+    def total_fields(self):
+        fields = ["first_name",
+                   "last_name",
+                   "country",
+                   "connect_with",
+                   "roles",
+                   "about_me",
+                   "website_url",
+                   "facebook_id",
+                   "twitter_id",
+                   "skype_id",
+                ]
+        if self.roles.filter(is_educator=True).exists():
+            fields += ["educator_student_levels", "educator_subjects"]
+        if self.country and self.country.code == "US":
+            fields += ["us_state"]
+        return len(fields)
+    
+    @property
+    def filled_fields(self):
+        number = 0
+        user = self.user
+        if user.first_name:
+            number += 1
+        if user.last_name:
+            number += 1
+        if self.country:
+            number += 1
+        if self.connect_with:
+            number += 1
+        if self.roles.all().exists():
+            number += 1
+        if self.roles.filter(is_educator=True).exists():
+            if self.educator_student_levels.all().exists():
+                number += 1
+            if self.educator_subjects.all().exists():
+                number += 1
+        if self.country and self.country.code == "US" and self.us_state:
+            number += 1
+        if self.about_me:
+            number +=1
+        if self.website_url:
+            number +=1
+        if self.facebook_id:
+            number +=1
+        if self.twitter_id:
+            number +=1
+        if self.skype_id:
+            number +=1
+
+        return number
+
+    @property
+    def completeness(self):
+        total_fields = self.total_fields
+        filled_fields = self.filled_fields
+        if not total_fields or filled_fields >= total_fields:
+            return 100
+        return int(filled_fields * 100 / total_fields)
 
 
 def gen_confirmation_key():
