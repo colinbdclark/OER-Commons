@@ -8,6 +8,26 @@ import urllib
 register = Library()
 
 
+VIEWS = [
+    ("users:profile_edit", u"Basic Information and Password"),
+    ("users:profile_geography", u"Location"),
+    ("users:profile_roles", u"Role"),
+    ("users:profile_about", u"About Me"),
+    ("preferences:preferences", u"Settings"),
+]
+
+
+@register.inclusion_tag("users/include/profile-views.html", takes_context=True)
+def profile_views(context):
+    request = context["request"]
+    views = []
+    for view_name, title in VIEWS:
+        url = reverse(view_name)
+        views.append(dict(title=title, url=url,
+                          selected=request.path == url))
+    return dict(views=views)
+
+
 PROFILE_NOTIFICATION_HIDE_COOKIE_NAME = "_hpn"
 
 
@@ -52,24 +72,3 @@ def confirmation_notification(context, notification_class):
     resend_url = u"%s?%s" % (reverse("users:registration_resend"), urllib.urlencode(dict(email=user.email)))
     return dict(days_to_delete=days_to_delete, resend_url=resend_url,
                 notification_class=notification_class)
-
-
-VIEWS = [
-    ("users:profile_edit", u"Basic Information and Password"),
-    ("users:profile_geography", u"Location"),
-    ("users:profile_roles", u"Role"),
-    ("users:profile_about", u"About Me"),
-    ("preferences:preferences", u"Settings"),
-]
-
-
-@register.inclusion_tag("users/include/profile-views.html", takes_context=True)
-def profile_views(context):
-    request = context["request"]
-    views = []
-    for view_name, title in VIEWS:
-        url = reverse(view_name)
-        views.append(dict(title=title, url=url,
-                          selected=request.path == url))
-    return dict(views=views)
-
