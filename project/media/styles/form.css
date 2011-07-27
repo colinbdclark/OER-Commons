@@ -35,6 +35,14 @@ form.formatted .required label {
   background: url(../images/asterisk.gif) no-repeat 100% 0;
 }
 
+form.formatted  label.show-password {
+  padding-right: 0;
+  padding-left: 10px;
+  background: none;
+  font-weight: normal
+}
+
+
 form.formatted .field ul {
   list-style-type: none;
   margin: 0;
@@ -91,12 +99,12 @@ form.reset-password-init input.text {
   width: 392px;
 }
 
-form.reset-password, form.change-password {
+form.reset-password {
   width: 200px;
   margin: 0 auto;
 }
 
-form.reset-password input.text, form.change-password input.text {
+form.reset-password input.text {
   width: 192px;
 }
 
@@ -107,36 +115,6 @@ form.registration-confirm {
 
 form.registration-confirm input.text {
   width: 222px;
-}
-
-form.profile input.text {
-  width: 550px;
-}
-
-form.profile textarea.text {
-  width: 550px;
-  resize: none;
-  height: 75px;
-}
-
-form.profile ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  margin-top: 3px;
-}
-
-form.profile li {
-  margin: 1px 0;
-  padding: 0;
-}
-
-form.profile a {
-  text-decoration: none;
-}
-
-form.profile .change-password-link {
-  text-align: right;
 }
 
 form.content-submission {

@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import permalink
 from django.db.models.fields import NOT_PROVIDED
 from django.utils.translation import ugettext_lazy as _
+from geo.models import Country
 from materials.ccrest import CcRest
 from south.modelsinspector import add_introspection_rules
 from urllib2 import HTTPError
@@ -195,8 +196,8 @@ class License(models.Model):
 
     class Meta:
         app_label = "materials"
-        verbose_name = _(u"Country")
-        verbose_name_plural = _(u"Countries")
+        verbose_name = _(u"License")
+        verbose_name_plural = _(u"Licenses")
         ordering = ("id",)
 
     @property
@@ -223,25 +224,6 @@ class License(models.Model):
     def image(self):
         # TODO: fix this
         return self.image_url
-
-
-class Country(models.Model):
-
-    name = models.CharField(unique=True, max_length=100,
-                            verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, max_length=100,
-                         populate_from="name",
-                         verbose_name=_(u"Slug"),
-                         db_index=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = "materials"
-        verbose_name = _(u"Country")
-        verbose_name_plural = _(u"Countries")
-        ordering = ("id",)
 
 
 class Author(models.Model):

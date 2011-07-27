@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load users_tags %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.profile.init_roles();
+      oer.autocomplete_list_widget.init();
+    });
+  </script>
+{% endblock %}
+
+{% block bodyclass %}no-columns profile-edit{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+
+  {% profile_views %}
+
+
+  <form method="post" class="formatted" name="roles" action="{% url users:profile_roles %}">
+
+    <section class="roles">
+      <h1>Your Role</h1>
+      {% with form.roles as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+    </section>
+
+    <section class="educator"{% if not is_educator %} style="display: none;"{% endif %}>
+      <h1>Educator Details</h1>
+      {% with form.educator_student_levels as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      {% with form.educator_subjects as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+    </section>
+
+    <div class="buttons">
+      <input type="submit" class="save" value="Save" />
+      <input type="submit" class="next" value="Save and tell us more!" />
+    </div>
+
+  </form>
+
+{% endblock %}
