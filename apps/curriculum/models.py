@@ -88,7 +88,7 @@ class AlignmentTag(models.Model):
     standard = models.ForeignKey(Standard)
     grade = models.ForeignKey(Grade)
     category = models.ForeignKey(LearningObjectiveCategory)
-    subcategory = models.TextField()
+    subcategory = models.TextField(verbose_name=u"Domain")
     code = models.CharField(max_length=4, db_index=True)
 
     objects = AlignmentTagManager()
