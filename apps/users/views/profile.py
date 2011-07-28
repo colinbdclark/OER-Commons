@@ -23,6 +23,7 @@ def profile_view(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -33,11 +34,32 @@ def profile_view(request):
 @login_required
 def profile_edit(request):
 
-    page_title = u"My Profile"
-    breadcrumbs = [{"url": reverse("users:profile_edit"), "title": page_title}]
-
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
+
+    # If a user has all main fields filled we redirect him
+    # to the next not-filled subform
+    if "unfilled" in request.GET:
+        if user.first_name and user.last_name and user.email:
+            if not all([profile.country, profile.connect_with]):
+                return redirect("users:profile_geography")
+            if profile.country and profile.country.code == "US" and not profile.us_state:
+                return redirect("users:profile_geography")
+            if not profile.roles.exists():
+                return redirect("users:profile_roles")
+            if profile.roles.filter(is_educator=True).exists() and (not profile\
+            .educator_student_levels.exists() or not profile.educator_subjects\
+            .exists()):
+                return redirect("users:profile_roles")
+            if not all([profile.about_me, profile.website_url,
+                        profile.facebook_id, profile.twitter_id,
+                        profile.skype_id]):
+                return redirect("users:profile_about")
+
+    page_title = u"My Profile"
+    breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
+
     user_info_form = UserInfoForm(instance=user)
     change_password_form = ChangePasswordForm()
 
@@ -151,6 +173,7 @@ def geography(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -190,6 +213,7 @@ def roles(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -220,6 +244,7 @@ def about(request):
 
     page_title = u"My Profile"
     breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
+    hide_global_notifications = True
 
     user = request.user
     profile = Profile.objects.get_or_create(user=user)[0]
@@ -233,7 +258,7 @@ def about(request):
             if request.is_ajax():
                 return ajax_form_success(form.success_message)
             
-            return redirect("users:profile")
+            return redirect("frontpage")
         
         else:
             if request.is_ajax():

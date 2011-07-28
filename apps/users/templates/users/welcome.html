@@ -2,10 +2,6 @@
 {% load flatblock_tags %}
 
 {% block content %}
-  {% if request.user.is_authenticated %}
-  <p>Hi {{ request.user.first_name }},</p>
-  {% endif %}
-
   <p>Welcome to OER Commons, a place for you to find and share open educational resources.</p>
 
   <p>ISKME created OER Commons, publicly launched in February 2007, to provide support for and build a knowledge base around the use and reuse of open educational resources (OER).</p> 

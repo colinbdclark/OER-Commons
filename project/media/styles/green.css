@@ -1,4 +1,4 @@
-body.green {
+body.green .page {
   background-image: url(../images/green-main-bg.png);
 }
 
@@ -99,17 +99,6 @@ body.green {
 
 .green .portlet.oermaterials {
   margin-bottom: 0;
-}
-
-#green-sponsors-portlet p {
-  color: #666;
-  line-height: 16px;
-  margin-right: 20px;
-}
-
-#green-sponsors-portlet div {
-  text-align: center;
-  margin: 15px 0;
 }
 
 body.green .top-keywords h4 .icon {

@@ -20,7 +20,8 @@ class AddForm(SubmissionFormBase, ModelForm):
 
     title = forms.CharField(label=u"Title:",
                             widget=forms.TextInput(
-                            attrs={"class": "text wide"}))
+                            attrs={"class": "text wide"}),
+                            max_length=500)
 
     url = forms.URLField(label=u"URL Pointer:", initial=u"http://",
                          widget=forms.TextInput(

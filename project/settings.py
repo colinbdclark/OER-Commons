@@ -42,8 +42,8 @@ STATICFILES_PREPEND_LABEL_APPS = (
     'django.contrib.admin',
 )
 
-ADMIN_MEDIA_ROOT = os.path.join(STATIC_ROOT, 'admin_media')
-ADMIN_MEDIA_PREFIX = '/admin_media/'
+ADMIN_MEDIA_ROOT = os.path.join(STATIC_ROOT, 'admin')
+ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin') + "/"
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
@@ -55,6 +55,7 @@ MIDDLEWARE_CLASSES = (
     'preferences.middleware.PreferencesMiddleware',
     'depiction.middleware.ProfilerMiddleware',
     'abtesting.middleware.ABTestingMiddleware',
+    'users.middleware.ConfirmationMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
