@@ -1,0 +1,74 @@
+{% extends "lessons/authoring/base.html" %}
+
+{% block content %}
+
+  <form action="{% url lessons:edit_define lesson_id=lesson.id %}" method="post"
+        class="formatted" id="define-form">
+
+    <aside class="column-left">
+
+      <div class="student-levels">
+        <a href="#" class="dashed">Edit</a>
+        {% with form.student_levels as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+        <ul>
+          {% for level in lesson.student_levels.all %}
+            <li>{{ level }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </aside><section id="content" class="content column-main">
+
+      {% with form.title as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      {% with form.subjects as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      {% with form.summary as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      {% with form.goals as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      <div class="buttons">
+        <input type="submit" />
+      </div>
+
+    </section><aside class="column-right">
+      <section>
+        <img src="http://placehold.it/200x100/dddddd/333333" />
+        <h1>Create an OER?<br/>
+            What does that mean?</h1>
+        <p>
+          Creating an OER (Open Educational Resource) on OER Commons is an
+          easy way to share ideas online and organize text, documents, multimedia
+          and websites into one educational resource.
+        </p>
+        <p>OER can be:</p>
+        <ul>
+          <li>Lesson Plans</li>
+          <li>Activities</li>
+          <li>Teaching Strategies</li>
+          <li>and more</li>
+        </ul>
+      </section>
+    </aside>
+
+  </form>
+
+{% endblock %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.authoring.init_define_form();
+    });
+  </script>
+{% endblock %}

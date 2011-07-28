@@ -12,86 +12,128 @@
   width: 480px;
 }
 
-.authoring .progress-tracker {
+.authoring aside h1 {
+  font-size: 18px;
   margin-bottom: 10px;
 }
 
-#edit-lesson-form aside .box {
-  padding: 10px;
-  background: #eee;
-  border: none;
-}
-
-#edit-lesson-form aside .box > ul {
+.authoring aside ul {
   margin-bottom: 1em;
   list-style-position: inside;
 }
 
-#edit-lesson-form .student-levels .field ul {
+.authoring aside p {
+  margin: 1em 0;
+}
+
+.authoring form.formatted .field {
+  margin-bottom: 1.5em;
+}
+
+.authoring form.formatted .label {
+  margin-bottom: 4px;
+}
+
+.authoring form.formatted .label label {
+  font-weight: normal;
+  font-size: 18px;
+}
+
+.authoring form.formatted .help {
+  margin: 4px 0 4px 1em;
+  font-size: 14px;
+  font-style: normal;
+}
+
+.authoring form.formatted input[type='text'],
+.authoring form.formatted textarea {
+  border: 1px solid #1983AD;
+}
+
+.authoring form.formatted input[type='text'] {
+  line-height: 20px;
+  font-size: 16px;
+}
+
+#define-form .student-levels a {
+  float: right;
+}
+
+#define-form .student-levels .field {
+  margin-bottom: 5px;
+}
+
+#define-form .student-levels .label label {
+  font-size: 14px;
+}
+
+#define-form .student-levels ul {
+  list-style-type: none;
+}
+
+
+#define-form .student-levels .field ul {
   display: none;
 }
 
-#edit-lesson-form .title input {
-  line-height: 20px;
-  font-size: 16px;
+#define-form .title input {
   width: 470px;
 }
 
-#edit-lesson-form .subjects ul {
+#define-form .subjects ul {
   margin-top: 3px;
 }
 
-#edit-lesson-form .subjects li {
+#define-form .subjects li {
   display: inline-block;
   width: 200px;
   margin-right: 10px;
   vertical-align: top;
 }
 
-#edit-lesson-form .summary textarea {
+#define-form .summary textarea {
   width: 470px;
 }
 
-#edit-lesson-form .goals ul {
-  list-style: disc inside;
+#define-form .goals ul {
+  list-style: disc outside;
+  margin-left: 20px;
 }
 
-#edit-lesson-form .goals a {
+#define-form .goals a {
   display: inline-block;
   margin-top: 5px;
   margin-left: 15px;
 }
 
-#edit-lesson-form .goals input {
-  line-height: 18px;
-  font-size: 14px;
-  width: 200px;
+#define-form .goals input {
+  width: 450px;
 }
 
-#edit-lesson-form .image {
+#define-form .image {
   margin-top: 10px;
 }
 
-#edit-lesson-form .image.loading {
+#define-form .image.loading {
   padding-top: 150px;
   background: url(../images/ajax-loader-big.gif) no-repeat 50% 70px;
 }
 
-#edit-lesson-form .image .controls {
+#define-form .image .controls {
   position: relative;
   margin-bottom: 10px;
 }
 
-#edit-lesson-form .image .controls div {
+#define-form .image .controls div {
   display: inline-block;
 }
 
-#edit-lesson-form .image .controls .remove {
+#define-form .image .controls .remove {
   position: absolute;
   right: 0;
 }
 
-#edit-lesson-form .image ul {
+#define-form .image ul {
   list-style-position: inside;
   margin-top: 5px;
 }

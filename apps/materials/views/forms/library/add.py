@@ -1,12 +1,12 @@
-from common.models import GeneralSubject
+from common.models import GeneralSubject, Language
 from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
-from materials.models.common import  GradeLevel, MediaFormat, \
-    Language, GeographicRelevance, Keyword
+from materials.models.common import  GradeLevel, MediaFormat,\
+    GeographicRelevance, Keyword
 from materials.models.library import LibraryMaterialType, Library
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
 from materials.views.forms import AuthorsField, LICENSE_TYPES, CC_OLD_LICENSES, \

@@ -35,4 +35,21 @@ class StudentLevel(models.Model):
 
     class Meta:
         ordering = ("id",)
-        
+
+
+class Language(models.Model):
+
+    name = models.CharField(unique=True, max_length=100,
+                            verbose_name=_(u"Name"))
+    slug = models.SlugField(max_length=3, unique=True,
+                            verbose_name=_(u"Slug"),
+                            db_index=True)
+    order = models.IntegerField(default=999, verbose_name=_(u"Order"))
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _(u"Language")
+        verbose_name_plural = _(u"Languages")
+        ordering = ("order", "name",)

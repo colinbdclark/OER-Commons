@@ -1,4 +1,4 @@
-from common.models import GeneralSubject
+from common.models import GeneralSubject, Language
 from django import forms
 from django.conf import settings
 from django.contrib.admin.util import unquote
@@ -15,7 +15,7 @@ from django.views.generic.simple import redirect_to
 from material import MaterialAdmin
 from materials.admin.fields import LicenseFields
 from materials.models.common import Author, GradeLevel, \
-    MediaFormat, Language, GeographicRelevance, Keyword
+    MediaFormat, GeographicRelevance, Keyword
 from materials.models.course import Course, CourseMaterialType
 from materials.views.forms import RSSFields
 from materials.views.forms.course import InstitutionField, CollectionField, \

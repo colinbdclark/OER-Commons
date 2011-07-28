@@ -299,25 +299,6 @@ class GradeLevel(models.Model):
         return "materials:grade_level_index", [], {"grade_levels": self.slug}
 
 
-class Language(models.Model):
-
-    name = models.CharField(unique=True, max_length=100,
-                            verbose_name=_(u"Name"))
-    slug = models.SlugField(max_length=3, unique=True,
-                            verbose_name=_(u"Slug"),
-                            db_index=True)
-    order = models.IntegerField(default=999, verbose_name=_(u"Order"))
-    
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = "materials"
-        verbose_name = _(u"Language")
-        verbose_name_plural = _(u"Languages")
-        ordering = ("order", "name",)
-
-
 class Collection(models.Model):
 
     name = models.CharField(unique=True, max_length=300,

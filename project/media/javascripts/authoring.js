@@ -1,7 +1,7 @@
 oer.authoring = {};
 
-oer.authoring.init_edit_lesson = function() {
-  var $form = $("#edit-lesson-form");
+oer.authoring.init_define_form = function() {
+  var $form = $("#define-form");
 
   var $student_levels = $form.find("div.student-levels");
   $student_levels.find("a").click(function(e) {
@@ -60,35 +60,35 @@ oer.authoring.init_edit_lesson = function() {
     }
   });
 
-  var $image_widget = $form.find("div.image");
-  var $image = $image_widget.find("img");
-  var $image_upload = $image_widget.find("a.upload");
-  var $image_remove = $image_widget.find("a.remove");
-  $image_upload.upload({
-        action: $image_upload.attr("href"),
-        onComplete: function(response) {
-            response = $.parseJSON(response);
-            if (response.status === "error") {
-                oer.status_message.error(response.message, true);
-            } else if (response.status === "success") {
-                $image.attr("src", response.url);
-                $image_remove.show();
-            }
-            $image_widget.removeClass("loading");
-            $image.show();
-        },
-        onSubmit: function() {
-            $image_widget.addClass("loading");
-            $image.hide();
-        }
-    });
-  $image_remove.click(function(e) {
-      e.preventDefault();
-      $image.attr("src", "http://placehold.it/220x150/dddddd/333333&text=No%20image");
-      $image_remove.hide();
-      $.post($image_remove.attr("href"), function(response) {
-          oer.status_message.success(response.message, true);
-      });
-  });
+//  var $image_widget = $form.find("div.image");
+//  var $image = $image_widget.find("img");
+//  var $image_upload = $image_widget.find("a.upload");
+//  var $image_remove = $image_widget.find("a.remove");
+//  $image_upload.upload({
+//        action: $image_upload.attr("href"),
+//        onComplete: function(response) {
+//            response = $.parseJSON(response);
+//            if (response.status === "error") {
+//                oer.status_message.error(response.message, true);
+//            } else if (response.status === "success") {
+//                $image.attr("src", response.url);
+//                $image_remove.show();
+//            }
+//            $image_widget.removeClass("loading");
+//            $image.show();
+//        },
+//        onSubmit: function() {
+//            $image_widget.addClass("loading");
+//            $image.hide();
+//        }
+//    });
+//  $image_remove.click(function(e) {
+//      e.preventDefault();
+//      $image.attr("src", "http://placehold.it/220x150/dddddd/333333&text=No%20image");
+//      $image_remove.hide();
+//      $.post($image_remove.attr("href"), function(response) {
+//          oer.status_message.success(response.message, true);
+//      });
+//  });
 
 };

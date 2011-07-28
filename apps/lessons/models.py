@@ -1,6 +1,6 @@
 from autoslug import AutoSlugField
 from common.fields import SeparatedValuesField
-from common.models import StudentLevel, GeneralSubject
+from common.models import StudentLevel, GeneralSubject, Language
 from django.contrib.auth.models import User
 from django.db import models
 from sorl.thumbnail import get_thumbnail
@@ -33,12 +33,12 @@ class Lesson(models.Model):
 
     goals = SeparatedValuesField(default=u"")
 
+    language = models.ForeignKey(Language, null=True, blank=True)
+
     image = models.ImageField(null=True, blank=True,
                               upload_to="upload/lessons/lesson")
 
-    group = models.ForeignKey(Group, null=True, blank=True)
-
-    instruction_date 
+#    group = models.ForeignKey(Group, null=True, blank=True)
 
     def __unicode__(self):
         return self.title or self.id

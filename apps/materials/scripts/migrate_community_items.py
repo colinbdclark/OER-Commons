@@ -1,10 +1,10 @@
-from common.models import GeneralSubject
+from common.models import GeneralSubject, Language
 from dateutil.parser import parse
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections
 from django.db.utils import DatabaseError
-from materials.models.common import Author, License, GradeLevel, Keyword, Language, GeographicRelevance
+from materials.models.common import Author, License, GradeLevel, Keyword, GeographicRelevance
 from materials.models.community import CommunityItem, CommunityTopic, \
     CommunityType
 from materials.models.material import reindex_materials
