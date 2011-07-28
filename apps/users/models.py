@@ -182,9 +182,6 @@ class Profile(models.Model):
                    "roles",
                    "about_me",
                    "website_url",
-                   "facebook_id",
-                   "twitter_id",
-                   "skype_id",
                 ]
         if self.roles.filter(is_educator=True).exists():
             fields += ["educator_student_levels", "educator_subjects"]
@@ -215,13 +212,7 @@ class Profile(models.Model):
             number += 1
         if self.about_me:
             number +=1
-        if self.website_url:
-            number +=1
-        if self.facebook_id:
-            number +=1
-        if self.twitter_id:
-            number +=1
-        if self.skype_id:
+        if self.website_url or self.facebook_id or self.twitter_id or self.skype_id:
             number +=1
 
         return number
