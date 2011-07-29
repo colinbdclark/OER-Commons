@@ -273,7 +273,7 @@ body.authoring {
   font-size: 14px;
 }
 
-#organize-form section.organize .field
+#organize-form section.organize .field,
 #organize-form section.align .field {
   position: relative;
 }
