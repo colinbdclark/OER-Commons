@@ -19,6 +19,10 @@
         </ul>
       </div>
 
+      {% with form.language as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
     </aside><section id="content" class="content column-main">
 
       {% with form.title as field %}
@@ -38,12 +42,12 @@
       {% endwith %}
 
       <div class="buttons">
-        <input type="submit" />
+        <a class="next" href="{% url lessons:edit_organize lesson_id=lesson.id %}">Next</a>
       </div>
 
     </section><aside class="column-right">
       <section>
-        <img src="http://placehold.it/200x100/dddddd/333333" />
+        <img src="http://placehold.it/180x100/dddddd/333333" />
         <h1>Create an OER?<br/>
             What does that mean?</h1>
         <p>

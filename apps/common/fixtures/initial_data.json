@@ -328,7 +328,7 @@
     "pk": 20, 
     "model": "common.language", 
     "fields": {
-      "name": "Byelorussian (Belarussian)", 
+      "name": "Belarussian",
       "slug": "be"
     }
   }, 
@@ -617,7 +617,7 @@
     "pk": 56, 
     "model": "common.language", 
     "fields": {
-      "name": "Irish (Irish Gaelic)", 
+      "name": "Irish Gaelic",
       "slug": "ga"
     }
   }, 
@@ -993,7 +993,7 @@
     "pk": 103, 
     "model": "common.language", 
     "fields": {
-      "name": "Scots Gaelic (Scottish Gaelic)", 
+      "name": "Scottish Gaelic",
       "slug": "gd"
     }
   }, 

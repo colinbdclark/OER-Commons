@@ -7,16 +7,14 @@ from lessons.views import LessonViewMixin
 from utils.decorators import login_required
 from utils.views import OERViewMixin
 
-import datetime
 
-
-class OrganizeLessonForm(forms.ModelForm):
+class OrganizeForm(forms.ModelForm):
 
     group = forms.ModelChoiceField(Group.objects.all(),
                 label=u"Add to an item group",
                 help_text=u"and keep your items straight")
 
-    instruction_date = forms.DateField(initial=,
+    instruction_date = forms.DateField(
                 label=u"What is the indented date of instruction?",
                 help_text=u"we'll put it in your calendar in 'My Items'")
 
@@ -24,23 +22,20 @@ class OrganizeLessonForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user")
-        super(OrganizeLessonForm, self).__init__(*args, **kwargs)
+        super(OrganizeForm, self).__init__(*args, **kwargs)
         self.fields["group"].queryset = self.fields["group"].queryset.filter(user=user)
 
     class Meta:
         model = Lesson
-        fields = ["group", "keywords", "instruction_date"]
+        fields = ["group", "instruction_date"]
 
 
-class OrganizeLesson(LessonViewMixin, OERViewMixin, TemplateView):
+class Organize(LessonViewMixin, OERViewMixin, TemplateView):
 
-    template_name = "lessons/authoring/lesson-organize.html"
+    template_name = "lessons/authoring/organize.html"
     restrict_to_owner = True
 
-    def get_page_title(self):
-        if self.lesson.title:
-            return u'Edit "%s"' % self.lesson.title
-        return u"Edit Lesson"
+    page_title = u"Organize Lesson"
 
     @method_decorator(login_required())
     def dispatch(self, request, *args, **kwargs):
@@ -48,11 +43,12 @@ class OrganizeLesson(LessonViewMixin, OERViewMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         if getattr(self, "form", None) is None:
-            self.form = OrganizeLessonForm(instance=self.lesson)
-        return super(OrganizeLesson, self).get(request, *args, **kwargs)
+            self.form = OrganizeForm(instance=self.lesson, user=request.user)
+        return super(Organize, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.form = OrganizeLessonForm(request.POST, instance=self.lesson)
+        self.form = OrganizeForm(request.POST, instance=self.lesson,
+                                 user=request.user)
         if self.form.is_valid():
             self.form.save()
             if request.is_ajax():
@@ -67,6 +63,7 @@ class OrganizeLesson(LessonViewMixin, OERViewMixin, TemplateView):
         return self.get(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
-        data = super(OrganizeLesson, self).get_context_data(*args, **kwargs)
+        data = super(Organize, self).get_context_data(*args, **kwargs)
         data["form"] = self.form
+        data["step_number"] = 2
         return data

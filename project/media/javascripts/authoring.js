@@ -45,7 +45,8 @@ oer.authoring.init_define_form = function() {
         title: "required",
         summary: "required",
         subjects: "required",
-        goals: "null"
+        goals: "null",
+        language: "required"
     },
     submitHandler: function(form) {
         console.log(form);

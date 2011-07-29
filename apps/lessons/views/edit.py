@@ -1,20 +1,12 @@
 from annoying.decorators import JsonResponse
-from common.models import StudentLevel, GeneralSubject
 from django import forms
-from django.forms.util import flatatt
 from django.http import HttpResponse, Http404
-from django.utils.datastructures import MultiValueDict, MergeDict
 from django.utils.decorators import method_decorator
-from django.utils.encoding import force_unicode
-from django.utils.safestring import mark_safe
-from django.views.generic import TemplateView, View
-from lessons.models import Lesson
+from django.views.generic import View
 from lessons.views import LessonViewMixin
 from sorl.thumbnail.shortcuts import delete
 from utils.decorators import login_required
-from utils.views import OERViewMixin
 import json
-import string
 import time
 
 

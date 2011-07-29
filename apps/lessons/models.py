@@ -38,7 +38,9 @@ class Lesson(models.Model):
     image = models.ImageField(null=True, blank=True,
                               upload_to="upload/lessons/lesson")
 
-#    group = models.ForeignKey(Group, null=True, blank=True)
+    group = models.ForeignKey(Group, null=True, blank=True)
+
+    instruction_date = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
         return self.title or self.id

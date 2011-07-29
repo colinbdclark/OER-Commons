@@ -3,18 +3,11 @@
 {% block content %}
 
   <form action="{% url lessons:edit_organize lesson_id=lesson.id %}" method="post"
-        class="formatted" id="organize-lesson-form">
+        class="formatted" id="organize-form">
 
     <aside class="column-left">
-      {% spaceless %}
-      <div class="progress-tracker">
-        <img src="http://placehold.it/220x40/dddddd/333333&text=Progress%20tracker" />
-      </div>
-      {% endspaceless %}
 
     </aside><section id="content" class="content column-main">
-      <h1>Create an OER</h1>
-
       {% with form.title as field %}
         {% include "include/form-field.html" %}
       {% endwith %}
@@ -32,7 +25,7 @@
       {% endwith %}
 
       <div class="buttons">
-        <input type="submit" />
+        <a href="#">Next</a>
       </div>
 
     </section><aside class="column-left">

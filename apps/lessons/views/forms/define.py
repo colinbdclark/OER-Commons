@@ -1,5 +1,5 @@
 from annoying.decorators import JsonResponse
-from common.models import StudentLevel, GeneralSubject
+from common.models import StudentLevel, GeneralSubject, Language
 from django import forms
 from django.utils.datastructures import MergeDict, MultiValueDict
 from django.utils.decorators import method_decorator
@@ -50,6 +50,10 @@ class DefineForm(forms.ModelForm):
                         label=u"Level:",
                         widget=forms.CheckboxSelectMultiple())
 
+    language = forms.ModelChoiceField(Language.objects.all(),
+                        label=u"Language:",
+                        widget=forms.Select())
+
     subjects = forms.ModelMultipleChoiceField(GeneralSubject.objects.all(),
                         label=u"Primary Subject",
                         widget=forms.CheckboxSelectMultiple())
@@ -63,7 +67,8 @@ class DefineForm(forms.ModelForm):
                         help_text=u"What do you hope students will learn?")
 
     class Meta:
-        fields = ["title", "student_levels", "subjects", "summary", "goals"]
+        fields = ["title", "student_levels", "language",
+                  "subjects", "summary", "goals"]
         model = Lesson
 
 
@@ -72,7 +77,7 @@ class Define(LessonViewMixin, OERViewMixin, TemplateView):
     template_name = "lessons/authoring/define.html"
     restrict_to_owner = True
 
-    page_title = u"Define"
+    page_title = u"Define Lesson"
 
     @method_decorator(login_required())
     def dispatch(self, request, *args, **kwargs):
@@ -101,4 +106,5 @@ class Define(LessonViewMixin, OERViewMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         data = super(Define, self).get_context_data(*args, **kwargs)
         data["form"] = self.form
+        data["step_number"] = 1
         return data
