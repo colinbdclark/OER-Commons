@@ -150,7 +150,7 @@ oer.materials.index.init_tags_form = function() {
             $user_tags.empty();
             $form.attr("action", $this.attr("href"));
             $input.val("");
-            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/"), function(data, status) {
+            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
                 var item_tags = data.tags;
                 var user_tags = data.user_tags;
                 $.each(user_tags, function(index, tag) {
@@ -165,6 +165,60 @@ oer.materials.index.init_tags_form = function() {
     oer.tags_form.init();
 };
 
+oer.materials.index.init_align_form = function() {
+    var $dialog = $("#align-dialog").dialog({
+    modal : true,
+    width : "650",
+    height : "auto",
+    autoOpen : false,
+    resizable : false
+    });
+
+    var $document = $(document);
+    $document.bind(oer.align_form.LOADING_EVENT, function(e) {
+        $dialog.dialog("widget").addClass("loading");
+    });
+    $document.bind(oer.align_form.LOADED_EVENT, function(e) {
+        $dialog.dialog("widget").removeClass("loading");
+    });
+
+    var $form = $("#align-form");
+    var $user_tags = $("ul.align-user-tags");
+
+    oer.align_form.init_user_tags($user_tags, $form);
+
+    var $materials_index = $("#content div.materials-index");
+    $materials_index.delegate("dl.actions a.align-item", "click", function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $menu = $this.closest("dl.actions");
+        $menu.removeClass("active");
+        var $item = $this.closest("article.item");
+        
+        oer.login.check_login(function() {
+            $form.hide();
+            $form.attr("action", $this.attr("href"));
+            var initialized = !!$form.find("#id_curriculum_standard option").length;
+            if (initialized) {
+                oer.align_form.reset();
+            } else {
+                oer.align_form.init();
+            }
+            $user_tags.empty();
+            $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
+                $.each(data.tags, function(index, tag) {
+                    var $tags = $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
+                    oer.align_form.init_tag_tooltip($tags.find("a:first"));
+                });
+                $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
+                $form.show();
+            });
+            $dialog.dialog("option", "title", "Align " + $item.find("h1 a").first().text());
+            $dialog.dialog("open");
+        });
+    });
+};
+
 oer.materials.index.init = function() {
 
     oer.materials.index.init_action_panel();
@@ -173,6 +227,7 @@ oer.materials.index.init = function() {
     oer.materials.index.init_item_links();
     oer.materials.index.init_actions_menus();
     oer.materials.index.init_tags_form();
+    oer.materials.index.init_align_form();
 
     var $filters_portlet = $("section.portlet.index-filters");
 

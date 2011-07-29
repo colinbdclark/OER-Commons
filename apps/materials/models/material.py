@@ -1,4 +1,5 @@
 from autoslug.fields import AutoSlugField
+from curriculum.models import TaggedMaterial
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -103,6 +104,7 @@ class Material(models.Model):
     reviews = generic.GenericRelation(Review)
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
+    alignment_tags = generic.GenericRelation(TaggedMaterial)
     
     @property
     def verbose_name(self):

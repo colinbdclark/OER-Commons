@@ -1,4 +1,5 @@
 from common.models import GeneralSubject, Language, Keyword
+from curriculum.models import TaggedMaterial, AlignmentTag
 from django.http import Http404
 from materials.models.common import  GradeLevel, \
     MediaFormat, GeographicRelevance, Collection, COU_BUCKETS, \
@@ -7,10 +8,10 @@ from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import COURSE_OR_MODULE, CourseMaterialType
 from materials.models.library import LibraryMaterialType
 from materials.models.material import MEMBER_ACTIVITY_TYPES
+from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_slug
 from tags.models import Tag
 import re
-from materials.models.microsite import Microsite, Topic
 
 
 class Filter(object):
@@ -185,7 +186,55 @@ class KeywordFilter(Filter):
         return query_string_params
 
     def page_subtitle(self, value):
+        if isinstance(value, list):
+            return "Keyword: %s" % u", ".join([(get_name_from_slug(Keyword, v) or get_name_from_slug(Tag, v)) for v in value])
         return "Keyword: %s" % (get_name_from_slug(Keyword, value) or get_name_from_slug(Tag, value))
+
+
+class AlignmentFilter(Filter):
+
+    def __init__(self, index_name, request_name):
+        self.index_name = index_name
+        self.request_name = request_name
+
+    @property
+    def available_values(self):
+        values = set()
+        for parts in TaggedMaterial.objects.all().values_list("tag__standard__code",
+                                                              "tag__grade__code",
+                                                              "tag__category__code",
+                                                              "tag__code").order_by().distinct():
+            values.add(".".join(parts))
+        return values
+
+    def extract_value(self, request):
+        value = request.REQUEST.getlist(self.request_name)
+        if not value:
+            return None
+        return value
+
+    def update_query(self, query, value):
+        available_values = self.available_values
+
+
+        if not isinstance(value, list):
+            value = [value]
+
+        if set(value) - available_values:
+            raise Http404()
+
+        value = [AlignmentTag.objects.get_by_natural_key(*(v.split("."))).id for v in value]
+        
+        return query.narrow(u"%s:(%s)" % (self.index_name, u" OR ".join([str(v) for v in value])))
+
+    def update_query_string_params(self, query_string_params, value):
+        query_string_params[self.request_name] = value
+        return query_string_params
+
+    def page_subtitle(self, value):
+        if isinstance(value, list):
+            return u"Alignment Tag: %s" % u", ".join(value)
+        return u"Alignment Tag: %s" % value
 
 
 class SearchParameters(object):
@@ -330,6 +379,7 @@ FILTERS = {
     "microsite": VocabularyFilter("microsites", "f.microsite", Microsite, u"Topic", ignore_all_values=False),
     "topics": VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic"),
     "featured": BooleanFilter("featured", "f.featured", u"Featured Resources"),
+    "alignment": AlignmentFilter("alignment_tags", "f.alignment"),
     "search": SearchFilter(),
 }
 

@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'common',
     'tags',
     'geo',
+    'curriculum',
     'materials',
     'users',
     'rating',

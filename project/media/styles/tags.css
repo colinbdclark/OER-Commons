@@ -102,6 +102,7 @@ body.authenticated .user-tags {
 .user-tags li.tag a.delete,
 .portlet.item-tags .user-tags li.tag a.delete {
   display: block;
+  float: right;
   position: absolute;
   right: 2px;
   top: 0px;

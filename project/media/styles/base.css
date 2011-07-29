@@ -12,6 +12,14 @@ a {
   color: #0B7BA9;
 }
 
+.align-center {
+  text-align: center;
+}
+
+.align-right {
+  text-align: right;
+}
+
 a.dashed {
   border-bottom-width: 1px;
   border-bottom-style: dashed;
@@ -270,6 +278,23 @@ div.box h3 {
   text-shadow: 0px 0px 1px #333;
 }
 
+.qtip {
+  font-size: 13px;
+  line-height: 1.3em;
+}
+
+.qtip dt {
+  font-weight: bold;
+}
+
+.qtip dd {
+  margin: 0.2em 0 0.5em 1em;
+}
+
+.qtip dd.last {
+  margin-bottom: 0;
+}
+
 .global-notification {
   padding: 3px 0;
   font-size: 14px;
@@ -295,14 +320,11 @@ div.box h3 {
   background-color: #418ba8;
   color: #fff;
   border: none;
-  font-size: 13px;
 }
 
 .ui-tooltip-dark-blue .ui-tooltip-content {
   background-color: #c9e7f2;
   border: none;
-  font-size: 13px;
-  line-height: 1.3em;
   color: #000;
 }
 
