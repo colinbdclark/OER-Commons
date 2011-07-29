@@ -7,6 +7,7 @@ class AutocompleteListWidget(forms.Textarea):
 
     def __init__(self, *args, **kwargs):
         self.new_item_label = kwargs.pop("new_item_label", None)
+        self.use_placeholder_label = kwargs.pop("use_placeholder_label", False)
         super(AutocompleteListWidget, self).__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None):
@@ -22,7 +23,8 @@ class AutocompleteListWidget(forms.Textarea):
         return render_to_string("utils/include/autocomplete-list-widget.html",
                                 dict(name=name, value=value, attrs=attrs,
                                      autocomplete_url=autocomplete_url,
-                                     new_item_label=new_item_label))
+                                     new_item_label=new_item_label,
+                                     use_placeholder_label=self.use_placeholder_label))
 
     def value_from_datadict(self, data, files, name):
         values = [k for k in data.get(name, u"").split(",") if k]

@@ -1,7 +1,7 @@
+from common.models import Keyword
 from django.core.urlresolvers import reverse
 from django.http import HttpResponsePermanentRedirect, Http404
 from django.views.generic.simple import direct_to_template
-from materials.models.common import Keyword
 from tags.models import Tag
 import string
 from django.core.paginator import Paginator

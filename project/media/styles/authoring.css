@@ -1,97 +1,326 @@
+body.authoring {
+  background: #EFEFEF url(../images/authoring/body-bg.png) repeat-x 0 0;
+}
+
+.authoring .fixed-width {
+  width: 1000px;
+}
+
+.authoring #logo {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url(../images/authoring/logo.png) no-repeat;
+  width: 116px;
+  height: 94px;
+  text-indent: -9999px;
+}
+
+.authoring header.global {
+  height: 56px;
+  background: url(../images/authoring/header-bg.png) no-repeat 155px 0;
+  position: relative;
+}
+
+.authoring header.global h1 {
+  position: absolute;
+  top: 27px;
+  left: 120px;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.authoring header.global nav {
+  position: absolute;
+  right: 50px;
+  top: 35px;
+}
+
+.authoring header.global nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.authoring header.global nav ul li {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.authoring .progress-bar {
+  background-repeat: no-repeat;
+  width: 400px;
+  height: 50px;
+  margin: auto;
+  position: relative;
+  top: 4px;
+}
+
+.authoring .progress-bar.step1 {
+  background-image: url(../images/authoring/progress-bar-1.png);
+}
+
+.authoring .progress-bar.step2 {
+  background-image: url(../images/authoring/progress-bar-2.png);
+}
+
+.authoring .progress-bar.step3 {
+  background-image: url(../images/authoring/progress-bar-3.png);
+}
+
+.authoring .progress-bar.step4 {
+  background-image: url(../images/authoring/progress-bar-4.png);
+}
+
+.authoring .progress-bar.step5 {
+  background-image: url(../images/authoring/progress-bar-5.png);
+}
+
+.authoring .page {
+  margin-top: 4px;
+  background: url(../images/authoring/content-bg.png) repeat-y 50% 0;
+}
+
+.authoring .page .wrap-top {
+  padding-top: 10px;
+  background: url(../images/authoring/content-bg-top.png) no-repeat 50% 0;
+}
+
+.authoring .page .wrap-bottom {
+  padding-bottom: 10px;
+  background: url(../images/authoring/content-bg-bottom.png) no-repeat 50% 100%;
+}
+
+.authoring .column-left,
+.authoring .column-right {
+  padding: 10px 20px;
+  width: 180px;
+}
+
+.authoring .column-main {
+  width: 520px;
+}
+
+@media all and (max-width: 1150px) {
+  .authoring .column-left {
+    padding-top: 40px;
+  }
+}
+
+.authoring #content {
+  padding-top: 10px;
+}
+
 .authoring #content h1 {
   font-size: 20px;
   line-height: 30px;
 }
 
-.authoring .column-left,
-.authoring .column-right {
-  width: 220px;
+.authoring aside h1 {
+  font-size: 16px;
+  margin: 0.5em 0;
 }
 
-.authoring .column-main {
-  width: 480px;
-}
-
-.authoring .progress-tracker {
-  margin-bottom: 10px;
-}
-
-#edit-lesson-form aside .box {
-  padding: 10px;
-  background: #eee;
-  border: none;
-}
-
-#edit-lesson-form aside .box > ul {
+.authoring aside ul {
   margin-bottom: 1em;
   list-style-position: inside;
 }
 
-#edit-lesson-form .student-levels .field ul {
+.authoring aside p {
+  margin: 1em 0;
+}
+
+.authoring form.formatted .field {
+  margin-bottom: 1.5em;
+}
+
+.authoring form.formatted .label {
+  margin-bottom: 4px;
+}
+
+.authoring form.formatted .label label {
+  font-weight: normal;
+  font-size: 18px;
+}
+
+.authoring form.formatted .help {
+  margin: 4px 0 4px 1em;
+  font-size: 14px;
+  font-style: normal;
+}
+
+.authoring form.formatted input[type='text'],
+.authoring form.formatted textarea {
+  border: 1px solid #0B7BA8;
+}
+
+.authoring form.formatted input[type='text'] {
+  line-height: 20px;
+  font-size: 16px;
+}
+
+.authoring #status-messages {
+  position: absolute;
+  top: 64px;
+  left: 10px;
+  z-index: 10;
+}
+
+.authoring #status-messages .status-message {
+  float: left;
+  clear: both;
+}
+
+
+#define-form aside .field {
+  margin-bottom: 5px;
+}
+
+#define-form .student-levels a {
+  float: right;
+}
+
+#define-form .student-levels ul {
+  list-style-type: none;
+}
+
+#define-form .student-levels .field ul {
   display: none;
 }
 
-#edit-lesson-form .title input {
-  line-height: 20px;
-  font-size: 16px;
+#define-form .title input {
   width: 470px;
 }
 
-#edit-lesson-form .subjects ul {
+#define-form .subjects ul {
   margin-top: 3px;
 }
 
-#edit-lesson-form .subjects li {
+#define-form .subjects li {
   display: inline-block;
   width: 200px;
   margin-right: 10px;
   vertical-align: top;
 }
 
-#edit-lesson-form .summary textarea {
+#define-form .summary textarea {
   width: 470px;
 }
 
-#edit-lesson-form .goals ul {
-  list-style: disc inside;
+#define-form .goals ul {
+  list-style: disc outside;
+  margin-left: 20px;
 }
 
-#edit-lesson-form .goals a {
+#define-form .goals a {
   display: inline-block;
   margin-top: 5px;
   margin-left: 15px;
 }
 
-#edit-lesson-form .goals input {
-  line-height: 18px;
-  font-size: 14px;
-  width: 200px;
+#define-form .goals input {
+  width: 450px;
 }
 
-#edit-lesson-form .image {
+#organize-form #content section header h1 {
+  display: inline-block;
+  font-weight: normal;
+  font-size: 18px;
+}
+
+#organize-form #content section {
+  margin-bottom: 1em;
+}
+
+#organize-form #content section header span {
+  color: #999;
+  position: relative;
+  bottom: 1px;
+  left: 1em;
+}
+
+#organize-form .image {
   margin-top: 10px;
+  vertical-align: top;
 }
 
-#edit-lesson-form .image.loading {
+#organize-form .image.loading {
   padding-top: 150px;
   background: url(../images/ajax-loader-big.gif) no-repeat 50% 70px;
 }
 
-#edit-lesson-form .image .controls {
-  position: relative;
-  margin-bottom: 10px;
+#organize-form .image .controls {
+  display: inline-block;
+  margin-left: 1em;
+  vertical-align: top;
 }
 
-#edit-lesson-form .image .controls div {
+#organize-form .image .controls div {
   display: inline-block;
 }
 
-#edit-lesson-form .image .controls .remove {
-  position: absolute;
-  right: 0;
+#organize-form .image .controls a {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid #666;
+  text-decoration: none;
+  color: #333;
 }
 
-#edit-lesson-form .image ul {
-  list-style-position: inside;
-  margin-top: 5px;
+#organize-form section.organize .label label,
+#organize-form section.align .label label {
+  font-size: 14px;
+}
+
+#organize-form section.organize .field,
+#organize-form section.align .field {
+  position: relative;
+}
+
+#organize-form section.organize .field .errors {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#organize-form #id_group {
+  position: absolute;
+  right: 0;
+  top: 14px;
+}
+
+#organize-form #id_instruction_date {
+  position: absolute;
+  right: 0;
+  top: 14px;
+  width: 110px;
+}
+
+#organize-form #add-keywords {
+  position: absolute;
+  right: 0;
+  top: 14px;
+  width: 200px;
+}
+
+#organize-form #keywords-widget ul {
+  margin-top: 1em;
+}
+
+#organize-form section.align header h1 {
+  margin-bottom: 0;
+}
+
+#organize-form section.align div.label {
+  display: inline-block;
+}
+
+#organize-form section.align a.align {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid #666;
+  text-decoration: none;
+  color: #333;
+  margin-left: 1em;
 }

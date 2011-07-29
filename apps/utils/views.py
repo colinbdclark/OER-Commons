@@ -21,6 +21,8 @@ class OERViewMixin(object):
         data = super(OERViewMixin, self).get_context_data(*args, **kwargs)
         data["page_title"] = self.page_title
         data["page_subtitle"] = self.page_subtitle
+        data["breadcrumbs"] = self.breadcrumbs
+        return data
 
 
 MAX_RESULTS = 10

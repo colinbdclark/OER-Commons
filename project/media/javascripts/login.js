@@ -4,7 +4,7 @@ oer.login.LOGGED_IN_EVENT = "oer-login-logged-in";
 oer.login.LOGGED_OUT_EVENT = "oer-login-logged-out";
 
 oer.login.init = function() {
-    $("#header a.login").click(function(e) {
+    $("header.global a.login").click(function(e) {
         e.preventDefault();
         oer.login.show_popup();
     });

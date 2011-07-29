@@ -1,13 +1,13 @@
 from __future__ import absolute_import
 
 from autoslug.fields import AutoSlugField
-from common.models import GeneralSubject
+from common.models import GeneralSubject, Language, Keyword
 from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import pre_delete, m2m_changed, post_save
 from django.utils.translation import ugettext_lazy as _
-from materials.models.common import Author, Keyword, GradeLevel, \
-    Language, GeographicRelevance, AutoCreateManyToManyField
+from materials.models.common import Author, GradeLevel,\
+    GeographicRelevance, AutoCreateManyToManyField
 from materials.models.material import Material, mark_for_reindex, \
     unindex_material, material_post_save
 

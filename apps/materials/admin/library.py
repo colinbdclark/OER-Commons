@@ -1,4 +1,4 @@
-from common.models import GeneralSubject
+from common.models import GeneralSubject, Language, Keyword
 from curriculum.models import AlignmentTag
 from django import forms
 from django.conf import settings
@@ -16,7 +16,7 @@ from material import MaterialAdmin
 from materials.admin.course import AuthorsFormSet
 from materials.admin.fields import LicenseFields
 from materials.models.common import Author, GradeLevel, \
-    MediaFormat, Language, GeographicRelevance, Keyword
+    MediaFormat, GeographicRelevance
 from materials.models.library import Library, LibraryMaterialType
 from materials.views.forms import RSSFields
 from materials.views.forms.course import InstitutionField, CollectionField

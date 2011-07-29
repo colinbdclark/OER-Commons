@@ -1,9 +1,20 @@
 from autoslug import AutoSlugField
 from common.fields import SeparatedValuesField
-from common.models import StudentLevel, GeneralSubject
+from common.models import StudentLevel, GeneralSubject, Language, Keyword
 from django.contrib.auth.models import User
 from django.db import models
+from materials.models import AutoCreateManyToManyField
 from sorl.thumbnail import get_thumbnail
+
+
+class Group(models.Model):
+
+    user = models.ForeignKey(User)
+
+    title = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return self.title
 
 
 class Lesson(models.Model):
@@ -23,8 +34,16 @@ class Lesson(models.Model):
 
     goals = SeparatedValuesField(default=u"")
 
+    language = models.ForeignKey(Language, null=True, blank=True)
+
     image = models.ImageField(null=True, blank=True,
                               upload_to="upload/lessons/lesson")
+
+    group = models.ForeignKey(Group, null=True, blank=True)
+
+    instruction_date = models.DateTimeField(null=True, blank=True)
+
+    keywords = AutoCreateManyToManyField(Keyword)
 
     def __unicode__(self):
         return self.title or self.id

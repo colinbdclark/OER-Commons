@@ -182,7 +182,7 @@ oer.materials.index.init_tags_form = function() {
             $user_tags.empty();
             $form.attr("action", $this.attr("href"));
             $input.val("");
-            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
+            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
                 var user_tags = data.user_tags;
                 $.each(user_tags, function(index, tag) {
                     $.tmpl("user-tags-item", tag).appendTo($user_tags);

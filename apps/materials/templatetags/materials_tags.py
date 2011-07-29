@@ -1,8 +1,9 @@
+from common.models import Keyword
 from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.utils.html import fix_ampersands
 from django.utils.safestring import mark_safe
-from materials.models.common import COU_BUCKETS, Keyword, License
+from materials.models.common import COU_BUCKETS, License
 
 
 register = Library()
