@@ -1,8 +1,9 @@
 from autoslug import AutoSlugField
 from common.fields import SeparatedValuesField
-from common.models import StudentLevel, GeneralSubject, Language
+from common.models import StudentLevel, GeneralSubject, Language, Keyword
 from django.contrib.auth.models import User
 from django.db import models
+from materials.models import AutoCreateManyToManyField
 from sorl.thumbnail import get_thumbnail
 
 
@@ -41,6 +42,8 @@ class Lesson(models.Model):
     group = models.ForeignKey(Group, null=True, blank=True)
 
     instruction_date = models.DateTimeField(null=True, blank=True)
+
+    keywords = AutoCreateManyToManyField(Keyword)
 
     def __unicode__(self):
         return self.title or self.id
