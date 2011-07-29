@@ -1,4 +1,4 @@
-from common.models import GeneralSubject, Language
+from common.models import GeneralSubject, Language, Keyword
 from django import forms
 from django.conf import settings
 from django.contrib.admin.util import unquote
@@ -15,7 +15,7 @@ from material import MaterialAdmin
 from materials.admin.course import AuthorsFormSet
 from materials.admin.fields import LicenseFields
 from materials.models.common import Author, GradeLevel,\
-    GeographicRelevance, Keyword
+    GeographicRelevance
 from materials.models.community import CommunityType, CommunityTopic, \
     CommunityItem
 from materials.views.forms import RSSFields

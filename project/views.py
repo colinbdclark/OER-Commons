@@ -1,6 +1,6 @@
 from annoying.decorators import ajax_request
 from cache_utils.decorators import cached
-from common.models import GeneralSubject
+from common.models import GeneralSubject, Keyword
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from django.utils.html import escape
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
-from materials.models.common import Keyword, GradeLevel
+from materials.models.common import  GradeLevel
 from materials.models.material import PUBLISHED_STATE
 from materials.models.microsite import Microsite
 from materials.utils import get_name_from_slug, get_facets_for_field

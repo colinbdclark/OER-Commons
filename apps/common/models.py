@@ -53,3 +53,33 @@ class Language(models.Model):
         verbose_name = _(u"Language")
         verbose_name_plural = _(u"Languages")
         ordering = ("order", "name",)
+
+
+class KeywordManager(models.Manager):
+
+    def get_by_natural_key(self, name):
+        return self.get_or_create(name=name)[0]
+    
+
+class Keyword(models.Model):
+
+    name = models.CharField(max_length=500, unique=True,
+                            verbose_name=_(u"Name"))
+    slug = AutoSlugField(populate_from="name", max_length=500,
+                         verbose_name=_(u"Slug"),
+                         db_index=True)
+    suggested = models.BooleanField(default=False,
+                                    verbose_name=_(u"Suggested"))
+
+    objects = KeywordManager()
+
+    def natural_key(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _(u"Keyword")
+        verbose_name_plural = _(u"Keywords")
+        ordering = ("name",)
