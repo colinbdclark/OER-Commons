@@ -6,13 +6,13 @@ oer.materials.index.init_action_panel = function() {
     var $action_panel = $("div.action-panel");
 
     $action_panel.find("select[name='batch_size']").change(function() {
-        $this = $(this);
+        var $this = $(this);
         $form.find("input[name='batch_size']").val($this.val());
         $form.submit();
     });
 
     $action_panel.find("select[name='sort_by']").change(function() {
-        $this = $(this);
+        var $this = $(this);
         $form.find("input[name='sort_by']").val($this.val());
         $form.submit();
     });
@@ -31,7 +31,7 @@ oer.materials.index.init_filters = function() {
 
     $form.submit(function() {
         $form.find("dl.filter").each(function() {
-            $filter = $(this);
+            var $filter = $(this);
             if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
                 $filter.find(":checkbox").attr("disabled", true);
             }
@@ -41,9 +41,9 @@ oer.materials.index.init_filters = function() {
         }
     });
 
-    $form.delegate("dl.filter dd :checkbox", "click", function(e) {
-        $checkbox = $(this);
-        $filter = $checkbox.parents("dl.filter").first();
+    $form.delegate("dl.filter dd :checkbox", "click", function() {
+        var $checkbox = $(this);
+        var $filter = $checkbox.parents("dl.filter").first();
         if ($checkbox.attr("checked")) {
             if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
                 $filter.find("dt :checkbox").attr("checked", true);
@@ -54,8 +54,8 @@ oer.materials.index.init_filters = function() {
     });
 
     $form.delegate("dl.filter dt :checkbox", "click", function(e) {
-        $checkbox = $(this);
-        $filter = $checkbox.parents("dl.filter").first();
+        var $checkbox = $(this);
+        var $filter = $checkbox.parents("dl.filter").first();
         $filter.find(".collapsed").removeClass("collapsed").addClass("expanded");
         if ($checkbox.attr("checked")) {
             $filter.find("dd :checkbox").attr("checked", true);
@@ -109,7 +109,7 @@ oer.materials.index.init_actions_menus = function() {
         }
     });
 
-    $(document).click(function(e) {
+    $(document).click(function() {
         $materials_index.find("dl.actions").removeClass("active");
     });
 
@@ -150,7 +150,7 @@ oer.materials.index.init_tags_form = function() {
             $user_tags.empty();
             $form.attr("action", $this.attr("href"));
             $input.val("");
-            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
+            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
                 var item_tags = data.tags;
                 var user_tags = data.user_tags;
                 $.each(user_tags, function(index, tag) {
