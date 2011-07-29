@@ -160,6 +160,19 @@ body.authoring {
   font-size: 16px;
 }
 
+.authoring #status-messages {
+  position: absolute;
+  top: 64px;
+  left: 10px;
+  z-index: 10;
+}
+
+.authoring #status-messages .status-message {
+  float: left;
+  clear: both;
+}
+
+
 #define-form aside .field {
   margin-bottom: 5px;
 }
@@ -210,30 +223,104 @@ body.authoring {
   width: 450px;
 }
 
-#define-form .image {
-  margin-top: 10px;
+#organize-form #content section header h1 {
+  display: inline-block;
+  font-weight: normal;
+  font-size: 18px;
 }
 
-#define-form .image.loading {
+#organize-form #content section {
+  margin-bottom: 1em;
+}
+
+#organize-form #content section header span {
+  color: #999;
+  position: relative;
+  bottom: 1px;
+  left: 1em;
+}
+
+#organize-form .image {
+  margin-top: 10px;
+  vertical-align: top;
+}
+
+#organize-form .image.loading {
   padding-top: 150px;
   background: url(../images/ajax-loader-big.gif) no-repeat 50% 70px;
 }
 
-#define-form .image .controls {
-  position: relative;
-  margin-bottom: 10px;
+#organize-form .image .controls {
+  display: inline-block;
+  margin-left: 1em;
+  vertical-align: top;
 }
 
-#define-form .image .controls div {
+#organize-form .image .controls div {
   display: inline-block;
 }
 
-#define-form .image .controls .remove {
-  position: absolute;
-  right: 0;
+#organize-form .image .controls a {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid #666;
+  text-decoration: none;
+  color: #333;
 }
 
-#define-form .image ul {
-  list-style-position: inside;
-  margin-top: 5px;
+#organize-form section.organize .label label,
+#organize-form section.align .label label {
+  font-size: 14px;
+}
+
+#organize-form section.organize .field
+#organize-form section.align .field {
+  position: relative;
+}
+
+#organize-form section.organize .field .errors {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#organize-form #id_group {
+  position: absolute;
+  right: 0;
+  top: 14px;
+}
+
+#organize-form #id_instruction_date {
+  position: absolute;
+  right: 0;
+  top: 14px;
+  width: 110px;
+}
+
+#organize-form #add-keywords {
+  position: absolute;
+  right: 0;
+  top: 14px;
+  width: 200px;
+}
+
+#organize-form #keywords-widget ul {
+  margin-top: 1em;
+}
+
+#organize-form section.align header h1 {
+  margin-bottom: 0;
+}
+
+#organize-form section.align div.label {
+  display: inline-block;
+}
+
+#organize-form section.align a.align {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid #666;
+  text-decoration: none;
+  color: #333;
+  margin-left: 1em;
 }
