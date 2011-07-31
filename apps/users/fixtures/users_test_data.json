@@ -54,5 +54,23 @@
             "confirmed": false,
             "timestamp": "2011-06-20 01:48:20"
         }
+    },
+    {
+        "pk": 3,
+        "model": "auth.user",
+        "fields": {
+            "username": "testuser3",
+            "first_name": "Jonny",
+            "last_name": "Doe",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2011-06-20 02:48:20",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$6dbae$dd62c29a3c7a92e88918f92a6200ea18450d9f19",
+            "email": "jonny@example.com",
+            "date_joined": "2011-06-20 01:48:20"
+        }
     }
 ]
