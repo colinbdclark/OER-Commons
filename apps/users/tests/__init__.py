@@ -5,3 +5,4 @@ from views.registration import (RegistrationFormTest, ConfirmationFormTest,
 from views.login import LoginViewTest
 from views.reset_password import (InitResetPasswordFormTest,
     ResetPasswordFormTest, InitViewTest, ResetPasswordViewTest)
+from backend import EncryptPasswordTest, CheckPasswordTest, BcryptBackendTest
