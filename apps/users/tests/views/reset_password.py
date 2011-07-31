@@ -164,13 +164,6 @@ class ResetPasswordViewTest(TestCase, TestDataGenerator):
         self.reset_password_url = reverse('users:reset_password',
                                           args=[self.confirmation.key])
 
-    def test_key_is_none(self):
-        # Test that key is None.
-        reset_password_url = reverse('users:reset_password', args=[None])
-        print reset_password_url
-        response = self.client.get(reset_password_url)
-        self.assertEqual(response.status_code, 404)
-
     def test_reset_password_template(self):
         # Test reset password view was rendered with correct template.
         response = self.client.get(self.reset_password_url)
