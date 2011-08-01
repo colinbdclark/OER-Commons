@@ -1,8 +1,11 @@
 <div id="{{ name }}-widget" class="autocomplete-list-widget" data-url="{{ autocomplete_url }}">
   {% spaceless %}
-  <ul class="clearfix">
+  <ul>
       {% for val in value %}
-        <li><a href="#" class="delete">Delete</a> <span>{{ val }}</span></li>
+        <li class="rc3">
+          <span>{{ val }}</span>
+          <a href="#" class="delete">x</a>
+        </li>
       {% endfor %}
   </ul>
   {% endspaceless %}

@@ -59,3 +59,26 @@ class Lesson(models.Model):
         if not self.image:
             return None
         return get_thumbnail(self.image, "220x500")
+
+
+class Chapter(models.Model):
+
+    lesson = models.ForeignKey(Lesson, related_name="chapters")
+    order = models.PositiveIntegerField()
+    title = models.CharField(default=u"", max_length=200)
+    text = models.TextField(default=u"")
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    def __unicode__(self):
+        return u"%s from %s" % (self.title, unicode(self.lesson))
+
+    def save(self, *args, **kwargs):
+        if not self.order:
+            self.order = self.lesson.chapters.all().count() + 1
+        super(Chapter, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ["lesson__id", "order", "id"]
+

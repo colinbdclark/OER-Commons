@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
+from haystack.exceptions import NotRegistered
 from haystack.sites import site
 from utils.decorators import login_required
 
@@ -52,8 +53,11 @@ def align(request, app_label, model, object_id):
     if form.is_valid():
         tagged = form.save()
         tag = form.cleaned_data["tag"]
-        
-        site.update_object(item)
+
+        try:
+            site.update_object(item)
+        except NotRegistered:
+            pass
         
         return dict(status="success",
                     tag=dict(id=tagged.id, code=tag.full_code,

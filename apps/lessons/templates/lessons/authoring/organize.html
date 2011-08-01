@@ -1,4 +1,5 @@
 {% extends "lessons/authoring/base.html" %}
+{% load curriculum_tags %}
 
 {% block content %}
 
@@ -48,18 +49,30 @@
           <div class="label">
             <label>Common Core Curriculum Standards</label>
           </div>
-          <a href="#" class="align rc3">Align</a>
-      </div>
+          <a href="#" id="show-align-form" class="rc3">Align</a>
+          <ul class="align-user-tags">
+            {% for tagged in align_user_tags %}
+              <li class="rc3 tag" data-id="{{ tagged.id }}">
+                <a href="{% url materials:alignment_index alignment=tagged.tag.full_code %}">{{ tagged.tag.full_code }}</a>
+                <a href="#" class="delete">x</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       </section>
 
       <div class="buttons">
-        <a href="#">Next</a>
+        <a href="{% url lessons:edit_outline lesson_id=lesson.id %}" class="rc5 next">Next</a>
       </div>
 
     </section><aside class="column-left">
     </aside>
 
   </form>
+
+  <div id="align-dialog" style="display: none;">
+    {% align_form lesson %}
+  </div>
 
 {% endblock %}
 

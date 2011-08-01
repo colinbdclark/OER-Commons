@@ -1,0 +1,55 @@
+{% extends "lessons/authoring/base.html" %}
+
+{% block content %}
+
+  <form action="{% url lessons:edit_outline lesson_id=lesson.id %}" method="post"
+        class="formatted" id="outline-form">
+
+    <aside class="column-left">
+    </aside><section id="content" class="content column-main">
+
+      <div class="field required">
+        <div class="label">
+          <label>Outline</label>
+        </div>
+        <div class="help">
+          Identify the main sections of your resource.<br>
+          You can always add or remove sections later.<br>
+          Add text, pictures and more on the next page.
+        </div>
+        <ol id="chapters">
+          {% for chapter in lesson.chapters.all %}
+            {% spaceless %}
+            <li data-id="{{ chapter.id }}">
+              <input name="title" value="{{ chapter.title }}" type="text" />
+              <input name="id" value="{{ chapter.id }}" type="hidden" />
+              <span class="handle rc3"></span>
+              <span class="remove rc3">x</span>
+            </li>
+            {% endspaceless %}
+          {% endfor %}
+        </ol>
+        <a href="#" class="add rc3">Add another</a>
+      </div>
+
+      <div class="buttons">
+        <a href="" class="rc5 next">Next</a>
+      </div>
+
+    </section><aside class="column-right">
+      <section>
+        <h1>Example Outlines</h1>
+      </section>
+    </aside>
+
+  </form>
+
+{% endblock %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.authoring.init_outline_form();
+    });
+  </script>
+{% endblock %}
