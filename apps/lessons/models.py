@@ -74,6 +74,11 @@ class Chapter(models.Model):
     def __unicode__(self):
         return u"%s from %s" % (self.title, unicode(self.lesson))
 
+    def save(self, *args, **kwargs):
+        if not self.order:
+            self.order = self.lesson.chapters.all().count() + 1
+        super(Chapter, self).save(*args, **kwargs)
+
     class Meta:
         ordering = ["lesson__id", "order", "id"]
-                
+
