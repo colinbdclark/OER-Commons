@@ -64,7 +64,7 @@ class Lesson(models.Model):
 class Chapter(models.Model):
 
     lesson = models.ForeignKey(Lesson, related_name="chapters")
-    order = models.PositiveIntegerField(default=1)
+    order = models.PositiveIntegerField()
     title = models.CharField(default=u"", max_length=200)
     text = models.TextField(default=u"")
 

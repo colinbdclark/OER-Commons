@@ -19,16 +19,17 @@
         </div>
         <ol id="chapters">
           {% for chapter in lesson.chapters.all %}
+            {% spaceless %}
             <li data-id="{{ chapter.id }}">
-              <input name="chapter_{{ chapter.id }}_title" value="{{ chapter.title }}" type="text" />
-              <input name="chapter_{{ chapter.id }}_order" value="{{ chapter.order }}" type="hidden" />
-              <a href="#" class="remove">x</a>
+              <input name="title" value="{{ chapter.title }}" type="text" />
+              <input name="id" value="{{ chapter.id }}" type="hidden" />
+              <span class="handle rc3"></span>
+              <span class="remove rc3">x</span>
             </li>
-            <li>
-              <a href="#" class="add">Add another</a>
-            </li>
+            {% endspaceless %}
           {% endfor %}
         </ol>
+        <a href="#" class="add rc3">Add another</a>
       </div>
 
       <div class="buttons">

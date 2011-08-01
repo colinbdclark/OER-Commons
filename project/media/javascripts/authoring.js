@@ -13,7 +13,7 @@ oer.authoring.autosave = function($form) {
     }
     setTimeout(function() {
         oer.authoring.autosave($form);
-    }, 10000);
+    }, 5000);
 };
 
 oer.authoring.init_define_form = function() {
@@ -162,6 +162,51 @@ oer.authoring.init_organize_form = function() {
             oer.status_message.success(response.message, true);
         });
     });
+};
 
+$.template("authoring-outline-item", '<input name="title" value="" type="text" /><input type="hidden" name="id" value="${id}" /><span class="handle rc3"></span><span class="remove rc3">x</span>');
 
+oer.authoring.init_outline_form = function() {
+    var $form = $("#outline-form");
+    
+    oer.authoring.autosave($form);
+
+    $form.submit(function(e) {
+        e.preventDefault();
+        $.post($form.attr("action"), $form.serialize(), function(response) {
+            if (response.status === "success") {
+                oer.status_message.success(response.message, true);
+            }
+        });
+    });
+
+    var $chapters = $form.find("#chapters");
+
+    var $add_chapter_btn = $form.find("a.add");
+    $add_chapter_btn.click(function(e) {
+        e.preventDefault();
+        var $li = $("<li></li>").addClass("loading");
+        $li.appendTo($chapters);
+        $.post(window.location.href, {"add-chapter": "yes"}, function(response) {
+            $.tmpl("authoring-outline-item", response).appendTo($li);
+            $li.removeClass("loading");
+        });
+    });
+
+    $chapters.delegate("span.remove", "click", function(e) {
+        e.preventDefault();
+        apprise("Delete this chapter?", {verify: true}, function(r) {
+            if (r) {
+                var $chapter = $(e.target).closest("li");
+                $.post(document.location.href, {"delete-chapter": "yes", "id": $chapter.data("id")});
+                $chapter.remove();
+            }
+        });
+    });
+
+    $chapters.sortable({
+        placeholder: "ui-state-highlight",
+        cursor: "crosshair",
+        handle: ".handle"
+    });
 };

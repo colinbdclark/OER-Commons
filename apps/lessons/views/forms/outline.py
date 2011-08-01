@@ -24,16 +24,41 @@ class Outline(LessonViewMixin, OERViewMixin, TemplateView):
         return super(Outline, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if "add-chapter" in request.POST:
-            chapter = Chapter.objects.create(lesson=self.lesson)
-            return JsonResponse(dict(status="success", id=chapter.id))
+        if request.is_ajax():
+            if "add-chapter" in request.POST:
+                chapter = Chapter.objects.create(lesson=self.lesson)
+                return JsonResponse(dict(status="success", id=chapter.id))
 
-        elif "remove-chapter" in request.POST:
-            try:
-                Chapter.objects.get(lesson=self.lesson, id=int(request.POST["id"])).delete()
-            except (ValueError, TypeError, KeyError, Chapter.DoesNotExist):
-                return JsonResponse(dict(status="error"))
-            return JsonResponse(dict(status="success"))
+            elif "delete-chapter" in request.POST:
+                try:
+                    Chapter.objects.get(lesson=self.lesson, id=int(request.POST["id"])).delete()
+                except (ValueError, TypeError, KeyError, Chapter.DoesNotExist):
+                    return JsonResponse(dict(status="error"))
+                return JsonResponse(dict(status="success"))
+
+            titles = request.POST.getlist("title")
+            ids = request.POST.getlist("id")
+            assert len(titles) == len(ids)
+
+            saved = False
+            for i, title in enumerate(titles):
+                id = int(ids[i])
+                order = i+1
+                try:
+                    chapter = self.lesson.chapters.get(id=id)
+                    if chapter.title != title or chapter.order != order:
+                        chapter.title = title
+                        chapter.order = order
+                        chapter.save()
+                        saved = True
+                except Chapter.DoesNotExist:
+                    continue
+
+            if saved:
+                return JsonResponse(dict(status="success", message=u"Changes were saved."))
+
+            return JsonResponse(dict(message=u"Nothing changed."))
+
 
         return self.get(request, *args, **kwargs)
 
