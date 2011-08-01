@@ -1,6 +1,8 @@
 from annoying.decorators import JsonResponse
 from common.models import Keyword
+from curriculum.models import TaggedMaterial
 from django import forms
+from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse, Http404
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
@@ -85,6 +87,13 @@ class Organize(LessonViewMixin, OERViewMixin, TemplateView):
         data = super(Organize, self).get_context_data(*args, **kwargs)
         data["form"] = self.form
         data["step_number"] = 2
+        align_user_tags = []
+        content_type = ContentType.objects.get_for_model(self.lesson)
+        for tagged in TaggedMaterial.objects.filter(content_type=content_type,
+                                                    object_id=self.lesson.id,
+                                                    user=self.request.user).select_related():
+            align_user_tags.append(tagged)
+        data["align_user_tags"] = align_user_tags
         return data
 
 

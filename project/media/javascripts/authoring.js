@@ -85,6 +85,53 @@ oer.authoring.init_organize_form = function() {
         }
     });
 
+
+    var $dialog = $("#align-dialog").dialog({
+        modal : true,
+        width : "650",
+        height : "auto",
+        position: ["center", 150],
+        autoOpen : false,
+        resizable : false
+    });
+
+    var $document = $(document);
+    $document.bind(oer.align_form.LOADING_EVENT, function() {
+        $dialog.dialog("widget").addClass("loading");
+    });
+    $document.bind(oer.align_form.LOADED_EVENT, function() {
+        $dialog.dialog("widget").removeClass("loading");
+    });
+
+    var $form = $("#align-form");
+    var $form_user_tags = $form.find("ul.align-user-tags");
+
+    var $align = $("section.align");
+    var $align_user_tags = $align.find("ul.align-user-tags");
+
+    var $all_user_tags = $("ul.align-user-tags");
+    oer.align_form.init_user_tags($all_user_tags, $form);
+    oer.align_form.init_tag_tooltip($all_user_tags.find("a:first"));
+
+    var $show_form_btn = $("#show-align-form");
+
+    $show_form_btn.click(function(e) {
+        e.preventDefault();
+        var initialized = !!$form.find("#id_curriculum_standard option").length;
+        if (initialized) {
+            oer.align_form.reset();
+        } else {
+            oer.align_form.init();
+            $dialog.dialog("option", "title", "Align OER");
+            $align_user_tags.children("li").each(function(i, el) {
+                var $li = $(el).clone(true);
+                $form_user_tags.append($li);
+            });
+            $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
+        }
+        $dialog.dialog("open");
+    });
+
     var $image_widget = $form.find("section.image");
     var $image = $image_widget.find("img");
     var $image_upload = $image_widget.find("a.upload");
