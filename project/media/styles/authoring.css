@@ -181,6 +181,10 @@ body.authoring {
   text-decoration: none;
 }
 
+.authoring .buttons {
+  margin-bottom: 1em;
+}
+
 #define-form aside .field {
   margin-bottom: 5px;
 }
@@ -198,7 +202,7 @@ body.authoring {
 }
 
 #define-form .title input {
-  width: 470px;
+  width: 515px;
 }
 
 #define-form .subjects ul {
@@ -213,7 +217,7 @@ body.authoring {
 }
 
 #define-form .summary textarea {
-  width: 470px;
+  width: 515px;
 }
 
 #define-form .goals ul {
@@ -224,11 +228,11 @@ body.authoring {
 #define-form .goals a {
   display: inline-block;
   margin-top: 5px;
-  margin-left: 15px;
+  margin-left: 20px;
 }
 
 #define-form .goals input {
-  width: 450px;
+  width: 495px;
 }
 
 #organize-form #content section header h1 {
