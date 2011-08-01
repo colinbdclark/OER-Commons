@@ -58,7 +58,7 @@ class Organize(LessonViewMixin, OERViewMixin, TemplateView):
 
     page_title = u"Organize Lesson"
 
-    @method_decorator(login_required())
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(Organize, self).dispatch(request, *args, **kwargs)
 
