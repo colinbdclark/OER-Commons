@@ -9,26 +9,26 @@ oer.align_form.TAGS_CHANGED_EVENT = "oer-align-form-tags-changed";
 $.template("align-user-tags-item", '<li data-id="${id}" class="tag rc3"><a href="${url}">${code}</a> <a href="#" class="delete">x</a></li>');
 
 oer.align_form.init_tag_tooltip = function($a) {
-  $a.each(function() {
-    var $this = $(this);
-    $this.qtip({
-        content: {
-            text: 'Loading...',
-            ajax: {
-                url: "/curriculum/get_tag_description/" + $this.text()
+    $a.each(function() {
+        var $this = $(this);
+        $this.qtip({
+            content: {
+                text: 'Loading...',
+                ajax: {
+                    url: "/curriculum/get_tag_description/" + $this.text()
+                }
+            },
+            position: {
+                target: "event",
+                my: "bottom center",
+                at: "top center",
+                effect: false
+            },
+            style: {
+                classes: "align-tag-tooltip ui-tooltip-shadow ui-tooltip-rounded"
             }
-        },
-        position: {
-            target: "event",
-            my: "bottom center",
-            at: "top center",
-            effect: false
-        },
-        style: {
-            classes: "align-tag-tooltip ui-tooltip-shadow ui-tooltip-rounded"
-        }
+        });
     });
-  });
 };
 
 oer.align_form.init_user_tags = function($user_tags, $form) {
@@ -38,9 +38,9 @@ oer.align_form.init_user_tags = function($user_tags, $form) {
         var $li = $this.closest("li");
         var id = $li.data("id");
         $.post($form.data("delete-url"), {
-                    id : id
-                }, function() {
-                });
+            id : id
+        }, function() {
+        });
         var code = $this.prev('a').text();
         var $lis = $user_tags.find("a:econtains(" + code + ")").parent();
         $lis.fadeOut(250, function() {
@@ -57,8 +57,11 @@ oer.align_form.init = function() {
 
     oer.align_form.init_user_tags($user_tags, $form);
 
-    var $buttons = $form.find("#align-form-buttons");
-    $buttons.find(":submit").button();
+    var $submit_btn = $form.find("#align-form-buttons :submit").button();
+    var $close_btn = $form.find("#align-form-buttons a.close").button().click(function(e) {
+        e.preventDefault();
+        $("#align-dialog").dialog("close");
+    });
 
     var $standard = $form.find("#id_curriculum_standard");
 
@@ -84,10 +87,11 @@ oer.align_form.init = function() {
     $tag.change(function() {
         var value = $tag.val();
         if (value === "-") {
-            $buttons.hide();
+            $submit_btn.hide();
             $description.hide();
         } else {
-            $buttons.show();
+            $submit_btn.show();
+            $submit_btn.focus();
             var code = $tag.find(":selected").data("code");
             $document.trigger(oer.align_form.LOADING_EVENT);
             $description.load("/curriculum/get_tag_description/" + code, function() {
@@ -131,20 +135,25 @@ oer.align_form.init = function() {
         }
         $document.trigger(oer.align_form.LOADING_EVENT);
         $.post($form.attr("action"), {
-                    tag : value
-                }, function(data) {
-                    if (data.status === "success") {
-                        var $tags = $.tmpl("align-user-tags-item", data.tag).appendTo($user_tags);
-                        if (window.rocon != undefined) {
-                            $tags.each(function(e, el) {
-                                rocon.update(el);
-                            });
-                        }
-                        oer.align_form.init_tag_tooltip($tags.find("a:first"));
-                        $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
-                    }
-                    $document.trigger(oer.align_form.LOADED_EVENT);
-                });
+            tag : value
+        }, function(data) {
+            if (data.status === "success") {
+                var $tags = $.tmpl("align-user-tags-item", data.tag).appendTo($user_tags);
+                if (window.rocon != undefined) {
+                    $tags.each(function(e, el) {
+                        rocon.update(el);
+                    });
+                }
+                oer.align_form.init_tag_tooltip($tags.find("a:first"));
+                $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
+                $("#id_curriculum_tag").effect("transfer", {
+                    to: $tags.last()
+                }, 1000).val("-").focus();
+                $submit_btn.hide();
+                $form.find("#align-tag-description").hide();
+            }
+            $document.trigger(oer.align_form.LOADED_EVENT);
+        });
     });
 
 };
@@ -159,12 +168,12 @@ oer.align_form.init_dropdown = function($dropdown) {
     var $prev_dropdowns = $prev_fields.find("select");
     var $next_field = $next_fields.first();
     var $next_dropdown = $next_dropdowns.first();
-    var $buttons = $form.find("#align-form-buttons");
+    var $submit_btn = $form.find("#align-form-buttons :submit");
     var $description = $("#align-tag-description");
     $dropdown.change(function() {
         var value = $dropdown.val();
         $description.hide();
-        $buttons.hide();
+        $submit_btn.hide();
         $next_fields.hide();
         $next_dropdowns.empty();
         if (value !== "-") {
@@ -181,6 +190,7 @@ oer.align_form.init_dropdown = function($dropdown) {
                 $next_field.show();
                 $document.trigger(oer.align_form.LOADED_EVENT);
                 $field.removeClass("loading");
+                $next_dropdown.focus();
             });
         }
     });
@@ -215,7 +225,7 @@ oer.align_form.load_options = function($dropdown, data) {
 oer.align_form.reset = function() {
     var $form = $("#align-form");
 
-    $form.find("#id_curriculum_standard").val("-");
+    $form.find("#id_curriculum_standard").val("-").focus();
 
     $form.find("#id_curriculum_grade").empty();
     $form.find("div.field.grade").hide();
@@ -226,7 +236,9 @@ oer.align_form.reset = function() {
     $form.find("#id_curriculum_tag").empty();
     $form.find("div.field.tag").hide();
 
-    $form.find("#align-form-buttons").hide();
+    $form.find("#align-form-buttons :submit").hide();
+
+    $form.find("#align-tag-description").empty().hide();
 };
 
 oer.align_tags_portlet = {};
@@ -301,6 +313,7 @@ oer.align_tags_portlet.init = function() {
                 $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
             }
             $dialog.dialog("open");
+            $form.find("select:first").focus();
         });
     });
 };

@@ -6,7 +6,10 @@
   display: inline-block;
 }
 
-#align-form div.grade, #align-form div.category, #align-form div.tag, #align-form div.buttons {
+#align-form div.grade,
+#align-form div.category,
+#align-form div.tag,
+#align-form div.buttons input[type='submit'] {
   display: none;
 }
 
