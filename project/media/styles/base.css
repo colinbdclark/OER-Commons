@@ -319,3 +319,8 @@ div.box h3 {
 .status-message .close {
   margin-top: 5px;
 }
+
+.ui-effects-transfer {
+  border: 1px solid #333;
+  z-index: 9999;
+}
