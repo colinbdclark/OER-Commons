@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate, login as auth_login, \
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic.simple import direct_to_template
 from utils.shortcuts import redirect_to_next_url
 import re
 
@@ -91,12 +91,12 @@ def login(request):
     else:
         form = LoginForm(request)
 
-    return direct_to_template(request, "users/login.html", locals())
+    return render(request, "users/login.html", locals())
 
 
 def render_login_form(request):
-    form = LoginForm()
-    return direct_to_template(request, "users/login-form.html", locals())
+    return render(request, "users/login-form.html", dict(form=LoginForm(),
+                                                         in_dialog=True))
  
 
 def logout(request):

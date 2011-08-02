@@ -17,7 +17,10 @@
     {% include "include/form-field.html" %}
   {% endfor %}
   <div class="buttons">
-    <a href="{% url users:reset_password_init %}">Forgot your password?</a>
+    <a href="{% url users:reset_password_init %}" class="forgot-password">Forgot your password?</a>
+    {% if in_dialog %}
+      <a href="#" class="cancel dashed">Cancel</a>
+    {% endif %}
     <input type="submit" class="button" value="Log in" />
   </div>
   
