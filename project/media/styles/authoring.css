@@ -196,6 +196,7 @@ body.authoring {
 .authoring .page form.formatted input[type='text'],
 .authoring .page form.formatted textarea {
   border: 1px solid #0B7BA8;
+  padding-left: 4px;
 }
 
 .authoring .page form.formatted input[type='text'] {
@@ -257,7 +258,7 @@ body.authoring {
 }
 
 #define-form .title input {
-  width: 515px;
+  width: 510px;
 }
 
 #define-form .subjects ul {
@@ -272,7 +273,7 @@ body.authoring {
 }
 
 #define-form .summary textarea {
-  width: 515px;
+  width: 510px;
 }
 
 #define-form .goals ul {
@@ -287,7 +288,7 @@ body.authoring {
 }
 
 #define-form .goals input {
-  width: 495px;
+  width: 490px;
 }
 
 #define-form .buttons a.next {
@@ -365,14 +366,14 @@ body.authoring {
   position: absolute;
   right: 0;
   top: 14px;
-  width: 110px;
+  width: 105px;
 }
 
 #organize-form #add-keywords {
   position: absolute;
   right: 0;
   top: 14px;
-  width: 200px;
+  width: 195px;
 }
 
 #organize-form #keywords-widget ul {
@@ -422,7 +423,7 @@ body.authoring {
 }
 
 #outline-form input[type='text'] {
-  width: 420px;
+  width: 415px;
   margin: 0;
   vertical-align: middle;
 }
