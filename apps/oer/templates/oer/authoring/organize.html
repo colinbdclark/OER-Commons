@@ -1,0 +1,85 @@
+{% extends "oer/authoring/base.html" %}
+{% load curriculum_tags %}
+
+{% block content %}
+
+  <form action="{% url oer:edit_organize oer_id=oer.id %}" method="post"
+        class="formatted" id="organize-form">
+
+    <aside class="column-left">
+
+    </aside><section id="content" class="content column-main">
+
+      <section class="image">
+        <header>
+          <h1>Add a Picture</h1>
+          <span>(optional)</span>
+        </header>
+        <img src="{% if oer.image %}{{ oer.get_thumbnail.url }}{% else %}http://placehold.it/220x150/dddddd/333333&text=No%20image{% endif %}" />
+        <div class="controls">
+          <p>Choose and image for your OER</p>
+          <a href="{% url oer:edit_image_upload oer_id=oer.id %}" class="upload rc3">Upload</a>
+          <a href="{% url oer:edit_image_remove oer_id=oer.id %}" class="remove rc3"{% if not oer.image %} style="display: none;"{% endif %}>Remove</a>
+        </div>
+      </section>
+
+      <section class="organize">
+        <header>
+          <h1>Organize</h1>
+          <span>(optional)</span>
+        </header>
+        {% with form.group as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+        {% with form.instruction_date as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+        {% with form.keywords as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+      </section>
+
+      <section class="align">
+        <header>
+          <h1>Align</h1>
+          <span>(optional)</span>
+        </header>
+        <div class="field">
+          <div class="help">One liner about aligning to standards.</div>
+          <div class="label">
+            <label>Common Core Curriculum Standards</label>
+          </div>
+          <a href="#" id="show-align-form" class="rc3">Align</a>
+          <ul class="align-user-tags">
+            {% for tagged in align_user_tags %}
+              <li class="rc3 tag" data-id="{{ tagged.id }}">
+                <a href="{% url materials:alignment_index alignment=tagged.tag.full_code %}">{{ tagged.tag.full_code }}</a>
+                <a href="#" class="delete">x</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+
+      <div class="buttons">
+        <a href="{% url oer:edit_outline oer_id=oer.id %}" class="rc5 next">Next</a>
+      </div>
+
+    </section><aside class="column-left">
+    </aside>
+
+  </form>
+
+  <div id="align-dialog" style="display: none;">
+    {% align_form oer %}
+  </div>
+
+{% endblock %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.authoring.init_organize_form();
+    });
+  </script>
+{% endblock %}

@@ -115,7 +115,7 @@ INSTALLED_APPS = (
     'visitcounts',
     'newsletter',
     'preferences',
-    'lessons',
+    'oer',
     'project',
 )
 

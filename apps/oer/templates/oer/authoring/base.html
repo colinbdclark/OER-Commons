@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load compress %}
+{% load flatblock_tags %}
+<html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
+  <head>
+    <meta charset="utf-8"/>
+    {% compress css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/reset.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/typography.css" media="all" />
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/jquery.qtip.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/apprise.css" media="all" />
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}styles/base.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}styles/form.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}styles/column-layout.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}styles/autocomplete-list-widget.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}styles/align-form.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}styles/authoring.css" media="all" />
+    {% endcompress %}
+
+    <!--[if lt IE 8]>
+      {% compress css %}
+      <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/ie.css" media="all" />
+      <link rel="stylesheet" href="{{ STATIC_URL }}styles/ie.css" media="all" />
+      {% endcompress %}
+    <![endif]-->
+
+    <title>{% block title %}{% if page_title %}{{ page_title }}{% if page_subtitle %}: {{ page_subtitle|safe }}{% endif %} | {% endif %}OER Commons{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico"/>
+
+    {% include "include/modernizr.html" %}
+  </head>
+  <body class="authoring {% block bodyclass %}{% endblock %} {% if request.user.is_authenticated %} authenticated{% endif %}">
+
+    <a href="{% url frontpage %}" id="logo">OER Commons</a>
+
+    <header class="global fixed-width">
+      <h1>Create an OER</h1>
+      <div class="progress-bar step{% if step_number %}{{ step_number }}{% else %}1{% endif %}"></div>
+      <nav>
+        <ul>
+          <li><a href="#">My Items</a></li>
+          <li><a href="#">Help</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="page fixed-width">
+      <div id="status-messages"></div>
+      <div class="wrap-top"><div class="wrap-bottom">
+        {% block content %}
+        {% endblock %}
+      </div></div>
+    </div>
+
+    {% include "include/cdn-js.html" %}
+    {% compress js %}
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.validate.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.ocupload.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.qtip.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/apprise.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/namespace.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/global-init.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/validation.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/status-message.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/autocomplete-list-widget.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/align-form.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/authoring.js"></script>
+      {% block extra-js %}
+      {% endblock %}
+    {% endcompress %}
+
+    {% flatblock "google-analytics" %}
+
+  </body>
+</html>
