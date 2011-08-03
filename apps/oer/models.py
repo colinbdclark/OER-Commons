@@ -17,7 +17,7 @@ class Group(models.Model):
         return self.title
 
 
-class Lesson(models.Model):
+class OER(models.Model):
 
     author = models.ForeignKey(User, null=True)
     is_new = models.BooleanField(default=True)
@@ -37,7 +37,7 @@ class Lesson(models.Model):
     language = models.ForeignKey(Language, null=True, blank=True)
 
     image = models.ImageField(null=True, blank=True,
-                              upload_to="upload/lessons/lesson")
+                              upload_to="upload/oer/oer")
 
     group = models.ForeignKey(Group, null=True, blank=True)
 
@@ -53,7 +53,7 @@ class Lesson(models.Model):
             self.is_new = True
         else:
             self.is_new = False
-        super(Lesson, self).save(*args, **kwargs)
+        super(OER, self).save(*args, **kwargs)
 
     def get_thumbnail(self):
         if not self.image:
@@ -63,7 +63,7 @@ class Lesson(models.Model):
 
 class Chapter(models.Model):
 
-    lesson = models.ForeignKey(Lesson, related_name="chapters")
+    oer = models.ForeignKey(OER, related_name="chapters")
     order = models.PositiveIntegerField()
     title = models.CharField(default=u"", max_length=200)
     text = models.TextField(default=u"")
@@ -72,13 +72,13 @@ class Chapter(models.Model):
     modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __unicode__(self):
-        return u"%s from %s" % (self.title, unicode(self.lesson))
+        return u"%s from %s" % (self.title, unicode(self.oer))
 
     def save(self, *args, **kwargs):
         if not self.order:
-            self.order = self.lesson.chapters.all().count() + 1
+            self.order = self.oer.chapters.all().count() + 1
         super(Chapter, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = ["lesson__id", "order", "id"]
+        ordering = ["oer__id", "order", "id"]
 

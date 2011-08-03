@@ -116,7 +116,7 @@ INSTALLED_APPS = (
     'newsletter',
     'blog',
     'preferences',
-    'lessons',
+    'oer',
     'project',
 )
 

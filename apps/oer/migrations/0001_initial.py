@@ -8,19 +8,88 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding M2M table for field keywords on 'Lesson'
-        db.create_table('lessons_lesson_keywords', (
+        # Adding model 'Group'
+        db.create_table('oer_group', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
+        ))
+        db.send_create_signal('oer', ['Group'])
+
+        # Adding model 'OER'
+        db.create_table('oer_oer', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
+            ('is_new', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified_on', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(default=u'', max_length=200)),
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(unique_with=(), max_length=50, populate_from=None, db_index=True)),
+            ('summary', self.gf('django.db.models.fields.TextField')(default=u'')),
+            ('goals', self.gf('common.fields.SeparatedValuesField')(default=u'')),
+            ('language', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['common.Language'], null=True, blank=True)),
+            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
+            ('group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['oer.Group'], null=True, blank=True)),
+            ('instruction_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+        ))
+        db.send_create_signal('oer', ['OER'])
+
+        # Adding M2M table for field student_levels on 'OER'
+        db.create_table('oer_oer_student_levels', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('lesson', models.ForeignKey(orm['lessons.lesson'], null=False)),
+            ('oer', models.ForeignKey(orm['oer.oer'], null=False)),
+            ('studentlevel', models.ForeignKey(orm['common.studentlevel'], null=False))
+        ))
+        db.create_unique('oer_oer_student_levels', ['oer_id', 'studentlevel_id'])
+
+        # Adding M2M table for field subjects on 'OER'
+        db.create_table('oer_oer_subjects', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('oer', models.ForeignKey(orm['oer.oer'], null=False)),
+            ('generalsubject', models.ForeignKey(orm['common.generalsubject'], null=False))
+        ))
+        db.create_unique('oer_oer_subjects', ['oer_id', 'generalsubject_id'])
+
+        # Adding M2M table for field keywords on 'OER'
+        db.create_table('oer_oer_keywords', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('oer', models.ForeignKey(orm['oer.oer'], null=False)),
             ('keyword', models.ForeignKey(orm['common.keyword'], null=False))
         ))
-        db.create_unique('lessons_lesson_keywords', ['lesson_id', 'keyword_id'])
+        db.create_unique('oer_oer_keywords', ['oer_id', 'keyword_id'])
+
+        # Adding model 'Chapter'
+        db.create_table('oer_chapter', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('oer', self.gf('django.db.models.fields.related.ForeignKey')(related_name='chapters', to=orm['oer.OER'])),
+            ('order', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('title', self.gf('django.db.models.fields.CharField')(default=u'', max_length=200)),
+            ('text', self.gf('django.db.models.fields.TextField')(default=u'')),
+            ('created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified_on', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
+        ))
+        db.send_create_signal('oer', ['Chapter'])
 
 
     def backwards(self, orm):
         
-        # Removing M2M table for field keywords on 'Lesson'
-        db.delete_table('lessons_lesson_keywords')
+        # Deleting model 'Group'
+        db.delete_table('oer_group')
+
+        # Deleting model 'OER'
+        db.delete_table('oer_oer')
+
+        # Removing M2M table for field student_levels on 'OER'
+        db.delete_table('oer_oer_student_levels')
+
+        # Removing M2M table for field subjects on 'OER'
+        db.delete_table('oer_oer_subjects')
+
+        # Removing M2M table for field keywords on 'OER'
+        db.delete_table('oer_oer_keywords')
+
+        # Deleting model 'Chapter'
+        db.delete_table('oer_chapter')
 
 
     models = {
@@ -86,18 +155,28 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'lessons.group': {
+        'oer.chapter': {
+            'Meta': {'ordering': "['oer__id', 'order', 'id']", 'object_name': 'Chapter'},
+            'created_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified_on': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
+            'oer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'chapters'", 'to': "orm['oer.OER']"}),
+            'order': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'text': ('django.db.models.fields.TextField', [], {'default': "u''"}),
+            'title': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '200'})
+        },
+        'oer.group': {
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
-        'lessons.lesson': {
-            'Meta': {'object_name': 'Lesson'},
+        'oer.oer': {
+            'Meta': {'object_name': 'OER'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'}),
             'created_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'goals': ('common.fields.SeparatedValuesField', [], {'default': "u''"}),
-            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lessons.Group']", 'null': 'True', 'blank': 'True'}),
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['oer.Group']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'instruction_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
@@ -113,4 +192,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['lessons']
+    complete_apps = ['oer']

@@ -6,10 +6,10 @@ from django.utils.decorators import method_decorator
 from django.utils.encoding import force_unicode
 from django.utils.safestring import mark_safe
 from django.views.generic import TemplateView
-from lessons.models import Lesson
-from lessons.views import LessonViewMixin
+from oer.models import OER
+from oer.views import OERViewMixin
 from utils.decorators import login_required
-from utils.views import OERViewMixin
+from utils.views import BaseViewMixin
 import string
 
 
@@ -30,7 +30,7 @@ class GoalsWidget(forms.widgets.Input):
                 # so that the inputs don't all have the same ID attribute.
                 input_attrs['id'] = '%s_%s' % (id_, i)
             inputs.append(u'<li><input%s /></li>' % forms.util.flatatt(input_attrs))
-        return mark_safe(u'<ul>%s</ul> <a href="#" class="dashed">Add another</a>' % u'\n'.join(inputs))
+        return mark_safe(u'<ul>%s</ul> <a href="#" class="add rc3">Add another</a>' % u'\n'.join(inputs))
 
     def value_from_datadict(self, data, files, name):
         if isinstance(data, (MultiValueDict, MergeDict)):
@@ -60,24 +60,24 @@ class DefineForm(forms.ModelForm):
 
     summary = forms.CharField(widget=forms.Textarea(),
                         label=u"Summary",
-                        help_text=u"Quick description of your lesson")
+                        help_text=u"Quick description of your OER")
 
     goals = forms.Field(widget=GoalsWidget(),
-                        label=u"Lesson Goals",
+                        label=u"Goals",
                         help_text=u"What do you hope students will learn?")
 
     class Meta:
         fields = ["title", "student_levels", "language",
                   "subjects", "summary", "goals"]
-        model = Lesson
+        model = OER
 
 
-class Define(LessonViewMixin, OERViewMixin, TemplateView):
+class Define(OERViewMixin, BaseViewMixin, TemplateView):
 
-    template_name = "lessons/authoring/define.html"
+    template_name = "oer/authoring/define.html"
     restrict_to_owner = True
 
-    page_title = u"Define Lesson"
+    page_title = u"Define OER"
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -85,11 +85,11 @@ class Define(LessonViewMixin, OERViewMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         if getattr(self, "form", None) is None:
-            self.form = DefineForm(instance=self.lesson)
+            self.form = DefineForm(instance=self.oer)
         return super(Define, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.form = DefineForm(request.POST, instance=self.lesson)
+        self.form = DefineForm(request.POST, instance=self.oer)
         if self.form.is_valid():
             self.form.save()
             if request.is_ajax():

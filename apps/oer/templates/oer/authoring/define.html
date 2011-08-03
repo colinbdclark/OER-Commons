@@ -1,8 +1,8 @@
-{% extends "lessons/authoring/base.html" %}
+{% extends "oer/authoring/base.html" %}
 
 {% block content %}
 
-  <form action="{% url lessons:edit_define lesson_id=lesson.id %}" method="post"
+  <form action="{% url oer:edit_define oer_id=oer.id %}" method="post"
         class="formatted" id="define-form">
 
     <aside class="column-left">
@@ -13,7 +13,7 @@
           {% include "include/form-field.html" %}
         {% endwith %}
         <ul>
-          {% for level in lesson.student_levels.all %}
+          {% for level in oer.student_levels.all %}
             <li>{{ level }}</li>
           {% endfor %}
         </ul>
@@ -42,7 +42,7 @@
       {% endwith %}
 
       <div class="buttons">
-        <a href="{% url lessons:edit_organize lesson_id=lesson.id %}" class="rc5 next">Next</a>
+        <a href="{% url oer:edit_organize oer_id=oer.id %}" class="rc5 next">Next</a>
       </div>
 
     </section><aside class="column-right">

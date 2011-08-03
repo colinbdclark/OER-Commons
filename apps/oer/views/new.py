@@ -2,23 +2,23 @@ from common.models import Language
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import View
-from lessons.models import Lesson
+from oer.models import OER
 from utils.decorators import login_required
 import datetime
 
 
-class NewLesson(View):
+class New(View):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        lesson, created = Lesson.objects.get_or_create(author=request.user,
+        oer, created = OER.objects.get_or_create(author=request.user,
                                                        is_new=True)
         student_levels = request.user.get_profile().educator_student_levels
         if created:
             if student_levels.exists():
-                lesson.student_levels.add(*list(student_levels))
-            lesson.language = Language.objects.get(slug="en")
-            lesson.instruction_date = datetime.date.today() + datetime.timedelta(days=1)
-            lesson.save()
+                oer.student_levels.add(*list(student_levels))
+            oer.language = Language.objects.get(slug="en")
+            oer.instruction_date = datetime.date.today() + datetime.timedelta(days=1)
+            oer.save()
 
-        return redirect("lessons:edit_define", lesson_id=lesson.id)
+        return redirect("oer:edit_define", oer_id=oer.id)

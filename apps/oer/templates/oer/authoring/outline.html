@@ -1,8 +1,8 @@
-{% extends "lessons/authoring/base.html" %}
+{% extends "oer/authoring/base.html" %}
 
 {% block content %}
 
-  <form action="{% url lessons:edit_outline lesson_id=lesson.id %}" method="post"
+  <form action="{% url oer:edit_outline oer_id=oer.id %}" method="post"
         class="formatted" id="outline-form">
 
     <aside class="column-left">
@@ -18,7 +18,7 @@
           Add text, pictures and more on the next page.
         </div>
         <ol id="chapters">
-          {% for chapter in lesson.chapters.all %}
+          {% for chapter in oer.chapters.all %}
             {% spaceless %}
             <li data-id="{{ chapter.id }}">
               <input name="title" value="{{ chapter.title }}" type="text" />
@@ -33,7 +33,8 @@
       </div>
 
       <div class="buttons">
-        <a href="" class="rc5 next">Next</a>
+        <a href="{% url oer:edit_organize oer_id=oer.id %}" class="rc5 prev">Back</a>
+        <a href="#" class="rc5 next">Next</a>
       </div>
 
     </section><aside class="column-right">

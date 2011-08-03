@@ -48,6 +48,15 @@ body.authoring {
   margin-right: 1em;
 }
 
+.authoring header.global nav ul li a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.authoring header.global nav ul li a:hover {
+  text-decoration: underline;
+}
+
 .authoring .progress-bar {
   background-repeat: no-repeat;
   width: 400px;
@@ -75,6 +84,49 @@ body.authoring {
 
 .authoring .progress-bar.step5 {
   background-image: url(../images/authoring/progress-bar-5.png);
+}
+
+.authoring .progress-bar a {
+  display: block;
+  position: absolute;
+  text-indent: -9999px;
+  height: 15px;
+  width: 15px;
+}
+
+.authoring .progress-bar a.define {
+  top: 8px;
+  left: 4px;
+  height: 33px;
+  width: 35px;
+}
+
+.authoring .progress-bar a.organize {
+  top: 8px;
+  left: 70px;
+  height: 33px;
+  width: 50px;
+}
+
+.authoring .progress-bar a.outline {
+  top: 8px;
+  left: 160px;
+  height: 33px;
+  width: 40px;
+}
+
+.authoring .progress-bar a.add-content {
+  top: 2px;
+  left: 240px;
+  height: 43px;
+  width: 70px;
+}
+
+.authoring .progress-bar a.license {
+  top: 8px;
+  left: 347px;
+  height: 33px;
+  width: 44px;
 }
 
 .authoring .page {
@@ -144,6 +196,10 @@ body.authoring {
   font-size: 18px;
 }
 
+.authoring .page form.formatted .required .label label {
+  background-image: url(../images/authoring/asterisk.png);
+}
+
 .authoring .page form.formatted .help {
   margin: 4px 0 4px 1em;
   font-size: 14px;
@@ -153,6 +209,7 @@ body.authoring {
 .authoring .page form.formatted input[type='text'],
 .authoring .page form.formatted textarea {
   border: 1px solid #0B7BA8;
+  padding-left: 4px;
 }
 
 .authoring .page form.formatted input[type='text'] {
@@ -172,17 +229,29 @@ body.authoring {
   clear: both;
 }
 
-.authoring .buttons a.next {
+.authoring .buttons {
+  margin-bottom: 1em;
+  position: relative;
+}
+
+.authoring .buttons a {
   display: inline-block;
-  background: #FFCB66 url(../images/authoring/next-btn-arrow.png) no-repeat 90% 50%;
   padding: 10px 40px 10px 15px;
   color: #fff;
   font-size: 16px;
   text-decoration: none;
 }
 
-.authoring .buttons {
-  margin-bottom: 1em;
+.authoring .buttons a.next {
+  background: #FFCB66 url(../images/authoring/arrow-next.png) no-repeat 60px 50%;
+}
+
+.authoring .buttons a.prev {
+  padding-right: 15px;
+  padding-left: 40px;
+  background: #FFCB66 url(../images/authoring/arrow-prev.png) no-repeat 8px 50%;
+  position: absolute;
+  left: 0;
 }
 
 #define-form aside .field {
@@ -202,7 +271,7 @@ body.authoring {
 }
 
 #define-form .title input {
-  width: 515px;
+  width: 510px;
 }
 
 #define-form .subjects ul {
@@ -217,7 +286,7 @@ body.authoring {
 }
 
 #define-form .summary textarea {
-  width: 515px;
+  width: 510px;
 }
 
 #define-form .goals ul {
@@ -232,7 +301,11 @@ body.authoring {
 }
 
 #define-form .goals input {
-  width: 495px;
+  width: 490px;
+}
+
+#define-form .buttons a.next {
+  background-color: #DBD639;
 }
 
 #organize-form #content section header h1 {
@@ -306,14 +379,14 @@ body.authoring {
   position: absolute;
   right: 0;
   top: 14px;
-  width: 110px;
+  width: 105px;
 }
 
 #organize-form #add-keywords {
   position: absolute;
   right: 0;
   top: 14px;
-  width: 200px;
+  width: 195px;
 }
 
 #organize-form #keywords-widget ul {
@@ -341,6 +414,14 @@ body.authoring {
   margin-top: 1em;
 }
 
+#organize-form .buttons a.prev {
+  background-color: #FFCB66;
+}
+
+#organize-form .buttons a.next {
+  background-color: #8CC63F;
+}
+
 #outline-form ol {
   font-size: 16px;
   margin-top: 1em;
@@ -355,7 +436,7 @@ body.authoring {
 }
 
 #outline-form input[type='text'] {
-  width: 420px;
+  width: 415px;
   margin: 0;
   vertical-align: middle;
 }
@@ -384,11 +465,21 @@ body.authoring {
   vertical-align: middle;
 }
 
-#outline-form a.add {
+.authoring a.add {
   color: #679701;
   border: 1px solid #D9E5C0;
   display: inline-block;
-  padding: 2px 10px;
+  padding: 3px 10px 3px 25px;
+  line-height: 20px;
   text-decoration: none;
   margin-left: 20px;
+  background: url(../images/authoring/icon-add.png) no-repeat 5px 50%;
+}
+
+#outline-form .buttons a.prev {
+  background-color: #DBD639;
+}
+
+#outline-form .buttons a.next {
+  background-color: #8CC63F;
 }

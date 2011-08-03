@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 
 
-class OERViewMixin(object):
+class BaseViewMixin(object):
 
     def get_page_title(self):
         return None
@@ -18,7 +18,7 @@ class OERViewMixin(object):
     breadcrumbs = property(get_breadcrumbs)
 
     def get_context_data(self, *args, **kwargs):
-        data = super(OERViewMixin, self).get_context_data(*args, **kwargs)
+        data = super(BaseViewMixin, self).get_context_data(*args, **kwargs)
         data["page_title"] = self.page_title
         data["page_subtitle"] = self.page_subtitle
         data["breadcrumbs"] = self.breadcrumbs

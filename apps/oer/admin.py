@@ -1,6 +1,6 @@
 from django.contrib import admin
-from lessons import models
+from oer import models
 
 
-admin.site.register(models.Lesson, admin.ModelAdmin)
+admin.site.register(models.OER, admin.ModelAdmin)
 admin.site.register(models.Chapter, admin.ModelAdmin)

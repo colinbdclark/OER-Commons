@@ -1,15 +1,15 @@
 from annoying.decorators import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
-from lessons.models import Chapter
-from lessons.views import LessonViewMixin
+from oer.models import Chapter
+from oer.views import OERViewMixin
 from utils.decorators import login_required
-from utils.views import OERViewMixin
+from utils.views import BaseViewMixin
 
 
-class Outline(LessonViewMixin, OERViewMixin, TemplateView):
+class Outline(OERViewMixin, BaseViewMixin, TemplateView):
 
-    template_name = "lessons/authoring/outline.html"
+    template_name = "oer/authoring/outline.html"
     restrict_to_owner = True
 
     page_title = u"Outline"
@@ -19,19 +19,19 @@ class Outline(LessonViewMixin, OERViewMixin, TemplateView):
         return super(Outline, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        if not self.lesson.chapters.all().exists():
-            Chapter.objects.create(lesson=self.lesson)
+        if not self.oer.chapters.all().exists():
+            Chapter.objects.create(oer=self.oer)
         return super(Outline, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
             if "add-chapter" in request.POST:
-                chapter = Chapter.objects.create(lesson=self.lesson)
+                chapter = Chapter.objects.create(oer=self.oer)
                 return JsonResponse(dict(status="success", id=chapter.id))
 
             elif "delete-chapter" in request.POST:
                 try:
-                    Chapter.objects.get(lesson=self.lesson, id=int(request.POST["id"])).delete()
+                    Chapter.objects.get(oer=self.oer, id=int(request.POST["id"])).delete()
                 except (ValueError, TypeError, KeyError, Chapter.DoesNotExist):
                     return JsonResponse(dict(status="error"))
                 return JsonResponse(dict(status="success"))
@@ -45,7 +45,7 @@ class Outline(LessonViewMixin, OERViewMixin, TemplateView):
                 id = int(ids[i])
                 order = i+1
                 try:
-                    chapter = self.lesson.chapters.get(id=id)
+                    chapter = self.oer.chapters.get(id=id)
                     if chapter.title != title or chapter.order != order:
                         chapter.title = title
                         chapter.order = order
