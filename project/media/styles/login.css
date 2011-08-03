@@ -1,20 +1,48 @@
 form.login {
-  width: 230px;
+  width: 330px;
   margin: 0 auto;
 }
 
 form.login input.text {
-  width: 222px;
+  width: 322px;
 }
 
 form.login a {
   text-decoration: none;
 }
 
+form.login .buttons {
+  position: relative;
+}
+
 form.login .buttons a {
-  display: block;
-  float: left;
+  display: inline-block;
   margin-top: 7px;
+  margin-right: 1em;
+}
+
+form.login .buttons a.forgot-password {
+  position: absolute;
+  left: 0;
+}
+
+form.login input.text {
+  font-size: 16px;
+  padding: 3px 1px;
+}
+
+form.login #id_password,
+form.login #altpassword {
+  width: 200px;
+}
+
+form.login .field {
+  position: relative;
+}
+
+form.login label.show-password {
+  position: absolute;
+  right: 0;
 }
 
 #login-popup form.login {

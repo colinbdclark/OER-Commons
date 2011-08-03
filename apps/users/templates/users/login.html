@@ -5,3 +5,11 @@
 {% block content %}
     {% include "users/login-form.html" %}
 {% endblock %}
+
+{% block extra-js %}
+  <script>
+    $(function() {
+      $("#id_password").showPasswordCheckbox();
+    });
+  </script>
+{% endblock %}
