@@ -187,6 +187,10 @@ body.authoring {
   font-size: 18px;
 }
 
+.authoring .page form.formatted .required .label label {
+  background-image: url(../images/authoring/asterisk.png);
+}
+
 .authoring .page form.formatted .help {
   margin: 4px 0 4px 1em;
   font-size: 14px;
