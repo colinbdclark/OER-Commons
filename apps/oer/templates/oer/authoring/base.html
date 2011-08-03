@@ -38,7 +38,13 @@
 
     <header class="global fixed-width">
       <h1>Create an OER</h1>
-      <div class="progress-bar step{% if step_number %}{{ step_number }}{% else %}1{% endif %}"></div>
+      <div class="progress-bar step{% if step_number %}{{ step_number }}{% else %}1{% endif %}">
+        <a href="{% url oer:edit_define oer_id=oer.id %}" class="define">Define</a>
+        <a href="{% url oer:edit_organize oer_id=oer.id %}" class="organize">Organize</a>
+        <a href="{% url oer:edit_outline oer_id=oer.id %}" class="outline">Outline</a>
+        <a href="#" class="add-content">Add Content</a>
+        <a href="#" class="license">License</a>
+      </div>
       <nav>
         <ul>
           <li><a href="#">My Items</a></li>
