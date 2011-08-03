@@ -103,8 +103,9 @@ def delete_tag(request):
 def list_standards(request, existing=False):
     if existing:
         ids = TaggedMaterial.objects.all().values_list("tag__standard", flat=True).order_by().distinct()
-        return dict(options=list(Standard.objects.filter(id__in=ids).values("id", "name")))
-    return dict(options=list(Standard.objects.values("id", "name")))
+    else:
+        ids = AlignmentTag.objects.values_list("standard", flat=True).order_by().distinct()
+    return dict(options=list(Standard.objects.filter(id__in=ids).values("id", "name")))
 
 
 @ajax_request
