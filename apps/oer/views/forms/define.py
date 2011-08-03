@@ -30,7 +30,7 @@ class GoalsWidget(forms.widgets.Input):
                 # so that the inputs don't all have the same ID attribute.
                 input_attrs['id'] = '%s_%s' % (id_, i)
             inputs.append(u'<li><input%s /></li>' % forms.util.flatatt(input_attrs))
-        return mark_safe(u'<ul>%s</ul> <a href="#" class="dashed">Add another</a>' % u'\n'.join(inputs))
+        return mark_safe(u'<ul>%s</ul> <a href="#" class="add rc3">Add another</a>' % u'\n'.join(inputs))
 
     def value_from_datadict(self, data, files, name):
         if isinstance(data, (MultiValueDict, MergeDict)):
