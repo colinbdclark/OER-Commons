@@ -48,6 +48,15 @@ body.authoring {
   margin-right: 1em;
 }
 
+.authoring header.global nav ul li a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.authoring header.global nav ul li a:hover {
+  text-decoration: underline;
+}
+
 .authoring .progress-bar {
   background-repeat: no-repeat;
   width: 400px;
