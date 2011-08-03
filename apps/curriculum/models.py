@@ -7,14 +7,16 @@ from django_extensions.utils.text import truncate_letters
 
 class StandardManager(models.Manager):
 
-    def get_by_natural_key(self, code):
-        return self.get(code=code)
+    def get_by_natural_key(self, code, substandard_code):
+        return self.get(code=code, substandard_code=substandard_code)
 
 
 class Standard(models.Model):
 
-    name = models.CharField(max_length=100, unique=True)
-    code = models.CharField(max_length=4, unique=True, db_index=True)
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=4, db_index=True)
+
+    substandard_code = models.CharField(max_length=20, db_index=True, default=u"")
 
     objects = StandardManager()
 
@@ -22,10 +24,11 @@ class Standard(models.Model):
         return "%s (%s)" % (self.name, self.code)
 
     def natural_key(self):
-        return (self.code,)
+        return self.code, self.substandard_code
 
     class Meta:
-        ordering = ("code",)
+        unique_together = ["code", "substandard_code"]
+        ordering = ("id", )
 
 
 class GradeManager(models.Manager):
@@ -45,7 +48,7 @@ class Grade(models.Model):
         return "%s (%s)" % (self.name, self.code)
 
     def natural_key(self):
-        return (self.code,)
+        return self.code,
 
     class Meta:
         ordering = ("id", )
@@ -68,7 +71,7 @@ class LearningObjectiveCategory(models.Model):
         return "%s (%s)" % (self.name, self.code)
 
     def natural_key(self):
-        return (self.code,)
+        return self.code,
 
     class Meta:
         ordering = ("id", )
@@ -118,7 +121,7 @@ class TaggedMaterial(models.Model):
     content_type = models.ForeignKey(ContentType, db_index=True)
     object_id = models.PositiveIntegerField(db_index=True)
 
-    content_object = GenericForeignKey('content_type', 'object_id')
+    content_object = GenericForeignKey()
 
     timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
 
