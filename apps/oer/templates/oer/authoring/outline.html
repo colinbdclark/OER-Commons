@@ -17,12 +17,12 @@
           You can always add or remove sections later.<br>
           Add text, pictures and more on the next page.
         </div>
-        <ol id="chapters">
-          {% for chapter in oer.chapters.all %}
+        <ol id="sections">
+          {% for section in oer.sections.all %}
             {% spaceless %}
-            <li data-id="{{ chapter.id }}">
-              <input name="title" value="{{ chapter.title }}" type="text" />
-              <input name="id" value="{{ chapter.id }}" type="hidden" />
+            <li data-id="{{ section.id }}">
+              <input name="title" value="{{ section.title }}" type="text" />
+              <input name="id" value="{{ section.id }}" type="hidden" />
               <span class="handle rc3"></span>
               <span class="remove rc3">x</span>
             </li>
