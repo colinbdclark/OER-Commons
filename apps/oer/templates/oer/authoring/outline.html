@@ -23,8 +23,8 @@
             <li data-id="{{ section.id }}">
               <input name="title" value="{{ section.title }}" type="text" />
               <input name="id" value="{{ section.id }}" type="hidden" />
-              <span class="handle rc3"></span>
-              <span class="remove rc3">x</span>
+              <a href="#" class="handle gray-btn rc3">Move</a>
+              <a href="#"  class="remove gray-btn rc3">Delete</a>
             </li>
             {% endspaceless %}
           {% endfor %}

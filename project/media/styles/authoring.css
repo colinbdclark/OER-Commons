@@ -452,28 +452,18 @@ body.authoring {
   vertical-align: middle;
 }
 
-#outline-form ol li .remove {
-  display: inline-block;
-  padding: 1px 7px;
-  height: 20px;
-  line-height: 20px;
-  border: 1px solid #666;
-  color: #666;
+#outline-form ol li .remove,
+#outline-form ol li .handle {
+  height: 22px;
+  width: 22px;
+  padding: 0;
   margin-left: 0.5em;
-  cursor: pointer;
   vertical-align: middle;
+  text-indent: -9999px;
 }
 
-#outline-form ol li .handle {
-  display: inline-block;
-  padding: 1px 7px;
-  height: 20px;
-  line-height: 20px;
-  border: 1px solid #666;
-  color: #666;
-  margin-left: 0.5em;
-  cursor: move;
-  vertical-align: middle;
+#outline-form ol li .remove {
+  background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
 }
 
 .authoring a.add {

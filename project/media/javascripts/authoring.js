@@ -172,7 +172,7 @@ oer.authoring.init_organize_form = function() {
     });
 };
 
-$.template("authoring-outline-item", '<input name="title" value="" type="text" /><input type="hidden" name="id" value="${id}" /><span class="handle rc3"></span><span class="remove rc3">x</span>');
+$.template("authoring-outline-item", '<input name="title" value="" type="text" /><input type="hidden" name="id" value="${id}" /><a href="#" class="handle gray-btn rc3">Move</a><a class="remove gray-btn rc3">Delete</span>');
 
 oer.authoring.init_outline_form = function() {
     var $form = $("#outline-form");
@@ -201,7 +201,7 @@ oer.authoring.init_outline_form = function() {
         });
     });
 
-    $sections.delegate("span.remove", "click", function(e) {
+    $sections.delegate("a.remove", "click", function(e) {
         e.preventDefault();
         apprise("Delete this section?", {verify: true}, function(r) {
             if (r) {
