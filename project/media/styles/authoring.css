@@ -234,7 +234,8 @@ body.authoring {
   position: relative;
 }
 
-.authoring .buttons a {
+.authoring .buttons a.next,
+.authoring .buttons a.prev {
   display: inline-block;
   padding: 10px 40px 10px 15px;
   color: #fff;
