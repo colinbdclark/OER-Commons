@@ -17,9 +17,10 @@
         </header>
         <img src="{% if oer.image %}{{ oer.get_thumbnail.url }}{% else %}http://placehold.it/220x150/dddddd/333333&text=No%20image{% endif %}" />
         <div class="controls">
-          <p>Choose and image for your OER</p>
-          <a href="{% url oer:edit_image_upload oer_id=oer.id %}" class="upload rc3">Upload</a>
-          <a href="{% url oer:edit_image_remove oer_id=oer.id %}" class="remove rc3"{% if not oer.image %} style="display: none;"{% endif %}>Remove</a>
+          <p>Choose an image for your OER</p>
+          <p class="help">Use an image from your resource, a picture of student work, a picture of your classroom, etc.</p>
+          <a href="{% url oer:edit_image_upload oer_id=oer.id %}" class="upload gray-btn rc3">Upload</a>
+          <a href="{% url oer:edit_image_remove oer_id=oer.id %}" class="remove gray-btn rc3"{% if not oer.image %} style="display: none;"{% endif %}>Remove</a>
         </div>
       </section>
 
@@ -49,7 +50,7 @@
           <div class="label">
             <label>Common Core Curriculum Standards</label>
           </div>
-          <a href="#" id="show-align-form" class="rc3">Align</a>
+          <a href="#" id="show-align-form" class="gray-btn rc3">Align</a>
           <ul class="align-user-tags">
             {% for tagged in align_user_tags %}
               <li class="rc3 tag" data-id="{{ tagged.id }}">

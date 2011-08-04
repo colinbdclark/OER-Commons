@@ -354,12 +354,18 @@ body.authoring {
   display: inline-block;
   margin-left: 1em;
   vertical-align: top;
+  width: 275px;
+}
+
+#organize-form .image .controls p {
+  font-size: 14px;
+}
+
+#organize-form .image .controls p.help {
+  margin-bottom: 1em;
 }
 
 #organize-form .image .controls div {
-  display: inline-block;
-}
-
   display: inline-block;
 }
 
