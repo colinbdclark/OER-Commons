@@ -190,15 +190,27 @@ oer.authoring.init_outline_form = function() {
 
     var $sections = $form.find("#sections");
 
-    var $add_section_btn = $form.find("a.add");
-    $add_section_btn.click(function(e) {
-        e.preventDefault();
+    var add_section = function() {
         var $li = $("<li></li>").addClass("loading");
         $li.appendTo($sections);
         $.post(window.location.href, {"add-section": "yes"}, function(response) {
             $.tmpl("authoring-outline-item", response).appendTo($li);
             $li.removeClass("loading");
+            $li.find(":input").focus();
         });
+    };
+
+    var $add_section_btn = $form.find("a.add");
+    $add_section_btn.click(function(e) {
+        e.preventDefault();
+        add_section();
+    });
+
+    $sections.delegate("li:last :input", "keydown", function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            add_section();
+        }
     });
 
     $sections.delegate("a.remove", "click", function(e) {
