@@ -26,7 +26,7 @@ class OrganizeForm(forms.ModelForm):
                 )
 
     instruction_date = forms.DateField(
-                label=u"What is the indented date of instruction?",
+                label=u"Choose a date of instruction?",
                 help_text=u"we'll put it in your calendar in 'My Items'",
                 widget=forms.DateInput(attrs={"placeholder": "MM/DD/YYYY"},
                                        format="%m/%d/%Y"),

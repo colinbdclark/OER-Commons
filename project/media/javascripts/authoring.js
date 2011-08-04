@@ -38,7 +38,7 @@ oer.authoring.init_define_form = function() {
         $item.appendTo($goals_list);
     });
 
-    $.validator.addMethod("null", function(value, element) {
+    $.validator.addMethod("null", function() {
         return true;
     }, "");
     var validator = $form.validate({
@@ -49,7 +49,7 @@ oer.authoring.init_define_form = function() {
             goals: "null",
             language: "required"
         },
-        submitHandler: function(form) {
+        submitHandler: function() {
             $.post($form.attr("action"), $form.serialize(), function(response) {
                 if (response.status === "success") {
                     oer.status_message.success(response.message, true);
@@ -74,7 +74,7 @@ oer.authoring.init_organize_form = function() {
         rules: {
             instruction_date: "date"
         },
-        submitHandler: function(form) {
+        submitHandler: function() {
             $.post($form.attr("action"), $form.serialize(), function(response) {
                 if (response.status === "success") {
                     oer.status_message.success(response.message, true);
@@ -103,7 +103,6 @@ oer.authoring.init_organize_form = function() {
         $dialog.dialog("widget").removeClass("loading");
     });
 
-    var $form = $("#align-form");
     var $form_user_tags = $form.find("ul.align-user-tags");
 
     var $align = $("section.align");
@@ -154,6 +153,15 @@ oer.authoring.init_organize_form = function() {
             $image.hide();
         }
     });
+
+    var $image_file_input = $image_widget.find("input[type='file']");
+    $image_file_input.mouseenter(function() {
+        $image_upload.addClass("hover");
+    });
+    $image_file_input.mouseleave(function() {
+        $image_upload.removeClass("hover");
+    });
+
     $image_remove.click(function(e) {
         e.preventDefault();
         $image.attr("src", "http://placehold.it/220x150/dddddd/333333&text=No%20image");

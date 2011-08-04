@@ -1,4 +1,4 @@
-from common.models import Language
+from common.models import Language, Keyword
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import View
@@ -13,10 +13,12 @@ class New(View):
     def get(self, request, *args, **kwargs):
         oer, created = OER.objects.get_or_create(author=request.user,
                                                        is_new=True)
-        student_levels = request.user.get_profile().educator_student_levels
+        profile = request.user.get_profile()
         if created:
-            if student_levels.exists():
-                oer.student_levels.add(*list(student_levels))
+            for level in profile.educator_student_levels.all():
+                oer.student_levels.add(level)
+            for subject in profile.educator_subjects.all():
+                oer.keywords.add(Keyword.objects.get_or_create(name=subject.title)[0])
             oer.language = Language.objects.get(slug="en")
             oer.instruction_date = datetime.date.today() + datetime.timedelta(days=1)
             oer.save()
