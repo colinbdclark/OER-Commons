@@ -268,6 +268,20 @@ body.authoring {
   border-color: #666;
 }
 
+.authoring a.add {
+  color: #679701;
+  border: 1px solid #D9E5C0;
+  display: inline-block;
+  padding: 3px 10px 3px 25px;
+  line-height: 20px;
+  text-decoration: none;
+  margin-left: 20px;
+  background: url(../images/authoring/icon-add.png) no-repeat 5px 50%;
+}
+
+.authoring a.add:hover {
+  border-color: #679701;
+}
 
 #define-form aside .field {
   margin-bottom: 5px;
@@ -464,17 +478,6 @@ body.authoring {
 
 #outline-form ol li .remove {
   background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
-}
-
-.authoring a.add {
-  color: #679701;
-  border: 1px solid #D9E5C0;
-  display: inline-block;
-  padding: 3px 10px 3px 25px;
-  line-height: 20px;
-  text-decoration: none;
-  margin-left: 20px;
-  background: url(../images/authoring/icon-add.png) no-repeat 5px 50%;
 }
 
 #outline-form .buttons a.prev {
