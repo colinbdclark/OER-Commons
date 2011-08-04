@@ -268,6 +268,20 @@ body.authoring {
   border-color: #666;
 }
 
+.authoring a.add {
+  color: #679701;
+  border: 1px solid #D9E5C0;
+  display: inline-block;
+  padding: 3px 10px 3px 25px;
+  line-height: 20px;
+  text-decoration: none;
+  margin-left: 20px;
+  background: url(../images/authoring/icon-add.png) no-repeat 5px 50%;
+}
+
+.authoring a.add:hover {
+  border-color: #679701;
+}
 
 #define-form aside .field {
   margin-bottom: 5px;
@@ -452,39 +466,18 @@ body.authoring {
   vertical-align: middle;
 }
 
-#outline-form ol li .remove {
-  display: inline-block;
-  padding: 1px 7px;
-  height: 20px;
-  line-height: 20px;
-  border: 1px solid #666;
-  color: #666;
-  margin-left: 0.5em;
-  cursor: pointer;
-  vertical-align: middle;
-}
-
+#outline-form ol li .remove,
 #outline-form ol li .handle {
-  display: inline-block;
-  padding: 1px 7px;
-  height: 20px;
-  line-height: 20px;
-  border: 1px solid #666;
-  color: #666;
+  height: 22px;
+  width: 22px;
+  padding: 0;
   margin-left: 0.5em;
-  cursor: move;
   vertical-align: middle;
+  text-indent: -9999px;
 }
 
-.authoring a.add {
-  color: #679701;
-  border: 1px solid #D9E5C0;
-  display: inline-block;
-  padding: 3px 10px 3px 25px;
-  line-height: 20px;
-  text-decoration: none;
-  margin-left: 20px;
-  background: url(../images/authoring/icon-add.png) no-repeat 5px 50%;
+#outline-form ol li .remove {
+  background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
 }
 
 #outline-form .buttons a.prev {

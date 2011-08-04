@@ -1,7 +1,7 @@
 from annoying.decorators import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
-from oer.models import Chapter
+from oer.models import Section
 from oer.views import OERViewMixin
 from utils.decorators import login_required
 from utils.views import BaseViewMixin
@@ -19,20 +19,20 @@ class Outline(OERViewMixin, BaseViewMixin, TemplateView):
         return super(Outline, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        if not self.oer.chapters.all().exists():
-            Chapter.objects.create(oer=self.oer)
+        if not self.oer.sections.all().exists():
+            Section.objects.create(oer=self.oer)
         return super(Outline, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
-            if "add-chapter" in request.POST:
-                chapter = Chapter.objects.create(oer=self.oer)
-                return JsonResponse(dict(status="success", id=chapter.id))
+            if "add-section" in request.POST:
+                section = Section.objects.create(oer=self.oer)
+                return JsonResponse(dict(status="success", id=section.id))
 
-            elif "delete-chapter" in request.POST:
+            elif "delete-section" in request.POST:
                 try:
-                    Chapter.objects.get(oer=self.oer, id=int(request.POST["id"])).delete()
-                except (ValueError, TypeError, KeyError, Chapter.DoesNotExist):
+                    Section.objects.get(oer=self.oer, id=int(request.POST["id"])).delete()
+                except (ValueError, TypeError, KeyError, Section.DoesNotExist):
                     return JsonResponse(dict(status="error"))
                 return JsonResponse(dict(status="success"))
 
@@ -45,13 +45,13 @@ class Outline(OERViewMixin, BaseViewMixin, TemplateView):
                 id = int(ids[i])
                 order = i+1
                 try:
-                    chapter = self.oer.chapters.get(id=id)
-                    if chapter.title != title or chapter.order != order:
-                        chapter.title = title
-                        chapter.order = order
-                        chapter.save()
+                    section = self.oer.sections.get(id=id)
+                    if section.title != title or section.order != order:
+                        section.title = title
+                        section.order = order
+                        section.save()
                         saved = True
-                except Chapter.DoesNotExist:
+                except Section.DoesNotExist:
                     continue
 
             if saved:

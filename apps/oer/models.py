@@ -61,9 +61,9 @@ class OER(models.Model):
         return get_thumbnail(self.image, "220x500")
 
 
-class Chapter(models.Model):
+class Section(models.Model):
 
-    oer = models.ForeignKey(OER, related_name="chapters")
+    oer = models.ForeignKey(OER, related_name="sections")
     order = models.PositiveIntegerField()
     title = models.CharField(default=u"", max_length=200)
     text = models.TextField(default=u"")
@@ -76,8 +76,8 @@ class Chapter(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.order:
-            self.order = self.oer.chapters.all().count() + 1
-        super(Chapter, self).save(*args, **kwargs)
+            self.order = self.oer.sections.all().count() + 1
+        super(Section, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ["oer__id", "order", "id"]
