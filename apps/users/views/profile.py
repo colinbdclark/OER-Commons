@@ -258,7 +258,7 @@ def about(request):
             if request.is_ajax():
                 return ajax_form_success(form.success_message)
             
-            return redirect("frontpage")
+            return redirect("users:profile")
         
         else:
             if request.is_ajax():
