@@ -67,3 +67,16 @@ def bound_field_value(field):
         else:
             data = field.data
     return data
+
+
+@register.filter
+@stringfilter
+def truncatechars(value, arg, ellipsis=u"..."):
+    try:
+        length = int(arg)
+    except ValueError: # Invalid literal for int().
+        return value # Fail silently. full_url.is_safe = True
+    if len(value) > length:
+        value = value[:length-len(ellipsis)] + ellipsis
+        assert len(value) == length
+    return value
