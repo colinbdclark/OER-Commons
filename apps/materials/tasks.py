@@ -77,7 +77,7 @@ def get_url_status_code(url):
 
     try:
         host = url.split('/')[2]
-        path = "/".join(url.split('/')[3:])
+        path = "/" + "/".join(url.split('/')[3:])
     except:
         return None
 
