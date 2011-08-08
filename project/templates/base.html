@@ -56,13 +56,11 @@
     
     <div class="layout-columns fixed-width clearfix" {% block content-itemscope-attrs %}{# this is a placeholder to insert microdata itemscope attribute on resource page #}{% endblock %}>
 
-      <div class="column-left">
+      <aside class="column-left">
         {% block column-left %}
           &nbsp;
         {% endblock %}
-      </div>
-
-      <div class="column-main">
+      </aside><div class="column-main">
         {% include "include/status-messages.html" %}
         {% if not hide_global_notifications %}
           {% if request.abtesting == "b" %}
@@ -71,17 +69,15 @@
           {% endif %}
         {% endif %}
   
-        <div id="content" class="content {% block contentclass %}{% endblock %}">
+        <section id="content" class="content {% block contentclass %}{% endblock %}">
           {% block content %}
           {% endblock %}
-        </div>
-      </div>
-
-      <div class="column-right">
+        </section >
+      </div><aside class="column-right">
         {% block column-right %}
           &nbsp;
         {% endblock %}
-      </div>
+      </aside>
 
     </div>
     

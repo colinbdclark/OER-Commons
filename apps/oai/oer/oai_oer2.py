@@ -1,7 +1,8 @@
+from common.models import GeneralSubject, Language
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from haystack.models import SearchResult
-from materials.models.common import GeneralSubject, Language, \
+from materials.models.common import\
     GeographicRelevance, MediaFormat, GradeLevel, Collection
 from materials.models.community import CommunityType, CommunityItem
 from materials.models.course import Course, CourseMaterialType

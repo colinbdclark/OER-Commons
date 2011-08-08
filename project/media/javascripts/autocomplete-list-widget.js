@@ -1,6 +1,6 @@
 oer.autocomplete_list_widget = {};
 
-$.template("autocomplete-list-widget-item", '<li><a href="#" class="delete">Delete</a> <span>${name}</span></li>');
+$.template("autocomplete-list-widget-item", '<li class="rc3"><span>${name}</span> <a href="#" class="delete">x</a></li>');
 
 oer.autocomplete_list_widget.init = function() {
 
@@ -28,14 +28,17 @@ oer.autocomplete_list_widget.init = function() {
             var values = get_values($input);
             $add_input.val("");
             if ($.inArray(value, values) != -1) {
-                $items.find("span:econtains('" + value + "')").closest("li").effect("bounce");
+                $items.find("span:econtains('" + value + "')").closest("li").effect("pulsate", 200);
                 return;
             }
             values.push(value);
             $input.val(values.join(","));
-            $.tmpl("autocomplete-list-widget-item", {
+            var $item = $.tmpl("autocomplete-list-widget-item", {
                 name : value
             }).appendTo($items);
+            if (window.rocon != undefined) {
+                rocon.update($item.get(0));
+            }
         }
 
         $add_input.autocomplete({

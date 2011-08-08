@@ -12,6 +12,14 @@ a {
   color: #0B7BA9;
 }
 
+.align-center {
+  text-align: center;
+}
+
+.align-right {
+  text-align: right;
+}
+
 a.dashed {
   border-bottom-width: 1px;
   border-bottom-style: dashed;

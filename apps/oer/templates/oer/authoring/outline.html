@@ -1,0 +1,56 @@
+{% extends "oer/authoring/base.html" %}
+
+{% block content %}
+
+  <form action="{% url oer:edit_outline oer_id=oer.id %}" method="post"
+        class="formatted" id="outline-form">
+
+    <aside class="column-left">
+    </aside><section id="content" class="content column-main">
+
+      <div class="field required">
+        <div class="label">
+          <label>Outline</label>
+        </div>
+        <div class="help">
+          Identify the main sections of your resource.<br>
+          You can always add or remove sections later.<br>
+          Add text, pictures and more on the next page.
+        </div>
+        <ol id="sections">
+          {% for section in oer.sections.all %}
+            {% spaceless %}
+            <li data-id="{{ section.id }}">
+              <input name="title" value="{{ section.title }}" type="text" />
+              <input name="id" value="{{ section.id }}" type="hidden" />
+              <a href="#" class="handle gray-btn rc3">Move</a>
+              <a href="#"  class="remove gray-btn rc3">Delete</a>
+            </li>
+            {% endspaceless %}
+          {% endfor %}
+        </ol>
+        <a href="#" class="add rc3">Add another</a>
+      </div>
+
+      <div class="buttons">
+        <a href="{% url oer:edit_organize oer_id=oer.id %}" class="rc5 prev">Back</a>
+        <a href="#" class="rc5 next">Next</a>
+      </div>
+
+    </section><aside class="column-right">
+      <section>
+        <h1>Example Outlines</h1>
+      </section>
+    </aside>
+
+  </form>
+
+{% endblock %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.authoring.init_outline_form();
+    });
+  </script>
+{% endblock %}

@@ -244,61 +244,6 @@ class Author(models.Model):
         ordering = ("name",)
 
 
-class KeywordManager(models.Manager):
-
-    def get_by_natural_key(self, name):
-        return self.get_or_create(name=name)[0]
-
-
-class Keyword(models.Model):
-
-    name = models.CharField(max_length=500, unique=True,
-                            verbose_name=_(u"Name"))
-    slug = AutoSlugField(populate_from="name", max_length=500,
-                         verbose_name=_(u"Slug"),
-                         db_index=True)
-    suggested = models.BooleanField(default=False,
-                                    verbose_name=_(u"Suggested"))
-
-    objects = KeywordManager()
-
-    def natural_key(self):
-        return self.name
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = "materials"
-        verbose_name = _(u"Keyword")
-        verbose_name_plural = _(u"Keywords")
-        ordering = ("name",)
-
-
-class GeneralSubject(models.Model):
-
-    name = models.CharField(unique=True, max_length=100,
-                            verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
-                         verbose_name=_(u"Slug"),
-                         db_index=True)
-    description = models.TextField(default=u"", blank=True,
-                                   verbose_name=_(u"Description"))
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = "materials"
-        verbose_name = _(u"General subject")
-        verbose_name_plural = _(u"General subjects")
-        ordering = ("id",)
-
-    @permalink
-    def get_absolute_url(self):
-        return "materials:general_subject_index", [], {"general_subjects": self.slug}
-
-
 class GradeLevel(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
@@ -321,25 +266,6 @@ class GradeLevel(models.Model):
     @permalink
     def get_absolute_url(self):
         return "materials:grade_level_index", [], {"grade_levels": self.slug}
-
-
-class Language(models.Model):
-
-    name = models.CharField(unique=True, max_length=100,
-                            verbose_name=_(u"Name"))
-    slug = models.SlugField(max_length=3, unique=True,
-                            verbose_name=_(u"Slug"),
-                            db_index=True)
-    order = models.IntegerField(default=999, verbose_name=_(u"Order"))
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = "materials"
-        verbose_name = _(u"Language")
-        verbose_name_plural = _(u"Languages")
-        ordering = ("order", "name",)
 
 
 class Collection(models.Model):
@@ -412,4 +338,3 @@ class GeographicRelevance(models.Model):
         verbose_name = _(u"Geographic relevance")
         verbose_name_plural = _(u"Geographic relevances")
         ordering = ("id",)
-

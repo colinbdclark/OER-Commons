@@ -1,6 +1,7 @@
+from common.models import GeneralSubject, Language
 from django.template.loader import render_to_string
 from haystack.models import SearchResult
-from materials.models.common import GeneralSubject, MediaFormat, Language, \
+from materials.models.common import  MediaFormat,\
     GeographicRelevance
 from materials.models.course import Course
 from materials.models.library import Library

@@ -1,5 +1,5 @@
+from common.models import Keyword
 from django.db.models.aggregates import Count
-from materials.models.common import Keyword
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library

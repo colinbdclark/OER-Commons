@@ -1,6 +1,6 @@
+from common.models import GeneralSubject
 from django.template.loader import render_to_string
 from haystack.models import SearchResult
-from materials.models.common import GeneralSubject
 from materials.utils import get_name_from_id
 from oai.oer import OERMetadataFormat
 

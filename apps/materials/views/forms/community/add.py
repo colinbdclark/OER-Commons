@@ -1,11 +1,12 @@
+from common.models import GeneralSubject, Language, Keyword
 from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
-from materials.models.common import GeneralSubject, GradeLevel, Language, \
-    GeographicRelevance, Keyword
+from materials.models.common import  GradeLevel,\
+    GeographicRelevance
 from materials.models.community import CommunityItem, CommunityType, \
     CommunityTopic
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE

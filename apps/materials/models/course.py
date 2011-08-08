@@ -1,9 +1,12 @@
+from __future__ import absolute_import
+
 from autoslug.fields import AutoSlugField
+from common.models import GeneralSubject, Language, Keyword
 from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
-from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
-    Language, GeographicRelevance, MediaFormat, Institution, Collection, \
+from materials.models.common import Author, GradeLevel, \
+    GeographicRelevance, MediaFormat, Institution, Collection, \
     AutoCreateManyToManyField, AutoCreateForeignKey
 from materials.models.material import Material
 

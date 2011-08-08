@@ -1,0 +1,489 @@
+body.authoring {
+  background: #EFEFEF url(../images/authoring/body-bg.png) repeat-x 0 0;
+}
+
+.authoring .fixed-width {
+  width: 1000px;
+}
+
+.authoring #logo {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url(../images/authoring/logo.png) no-repeat;
+  width: 116px;
+  height: 94px;
+  text-indent: -9999px;
+}
+
+.authoring header.global {
+  height: 56px;
+  background: url(../images/authoring/header-bg.png) no-repeat 155px 0;
+  position: relative;
+}
+
+.authoring header.global h1 {
+  position: absolute;
+  top: 27px;
+  left: 120px;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.authoring header.global nav {
+  position: absolute;
+  right: 50px;
+  top: 35px;
+}
+
+.authoring header.global nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.authoring header.global nav ul li {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.authoring header.global nav ul li a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.authoring header.global nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.authoring .progress-bar {
+  background-repeat: no-repeat;
+  width: 400px;
+  height: 50px;
+  margin: auto;
+  position: relative;
+  top: 4px;
+}
+
+.authoring .progress-bar.step1 {
+  background-image: url(../images/authoring/progress-bar-1.png);
+}
+
+.authoring .progress-bar.step2 {
+  background-image: url(../images/authoring/progress-bar-2.png);
+}
+
+.authoring .progress-bar.step3 {
+  background-image: url(../images/authoring/progress-bar-3.png);
+}
+
+.authoring .progress-bar.step4 {
+  background-image: url(../images/authoring/progress-bar-4.png);
+}
+
+.authoring .progress-bar.step5 {
+  background-image: url(../images/authoring/progress-bar-5.png);
+}
+
+.authoring .progress-bar a {
+  display: block;
+  position: absolute;
+  text-indent: -9999px;
+  height: 15px;
+  width: 15px;
+}
+
+.authoring .progress-bar a.define {
+  top: 8px;
+  left: 4px;
+  height: 33px;
+  width: 35px;
+}
+
+.authoring .progress-bar a.organize {
+  top: 8px;
+  left: 70px;
+  height: 33px;
+  width: 50px;
+}
+
+.authoring .progress-bar a.outline {
+  top: 8px;
+  left: 160px;
+  height: 33px;
+  width: 40px;
+}
+
+.authoring .progress-bar a.add-content {
+  top: 2px;
+  left: 240px;
+  height: 43px;
+  width: 70px;
+}
+
+.authoring .progress-bar a.license {
+  top: 8px;
+  left: 347px;
+  height: 33px;
+  width: 44px;
+}
+
+.authoring .page {
+  margin-top: 4px;
+  background: url(../images/authoring/content-bg.png) repeat-y 50% 0;
+}
+
+.authoring .page .wrap-top {
+  padding-top: 10px;
+  background: url(../images/authoring/content-bg-top.png) no-repeat 50% 0;
+}
+
+.authoring .page .wrap-bottom {
+  padding-bottom: 10px;
+  background: url(../images/authoring/content-bg-bottom.png) no-repeat 50% 100%;
+}
+
+.authoring .column-left,
+.authoring .column-right {
+  padding: 10px 20px;
+  width: 180px;
+}
+
+.authoring .column-main {
+  width: 520px;
+}
+
+@media all and (max-width: 1150px) {
+  .authoring .column-left {
+    padding-top: 40px;
+  }
+}
+
+.authoring #content {
+  padding-top: 10px;
+}
+
+.authoring #content h1 {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.authoring aside h1 {
+  font-size: 16px;
+  margin: 0.5em 0;
+}
+
+.authoring aside ul {
+  margin-bottom: 1em;
+  list-style-position: inside;
+}
+
+.authoring aside p {
+  margin: 1em 0;
+}
+
+.authoring .page form.formatted .field {
+  margin-bottom: 1.5em;
+}
+
+.authoring .page .formatted .label {
+  margin-bottom: 4px;
+}
+
+.authoring .page form.formatted .label label {
+  font-weight: normal;
+  font-size: 18px;
+}
+
+.authoring .page form.formatted .required .label label {
+  background-image: url(../images/authoring/asterisk.png);
+}
+
+.authoring .page form.formatted .help {
+  margin: 4px 0 4px 1em;
+  font-size: 14px;
+  font-style: normal;
+}
+
+.authoring .page form.formatted input[type='text'],
+.authoring .page form.formatted textarea {
+  border: 1px solid #0B7BA8;
+  padding-left: 4px;
+}
+
+.authoring .page form.formatted input[type='text'] {
+  line-height: 20px;
+  font-size: 16px;
+}
+
+.authoring #status-messages {
+  position: absolute;
+  top: 64px;
+  left: 10px;
+  z-index: 10;
+}
+
+.authoring #status-messages .status-message {
+  float: left;
+  clear: both;
+}
+
+.authoring .buttons {
+  margin-bottom: 1em;
+  position: relative;
+}
+
+.authoring .buttons a.next,
+.authoring .buttons a.prev {
+  display: inline-block;
+  padding: 10px 40px 10px 15px;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.authoring .buttons a.next {
+  background: #FFCB66 url(../images/authoring/arrow-next.png) no-repeat 60px 50%;
+}
+
+.authoring .buttons a.prev {
+  padding-right: 15px;
+  padding-left: 40px;
+  background: #FFCB66 url(../images/authoring/arrow-prev.png) no-repeat 8px 50%;
+  position: absolute;
+  left: 0;
+}
+
+.authoring a.gray-btn {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  color: #333;
+}
+
+.authoring a.gray-btn:hover,
+.authoring a.gray-btn.hover {
+  border-color: #666;
+}
+
+.authoring a.add {
+  color: #679701;
+  border: 1px solid #D9E5C0;
+  display: inline-block;
+  padding: 3px 10px 3px 25px;
+  line-height: 20px;
+  text-decoration: none;
+  margin-left: 20px;
+  background: url(../images/authoring/icon-add.png) no-repeat 5px 50%;
+}
+
+.authoring a.add:hover {
+  border-color: #679701;
+}
+
+#define-form aside .field {
+  margin-bottom: 5px;
+}
+
+#define-form .student-levels a {
+  float: right;
+}
+
+#define-form .student-levels ul {
+  list-style-type: none;
+}
+
+#define-form .student-levels .field ul {
+  display: none;
+}
+
+#define-form .title input {
+  width: 510px;
+}
+
+#define-form .subjects ul {
+  margin-top: 3px;
+}
+
+#define-form .subjects li {
+  display: inline-block;
+  width: 200px;
+  margin-right: 10px;
+  vertical-align: top;
+}
+
+#define-form .summary textarea {
+  width: 510px;
+}
+
+#define-form .goals ul {
+  list-style: disc outside;
+  margin-left: 20px;
+}
+
+#define-form .goals a {
+  display: inline-block;
+  margin-top: 5px;
+  margin-left: 20px;
+}
+
+#define-form .goals input {
+  width: 490px;
+}
+
+#define-form .buttons a.next {
+  background-color: #DBD639;
+}
+
+#organize-form #content section header h1 {
+  display: inline-block;
+  font-weight: normal;
+  font-size: 18px;
+}
+
+#organize-form #content section {
+  margin-bottom: 1em;
+}
+
+#organize-form #content section header span {
+  color: #999;
+  position: relative;
+  bottom: 1px;
+  left: 1em;
+}
+
+#organize-form .image {
+  margin-top: 10px;
+  vertical-align: top;
+}
+
+#organize-form .image.loading {
+  padding-top: 150px;
+  background: url(../images/ajax-loader-big.gif) no-repeat 50% 70px;
+}
+
+#organize-form .image .controls {
+  display: inline-block;
+  margin-left: 1em;
+  vertical-align: top;
+  width: 275px;
+}
+
+#organize-form .image .controls p {
+  font-size: 14px;
+}
+
+#organize-form .image .controls p.help {
+  margin-bottom: 1em;
+}
+
+#organize-form .image .controls div {
+  display: inline-block;
+}
+
+#organize-form section.organize .label label,
+#organize-form section.align .label label {
+  font-size: 14px;
+}
+
+#organize-form section.organize .field,
+#organize-form section.align .field {
+  position: relative;
+}
+
+#organize-form section.organize .field .errors {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#organize-form #id_group {
+  position: absolute;
+  right: 0;
+  top: 14px;
+}
+
+#organize-form #id_instruction_date {
+  position: absolute;
+  right: 0;
+  top: 14px;
+  width: 105px;
+}
+
+#organize-form #add-keywords {
+  position: absolute;
+  right: 0;
+  top: 14px;
+  width: 195px;
+}
+
+#organize-form #keywords-widget ul {
+  margin-top: 1em;
+}
+
+#organize-form section.align header h1 {
+  margin-bottom: 0;
+}
+
+#organize-form section.align div.label {
+  display: inline-block;
+}
+
+#organize-form #show-align-form {
+  margin-left: 1em;
+}
+
+#organize-form section.align .align-user-tags {
+  margin-top: 1em;
+}
+
+#organize-form .buttons a.prev {
+  background-color: #FFCB66;
+}
+
+#organize-form .buttons a.next {
+  background-color: #8CC63F;
+}
+
+#outline-form ol {
+  font-size: 16px;
+  margin-top: 1em;
+}
+
+#outline-form ol li {
+  margin-bottom: 0.5em;
+}
+
+#outline-form ol li.loading {
+  background: url(../images/ajax-loader.gif) no-repeat 0 50%;
+}
+
+#outline-form input[type='text'] {
+  width: 415px;
+  margin: 0;
+  vertical-align: middle;
+}
+
+#outline-form ol li .remove,
+#outline-form ol li .handle {
+  height: 22px;
+  width: 22px;
+  padding: 0;
+  margin-left: 0.5em;
+  vertical-align: middle;
+  text-indent: -9999px;
+}
+
+#outline-form ol li .remove {
+  background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
+}
+
+#outline-form .buttons a.prev {
+  background-color: #DBD639;
+}
+
+#outline-form .buttons a.next {
+  background-color: #8CC63F;
+}
