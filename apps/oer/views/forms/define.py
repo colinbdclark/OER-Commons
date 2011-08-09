@@ -1,6 +1,7 @@
 from annoying.decorators import JsonResponse
 from common.models import StudentLevel, GeneralSubject, Language
 from django import forms
+from django.shortcuts import redirect
 from django.utils.datastructures import MergeDict, MultiValueDict
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_unicode
@@ -94,6 +95,8 @@ class Define(OERViewMixin, BaseViewMixin, TemplateView):
             self.form.save()
             if request.is_ajax():
                 return JsonResponse(dict(status="success", message=u"Changes were saved."))
+            else:
+                return redirect("oer:edit_organize", oer_id=self.oer.id)
         else:
             if request.is_ajax():
                 errors = {}
