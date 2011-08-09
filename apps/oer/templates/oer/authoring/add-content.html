@@ -3,17 +3,40 @@
 {% block content %}
 
   <form action="{% url oer:edit_add_content oer_id=oer.id section_number=section_number %}" method="post"
-        class="formatted" id="add-content-form">
+        class="formatted" id="add-content-form" data-section-number="{{ section_number }}">
 
     <aside class="column-left">
+      <section class="sections">
+        <h1>{{ oer.title }}</h1>
+        <ol>
+          {% for section in oer.sections.all %}
+            <li>{{ section.title }}</li>
+          {% endfor %}
+        </ol>
+        <a href="{% url oer:edit_outline oer_id=oer.id %}" class="rc3 gray-btn">Edit Outline</a>
+      </section>
     </aside><section id="content" class="content column-main">
 
       {% with form.title as field %}
-        {% include "include/form-field.html" %}
+        <div class="field title">
+          <div class="errors">
+            {% for error in field.errors %}
+              <label class="error">{{ error|safe }}</label>
+            {% endfor %}
+          </div>
+          {{ section_number }}. {{ field }}
+        </div>
       {% endwith %}
 
       {% with form.text as field %}
-        {% include "include/form-field.html" %}
+        <div class="field text">
+          <div class="errors">
+            {% for error in field.errors %}
+              <label class="error">{{ error|safe }}</label>
+            {% endfor %}
+          </div>
+          {{ field }}
+        </div>
       {% endwith %}
 
       <div class="buttons">

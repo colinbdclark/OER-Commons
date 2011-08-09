@@ -488,7 +488,30 @@ body.authoring {
   background-color: #8CC63F;
 }
 
+#add-content-form .title {
+  border-bottom: 1px dashed #ccc;
+  margin-bottom: 0.5em;
+  font-size: 18px;
+}
+
+#add-content-form .title input {
+  border: none;
+  width: 450px;
+  padding-left: 0;
+  font-size: 18px;
+}
+
 #add-content-form #id_text {
-  width: 510px;
+  width: 515px;
   height: 400px;
+}
+
+#add-content-form section.sections ol {
+  list-style-position: inside;
+  margin-bottom: 1em;
+  font-size: 14px;
+}
+
+#add-content-form section.sections ol li {
+  margin: 3px 0;
 }

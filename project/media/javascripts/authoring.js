@@ -171,7 +171,7 @@ $.template("authoring-outline-item", '<input name="title" value="" type="text" /
 
 oer.authoring.init_outline_form = function() {
     var $form = $("#outline-form");
-    
+
     oer.authoring.autosave($form);
 
     $form.find("div.buttons a.next").click(function(e) {
@@ -223,9 +223,25 @@ oer.authoring.init_outline_form = function() {
 };
 
 oer.authoring.init_add_content_form = function() {
-  $("#id_text").redactor({
-    lang: "en",
-    focus: true,
-    toolbar: "oer"
-  });
+
+    var $form = $("#add-content-form");
+
+    $("#id_text").redactor({
+        lang: "en",
+        focus: true,
+        toolbar: "oer"
+    });
+
+    oer.authoring.autosave($form);
+
+    $form.find("div.buttons a.next").click(function(e) {
+        e.preventDefault();
+        $form.submit();
+    });
+
+    var $current_section_in_list = $form.find("section.sections ol li").eq($form.data("section-number")-1);
+    var $title_input = $("#id_title");
+    $title_input.keyup(function() {
+        $current_section_in_list.text($title_input.val());
+    });
 };
