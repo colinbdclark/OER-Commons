@@ -34,7 +34,7 @@
 
       <div class="buttons">
         <a href="{% url oer:edit_organize oer_id=oer.id %}" class="rc5 prev">Back</a>
-        <a href="#" class="rc5 next">Next</a>
+        <a href="{% url oer:edit_add_content oer_id=oer.id section_number=1 %}" class="rc5 next">Next</a>
       </div>
 
     </section><aside class="column-right">

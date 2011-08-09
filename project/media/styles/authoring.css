@@ -487,3 +487,8 @@ body.authoring {
 #outline-form .buttons a.next {
   background-color: #8CC63F;
 }
+
+#add-content-form #id_text {
+  width: 510px;
+  height: 400px;
+}

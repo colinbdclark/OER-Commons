@@ -221,3 +221,11 @@ oer.authoring.init_outline_form = function() {
         handle: ".handle"
     });
 };
+
+oer.authoring.init_add_content_form = function() {
+  $("#id_text").redactor({
+    lang: "en",
+    focus: true,
+    toolbar: "oer"
+  });
+};

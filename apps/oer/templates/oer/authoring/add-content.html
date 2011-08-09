@@ -1,0 +1,45 @@
+{% extends "oer/authoring/base.html" %}
+
+{% block content %}
+
+  <form action="{% url oer:edit_add_content oer_id=oer.id section_number=section_number %}" method="post"
+        class="formatted" id="add-content-form">
+
+    <aside class="column-left">
+    </aside><section id="content" class="content column-main">
+
+      {% with form.title as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      {% with form.text as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      <div class="buttons">
+        {% if prev_section_number %}
+          <a href="{% url oer:edit_add_content oer_id=oer.id section_number=prev_section_number %}" class="rc5 prev">Back</a>
+        {% else %}
+          <a href="{% url oer:edit_outline oer_id=oer.id %}" class="rc5 prev">Back</a>
+        {% endif %}
+        {% if next_section_number %}
+          <a href="{% url oer:edit_add_content oer_id=oer.id section_number=next_section_number %}" class="rc5 next">Next</a>
+        {% else %}
+          <a href="#" class="rc5 next">Next</a>
+        {% endif %}
+      </div>
+
+    </section><aside class="column-right">
+    </aside>
+
+  </form>
+
+{% endblock %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.authoring.init_add_content_form();
+    });
+  </script>
+{% endblock %}

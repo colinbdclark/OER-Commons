@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns, url
+from oer.views.forms.add_content import AddContent
 from oer.views.forms.define import Define
 from oer.views.forms.organize import Organize, Image
 from oer.views.forms.outline import Outline
@@ -12,4 +13,5 @@ urlpatterns = patterns("",
     url(r"^edit/(?P<oer_id>\d+)/upload-image$", Image.as_view(action="upload"), name="edit_image_upload"),
     url(r"^edit/(?P<oer_id>\d+)/remove-image$", Image.as_view(action="remove"), name="edit_image_remove"),
     url(r"^edit/(?P<oer_id>\d+)/outline$", Outline.as_view(), name="edit_outline"),
+    url(r"^edit/(?P<oer_id>\d+)/add-content/(?P<section_number>\d+)$", AddContent.as_view(), name="edit_add_content"),
 )
