@@ -1,0 +1,3 @@
+
+
+DAYS_TO_DELETE = 30
