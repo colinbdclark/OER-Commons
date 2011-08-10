@@ -83,7 +83,7 @@ form.formatted label.error {
 }
 
 form.formatted label.error a {
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 form.formatted .buttons {
@@ -413,4 +413,8 @@ form.feedback p {
 form.feedback .text {
   width: 542px;
   resize: none;
+}
+
+#validate-csv-form {
+  width: 300px;
 }

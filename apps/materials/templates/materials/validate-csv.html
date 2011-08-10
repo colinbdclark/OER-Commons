@@ -14,31 +14,32 @@
     <div class="buttons">
       <input type="submit" value="Validate" />
     </div>
-
-    {% if validation_errors %}
-      <h2>Validation Errors</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Line Number</th>
-            <th>Field Name</th>
-            <th>Error</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in validation_errors %}
-            <tr>
-              {% for cell in row %}
-                <td>{{ cell }}</td>
-              {% endfor %}
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      {% if is_valid %}
-        <p class="green">Data appears to be valid.</p>
-      {% endif %}
-    {% endif %}
   </form>
+
+  {% if validation_errors %}
+    <h2>Validation Errors</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Line Number</th>
+          <th>Field Name</th>
+          <th>Error</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in validation_errors %}
+          <tr>
+            {% for cell in row %}
+              <td>{{ cell }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    {% if is_valid %}
+      <p class="green">Data appears to be valid.</p>
+    {% endif %}
+  {% endif %}
+
 {% endblock %}
