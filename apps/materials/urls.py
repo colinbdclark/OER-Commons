@@ -3,6 +3,7 @@ from django.views.generic.simple import direct_to_template
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
+from materials.views.validate_csv import ValidateCSV
 from reviews.urls import add_review_patterns
 from saveditems.urls import saved_item_patterns
 
@@ -89,7 +90,9 @@ microsite_browse_patterns = browse_patterns + patterns('materials.views',
     url(r"^/topic/(?P<topics>[^/]+)/?$", "index.index", name="topic_index"),
 )
 
-urlpatterns = patterns('materials.views',
+urlpatterns = patterns('',
+    url(r'^validate-csv$', ValidateCSV.as_view(), name="validate_csv"),
+) + patterns('materials.views',
     url(r"^facebook_rss/?$", "facebook_feed.facebook_feed", name="facebook_feed"),
     url(r"^oer/?$", "browse.browse", name="browse"),
     url(r"^oer/providers/?$", "browse.providers", name="browse_providers"),
@@ -110,6 +113,4 @@ urlpatterns = patterns('materials.views',
     url(r'^submit/dispatch$', "iframe_submission.iframe.dispatch_iframe", name="iframe_dispatch"),
     url(r'^submit/login$', "iframe_submission.login.login", name="iframe_login"),
     url(r'^submit/post?$', "iframe_submission.submission_form.submit", name="iframe_submission_post"),
-    url(r'^(?P<microsite>[^/]+)/?$', "microsites.microsite", name="microsite"),
 )
-
