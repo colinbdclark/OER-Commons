@@ -3,16 +3,22 @@
 {% block bodyclass %}no-columns{% endblock %}
 
 {% block content %}
-  <form action="{% url materials:validate_csv %}" method="post"
+  <form action="{% url materials:data_import %}" method="post"
         enctype="multipart/form-data" class="formatted"
-        id="validate-csv-form">
+        id="data-import-form">
 
     {% with form.file as field %}
       {% include "include/form-field.html" %}
     {% endwith %}
 
+    {% if form.filename %}
+      <p>Processed file: <strong>{{ form.filename }}</strong></p>
+    {% endif %}
+
     <div class="buttons">
-      <input type="submit" value="Validate" />
+      <input type="submit" name="import" value="Import" />
+      <input type="submit" name="dry_run" value="Import (dry run)" />
+      <input type="submit" name="validate" value="Validate" />
     </div>
   </form>
 
@@ -36,10 +42,6 @@
         {% endfor %}
       </tbody>
     </table>
-  {% else %}
-    {% if is_valid %}
-      <p class="green">Data appears to be valid.</p>
-    {% endif %}
   {% endif %}
 
 {% endblock %}

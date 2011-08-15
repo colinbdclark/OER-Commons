@@ -415,6 +415,7 @@ form.feedback .text {
   resize: none;
 }
 
-#validate-csv-form {
+#validate-csv-form,
+#data-import-form {
   width: 300px;
 }

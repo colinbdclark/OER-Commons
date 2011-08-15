@@ -55,7 +55,7 @@ class AutoCreateManyToManyField(models.ManyToManyField):
 add_introspection_rules([], ["^materials\.models\.common\.AutoCreateManyToManyField"])
 
 
-NO_STRING_ATTACHED = "no-strings-attached" 
+NO_STRING_ATTACHED = "no-strings-attached"
 REMIX_AND_SHARE = "remix-and-share"
 SHARE_ONLY = "share-only"
 READ_THE_FINE_PRINT = "read-the-fine-print"
@@ -297,7 +297,7 @@ class GeneralSubject(models.Model):
     @permalink
     def get_absolute_url(self):
         return "materials:general_subject_index", [], {"general_subjects": self.slug}
-    
+
 
 class GradeLevel(models.Model):
 
@@ -331,7 +331,7 @@ class Language(models.Model):
                             verbose_name=_(u"Slug"),
                             db_index=True)
     order = models.IntegerField(default=999, verbose_name=_(u"Order"))
-    
+
     def __unicode__(self):
         return self.name
 
