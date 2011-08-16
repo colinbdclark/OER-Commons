@@ -22,6 +22,7 @@
         oer.materials.view_item.init_content_actions();
       {% endif %}
       $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
+      oer.evaluation_tool.init_evaluate_button();
     });
   </script>
 {% endblock %}
@@ -98,7 +99,7 @@
     {% cou_bucket item.license.bucket %}
   </div>
   {% endif %}
-  
+
   <div class="details">
     <h1 itemprop="name">
       {% if request.preferences.show_toolbar %}
@@ -126,7 +127,7 @@
       <dt>Author:</dt>
       <dd>
         {% for author in item.authors.all %}
-          <span itemprop="author">{{ author }}</span>{% if not forloop.last %},{% endif %}  
+          <span itemprop="author">{{ author }}</span>{% if not forloop.last %},{% endif %}
         {% endfor %}
       </dd>
       {% endif %}
@@ -153,7 +154,7 @@
       <dd>{{ item.grade_levels.all|join:", " }}</dd>
       {% endif %}
     </dl>
-    
+
     <dl>
       <dt>Abstract:</dt>
       <dd itemprop="description">{{ item.abstract|linebreaks }}</dd>
@@ -174,7 +175,7 @@
       <dt>Material Type:</dt>
       <dd>{{ item.material_types.all|join:", " }}</dd>
       {% endif %}
-      
+
       {% if item.media_formats.all.count %}
       <dt>Media Format:</dt>
       <dd>{{ item.media_formats.all|join:", " }}</dd>
@@ -194,13 +195,13 @@
       <dt>Content Type:</dt>
       <dd>{{ item.community_types.all|join:", " }}</dd>
       {% endif %}
-      
+
       {% if item.community_topics.all.count %}
       <dt>Content Topic:</dt>
       <dd>{{ item.community_topics.all|join:", " }}</dd>
       {% endif %}
     </dl>
-    
+
     <dl class="license">
       {% if item.license %}
         {% with item.license as license %}
@@ -252,13 +253,13 @@
       <span itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
         <span itemprop="reviewRating" itemscope="itemscope" itemtype="http://schema.org/Rating">
            <meta itemprop="ratingValue" content="{{ rating.value }}" />
-           <meta itemprop="bestRating" content="5" />      
+           <meta itemprop="bestRating" content="5" />
         </span>
       </span>
     {% endfor %}
 
   </div>
-  
+
 
 </article>
 
@@ -285,6 +286,9 @@
     {% stars item.identifier item.ratings.all %}
     <div>
       <a href="{{ add_review_url }}" class="button-blue-big rc5 require-login with-next-url">Write a Review</a>
+    </div>
+    <div>
+      <a href="{% url rubrics:evaluate_intro %}?url={{ item.url }}" id="evaluate-btn" class="button-blue-big rc5">Evaluate with Rubrics</a>
     </div>
   </section>
 
