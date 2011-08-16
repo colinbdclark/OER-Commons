@@ -1,0 +1,51 @@
+{% extends "rubrics/tool/base.html" %}
+
+{% block content %}
+  <div class="results">
+    <p class="thanks">Thanks for your contribution!</p>
+
+    <figure>
+      <figcaption>
+        Results
+      </figcaption>
+      <table>
+        <thead>
+          <tr>
+            <th>Rubric</th>
+            <th>Your Score</th>
+            <th>Average Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for score in scores %}
+            <tr>
+              <td class="first">{{ score.name }}</td>
+              <td>
+                {% if score.user_score == None %}
+                  <span class="na">NA</span>
+                {% else %}
+                  <span class="s{{ score.user_score }}">{{ score.user_score|floatformat }}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if score.average_score == None %}
+                  <span class="na">NA</span>
+                {% else %}
+                  <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </figure>
+  </div>
+{% endblock %}
+
+{% block extra-js %}
+  <script>
+    $(function() {
+      oer.evaluation_tool.init_graph();
+    });
+  </script>
+{% endblock %}

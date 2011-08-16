@@ -1,0 +1,360 @@
+[
+  {
+    "pk": 1, 
+    "model": "rubrics.rubric", 
+    "fields": {
+      "name": "Quality of Explanation of Content", 
+      "description": "Applies to objects designed to explain content. Used to rate how thoroughly subject matter is explained or otherwise revealed in resource. Teachers might use object with whole class, small group, or individual student. Students might use this object to self-tutor."
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "rubrics.rubric", 
+    "fields": {
+      "name": "Utility of Materials as Tools to Teach Others", 
+      "description": "Applies to objects designed as an instructional tool to teach others. Primary user would be teacher looking for classroom tools. Rubric is useful for a variety of object types, including units, lessons, applets."
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "rubrics.rubric", 
+    "fields": {
+      "name": "Quality of Assessments", 
+      "description": "Applies to objects that seek to determine what a student knows before, during, or after a topic is taught. When many assessments are included in one object, the rubric is applied to the entire set."
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "rubrics.rubric", 
+    "fields": {
+      "name": "Degree of Interactivity", 
+      "description": "Applies to objects that have a designed interactive component. Used to rate degree and quality of an object\u2019s interactivity. Interactivity broadly means that the object responds to the user \u2013 the object behaves differently based on what the user does."
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "rubrics.rubric", 
+    "fields": {
+      "name": "Quality of Practice Exercises", 
+      "description": "Applies to objects that contain collections or sets of practice exercises to help students better understand information or solidify skills and knowledge by doing tasks that routinize skills and procedures. Typically a collection or pool of practice exercises is treated as a single object and the rubric is applied to the set."
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "rubrics.rubric", 
+    "fields": {
+      "name": "Opportunities for Deeper Learning", 
+      "description": "Applies to objects that engage learners to: think critically; make sense of complex problems and persevere in solving them; reason abstractly; construct viable arguments and critique the reasoning of others; construct, use, or analyze models; look for and express regularity in repeated reasoning; work collaboratively with others; learn how to learn; apply discrete knowledge and skills to real-world situations.  Use this rubric for math objects that advance mastery of academic content as well as critical thinking, reasoning, and collaboration. "
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "**All** are true: content is comprehensive enough for all to understand; connects important associated concepts; requires no augmentation; big ideas identified and consolidated in object.", 
+      "value": 3, 
+      "rubric": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Skills, procedures, and information are understandable, **but** important connections are not clear.", 
+      "value": 2, 
+      "rubric": 1
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Content correctly explained, but cursory and limited.", 
+      "value": 1, 
+      "rubric": 1
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Content explanation has no value, is confusing or contains errors.", 
+      "value": 0, 
+      "rubric": 1
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Object not designed to explain content.", 
+      "value": null, 
+      "rubric": 1
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "**All** are true: materials and ideas are comprehensive, easy to understand and use to teach others; includes suggestions for use w/variety of learners; all components are provided and work as intended, including estimate of planning time and materials list; facilitate mixed instructional approaches for large units.", 
+      "value": 3, 
+      "rubric": 2
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Comprehensive, easy-to-understand and easy-to-use unit or lesson designed to teach others. Falls short of Superior because either: 1) object does not include suggestions for ways to use materials with variety of learners ,or 2) core components are underdeveloped in the object.", 
+      "value": 2, 
+      "rubric": 2
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Useful approach or idea to teach topic, but falls short of Strong because either: 1) object is missing important elements, e.g. directions are not included, or 2) important elements do not do what they should, e.g., directions are unclear.", 
+      "value": 1, 
+      "rubric": 2
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Confusing, contains errors, is missing many important elements. Not useful in its present form.", 
+      "value": 0, 
+      "rubric": 2
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Not designed as teacher\u2019s instructional tool.", 
+      "value": null, 
+      "rubric": 2
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "**All** are true: skills and knowledge assessed align to content and performance expectations and are included in the scope of the material (unless differentiated as extension material); most important aspects are given appropriate weight/attention; multiple assessment modes are offered; level of difficulty corresponds to complexity of subject-area content, performance expectations, and degree of cognitive demand.", 
+      "value": 3, 
+      "rubric": 3
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Assesses all, or nearly all, of the content and performance expectations, **but** level of cognitive demand does not match stated assessment goals. One or more assessment modes may be offered.", 
+      "value": 2, 
+      "rubric": 3
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Assesses much of the content or performance expectations intended, **but** omits some important content or performance expectations.", 
+      "value": 1, 
+      "rubric": 3
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Contains significant errors, does not assess important content or performance, written in a way that is confusing to students.", 
+      "value": 0, 
+      "rubric": 3
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Not designed to have an assessment component.", 
+      "value": null, 
+      "rubric": 3
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "**All** are true: object is responsive to student input by creating individualized learning experience; purposeful and directly related to learning; well designed and easy-to-use; functions flawlessly on expected platform.", 
+      "value": 3, 
+      "rubric": 4
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Features are purposeful and directly related to learning, well designed, easy-to-use, and function flawlessly on expected platform, **but** may not provide individualized learning experience.", 
+      "value": 2, 
+      "rubric": 4
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Interactive feature neither relates to nor detracts from learning. Points or rewards increase motivation and content understanding by rewarding or entertaining.", 
+      "value": 1, 
+      "rubric": 4
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Interactive features are poorly conceived and/or executed.", 
+      "value": 0, 
+      "rubric": 4
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Does not contain an interactive element.", 
+      "value": null, 
+      "rubric": 4
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "**All** are true: offers extensive number of practice exercises to cover/support content mastery and performance expectations; exercises are clearly written, supported by accurate answer keys; variety of exercises and types available in variety of formats appropriate to content and performance expectations. ", 
+      "value": 3, 
+      "rubric": 5
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Meets at least **one** of **three** criteria: 1) offers many well-written exercises aligned to content and performance expectations and supported by accurate answer keys, 2) presents a variety of exercise types, 3) makes a variety of exercise formats available, as appropriate to exercise type. ", 
+      "value": 2, 
+      "rubric": 5
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Includes only a few well-written exercises with little variation in format or type.", 
+      "value": 1, 
+      "rubric": 5
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Exercises do not cover content and performance expectations, errors in the answer key, lacks an answer key, or is unsound for another reason. (OER with only one or two practice exercises should be scored N/A.)", 
+      "value": 0, 
+      "rubric": 5
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Not designed to provide learner practice. ", 
+      "value": null, 
+      "rubric": 5
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "**All** are true: **three** or more of the practices are required; offers a range of cognitive demand appropriate to and supportive of material targeted; appropriate scaffolding and direction is provided or available. ", 
+      "value": 3, 
+      "rubric": 6
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "**One** or **two**, perhaps co-mingled, practices are included, such as an object that requires abstract reasoning skills **and** perseverance to reach a solution.", 
+      "value": 2, 
+      "rubric": 6
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Contains a complex problem, but is missing clear guidance on how to tap into various aspects of deeper learning.", 
+      "value": 1, 
+      "rubric": 6
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Intended to support deeper learning goals, but not useful in present form, and presents poorly formulated problems and/or unclear directions.", 
+      "value": 0, 
+      "rubric": 6
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "rubrics.rubricscorevalue", 
+    "fields": {
+      "description": "Not designed to provide opportunity for deeper learning.", 
+      "value": null, 
+      "rubric": 6
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "rubrics.standardalignmentscorevalue", 
+    "fields": {
+      "description": "**All** are true: object is completely aligned to all content and performance expectations in the standard; no elements in the object are extraneous to the standard; all elements of the standard are completely addressed. ", 
+      "value": 3
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "rubrics.standardalignmentscorevalue", 
+    "fields": {
+      "description": "Covers all but minor elements of the standard, **or** covers slightly *more* than the standard without differentiating between the required versus optional material.", 
+      "value": 2
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "rubrics.standardalignmentscorevalue", 
+    "fields": {
+      "description": "Covers only part of the standard (either content or performance), but there is fidelity to the part it covers.", 
+      "value": 1
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "rubrics.standardalignmentscorevalue", 
+    "fields": {
+      "description": "Does not match standard, or matches only to minimally important aspects of standard.", 
+      "value": 0
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "rubrics.standardalignmentscorevalue", 
+    "fields": {
+      "description": "No standards have been suggested for alignment.", 
+      "value": null
+    }
+  }
+]
