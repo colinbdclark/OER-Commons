@@ -1,0 +1,101 @@
+body {
+  height: 100%;
+}
+
+header.global {
+  position: relative;
+  height: 50px;
+  background: #96A9B4 url(../images/rubrics-manage/header.png) no-repeat 0 50%;
+}
+
+footer.global {
+  height: 125px;
+  background: #96A9B4 url(../images/rubrics-manage/footer.png) no-repeat 100% 50%;
+}
+
+.content {
+  padding: 2em;
+}
+
+.content h1 {
+  font-size: 150%;
+}
+
+.content h2 {
+  font-size: 130%;
+}
+
+#login-form {
+  margin: 2em auto;
+}
+
+.datagrid-pager.pagination table td {
+  vertical-align: middle;
+}
+
+#toolbar {
+  position: relative;
+  height: auto;
+}
+
+#toolbar .right {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+}
+
+#toolbar {
+  padding: 4px;
+}
+
+#toolbar input[type='search'] {
+  margin-left: 3em;
+}
+
+#toolbar .datebox input.combo-text {
+  text-align: center;
+}
+
+#summary {
+  float: right;
+  margin-bottom: 1em;
+  margin-left: 1em;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+#summary td {
+  padding: 1px 5px;
+  vertical-align: middle;
+  line-height: 20px;
+  font-size: 15px;
+}
+
+#summary td.sep {
+  padding-right: 1em;
+}
+
+#summary td.number {
+  line-height: 40px;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+#summary td:last-child {
+  padding-right: 15px;
+}
+
+#summary td.small {
+  padding-left: 5px;
+  line-height: 20px;
+  font-size: 13px;
+}
+
+.datagrid {
+  clear: both;
+}
+
+.datagrid td input[type='text'] {
+  margin: 0;
+  text-align: center;
+}

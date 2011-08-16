@@ -11,6 +11,7 @@ from materials.models.library import LibraryMaterialType
 from materials.models.material import MEMBER_ACTIVITY_TYPES
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_slug
+from rubrics.models import get_rubric_choices
 from tags.models import Tag
 import re
 
@@ -372,6 +373,18 @@ class SearchFilter(Filter):
         return unicode(value)
 
 
+class RubricFilter(ChoicesFilter):
+
+    def extract_value(self, request):
+        value = super(RubricFilter, self).extract_value(request)
+        if value is not None:
+            try:
+                value = map(int, value)
+            except (TypeError, ValueError):
+                raise Http404()
+        return value
+
+
 FILTERS = {
     "general_subjects": VocabularyFilter("general_subjects", "f.general_subject", GeneralSubject, u"Subject Area"),
     "grade_levels": VocabularyFilter("grade_levels", "f.edu_level", GradeLevel, u"Grade Level"),
@@ -392,6 +405,7 @@ FILTERS = {
     "topics": VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic"),
     "featured": BooleanFilter("featured", "f.featured", u"Featured Resources"),
     "alignment": AlignmentFilter("alignment_tags", "f.alignment"),
+    "evaluated_rubrics": RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric"),
     "search": SearchFilter(),
 }
 

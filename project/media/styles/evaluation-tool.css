@@ -1,0 +1,680 @@
+body.evaluation-tool {
+  margin: 0;
+  padding: 0;
+  width: 600px;
+}
+
+.evaluation-tool .intro {
+  padding: 2em;
+}
+
+.evaluation-tool .intro p {
+  margin-bottom: 1em;
+}
+
+.evaluation-tool .rubrics .intro {
+  padding: 0;
+}
+
+.evaluation-tool .intro a.learn {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid #ccc;
+  color: #123078;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.evaluation-tool .intro p.login {
+  margin: 1em 0;
+  color: #666;
+  font-weight: bold;
+}
+
+.evaluation-tool .intro p.login a {
+  color: #666;
+}
+
+.evaluation-tool .intro .guidelines {
+  margin: 2em 0;
+  color: #666;
+}
+
+.evaluation-tool .intro .guidelines h1 {
+  margin-bottom: 0.5em;
+  font-size: 16px;
+}
+
+.evaluation-tool .intro .guidelines ul li {
+  margin: 0.5em 0 0.5em 1.5em;
+}
+
+.evaluation-tool .intro a.start {
+  display: inline-block;
+  padding: 2px 10px;
+  background-color: #ffb21f;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.evaluation-tool .rubrics {
+  background-color: #d3dbdf;
+}
+
+.evaluation-tool .rubrics section .body {
+  display: none;
+  padding: 0 10px 10px;
+  background-color: #fff;
+}
+
+.evaluation-tool .rubrics .intro .body {
+  padding: 1em 2em;
+}
+
+.evaluation-tool .rubrics section {
+  border-bottom: 1px dashed #999;
+}
+
+.evaluation-tool .rubrics section.expanded {
+  border-bottom: 2px solid #123078;
+}
+
+.evaluation-tool .rubrics section.expanded .body {
+  display: block;
+}
+
+.evaluation-tool .rubrics section h1 {
+  position: relative;
+  padding: 0 10px;
+  line-height: 26px;
+  font-weight: bold;
+}
+
+.evaluation-tool .rubrics section.scored h1 {
+  padding-left: 30px;
+  background: url(../images/evaluation/icon-scored.png) no-repeat 3px 50%;
+}
+
+.evaluation-tool .rubrics section.not-scored h1 {
+  padding-left: 30px;
+  background: url(../images/evaluation/icon-not-scored.png) no-repeat 3px 50%;
+}
+
+.evaluation-tool .rubrics section.expanded h1 {
+  padding-top: 5px;
+  padding-left: 10px;
+  background: #fff;
+}
+
+.evaluation-tool .rubrics section h1 a {
+  display: block;
+  color: #666;
+  text-decoration: none;
+}
+
+.evaluation-tool .rubrics section.expanded h1 a {
+  display: inline;
+  color: #143073;
+  cursor: default;
+}
+
+.evaluation-tool .rubrics section h1 a.right {
+  position: absolute;
+  top: 0;
+  right: 1em;
+  display: block;
+  color: #0B7BA9;
+  text-decoration: underline;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+.evaluation-tool .rubrics section.expanded h1 a.right {
+  color: #fff;
+}
+
+.evaluation-tool .rubrics section .body > .description {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.evaluation-tool .rubrics section#alignment .body > .description {
+  margin-bottom: 0;
+}
+
+.evaluation-tool .rubrics .scores {
+  position: relative;
+  height: 155px;
+}
+
+.evaluation-tool .rubrics .scores a {
+  position: absolute;
+  left: 0;
+  display: block;
+  padding: 0 5px;
+  width: 160px;
+  height: 23px;
+  border: 2px solid;
+  background: #fff;
+  color: #333;
+  text-decoration: none;
+  line-height: 23px;
+}
+
+.evaluation-tool .rubrics .scores a strong {
+  display: inline-block;
+  width: 28px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.evaluation-tool .rubrics .scores .s1 a {
+  top: 5px;
+}
+
+.evaluation-tool .rubrics .scores .s2 a {
+  top: 35px;
+}
+
+.evaluation-tool .rubrics .scores .s3 a {
+  top: 65px;
+}
+
+.evaluation-tool .rubrics .scores .s4 a {
+  top: 95px;
+}
+
+.evaluation-tool .rubrics .scores .s5 a {
+  top: 125px;
+}
+
+.evaluation-tool .rubrics .scores .s1 a {
+  border-color: #bbd18d;
+}
+
+.evaluation-tool .rubrics .scores .s2 a {
+  border-color: #cce6aa;
+}
+
+.evaluation-tool .rubrics .scores .s3 a {
+  border-color: #edea9c;
+}
+
+.evaluation-tool .rubrics .scores .s4 a {
+  border-color: #ffe6b5;
+}
+
+.evaluation-tool .rubrics .scores .s5 a {
+  border-color: #dae1e4;
+}
+
+.evaluation-tool .rubrics .scores .selected a {
+  color: #fff;
+}
+
+.evaluation-tool .rubrics .scores .tip {
+  position: absolute;
+  top: 68px;
+  left: 190px;
+  z-index: 1;
+  color: #666;
+  font-style: italic;
+}
+
+.evaluation-tool .rubrics .scores .s1.selected a,
+.evaluation-tool .rubrics .scores .s1.hover a,
+.evaluation-tool .rubrics .scores .s1.selected .description,
+.evaluation-tool .rubrics .scores .s1.hover .description {
+  border-color: #679701;
+}
+
+.evaluation-tool .rubrics .scores .s1.selected a {
+  background-color: #679701;
+}
+
+.evaluation-tool .rubrics .scores .s2.selected a,
+.evaluation-tool .rubrics .scores .s2.hover a,
+.evaluation-tool .rubrics .scores .s2.selected .description,
+.evaluation-tool .rubrics .scores .s2.hover .description {
+  border-color: #8CC63F;
+}
+
+.evaluation-tool .rubrics .scores .s2.selected a {
+  background-color: #8CC63F;
+}
+
+.evaluation-tool .rubrics .scores .s3.selected a,
+.evaluation-tool .rubrics .scores .s3.hover a,
+.evaluation-tool .rubrics .scores .s3.selected .description,
+.evaluation-tool .rubrics .scores .s3.hover .description {
+  border-color: #DBD639;
+}
+
+.evaluation-tool .rubrics .scores .s3.selected a {
+  background-color: #DBD639;
+}
+
+.evaluation-tool .rubrics .scores .s4.selected a,
+.evaluation-tool .rubrics .scores .s4.hover a,
+.evaluation-tool .rubrics .scores .s4.selected .description,
+.evaluation-tool .rubrics .scores .s4.hover .description {
+  border-color: #FFCB66;
+}
+
+.evaluation-tool .rubrics .scores .s4.selected a {
+  background-color: #FFCB66;
+}
+
+.evaluation-tool .rubrics .scores .s5.selected a,
+.evaluation-tool .rubrics .scores .s5.hover a,
+.evaluation-tool .rubrics .scores .s5.selected .description,
+.evaluation-tool .rubrics .scores .s5.hover .description {
+  border-color: #B5C3CA;
+}
+
+.evaluation-tool .rubrics .scores .s5.selected a {
+  background-color: #B5C3CA;
+}
+
+.evaluation-tool .rubrics .scores .description {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  display: none;
+  overflow: hidden;
+  padding: 2px 5px 0;
+  width: 396px;
+  height: 155px;
+  border: 2px solid #679701;
+  background-color: #fff;
+  font-size: 12px;
+}
+
+.evaluation-tool .rubrics .scores .selected .description,
+.evaluation-tool .rubrics .scores .hover .description {
+  display: block;
+}
+
+.evaluation-tool .rubrics .scores .hover .description {
+  z-index: 10;
+}
+
+.evaluation-tool .rubrics .tags .tag-description,
+.evaluation-tool .rubrics .tags .scores,
+.evaluation-tool .rubrics .tags .footer {
+  display: none;
+}
+
+.evaluation-tool .rubrics .tags .tag-description.selected,
+.evaluation-tool .rubrics .tags .scores.selected,
+.evaluation-tool .rubrics .tags .footer.selected {
+  display: block;
+}
+
+.evaluation-tool .rubrics .tags .tag-description {
+  margin: 5px 0;
+  padding: 0 5px;
+  border-bottom: 1px solid #ccc;
+}
+
+.evaluation-tool .rubrics .tags .tag-description div {
+  position: relative;
+  padding: 2px 7px;
+  border: 2px solid #ffe6b5;
+  border-bottom: none;
+  -webkit-border-bottom-right-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  border-bottom-right-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -moz-border-radius-bottomleft: 0;
+  border-bottom-left-radius: 0;
+}
+
+.evaluation-tool .rubrics .tags .tag-description div .rocon-bl,
+.evaluation-tool .rubrics .tags .tag-description div .rocon-br {
+  display: none;
+}
+
+.evaluation-tool .rubrics .tags .tag-description span.counter {
+  position: absolute;
+  right: 10px;
+  color: #999;
+}
+
+.evaluation-tool .rubrics .tags .tag-description p {
+  font-size: 12px;
+}
+
+.evaluation-tool .rubrics .tags .tag-description p.grade {
+  margin-left: 1em;
+}
+
+.evaluation-tool .rubrics .tags .tag-description p span {
+  font-weight: bold;
+}
+
+.evaluation-tool .rubrics .tags a.tag {
+  display: inline-block;
+  margin-bottom: 5px;
+  border: 2px solid #fff;
+  text-align: center;
+  text-decoration: none;
+}
+
+.evaluation-tool .rubrics .tags a.tag span.code {
+  display: block;
+  padding: 2px 5px;
+  -webkit-border-top-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  border-top-right-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  border-top-left-radius: 3px;
+  background: #ccc;
+  color: #333;
+}
+
+.evaluation-tool .rubrics .tags a.tag span.value {
+  color: #999;
+}
+
+.evaluation-tool .rubrics .tags a.tag {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.evaluation-tool .rubrics .tags a.tag span.code {
+  display: block;
+  padding: 2px 5px;
+  background-color: #ccc;
+  color: #333;
+}
+
+.evaluation-tool .rubrics .tags a.tag span.value {
+  display: block;
+  padding: 0 5px;
+}
+
+.evaluation-tool .rubrics .tags a.tag.selected {
+  border-color: #ffb21f;
+}
+
+.evaluation-tool .rubrics .tags a.tag.selected span.code {
+  background-color: #ffb21f;
+}
+
+.evaluation-tool .rubrics .tags a.tag.selected span.value {
+  color: #ffb21f;
+}
+
+.evaluation-tool .rubrics section div.footer,
+.evaluation-tool .evaluation-results .footer {
+  position: relative;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.evaluation-tool .rubrics section .footer a.clear {
+  position: absolute;
+  left: 0;
+}
+
+.evaluation-tool .rubrics section .footer a.next,
+.evaluation-tool .rubrics section .footer a.save,
+.evaluation-tool .evaluation-results  .footer a.back,
+.evaluation-tool .evaluation-results  .footer a.finalize {
+  display: inline-block;
+  padding: 2px 5px;
+  background-color: #ffb21f;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.evaluation-tool .evaluation-results  .footer a.back.gray {
+  background-color: #ccc;
+}
+
+.evaluation-tool .rubrics section .footer a.next-tag,
+.evaluation-tool .rubrics section .footer a.prev-tag {
+  display: inline-block;
+  padding: 2px 5px;
+  background-color: #ccc;
+  color: #333;
+  text-decoration: none;
+}
+
+.evaluation-tool .evaluation-results {
+  padding: 0 1em;
+}
+
+.evaluation-tool .evaluation-results figure {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.evaluation-tool .evaluation-results table {
+  width: 100%;
+}
+
+.view-item .evaluation-results {
+  margin-top: 1em;
+}
+
+.evaluation-results p.thanks {
+  margin: 1em 0;
+  color: #123078;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.evaluation-results figcaption {
+  margin-bottom: 1em;
+  color: #666;
+  text-align: center;
+  font-size: 16px;
+}
+
+.evaluation-results th,
+.evaluation-results td {
+  padding: 4px 10px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.view-item .evaluation-results th,
+.view-item .evaluation-results td {
+  padding: 2px 0;
+}
+
+.evaluation-results th {
+  border-bottom: 2px solid #999;
+  font-size: 14px;
+}
+
+.view-item .evaluation-results th {
+  font-size: inherit;
+}
+
+.evaluation-results td {
+  border-bottom: 1px dashed #ccc;
+}
+
+.evaluation-results td.first {
+  text-align: right;
+}
+
+.evaluation-results td span {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.view-item .evaluation-results td span {
+  font-size: 16px;
+}
+
+.evaluation-results td span.s0 {
+  color: #ffcb66;
+}
+
+.evaluation-results td span.s1 {
+  color: #dbd639;
+}
+
+.evaluation-results td span.s2 {
+  color: #8cc63f;
+}
+
+.evaluation-results td span.s3 {
+  color: #679701;
+}
+
+.evaluation-results td span.na {
+  color: #999;
+  font-size: 14px;
+}
+
+.evaluation-results td span span.users,
+.view-item .evaluation-results td span span.users {
+  color: #333;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+.evaluation-results td span.nr {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url(../images/evaluation/icon-not-scored.png) no-repeat 50% 50%;
+  vertical-align: middle;
+}
+
+.evaluation-tool .evaluation-results #finalize-form .label {
+  margin-bottom: 2px;
+}
+
+.evaluation-tool .evaluation-results #finalize-form textarea {
+  margin: 0;
+  width: 567px;
+  height: 150px;
+  border-color: #ccc;
+  resize: none;
+}
+
+.evaluation-tool footer.global {
+  position: absolute;
+  bottom: 0;
+  z-index: 10;
+  padding: 4px 10px;
+  width: 580px;
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.evaluation-tool footer.global a {
+  color: #666;
+}
+
+.evaluation-tool footer.global a.results {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  display: inline-block;
+  padding: 1px 5px;
+  background-color: #194487;
+  color: #fff;
+  text-decoration: none;
+}
+
+#evaluate-dialog {
+  padding: 0;
+}
+
+.evaluate-dialog.ui-dialog .ui-dialog-titlebar {
+  padding: 0 10px;
+  border-bottom: 2px solid #123078;
+  background: #b5c3ca;
+}
+
+.evaluate-dialog.ui-dialog .ui-dialog-title {
+  padding-left: 40px;
+  background: url(../images/evaluation/header-bg.png) no-repeat 0 50%;
+  color: #fff;
+  text-shadow: none;
+  line-height: 35px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.evaluate-dialog .ui-dialog-title span {
+  color: #123078;
+  font-weight: normal;
+}
+
+.evaluate-dialog .ui-dialog-titlebar-close {
+  margin-top: -16px;
+  width: 31px;
+  height: 30px;
+  background: url(../images/evaluation/dialog-icons.png) no-repeat 0 0;
+}
+
+.evaluate-dialog .ui-dialog-titlebar-close.ui-state-hover {
+  background-position: 0 -31px;
+}
+
+.evaluate-dialog .ui-dialog-titlebar-close span {
+  display: none;
+}
+
+.evaluate-dialog.ui-dialog .ui-dialog-titlebar .minimize {
+  position: absolute;
+  top: 55%;
+  right: 40px;
+  display: block;
+  margin: -16px 0 0 0;
+  width: 33px;
+  height: 30px;
+  background: url(../images/evaluation/dialog-icons.png) no-repeat 0 -62px;
+  text-indent: -9999px;
+}
+
+.evaluate-dialog.ui-dialog .ui-dialog-titlebar .minimize:hover {
+  background-position: 0 -93px;
+}
+
+.evaluate-dialog.ui-dialog.collapsed .ui-dialog-titlebar .minimize {
+  background-position: 0 -124px;
+}
+
+.evaluate-dialog.ui-dialog.collapsed .ui-dialog-titlebar .minimize:hover {
+  background-position: 0 -155px;
+}
+
+.evaluate-dialog.ui-dialog.collapsed .ui-dialog-titlebar {
+  border: none;
+}
+
+.evaluate-dialog.ui-dialog.collapsed .ui-dialog-content {
+  display: none;
+}
+
+.evaluation-tool .align {
+  padding: 1em;
+}
+
+.evaluation-tool .align #align-form,
+.evaluation-tool .align #align-form div.buttons {
+  width: 570px;
+}
+
+.evaluation-tool .align #align-tag-description {
+  width: 300px;
+}
+
+.evaluation-tool .align #align-form .align-user-tags-ct {
+  margin-right: 330px;
+}

@@ -2,6 +2,7 @@ from django.views.generic.simple import direct_to_template
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
 from django.core.urlresolvers import reverse
 from materials.models.common import LICENSE_HIERARCHY, LICENSE_TYPES
+from rubrics.models import get_rubric_choices
 
 
 ADVANCED_SEARCH_FILTERS = (
@@ -63,6 +64,8 @@ def advanced_search(request):
     page_title = u"Advanced Search"
     breadcrumbs = [{"url": reverse("materials:advanced_search"),
                     "title": page_title}]
+
+    rubrics = [dict(id=id, name=name) for id, name in get_rubric_choices()]
 
     return direct_to_template(request, "materials/advanced-search.html",
                               locals())

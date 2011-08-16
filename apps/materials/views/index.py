@@ -293,6 +293,8 @@ def populate_item_from_search_result(result):
             topics.append(topic)
         item["topics"] = topics
 
+    item["is_evaluated"] = bool(result.evaluated_rubrics)
+
     model = result.model
 
     namespace = getattr(model, "namespace", None)
@@ -480,6 +482,8 @@ def index(request, general_subjects=None, grade_levels=None,
 
     if len(filter_values) == 1 and "featured" in filter_values:
         query = query.order_by("-featured_on")
+    elif len(filter_values) == 1 and "evaluated_rubrics" in filter_values:
+        query = query.order_by("-evaluation_score_rubric_%i" % filter_values["evaluated_rubrics"][0])
     elif index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
 

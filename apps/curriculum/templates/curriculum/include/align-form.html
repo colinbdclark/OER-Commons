@@ -24,7 +24,7 @@
    <select name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_tags %}"></select>
 </div>
 <div class="buttons" id="align-form-buttons">
-  <a href="#" class="close">Close</a>
+  <a href="#" class="close">{{ close_button_text|default:"Close" }}</a>
   <input type="submit" value="Add selected tag" />
 </div>
 </form>

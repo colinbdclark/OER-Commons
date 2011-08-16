@@ -116,6 +116,8 @@ INSTALLED_APPS = (
     'visitcounts',
     'newsletter',
     'preferences',
+    'rubrics',
+    'rubrics.manage',
     'project',
 )
 

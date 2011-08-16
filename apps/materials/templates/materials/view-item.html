@@ -6,6 +6,7 @@
 {% load flatblock_tags %}
 {% load thumbnail %}
 {% load curriculum_tags %}
+{% load i18n %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -21,12 +22,12 @@
       {% if content_actions or workflow_actions %}
         oer.materials.view_item.init_content_actions();
       {% endif %}
-      $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
+      $("section.portlet a.tooltip").qtip(TOPLEFTSIDE_TOOLTIP_OPTIONS);
     });
   </script>
 {% endblock %}
 
-{% block bodyclass %}wide-right-column{% endblock %}
+{% block bodyclass %}wide-right-column view-item{% endblock %}
 
 {% block above-content %}{% endblock %}
 
@@ -278,6 +279,52 @@
     <div>
       <a href="{{ add_review_url }}" class="button-blue-big rc5 require-login with-next-url">Write a Review</a>
     </div>
+    <div>
+      <a href="{{ toolbar_view_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
+      <a href="#evaluate-tooltip" rel="#evaluate-tooltip" class="tooltip"><small>What is this?</small></a>
+      <div style="display: none" id="evaluate-tooltip">
+          These seven rubrics will help users determine the degree of alignment of OER to
+          education standards and to determine aspects of OER quality (such as explanation of
+          content, assessment, and interactivity).
+      </div>
+
+    </div>
+    {% if evaluations_number and evaluation_scores %}
+      <div class="evaluation-results">
+        <figure>
+          <table>
+            <thead>
+              <tr>
+                <th>Rubric</th>
+                <th width="120">Average Score<br/> (3 Points Possible)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for score in evaluation_scores %}
+                <tr>
+                  <td class="first">{{ score.name }}</td>
+                  <td>
+                    {% if score.score_class == "nr" %}
+                        <span class="nr"></span>
+                    {% else %}
+                        {% if score.score == None %}
+                          <span class="na">N/A</span>
+                        {% else %}
+                          <span class="s{{ score.score_class }}">{{ score.score|floatformat }}
+                            {% if score.evaluations_number %}
+                              <span class="users">({% blocktrans count count=score.evaluations_number %}{{ count }} user{% plural %}{{ count }} users{% endblocktrans %})</span>
+                            {% endif %}
+                          </span>
+                        {% endif %}
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </figure>
+      </div>
+    {% endif %}
   </section>
 
   {% align_item_tags_portlet item %}

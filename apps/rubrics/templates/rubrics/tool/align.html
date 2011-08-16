@@ -1,0 +1,18 @@
+{% extends "rubrics/tool/base.html" %}
+{% load markup %}
+
+{% block content %}
+  <div class="align" data-evaluate-url="{% url rubrics:evaluate_rubrics content_type_id=content_type.id,object_id=object.id %}">
+    {% with "Return to Evaluation" as close_button_text %}
+      {% include "curriculum/include/align-form.html" %}
+    {% endwith %}
+  </div>
+{% endblock %}
+
+{% block extra-js %}
+  <script>
+    $(function() {
+      oer.evaluation_tool.init_align();
+    });
+  </script>
+{% endblock %}

@@ -4,6 +4,7 @@ from autoslug.fields import AutoSlugField
 from curriculum.models import TaggedMaterial
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import permalink
 from django.db.models.aggregates import Avg
@@ -14,6 +15,7 @@ from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
 from rating.models import Rating
 from reviews.models import Review
+from rubrics.models import StandardAlignmentScore, RubricScore, EvaluatedItemMixin
 from saveditems.models import SavedItem
 from tags.models import Tag
 from visitcounts.models import Visit
@@ -56,7 +58,7 @@ MEMBER_ACTIVITY_TYPES = (
 )
 
 
-class GenericMaterial(models.Model):
+class GenericMaterial(models.Model, EvaluatedItemMixin):
 
     created_on = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_(u"Created on"))
@@ -73,7 +75,7 @@ class GenericMaterial(models.Model):
         app_label = "materials"
 
 
-class Material(Indexed):
+class Material(Indexed, EvaluatedItemMixin):
 
     def __init__(self, *args, **kwargs):
         super(Material, self).__init__(*args, **kwargs)
@@ -243,3 +245,13 @@ class Material(Indexed):
     @property
     def is_displayed(self):
         return self.workflow_state == PUBLISHED_STATE and self.http_status != 404
+
+    @property
+    def is_evaluated(self):
+        content_type = ContentType.objects.get_for_model(self)
+        kwargs = dict(content_type=content_type, object_id=self.id,
+                      confirmed=True)
+        return StandardAlignmentScore.objects.filter(**kwargs).exists() or \
+               RubricScore.objects.filter(**kwargs).exists()
+
+
