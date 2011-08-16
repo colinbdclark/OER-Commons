@@ -1,0 +1,34 @@
+{% extends "rubrics/tool/base.html" %}
+
+{% block content %}
+  <div class="intro">
+
+    {% if object %}
+      <div class="align-center">
+        <a href="#" class="rc5 learn">Learn about evaluating OER</a>
+      </div>
+
+      {% if not request.user.is_authenticated %}
+        <p class="login align-center">Evaluators, please <a href="{% url users:login %}" target="_blank">login here</a></p>
+      {% endif %}
+
+      <section class="guidelines">
+        <h1>Guidelines &amp; Reminders</h1>
+        <ul>
+          <li>Score each rubric independenly</li>
+          <li>Please mark N/A or any rubric that doesn't apply to the resource
+            you're evaluating</li>
+        </ul>
+      </section>
+
+      <div class="align-center">
+        <a href="{% url rubrics:evaluate_rubrics content_type_id=content_type.id object_id=object.id %}" class="rc5 start">Start Evaluating</a>
+      </div>
+    {% else %}
+      <p class="align-center">
+        OER with URL <a href="{{ url }}">{{ url }}</a> is not registered at OER-Commons.
+      </p>
+    {% endif %}
+
+  </div>
+{% endblock %}
