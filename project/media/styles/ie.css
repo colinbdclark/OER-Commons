@@ -58,6 +58,14 @@
 .column-main,
 .column-right,
 .content-submission .label label,
+.evaluation-tool .intro a.learn,
+.evaluation-tool .intro a.start,
+.evaluation-tool .rubrics .scores a strong,
+.evaluation-tool .rubrics .tags a.tag,
+.evaluation-tool .rubrics .tags a.tag,
+.evaluation-tool .rubrics section .footer a.next, .evaluation-tool .rubrics section .footer a.save,
+.evaluation-tool .rubrics section .footer a.next-tag,
+.evaluation-tool header h1,
 .form-row.tags a.delete,
 .form-row.tags ul li,
 .frontpage-highlight .buttons li,
@@ -79,7 +87,8 @@
 .profile-views,
 .user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
 .user-tags li.tag, .portlet.item-tags .user-tags li.tag,
-fieldset.step p.content-submission-buttons a {
+fieldset.step p.content-submission-buttons a,
+form.login .buttons a {
     display: inline;
     zoom: 1;
 }

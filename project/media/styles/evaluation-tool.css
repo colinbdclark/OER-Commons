@@ -1,0 +1,424 @@
+body.evaluation-tool {
+  width: 600px;
+  margin: 0;
+  padding: 0;
+}
+
+.evaluation-tool header {
+  background: #b5c3ca;
+  border-bottom: 2px solid #123078;
+  text-align: center;
+}
+
+.evaluation-tool header h1 {
+  font-size: 20px;
+  color: #fff;
+  font-weight: bold;
+  display: inline-block;
+  padding-left: 40px;
+  line-height: 35px;
+  background: url(../images/evaluation/header-bg.png) no-repeat 0 50%;
+}
+
+.evaluation-tool header h1 span {
+  color: #123078;
+  font-weight: normal;
+}
+
+.evaluation-tool .intro {
+  padding: 2em;
+}
+
+.evaluation-tool .intro a.learn {
+  font-size: 16px;
+  text-decoration: none;
+  display: inline-block;
+  border: 1px solid #ccc;
+  color: #123078;
+  padding: 2px 10px;
+}
+
+.evaluation-tool .intro p.login {
+  margin: 1em 0;
+  font-weight: bold;
+  color: #666;
+}
+
+.evaluation-tool .intro p.login a {
+  color: #666;
+}
+
+.evaluation-tool .intro .guidelines {
+  color: #666;
+  margin: 2em 0;
+}
+
+.evaluation-tool .intro .guidelines h1 {
+  font-size: 16px;
+}
+
+.evaluation-tool .intro .guidelines ul {
+  list-style-position: inside;
+}
+
+.evaluation-tool .intro .guidelines ul li {
+  margin: 0.5em 0;
+}
+
+.evaluation-tool .intro a.start {
+  font-size: 16px;
+  text-decoration: none;
+  display: inline-block;
+  color: #fff;
+  padding: 2px 10px;
+  background-color: #ffb21f;
+}
+
+.evaluation-tool .rubrics {
+  background-color: #d3dbdf;
+}
+
+.evaluation-tool .rubrics section .body {
+  display: none;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.evaluation-tool .rubrics section {
+  border-bottom: 1px dashed #999;
+}
+
+.evaluation-tool .rubrics section.expanded {
+  border-bottom: 2px solid #123078;
+}
+
+.evaluation-tool .rubrics section.expanded .body {
+  display: block;
+}
+
+.evaluation-tool .rubrics section h1 {
+  line-height: 26px;
+  padding: 0 10px;
+  font-weight: bold;
+}
+
+.evaluation-tool .rubrics section h1.scored {
+  padding-left: 30px;
+  background: url(../images/evaluation/icon-scored.png) no-repeat 3px 50%;
+}
+
+.evaluation-tool .rubrics section.expanded h1 {
+  background-color: #ffb21f;
+  font-size: 14px;
+}
+
+.evaluation-tool .rubrics section.expanded h1.scored {
+  background-image: none;
+  padding-left: 10px;
+}
+
+.evaluation-tool .rubrics section h1 a {
+  text-decoration: none;
+  color: #666;
+  display: block;
+}
+
+.evaluation-tool .rubrics section.expanded h1 a {
+  color: #fff;
+}
+
+.evaluation-tool .rubrics .scores {
+  position: relative;
+  height: 155px;
+  margin-top: 1em;
+}
+
+.evaluation-tool .rubrics .scores a {
+  display: block;
+  width: 160px;
+  position: absolute;
+  left: 0;
+  border: 2px solid;
+  padding: 0 5px;
+  height: 23px;
+  line-height: 23px;
+  text-decoration: none;
+  color: #333;
+  background: #fff;
+}
+
+.evaluation-tool .rubrics .scores a strong {
+  display: inline-block;
+  width: 28px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.evaluation-tool .rubrics .scores .s1 a {
+  top: 5px;
+}
+
+.evaluation-tool .rubrics .scores .s2 a {
+  top: 35px;
+}
+
+.evaluation-tool .rubrics .scores .s3 a {
+  top: 65px;
+}
+
+.evaluation-tool .rubrics .scores .s4 a {
+  top: 95px;
+}
+
+.evaluation-tool .rubrics .scores .s5 a {
+  top: 125px;
+}
+
+.evaluation-tool .rubrics .scores .s1 a {
+  border-color: #bbd18d;
+}
+
+.evaluation-tool .rubrics .scores .s2 a {
+  border-color: #cce6aa;
+}
+
+.evaluation-tool .rubrics .scores .s3 a {
+  border-color: #edea9c;
+}
+
+.evaluation-tool .rubrics .scores .s4 a {
+  border-color: #ffe6b5;
+}
+
+.evaluation-tool .rubrics .scores .s5 a {
+  border-color: #dae1e4;
+}
+
+.evaluation-tool .rubrics .scores .selected a {
+  color: #fff;
+  border-color: #679701;
+  background-color: #679701;
+}
+
+.evaluation-tool .rubrics .scores .description {
+  display: none;
+  position: absolute;
+  width: 396px;
+  height: 155px;
+  border: 2px solid #679701;
+  background-color: #fff;
+  right: 0;
+  top: 0;
+  padding: 0 5px;
+  z-index: 2;
+  overflow: hidden;
+  font-size: 12px;
+}
+
+.evaluation-tool .rubrics .scores .selected .description {
+  display: block;
+}
+
+.evaluation-tool .rubrics .tags .tag-description,
+.evaluation-tool .rubrics .tags .scores,
+.evaluation-tool .rubrics .tags .footer {
+  display: none;
+}
+
+.evaluation-tool .rubrics .tags .tag-description.selected,
+.evaluation-tool .rubrics .tags .scores.selected,
+.evaluation-tool .rubrics .tags .footer.selected {
+  display: block;
+}
+
+.evaluation-tool .rubrics .tags .tag-description {
+  padding: 0 5px;
+  border-bottom: 1px solid #ccc;
+  margin: 5px 0;
+}
+
+.evaluation-tool .rubrics .tags .tag-description div {
+  position: relative;
+  border: 2px solid #ffe6b5;
+  padding: 2px 7px;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-bottom-right-radius: 0;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-bottomright: 0;
+}
+
+.evaluation-tool .rubrics .tags .tag-description div .rocon-bl,
+.evaluation-tool .rubrics .tags .tag-description div .rocon-br {
+  display: none;
+}
+
+.evaluation-tool .rubrics .tags .tag-description span.counter {
+  position: absolute;
+  right: 10px;
+  color: #999;
+}
+
+.evaluation-tool .rubrics .tags .tag-description p {
+  font-size: 12px;
+}
+
+.evaluation-tool .rubrics .tags .tag-description p.grade {
+  margin-left: 1em;
+}
+
+.evaluation-tool .rubrics .tags .tag-description p span {
+  font-weight: bold;
+}
+
+.evaluation-tool .rubrics .tags a.tag {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  border: 2px solid #fff;
+}
+
+.evaluation-tool .rubrics .tags a.tag span.code {
+  background: #ccc;
+  display: block;
+  color: #333;
+  padding: 2px 5px;
+}
+
+.evaluation-tool .rubrics .tags a.tag span.value {
+  color: #999;
+}
+
+.evaluation-tool .rubrics .tags a.tag {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+}
+
+.evaluation-tool .rubrics .tags a.tag span.code {
+  background-color: #ccc;
+  display: block;
+  color: #333;
+  padding: 2px 5px;
+}
+
+.evaluation-tool .rubrics .tags a.tag span.value {
+  display: block;
+  padding: 0 5px;
+}
+
+.evaluation-tool .rubrics .tags a.tag.selected {
+  border-color: #ffb21f;
+}
+
+.evaluation-tool .rubrics .tags a.tag.selected span.code {
+  background-color: #ffb21f;
+}
+
+.evaluation-tool .rubrics .tags a.tag.selected span.value {
+  color: #ffb21f;
+}
+
+.evaluation-tool .rubrics .tags .scores {
+  margin-top: 5px;
+}
+
+.evaluation-tool .rubrics section div.footer {
+  position: relative;
+  text-align: right;
+  margin-top: 10px;
+}
+
+.evaluation-tool .rubrics section .footer a.clear {
+  position: absolute;
+  left: 0;
+}
+
+.evaluation-tool .rubrics section .footer a.next,
+.evaluation-tool .rubrics section .footer a.save {
+  background-color: #ffb21f;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  padding: 2px 5px;
+}
+
+.evaluation-tool .rubrics section .footer a.next-tag {
+  background-color: #ccc;
+  color: #333;
+  text-decoration: none;
+  display: inline-block;
+  padding: 2px 5px;
+}
+
+.evaluation-tool .results p.thanks {
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #123078;
+  margin: 1em 0;
+}
+
+.evaluation-tool .results figcaption {
+  margin-bottom: 1em;
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+}
+
+.evaluation-tool .results table {
+  margin-left: 1em;
+}
+
+.evaluation-tool .results th,
+.evaluation-tool .results td {
+  padding: 4px 10px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.evaluation-tool .results th {
+  border-bottom: 2px solid #999;
+  font-size: 14px;
+}
+
+.evaluation-tool .results td {
+  border-bottom: 1px dashed #ccc;
+}
+
+.evaluation-tool .results td.first {
+  text-align: right;
+}
+
+.evaluation-tool .results td span {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.evaluation-tool .results td span.s0 {
+  color: #ffcb66;
+}
+
+.evaluation-tool .results td span.s1 {
+  color: #dbd639;
+}
+
+.evaluation-tool .results td span.s2 {
+  color: #8cc63f;
+}
+
+.evaluation-tool .results td span.s3 {
+  color: #679701;
+}
+
+.evaluation-tool .results td span.na {
+  color: #999;
+  font-size: 14px;
+}
+
+#evaluate-dialog {
+  padding: 0;
+}

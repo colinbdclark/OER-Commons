@@ -45,6 +45,7 @@ urlpatterns = patterns('',
     url(r'', include('blog.urls')),
     url(r'', include('preferences.urls', app_name=None, namespace="preferences")),
     url(r'', include('curriculum.urls', app_name=None, namespace="curriculum")),
+    url(r'', include('rubrics.urls', app_name=None, namespace="rubrics")),
     url(r'^oer/', include('oer.urls', app_name=None, namespace="oer")),
     url(r'^my', include('myitems.urls', app_name=None, namespace="myitems")), # TODO! Set up redirect /portfolio -> /my
     url(r'^savedsearches', include('savedsearches.urls', app_name=None, namespace="savedsearches")),
