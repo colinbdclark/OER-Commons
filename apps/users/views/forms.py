@@ -169,14 +169,13 @@ class AboutMeForm(forms.ModelForm):
                                            "class": "text"}),
                                  required=False)
 
-    facebook_id = forms.CharField(label=u"Facebook", required=False,
+    facebook_id = forms.CharField(label=u"Facebook Profile", required=False,
                                   widget=forms.TextInput(
                                       attrs={"class": "text",
                    "placeholder": "https://www.facebook.com/your_username"}))
 
     twitter_id = forms.CharField(label=u"Twitter", required=False,
-                                 widget=forms.TextInput(attrs={"class": "text",
-                       "placeholder": "https://twitter.com/your_username"}))
+                                 widget=forms.TextInput(attrs={"class": "text"}))
 
     skype_id = forms.CharField(label=u"Skype", required=False,
                                widget=forms.TextInput(attrs={"class": "text"}))

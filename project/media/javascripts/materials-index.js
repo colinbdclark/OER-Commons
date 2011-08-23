@@ -236,7 +236,7 @@ oer.materials.index.init_align_form = function() {
                 oer.align_form.init();
             }
             $user_tags.empty();
-            $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data, status) {
+            $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
                 $.each(data.tags, function(index, tag) {
                     var $tags = $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
                     oer.align_form.init_tag_tooltip($tags.find("a:first"));
