@@ -3,6 +3,23 @@
 
 {% block content %}
   <div class="rubrics" data-evaluate-url="{% url rubrics:evaluate_rubrics content_type_id=content_type.id,object_id=object.id %}">
+    <section class="intro">
+      <h1><a href="#">Guidelines &amp; Reminders</a></h1>
+      <div class="body">
+
+        <div class="align-center">
+          <a href="http://www.achieve.org/oer-rubrics" target="_blank" class="rc5 learn">Learn about evaluating OER</a>
+        </div>
+
+        <div class="guidelines">
+          {% include "rubrics/tool/include/guidelines.html" %}
+        </div>
+
+        <div class="align-center">
+          <a href="#" class="rc5 start next">Start Evaluating</a>
+        </div>
+      </div>
+    </section>
     <section id="alignment" class="expanded">
       <h1{% if alignment_scored %} class="scored"{% endif %}><a href="#">Degree of Alignment to Standards</a></h1>
       <div class="body">
@@ -29,15 +46,16 @@
 
           {% for tag in alignment_tags %}
             <a href="#" class="tag rc5{% if forloop.first %} selected{% endif %}{% if tag.score_value %} scored{% endif %}" data-tag-id="{{ tag.id }}">
-              <span class="code rc3">{{ tag.full_code }}</span>
+              <span class="code">{{ tag.full_code }}</span>
               <span class="value">{% if tag.score_value %}{% if tag.score_value.value != None %}{{ tag.score_value.value }} {{ tag.score_value.get_value_display }}{% else %}N/A{% endif %} {% else %}No score{% endif %}</span>
             </a>
           {% endfor %}
 
           {% for tag in alignment_tags %}
-            <div class="scores{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}">
+            <div class="scores{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}"
+                 data-saved="{% if tag.scored %}true{% else %}false{% endif %}">
               {% for score in alignment_score_values %}
-                <div class="s{{ forloop.counter }}{% if tag.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
+                <div class="s{{ forloop.counter }}{% if not tag.scored and forloop.first or tag.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
                   <a href="#" class="rc5"><strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
                   <div class="description rc5">{{ score.description|markdown|safe }}</div>
                 </div>
@@ -48,6 +66,9 @@
           {% for tag in alignment_tags %}
             <div class="footer{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}">
               <a href="#" class="dashed clear">Clear rating</a>
+              {% if not forloop.first %}
+                <a href="#" class="prev-tag rc5">Previous standard</a>
+              {% endif %}
               {% if not forloop.last %}
                 <a href="#" class="next-tag rc5">Next standard</a>
               {% endif %}
@@ -64,9 +85,10 @@
           <div class="description">
             {{ rubric.description|markdown|safe }}
           </div>
-          <div class="scores" data-rubric-id="{{ rubric.id }}">
+          <div class="scores" data-rubric-id="{{ rubric.id }}"
+               data-saved="{% if rubric.scored %}true{% else %}false{% endif %}">
             {% for score in rubric.score_values.all %}
-              <div class="s{{ forloop.counter }}{% if rubric.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
+              <div class="s{{ forloop.counter }}{% if not rubric.scored and forloop.first or rubric.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
                 <a href="#" class="rc5"><strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
                 <div class="description rc5">{{ score.description|markdown|safe }}</div>
               </div>
@@ -84,6 +106,9 @@
       </section>
     {% endfor %}
   </div>
+  <footer class="global">
+    <a href="http://www.achieve.org/files/AchieveOERRubrics.pdf" target="_blank">OER Rubrics (PDF Version)</a>
+  </footer>
 {% endblock %}
 
 {% block extra-js %}

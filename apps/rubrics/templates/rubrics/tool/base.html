@@ -30,6 +30,13 @@
     {% endblock %}
 
     {% include "include/cdn-js.html" %}
+
+    <!--[if lt IE 9]>
+      {% compress js %}
+      <script type="text/javascript" src="{{ STATIC_URL }}javascripts/rounded-corners-min.js"></script>
+      {% endcompress %}
+    <![endif]-->
+
     {% compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/namespace.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/evaluation-tool.js"></script>
