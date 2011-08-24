@@ -73,8 +73,10 @@ class Rubrics(EvaluateViewMixin, TemplateView):
             )
             if score:
                 tag.score_value = score.score
+                tag.scored = True
             else:
                 tag.score_value = None
+                tag.scored = False
             data["alignment_tags"].append(tag)
         data["alignment_scored"] = all(map(lambda x: x.score_value, data["alignment_tags"]))
 
@@ -87,8 +89,10 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                                        rubric=rubric)
             if score:
                 rubric.score_value = score.score
+                rubric.scored = True
             else:
                 rubric.score_value = None
+                rubric.scored = False
             data["rubrics"].append(rubric)
 
         data["alignment_score_values"] = StandardAlignmentScoreValue.objects.all()
