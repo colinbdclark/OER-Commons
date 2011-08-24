@@ -4,8 +4,9 @@
   <div class="intro">
 
     {% if object %}
+
       <div class="align-center">
-        <a href="#" class="rc5 learn">Learn about evaluating OER</a>
+        <a href="http://www.achieve.org/oer-rubrics" target="_blank" class="rc5 learn">Learn about evaluating OER</a>
       </div>
 
       {% if not request.user.is_authenticated %}
@@ -14,11 +15,7 @@
 
       <section class="guidelines">
         <h1>Guidelines &amp; Reminders</h1>
-        <ul>
-          <li>Score each rubric independenly</li>
-          <li>Please mark N/A or any rubric that doesn't apply to the resource
-            you're evaluating</li>
-        </ul>
+        {% include "rubrics/tool/include/guidelines.html" %}
       </section>
 
       <div class="align-center">
