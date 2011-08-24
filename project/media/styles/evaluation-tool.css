@@ -29,6 +29,10 @@ body.evaluation-tool {
   padding: 2em;
 }
 
+.evaluation-tool .rubrics .intro {
+  padding: 0;
+}
+
 .evaluation-tool .intro a.learn {
   font-size: 16px;
   text-decoration: none;
@@ -285,6 +289,12 @@ body.evaluation-tool {
   display: block;
   color: #333;
   padding: 2px 5px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-top-right-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-topright: 3px;
 }
 
 .evaluation-tool .rubrics .tags a.tag span.value {
@@ -346,7 +356,8 @@ body.evaluation-tool {
   padding: 2px 5px;
 }
 
-.evaluation-tool .rubrics section .footer a.next-tag {
+.evaluation-tool .rubrics section .footer a.next-tag,
+.evaluation-tool .rubrics section .footer a.prev-tag {
   background-color: #ccc;
   color: #333;
   text-decoration: none;
@@ -417,6 +428,15 @@ body.evaluation-tool {
 .evaluation-tool .results td span.na {
   color: #999;
   font-size: 14px;
+}
+
+.evaluation-tool footer.global {
+  padding: 4px 10px;
+  text-align: right;
+}
+
+.evaluation-tool footer.global a {
+  color: #666;
 }
 
 #evaluate-dialog {

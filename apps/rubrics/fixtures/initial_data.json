@@ -43,7 +43,7 @@
     "pk": 6, 
     "model": "rubrics.rubric", 
     "fields": {
-      "name": "Opportunities for Deeper Learning", 
+      "name": "Opportunities for Deeper Learning (Math only)", 
       "description": "Applies to objects that engage learners to: think critically; make sense of complex problems and persevere in solving them; reason abstractly; construct viable arguments and critique the reasoning of others; construct, use, or analyze models; look for and express regularity in repeated reasoning; work collaboratively with others; learn how to learn; apply discrete knowledge and skills to real-world situations.  Use this rubric for math objects that advance mastery of academic content as well as critical thinking, reasoning, and collaboration. "
     }
   }, 
@@ -96,7 +96,7 @@
     "pk": 6, 
     "model": "rubrics.rubricscorevalue", 
     "fields": {
-      "description": "**All** are true: materials and ideas are comprehensive, easy to understand and use to teach others; includes suggestions for use w/variety of learners; all components are provided and work as intended, including estimate of planning time and materials list; facilitate mixed instructional approaches for large units.", 
+      "description": "**All** are true: materials and ideas are comprehensive, easy to understand and use to teach others; includes suggestions for use with a variety of learners; all components are provided and work as intended, including estimate of planning time and materials list; facilitate mixed instructional approaches for large units.", 
       "value": 3, 
       "rubric": 2
     }
@@ -105,7 +105,7 @@
     "pk": 7, 
     "model": "rubrics.rubricscorevalue", 
     "fields": {
-      "description": "Comprehensive, easy-to-understand and easy-to-use unit or lesson designed to teach others. Falls short of Superior because either: 1) object does not include suggestions for ways to use materials with variety of learners ,or 2) core components are underdeveloped in the object.", 
+      "description": "Comprehensive, easy-to-understand and easy-to-use unit or lesson designed to teach others. Falls short of Superior because either: 1) object does not include suggestions for ways to use materials with variety of learners, or 2) core components are underdeveloped in the object.", 
       "value": 2, 
       "rubric": 2
     }
@@ -231,7 +231,7 @@
     "pk": 21, 
     "model": "rubrics.rubricscorevalue", 
     "fields": {
-      "description": "**All** are true: offers extensive number of practice exercises to cover/support content mastery and performance expectations; exercises are clearly written, supported by accurate answer keys; variety of exercises and types available in variety of formats appropriate to content and performance expectations. ", 
+      "description": "**All** are true: offers extensive number of practice exercises to cover/support content mastery and performance expectations; exercises are clearly written, supported by accurate answer keys; variety of exercises and types are available in a variety of formats appropriate to content and performance expectations. ", 
       "value": 3, 
       "rubric": 5
     }
