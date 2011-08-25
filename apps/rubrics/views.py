@@ -2,6 +2,7 @@ from annoying.decorators import ajax_request
 from annoying.functions import get_object_or_None
 from curriculum.models import AlignmentTag
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 from django.db.models import Avg
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
@@ -280,4 +281,22 @@ class Results(EvaluateViewMixin, TemplateView):
                 average_score_class=average_score_class,
             ))
 
+        return data
+
+
+class Align(EvaluateViewMixin, TemplateView):
+
+    template_name = "rubrics/tool/align.html"
+
+    def get_context_data(self, **kwargs):
+        data = super(Align, self).get_context_data(**kwargs)
+        data["action"] = reverse("curriculum:align",
+            args=(
+                self.content_type.app_label,
+                self.content_type.model,
+                self.object.id,
+            )
+        )
+        data["content_type"] = self.content_type
+        data["object"] = self.object
         return data
