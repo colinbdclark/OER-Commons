@@ -27,7 +27,7 @@
   </script>
 {% endblock %}
 
-{% block bodyclass %}wide-right-column{% endblock %}
+{% block bodyclass %}wide-right-column view-item{% endblock %}
 
 {% block above-content %}{% endblock %}
 
@@ -290,6 +290,34 @@
     <div>
       <a href="{% url rubrics:evaluate_intro %}?url={{ item.url }}" id="evaluate-btn" class="button-blue-big rc5">Evaluate with Rubrics</a>
     </div>
+    {% if evaluation_scores %}
+      <div class="evaluation-results">
+        <figure>
+          <table>
+            <thead>
+              <tr>
+                <th>Rubric</th>
+                <th>Average Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for score in evaluation_scores %}
+                <tr>
+                  <td class="first">{{ score.name }}</td>
+                  <td>
+                    {% if score.average_score == None %}
+                      <span class="na">NA</span>
+                    {% else %}
+                      <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </figure>
+      </div>
+    {% endif %}
   </section>
 
   {% align_item_tags_portlet item %}

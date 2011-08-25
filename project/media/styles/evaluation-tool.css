@@ -365,7 +365,11 @@ body.evaluation-tool {
   padding: 2px 5px;
 }
 
-.evaluation-tool .results p.thanks {
+.view-item .evaluation-results {
+  margin-top: 1em;
+}
+
+.evaluation-results p.thanks {
   text-align: center;
   font-weight: bold;
   font-size: 16px;
@@ -373,59 +377,76 @@ body.evaluation-tool {
   margin: 1em 0;
 }
 
-.evaluation-tool .results figcaption {
+.evaluation-results figcaption {
   margin-bottom: 1em;
   text-align: center;
   font-size: 16px;
   color: #666;
 }
 
-.evaluation-tool .results table {
+.evaluation-results table {
   margin-left: 1em;
 }
 
-.evaluation-tool .results th,
-.evaluation-tool .results td {
+.view-item .evaluation-results table {
+  margin-left: 0;
+}
+
+.evaluation-results th,
+.evaluation-results td {
   padding: 4px 10px;
   vertical-align: middle;
   text-align: center;
 }
 
-.evaluation-tool .results th {
+.view-item .evaluation-results th,
+.view-item .evaluation-results td {
+  padding: 2px 5px;
+}
+
+.evaluation-results th {
   border-bottom: 2px solid #999;
   font-size: 14px;
 }
 
-.evaluation-tool .results td {
+.view-item .evaluation-results th {
+  font-size: inherit;
+}
+
+.evaluation-results td {
   border-bottom: 1px dashed #ccc;
 }
 
-.evaluation-tool .results td.first {
+.evaluation-results td.first {
   text-align: right;
 }
 
-.evaluation-tool .results td span {
+.evaluation-results td span {
   font-weight: bold;
   font-size: 18px;
 }
 
-.evaluation-tool .results td span.s0 {
+.view-item .evaluation-results td span {
+  font-size: 16px;
+}
+
+.evaluation-results td span.s0 {
   color: #ffcb66;
 }
 
-.evaluation-tool .results td span.s1 {
+.evaluation-results td span.s1 {
   color: #dbd639;
 }
 
-.evaluation-tool .results td span.s2 {
+.evaluation-results td span.s2 {
   color: #8cc63f;
 }
 
-.evaluation-tool .results td span.s3 {
+.evaluation-results td span.s3 {
   color: #679701;
 }
 
-.evaluation-tool .results td span.na {
+.evaluation-results td span.na {
   color: #999;
   font-size: 14px;
 }
@@ -441,4 +462,21 @@ body.evaluation-tool {
 
 #evaluate-dialog {
   padding: 0;
+}
+
+.evaluation-tool .align {
+  padding: 1em;
+}
+
+.evaluation-tool .align #align-form,
+.evaluation-tool .align #align-form div.buttons {
+  width: 570px;
+}
+
+.evaluation-tool .align #align-tag-description {
+  width: 300px;
+}
+
+.evaluation-tool .align #align-form .align-user-tags-ct {
+  margin-right: 330px;
 }
