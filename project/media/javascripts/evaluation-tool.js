@@ -205,3 +205,24 @@ oer.evaluation_tool.init_evaluate_button = function() {
         });
     });
 };
+
+oer.evaluation_tool.init_align = function() {
+    oer.align_form.init();
+
+    var $document = $(document);
+    var $form = $("#align-form");
+    var $user_tags = $form.find("ul.align-user-tags");
+
+    $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
+        $.each(data.tags, function(index, tag) {
+            var $tags = $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
+            oer.align_form.init_tag_tooltip($tags.find("a:first"));
+        });
+        $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
+        $form.show();
+    });
+
+    var $close_btn = $form.find("div.buttons a.close");
+    $close_btn.unbind("click");
+    $close_btn.attr("href", $("div.align").data("evaluate-url"));
+};
