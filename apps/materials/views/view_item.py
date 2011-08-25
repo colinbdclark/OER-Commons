@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, resolve
+from django.db.models import Avg
 from django.http import Http404, QueryDict, HttpRequest
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import MultiValueDict
@@ -11,9 +12,11 @@ from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
 from reviews.views import ReviewForm
+from rubrics.models import StandardAlignmentScore, RubricScore, Rubric
 from saveditems.models import SavedItem
 from visitcounts.models import Visit
 import urllib
+
 
 
 # TODO: rewrite this to class based view when project is moved to Django 1.3
@@ -51,7 +54,7 @@ def view_item(request, slug=None, model=None):
                                 kwargs=dict(slug=item.slug)),
                  "title": u"Edit",
                  "class": "edit"},
-                                
+
                 {"url": reverse("materials:%s:delete" % item.namespace,
                                 kwargs=dict(slug=item.slug)),
                  "title": u"Delete",
@@ -111,11 +114,8 @@ def view_item(request, slug=None, model=None):
             tags_slugs.add(tag["slug"])
 
     for topic in item.topics():
-        tag = {"class": "topic"}
-        tag["slug"] = topic.slug
-        tag["name"] = topic.name
-        tag["microsite"] = topic.microsite
-        tag["other"] = topic.other
+        tag = {"class": "topic", "slug": topic.slug, "name": topic.name,
+               "microsite": topic.microsite, "other": topic.other}
         tags_slugs.add(tag["slug"])
         tags.append(tag)
 
@@ -240,6 +240,50 @@ def view_item(request, slug=None, model=None):
     toolbar_view_url = reverse("materials:%s:toolbar_view_item" % item.namespace,
                                    kwargs=dict(slug=item.slug))
 
+    # Evaluation scores
+    evaluation_scores = []
+
+    alignment_scores = StandardAlignmentScore.objects.filter(
+        content_type=content_type,
+        object_id=item.id,
+    )
+
+    average_score = alignment_scores.aggregate(
+        Avg("score__value")
+    )["score__value__avg"]
+    if average_score is None:
+        average_score_class = None
+    else:
+        average_score_class = int(average_score)
+
+    evaluation_scores.append(dict(
+        name=u"Degree of Alignment",
+        average_score=average_score,
+        average_score_class=average_score_class,
+    ))
+
+    rubric_scores = RubricScore.objects.filter(
+        content_type=content_type,
+        object_id=item.id,
+    )
+    for rubric in Rubric.objects.all():
+        scores = rubric_scores.filter(rubric=rubric)
+
+        average_score =scores.aggregate(
+            Avg("score__value")
+        )["score__value__avg"]
+
+        if average_score is None:
+            average_score_class = None
+        else:
+            average_score_class = int(average_score)
+
+        evaluation_scores.append(dict(
+            name=rubric.name,
+            average_score=average_score,
+            average_score_class=average_score_class,
+        ))
+
     Visit.objects.count(request, item)
 
     return direct_to_template(request, "materials/view-item.html", locals())
@@ -264,7 +308,7 @@ def toolbar_view_item(request, slug=None, model=None):
                                 content_type.model,
                                 item.id,
                             ))
-    
+
     saved = False
     if request.user.is_authenticated():
         saved = SavedItem.objects.filter(content_type=content_type,
@@ -389,7 +433,7 @@ def toolbar_view_item(request, slug=None, model=None):
 
         if item_found:
             index_url = index_path + serialize_query_string_params(query_string_params)
-        
+
     Visit.objects.count(request, item)
 
     return direct_to_template(request, "materials/toolbar-view-item.html", locals())
