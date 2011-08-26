@@ -10,26 +10,27 @@
     {% compress css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/reset.css" media="all" />
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/typography.css" media="all" />
-    
+
     <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all" />
-    
+
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/base.css" media="all" />
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/form.css" media="all" />
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/login.css" media="all" />
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/rating.css" media="all" />
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/tags.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}styles/evaluation-tool.css" media="all" />
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/materials-toolbar.css" media="all" />
     {% endcompress %}
-    
+
     <!--[if lt IE 8]>
       {% compress css %}
       <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/ie.css" media="all" />
       <link rel="stylesheet" href="{{ STATIC_URL }}styles/ie.css" media="all" />
       {% endcompress %}
     <![endif]-->
-    
+
     <title>{{ item.title }} | OER Commons</title>
-    <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico"/> 
+    <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico"/>
 
     {% include "include/modernizr.html" %}
   </head>
@@ -42,7 +43,7 @@
     <div id="toolbar">
 
       <div class="c1"><div class="c2"><div class="c3"><div class="c4"><div class="green-bar">
-      
+
         {% if came_from_index %}
         <div class="view-item-navigation">
           {% spaceless %}
@@ -66,7 +67,7 @@
           </form>
         </div>
         {% endif %}
-  
+
         {% spaceless %}
         <ul>
           <li class="sep">
@@ -76,32 +77,33 @@
           <li>
             <a href="{% url myitems:myitems %}">My Items</a>
           </li>
-        </ul>    
+        </ul>
         {% endspaceless %}
-         
+
         {% spaceless %}
         <ul>
           <li class="rating"><span>Rating: </span>{% stars item.identifier item.rating %}</li>
           <li class="sep"><a href="#" class="review">Review</a></li>
+          <li class="sep"><a href="{% url rubrics:evaluate_intro %}?url={{ item.url }}" id="evaluate-btn">Evaluate</a></li>
           <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
         </ul>
         {% endspaceless %}
-      
+
         <div class="add-this-ct">
           <div class="addthis_toolbox addthis_default_style ">
             <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
             <a class="addthis_button_tweet"></a>
           </div>
           <script type="text/javascript">
-            addthis_url    = location.href;   
-            addthis_title  = document.title;  
-            addthis_pub    = 'oercommons';     
+            addthis_url    = location.href;
+            addthis_title  = document.title;
+            addthis_pub    = 'oercommons';
           </script>
           <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4dbe4f65120603bd"></script>
         </div>
-      
+
       <div class="clear"></div>
-        
+
       </div></div></div></div></div>
 
     </div>
@@ -126,13 +128,13 @@
           {% endfor %}
         {% endwith %}
         <div class="buttons">
-            <input type="submit" value="Add review" />        
+            <input type="submit" value="Add review" />
         </div>
       </form>
     </div>
 
     <iframe id="resource" src="{{ item.url }}" width="100%" height="100%"></iframe>
-  
+
     {% include "include/cdn-js.html" %}
     {% compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.validate.js"></script>
@@ -143,18 +145,20 @@
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/login.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/tags-form.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/rating.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/evaluation-tool.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/materials-view-item.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/materials-toolbar.js"></script>
     {% endcompress %}
     <script type="text/javascript">
-      ITEM_TITLE = "{{ item.title|escapejs }}"; 
+      ITEM_TITLE = "{{ item.title|escapejs }}";
       $(function() {
           oer.materials.toolbar.init();
           oer.rating.init();
+          oer.evaluation_tool.init_evaluate_button();
       });
     </script>
-    
+
     {% flatblock "google-analytics" %}
-    
+
   </body>
 </html>
