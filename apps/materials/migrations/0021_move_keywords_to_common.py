@@ -189,6 +189,14 @@ class Migration(DataMigration):
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
+        'materials.genericmaterial': {
+            'Meta': {'object_name': 'GenericMaterial'},
+            'created_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified_on': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '300'})
+        },
         'materials.geographicrelevance': {
             'Meta': {'ordering': "('id',)", 'object_name': 'GeographicRelevance'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
