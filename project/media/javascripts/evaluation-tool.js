@@ -194,7 +194,7 @@ oer.evaluation_tool.init_evaluate_button = function() {
                 }).appendTo($dialog);
                 $dialog.appendTo($("body"));
                 $dialog.dialog({
-                    title: "Evaluate to Rubrics",
+                    title: "Evaluate Resource",
                     width: 600,
                     resizable: false
                 });
