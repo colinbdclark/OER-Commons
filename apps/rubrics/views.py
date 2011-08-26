@@ -8,9 +8,9 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
-from materials.models import Course, Library, CommunityItem
+from materials.models import Course, Library, CommunityItem, GenericMaterial
 from rubrics.models import Rubric, StandardAlignmentScoreValue, \
-    StandardAlignmentScore, RubricScore, RubricScoreValue, SCORES
+    StandardAlignmentScore, RubricScore, RubricScoreValue
 from utils.decorators import login_required
 
 
@@ -23,10 +23,16 @@ class Intro(TemplateView):
         if not self.url:
             return HttpResponseBadRequest()
 
-        for model in (Course, Library, CommunityItem):
+        for model in (Course, Library, CommunityItem, GenericMaterial):
             self.object = get_object_or_None(model, url=self.url)
             if self.object:
                 break
+
+        if not self.object and self.request.user.is_authenticated():
+            self.object = GenericMaterial.objects.create(
+                url=self.url,
+                creator=self.request.user,
+            )
 
         return super(Intro, self).get(request, *args, **kwargs)
 
@@ -48,6 +54,7 @@ class EvaluateViewMixin(object):
         object_id = kwargs.pop("object_id")
         model = self.content_type.model_class()
         self.object = get_object_or_404(model, id=int(object_id))
+        #noinspection PyUnresolvedReferences
         return super(EvaluateViewMixin, self).dispatch(request, *args, **kwargs)
 
 
@@ -99,9 +106,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         data["alignment_score_values"] = StandardAlignmentScoreValue.objects.all()
         return data
 
+    #noinspection PyUnusedLocal
     @method_decorator(ajax_request)
     def post(self, request, *args, **kwargs):
         delete = "delete" in request.POST
+        score_value_id = None
 
         if not delete:
             score_value_id = request.POST.get("score_id")
@@ -212,7 +221,7 @@ class Results(EvaluateViewMixin, TemplateView):
         user_score = alignment_scores.filter(
             user=self.request.user
         ).aggregate(Avg("score__value"))["score__value__avg"]
-        if user_score != None:
+        if user_score is not None:
             user_score = int(user_score)
 
         data["scores"].append(dict(
