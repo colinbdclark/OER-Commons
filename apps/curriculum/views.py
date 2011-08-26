@@ -7,14 +7,15 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
+from haystack.exceptions import NotRegistered
 from haystack.sites import site
 from utils.decorators import login_required
 
 
 class TagResourceForm(forms.Form):
-    
+
     tag = forms.ModelChoiceField(queryset=AlignmentTag.objects.all())
-    
+
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop("instance", None)
         self.user = kwargs.pop("user", None)
@@ -39,12 +40,12 @@ def align(request, app_label, model, object_id):
 
     if request.method != "POST":
         raise Http404()
-        
+
     content_type = get_object_or_404(ContentType, app_label=app_label,
                                      model=model)
     model = content_type.model_class()
     object_id = int(object_id)
-    
+
     item = get_object_or_404(model, id=object_id)
     user = request.user
 
@@ -52,16 +53,19 @@ def align(request, app_label, model, object_id):
     if form.is_valid():
         tagged = form.save()
         tag = form.cleaned_data["tag"]
-        
-        site.update_object(item)
-        
+
+        try:
+            site.update_object(item)
+        except NotRegistered:
+            pass
+
         return dict(status="success",
                     tag=dict(id=tagged.id, code=tag.full_code,
                              url=reverse("materials:alignment_index",
                                         kwargs=dict(alignment=tag.full_code))))
     else:
         return dict(status="error")
-    
+
 
 @login_required
 @ajax_request
@@ -71,7 +75,7 @@ def list_user_tags(request, app_label, model, object_id):
                                      model=model)
     model = content_type.model_class()
     object_id = int(object_id)
-        
+
     tags = []
     for tagged in TaggedMaterial.objects.filter(content_type=content_type,
                                                 object_id=object_id,
@@ -89,17 +93,17 @@ def list_user_tags(request, app_label, model, object_id):
 def delete_tag(request):
     if request.method != "POST":
         raise Http404()
-    
+
     try:
         tagged = TaggedMaterial.objects.get(id=int(request.POST["id"]))
     except:
         return dict(status="error")
-    
+
     tagged.delete()
     return dict(status="success")
-    
-    
-@ajax_request    
+
+
+@ajax_request
 def list_standards(request, existing=False):
     if existing:
         ids = TaggedMaterial.objects.all().values_list("tag__standard", flat=True).order_by().distinct()
@@ -119,7 +123,7 @@ def list_grades(request, existing=False):
     if existing:
         ids = TaggedMaterial.objects.filter(tag__standard=standard).values_list("tag__grade", flat=True).order_by().distinct()
     else:
-        ids = AlignmentTag.objects.filter(standard=standard).values_list("grade", flat=True).order_by().distinct() 
+        ids = AlignmentTag.objects.filter(standard=standard).values_list("grade", flat=True).order_by().distinct()
     return dict(options=list(Grade.objects.filter(id__in=ids).values("id", "name")))
 
 
@@ -130,7 +134,7 @@ def list_categories(request, existing=False):
         standard = Standard.objects.get(id=int(standard))
     except:
         return HttpResponse(u"", status=400)
-    
+
     grade = request.POST.get("grade")
     try:
         grade = Grade.objects.get(id=int(grade))
@@ -143,7 +147,7 @@ def list_categories(request, existing=False):
     else:
         ids = AlignmentTag.objects.filter(standard=standard,
                                           grade=grade).values_list("category",
-                                                                   flat=True).order_by().distinct() 
+                                                                   flat=True).order_by().distinct()
     return dict(options=list(LearningObjectiveCategory.objects.filter(id__in=ids).values("id", "name")))
 
 
@@ -154,7 +158,7 @@ def list_tags(request, existing=False):
         standard = Standard.objects.get(id=int(standard))
     except:
         return HttpResponse(u"", status=400)
-    
+
     grade = request.POST.get("grade")
     try:
         grade = Grade.objects.get(id=int(grade))
@@ -174,12 +178,12 @@ def list_tags(request, existing=False):
         tags = AlignmentTag.objects.filter(id__in=ids)
     else:
         tags = AlignmentTag.objects.filter(standard=standard, grade=grade,
-                                           category=category) 
-    
+                                           category=category)
+
     optgroups = []
     items = []
     title = None
-    
+
     # Group tag by subcategory and create the following structure:
     # tag1.subcategory
     # - tag1
@@ -189,7 +193,7 @@ def list_tags(request, existing=False):
     # - tag4
     # - tag5 (has the same subcat as tag4)
     # ....
-    
+
     for tag in tags:
         if tag.subcategory != title:
             # Start filling the next optgroup
@@ -200,11 +204,11 @@ def list_tags(request, existing=False):
         items.append(dict(id=tag.id,
                           name=unicode(tag),
                           code=tag.full_code))
-        
+
     if title and items:
         # Add the last optgroup to final results
         optgroups.append(dict(title=title, items=items))
-        
+
     return dict(optgroups=optgroups)
 
 
