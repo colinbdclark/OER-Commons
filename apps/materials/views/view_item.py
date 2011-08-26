@@ -19,6 +19,7 @@ import urllib
 
 
 
+
 # TODO: rewrite this to class based view when project is moved to Django 1.3
 # This would allow to avoid code duplication.
 
