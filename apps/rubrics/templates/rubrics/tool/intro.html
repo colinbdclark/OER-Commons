@@ -3,28 +3,23 @@
 {% block content %}
   <div class="intro">
 
+    <div class="align-center">
+      <a href="http://www.achieve.org/oer-rubrics" target="_blank" class="rc5 learn">Learn about evaluating OER</a>
+    </div>
+
+    {% if not request.user.is_authenticated %}
+      <p class="login align-center">Evaluators, please <a href="{% url users:login %}" target="_blank">login here</a></p>
+    {% endif %}
+
+    <section class="guidelines">
+      <h1>Guidelines &amp; Reminders</h1>
+      {% include "rubrics/tool/include/guidelines.html" %}
+    </section>
+
     {% if object %}
-
-      <div class="align-center">
-        <a href="http://www.achieve.org/oer-rubrics" target="_blank" class="rc5 learn">Learn about evaluating OER</a>
-      </div>
-
-      {% if not request.user.is_authenticated %}
-        <p class="login align-center">Evaluators, please <a href="{% url users:login %}" target="_blank">login here</a></p>
-      {% endif %}
-
-      <section class="guidelines">
-        <h1>Guidelines &amp; Reminders</h1>
-        {% include "rubrics/tool/include/guidelines.html" %}
-      </section>
-
       <div class="align-center">
         <a href="{% url rubrics:evaluate_rubrics content_type_id=content_type.id object_id=object.id %}" class="rc5 start">Start Evaluating</a>
       </div>
-    {% else %}
-      <p class="align-center">
-        OER with URL <a href="{{ url }}">{{ url }}</a> is not registered at OER-Commons.
-      </p>
     {% endif %}
 
   </div>
