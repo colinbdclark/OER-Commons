@@ -66,6 +66,8 @@ class GenericMaterial(models.Model):
 
     url = models.URLField(max_length=300, verbose_name=_(u"URL"), verify_exists=False)
 
+    alignment_tags = generic.GenericRelation(TaggedMaterial)
+
     class Meta:
         app_label = "materials"
 
