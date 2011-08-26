@@ -289,16 +289,16 @@
       <a href="{{ add_review_url }}" class="button-blue-big rc5 require-login with-next-url">Write a Review</a>
     </div>
     <div>
-      <a href="{% url rubrics:evaluate_intro %}?url={{ item.url }}" id="evaluate-btn" class="button-blue-big rc5">Evaluate with Rubrics</a>
+      <a href="{% url rubrics:evaluate_intro %}?url={{ item.url }}" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
     </div>
-    {% if evaluation_scores %}
+    {% if evaluations_number and evaluation_scores %}
       <div class="evaluation-results">
         <figure>
           <table>
             <thead>
               <tr>
                 <th>Rubric</th>
-                <th>Average Score</th>
+                <th width="90">Average Score<br/> (out of {{ evaluations_number }})</th>
               </tr>
             </thead>
             <tbody>
