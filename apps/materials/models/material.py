@@ -55,6 +55,21 @@ MEMBER_ACTIVITY_TYPES = (
 )
 
 
+class GenericMaterial(models.Model):
+
+    created_on = models.DateTimeField(auto_now_add=True,
+                                      verbose_name=_(u"Created on"))
+    modified_on = models.DateTimeField(auto_now=True, null=True, blank=True,
+                                      verbose_name=_(u"Modified on"))
+
+    creator = models.ForeignKey(User, verbose_name=_("Creator"))
+
+    url = models.URLField(max_length=300, verbose_name=_(u"URL"), verify_exists=False)
+
+    class Meta:
+        app_label = "materials"
+
+
 class Material(models.Model):
 
     cached_vars = ["url"]
@@ -64,7 +79,7 @@ class Material(models.Model):
         self.var_cache = {}
         for var in self.cached_vars:
             self.var_cache[var] = copy.copy(getattr(self, var))
-            
+
     namespace = None
 
     title = models.CharField(max_length=500, verbose_name=_(u"Title"))
@@ -96,7 +111,7 @@ class Material(models.Model):
 
     featured = models.BooleanField(default=False, verbose_name=_(u"Featured"))
     featured_on = models.DateTimeField(null=True, blank=True)
-    
+
     http_status = models.IntegerField(null=True, blank=True, verbose_name=_(u"HTTP Status"))
     screenshot = models.ImageField(null=True, blank=True, upload_to="upload/materials/screenshots")
 
@@ -105,7 +120,7 @@ class Material(models.Model):
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
     alignment_tags = generic.GenericRelation(TaggedMaterial)
-    
+
     @property
     def verbose_name(self):
         return self._meta.verbose_name
@@ -216,7 +231,7 @@ class Material(models.Model):
     @property
     def visits(self):
         return Visit.objects.get_visits_count(self, None)
-    
+
     @property
     def is_displayed(self):
         return self.workflow_state == PUBLISHED_STATE and self.http_status != 404
