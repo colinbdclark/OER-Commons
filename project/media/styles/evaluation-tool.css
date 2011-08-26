@@ -401,7 +401,7 @@ body.evaluation-tool {
 
 .view-item .evaluation-results th,
 .view-item .evaluation-results td {
-  padding: 2px 5px;
+  padding: 2px 0;
 }
 
 .evaluation-results th {

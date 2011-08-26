@@ -73,7 +73,7 @@
               {% if not forloop.last %}
                 <a href="#" class="next-tag rc5">Next standard</a>
               {% endif %}
-              <a href="#" class="next rc5">Next</a>
+              <a href="#" class="next rc5">Save &amp; Go to Next Rubric</a>
             </div>
           {% endfor %}
         </div>
@@ -98,9 +98,9 @@
           <div class="footer">
             <a href="#" class="dashed clear">Clear rating</a>
             {% if forloop.last %}
-              <a href="{% url rubrics:evaluate_results content_type_id=content_type.id,object_id=object.id %}" class="save rc5">Save</a>
+              <a href="{% url rubrics:evaluate_results content_type_id=content_type.id,object_id=object.id %}" class="save rc5">Save &amp; View Results</a>
             {% else %}
-              <a href="#" class="next rc5">Next</a>
+              <a href="#" class="next rc5">Save &amp; Go to Next Rubric</a>
             {% endif %}
           </div>
         </div>

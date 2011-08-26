@@ -1,6 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, resolve
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
@@ -223,12 +223,15 @@ def view_item(request, slug=None, model=None):
                                    kwargs=dict(slug=item.slug))
 
     # Evaluation scores
+    evaluations_number = 0
     evaluation_scores = []
 
     alignment_scores = StandardAlignmentScore.objects.filter(
         content_type=content_type,
         object_id=item.id,
     )
+
+    evaluations_number = len(alignment_scores.values_list("user__id", flat=True).distinct())
 
     average_score = alignment_scores.aggregate(
         Avg("score__value")
@@ -250,6 +253,10 @@ def view_item(request, slug=None, model=None):
     )
     for rubric in Rubric.objects.all():
         scores = rubric_scores.filter(rubric=rubric)
+        evaluations_number = max(
+            evaluations_number,
+            len(scores.values_list("user__id", flat=True).distinct())
+        )
 
         average_score =scores.aggregate(
             Avg("score__value")
