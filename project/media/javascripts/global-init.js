@@ -16,19 +16,5 @@ $(function() {
             $honeypot_field.val(data.value);
         });
     }
-
-    if ("search_box" in oer) {
-        oer.search_box.init();
-    }
-    if ("next_url" in oer) {
-        oer.next_url.init();
-    }
-    if ("login" in oer) {
-        oer.login.init();
-    }
-
-    if ("profile" in oer) {
-        oer.profile.init_profile_notification();
-    }
-    
+    oer.profile.init_profile_notification();
 });

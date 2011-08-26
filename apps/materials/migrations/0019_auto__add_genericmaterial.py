@@ -8,26 +8,21 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding field 'Course.screenshot'
-        db.add_column('materials_course', 'screenshot', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True), keep_default=False)
-
-        # Adding field 'CommunityItem.screenshot'
-        db.add_column('materials_communityitem', 'screenshot', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True), keep_default=False)
-
-        # Adding field 'Library.screenshot'
-        db.add_column('materials_library', 'screenshot', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True), keep_default=False)
+        # Adding model 'GenericMaterial'
+        db.create_table('materials_genericmaterial', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified_on', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
+            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length=300)),
+        ))
+        db.send_create_signal('materials', ['GenericMaterial'])
 
 
     def backwards(self, orm):
         
-        # Deleting field 'Course.screenshot'
-        db.delete_column('materials_course', 'screenshot')
-
-        # Deleting field 'CommunityItem.screenshot'
-        db.delete_column('materials_communityitem', 'screenshot')
-
-        # Deleting field 'Library.screenshot'
-        db.delete_column('materials_library', 'screenshot')
+        # Deleting model 'GenericMaterial'
+        db.delete_table('materials_genericmaterial')
 
 
     models = {
@@ -66,6 +61,44 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'curriculum.alignmenttag': {
+            'Meta': {'ordering': "('standard', 'grade', 'category', 'code')", 'unique_together': "(('standard', 'grade', 'category', 'code'),)", 'object_name': 'AlignmentTag'},
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['curriculum.LearningObjectiveCategory']"}),
+            'code': ('django.db.models.fields.CharField', [], {'max_length': '4', 'db_index': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {}),
+            'grade': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['curriculum.Grade']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'standard': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['curriculum.Standard']"}),
+            'subcategory': ('django.db.models.fields.TextField', [], {})
+        },
+        'curriculum.grade': {
+            'Meta': {'ordering': "('id',)", 'object_name': 'Grade'},
+            'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '4', 'db_index': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'})
+        },
+        'curriculum.learningobjectivecategory': {
+            'Meta': {'ordering': "('id',)", 'object_name': 'LearningObjectiveCategory'},
+            'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '8', 'db_index': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'})
+        },
+        'curriculum.standard': {
+            'Meta': {'ordering': "('id',)", 'unique_together': "(['code', 'substandard_code'],)", 'object_name': 'Standard'},
+            'code': ('django.db.models.fields.CharField', [], {'max_length': '4', 'db_index': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'substandard_code': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '20', 'db_index': 'True'})
+        },
+        'curriculum.taggedmaterial': {
+            'Meta': {'unique_together': "(('user', 'tag', 'content_type', 'object_id'),)", 'object_name': 'TaggedMaterial'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'tag': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['curriculum.AlignmentTag']"}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'db_index': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'geo.country': {
             'Meta': {'ordering': "('name',)", 'object_name': 'Country'},
@@ -186,6 +219,14 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+        },
+        'materials.genericmaterial': {
+            'Meta': {'object_name': 'GenericMaterial'},
+            'created_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified_on': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '300'})
         },
         'materials.geographicrelevance': {
             'Meta': {'ordering': "('id',)", 'object_name': 'GeographicRelevance'},
