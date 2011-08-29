@@ -303,8 +303,8 @@ class Client(BaseClient):
         headers = {'User-Agent': 'pyoai'}
         if self._credentials is not None:
             headers['Authorization'] = 'Basic ' + self._credentials.strip()
-        request = urllib2.Request(
-            self._base_url, data=urlencode(kw), headers=headers)
+        url = "%s?%s" % (self._base_url, urlencode(kw))
+        request = urllib2.Request(url, headers=headers)
         return retrieveFromUrlWaiting(request)
 
 def buildHeader(header_node, namespaces):
