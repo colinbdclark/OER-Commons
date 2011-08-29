@@ -7,6 +7,7 @@
 {% load curriculum_tags %}
 {% load thumbnail %}
 {% load curriculum_tags %}
+{% load i18n %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -298,7 +299,7 @@
             <thead>
               <tr>
                 <th>Rubric</th>
-                <th width="90">Average Score<br/> (out of {{ evaluations_number }})</th>
+                <th width="90">Average Score<br/> ({% blocktrans count count=evaluations_number %}{{ count }} user rating{% plural %}{{ count }} user ratings{% endblocktrans %})</th>
               </tr>
             </thead>
             <tbody>
@@ -309,7 +310,7 @@
                     {% if score.average_score == None %}
                       <span class="na">NA</span>
                     {% else %}
-                      <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}</span>
+                      <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}/3</span>
                     {% endif %}
                   </td>
                 </tr>
