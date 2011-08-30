@@ -64,17 +64,17 @@ METADATA_FORMATS = {
 
 
 class Repository(models.Model):
-    
+
     base_url = models.URLField(max_length=200, verify_exists=False)
     name = models.CharField(max_length=200, null=True, blank=True)
     protocol_version = models.CharField(max_length=10, choices=PROTOCOL_VERSIONS, null=True, blank=True)
     earliest_datestamp = models.DateTimeField(null=True, blank=True)
     deleted_record = models.CharField(max_length=20, choices=DELETED_RECORDS, null=True, blank=True)
     granularity = models.CharField(max_length=20, choices=GRANULARITIES, null=True, blank=True)
-    
+
     def __unicode__(self):
         return self.name or self.base_url
-    
+
     class Meta:
         verbose_name = u"Repository"
         verbose_name_plural = u"Repositories"
@@ -87,7 +87,7 @@ class Repository(models.Model):
         self._identify()
         self._get_metadata_prefixes()
         self._get_sets()
-        
+
     def _identify(self):
         identify = self.client.identify()
         self.name = unicode(identify.repositoryName(), 'utf-8')
@@ -112,7 +112,7 @@ class Repository(models.Model):
                                                  schema=unicode(schema, "utf-8"),
                                                  namespace=unicode(namespace, "utf-8"),
                                                  repository=self,
-                                                 ) 
+                                                 )
 
     def _get_sets(self):
         Set.objects.filter(repository=self).delete()
@@ -121,33 +121,33 @@ class Repository(models.Model):
                 Set.objects.get_or_create(spec=unicode(spec),
                                           name=unicode(name),
                                           repository=self,
-                                          ) 
+                                          )
         except NoSetHierarchyError:
             pass
         except HTTPError:
             pass
-        
+
 
 class Set(models.Model):
-    
+
     repository = models.ForeignKey(Repository, related_name="sets")
     spec = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     harvested_on = models.DateTimeField(null=True, blank=True)
-    
+
     def __unicode__(self):
         s = u"%s - %s" % (self.spec, self.name)
         if self.harvested_on:
             s = u"%s - Harvested on %s" % (s, format(self.harvested_on,
                                                      settings.DATETIME_FORMAT))
         return s
-    
+
     class Meta:
         ordering = ["repository", "spec", "name"]
-    
+
 
 class AdminEmail(models.Model):
-    
+
     repository = models.ForeignKey(Repository, related_name="admin_emails")
     email = models.EmailField(max_length=200)
 
@@ -156,7 +156,7 @@ class AdminEmail(models.Model):
 
 
 class MetadataPrefix(models.Model):
-    
+
     repository = models.ForeignKey(Repository, related_name="metadata_prefixes")
     prefix = models.CharField(max_length=30)
     schema = models.CharField(max_length=200)
@@ -164,12 +164,12 @@ class MetadataPrefix(models.Model):
 
     def __unicode__(self):
         return self.prefix
-    
+
     class Meta:
         verbose_name = u"Metadata Prefix"
         verbose_name_plural = u"Metadata Prefixes"
         ordering = ["repository", "prefix"]
-    
+
 
 @task()
 def run_job(job):
@@ -180,7 +180,7 @@ def run_job(job):
     job.processed_records = 0
 
     f = NamedTemporaryFile()
-        
+
     try:
 
         metadata_prefix = job.metadata_prefix.prefix
@@ -188,22 +188,21 @@ def run_job(job):
         client = job.repository.client
         client.ignoreBadCharacters(True)
         client.updateGranularity()
-        
-        kwargs = {}
-        kwargs['metadataPrefix'] = metadata_prefix
-        _time = datetime.time(0, 0, 0, tzinfo=None) 
+
+        kwargs = {'metadataPrefix': metadata_prefix}
+        _time = datetime.time(0, 0, 0)
         if job.from_date:
             kwargs['from_'] = datetime.datetime.combine(job.from_date, _time)
         if job.until_date:
             kwargs['until'] = datetime.datetime.combine(job.until_date, _time)
-    
+
         if job.set:
             kwargs["set"] = job.set.spec
-    
+
         writer = csv.writer(f, quoting=csv.QUOTE_NONNUMERIC)
-    
+
         writer.writerow(format.header)
-    
+
         for header, metadata, about in client.listRecords(**kwargs):
             if header.isDeleted():
                 continue
@@ -216,22 +215,22 @@ def run_job(job):
                                                                               traceback.format_exc())
                 Error(text=text, job=job).save()
             job.processed_records += 1
-            
+
             # Save the job after every 100 processed records
             if not job.processed_records % 100:
                 job.save()
-        
+
         if job.errors.count():
             job.status = ERROR
         else:
             job.status = COMPLETE
-            
+
         now = datetime.datetime.now()
-        
+
         if job.set:
             job.set.harvested_on = now
             job.set.save()
-            
+
         job.finished_on = now
 
         filename_parts = [slugify(unicode(job.repository))]
@@ -239,7 +238,7 @@ def run_job(job):
             filename_parts.append(slugify(job.set.spec))
         filename_parts.append(now.isoformat())
         filename = "-".join(filename_parts) + ".csv"
-        job.file.save(filename, File(f))        
+        job.file.save(filename, File(f))
 
     except NoRecordsMatchError:
         job.status = NO_RECORDS_MATCH
@@ -247,16 +246,16 @@ def run_job(job):
     except:
         job.status = ERROR
         Error(text=traceback.format_exc(), job=job).save()
-        
+
     finally:
         job.save()
         f.close()
 
     job.notify()
-    
+
 
 class Job(models.Model):
-    
+
     repository = models.ForeignKey(Repository)
     metadata_prefix = models.ForeignKey(MetadataPrefix)
     from_date = models.DateField(null=True, blank=True)
@@ -271,13 +270,13 @@ class Job(models.Model):
     finished_on = models.DateField(null=True, blank=True)
     file = models.FileField(upload_to="harvester",
                             null=True, blank=True)
-    
+
     def __unicode__(self):
         return unicode(self.repository)
-    
+
     def run(self):
         run_job.delay(self)
-    
+
     def notify(self):
         base_url = "http://%s" % Site.objects.get_current().domain
         text = render_to_string("harvester/notification.html",
@@ -285,13 +284,13 @@ class Job(models.Model):
         message = EmailMessage(u"Harvesting job is complete", text, settings.DEFAULT_FROM_EMAIL, [self.email])
         message.content_subtype = "html"
         message.send()
-    
+
     class Meta:
         verbose_name = u"Job"
         verbose_name_plural = u"Jobs"
-    
-    
+
+
 class Error(models.Model):
-    
+
     text = models.TextField()
-    job = models.ForeignKey(Job, related_name="errors")  
+    job = models.ForeignKey(Job, related_name="errors")

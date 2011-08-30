@@ -38,14 +38,13 @@
           {% endfor %}
         </tbody>
       </table>
+      <div class="footer">
+        <a class="rc3 back"
+           href="{% url rubrics:evaluate_rubrics content_type_id=content_type.id,object_id=object.id %}{% if not_scored_section %}#{{ not_scored_section }}{% endif %}">
+          Go Back &amp; Change Your Scores
+        </a>
+      </div>
     </figure>
-  </div>
-{% endblock %}
 
-{% block extra-js %}
-  <script>
-    $(function() {
-      oer.evaluation_tool.init_graph();
-    });
-  </script>
+  </div>
 {% endblock %}
