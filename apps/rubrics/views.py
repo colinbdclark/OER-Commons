@@ -218,9 +218,10 @@ class Results(EvaluateViewMixin, TemplateView):
         else:
             average_score_class = int(average_score)
 
-        user_score = alignment_scores.filter(
+        user_alignment_scores = alignment_scores.filter(
             user=self.request.user
-        ).aggregate(Avg("score__value"))["score__value__avg"]
+        )
+        user_score = user_alignment_scores.aggregate(Avg("score__value"))["score__value__avg"]
         if user_score is not None:
             user_score = int(user_score)
 
@@ -231,10 +232,11 @@ class Results(EvaluateViewMixin, TemplateView):
             average_score_class=average_score_class,
         ))
 
-#        tags = AlignmentTag.objects.filter(
-#            id__in=self.object.alignment_tags.values_list("tag__id",
-#                                                          flat=True).distinct()
-#        )
+        tags = AlignmentTag.objects.filter(
+            id__in=self.object.alignment_tags.values_list("tag__id",
+                                                          flat=True).distinct()
+        )
+
 #        for tag in tags:
 #            scores = alignment_scores.filter(alignment_tag=tag)
 #            user_score=scores.filter(user=self.request.user)
@@ -261,11 +263,12 @@ class Results(EvaluateViewMixin, TemplateView):
 #            ))
 
 
+        rubrics = Rubric.objects.all()
         rubric_scores = RubricScore.objects.filter(
             content_type=self.content_type,
             object_id=self.object.id,
         )
-        for rubric in Rubric.objects.all():
+        for rubric in rubrics:
             scores = rubric_scores.filter(rubric=rubric)
             user_score = scores.filter(user=self.request.user)
 
@@ -290,6 +293,20 @@ class Results(EvaluateViewMixin, TemplateView):
                 average_score_class=average_score_class,
             ))
 
+        not_scored_section = None
+        not_scored_tags = set(tags.values_list("id", flat=True)) - \
+                          set(user_alignment_scores.values_list("alignment_tag__id",
+                                                                flat=True))
+        user_rubric_scores = rubric_scores.filter(user=self.request.user)
+        not_scored_rubrics = set(rubrics.values_list("id", flat=True)) - \
+                             set(user_rubric_scores.values_list("rubric__id",
+                                                                flat=True))
+        if not_scored_tags:
+            not_scored_section = "standard%i" % sorted(not_scored_tags)[0]
+        elif not_scored_rubrics:
+            not_scored_section = "rubric%i" % sorted(not_scored_rubrics)[0]
+
+        data["not_scored_section"] = not_scored_section
         return data
 
 

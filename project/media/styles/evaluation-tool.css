@@ -204,6 +204,10 @@ body.evaluation-tool {
   background-color: #679701;
 }
 
+.evaluation-tool .rubrics .scores .hover a {
+  border-color: #679701;
+}
+
 .evaluation-tool .rubrics .scores .description {
   display: none;
   position: absolute;
@@ -219,8 +223,13 @@ body.evaluation-tool {
   font-size: 12px;
 }
 
-.evaluation-tool .rubrics .scores .selected .description {
+.evaluation-tool .rubrics .scores .selected .description,
+.evaluation-tool .rubrics .scores .hover .description {
   display: block;
+}
+
+.evaluation-tool .rubrics .scores .hover .description {
+  z-index: 10;
 }
 
 .evaluation-tool .rubrics .tags .tag-description,
@@ -335,7 +344,8 @@ body.evaluation-tool {
   margin-top: 5px;
 }
 
-.evaluation-tool .rubrics section div.footer {
+.evaluation-tool .rubrics section div.footer,
+.evaluation-tool .evaluation-results .footer {
   position: relative;
   text-align: right;
   margin-top: 10px;
@@ -347,7 +357,8 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section .footer a.next,
-.evaluation-tool .rubrics section .footer a.save {
+.evaluation-tool .rubrics section .footer a.save,
+.evaluation-tool .evaluation-results  .footer a.back {
   background-color: #ffb21f;
   color: #fff;
   font-weight: bold;
@@ -363,6 +374,14 @@ body.evaluation-tool {
   text-decoration: none;
   display: inline-block;
   padding: 2px 5px;
+}
+
+.evaluation-tool .evaluation-results {
+  padding: 0 1em;
+}
+
+.evaluation-tool .evaluation-results table {
+  width: 100%;
 }
 
 .view-item .evaluation-results {
@@ -382,14 +401,6 @@ body.evaluation-tool {
   text-align: center;
   font-size: 16px;
   color: #666;
-}
-
-.evaluation-results table {
-  margin-left: 1em;
-}
-
-.view-item .evaluation-results table {
-  margin-left: 0;
 }
 
 .evaluation-results th,
