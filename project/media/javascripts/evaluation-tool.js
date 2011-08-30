@@ -97,12 +97,18 @@ oer.evaluation_tool.init_rubrics = function() {
     });
 
     var $score_selectors = $rubrics.find("div.scores");
-    $score_selectors.delegate("a", "click", function(e) {
-        e.preventDefault();
+    $score_selectors.delegate("a,:radio", "click", function(e) {
         var $this = $(this);
         var $score = $this.closest("div");
         if ($score.hasClass("selected")) {
+            e.preventDefault();
             return;
+        }
+        if ($this.is("a")) {
+            $score.find(":radio").attr("checked", true);
+            e.preventDefault();
+        } else {
+            e.stopPropagation();
         }
         var $scores_ct = $this.closest("div.scores");
         $scores_ct.find("div.selected").removeClass("selected");
@@ -114,6 +120,26 @@ oer.evaluation_tool.init_rubrics = function() {
             });
         }
         save_score($scores_ct);
+    });
+
+    $score_selectors.find("a").mouseenter(function() {
+        var $this = $(this);
+        $this.closest("div").addClass("hover");
+        if (window.rocon != undefined) {
+            $this.closest("div.scores").find("a").each(function(e, el) {
+                rocon.update(el);
+            });
+        }
+    });
+
+    $score_selectors.find("a").mouseleave(function() {
+        var $this = $(this);
+        $this.closest("div").removeClass("hover");
+        if (window.rocon != undefined) {
+            $this.closest("div.scores").find("a").each(function(e, el) {
+                rocon.update(el);
+            });
+        }
     });
 
     $rubrics.delegate("a.clear", "click", function(e) {
@@ -134,12 +160,19 @@ oer.evaluation_tool.init_rubrics = function() {
             $tag.removeClass("scored");
         }
         $scores_ct.find("div.selected").removeClass("selected");
+        $scores_ct.find(":radio").attr("checked", false);
         var data = {"delete": "yes"};
         if (tag_id) {
             data["tag_id"] = tag_id;
         } else if (rubric_id) {
             data["rubric_id"] = rubric_id;
         }
+        if (window.rocon != undefined) {
+            $scores_ct.find("a").each(function(e, el) {
+                rocon.update(el);
+            });
+        }
+
         $.post(evaluate_url, data);
         $section.children("h1:first").removeClass("scored");
     });
@@ -173,6 +206,19 @@ oer.evaluation_tool.init_rubrics = function() {
             save_score($scores_ct);
         }
     });
+
+    var hash = window.location.hash;
+    var result = hash.match(/^#(standard|rubric)(\d+)$/);
+    if (result !== null) {
+        if (result[1] === "standard") {
+            open_section($("#alignment"));
+            var $tag = $tags_ct.find("a.tag[data-tag-id='" + result[2] + "']");
+            select_tag($tag);
+        } else if (result[1] === "rubric") {
+            var $section = $sections.filter("[data-rubric-id='" + result[2] + "']");
+            open_section($section);
+        }
+    }
 };
 
 oer.evaluation_tool.init_evaluate_button = function() {

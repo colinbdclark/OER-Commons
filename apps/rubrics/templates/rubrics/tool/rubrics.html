@@ -56,8 +56,10 @@
             <div class="scores{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}"
                  data-saved="{% if tag.scored %}true{% else %}false{% endif %}">
               {% for score in alignment_score_values %}
-                <div class="s{{ forloop.counter }}{% if not tag.scored and forloop.first or tag.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
-                  <a href="#" class="rc5"><strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
+                <div class="s{{ forloop.counter }}{% if tag.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
+                  <a href="#" class="rc5">
+                    <input type="radio" name="tag{{ tag.id }}" value="{{ score.value }}" {% if tag.score_value == score %}checked{% endif %} />
+                    <strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
                   <div class="description rc5">{{ score.description|markdown|safe }}</div>
                 </div>
               {% endfor %}
@@ -80,7 +82,7 @@
       </div>
     </section>
     {% for rubric in rubrics %}
-      <section class="rubric">
+      <section class="rubric" data-rubric-id="{{ rubric.id }}">
         <h1{% if rubric.score_value %} class="scored"{% endif %}><a href="#">{{ rubric.name }}</a></h1>
         <div class="body">
           <div class="description">
@@ -89,8 +91,10 @@
           <div class="scores" data-rubric-id="{{ rubric.id }}"
                data-saved="{% if rubric.scored %}true{% else %}false{% endif %}">
             {% for score in rubric.score_values.all %}
-              <div class="s{{ forloop.counter }}{% if not rubric.scored and forloop.first or rubric.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
-                <a href="#" class="rc5"><strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
+              <div class="s{{ forloop.counter }}{% if rubric.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
+                <a href="#" class="rc5">
+                  <input type="radio" name="rubric{{ rubric.id }}" value="{{ score.value }}" {% if rubric.score_value == score %}checked{% endif %} />
+                  <strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
                 <div class="description rc5">{{ score.description|markdown|safe }}</div>
               </div>
             {% endfor %}
