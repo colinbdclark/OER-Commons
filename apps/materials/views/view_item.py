@@ -4,7 +4,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
-from materials.models.material import WORKFLOW_TRANSITIONS
+from materials.models.material import WORKFLOW_TRANSITIONS, PUBLISHED_STATE
 from materials.models.microsite import Microsite
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
@@ -24,6 +24,13 @@ def view_item(request, slug=None, model=None):
 
     item = get_object_or_404(model, slug=slug)
 
+    # Not published item is shown only to staff users or to the user that added it.
+    if item.workflow_state != PUBLISHED_STATE:
+        if request.user.is_anonymous():
+            raise Http404()
+        elif not request.user.is_staff and not request.user.is_superuser and request.user != item.creator:
+            raise Http404()
+
     if hasattr(item, "breadcrumbs"):
         breadcrumbs = item.breadcrumbs
     else:
@@ -39,7 +46,7 @@ def view_item(request, slug=None, model=None):
                                 kwargs=dict(slug=item.slug)),
                  "title": u"Edit",
                  "class": "edit"},
-                                
+
                 {"url": reverse("materials:%s:delete" % item.namespace,
                                 kwargs=dict(slug=item.slug)),
                  "title": u"Delete",
@@ -229,6 +236,13 @@ def toolbar_view_item(request, slug=None, model=None):
     if not item.url:
         raise Http404()
 
+    # Not published item is shown only to staff users or to the user that added it.
+    if item.workflow_state != PUBLISHED_STATE:
+        if request.user.is_anonymous():
+            raise Http404()
+        elif not request.user.is_staff and not request.user.is_superuser and request.user != item.creator:
+            raise Http404()
+
     content_type = ContentType.objects.get_for_model(item)
     item.identifier = "%s.%s.%i" % (content_type.app_label,
                                     content_type.model,
@@ -239,7 +253,7 @@ def toolbar_view_item(request, slug=None, model=None):
                                 content_type.model,
                                 item.id,
                             ))
-    
+
     saved = False
     if request.user.is_authenticated():
         saved = SavedItem.objects.filter(content_type=content_type,
@@ -345,7 +359,7 @@ def toolbar_view_item(request, slug=None, model=None):
             query_string_params["batch_start"] = batch_start
 
         index_url = index_path + serialize_query_string_params(query_string_params)
-        
+
     Visit.objects.count(request, item)
 
     return direct_to_template(request, "materials/toolbar-view-item.html", locals())
