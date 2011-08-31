@@ -9,15 +9,11 @@ import zipfile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
-from django.contrib import messages
 from django import forms
 from geo.models import Country
-from materials.models import GeneralSubject, GradeLevel, CourseMaterialType, MediaFormat, Language, GeographicRelevance, LibraryMaterialType
+from materials.models import GeneralSubject, GradeLevel, CourseMaterialType, MediaFormat, Language, GeographicRelevance, LibraryMaterialType, Course, Library
 from materials.models.course import COURSE_OR_MODULE
 from project.utils import slugify
-from utils.decorators import login_required
 
 
 def force_list(value):
@@ -327,6 +323,11 @@ class ValidateCSVForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.validation_errors = []
+        self.header = None
+        self.fields_definition = None
+        self.csv_data = []
+        self.model = None
+        self.filename = None
         super(ValidateCSVForm, self).__init__(*args, **kwargs)
 
     def add_validation_error(self, message, line_number=u"", field=u""):
@@ -342,34 +343,40 @@ class ValidateCSVForm(forms.Form):
             for zipinfo in zip.infolist():
                 if zipinfo.filename.endswith(".csv"):
                     filename = os.path.split(zipinfo.filename)[-1]
+                    self.filename = filename
                     file = InMemoryUploadedFile(zip.open(zipinfo.filename, "rU"),
                                                 "file", filename, "text/csv",
                                                 zipinfo.file_size, None)
                     break
             else:
                 raise forms.ValidationError(u"Can't find a CSV file in this archive.")
+        else:
+            self.filename = file.name
         if file.content_type != "text/csv":
             raise forms.ValidationError(u"This file does not appear to be a valid CSV file.")
         reader = csv.reader(file.file.read().splitlines())
-        header = reader.next()
-        header = map(lambda x: x.strip().upper(), header)
-        if header[0].startswith("CR_"):
-            fields_definition = COURSE_FIELDS
-        elif header[0].startswith("LIB_"):
-            fields_definition = LIBRARY_FIELDS
+        self.header = reader.next()
+        self.header = map(lambda x: x.strip().upper(), self.header)
+        if self.header[0].startswith("CR_"):
+            self.fields_definition = COURSE_FIELDS
+            self.model = Course
+        elif self.header[0].startswith("LIB_"):
+            self.fields_definition = LIBRARY_FIELDS
+            self.model = Library
         else:
             raise forms.ValidationError(u"Can't find OER data in this CSV file.")
 
         for line_index, row in enumerate(reader):
             line_number = line_index + 2
+            extracted_data = []
             for field_index, raw_value in enumerate(row):
-                field_name = header[field_index]
-                if field_name not in fields_definition:
+                field_name = self.header[field_index]
+                if field_name not in self.fields_definition:
                     self.add_validation_error("Uknown field", line_number,
                                               field_name)
                     continue
 
-                extractor, validators = fields_definition[field_name]
+                extractor, validators = self.fields_definition[field_name]
                 try:
                     value = extractor(raw_value)
                 except ValidationError:
@@ -387,39 +394,9 @@ class ValidateCSVForm(forms.Form):
                                 self.add_validation_error(error, line_number,
                                                           field_name)
 
+                extracted_data.append(value)
+
+            if len(extracted_data) == len(row):
+                self.csv_data.append(extracted_data)
+
         return file
-
-
-class ValidateCSV(TemplateView):
-
-    template_name = "materials/validate-csv.html"
-
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        self.form = None
-        self.validation_errors = None
-        self.is_valid = False
-        return super(ValidateCSV, self).dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.form = ValidateCSVForm(request.POST, request.FILES)
-        if self.form.is_valid():
-            self.validation_errors = self.form.validation_errors
-            if not self.validation_errors:
-                self.is_valid = True
-        else:
-            messages.error(request, u"Please correct the indicated errors.")
-
-        return self.get(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        if not self.form:
-            self.form = ValidateCSVForm()
-        return super(ValidateCSV, self).get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = super(ValidateCSV, self).get_context_data(**kwargs)
-        data["form"] = self.form
-        data["validation_errors"] = self.validation_errors
-        data["is_valid"] = self.is_valid
-        return data

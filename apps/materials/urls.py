@@ -3,7 +3,7 @@ from django.views.generic.simple import direct_to_template
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
-from materials.views.validate_csv import ValidateCSV
+from materials.views.data_import import DataImport
 from reviews.urls import add_review_patterns
 from saveditems.urls import saved_item_patterns
 
@@ -91,7 +91,7 @@ microsite_browse_patterns = browse_patterns + patterns('materials.views',
 )
 
 urlpatterns = patterns('',
-    url(r'^validate-csv$', ValidateCSV.as_view(), name="validate_csv"),
+    url(r'^import$', DataImport.as_view(), name="data_import"),
 ) + patterns('materials.views',
     url(r"^facebook_rss/?$", "facebook_feed.facebook_feed", name="facebook_feed"),
     url(r"^oer/?$", "browse.browse", name="browse"),
