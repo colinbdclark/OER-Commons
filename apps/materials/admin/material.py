@@ -74,7 +74,7 @@ class MaterialAdmin(ModelAdmin):
 
         tags.delete()
 
-        site.update_object(obj)
+        obj.reindex()
 
         return dict(status="success")
 
@@ -100,6 +100,6 @@ class MaterialAdmin(ModelAdmin):
 
         tags.delete()
 
-        site.update_object(obj)
+        obj.reindex()
 
         return dict(status="success")

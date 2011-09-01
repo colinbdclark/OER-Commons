@@ -1,14 +1,14 @@
+from __future__ import absolute_import
+
 from autoslug.fields import AutoSlugField
 from curriculum.models import TaggedMaterial
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
-from django.core.signals import request_finished
 from django.db import models
 from django.db.models import permalink
 from django.db.models.aggregates import Avg
 from django.utils.translation import ugettext_lazy as _
-from materials import globals
+from haystack_scheduled.indexes import Indexed
 from materials.models import License
 from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
@@ -26,6 +26,7 @@ PUBLISHED_STATE = u"published"
 PRIVATE_STATE = "private"
 PENDING_STATE = u"pending"
 REJECTED_STATE = u"rejected"
+IMPORTED_STATE = u"imported"
 
 
 WORKFLOW_STATES = (
@@ -33,6 +34,7 @@ WORKFLOW_STATES = (
    (PRIVATE_STATE, _(u"Private")),
    (PENDING_STATE, _(u"Pending")),
    (REJECTED_STATE, _(u"Rejected")),
+   (IMPORTED_STATE, _(u"Imported")),
 )
 
 
@@ -72,7 +74,7 @@ class GenericMaterial(models.Model):
         app_label = "materials"
 
 
-class Material(models.Model):
+class Material(Indexed):
 
     cached_vars = ["url"]
 
@@ -237,35 +239,6 @@ class Material(models.Model):
     @property
     def is_displayed(self):
         return self.workflow_state == PUBLISHED_STATE and self.http_status != 404
-
-
-def mark_for_reindex(sender, **kwargs):
-    to_be_reindexed = getattr(globals, "to_be_reindexed", {})
-    if sender not in to_be_reindexed:
-        to_be_reindexed[sender] = set()
-    to_be_reindexed[sender].add(kwargs["instance"])
-    if len(to_be_reindexed[sender]) > getattr(settings, 'HAYSTACK_BATCH_SIZE', 1000):
-        reindex_materials()
-    globals.to_be_reindexed = to_be_reindexed
-
-
-def reindex_materials(**kwargs):
-    to_be_reindexed = getattr(globals, "to_be_reindexed", {})
-    from haystack.sites import site
-    for model, objects in to_be_reindexed.items():
-        index = site.get_index(model)
-        index.backend.update(index, objects)
-    globals.to_be_reindexed = {}
-request_finished.connect(reindex_materials, dispatch_uid="materials_request_finished_reindex")
-
-
-def unindex_material(sender, **kwargs):
-    instance = kwargs["instance"]
-    to_be_reindexed = getattr(globals, "to_be_reindexed", {})
-    if sender in to_be_reindexed:
-        to_be_reindexed[sender].discard(instance)
-    from haystack.sites import site
-    site.remove_object(instance)
 
 
 def material_post_save(sender, **kwargs):

@@ -78,6 +78,7 @@ INSTALLED_APPS = (
     'compressor',
     'debug_toolbar',
     'haystack',
+    'haystack_scheduled',
     'flatblocks',
     'mptt',
     'indexer',
@@ -191,7 +192,7 @@ def honeypot_verifier(value):
         value = int(value)
     except:
         return False
-    # Check the difference between current time moment and honeypot value. 
+    # Check the difference between current time moment and honeypot value.
     # It must be positive and less than one hour.
     now = int(time.time())
     diff = now - value

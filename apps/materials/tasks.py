@@ -2,6 +2,7 @@ from celery.decorators import task
 from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor
+from haystack_scheduled.indexes import Indexed
 from sorl.thumbnail.shortcuts import delete
 import os
 import shlex
@@ -13,16 +14,15 @@ import httplib
 
 @task
 def reindex_microsite_topic(topic):
-    from haystack.sites import site
     from haystack.query import SearchQuerySet
 
     objects = set()
-    
+
     # get all objects from this topic and all objects with this topic's keywords
     query = "indexed_topics:%s" % topic.id
     for result in SearchQuerySet().narrow(query).load_all():
         objects.add(result.object)
-    
+
     topic_keywords = topic.keywords.values_list("slug", flat=True)
     microsite_keywords = topic.microsite.keywords.values_list("slug", flat=True)
     if topic_keywords and microsite_keywords:
@@ -33,7 +33,8 @@ def reindex_microsite_topic(topic):
             objects.add(result.object)
 
     for instance in objects:
-        site.update_object(instance)
+        if isinstance(instance, Indexed):
+            instance.reindex()
 
 
 class TimeoutError(Exception):
@@ -99,14 +100,13 @@ def get_url_status_code(url):
 
 
 def check_url_status(item):
-    from haystack.sites import site
-
     status_code = get_url_status_code(item.url)
 
     if item.http_status != status_code:
         item.http_status = status_code
         item.save()
-        site.update_object(item)
+        if isinstance(item, Indexed):
+            item.reindex()
 
 
 def update_screenshot(item):

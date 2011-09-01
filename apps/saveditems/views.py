@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from haystack.sites import site
+from haystack_scheduled.indexes import Indexed
 from saveditems.models import SavedItem
 from utils.decorators import login_required
 from utils.shortcuts import redirect_to_next_url
@@ -11,8 +11,8 @@ from utils.shortcuts import redirect_to_next_url
 
 @login_required
 def save(request, slug=None, model=None):
-    ''' Save item if it isn't saved.
-    Unsave item if it's saved. '''
+    """ Save item if it isn't saved.
+    Unsave item if it's saved. """
 
     if not slug or not model:
         raise Http404()
@@ -25,7 +25,8 @@ def save(request, slug=None, model=None):
                           object_id=object_id,
                           user=request.user)
 
-    site.update_object(item)
+    if isinstance(item, Indexed):
+        item.reindex()
 
     if request.is_ajax():
         return JsonResponse(dict(status="success",
@@ -49,7 +50,9 @@ def unsave(request, slug=None, model=None):
         SavedItem.objects.get(content_type=content_type,
                               object_id=object_id,
                               user=request.user).delete()
-        site.update_object(item)
+
+        if isinstance(item, Indexed):
+            item.reindex()
 
         if request.is_ajax():
             return JsonResponse(dict(status="success",

@@ -1,7 +1,6 @@
 import sys
 import haystack
 
-from annoying.functions import get_object_or_None
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -14,7 +13,7 @@ from materials.models import Course, Library, GeneralSubject, GradeLevel, \
     Language, GeographicRelevance, CourseMaterialType, \
     LibraryMaterialType, MediaFormat, License
 from materials.models.common import CC_LICENSE_URL_RE, PUBLIC_DOMAIN_URL_RE, GNU_FDL_URL_RE, PUBLIC_DOMAIN_NAME, GNU_FDL_NAME
-from materials.models.material import PUBLISHED_STATE
+from materials.models.material import IMPORTED_STATE
 from materials.views.validate_csv import ValidateCSVForm
 from utils.decorators import login_required
 
@@ -145,7 +144,7 @@ class DataImport(TemplateView):
             try:
                 # Get or create the model here
                 obj = model(creator=request.user)
-                obj.workflow_state = PUBLISHED_STATE
+                obj.workflow_state = IMPORTED_STATE
 
                 if model.objects.filter(url=data["URL"]).exists():
                     raise forms.ValidationError(u"URL '%s' is registered in database already." % data["URL"])
@@ -286,8 +285,6 @@ class DataImport(TemplateView):
                 messages.success(request, u"Data appears to be valid. "
                     "It is not imported because 'Dry run' option is selected.")
             else:
-                for obj in imported_objects:
-                    haystack.site.update_object(obj)
                 transaction.commit()
                 messages.success(request, u"Data was imported successfully.")
 

@@ -1,14 +1,13 @@
 from autoslug.fields import AutoSlugField
 from django.db import models
 from django.db.models import permalink
-from django.db.models.signals import post_save, m2m_changed, pre_delete
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from materials.models import material_post_save
 from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
     Language, GeographicRelevance, MediaFormat, Institution, Collection, \
     AutoCreateManyToManyField, AutoCreateForeignKey
-from materials.models.material import Material, mark_for_reindex, \
-    unindex_material
+from materials.models.material import Material
 
 
 COURSE_OR_MODULE = (
@@ -137,8 +136,4 @@ class Course(Material):
         ordering = ("created_on",)
 
 
-post_save.connect(mark_for_reindex, sender=Course, dispatch_uid="course_post_save_reindex")
 post_save.connect(material_post_save, sender=Course, dispatch_uid="course_post_save")
-m2m_changed.connect(mark_for_reindex, sender=Course, dispatch_uid="course_m2m_changed_reindex")
-pre_delete.connect(unindex_material, sender=Course, dispatch_uid="course_pre_delete_unindex")
-

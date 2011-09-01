@@ -1,14 +1,11 @@
 from annoying.decorators import ajax_request
 from django import forms
-from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
-from django.shortcuts import get_object_or_404
-from haystack.sites import site
+from haystack_scheduled.indexes import Indexed
 from rating import get_rating_stars_class
 from rating.models import RATING_VALUES, Rating
 from utils.decorators import login_required
-from utils.shortcuts import redirect_to_next_url
 
 
 class RatingForm(forms.Form):
@@ -56,8 +53,8 @@ class RatingForm(forms.Form):
                                     value=int(rating))
                 rating_obj.save()
 
-        site.update_object(self.instance)
-
+        if isinstance(self.instance, Indexed):
+            self.instance.reindex()
 
 
 @login_required
