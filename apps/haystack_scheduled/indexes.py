@@ -62,13 +62,6 @@ class ScheduledSearchIndex(SearchIndex):
 
         return data
 
-    def unindex_removed(self):
-        model = self.model
-        existings_pks = set(map(smart_str, model.objects.values_list("pk", flat=True)))
-        for result in SearchQuerySet().models(model):
-            if smart_str(result.pk) not in existings_pks:
-                self.backend.remove(".".join([result.app_label, result.model_name, str(result.pk)]))
-
 
 class Indexed(models.Model):
 

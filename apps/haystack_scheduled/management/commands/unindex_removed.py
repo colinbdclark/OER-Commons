@@ -1,6 +1,7 @@
 from django.core.management.base import AppCommand
 from django.conf import settings
 from optparse import make_option
+from django.utils.encoding import smart_str
 
 
 class Command(AppCommand):
@@ -47,6 +48,7 @@ class Command(AppCommand):
         from haystack import site
         from django.db.models import get_models
         from haystack.exceptions import NotRegistered
+        from haystack.query import SearchQuerySet
         from haystack_scheduled.indexes import ScheduledSearchIndex
 
         for model in get_models(app):
@@ -64,4 +66,9 @@ class Command(AppCommand):
 
             print "'%s' - unindexing removed objects." % model
 
-            index.unindex_removed()
+            existings_pks = set(map(smart_str, model.objects.values_list("pk", flat=True)))
+            for result in SearchQuerySet().models(model):
+                if smart_str(result.pk) not in existings_pks:
+                    if self.verbosity >= 2:
+                        print "Unindexing pk %s" % result.pk
+                    index.backend.remove(".".join([result.app_label, result.model_name, str(result.pk)]))
