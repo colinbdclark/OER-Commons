@@ -36,8 +36,12 @@ class ScheduledSearchIndex(SearchIndex):
             self.model.objects.filter(pk=instance.pk).update(**{self.indexed_field: True})
             self.backend.update(self, [instance])
 
+    def get_queryset(self):
+        return self.index_queryset()
+
     def index_queryset(self):
-        return super(ScheduledSearchIndex, self).index_queryset().filter(**{self.indexed_field: False})
+        qs = self.model._default_manager.all()
+        return qs.filter(**{self.indexed_field: False})
 
     def clear(self):
         self.model.objects.all().update(**{self.indexed_field: False})
