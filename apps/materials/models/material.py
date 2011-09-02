@@ -12,7 +12,6 @@ from haystack_scheduled.indexes import Indexed
 from materials.models import License
 from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
-from materials.tasks import material_post_save_task
 from rating.models import Rating
 from reviews.models import Review
 from saveditems.models import SavedItem
@@ -76,19 +75,18 @@ class GenericMaterial(models.Model):
 
 class Material(Indexed):
 
-    cached_vars = ["url"]
-
     def __init__(self, *args, **kwargs):
         super(Material, self).__init__(*args, **kwargs)
-        self.var_cache = {}
-        for var in self.cached_vars:
-            self.var_cache[var] = copy.copy(getattr(self, var))
+        self.__original_url = self.url
 
     namespace = None
 
     title = models.CharField(max_length=500, verbose_name=_(u"Title"))
     slug = AutoSlugField(max_length=500, populate_from='title', unique=True,
                          verbose_name=_(u"Slug"))
+
+    url = models.URLField(max_length=300, verbose_name=_(u"URL"),
+                          verify_exists=False)
 
     created_on = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_(u"Created on"))
@@ -116,6 +114,7 @@ class Material(Indexed):
     featured = models.BooleanField(default=False, verbose_name=_(u"Featured"))
     featured_on = models.DateTimeField(null=True, blank=True)
 
+    url_fetched_on = models.DateTimeField(null=True, blank=True, db_index=True, verbose_name=_(u"URL fetched on"))
     http_status = models.IntegerField(null=True, blank=True, verbose_name=_(u"HTTP Status"))
     screenshot = models.ImageField(null=True, blank=True, upload_to="upload/materials/screenshots")
 
@@ -140,6 +139,11 @@ class Material(Indexed):
             self.featured_on = datetime.datetime.now()
         if not self.featured:
             self.featured_on = None
+
+        if self.url != self.__original_url:
+            self.__original_url = self.url
+            self.url_fetched_on = None
+
         super(Material, self).save(*args, **kwargs)
 
     @permalink
@@ -239,12 +243,3 @@ class Material(Indexed):
     @property
     def is_displayed(self):
         return self.workflow_state == PUBLISHED_STATE and self.http_status != 404
-
-
-def material_post_save(sender, **kwargs):
-    instance = kwargs["instance"]
-    if hasattr(instance, "_post_save_processed"):
-        return
-    # Set this flat to ensure that handler is called only once
-    instance._post_save_processed = True
-    material_post_save_task.delay(instance)

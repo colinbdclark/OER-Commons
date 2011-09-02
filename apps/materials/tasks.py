@@ -1,9 +1,12 @@
+from __future__ import absolute_import
+
 from celery.decorators import task
 from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor
 from haystack_scheduled.indexes import Indexed
 from sorl.thumbnail.shortcuts import delete
+from utils import update_item
 import os
 import shlex
 import subprocess
@@ -38,8 +41,10 @@ def reindex_microsite_topic(topic):
 
 
 class TimeoutError(Exception):
+
     def __init__(self, value="Timed Out"):
         self.value = value
+
     def __str__(self):
         return repr(self.value)
 
@@ -103,8 +108,7 @@ def check_url_status(item):
     status_code = get_url_status_code(item.url)
 
     if item.http_status != status_code:
-        item.http_status = status_code
-        item.save()
+        update_item(item, http_status=status_code)
         if isinstance(item, Indexed):
             item.reindex()
 
@@ -120,8 +124,7 @@ def update_screenshot(item):
     if item.http_status != 200:
         if item.screenshot:
             delete(item.screenshot)
-            item.screenshot = None
-            item.save()
+            update_item(item, screenshot=None)
         return
 
     url_hash = md5_constructor(smart_str(url)).hexdigest()
@@ -135,8 +138,7 @@ def update_screenshot(item):
                 return
             else:
                 delete(item.screenshot)
-                item.screenshot = None
-                item.save()
+                update_item(item, screenshot=None)
         except OSError:
             pass
 
@@ -175,18 +177,6 @@ def update_screenshot(item):
     result = fetch_screenshot(args)
     if result:
         if os.path.exists(full_path):
-            item.screenshot = filename
-            item.save()
+            update_item(item, screenshot=filename)
     else:
-        item.screenshot = None
-        item.save()
-
-
-@task
-def material_post_save_task(item):
-
-    # URL has changed
-    if item.var_cache.get("url") != item.url:
-        check_url_status(item)
-
-    update_screenshot(item)
+        update_item(item, screenshot=None)
