@@ -7,8 +7,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
-from haystack.exceptions import NotRegistered
-from haystack.sites import site
+from haystack_scheduled.indexes import Indexed
 from utils.decorators import login_required
 
 
@@ -54,10 +53,8 @@ def align(request, app_label, model, object_id):
         tagged = form.save()
         tag = form.cleaned_data["tag"]
 
-        try:
-            site.update_object(item)
-        except NotRegistered:
-            pass
+        if isinstance(item, Indexed):
+            item.reindex()
 
         return dict(status="success",
                     tag=dict(id=tagged.id, code=tag.full_code,
@@ -73,7 +70,6 @@ def list_user_tags(request, app_label, model, object_id):
 
     content_type = get_object_or_404(ContentType, app_label=app_label,
                                      model=model)
-    model = content_type.model_class()
     object_id = int(object_id)
 
     tags = []

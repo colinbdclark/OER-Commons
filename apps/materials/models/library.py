@@ -4,13 +4,11 @@ from autoslug.fields import AutoSlugField
 from common.models import GeneralSubject, Language, Keyword
 from django.db import models
 from django.db.models import permalink
-from django.db.models.signals import pre_delete, m2m_changed, post_save
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, GradeLevel,\
     GeographicRelevance, MediaFormat, Institution, Collection, \
     AutoCreateManyToManyField, AutoCreateForeignKey
-from materials.models.material import Material, mark_for_reindex, \
-    unindex_material, material_post_save
+from materials.models.material import Material
 
 
 class LibraryMaterialType(models.Model):
@@ -48,7 +46,6 @@ class Library(Material):
     authors = AutoCreateManyToManyField(Author, verbose_name=_(u"Authors"),
                                         respect_all_fields=True)
 
-    url = models.URLField(max_length=300, verbose_name=_(u"URL"), verify_exists=False)
     keywords = AutoCreateManyToManyField(Keyword, verbose_name=_(u"Keywords"))
 
     tech_requirements = models.TextField(default=u"", blank=True,
@@ -86,9 +83,3 @@ class Library(Material):
         verbose_name = _(u"Library and Collection")
         verbose_name_plural = _(u"Libraries and Collections")
         ordering = ("created_on",)
-
-
-post_save.connect(mark_for_reindex, sender=Library, dispatch_uid="library_post_save_reindex")
-post_save.connect(material_post_save, sender=Library, dispatch_uid="library_post_save")
-m2m_changed.connect(mark_for_reindex, sender=Library, dispatch_uid="library_m2m_changed_reindex")
-pre_delete.connect(unindex_material, sender=Library, dispatch_uid="library_pre_delete_unindex")

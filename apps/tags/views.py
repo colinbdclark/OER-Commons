@@ -3,7 +3,7 @@ from autoslug.settings import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
-from haystack.sites import site
+from haystack_scheduled.indexes import Indexed
 from tags.models import Tag
 from utils.decorators import login_required
 
@@ -16,7 +16,7 @@ def add(request, app_label, model, object_id):
                                      model=model)
     model = content_type.model_class()
     object_id = int(object_id)
-    
+
     item = get_object_or_404(model, id=object_id)
     user = request.user
 
@@ -30,27 +30,27 @@ def add(request, app_label, model, object_id):
                     user=user, name=tag)
                 tag.save()
                 new_tags.append(tag)
-               
-    site.update_object(item)
-    
-    response = {}
-    response["tags"] = []
+
+    if isinstance(item, Indexed):
+        item.reindex()
+
+    response = {"tags": []}
     for tag in new_tags:
         response["tags"].append(dict(name=tag.name,
                                      id=tag.id,
                                      url=reverse("materials:keyword_index",
                                                  kwargs={"keywords": tag.slug}),
                                      ))
-    
+
     return response
 
 
 @login_required
 @ajax_request
 def delete(request):
-    
+
     response = {}
-    
+
     if request.method == "POST":
         try:
             id = int(request.POST.get("id"))
@@ -61,22 +61,23 @@ def delete(request):
                 tag = Tag.objects.get(id=id, user=request.user)
                 item = tag.content_object
                 tag.delete()
-                site.update_object(item)
+                if isinstance(item, Indexed):
+                    item.reindex()
             except Tag.DoesNotExist:
                 pass
 
     return response
-    
-    
+
+
 @login_required
 @ajax_request
 def get_tags(request, app_label, model, object_id):
-    
+
     content_type = get_object_or_404(ContentType, app_label=app_label,
                                      model=model)
     model = content_type.model_class()
     object_id = int(object_id)
-    
+
     item = get_object_or_404(model, id=object_id)
     user = request.user
 
@@ -86,7 +87,7 @@ def get_tags(request, app_label, model, object_id):
                               url=reverse("materials:keyword_index",
                                          kwargs={"keywords": slug}),
                               name=name))
-        
+
     item_tags = item.tags.all()
     if user_tags:
         item_tags = item_tags.exclude(id__in=[t["id"] for t in user_tags])
@@ -95,11 +96,10 @@ def get_tags(request, app_label, model, object_id):
     item_tags = [dict(url=reverse("materials:keyword_index",
                                   kwargs={"keywords": slug}),
                       name=name) for slug, name in item_tags]
-    
+
     response = dict(tags=item_tags,
                     user_tags=user_tags)
 
     return response
-    
-    
-    
+
+

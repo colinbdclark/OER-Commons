@@ -7,8 +7,12 @@ oer.authoring.autosave = function($form) {
         $form.data("serialized", current_serialized);
     } else {
         if (serialized !== current_serialized) {
-            $form.submit();
-            $form.data("serialized", current_serialized);
+            $.post($form.attr("action"), serialized, function(response) {
+                if (response.status === "success") {
+                    oer.status_message.success(response.message, true);
+                }
+                $form.data("serialized", current_serialized);
+            });
         }
     }
     setTimeout(function() {
@@ -48,16 +52,12 @@ oer.authoring.init_define_form = function() {
             subjects: "required",
             goals: "null",
             language: "required"
-        },
-        submitHandler: function() {
-            $.post($form.attr("action"), $form.serialize(), function(response) {
-                if (response.status === "success") {
-                    oer.status_message.success(response.message, true);
-                } else if (response.status === "error") {
-                    validator.showErrors(response.errors);
-                }
-            });
         }
+    });
+
+    $form.find("div.buttons a.next").click(function(e) {
+        e.preventDefault();
+        $form.submit();
     });
 };
 
@@ -73,18 +73,13 @@ oer.authoring.init_organize_form = function() {
     var validator = $form.validate({
         rules: {
             instruction_date: "date"
-        },
-        submitHandler: function() {
-            $.post($form.attr("action"), $form.serialize(), function(response) {
-                if (response.status === "success") {
-                    oer.status_message.success(response.message, true);
-                } else if (response.status === "error") {
-                    validator.showErrors(response.errors);
-                }
-            });
         }
     });
 
+    $form.find("div.buttons a.next").click(function(e) {
+        e.preventDefault();
+        $form.submit();
+    });
 
     var $dialog = $("#align-dialog").dialog({
         modal : true,
@@ -176,16 +171,12 @@ $.template("authoring-outline-item", '<input name="title" value="" type="text" /
 
 oer.authoring.init_outline_form = function() {
     var $form = $("#outline-form");
-    
+
     oer.authoring.autosave($form);
 
-    $form.submit(function(e) {
+    $form.find("div.buttons a.next").click(function(e) {
         e.preventDefault();
-        $.post($form.attr("action"), $form.serialize(), function(response) {
-            if (response.status === "success") {
-                oer.status_message.success(response.message, true);
-            }
-        });
+        $form.submit();
     });
 
     var $sections = $form.find("#sections");
@@ -228,5 +219,29 @@ oer.authoring.init_outline_form = function() {
         placeholder: "ui-state-highlight",
         cursor: "crosshair",
         handle: ".handle"
+    });
+};
+
+oer.authoring.init_add_content_form = function() {
+
+    var $form = $("#add-content-form");
+
+    $("#id_text").redactor({
+        lang: "en",
+        focus: true,
+        toolbar: "oer"
+    });
+
+    oer.authoring.autosave($form);
+
+    $form.find("div.buttons a.next").click(function(e) {
+        e.preventDefault();
+        $form.submit();
+    });
+
+    var $current_section_in_list = $form.find("section.sections ol li").eq($form.data("section-number")-1);
+    var $title_input = $("#id_title");
+    $title_input.keyup(function() {
+        $current_section_in_list.text($title_input.val());
     });
 };

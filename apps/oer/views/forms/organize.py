@@ -4,6 +4,7 @@ from curriculum.models import TaggedMaterial
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse, Http404
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
 from oer.models import OER, Group
@@ -74,6 +75,9 @@ class Organize(OERViewMixin, BaseViewMixin, TemplateView):
             self.form.save()
             if request.is_ajax():
                 return JsonResponse(dict(status="success", message=u"Changes were saved."))
+            else:
+                return redirect("oer:edit_outline", oer_id=self.oer.id)
+
         else:
             if request.is_ajax():
                 errors = {}

@@ -1,0 +1,68 @@
+{% extends "oer/authoring/base.html" %}
+
+{% block content %}
+
+  <form action="{% url oer:edit_add_content oer_id=oer.id section_number=section_number %}" method="post"
+        class="formatted" id="add-content-form" data-section-number="{{ section_number }}">
+
+    <aside class="column-left">
+      <section class="sections">
+        <h1>{{ oer.title }}</h1>
+        <ol>
+          {% for section in oer.sections.all %}
+            <li>{{ section.title }}</li>
+          {% endfor %}
+        </ol>
+        <a href="{% url oer:edit_outline oer_id=oer.id %}" class="rc3 gray-btn">Edit Outline</a>
+      </section>
+    </aside><section id="content" class="content column-main">
+
+      {% with form.title as field %}
+        <div class="field title">
+          <div class="errors">
+            {% for error in field.errors %}
+              <label class="error">{{ error|safe }}</label>
+            {% endfor %}
+          </div>
+          {{ section_number }}. {{ field }}
+        </div>
+      {% endwith %}
+
+      {% with form.text as field %}
+        <div class="field text">
+          <div class="errors">
+            {% for error in field.errors %}
+              <label class="error">{{ error|safe }}</label>
+            {% endfor %}
+          </div>
+          {{ field }}
+        </div>
+      {% endwith %}
+
+      <div class="buttons">
+        {% if prev_section_number %}
+          <a href="{% url oer:edit_add_content oer_id=oer.id section_number=prev_section_number %}" class="rc5 prev">Back</a>
+        {% else %}
+          <a href="{% url oer:edit_outline oer_id=oer.id %}" class="rc5 prev">Back</a>
+        {% endif %}
+        {% if next_section_number %}
+          <a href="{% url oer:edit_add_content oer_id=oer.id section_number=next_section_number %}" class="rc5 next">Next</a>
+        {% else %}
+          <a href="#" class="rc5 next">Next</a>
+        {% endif %}
+      </div>
+
+    </section><aside class="column-right">
+    </aside>
+
+  </form>
+
+{% endblock %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.authoring.init_add_content_form();
+    });
+  </script>
+{% endblock %}

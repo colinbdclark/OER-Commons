@@ -1,4 +1,5 @@
 from annoying.decorators import JsonResponse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from oer.models import Section
@@ -36,29 +37,32 @@ class Outline(OERViewMixin, BaseViewMixin, TemplateView):
                     return JsonResponse(dict(status="error"))
                 return JsonResponse(dict(status="success"))
 
-            titles = request.POST.getlist("title")
-            ids = request.POST.getlist("id")
-            assert len(titles) == len(ids)
+        titles = request.POST.getlist("title")
+        ids = request.POST.getlist("id")
+        assert len(titles) == len(ids)
 
-            saved = False
-            for i, title in enumerate(titles):
-                id = int(ids[i])
-                order = i+1
-                try:
-                    section = self.oer.sections.get(id=id)
-                    if section.title != title or section.order != order:
-                        section.title = title
-                        section.order = order
-                        section.save()
-                        saved = True
-                except Section.DoesNotExist:
-                    continue
+        saved = False
+        for i, title in enumerate(titles):
+            id = int(ids[i])
+            order = i+1
+            try:
+                section = self.oer.sections.get(id=id)
+                if section.title != title or section.order != order:
+                    section.title = title
+                    section.order = order
+                    section.save()
+                    saved = True
+            except Section.DoesNotExist:
+                continue
 
+        if request.is_ajax():
             if saved:
                 return JsonResponse(dict(status="success", message=u"Changes were saved."))
-
             return JsonResponse(dict(message=u"Nothing changed."))
 
+        if self.oer.sections.exists() and self.oer.sections.all()[0].title.strip():
+            return redirect("oer:edit_add_content", oer_id=self.oer.id,
+                            section_number=1)
 
         return self.get(request, *args, **kwargs)
 
