@@ -8,12 +8,36 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Deleting model 'GeneralSubject'
+        db.delete_table('materials_generalsubject')
+
+        # Deleting model 'Language'
+        db.delete_table('materials_language')
+
         # Deleting model 'Keyword'
         db.delete_table('materials_keyword')
 
 
     def backwards(self, orm):
         
+        # Adding model 'GeneralSubject'
+        db.create_table('materials_generalsubject', (
+            ('slug', self.gf('autoslug.fields.AutoSlugField')(max_length=100, unique_with=(), unique=True, populate_from=None, db_index=True)),
+            ('description', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100, unique=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        ))
+        db.send_create_signal('materials', ['GeneralSubject'])
+
+        # Adding model 'Language'
+        db.create_table('materials_language', (
+            ('order', self.gf('django.db.models.fields.IntegerField')(default=999)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=3, unique=True, db_index=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100, unique=True)),
+        ))
+        db.send_create_signal('materials', ['Language'])
+
         # Adding model 'Keyword'
         db.create_table('materials_keyword', (
             ('suggested', self.gf('django.db.models.fields.BooleanField')(default=False)),
