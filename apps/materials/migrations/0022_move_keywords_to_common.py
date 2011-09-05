@@ -193,6 +193,13 @@ class Migration(DataMigration):
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
         },
+        'materials.generalsubject': {
+            'Meta': {'ordering': "('id',)", 'object_name': 'GeneralSubject'},
+            'description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+        },
         'materials.genericmaterial': {
             'Meta': {'object_name': 'GenericMaterial'},
             'created_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -226,6 +233,13 @@ class Migration(DataMigration):
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '500'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '500', 'populate_from': 'None', 'db_index': 'True'}),
             'suggested': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
+        'materials.language': {
+            'Meta': {'ordering': "('order', 'name')", 'object_name': 'Language'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'order': ('django.db.models.fields.IntegerField', [], {'default': '999'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '3', 'db_index': 'True'})
         },
         'materials.library': {
             'Meta': {'ordering': "('created_on',)", 'object_name': 'Library'},
