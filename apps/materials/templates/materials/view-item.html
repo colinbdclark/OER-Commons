@@ -23,7 +23,6 @@
         oer.materials.view_item.init_content_actions();
       {% endif %}
       $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
-      oer.evaluation_tool.init_evaluate_button();
     });
   </script>
 {% endblock %}
@@ -289,7 +288,7 @@
       <a href="{{ add_review_url }}" class="button-blue-big rc5 require-login with-next-url">Write a Review</a>
     </div>
     <div>
-      <a href="{% url rubrics:evaluate_intro %}?url={{ item.url }}" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
+      <a href="{{ toolbar_view_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
     </div>
     {% if evaluations_number and evaluation_scores %}
       <div class="evaluation-results">
@@ -307,7 +306,7 @@
                   <td class="first">{{ score.name }}</td>
                   <td>
                     {% if score.average_score == None %}
-                      <span class="na">NA</span>
+                      <span class="na">N/A</span>
                     {% else %}
                       <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}/3</span>
                     {% endif %}

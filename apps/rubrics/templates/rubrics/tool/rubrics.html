@@ -53,8 +53,7 @@
           {% endfor %}
 
           {% for tag in alignment_tags %}
-            <div class="scores{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}"
-                 data-saved="{% if tag.scored %}true{% else %}false{% endif %}">
+            <div class="scores{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}">
               {% for score in alignment_score_values %}
                 <div class="s{{ forloop.counter }}{% if tag.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
                   <a href="#" class="rc5">
@@ -79,6 +78,7 @@
             </div>
           {% endfor %}
         </div>
+
       </div>
     </section>
     {% for rubric in rubrics %}
@@ -88,8 +88,7 @@
           <div class="description">
             {{ rubric.description|markdown|safe }}
           </div>
-          <div class="scores" data-rubric-id="{{ rubric.id }}"
-               data-saved="{% if rubric.scored %}true{% else %}false{% endif %}">
+          <div class="scores" data-rubric-id="{{ rubric.id }}">
             {% for score in rubric.score_values.all %}
               <div class="s{{ forloop.counter }}{% if rubric.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
                 <a href="#" class="rc5">

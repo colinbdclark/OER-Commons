@@ -51,7 +51,7 @@ class RubricScoreValue(ScoreValue):
         ordering = ["rubric", "id"]
 
 
-class RubricScore(models.Model):
+class Score(models.Model):
 
     user = models.ForeignKey(User)
 
@@ -59,23 +59,23 @@ class RubricScore(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
 
-    rubric = models.ForeignKey(Rubric)
+    confirmed = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+class RubricScore(Score):
 
     score = models.ForeignKey(RubricScoreValue)
+    rubric = models.ForeignKey(Rubric)
 
 
 class StandardAlignmentScoreValue(ScoreValue):
     pass
 
 
-class StandardAlignmentScore(models.Model):
-
-    user = models.ForeignKey(User)
-
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey()
-
-    alignment_tag = models.ForeignKey(AlignmentTag)
+class StandardAlignmentScore(Score):
 
     score = models.ForeignKey(StandardAlignmentScoreValue)
+    alignment_tag = models.ForeignKey(AlignmentTag)

@@ -200,12 +200,61 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics .scores .selected a {
   color: #fff;
+}
+
+.evaluation-tool .rubrics .scores .s1.selected a,
+.evaluation-tool .rubrics .scores .s1.hover a,
+.evaluation-tool .rubrics .scores .s1.selected .description,
+.evaluation-tool .rubrics .scores .s1.hover .description {
   border-color: #679701;
+}
+
+.evaluation-tool .rubrics .scores .s1.selected a {
   background-color: #679701;
 }
 
-.evaluation-tool .rubrics .scores .hover a {
-  border-color: #679701;
+.evaluation-tool .rubrics .scores .s2.selected a,
+.evaluation-tool .rubrics .scores .s2.hover a,
+.evaluation-tool .rubrics .scores .s2.selected .description,
+.evaluation-tool .rubrics .scores .s2.hover .description {
+  border-color: #8CC63F;
+}
+
+.evaluation-tool .rubrics .scores .s2.selected a {
+  background-color: #8CC63F;
+}
+
+.evaluation-tool .rubrics .scores .s3.selected a,
+.evaluation-tool .rubrics .scores .s3.hover a,
+.evaluation-tool .rubrics .scores .s3.selected .description,
+.evaluation-tool .rubrics .scores .s3.hover .description {
+  border-color: #DBD639;
+}
+
+.evaluation-tool .rubrics .scores .s3.selected a {
+  background-color: #DBD639;
+}
+
+.evaluation-tool .rubrics .scores .s4.selected a,
+.evaluation-tool .rubrics .scores .s4.hover a,
+.evaluation-tool .rubrics .scores .s4.selected .description,
+.evaluation-tool .rubrics .scores .s4.hover .description {
+  border-color: #FFCB66;
+}
+
+.evaluation-tool .rubrics .scores .s4.selected a {
+  background-color: #FFCB66;
+}
+
+.evaluation-tool .rubrics .scores .s5.selected a,
+.evaluation-tool .rubrics .scores .s5.hover a,
+.evaluation-tool .rubrics .scores .s5.selected .description,
+.evaluation-tool .rubrics .scores .s5.hover .description {
+  border-color: #B5C3CA;
+}
+
+.evaluation-tool .rubrics .scores .s5.selected a {
+  background-color: #B5C3CA;
 }
 
 .evaluation-tool .rubrics .scores .description {
@@ -217,7 +266,7 @@ body.evaluation-tool {
   background-color: #fff;
   right: 0;
   top: 0;
-  padding: 0 5px;
+  padding: 2px 5px 0;
   z-index: 2;
   overflow: hidden;
   font-size: 12px;
@@ -358,7 +407,8 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics section .footer a.next,
 .evaluation-tool .rubrics section .footer a.save,
-.evaluation-tool .evaluation-results  .footer a.back {
+.evaluation-tool .evaluation-results  .footer a.back,
+.evaluation-tool .evaluation-results  .footer a.finalize {
   background-color: #ffb21f;
   color: #fff;
   font-weight: bold;
@@ -465,6 +515,12 @@ body.evaluation-tool {
 .evaluation-tool footer.global {
   padding: 4px 10px;
   text-align: right;
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  width: 580px;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
 }
 
 .evaluation-tool footer.global a {
