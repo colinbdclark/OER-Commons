@@ -53,12 +53,14 @@ class ScheduledSearchIndex(SearchIndex):
         self.backend.update(self, items)
 
     def full_prepare(self, obj):
+
         data = super(ScheduledSearchIndex, self).full_prepare(obj)
 
         # This is the only place where we can set is_indexed=True if
         # indexing was initiated from management command.
         if not getattr(obj, self.indexed_field):
-            obj.__class__.objects.update(**{self.indexed_field: True})
+            setattr(obj, self.indexed_field, True)
+            obj.__class__.objects.filter(pk=obj.pk).update(**{self.indexed_field: True})
 
         return data
 

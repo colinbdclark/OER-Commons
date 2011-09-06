@@ -21,6 +21,7 @@ import urllib
 
 
 
+
 # TODO: rewrite this to class based view when project is moved to Django 1.3
 # This would allow to avoid code duplication.
 
@@ -256,6 +257,7 @@ def view_item(request, slug=None, model=None):
     alignment_scores = StandardAlignmentScore.objects.filter(
         content_type=content_type,
         object_id=item.id,
+        confirmed=True,
     )
 
     evaluations_number = len(alignment_scores.values_list("user__id", flat=True).distinct())
@@ -277,6 +279,7 @@ def view_item(request, slug=None, model=None):
     rubric_scores = RubricScore.objects.filter(
         content_type=content_type,
         object_id=item.id,
+        confirmed=True,
     )
     for rubric in Rubric.objects.all():
         scores = rubric_scores.filter(rubric=rubric)

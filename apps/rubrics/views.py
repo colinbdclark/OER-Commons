@@ -5,9 +5,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db.models import Avg
 from django.http import HttpResponseBadRequest
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from materials.models import Course, Library, CommunityItem, GenericMaterial
 from rubrics.models import Rubric, StandardAlignmentScoreValue, \
     StandardAlignmentScore, RubricScore, RubricScoreValue
@@ -221,6 +221,9 @@ class Results(EvaluateViewMixin, TemplateView):
         user_alignment_scores = alignment_scores.filter(
             user=self.request.user
         )
+
+        data["finalized"] = not user_alignment_scores.filter(confirmed=False).exists()
+
         user_score = user_alignment_scores.aggregate(Avg("score__value"))["score__value__avg"]
         if user_score is not None:
             user_score = int(user_score)
@@ -293,6 +296,8 @@ class Results(EvaluateViewMixin, TemplateView):
                 average_score_class=average_score_class,
             ))
 
+        data["finalized"] = data["finalized"] and not rubric_scores.filter(user=self.request.user, confirmed=False).exists()
+
         not_scored_section = None
         not_scored_tags = set(tags.values_list("id", flat=True)) - \
                           set(user_alignment_scores.values_list("alignment_tag__id",
@@ -308,6 +313,29 @@ class Results(EvaluateViewMixin, TemplateView):
 
         data["not_scored_section"] = not_scored_section
         return data
+
+
+class Finalize(EvaluateViewMixin, View):
+
+    #noinspection PyUnusedLocal
+    def post(self, request, *args, **kwargs):
+
+        StandardAlignmentScore.objects.filter(
+            content_type=self.content_type,
+            object_id=self.object.id,
+            user=request.user,
+        ).update(confirmed=True)
+
+        RubricScore.objects.filter(
+            content_type=self.content_type,
+            object_id=self.object.id,
+            user=request.user,
+        ).update(confirmed=True)
+
+        return redirect("rubrics:evaluate_results",
+            content_type_id=self.content_type.id,
+            object_id=self.object.id,
+        )
 
 
 class Align(EvaluateViewMixin, TemplateView):

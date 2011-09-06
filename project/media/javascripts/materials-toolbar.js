@@ -13,6 +13,10 @@ oer.materials.toolbar.init = function() {
     oer.materials.toolbar.init_save();
     oer.materials.toolbar.init_review();
     oer.materials.view_item.init_navigation();
+    oer.evaluation_tool.init_evaluate_button();
+    if (window.location.hash === "#evaluate") {
+        $("#evaluate-btn").click();
+    }
 };
 
 oer.materials.toolbar.resize_iframe = function() {
