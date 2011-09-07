@@ -203,12 +203,19 @@ oer.evaluation_tool.init_rubrics = function() {
     });
 
     var hash = window.location.hash;
-    var result = hash.match(/^#(standard|rubric)(\d+)$/);
+    var result = hash.match(/^#(standard|rubric)(\d+)?$/);
     if (result !== null) {
         if (result[1] === "standard") {
             open_section($("#alignment"));
-            var $tag = $tags_ct.find("a.tag[data-tag-id='" + result[2] + "']");
-            select_tag($tag);
+            var $tag = null;
+            if (result[2]) {
+                $tag = $tags_ct.find("a.tag[data-tag-id='" + result[2] + "']");
+            } else if ($tags_ct.find("a.tag").length) {
+                $tag = $tags_ct.find("a.tag").first();
+            }
+            if ($tag) {
+                select_tag($tag);
+            }
         } else if (result[1] === "rubric") {
             var $section = $sections.filter("[data-rubric-id='" + result[2] + "']");
             open_section($section);
@@ -216,35 +223,37 @@ oer.evaluation_tool.init_rubrics = function() {
     }
 };
 
+oer.evaluation_tool.open_tool = function(url) {
+    var $dialog = null;
+    oer.login.check_login(function() {
+        if ($dialog === null) {
+            $dialog = $("<div id='evaluate-dialog'></div>");
+            $("<iframe />", {
+                src: url,
+                width: 600,
+                height: 700,
+                frameBorder: 0,
+                scrolling: "no"
+            }).appendTo($dialog);
+            $dialog.appendTo($("body"));
+            $dialog.dialog({
+                title: "Evaluate Resource",
+                width: 600,
+                resizable: false,
+                position: [$("body").innerWidth() - 620, 50]
+            });
+        } else {
+            $dialog.find("iframe").attr("src", url);
+            $dialog.dialog("open");
+        }
+    });
+};
+
 oer.evaluation_tool.init_evaluate_button = function() {
     var $button = $("#evaluate-btn");
-    var $dialog = null;
-
     $button.click(function(e) {
         e.preventDefault();
-        var url = $(this).attr("href");
-        oer.login.check_login(function() {
-            if ($dialog === null) {
-                $dialog = $("<div id='evaluate-dialog'></div>");
-                $("<iframe />", {
-                    src: url,
-                    width: 600,
-                    height: 700,
-                    frameBorder: 0,
-                    scrolling: "no"
-                }).appendTo($dialog);
-                $dialog.appendTo($("body"));
-                $dialog.dialog({
-                    title: "Evaluate Resource",
-                    width: 600,
-                    resizable: false,
-                    position: [$("body").innerWidth() - 620, 50]
-                });
-            } else {
-                $dialog.find("iframe").attr("src", url);
-                $dialog.dialog("open");
-            }
-        });
+        oer.evaluation_tool.open_tool($(this).attr("href"));
     });
 };
 

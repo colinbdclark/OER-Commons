@@ -66,6 +66,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         data = super(Rubrics, self).get_context_data(**kwargs)
         data["content_type"] = self.content_type
         data["object"] = self.object
+        if isinstance(self.object, (Course, Library, CommunityItem)):
+            data["toolbar_view_url"] = reverse(
+                "materials:%s:toolbar_view_item" % self.object.namespace,
+                kwargs=dict(slug=self.object.slug),
+            )
 
         tags = AlignmentTag.objects.filter(
             id__in=self.object.alignment_tags.values_list("tag__id",
