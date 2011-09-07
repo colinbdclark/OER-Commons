@@ -20,8 +20,8 @@
         </div>
       </div>
     </section>
-    <section id="alignment" class="expanded">
-      <h1{% if alignment_scored %} class="scored"{% endif %}><a href="#">Degree of Alignment to Standards</a></h1>
+    <section id="alignment" class="expanded{% if alignment_scored %} scored{% endif %}">
+      <h1><a href="#">Degree of Alignment to Standards</a></h1>
       <div class="body">
         <div class="description">
           {% if not alignment_tags %}
@@ -82,8 +82,8 @@
       </div>
     </section>
     {% for rubric in rubrics %}
-      <section class="rubric" data-rubric-id="{{ rubric.id }}">
-        <h1{% if rubric.score_value %} class="scored"{% endif %}><a href="#">{{ rubric.name }}</a></h1>
+      <section class="rubric{% if rubric.scored %} scored{% endif %}" data-rubric-id="{{ rubric.id }}">
+        <h1><a href="#">{{ rubric.name }}</a></h1>
         <div class="body">
           <div class="description">
             {{ rubric.description|markdown|safe }}
