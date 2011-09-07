@@ -266,6 +266,9 @@ class IndexParams:
 def populate_item_from_search_result(result):
     item = result.get_stored_fields()
 
+    # TODO: is_evaluated should be a stored field
+    item["is_evaluated"] = result.object.is_evaluated
+
     item["identifier"] = "%s.%s.%s" % (result.app_label,
                                        result.model_name,
                                        result.pk)

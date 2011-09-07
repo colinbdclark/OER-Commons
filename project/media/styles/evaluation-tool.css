@@ -106,19 +106,20 @@ body.evaluation-tool {
   font-weight: bold;
 }
 
-.evaluation-tool .rubrics section h1.scored {
+.evaluation-tool .rubrics section.scored h1 {
   padding-left: 30px;
   background: url(../images/evaluation/icon-scored.png) no-repeat 3px 50%;
 }
 
-.evaluation-tool .rubrics section.expanded h1 {
-  background-color: #ffb21f;
-  font-size: 14px;
+.evaluation-tool .rubrics section.not-scored h1 {
+  padding-left: 30px;
+  background: url(../images/evaluation/icon-not-scored.png) no-repeat 3px 50%;
 }
 
-.evaluation-tool .rubrics section.expanded h1.scored {
-  background-image: none;
+.evaluation-tool .rubrics section.expanded h1 {
+  background: #ffb21f none;
   padding-left: 10px;
+  font-size: 14px;
 }
 
 .evaluation-tool .rubrics section h1 a {
@@ -417,6 +418,10 @@ body.evaluation-tool {
   padding: 2px 5px;
 }
 
+.evaluation-tool .evaluation-results  .footer a.back.gray {
+  background-color: #ccc;
+}
+
 .evaluation-tool .rubrics section .footer a.next-tag,
 .evaluation-tool .rubrics section .footer a.prev-tag {
   background-color: #ccc;
@@ -428,6 +433,10 @@ body.evaluation-tool {
 
 .evaluation-tool .evaluation-results {
   padding: 0 1em;
+}
+
+.evaluation-tool .evaluation-results figure {
+  margin-top: 1em;
 }
 
 .evaluation-tool .evaluation-results table {

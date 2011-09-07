@@ -8,10 +8,12 @@ oer.evaluation_tool.init_rubrics = function() {
     var $tags_ct = $rubrics.find("div.tags");
 
     function save_score($section, callback) {
+        var scored = true;
         $.each($section.find("div.scores"), function(i, scores) {
             var $scores = $(scores);
             var $score = $scores.find("div.selected");
             if (!$score.length) {
+                scored = false;
                 return;
             }
             var score_id = $score.data("score-id");
@@ -23,7 +25,11 @@ oer.evaluation_tool.init_rubrics = function() {
                 $.post(evaluate_url, {score_id: score_id, rubric_id: rubric_id});
             }
         });
-        $section.children("h1:first").addClass("scored");
+        if (scored) {
+            $section.removeClass("not-scored").addClass("scored");
+        } else {
+            $section.removeClass("scored").addClass("not-scored");
+        }
         if (callback) {
             callback();
         }
@@ -31,7 +37,11 @@ oer.evaluation_tool.init_rubrics = function() {
 
 
     function open_section($section) {
-        $sections.filter(".expanded").removeClass("expanded").find("div.body").show().slideUp("fast");
+        var $current_section = $sections.filter(".expanded");
+        if (!$current_section.hasClass("scored")) {
+            $current_section.addClass("not-scored")
+        }
+        $current_section.removeClass("expanded").find("div.body").show().slideUp("fast");
         if (!$section.hasClass("expanded")) {
             $section.addClass("expanded").find("div.body").hide().slideDown("fast");
         }
@@ -157,7 +167,7 @@ oer.evaluation_tool.init_rubrics = function() {
         }
 
         $.post(evaluate_url, data);
-        $section.children("h1:first").removeClass("scored");
+        $section.removeClass("scored").addClass("not-scored");
     });
 
     $rubrics.delegate("a.next", "click", function(e) {

@@ -2,7 +2,9 @@
 
 {% block content %}
   <div class="evaluation-results">
-    <p class="thanks">Thanks for your contribution!</p>
+    {% if finalized %}
+      <p class="thanks">Thanks for your contribution!</p>
+    {% endif %}
 
     <figure>
       <figcaption>
@@ -39,7 +41,7 @@
         </tbody>
       </table>
       <div class="footer">
-        <a class="rc3 back"
+        <a class="rc3 back {% if not finalized %} gray{% endif %}"
            href="{% url rubrics:evaluate_rubrics content_type_id=content_type.id,object_id=object.id %}{% if not_scored_section %}#{{ not_scored_section }}{% endif %}">
           Go Back &amp; Change Your Scores
         </a>
