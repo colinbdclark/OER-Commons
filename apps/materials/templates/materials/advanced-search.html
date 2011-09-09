@@ -98,6 +98,7 @@
         <div class="field">
           <div class="label"><label for="id_rubric">Resource Evaluation Criteria:</label></div>
           <select name="f.rubric" id="id_rubric">
+            <option value=""></option>
             {% for rubric in rubrics %}
               <option value="{{ rubric.id }}">{{ rubric.name }}</option>
             {% endfor %}
