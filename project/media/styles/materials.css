@@ -114,19 +114,19 @@
 }
 
 .cou-bucket.no-strings-attached {
-  background: url(../images/no-strings-attached.png) no-repeat 0% 50%;
+  background: url(../images/no-strings-attached.png) no-repeat 0 50%;
 }
 
 .cou-bucket.remix-and-share {
-  background: url(../images/remix-and-share.png) no-repeat 0% 50%;
+  background: url(../images/remix-and-share.png) no-repeat 0 50%;
 }
 
 .cou-bucket.share-only {
-  background: url(../images/share-only.png) no-repeat 0% 50%;
+  background: url(../images/share-only.png) no-repeat 0 50%;
 }
 
 .cou-bucket.read-the-fine-print {
-  background: url(../images/read-the-fine-print.png) no-repeat 0% 50%;
+  background: url(../images/read-the-fine-print.png) no-repeat 0 50%;
 }
 
 .materials-index .details .message {
@@ -186,8 +186,6 @@
   cursor: pointer;
   display: none;
   height: auto;
-  margin: 0px;
-  padding: 0px;
   position: absolute;
   right: -1px;
   top: 2em;
@@ -201,9 +199,8 @@
 
 .materials-index .item dl.actions ul {
   list-style-type: none;
-  margin: 0;
+  margin: -2px 0 0;
   padding: 0;
-  margin-top: -2px;
   background: #3D8298;
   border: 1px solid #1B536A;
   left: -4px;
@@ -232,12 +229,12 @@
 
 .materials-index .index-navigation.top {
   margin-bottom: 15px;
-  background: url(../images/dotted-line-hor.gif) repeat-x 0% 100%;
+  background: url(../images/dotted-line-hor.gif) repeat-x 0 100%;
 }
 
 .materials-index .index-navigation.bottom {
   margin-top: 15px;
-  background: url(../images/dotted-line-hor.gif) repeat-x 0% 0%;
+  background: url(../images/dotted-line-hor.gif) repeat-x 0 0;
 }
 
 .materials-index .index-navigation ul {
@@ -288,7 +285,7 @@
 .index-filters .search input.button {
   color: #333;
   font-size: 11px;
-  margin: 5px 0px;
+  margin: 5px 0;
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -437,7 +434,7 @@
 
 .portlet.save a.save {
   padding-left: 35px;
-  background: url(../images/icon-save.png) no-repeat 0% 50%;
+  background: url(../images/icon-save.png) no-repeat 0 50%;
 }
 
 /* Browse All */
@@ -452,7 +449,7 @@
 }
 
 .content .browse-materials thead th {
-  background: #f3f7f8 url(../images/box-header-bg.png) repeat-x 0% 0%;
+  background: #f3f7f8 url(../images/box-header-bg.png) repeat-x 0 0;
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -466,7 +463,7 @@
 }
 
 .content .browse-materials  th.sep {
-  background: #f3f7f8 url(../images/box-header-sep.png) no-repeat 0% 0%;
+  background: #f3f7f8 url(../images/box-header-sep.png) no-repeat 0 0;
 }
 
 .content .browse-materials  th.sep div {
@@ -500,8 +497,7 @@
 }
 
 .content .browse-materials td.sep {
-  background: #f3f7f8 url(../images/browse-table-column-sep.png) repeat-y
-    0% 0%;
+  background: #f3f7f8 url(../images/browse-table-column-sep.png) repeat-y 0 0;
 }
 
 .content .browse-materials td.sep div,.content .browse-materials  td.nosep div
@@ -543,8 +539,7 @@
 }
 
 .advanced-search .search-box {
-  background: #0c5671 url(../images/advancedsearch-searchbox-bg.png)
-    repeat-x 0% 0%;
+  background: #0c5671 url(../images/advancedsearch-searchbox-bg.png) repeat-x 0 0;
   padding: 10px;
   margin-bottom: 20px;
 }
@@ -592,7 +587,8 @@
   margin: 10px;
 }
 
-.advanced-search #align-form {
+.advanced-search #align-form,
+.advanced-search .rubric {
   margin: 5px 13px 20px 13px;
 }
 
@@ -600,7 +596,8 @@
   margin-bottom: 10px;
 }
 
-.advanced-search #align-form .field label {
+.advanced-search #align-form .field label,
+.advanced-search .rubric .field label {
   font-weight: bold;
   margin-bottom: 2px;
 }
@@ -649,7 +646,7 @@
 }
 
 .advanced-search .filter dd.not-collapsible label {
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .advanced-search .filter dd.collapsible ul {
@@ -659,10 +656,9 @@
 }
 
 .advanced-search .filter dd.collapsible li {
-  margin: 0;
+  margin: 0 0 0 16px;
   padding: 0;
   clear: both;
-  margin-left: 16px;
 }
 
 .content-actions {
@@ -674,7 +670,7 @@
 
 .content-actions ul {
   margin: 0;
-  paddding: 0;
+  padding: 0;
   list-style-type: none;
 }
 
@@ -713,8 +709,6 @@
   cursor: pointer;
   display: none;
   height: auto;
-  margin: 0px;
-  padding: 0px;
   position: absolute;
   right: -1px;
   top: 2em;
@@ -728,9 +722,8 @@
 
 .content-actions dl ul {
   list-style-type: none;
-  margin: 0;
+  margin: -6px 0 0;
   padding: 0;
-  margin-top: -6px;
   background: #CDE2A7;
   border: 1px solid #74AE0B;
   position: relative
@@ -758,8 +751,7 @@
 
 .content-actions dl ul li.icon a {
   padding-left: 22px;
-  background-repeat: no-repeat;
-  background-position: 2px 2px;
+  background: no-repeat 2px 2px;
 }
 
 .content-actions dl ul li.edit a {
@@ -795,8 +787,7 @@
 
 .tags-index ul.letters li {
   display: inline;
-  margin: 0;
-  margin-right: 8px;
+  margin: 0 8px 0 0;
   padding: 0;
   font-size: 14px;
   text-transform: uppercase;

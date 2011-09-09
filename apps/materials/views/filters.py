@@ -10,6 +10,7 @@ from materials.models.library import LibraryMaterialType
 from materials.models.material import MEMBER_ACTIVITY_TYPES
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_slug
+from rubrics.models import RUBRIC_CHOICES
 from tags.models import Tag
 import re
 
@@ -224,7 +225,7 @@ class AlignmentFilter(Filter):
             raise Http404()
 
         value = [AlignmentTag.objects.get_by_natural_key(*(v.split("."))).id for v in value]
-        
+
         return query.narrow(u"%s:(%s)" % (self.index_name, u" OR ".join([str(v) for v in value])))
 
     def update_query_string_params(self, query_string_params, value):
@@ -274,7 +275,7 @@ class SearchParameters(object):
             if self.any_words[0] not in self.all_words:
                 self.all_words.append(self.any_words[0])
             self.any_words = []
-        
+
         self.all_words = [w for w in self.all_words if w.lower() != "and"]
 
     def __nonzero__(self):
@@ -360,6 +361,18 @@ class SearchFilter(Filter):
         return unicode(value)
 
 
+class RubricFilter(ChoicesFilter):
+
+    def extract_value(self, request):
+        value = super(RubricFilter, self).extract_value(request)
+        if value is not None:
+            try:
+                value = map(int, value)
+            except (TypeError, ValueError):
+                raise Http404()
+        return value
+
+
 FILTERS = {
     "general_subjects": VocabularyFilter("general_subjects", "f.general_subject", GeneralSubject, u"Subject Area"),
     "grade_levels": VocabularyFilter("grade_levels", "f.edu_level", GradeLevel, u"Grade Level"),
@@ -380,6 +393,7 @@ FILTERS = {
     "topics": VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic"),
     "featured": BooleanFilter("featured", "f.featured", u"Featured Resources"),
     "alignment": AlignmentFilter("alignment_tags", "f.alignment"),
+    "evaluated_rubrics": RubricFilter("evaluated_rubrics", "f.rubric", RUBRIC_CHOICES, u"Rubric"),
     "search": SearchFilter(),
 }
 

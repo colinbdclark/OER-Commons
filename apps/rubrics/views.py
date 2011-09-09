@@ -8,6 +8,7 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
+from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial
 from rubrics.models import Rubric, StandardAlignmentScoreValue, \
     StandardAlignmentScore, RubricScore, RubricScoreValue
@@ -66,6 +67,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         data = super(Rubrics, self).get_context_data(**kwargs)
         data["content_type"] = self.content_type
         data["object"] = self.object
+        if isinstance(self.object, (Course, Library, CommunityItem)):
+            data["toolbar_view_url"] = reverse(
+                "materials:%s:toolbar_view_item" % self.object.namespace,
+                kwargs=dict(slug=self.object.slug),
+            )
 
         tags = AlignmentTag.objects.filter(
             id__in=self.object.alignment_tags.values_list("tag__id",
@@ -149,10 +155,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                     object_id=self.object.id,
                     user=request.user,
                     alignment_tag=tag,
-                    defaults=dict(score=score_value)
+                    defaults=dict(score=score_value, confirmed=False)
                 )
-                if score.score != score_value:
+                if not created:
                     score.score = score_value
+                    score.confirmed = False
                     score.save()
             return dict(status="success")
 
@@ -183,10 +190,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                     object_id=self.object.id,
                     user=request.user,
                     rubric=rubric,
-                    defaults=dict(score=score_value)
+                    defaults=dict(score=score_value, confirmed=False)
                 )
-                if score.score != score_value:
+                if not created:
                     score.score = score_value
+                    score.confirmed = False
                     score.save()
             return dict(status="success")
 
@@ -225,12 +233,15 @@ class Results(EvaluateViewMixin, TemplateView):
         data["finalized"] = not user_alignment_scores.filter(confirmed=False).exists()
 
         user_score = user_alignment_scores.aggregate(Avg("score__value"))["score__value__avg"]
-        if user_score is not None:
-            user_score = int(user_score)
+        if user_score is None:
+            user_score_class = None
+        else:
+            user_score_class = int(user_score)
 
         data["scores"].append(dict(
             name=u"Degree of Alignment",
             user_score=user_score,
+            user_score_class=user_score_class,
             average_score=average_score,
             average_score_class=average_score_class,
         ))
@@ -292,6 +303,7 @@ class Results(EvaluateViewMixin, TemplateView):
             data["scores"].append(dict(
                 name=rubric.name,
                 user_score=user_score,
+                user_score_class=user_score,
                 average_score=average_score,
                 average_score_class=average_score_class,
             ))
@@ -331,6 +343,9 @@ class Finalize(EvaluateViewMixin, View):
             object_id=self.object.id,
             user=request.user,
         ).update(confirmed=True)
+
+        if isinstance(self.object, Indexed):
+            self.object.reindex()
 
         return redirect("rubrics:evaluate_results",
             content_type_id=self.content_type.id,

@@ -26,7 +26,7 @@
                 {% if score.user_score == None %}
                   <span class="na">N/A</span>
                 {% else %}
-                  <span class="s{{ score.user_score }}">{{ score.user_score|floatformat }}</span>
+                  <span class="s{{ score.user_score_class }}">{{ score.user_score|floatformat }}</span>
                 {% endif %}
               </td>
               <td>

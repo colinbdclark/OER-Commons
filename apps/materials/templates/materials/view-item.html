@@ -306,10 +306,10 @@
                 <tr>
                   <td class="first">{{ score.name }}</td>
                   <td>
-                    {% if score.average_score == None %}
+                    {% if score.score == None %}
                       <span class="na">N/A</span>
                     {% else %}
-                      <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}/3</span>
+                      <span class="s{{ score.score_class }}">{{ score.score|floatformat }}/3</span>
                     {% endif %}
                   </td>
                 </tr>
