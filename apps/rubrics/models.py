@@ -1,8 +1,10 @@
+import re
 from curriculum.models import AlignmentTag
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from zope.cachedescriptors.property import Lazy
 
 
 SCORES = (
@@ -79,3 +81,64 @@ class StandardAlignmentScore(Score):
 
     score = models.ForeignKey(StandardAlignmentScoreValue)
     alignment_tag = models.ForeignKey(AlignmentTag)
+
+
+class EvaluatedItemMixin(object):
+
+    EVALUATION_SCORE_ATTRIBUTE_RE = re.compile(r"^evaluation_score_rubric_(\d)$")
+
+    @Lazy
+    def evaluations_number(self):
+        content_type = ContentType.objects.get_for_model(self)
+        user_ids = set()
+        for model in (StandardAlignmentScore, RubricScore):
+            user_ids.update(
+                model.objects.filter(
+                    content_type=content_type,
+                    object_id=self.pk,
+                    confirmed=True,
+                ).values_list("user__id", flat=True).distinct()
+            )
+        return len(user_ids)
+
+
+    @Lazy
+    def evaluation_scores(self):
+        scores = {}
+        content_type = ContentType.objects.get_for_model(self)
+        scores[0] = StandardAlignmentScore.objects.filter(
+            content_type=content_type,
+            object_id=self.pk,
+            confirmed=True,
+
+        ).aggregate(models.Avg("score__value"))["score__value__avg"]
+        for rubric in Rubric.objects.all():
+            scores[rubric.id] = RubricScore.objects.filter(
+                content_type=content_type,
+                object_id=self.pk,
+                confirmed=True,
+                rubric=rubric,
+
+            ).aggregate(models.Avg("score__value"))["score__value__avg"]
+        return scores
+
+    @property
+    def evaluated_rubrics(self):
+        return sorted([k for k, v in self.evaluation_scores.items() if v is not None])
+
+    def __getattr__(self, name):
+        r = self.EVALUATION_SCORE_ATTRIBUTE_RE.search(name)
+        if r:
+            rubric_id = int(r.groups()[0])
+            try:
+                return self.evaluation_scores[rubric_id]
+            except KeyError:
+                raise AttributeError()
+        return super(EvaluatedItemMixin, self).__getattr__(name)
+
+
+RUBRIC_CHOICES = [
+    (0, u"Degree of Alignment"),
+]
+
+RUBRIC_CHOICES += list(Rubric.objects.values_list("id", "name"))

@@ -15,7 +15,7 @@ from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
 from rating.models import Rating
 from reviews.models import Review
-from rubrics.models import StandardAlignmentScore, RubricScore
+from rubrics.models import StandardAlignmentScore, RubricScore, EvaluatedItemMixin
 from saveditems.models import SavedItem
 from tags.models import Tag
 from visitcounts.models import Visit
@@ -58,7 +58,7 @@ MEMBER_ACTIVITY_TYPES = (
 )
 
 
-class GenericMaterial(models.Model):
+class GenericMaterial(models.Model, EvaluatedItemMixin):
 
     created_on = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_(u"Created on"))
@@ -75,7 +75,7 @@ class GenericMaterial(models.Model):
         app_label = "materials"
 
 
-class Material(Indexed):
+class Material(Indexed, EvaluatedItemMixin):
 
     def __init__(self, *args, **kwargs):
         super(Material, self).__init__(*args, **kwargs)

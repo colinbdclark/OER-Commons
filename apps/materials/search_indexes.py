@@ -5,6 +5,7 @@ from haystack_scheduled.indexes import ScheduledSearchIndex
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
+from rubrics.indexes import EvaluatedItemIndex
 import re
 
 
@@ -51,7 +52,7 @@ class AlignmentTagsField(MultiValueField):
         return value.values_list("tag__id", flat=True).order_by().distinct()
 
 
-class MaterialSearchIndex(ScheduledSearchIndex):
+class MaterialSearchIndex(ScheduledSearchIndex, EvaluatedItemIndex):
 
     text = CharField(document=True, use_template=True)
     slug = CharField(model_attr="slug", stored=True, indexed=False)

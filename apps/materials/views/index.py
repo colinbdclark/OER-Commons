@@ -266,9 +266,6 @@ class IndexParams:
 def populate_item_from_search_result(result):
     item = result.get_stored_fields()
 
-    # TODO: is_evaluated should be a stored field
-    item["is_evaluated"] = result.object.is_evaluated
-
     item["identifier"] = "%s.%s.%s" % (result.app_label,
                                        result.model_name,
                                        result.pk)
@@ -295,6 +292,8 @@ def populate_item_from_search_result(result):
                 continue
             topics.append(topic)
         item["topics"] = topics
+
+    item["is_evaluated"] = bool(result.evaluated_rubrics)
 
     model = result.model
 
@@ -483,6 +482,8 @@ def index(request, general_subjects=None, grade_levels=None,
 
     if len(filter_values) == 1 and "featured" in filter_values:
         query = query.order_by("-featured_on")
+    elif len(filter_values) == 1 and "evaluated_rubrics" in filter_values:
+        query = query.order_by("-evaluation_score_rubric_%i" % filter_values["evaluated_rubrics"][0])
     elif index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
 

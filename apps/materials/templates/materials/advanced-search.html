@@ -18,7 +18,7 @@
     <p>Enter one or more Keywords then click the Search button.</p>
     <br/>
     <p>You may also refine your search further by choosing additional criteria
-    from the list below before clicking on Search</p> 
+    from the list below before clicking on Search</p>
   </section>
 {% endblock %}
 
@@ -76,23 +76,33 @@
       <h3>Additional Search Criteria</h3>
       <div id="align-form">
         <div class="field standard">
-           <div class="label"><label for="id_curriculum_standard">Curriculum Standard:</label></div>
-           <select name="standard" id="id_curriculum_standard" data-source="{% url curriculum:list_existing_standards %}">
-           </select>
+          <div class="label"><label for="id_curriculum_standard">Curriculum Standard:</label></div>
+          <select name="standard" id="id_curriculum_standard" data-source="{% url curriculum:list_existing_standards %}">
+          </select>
         </div>
         <div class="field grade">
-           <div class="label"><label for="id_curriculum_grade">Grade:</label></div>
-           <select name="grade" id="id_curriculum_grade" data-source="{% url curriculum:list_existing_grades %}"></select>
+          <div class="label"><label for="id_curriculum_grade">Grade:</label></div>
+          <select name="grade" id="id_curriculum_grade" data-source="{% url curriculum:list_existing_grades %}"></select>
         </div>
         <div class="field category">
-           <div class="label"><label for="id_curriculum_category">Learning Objective Category:</label></div>
-           <select name="category" id="id_curriculum_category" data-source="{% url curriculum:list_existing_categories %}"></select>
+          <div class="label"><label for="id_curriculum_category">Learning Objective Category:</label></div>
+          <select name="category" id="id_curriculum_category" data-source="{% url curriculum:list_existing_categories %}"></select>
         </div>
         <div class="field tag">
-           <div class="label"><label for="id_curriculum_tag">Alignment Tag:</label></div>
-           <select name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_existing_tags %}"></select>
+          <div class="label"><label for="id_curriculum_tag">Alignment Tag:</label></div>
+          <select name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_existing_tags %}"></select>
         </div>
         <input type="hidden" name="f.alignment" value="" />
+      </div>
+      <div class="rubric">
+        <div class="field">
+          <div class="label"><label for="id_rubric">Resource Evaluation Criteria:</label></div>
+          <select name="f.rubric" id="id_rubric">
+            {% for rubric in rubrics %}
+              <option value="{{ rubric.id }}">{{ rubric.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
       <div class="languages">
         {% with filters.languages as filter %}
@@ -128,7 +138,7 @@
           </dl>
           {% endif %}
         {% endwith %}
-        
+
         {% with filters.course_material_types as filter %}
           {% if filter.options %}
           <dl class="filter clearfix collapsible">
@@ -194,7 +204,7 @@
           </dl>
           {% endif %}
         {% endwith %}
-        
+
        </td>
        <td width="50%">
 
@@ -322,7 +332,7 @@
             </dl>
             {% endif %}
           {% endwith %}
-              
+
           {% with filters.community_topics as filter %}
             {% if filter.options %}
             <dl class="filter clearfix collapsible">
@@ -344,13 +354,13 @@
             </dl>
             {% endif %}
           {% endwith %}
-              
+
         </td>
         </tr></tbody></table>
         <div class="buttons">
           <input type="image" src="{{ STATIC_URL }}images/search-btn.png" />
         </div>
       </div>
-    </form>    
-    
+    </form>
+
 {% endblock %}

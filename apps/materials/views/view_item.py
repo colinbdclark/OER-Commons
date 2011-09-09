@@ -7,6 +7,7 @@ from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.material import WORKFLOW_TRANSITIONS, PUBLISHED_STATE
 from materials.models.microsite import Microsite
+from materials.utils import get_name_from_id
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
@@ -223,57 +224,19 @@ def view_item(request, slug=None, model=None):
                                    kwargs=dict(slug=item.slug))
 
     # Evaluation scores
-    evaluations_number = 0
+    evaluations_number = item.evaluations_number
     evaluation_scores = []
 
-    alignment_scores = StandardAlignmentScore.objects.filter(
-        content_type=content_type,
-        object_id=item.id,
-        confirmed=True,
-    )
-
-    evaluations_number = len(alignment_scores.values_list("user__id", flat=True).distinct())
-
-    average_score = alignment_scores.aggregate(
-        Avg("score__value")
-    )["score__value__avg"]
-    if average_score is None:
-        average_score_class = None
-    else:
-        average_score_class = int(average_score)
-
-    evaluation_scores.append(dict(
-        name=u"Degree of Alignment",
-        average_score=average_score,
-        average_score_class=average_score_class,
-    ))
-
-    rubric_scores = RubricScore.objects.filter(
-        content_type=content_type,
-        object_id=item.id,
-        confirmed=True,
-    )
-    for rubric in Rubric.objects.all():
-        scores = rubric_scores.filter(rubric=rubric)
-        evaluations_number = max(
-            evaluations_number,
-            len(scores.values_list("user__id", flat=True).distinct())
-        )
-
-        average_score =scores.aggregate(
-            Avg("score__value")
-        )["score__value__avg"]
-
-        if average_score is None:
-            average_score_class = None
+    for rubric_id, score in sorted(item.evaluation_scores.items()):
+        if rubric_id == 0:
+            name = u"Degree of Alignment"
         else:
-            average_score_class = int(average_score)
-
-        evaluation_scores.append(dict(
-            name=rubric.name,
-            average_score=average_score,
-            average_score_class=average_score_class,
-        ))
+            name = get_name_from_id(Rubric, rubric_id)
+        if score is None:
+            score_class = None
+        else:
+            score_class = int(score)
+        evaluation_scores.append(dict(name=name, score=score, score_class=score_class))
 
     Visit.objects.count(request, item)
 
