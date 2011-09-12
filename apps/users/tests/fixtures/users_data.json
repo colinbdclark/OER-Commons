@@ -19,6 +19,39 @@
     },
     {
         "pk": 1,
+        "model": "users.profile",
+        "fields": {
+            "educator_student_levels": [],
+            "principal_id": "",
+            "about_me": "Test about text.",
+            "biography": "",
+            "grade_level": [],
+            "publish_profile": false,
+            "institution": "",
+            "state": "",
+            "role": "",
+            "facebook_id": "testfacebook",
+            "department": "",
+            "homepage": "",
+            "publish_portfolio": false,
+            "website_url": "",
+            "hide_avatar": false,
+            "user": 1,
+            "why_interested": "",
+            "skype_id": "testskype",
+            "connect_with": "world",
+            "institution_url": "",
+            "roles": [10],
+            "educator_subjects": [],
+            "country": 177,
+            "twitter_id": "testtwitter",
+            "specializations": "",
+            "avatar": "",
+            "us_state": null
+        }
+    },
+    {
+        "pk": 1,
         "model": "users.registrationconfirmation",
         "fields": {
             "user": 1,
@@ -53,6 +86,17 @@
             "key": "rVqGu5SWnBvSLuRP9N8d",
             "confirmed": false,
             "timestamp": "2011-06-20 01:48:20"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "geo.countryipdiapason",
+        "fields": {
+          "country": [
+            "US"
+          ],
+          "start": 3512040160,
+          "end": 3512139775
         }
     }
 ]

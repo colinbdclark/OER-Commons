@@ -14,7 +14,7 @@ from users.tests.utils import TestDataGenerator
 
 class InitResetPasswordFormTest(TestCase, TestDataGenerator):
 
-    fixtures = ['users_test_data.json']
+    fixtures = ['users_data.json']
 
     def test_success_with_email(self):
         # Test that form is valid with correct email.
@@ -92,7 +92,7 @@ class ResetPasswordFormTest(TestCase, TestDataGenerator):
 
 class InitViewTest(TestCase, TestDataGenerator):
 
-    fixtures = ['users_test_data.json']
+    fixtures = ['users_data.json']
 
     def setUp(self):
         self.reset_password_init = reverse('users:reset_password_init')
@@ -155,7 +155,7 @@ class InitViewTest(TestCase, TestDataGenerator):
 
 class ResetPasswordViewTest(TestCase, TestDataGenerator):
 
-    fixtures = ['users_test_data.json']
+    fixtures = ['users_data.json']
 
     def setUp(self):
         user = User.objects.get(username='testuser')

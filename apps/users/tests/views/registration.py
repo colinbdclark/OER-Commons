@@ -48,7 +48,7 @@ class RegistrationFormTest(TestCase, TestDataGenerator):
 
 class ConfirmationFormTest(TestCase):
 
-    fixtures = ['users_test_data.json']
+    fixtures = ['users_data.json']
 
     def setUp(self):
         user = User.objects.get(username='testuser')
@@ -90,7 +90,7 @@ class ConfirmationFormTest(TestCase):
 
 class RegistrationViewTest(TestCase, TestDataGenerator):
 
-    fixtures = ['users_test_data.json']
+    fixtures = ['users_data.json']
 
     def setUp(self):
         self.honeypot_field = settings.HONEYPOT_FIELD_NAME
@@ -239,7 +239,7 @@ class RegistrationViewTest(TestCase, TestDataGenerator):
 
 class ResendViewTest(TestCase):
 
-    fixtures = ['users_test_data.json']
+    fixtures = ['users_data.json']
 
     def setUp(self):
         self.resend_confirmation = reverse('users:registration_resend')
@@ -293,7 +293,7 @@ class ResendViewTest(TestCase):
 
 class ConfirmViewTest(TestCase):
 
-    fixtures = ['users_test_data.json']
+    fixtures = ['users_data.json']
 
     def setUp(self):
         email = 'joanna@example.com'

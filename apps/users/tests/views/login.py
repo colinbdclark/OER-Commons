@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 
 class LoginViewTest(TestCase):
 
-    fixtures = ['users_test_data.json']
+    fixtures = ['users_data.json']
 
     def test_login(self):
         # Test log in with new user account
