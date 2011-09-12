@@ -119,7 +119,7 @@ def view_item(request, slug=None, model=None):
 
     for topic in item.topics():
         tag = {"class": "topic", "slug": topic.slug, "name": topic.name,
-               "microsite": topic.microsite.slug, "other": topic.other}
+               "microsite": topic.microsite, "other": topic.other}
         tags_slugs.add(tag["slug"])
         tags.append(tag)
 
@@ -157,7 +157,7 @@ def view_item(request, slug=None, model=None):
         index_path = filters.pop("index_path", None)
         if index_path and isinstance(index_path, list):
             index_path = index_path[0]
-            
+
     if index_path:
         try:
             kwargs = resolve(index_path)[2]
