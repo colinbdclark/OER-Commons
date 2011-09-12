@@ -19,6 +19,25 @@ oer.materials.index.init_action_panel = function() {
 
 };
 
+oer.materials.index.disable_unecessary_filters = function($form) {
+    var disabled_filters = [];
+    $form.find("dl.filter").each(function() {
+        var $filter = $(this);
+        if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
+            var $checkbox = $filter.find(":checkbox");
+            $checkbox.attr("disabled", "disabled");
+            disabled_filters.push($checkbox);
+        }
+    });
+    var $search_filter = $form.find("input[name='f.search']");
+    if ($search_filter.val() === "") {
+        $search_filter.attr("disabled", "disabled");
+        disabled_filters.push($search_filter);
+    }
+
+    return disabled_filters;
+};
+
 oer.materials.index.init_filters = function() {
     var $filters_portlet = $("section.portlet.index-filters");
     var $form = $filters_portlet.find("form[name='index-filters']");
@@ -30,15 +49,7 @@ oer.materials.index.init_filters = function() {
     });
 
     $form.submit(function() {
-        $form.find("dl.filter").each(function() {
-            var $filter = $(this);
-            if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
-                $filter.find(":checkbox").attr("disabled", true);
-            }
-        });
-        if ($form.find("input[name='f.search']").val() === "") {
-            $form.find("input[name='f.search']").attr("disabled", true);
-        }
+        oer.materials.index.disable_unecessary_filters($form);
     });
 
     $form.delegate("dl.filter dd :checkbox", "click", function() {
@@ -79,11 +90,10 @@ oer.materials.index.init_top_keywords = function() {
 oer.materials.index.init_item_links = function() {
     var $filters_portlet = $("section.portlet.index-filters");
     var $form = $filters_portlet.find("form[name='index-filters']");
-    $("#content div.materials-index").delegate("h1 a", "click", function(e) {
-        e.preventDefault();
-        $form.attr("action", $(this).attr("href")).attr("method", "post");
+    $("#content div.materials-index").delegate("h1 a", "click", function() {
+        oer.materials.index.disable_unecessary_filters($form);
         $form.find("input[name='index_path']").attr("disabled", false);
-        $form.submit();
+        $.cookie("_i", $form.serialize(), {path: "/"});
     });
 };
 
@@ -151,7 +161,6 @@ oer.materials.index.init_tags_form = function() {
             $form.attr("action", $this.attr("href"));
             $input.val("");
             $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
-                var item_tags = data.tags;
                 var user_tags = data.user_tags;
                 $.each(user_tags, function(index, tag) {
                     $.tmpl("user-tags-item", tag).appendTo($user_tags);
@@ -175,10 +184,10 @@ oer.materials.index.init_align_form = function() {
     });
 
     var $document = $(document);
-    $document.bind(oer.align_form.LOADING_EVENT, function(e) {
+    $document.bind(oer.align_form.LOADING_EVENT, function() {
         $dialog.dialog("widget").addClass("loading");
     });
-    $document.bind(oer.align_form.LOADED_EVENT, function(e) {
+    $document.bind(oer.align_form.LOADED_EVENT, function() {
         $dialog.dialog("widget").removeClass("loading");
     });
 
@@ -194,7 +203,7 @@ oer.materials.index.init_align_form = function() {
         var $menu = $this.closest("dl.actions");
         $menu.removeClass("active");
         var $item = $this.closest("article.item");
-        
+
         oer.login.check_login(function() {
             $form.hide();
             $form.attr("action", $this.attr("href"));
