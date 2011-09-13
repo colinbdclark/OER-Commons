@@ -186,7 +186,7 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
 PATH_FILTERS = ["general_subjects", "grade_levels", "course_material_types",
                 "library_material_types", "collection", "keywords", "license",
                 "course_or_module", "community_types",
-                "community_topics", "microsite", "topics"]
+                "community_topics", "microsite", "topics", "alignment"]
 
 
 class IndexParams:
@@ -269,7 +269,7 @@ def populate_item_from_search_result(result):
     item["identifier"] = "%s.%s.%s" % (result.app_label,
                                        result.model_name,
                                        result.pk)
-    
+
     if item.get("collection"):
         collection_id = item["collection"]
         item["collection"] = {"name": get_name_from_id(Collection,
@@ -294,7 +294,7 @@ def populate_item_from_search_result(result):
         item["topics"] = topics
 
     model = result.model
-    
+
     namespace = getattr(model, "namespace", None)
     if namespace:
         item["get_absolute_url"] = reverse(
@@ -317,6 +317,11 @@ def populate_item_from_search_result(result):
         item["toolbar_view_url"] = reverse(
                                "materials:%s:toolbar_view_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
+        item["align_url"] = reverse("curriculum:align", args=(
+                                    result.app_label,
+                                    result.model_name,
+                                    result.pk,
+                                ))
     else:
         item["get_absolute_url"] = result.object.get_absolute_url()
     return item
@@ -327,7 +332,7 @@ def index(request, general_subjects=None, grade_levels=None,
           collection=None, keywords=None, license=None, course_or_module=None,
           community_types=None, community_topics=None, microsite=None,
           model=None, search=False, tags=None, subjects=None, format=None,
-          topics=None, facet_fields=None):
+          topics=None, alignment=None, facet_fields=None):
 
     if not facet_fields: facet_fields = ["general_subjects", "grade_levels",
                                          "keywords",
@@ -465,7 +470,7 @@ def index(request, general_subjects=None, grade_levels=None,
         index_title = u"%s: %s" % (page_title, page_subtitle)
     else:
         index_title = page_title
-    
+
     feed_url = request.path + serialize_query_string_params(dict(query_string_params.items() + [("feed", "yes")]),
                                              ignore_params=["batch_start"])
     csv_url = request.path + serialize_query_string_params(dict(query_string_params.items() + [("csv", "yes")]),
@@ -477,7 +482,7 @@ def index(request, general_subjects=None, grade_levels=None,
         query = query.order_by("-featured_on")
     elif index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
-        
+
     if index_params.sort_by == "visits" and not filter_values:
         query = query.narrow("visits:[1 TO *]")
 
@@ -489,12 +494,14 @@ def index(request, general_subjects=None, grade_levels=None,
             query = query.facet(facet_field)
 
         total_items = len(query)
-        
+
         if total_items and index_params.batch_start >= total_items:
             return HttpResponsePermanentRedirect(index_url)
 
         results = query[index_params.batch_start:batch_end]
         for result in results:
+            if result is None:
+                continue
             items.append(populate_item_from_search_result(result))
 
         pagination = Pagination(request.path, query_string_params,
@@ -535,6 +542,8 @@ def index(request, general_subjects=None, grade_levels=None,
     elif format == "rss":
         results = query[0:20]
         for result in results:
+            if result is None:
+                continue
             item = result.get_stored_fields()
             if item.get("general_subjects"):
                 item["general_subjects"] = [get_name_from_id(
@@ -559,6 +568,8 @@ def index(request, general_subjects=None, grade_levels=None,
         results = query[index_params.batch_start:batch_end]
 
         for result in results:
+            if result is None:
+                continue
             data = result.get_stored_fields()
             item = {"id": result.id,
                     "title": data["title"],
@@ -574,22 +585,24 @@ def index(request, general_subjects=None, grade_levels=None,
             items.append(item)
 
         return JsonResponse(items)
-        
+
     elif format == "xml":
         query = query.load_all()
         results = query[index_params.batch_start:batch_end]
-        
+
         for result in results:
+            if result is None:
+                continue
             object = result.object
             data = result.get_stored_fields()
             item = {"url": data["url"],
                     "title": data["title"]}
             if data.get("authors"):
-                item["author"] = data["authors"][0] 
+                item["author"] = data["authors"][0]
             if data.get("institution"):
                 item["institution"] = get_name_from_id(Institution, data["institution"])
             item["abstract"] = data["abstract"]
-            
+
             license = object.license
             item["copyright_holder"] = license.copyright_holder
             item["license_url"] = license.url
@@ -597,10 +610,10 @@ def index(request, general_subjects=None, grade_levels=None,
             item["license_description"] = license.description
             item["license_type"] = license.type
             item["cou_bucket"] = license.bucket
-            
+
             if data["rating"]:
                 item["rating"] = '%.1f' % data["rating"]
-            
+
             item["fields"] = []
             grade_levels = data.get("grade_levels")
             if grade_levels:
@@ -630,7 +643,7 @@ def index(request, general_subjects=None, grade_levels=None,
                                            value=u",".join([get_slug_from_id(GeographicRelevance, id) for id in geographic_relevance]),
                                            content=u",".join([get_name_from_id(GeographicRelevance, id) for id in geographic_relevance])
                                            ))
-            
+
             keywords = object.keywords.values("slug", "name")
             if keywords:
                 item["fields"].append(dict(title=u"Keywords",
@@ -638,7 +651,7 @@ def index(request, general_subjects=None, grade_levels=None,
                                            value=u",".join([k["slug"] for k in keywords]),
                                            content=u",".join([k["name"] for k in keywords]),
                                            ))
-                
+
 
             tags = object.tags.values("slug", "name").order_by("slug").distinct()
             if tags:
@@ -647,7 +660,7 @@ def index(request, general_subjects=None, grade_levels=None,
                                            value=u",".join([k["slug"] for k in tags]),
                                            content=u",".join([k["name"] for k in tags]),
                                            ))
-            
+
             items.append(item)
 
         return direct_to_template(request, "materials/index-xml.xml", locals(),

@@ -1,4 +1,4 @@
-from annoying.decorators import ajax_request
+from annoying.decorators import ajax_request, JsonResponse
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
@@ -47,9 +47,8 @@ def profile_edit(request):
                 return redirect("users:profile_geography")
             if not profile.roles.exists():
                 return redirect("users:profile_roles")
-            if profile.roles.filter(is_educator=True).exists() and (not profile\
-            .educator_student_levels.exists() or not profile.educator_subjects\
-            .exists()):
+            if profile.roles.filter(is_educator=True).exists() and \
+               (not profile.educator_student_levels.exists() or not profile.educator_subjects.exists()):
                 return redirect("users:profile_roles")
             if not all([profile.about_me, profile.website_url,
                         profile.facebook_id, profile.twitter_id,
@@ -64,27 +63,27 @@ def profile_edit(request):
     change_password_form = ChangePasswordForm()
 
     if request.method == "POST":
-        
+
         if "user-info" in request.POST:
             user_info_form = UserInfoForm(request.POST, instance=user)
-            
+
             if user_info_form.is_valid():
                 user_info_form.save()
-                
+
                 if request.is_ajax():
                     return ajax_form_success(user_info_form.success_mesage)
-                
+
                 return redirect("users:profile_geography")
-                
+
             else:
                 if request.is_ajax():
                     return ajax_form_error(user_info_form, user_info_form.error_message)
-                
+
                 messages.error(request, user_info_form.error_message)
-                    
+
         elif "change-password" in request.POST:
             change_password_form = ChangePasswordForm(request.POST, instance=user)
-            
+
             if change_password_form.is_valid():
                 change_password_form.save()
                 body = render_to_string("users/emails/change-password.html",
@@ -95,18 +94,18 @@ def profile_edit(request):
                                        body, to=[user.email])
                 message.content_subtype = "html"
                 message.send()
-                
+
                 if request.is_ajax():
                     return ajax_form_success(change_password_form.success_message)
-                
+
                 messages.success(request, change_password_form.success_message)
                 change_password_form = ChangePasswordForm()
-                
+
             else:
                 if request.is_ajax():
                     return ajax_form_error(change_password_form,
                                            change_password_form.error_message)
-                    
+
                 messages.error(request, change_password_form.error_message)
 
     return direct_to_template(request, "users/profile-edit.html", locals())
@@ -143,7 +142,6 @@ def avatar_update(request):
 
     else:
         response["message"] = form.errors["file"][0]
-        return response
 
     # We don't use application/json content type here because IE misinterprets it.
     return HttpResponse(json.dumps(response))
@@ -183,7 +181,7 @@ def geography(request):
         ip = request.META.get("REMOTE_ADDR", None)
         if ip:
             country = CountryIPDiapason.objects.get_country_by_ip(ip)
-            
+
     initial = {"country": country, "us_state": profile.us_state}
 
     is_US = country and country.code == "US"
@@ -196,13 +194,13 @@ def geography(request):
             form.save()
             if request.is_ajax():
                 return ajax_form_success(form.success_message)
-            
+
             return redirect("users:profile_roles")
-        
+
         else:
             if request.is_ajax():
                 return ajax_form_error(form, form.error_message)
-            
+
             messages.error(request, form.error_message)
 
     return direct_to_template(request, "users/profile-geography.html", locals())
@@ -227,13 +225,13 @@ def roles(request):
             form.save()
             if request.is_ajax():
                 return ajax_form_success(form.success_message)
-            
+
             return redirect("users:profile_about")
-        
+
         else:
             if request.is_ajax():
                 return ajax_form_error(form, form.error_message)
-            
+
             messages.error(request, form.error_message)
 
     return direct_to_template(request, "users/profile-roles.html", locals())
@@ -257,13 +255,13 @@ def about(request):
             form.save()
             if request.is_ajax():
                 return ajax_form_success(form.success_message)
-            
+
             return redirect("users:profile")
-        
+
         else:
             if request.is_ajax():
                 return ajax_form_error(form, form.error_message)
-            
+
             messages.error(request, form.error_message)
 
     return direct_to_template(request, "users/profile-about.html", locals())

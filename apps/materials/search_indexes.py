@@ -1,7 +1,7 @@
 from haystack import site
 from haystack.fields import CharField, MultiValueField, IntegerField, \
     BooleanField, DateTimeField, FloatField
-from haystack.indexes import SearchIndex
+from haystack_scheduled.indexes import ScheduledSearchIndex
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
@@ -43,7 +43,15 @@ class ByField(MultiValueField):
         return value.values_list("user__id", flat=True)
 
 
-class MaterialSearchIndex(SearchIndex):
+class AlignmentTagsField(MultiValueField):
+
+    def convert(self, value):
+        if isinstance(value, list):
+            return list(set(value))
+        return value.values_list("tag__id", flat=True).order_by().distinct()
+
+
+class MaterialSearchIndex(ScheduledSearchIndex):
 
     text = CharField(document=True, use_template=True)
     slug = CharField(model_attr="slug", stored=True, indexed=False)
@@ -72,8 +80,10 @@ class MaterialSearchIndex(SearchIndex):
 
     workflow_state = CharField(model_attr="workflow_state")
     is_displayed = BooleanField(model_attr="is_displayed")
-    
+
     visits = IntegerField(model_attr="visits")
+
+    alignment_tags = AlignmentTagsField(model_attr="alignment_tags")
 
 
 class CourseIndex(MaterialSearchIndex):
@@ -96,9 +106,6 @@ class CourseIndex(MaterialSearchIndex):
 
     course_or_module = CharField(model_attr="course_or_module")
 
-    def get_queryset(self):
-        return Course.objects.all()
-
 
 class LibraryIndex(MaterialSearchIndex):
 
@@ -118,9 +125,6 @@ class LibraryIndex(MaterialSearchIndex):
     languages = VocabularyMultiValueField(model_attr="languages")
     geographic_relevance = VocabularyMultiValueField(model_attr="geographic_relevance")
 
-    def get_queryset(self):
-        return Library.objects.all()
-
 
 class CommunityItemIndex(MaterialSearchIndex):
 
@@ -135,9 +139,6 @@ class CommunityItemIndex(MaterialSearchIndex):
     community_topics = VocabularyMultiValueField(model_attr="community_topics")
     languages = VocabularyMultiValueField(model_attr="languages")
     geographic_relevance = VocabularyMultiValueField(model_attr="geographic_relevance")
-
-    def get_queryset(self):
-        return CommunityItem.objects.all()
 
 
 site.register(Course, CourseIndex)

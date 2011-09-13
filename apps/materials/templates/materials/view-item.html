@@ -5,6 +5,7 @@
 {% load tags_tags %}
 {% load flatblock_tags %}
 {% load thumbnail %}
+{% load curriculum_tags %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -14,6 +15,7 @@
       oer.materials.view_item.init();
       oer.send_this.init();
       oer.tags_portlet.init();
+      oer.align_tags_portlet.init();
       oer.tags_form.init();
       oer.rating.init();
       {% if content_actions or workflow_actions %}
@@ -96,7 +98,7 @@
     {% cou_bucket item.license.bucket %}
   </div>
   {% endif %}
-  
+
   <div class="details">
     <h1 itemprop="name">
       {% if request.preferences.show_toolbar %}
@@ -124,7 +126,7 @@
       <dt>Author:</dt>
       <dd>
         {% for author in item.authors.all %}
-          <span itemprop="author">{{ author }}</span>{% if not forloop.last %},{% endif %}  
+          <span itemprop="author">{{ author }}</span>{% if not forloop.last %},{% endif %}
         {% endfor %}
       </dd>
       {% endif %}
@@ -151,7 +153,7 @@
       <dd>{{ item.grade_levels.all|join:", " }}</dd>
       {% endif %}
     </dl>
-    
+
     <dl>
       <dt>Abstract:</dt>
       <dd itemprop="description">{{ item.abstract|linebreaks }}</dd>
@@ -172,7 +174,7 @@
       <dt>Material Type:</dt>
       <dd>{{ item.material_types.all|join:", " }}</dd>
       {% endif %}
-      
+
       {% if item.media_formats.all.count %}
       <dt>Media Format:</dt>
       <dd>{{ item.media_formats.all|join:", " }}</dd>
@@ -192,13 +194,13 @@
       <dt>Content Type:</dt>
       <dd>{{ item.community_types.all|join:", " }}</dd>
       {% endif %}
-      
+
       {% if item.community_topics.all.count %}
       <dt>Content Topic:</dt>
       <dd>{{ item.community_topics.all|join:", " }}</dd>
       {% endif %}
     </dl>
-    
+
     <dl class="license">
       {% if item.license %}
         {% with item.license as license %}
@@ -222,10 +224,9 @@
   </div>
 
   <div class="align-right">
-    <a {% if request.preferences.show_toolbar %}href="{{ toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
+    <a id="goto" {% if request.preferences.show_toolbar %}href="{{ toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
        class="button-blue-big rc5">Go to OER Item</a>
   </div>
-
 
   <div class="reviews">
     {% with item.reviews.all as reviews %}
@@ -250,13 +251,13 @@
       <span itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
         <span itemprop="reviewRating" itemscope="itemscope" itemtype="http://schema.org/Rating">
            <meta itemprop="ratingValue" content="{{ rating.value }}" />
-           <meta itemprop="bestRating" content="5" />      
+           <meta itemprop="bestRating" content="5" />
         </span>
       </span>
     {% endfor %}
 
   </div>
-  
+
 
 </article>
 
@@ -270,11 +271,10 @@
 
 {% block column-right %}
   <section class="portlet dotted save">
-    {% if save_url %}
-      <a href="{{ save_url }}" class="require-login save">Add to My Items</a>
-    {% endif %}
-    {% if unsave_url %}
+    {% if saved %}
       <a href="{{ unsave_url }}" class="require-login">Remove from My Items</a>
+    {% else %}
+      <a href="{{ save_url }}" class="require-login save">Add to My Items</a>
     {% endif %}
   </section>
 
@@ -285,6 +285,8 @@
       <a href="{{ add_review_url }}" class="button-blue-big rc5 require-login with-next-url">Write a Review</a>
     </div>
   </section>
+
+  {% align_item_tags_portlet item %}
 
   <section class="portlet addthis dotted">
     <h1>Share</h1>
@@ -320,13 +322,13 @@
     <ul class="user-tags">
       {% for tag in user_tags %}
         <li class="rc3 tag" data-id="{{ tag.id }}">
-          <a href="#" class="delete">x</a>
           <a href="{% url materials:keyword_index keywords=tag.slug %}">{{ tag.name }}</a>
+          <a href="#" class="delete">x</a>
         </li>
       {% endfor %}
     </ul>
 
-    <form action="{% url tags:add_tags content_type.app_label,content_type.model,item.id %}"
+    <form action="{{ add_tags_url }}"
           method="post" id="add-tags-form" name="add-tags-form">
       <label for="id_tags">Add new tag:</label>
       <input type="text" name="tags" id="id_tags" value="" class="text" />

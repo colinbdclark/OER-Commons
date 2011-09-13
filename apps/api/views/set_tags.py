@@ -3,7 +3,7 @@ from api.decorators import api_method
 from api.utils import get_object
 from django import forms
 from django.contrib.contenttypes.models import ContentType
-from haystack.sites import site
+from haystack_scheduled.indexes import Indexed
 from oauth_provider.decorators import oauth_required
 from tags.models import Tag
 
@@ -24,7 +24,7 @@ class TagsField(forms.Field):
 
 class TagsForm(forms.Form):
 
-    tags = TagsField(required=True)
+    tags = TagsField()
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop("instance", None)
@@ -39,14 +39,15 @@ class TagsForm(forms.Form):
         existing_tags = Tag.objects.filter(user=self.user,
                                            content_type=content_type,
                                            object_id=object_id)
-        
+
         existing_tag_names = existing_tags.values_list("name", flat=True)
         for tag in self.cleaned_data["tags"]:
             if tag not in existing_tag_names:
                 Tag(content_type=content_type, object_id=object_id,
                     user=self.user, name=tag).save()
 
-        site.update_object(self.instance)
+        if isinstance(self.instance, Indexed):
+            self.instance.reindex()
 
 
 @oauth_required

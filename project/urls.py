@@ -43,6 +43,7 @@ urlpatterns = patterns('',
     url(r'', include('tags.urls', app_name=None, namespace="tags")),
     url(r'', include('rating.urls', app_name=None, namespace="rating")),
     url(r'', include('preferences.urls', app_name=None, namespace="preferences")),
+    url(r'', include('curriculum.urls', app_name=None, namespace="curriculum")),
     url(r'^my', include('myitems.urls', app_name=None, namespace="myitems")), # TODO! Set up redirect /portfolio -> /my
     url(r'^savedsearches', include('savedsearches.urls', app_name=None, namespace="savedsearches")),
     url(r'^oauth/', include('oauth_provider.urls')),

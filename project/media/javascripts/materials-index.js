@@ -19,6 +19,25 @@ oer.materials.index.init_action_panel = function() {
 
 };
 
+oer.materials.index.disable_unecessary_filters = function($form) {
+    var disabled_filters = [];
+    $form.find("dl.filter").each(function() {
+        var $filter = $(this);
+        if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
+            var $checkbox = $filter.find(":checkbox");
+            $checkbox.attr("disabled", "disabled");
+            disabled_filters.push($checkbox);
+        }
+    });
+    var $search_filter = $form.find("input[name='f.search']");
+    if ($search_filter.val() === "") {
+        $search_filter.attr("disabled", "disabled");
+        disabled_filters.push($search_filter);
+    }
+
+    return disabled_filters;
+};
+
 oer.materials.index.init_filters = function() {
     var $filters_portlet = $("section.portlet.index-filters");
     var $form = $filters_portlet.find("form[name='index-filters']");
@@ -30,15 +49,7 @@ oer.materials.index.init_filters = function() {
     });
 
     $form.submit(function() {
-        $form.find("dl.filter").each(function() {
-            var $filter = $(this);
-            if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
-                $filter.find(":checkbox").attr("disabled", true);
-            }
-        });
-        if ($form.find("input[name='f.search']").val() === "") {
-            $form.find("input[name='f.search']").attr("disabled", true);
-        }
+        oer.materials.index.disable_unecessary_filters($form);
     });
 
     $form.delegate("dl.filter dd :checkbox", "click", function() {
@@ -79,11 +90,10 @@ oer.materials.index.init_top_keywords = function() {
 oer.materials.index.init_item_links = function() {
     var $filters_portlet = $("section.portlet.index-filters");
     var $form = $filters_portlet.find("form[name='index-filters']");
-    $("#content div.materials-index").delegate("h1 a", "click", function(e) {
-        e.preventDefault();
-        $form.attr("action", $(this).attr("href")).attr("method", "post");
+    $("#content div.materials-index").delegate("h1 a", "click", function() {
+        oer.materials.index.disable_unecessary_filters($form);
         $form.find("input[name='index_path']").attr("disabled", false);
-        $form.submit();
+        $.cookie("_i", $form.serialize(), {path: "/"});
     });
 };
 
@@ -150,8 +160,7 @@ oer.materials.index.init_tags_form = function() {
             $user_tags.empty();
             $form.attr("action", $this.attr("href"));
             $input.val("");
-            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/"), function(data) {
-                var item_tags = data.tags;
+            $.getJSON($form.attr("action").replace("/tags/add/", "/tags/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
                 var user_tags = data.user_tags;
                 $.each(user_tags, function(index, tag) {
                     $.tmpl("user-tags-item", tag).appendTo($user_tags);
@@ -165,6 +174,60 @@ oer.materials.index.init_tags_form = function() {
     oer.tags_form.init();
 };
 
+oer.materials.index.init_align_form = function() {
+    var $dialog = $("#align-dialog").dialog({
+    modal : true,
+    width : "650",
+    height : "auto",
+    autoOpen : false,
+    resizable : false
+    });
+
+    var $document = $(document);
+    $document.bind(oer.align_form.LOADING_EVENT, function() {
+        $dialog.dialog("widget").addClass("loading");
+    });
+    $document.bind(oer.align_form.LOADED_EVENT, function() {
+        $dialog.dialog("widget").removeClass("loading");
+    });
+
+    var $form = $("#align-form");
+    var $user_tags = $("ul.align-user-tags");
+
+    oer.align_form.init_user_tags($user_tags, $form);
+
+    var $materials_index = $("#content div.materials-index");
+    $materials_index.delegate("dl.actions a.align-item", "click", function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $menu = $this.closest("dl.actions");
+        $menu.removeClass("active");
+        var $item = $this.closest("article.item");
+
+        oer.login.check_login(function() {
+            $form.hide();
+            $form.attr("action", $this.attr("href"));
+            var initialized = !!$form.find("#id_curriculum_standard option").length;
+            if (initialized) {
+                oer.align_form.reset();
+            } else {
+                oer.align_form.init();
+            }
+            $user_tags.empty();
+            $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
+                $.each(data.tags, function(index, tag) {
+                    var $tags = $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
+                    oer.align_form.init_tag_tooltip($tags.find("a:first"));
+                });
+                $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
+                $form.show();
+            });
+            $dialog.dialog("option", "title", "Align " + $item.find("h1 a").first().text());
+            $dialog.dialog("open");
+        });
+    });
+};
+
 oer.materials.index.init = function() {
 
     oer.materials.index.init_action_panel();
@@ -173,6 +236,7 @@ oer.materials.index.init = function() {
     oer.materials.index.init_item_links();
     oer.materials.index.init_actions_menus();
     oer.materials.index.init_tags_form();
+    oer.materials.index.init_align_form();
 
     var $filters_portlet = $("section.portlet.index-filters");
 

@@ -32,7 +32,7 @@ def microsite(request, microsite):
     for result in results:
         items.append(populate_item_from_search_result(result))
 
-    facets = query.facet_counts()["fields"] 
+    facets = query.facet_counts()["fields"]
 
     topics = []
     topic_counts = dict(facets["indexed_topics"])
@@ -63,10 +63,10 @@ def microsite(request, microsite):
         keyword["name"] = name
 
     featured_k12 = SearchQuerySet().filter(workflow_state=PUBLISHED_STATE, featured=True, grade_levels__in=(1, 2), microsites=microsite.id).order_by("-featured_on").load_all()[:3]
-    featured_k12 = [r.object for r in featured_k12]
+    featured_k12 = [r.object for r in featured_k12 if r]
 
     featured_highered = SearchQuerySet().filter(workflow_state=PUBLISHED_STATE, featured=True, grade_levels=3, microsites=microsite.id).order_by("-featured_on").load_all()[:3]
-    featured_highered = [r.object for r in featured_highered]
+    featured_highered = [r.object for r in featured_highered if r]
 
     slides = Slide.objects.filter(microsite=microsite)
 

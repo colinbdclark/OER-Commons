@@ -67,9 +67,16 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'geo.country': {
+            'Meta': {'ordering': "('name',)", 'object_name': 'Country'},
+            'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '2', 'db_index': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+        },
         'materials.author': {
             'Meta': {'ordering': "('name',)", 'object_name': 'Author'},
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['materials.Country']", 'null': 'True', 'blank': 'True'}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geo.Country']", 'null': 'True', 'blank': 'True'}),
             'email': ('django.db.models.fields.EmailField', [], {'default': "u''", 'max_length': '500', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '500'})
@@ -121,12 +128,6 @@ class Migration(SchemaMigration):
         },
         'materials.communitytype': {
             'Meta': {'ordering': "('id',)", 'object_name': 'CommunityType'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
-        },
-        'materials.country': {
-            'Meta': {'ordering': "('id',)", 'object_name': 'Country'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})

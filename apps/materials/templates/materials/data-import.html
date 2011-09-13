@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block bodyclass %}no-columns{% endblock %}
+
+{% block content %}
+  <form action="{% url materials:data_import %}" method="post"
+        enctype="multipart/form-data" class="formatted"
+        id="data-import-form">
+
+    {% with form.file as field %}
+      {% include "include/form-field.html" %}
+    {% endwith %}
+
+    {% if form.filename %}
+      <p>Processed file: <strong>{{ form.filename }}</strong></p>
+    {% endif %}
+
+    <div class="buttons">
+      <input type="submit" name="import" value="Import" />
+      <input type="submit" name="dry_run" value="Import (dry run)" />
+      <input type="submit" name="validate" value="Validate" />
+    </div>
+  </form>
+
+  {% if validation_errors %}
+    <h2>Validation Errors</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Line Number</th>
+          <th>Field Name</th>
+          <th>Error</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in validation_errors %}
+          <tr>
+            {% for cell in row %}
+              <td>{{ cell }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+{% endblock %}

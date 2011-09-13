@@ -1,0 +1,148 @@
+#align-form {
+  min-width: 500px;
+}
+
+#align-form label {
+  display: inline-block;
+}
+
+#align-form div.grade,
+#align-form div.category,
+#align-form div.tag,
+#align-form div.buttons input[type='submit'] {
+  display: none;
+}
+
+#align-form h3 {
+  color: #1F4D64;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#align-tag-description {
+  display: none;
+  float: right;
+  width: 350px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  background-color: #FFE4B8;
+  padding: 10px;
+  font-size: 12px;
+  line-height: 1.2em;
+}
+
+#align-tag-description dt {
+  font-weight: bold;
+}
+
+#align-tag-description dd {
+  margin: 0.2em 0 0.5em 1em;
+}
+
+#align-tag-description dd.last {
+  margin-bottom: 0;
+}
+
+#align-form .align-user-tags-ct {
+  border: 1px solid #ccc;
+  padding: 3px 5px;
+  margin-right: 380px;
+  margin-bottom: 10px;
+}
+
+#align-form .align-user-tags-ct .tags-number {
+  display: block;
+  margin-top: 10px;
+}
+
+#align-form .align-user-tags-ct.no-tags .tags-number {
+  display: none;
+}
+
+#align-form .align-user-tags-ct .not-aligned {
+  display: none;
+  text-align: center;
+  color: #ccc;
+  font-size: 16px;
+  line-height: 30px;
+}
+
+#align-form .align-user-tags-ct.no-tags .not-aligned {
+  display: block;
+}
+
+.portlet.align-item-tags #show-align-form {
+  display: none;
+
+}
+
+body.authenticated .portlet.align-item-tags #show-align-form {
+  display: inline;
+}
+
+body.authenticated .portlet.align-item-tags .login {
+  display: none;
+}
+
+.portlet.align-item-tags ul,
+.align-user-tags {
+  list-style-type: none;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.align-user-tags {
+  margin: 0;
+}
+
+.portlet.align-item-tags li {
+  display: inline-block;
+  padding: 3px 5px;
+  margin: 3px 3px 3px 0;
+  background-color: #FFE4B8;
+}
+
+.portlet.align-item-tags li a {
+  color: #1E4E62;
+}
+
+.align-user-tags li.tag,
+.portlet.align-item-tags .align-user-tags li.tag {
+  border: 2px solid #FFE4B8;
+  background-color: #fff;
+  display: inline-block;
+  padding: 0px;
+  margin: 3px 6px 3px 0;
+  position: relative;
+}
+
+.align-user-tags li.tag a,
+.portlet.align-item-tags .align-user-tags li.tag a {
+  color: #1E4E62;
+  background-color: #FFE4B8;
+  display: inline-block;
+  margin-right: 20px;
+  padding: 1px 5px 1px 3px;
+  text-decoration: none;
+}
+
+.align-user-tags li.tag a.delete,
+.portlet.align-item-tags .align-user-tags li.tag a.delete {
+  display: block;
+  position: absolute;
+  right: 2px;
+  top: 0px;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  background: transparent url(../images/icon-delete-gray.png) no-repeat 50% 50%;
+  text-indent: -9999px;
+  padding: 0;
+  margin: 0;
+}
+
+.align-tag-tooltip .ui-tooltip-titlebar,
+.align-tag-tooltip .ui-tooltip-content {
+  border-color: #FFE4B8;
+  background-color: #FFE4B8;
+}

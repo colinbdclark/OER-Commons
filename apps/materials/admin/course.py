@@ -1,3 +1,4 @@
+from curriculum.models import AlignmentTag
 from django import forms
 from django.conf import settings
 from django.contrib.admin.util import unquote
@@ -209,6 +210,18 @@ AuthorsFormSet = modelformset_factory(Author, fields=["name", "email", "country"
 
 class CourseAdmin(MaterialAdmin):
 
+    def url(self):
+        url = self.url
+        short_url = len(url) < 30 and url or "%s..." % url[:27]
+        return """<a target="_blank" title="%(url)s" href="%(url)s">%(short_url)s</a>""" % dict(
+            url=url,
+            short_url=short_url,
+        )
+    url.allow_tags = True
+
+    list_display = ["title", "collection", url, "http_status", "workflow_state", "creator"]
+    search_fields = ["title", "collection__name", "institution__name"]
+
     def add_view(self, request, form_url='', extra_context=None):
         model = self.model
         opts = model._meta
@@ -277,6 +290,8 @@ class CourseAdmin(MaterialAdmin):
             authors_formset = AuthorsFormSet(prefix="authors", queryset=obj.authors.all())
 
         tags = obj.tags.distinct().values_list("name", flat=True)
+        alignment_tags = obj.alignment_tags.values_list("tag", flat=True).distinct()
+        alignment_tags = AlignmentTag.objects.filter(id__in=alignment_tags)
 
         context = {
             'title': _('Change %s') % force_unicode(opts.verbose_name),
@@ -284,6 +299,7 @@ class CourseAdmin(MaterialAdmin):
             'authors_formset': authors_formset,
             'main_fields': MAIN_FIELDS_CHANGE,
             'tags': tags,
+            'alignment_tags': alignment_tags,
             'object_id': object_id,
             'original': obj,
             'root_path': self.admin_site.root_path,

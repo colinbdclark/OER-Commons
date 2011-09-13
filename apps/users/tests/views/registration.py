@@ -4,18 +4,20 @@ import time
 import urllib
 import datetime
 
-from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core import mail
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from mock import patch
+from users import DAYS_TO_DELETE
 
 from users.views.registration import RegistrationForm, ConfirmationForm
 from users.models import RegistrationConfirmation, gen_confirmation_key
 
 from users.tests.utils import TestDataGenerator
+
+from utils.testing import TestCase
 
 
 class RegistrationFormTest(TestCase, TestDataGenerator):
@@ -198,16 +200,47 @@ class RegistrationViewTest(TestCase, TestDataGenerator):
                 confirmation_link = '%s?code=%s' % (reversed_url, key)
                 self.assertTrue(confirmation_link in mail.outbox[0].body)
 
+
         # Test that warning message shows when user account isn't confirmed.
+        now = datetime.datetime.now()
+        confirmation.timestamp = now
+        confirmation.save()
+
         response = self.client.get(self.frontpage)
         message = 'You haven\'t confirmed your email address yet. Please follow the instructions in confirmation email that we have sent to you.'
         self.assertContains(response, message)
 
-        # Test that number of days is correctly.
-        now = datetime.datetime.now()
-        days_to_delete = (now + datetime.timedelta(days=30) - confirmation.timestamp).days
+        # Test that number of days is displayed correctly.
+        days_to_delete = DAYS_TO_DELETE
         message_with_days = 'in %s days' % days_to_delete
-        self.assertContains(response, message_with_days)
+        self.assertContainsIgnoreWhitespace(response, message_with_days)
+
+        # Check that number of days is displayed reduced correctly
+        delta = 5
+        confirmation.timestamp = now - datetime.timedelta(days=delta)
+        confirmation.save()
+
+        response = self.client.get(self.frontpage)
+        days_to_delete = DAYS_TO_DELETE - delta
+        message_with_days = 'Otherwise your account will be deleted in %s days' % days_to_delete
+        self.assertContainsIgnoreWhitespace(response, message_with_days)
+
+        delta = DAYS_TO_DELETE - 1
+        confirmation.timestamp = now - datetime.timedelta(days=delta)
+        confirmation.save()
+
+        response = self.client.get(self.frontpage)
+        message_with_days = 'Otherwise your account will be deleted tomorrow'
+        self.assertContainsIgnoreWhitespace(response, message_with_days)
+
+        delta = DAYS_TO_DELETE
+        confirmation.timestamp = now - datetime.timedelta(days=delta)
+        confirmation.save()
+
+        response = self.client.get(self.frontpage)
+        message_with_days = 'Otherwise your account will be deleted today'
+        self.assertContainsIgnoreWhitespace(response, message_with_days)
+
 
         # Test that link to resend email confirmation exists in warning message.
         quoted_email = urllib.quote(data['email'])

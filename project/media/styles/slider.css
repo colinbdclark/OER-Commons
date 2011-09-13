@@ -1,6 +1,12 @@
+.slider {
+  list-style-type: none;
+  height: 190px;
+  width: 540px;
+  visibility: hidden;
+}
+
 .slider .wrapper {
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
+  background: no-repeat 50% 50%;
 }
 
 .slider .learning-is-sharing .column1 {

@@ -1,0 +1,17 @@
+<div class="form-row tags">
+  <div>
+    <label>Alignment Tags</label>
+    {% if alignment_tags %}
+      <ul class="align-user-tags">
+        {% for tag in alignment_tags %}
+          <li data-id="{{ tag.id }}">
+            <div>
+              <span>{{ tag.full_code }}</span>
+              <a href="#" class="delete">Delete</a>
+            </div>      
+          </li>
+        {% endfor %}
+      </ul>
+   {% endif %}
+  </div>
+</div>
