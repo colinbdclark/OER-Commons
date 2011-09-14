@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block extra-js %}
-<script type="text/javascript"> 
+<script type="text/javascript">
   $(function() {
     oer.accordion.init($("section.portlet.oermaterials div.accordion"));
     $("section.portlet.cou li a").qtip(DEFAULT_TOOLTIP_OPTIONS);
@@ -17,7 +17,7 @@
       buildNavigation: false,
       autoPlay: false,
       startStopped: true
-    });
+    }).css("visibility", "inherit");
     oer.newsletter.init();
   });
 </script>
@@ -58,45 +58,45 @@
 
 {% block column-left %}
 <section class="portlet oermaterials dotted">
-  <h1 class="dotted">OER Materials</h1> 
-  <div class="accordion clearfix"> 
-    <h2 class="accordion-header"><a href="#">Subject Areas</a></h2> 
-    <div class="accordion-body"> 
-      <ul> 
+  <h1 class="dotted">OER Materials</h1>
+  <div class="accordion clearfix">
+    <h2 class="accordion-header"><a href="#">Subject Areas</a></h2>
+    <div class="accordion-body">
+      <ul>
         {% for general_subject in general_subjects %}
-        <li> 
-          <a href="{% url materials:general_subject_index general_subjects=general_subject.slug %}"> 
+        <li>
+          <a href="{% url materials:general_subject_index general_subjects=general_subject.slug %}">
              {{ general_subject.name }} ({{ general_subject.count }})
-          </a> 
-        </li> 
+          </a>
+        </li>
         {% endfor %}
-      </ul> 
-    </div> 
-    <h2 class="accordion-header"><a href="#">Grade Levels</a></h2> 
-    <div class="accordion-body"> 
-      <ul> 
+      </ul>
+    </div>
+    <h2 class="accordion-header"><a href="#">Grade Levels</a></h2>
+    <div class="accordion-body">
+      <ul>
         {% for grade_level in grade_levels %}
-        <li> 
-          <a href="{% url materials:grade_level_index grade_levels=grade_level.slug %}"> 
+        <li>
+          <a href="{% url materials:grade_level_index grade_levels=grade_level.slug %}">
              {{ grade_level.name }} ({{ grade_level.count }})
-          </a> 
-        </li> 
+          </a>
+        </li>
         {% endfor %}
-      </ul> 
-    </div> 
-  </div>    
-  <h2>Topics</h2> 
-  <div class="topics clearfix"> 
-    <ul> 
+      </ul>
+    </div>
+  </div>
+  <h2>Topics</h2>
+  <div class="topics clearfix">
+    <ul>
       {% for microsite in microsites %}
-      <li> 
-        <a href="{{ microsite.get_absolute_url }}" class="{{ microsite.slug }}"> 
+      <li>
+        <a href="{{ microsite.get_absolute_url }}" class="{{ microsite.slug }}">
            {{ microsite.name }}
-        </a> 
-      </li> 
+        </a>
+      </li>
       {% endfor %}
-    </ul> 
-  </div> 
+    </ul>
+  </div>
   <h2><a href="{% url materials:browse_providers %}">Browse by Provider</a></h2>
 </section>
 
@@ -129,22 +129,22 @@
 
 {% include "include/portlets/bookmarklet.html" %}
 
-<section class="portlet twitter dotted clearfix"> 
-  <h1 class="green">OER Commons Tweets</h1> 
+<section class="portlet twitter dotted clearfix">
+  <h1 class="green">OER Commons Tweets</h1>
   {% if tweets %}
-  <ul class="tweets"> 
+  <ul class="tweets">
     {% for tweet in tweets %}
-    <li> 
-      {{ tweet.text|safe }} 
-      <span class="date">{{ tweet.date|date:"DATE_FORMAT" }}</span> 
-    </li> 
+    <li>
+      {{ tweet.text|safe }}
+      <span class="date">{{ tweet.date|date:"DATE_FORMAT" }}</span>
+    </li>
     {% endfor %}
-  </ul> 
+  </ul>
   {% endif %}
-  <a href="http://twitter.com/OERCommons" class="follow-btn"> 
+  <a href="http://twitter.com/OERCommons" class="follow-btn">
     Follow Our Tweets
-  </a> 
-</section> 
+  </a>
+</section>
 
 {% include "include/portlets/addthis.html" %}
 

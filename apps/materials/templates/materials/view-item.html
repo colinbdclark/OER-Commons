@@ -225,10 +225,9 @@
   </div>
 
   <div class="align-right">
-    <a {% if request.preferences.show_toolbar %}href="{{ toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
+    <a id="goto" {% if request.preferences.show_toolbar %}href="{{ toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
        class="button-blue-big rc5">Go to OER Item</a>
   </div>
-
 
   <div class="reviews">
     {% with item.reviews.all as reviews %}
@@ -273,11 +272,10 @@
 
 {% block column-right %}
   <section class="portlet dotted save">
-    {% if save_url %}
-      <a href="{{ save_url }}" class="require-login save">Add to My Items</a>
-    {% endif %}
-    {% if unsave_url %}
+    {% if saved %}
       <a href="{{ unsave_url }}" class="require-login">Remove from My Items</a>
+    {% else %}
+      <a href="{{ save_url }}" class="require-login save">Add to My Items</a>
     {% endif %}
   </section>
 
@@ -362,7 +360,7 @@
       {% endfor %}
     </ul>
 
-    <form action="{% url tags:add_tags content_type.app_label,content_type.model,item.id %}"
+    <form action="{{ add_tags_url }}"
           method="post" id="add-tags-form" name="add-tags-form">
       <label for="id_tags">Add new tag:</label>
       <input type="text" name="tags" id="id_tags" value="" class="text" />

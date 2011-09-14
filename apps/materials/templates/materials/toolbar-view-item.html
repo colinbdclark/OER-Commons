@@ -45,7 +45,7 @@
       <div class="c1"><div class="c2"><div class="c3"><div class="c4"><div class="green-bar">
 
         {% if came_from_index %}
-        <div class="view-item-navigation">
+        <nav class="view-item-navigation">
           {% spaceless %}
           <ul>
             {% if prev_item_url %}
@@ -65,7 +65,7 @@
             <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
             {% hidden_filters hidden_filters %}
           </form>
-        </div>
+        </nav>
         {% endif %}
 
         {% spaceless %}

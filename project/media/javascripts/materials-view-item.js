@@ -2,21 +2,22 @@ oer.materials.view_item = {};
 
 oer.materials.view_item.init = function() {
     oer.materials.view_item.init_navigation();
-    var $navigation = $("nav.view-item-navigation");
-    if ($navigation.length > 0) {
-        $("div.details h1 a").click(function(e) {
-            e.preventDefault();
-            $navigation.find("form").attr("action", $(this).attr("href")).submit();
-        });
-    }
 };
 
 oer.materials.view_item.init_navigation = function() {
     var $navigation = $("nav.view-item-navigation");
-    $navigation.find("a.item-link").click(function(e) {
-        e.preventDefault();
-        $navigation.find("form").attr("action", $(this).attr("href")).submit();
-    });
+    if ($navigation.length) {
+        var $form = $navigation.find("form");
+        $navigation.find("a.item-link").click(function() {
+            $.cookie("_i", $form.serialize(), {path: "/"});
+        });
+        $("div.details h1 a").click(function() {
+            $.cookie("_i", $form.serialize(), {path: "/"});
+        });
+        $("#goto").click(function() {
+            $.cookie("_i", $form.serialize(), {path: "/"});
+        });
+    }
 }
 
 oer.materials.view_item.init_content_actions = function() {
