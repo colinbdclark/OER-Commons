@@ -4,6 +4,7 @@ from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
 from materials.views.data_import import DataImport
+from materials.views.view_item import ViewItem, ToolbarViewItem
 from reviews.urls import add_review_patterns
 from saveditems.urls import saved_item_patterns
 
@@ -48,8 +49,8 @@ course_patterns = browse_patterns + patterns('materials.views',
     url(r"^/add/?$", "forms.course.add.add", name="add"),
     url(r"^/material_types/(?P<course_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
     url(r"^/(?P<course_or_module>full-course|learning-module)/?$", "index.index", name="course_or_module_index"),
-    url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
-    url(r"^/(?P<slug>[^/]+)/view/?$", "view_item.toolbar_view_item", name="toolbar_view_item"),
+    url(r"^/(?P<slug>[^/]+)/?$", ViewItem.as_view(), name="view_item"),
+    url(r"^/(?P<slug>[^/]+)/view/?$", ToolbarViewItem.as_view(), name="toolbar_view_item"),
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.course.edit.edit", name="edit"),
     url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
     url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
@@ -60,8 +61,8 @@ saved_item_patterns
 library_patterns = browse_patterns + patterns('materials.views',
     url(r"^/add/?$", "forms.library.add.add", name="add"),
     url(r"^/material_types/(?P<library_material_types>[^/]+)/?$", "index.index", name="material_type_index"),
-    url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
-    url(r"^/(?P<slug>[^/]+)/view/?$", "view_item.toolbar_view_item", name="toolbar_view_item"),
+    url(r"^/(?P<slug>[^/]+)/?$", ViewItem.as_view(), name="view_item"),
+    url(r"^/(?P<slug>[^/]+)/view/?$", ToolbarViewItem.as_view(), name="toolbar_view_item"),
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.library.edit.edit", name="edit"),
     url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
     url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
@@ -76,8 +77,8 @@ keyword_patterns + patterns('materials.views',
     url(r"^/add/?$", "forms.community.add.add", name="add"),
     url(r"^/oer_type/(?P<community_types>[^/]+)/?$", "index.index", name="community_type_index"),
     url(r"^/oer_topic/(?P<community_topics>[^/]+)/?$", "index.index", name="community_topic_index"),
-    url(r"^/(?P<slug>[^/]+)/?$", "view_item.view_item", name="view_item"),
-    url(r"^/(?P<slug>[^/]+)/view/?$", "view_item.toolbar_view_item", name="toolbar_view_item"),
+    url(r"^/(?P<slug>[^/]+)/?$", ViewItem.as_view(), name="view_item"),
+    url(r"^/(?P<slug>[^/]+)/view/?$", ToolbarViewItem.as_view(), name="toolbar_view_item"),
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.community.edit.edit", name="edit"),
     url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
     url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),

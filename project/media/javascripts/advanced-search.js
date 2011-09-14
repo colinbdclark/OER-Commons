@@ -58,7 +58,6 @@ oer.advanced_search.init = function() {
         $grade.attr("disabled", "disabled");
         $category.attr("disabled", "disabled");
         var alignment_tag_code = $tag.find(":selected").data("code");
-        console.log(alignment_tag_code);
         if (alignment_tag_code !== undefined) {
             $tag_input.val(alignment_tag_code);
         } else {
@@ -66,7 +65,7 @@ oer.advanced_search.init = function() {
         }
         $tag.attr("disabled", "disabled");
     });
-    
+
     oer.collapsibles.init($("#content"));
 
 };
