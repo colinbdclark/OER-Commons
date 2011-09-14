@@ -168,7 +168,8 @@ class BaseViewItemMixin(object):
         data["index_url"] = index_url
         data["prev_item_url"] = prev_item_url
         data["next_item_url"] = next_item_url
-        data["index_cookie"] = request.COOKIES["_i"]
+        if came_from_index:
+            data["index_cookie"] = request.COOKIES.get("_i")
 
 
         if request.user.is_authenticated():
