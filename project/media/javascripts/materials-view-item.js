@@ -7,15 +7,15 @@ oer.materials.view_item.init = function() {
 oer.materials.view_item.init_navigation = function() {
     var $navigation = $("nav.view-item-navigation");
     if ($navigation.length) {
-        var $form = $navigation.find("form");
+        var index_cookie = unescape($navigation.data("index-cookie"));
         $navigation.find("a.item-link").click(function() {
-            $.cookie("_i", $form.serialize(), {path: "/"});
+            $.cookie("_i", index_cookie, {path: "/"});
         });
         $("div.details h1 a").click(function() {
-            $.cookie("_i", $form.serialize(), {path: "/"});
+            $.cookie("_i", index_cookie, {path: "/"});
         });
         $("#goto").click(function() {
-            $.cookie("_i", $form.serialize(), {path: "/"});
+            $.cookie("_i", index_cookie, {path: "/"});
         });
     }
 }

@@ -39,7 +39,7 @@ def hidden_filters(hidden_filters):
                 filters.append(dict(name=name, value=v))
         elif isinstance(value, bool):
             filters.append(dict(name=name, value=value and "yes" or "no"))
-    return locals()
+    return dict(filters=filters)
 
 
 @register.inclusion_tag("materials/include/cou-bucket.html")

@@ -44,7 +44,7 @@
       <div class="c1"><div class="c2"><div class="c3"><div class="c4"><div class="green-bar">
 
         {% if came_from_index %}
-        <nav class="view-item-navigation">
+        <nav class="view-item-navigation" data-index-cookie="{{ index_cookie }}">
           {% spaceless %}
           <ul>
             {% if prev_item_url %}
@@ -58,12 +58,6 @@
             {% endif %}
           </ul>
           {% endspaceless %}
-          <form action="" method="post">
-            <input type="hidden" name="index_path" value="{{ index_path }}" />
-            <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
-            <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
-            {% hidden_filters hidden_filters %}
-          </form>
         </nav>
         {% endif %}
 
