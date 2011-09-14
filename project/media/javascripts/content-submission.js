@@ -108,7 +108,6 @@ oer.content_submission.init_license = function() {
         $cc_latest_errors.find("label").remove();
         $cc_selection_widget_loader.show();
         $.post("/license-picker/issue/", data, function(data) {
-            console.log(data);
             if (data.status == "error") {
                 $("<label></label>").addClass("error").text(data.message).appendTo($cc_latest_errors);
             } else {
