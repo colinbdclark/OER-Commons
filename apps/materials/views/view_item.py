@@ -61,7 +61,8 @@ class BaseViewItemMixin(object):
         model = self.model
         content_type = self.content_type
 
-        data["item"] = self.item
+        data["item"] = item
+        data["content_type"] = content_type
 
         microsite = None
         came_from_index = False
