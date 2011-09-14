@@ -1,10 +1,10 @@
-import re
 from curriculum.models import AlignmentTag
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from zope.cachedescriptors.property import Lazy
+import re
 
 
 SCORES = (
@@ -23,6 +23,7 @@ class ScoreValue(models.Model):
     description = models.TextField()
 
     def __unicode__(self):
+        #noinspection PyUnresolvedReferences
         return self.get_value_display()
 
     class Meta:
@@ -47,6 +48,7 @@ class RubricScoreValue(ScoreValue):
     rubric = models.ForeignKey(Rubric, related_name="score_values")
 
     def __unicode__(self):
+        #noinspection PyUnresolvedReferences
         return u"%s - %s" % (self.rubric, self.get_value_display())
 
     class Meta:
@@ -134,11 +136,13 @@ class EvaluatedItemMixin(object):
                 return self.evaluation_scores[rubric_id]
             except KeyError:
                 raise AttributeError()
+        #noinspection PyUnresolvedReferences
         return super(EvaluatedItemMixin, self).__getattr__(name)
 
 
-RUBRIC_CHOICES = [
-    (0, u"Degree of Alignment"),
-]
-
-RUBRIC_CHOICES += list(Rubric.objects.values_list("id", "name"))
+def get_rubric_choices():
+    choices = [
+        (0, u"Degree of Alignment"),
+    ]
+    choices += list(Rubric.objects.values_list("id", "name"))
+    return choices
