@@ -36,7 +36,7 @@
 {% block content %}
 
   {% if came_from_index %}
-  <nav class="view-item-navigation">
+  <nav class="view-item-navigation" data-index-cookie="{{ index_cookie }}">
     {% if prev_item_url %}
       <a class="item-link prev" href="{{ prev_item_url }}">&laquo; Previous Item</a>
     {% else %}
@@ -50,12 +50,6 @@
     {% else %}
       <a class="item-link next hidden" href="#">Next Item &raquo;</a>
     {% endif %}
-    <form action="" method="post">
-      <input type="hidden" name="index_path" value="{{ index_path }}" />
-      <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
-      <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
-      {% hidden_filters hidden_filters %}
-    </form>
   </nav>
   {% endif %}
 

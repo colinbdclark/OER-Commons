@@ -63,7 +63,8 @@ class BaseViewItemMixin(object):
         model = self.model
         content_type = self.content_type
 
-        data["item"] = self.item
+        data["item"] = item
+        data["content_type"] = content_type
 
         microsite = None
         came_from_index = False
@@ -71,8 +72,6 @@ class BaseViewItemMixin(object):
         prev_item_url = u""
         next_item_url = u""
         index_url = u""
-        index_params = None
-        hidden_filters = {}
 
         kwargs = {}
 
@@ -107,7 +106,6 @@ class BaseViewItemMixin(object):
 
             path_filter = None
 
-            hidden_filters = {}
             query_string_params = {}
             search_query = u""
 
@@ -126,7 +124,6 @@ class BaseViewItemMixin(object):
                 value = filter.extract_value(dummy_request)
                 if value is not None:
                     query = filter.update_query(query, value)
-                    hidden_filters[filter.request_name] = value
                     query_string_params = filter.update_query_string_params(query_string_params, value)
                     if filter_name == "search":
                         search_query = value
@@ -171,12 +168,11 @@ class BaseViewItemMixin(object):
 
         data["microsite"] = microsite
         data["came_from_index"] = came_from_index
-        data["index_path"] = index_path
-        data["index_params"] = index_params
         data["index_url"] = index_url
-        data["hidden_filters"] = hidden_filters
         data["prev_item_url"] = prev_item_url
         data["next_item_url"] = next_item_url
+        if came_from_index:
+            data["index_cookie"] = request.COOKIES.get("_i")
 
         if request.user.is_authenticated():
             data["saved"] = SavedItem.objects.filter(
