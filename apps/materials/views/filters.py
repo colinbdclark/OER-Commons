@@ -10,7 +10,7 @@ from materials.models.library import LibraryMaterialType
 from materials.models.material import MEMBER_ACTIVITY_TYPES
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_slug
-from rubrics.models import RUBRIC_CHOICES
+from rubrics.models import get_rubric_choices
 from tags.models import Tag
 import re
 
@@ -393,7 +393,7 @@ FILTERS = {
     "topics": VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic"),
     "featured": BooleanFilter("featured", "f.featured", u"Featured Resources"),
     "alignment": AlignmentFilter("alignment_tags", "f.alignment"),
-    "evaluated_rubrics": RubricFilter("evaluated_rubrics", "f.rubric", RUBRIC_CHOICES, u"Rubric"),
+    "evaluated_rubrics": RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric"),
     "search": SearchFilter(),
 }
 
