@@ -521,6 +521,14 @@ body.evaluation-tool {
   font-size: 14px;
 }
 
+.evaluation-results td span.nr {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url(../images/evaluation/icon-not-scored.png) no-repeat 50% 50%;
+  vertical-align: middle;
+}
+
 .evaluation-tool footer.global {
   padding: 4px 10px;
   text-align: right;

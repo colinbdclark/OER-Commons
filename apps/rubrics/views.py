@@ -92,7 +92,8 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                 tag.score_value = None
                 tag.scored = False
             data["alignment_tags"].append(tag)
-        data["alignment_scored"] = all(map(lambda x: x.score_value, data["alignment_tags"]))
+
+        data["alignment_scored"] = data["alignment_tags"] and all(map(lambda x: x.score_value, data["alignment_tags"]))
 
         data["rubrics"] = []
         for rubric in Rubric.objects.all():
@@ -221,7 +222,10 @@ class Results(EvaluateViewMixin, TemplateView):
         average_score = alignment_scores.aggregate(
             Avg("score__value")
         )["score__value__avg"]
-        if average_score is None:
+
+        if not alignment_scores.exists():
+            average_score_class = "nr"
+        elif average_score is None:
             average_score_class = None
         else:
             average_score_class = int(average_score)
@@ -233,7 +237,9 @@ class Results(EvaluateViewMixin, TemplateView):
         data["finalized"] = not user_alignment_scores.filter(confirmed=False).exists()
 
         user_score = user_alignment_scores.aggregate(Avg("score__value"))["score__value__avg"]
-        if user_score is None:
+        if not user_alignment_scores.exists():
+            user_score_class = "nr"
+        elif user_score is None:
             user_score_class = None
         else:
             user_score_class = int(user_score)
@@ -251,32 +257,6 @@ class Results(EvaluateViewMixin, TemplateView):
                                                           flat=True).distinct()
         )
 
-#        for tag in tags:
-#            scores = alignment_scores.filter(alignment_tag=tag)
-#            user_score=scores.filter(user=self.request.user)
-#
-#            if not user_score.exists():
-#                user_score = None
-#            else:
-#                user_score = user_score.values_list("score__value",
-#                                                    flat=True)[0]
-#            average_score =scores.aggregate(
-#                Avg("score__value")
-#            )["score__value__avg"]
-#
-#            if average_score is None:
-#                average_score_class = None
-#            else:
-#                average_score_class = int(average_score)
-#
-#            data["scores"].append(dict(
-#                name=tag.full_code,
-#                user_score=user_score,
-#                average_score=average_score,
-#                average_score_class=average_score_class,
-#            ))
-
-
         rubrics = Rubric.objects.all()
         rubric_scores = RubricScore.objects.filter(
             content_type=self.content_type,
@@ -288,14 +268,19 @@ class Results(EvaluateViewMixin, TemplateView):
 
             if not user_score.exists():
                 user_score = None
+                user_score_class = "nr"
             else:
                 user_score = user_score.values_list("score__value",
                                                     flat=True)[0]
-            average_score =scores.aggregate(
+                user_score_class = user_score
+
+            average_score = scores.aggregate(
                 Avg("score__value")
             )["score__value__avg"]
 
-            if average_score is None:
+            if not scores.exists():
+                average_score_class = "nr"
+            elif average_score is None:
                 average_score_class = None
             else:
                 average_score_class = int(average_score)
@@ -303,7 +288,7 @@ class Results(EvaluateViewMixin, TemplateView):
             data["scores"].append(dict(
                 name=rubric.name,
                 user_score=user_score,
-                user_score_class=user_score,
+                user_score_class=user_score_class,
                 average_score=average_score,
                 average_score_class=average_score_class,
             ))

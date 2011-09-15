@@ -35,10 +35,37 @@ oer.evaluation_tool.init_rubrics = function() {
         }
     }
 
+    function clear_score($scores) {
+        var $section = $scores.closest("section");
+
+        $scores.find("div.selected").removeClass("selected");
+        $scores.find(":radio").attr("checked", false);
+
+        var data = {"delete": "yes"};
+
+        if ($scores.data("tag-id") !== undefined) {
+            var tag_id = $scores.data("tag-id");
+            data["tag_id"] = tag_id;
+            var $tag = $section.find("a.tag[data-tag-id='" + tag_id + "']");
+            $tag.find("span.value").text("No score");
+            $tag.removeClass("scored");
+        } else if ($scores.data("rubric-id") !== undefined) {
+            data["rubric_id"] = $scores.data("rubric-id");
+        }
+
+        if (window.rocon != undefined) {
+            $scores.find("a").each(function(e, el) {
+                rocon.update(el);
+            });
+        }
+
+        $.post(evaluate_url, data);
+        $section.removeClass("scored").addClass("not-scored");
+    }
 
     function open_section($section) {
         var $current_section = $sections.filter(".expanded");
-        if (!$current_section.hasClass("scored")) {
+        if (!$current_section.hasClass("intro") && !$current_section.hasClass("scored")) {
             $current_section.addClass("not-scored")
         }
         $current_section.removeClass("expanded").find("div.body").show().slideUp("fast");
@@ -80,17 +107,27 @@ oer.evaluation_tool.init_rubrics = function() {
     $score_selectors.delegate("a,:radio", "click", function(e) {
         var $this = $(this);
         var $score = $this.closest("div");
+        var $scores = $this.closest("div.scores");
+
         if ($score.hasClass("selected")) {
-            e.preventDefault();
+            if ($this.is("a")) {
+                $score.find(":radio").attr("checked", false);
+                e.preventDefault();
+            } else {
+                $this.attr("checked", false);
+                e.stopPropagation();
+            }
+            clear_score($scores);
             return;
         }
+
         if ($this.is("a")) {
             $score.find(":radio").attr("checked", true);
             e.preventDefault();
         } else {
             e.stopPropagation();
         }
-        var $scores = $this.closest("div.scores");
+
         $scores.find("div.selected").removeClass("selected");
         $score.addClass("selected");
 
@@ -139,35 +176,14 @@ oer.evaluation_tool.init_rubrics = function() {
         e.preventDefault();
         var $this = $(this);
         var $section = $this.closest("section");
-        var $scores_ct = null;
-        var tag_id = null;
-        var rubric_id = null;
+        var $scores = null;
         if ($section.hasClass("rubric")) {
-            $scores_ct = $section.find("div.scores");
-            rubric_id = $scores_ct.data("rubric-id");
+            $scores = $section.find("div.scores");
         } else {
-            tag_id = $this.closest("div.footer").data("tag-id");
-            $scores_ct = $section.find("div.scores[data-tag-id='" + tag_id + "']");
-            var $tag = $section.find("a.tag[data-tag-id='" + tag_id + "']");
-            $tag.find("span.value").text("No score");
-            $tag.removeClass("scored");
+            var tag_id = $this.closest("div.footer").data("tag-id");
+            $scores = $section.find("div.scores[data-tag-id='" + tag_id + "']");
         }
-        $scores_ct.find("div.selected").removeClass("selected");
-        $scores_ct.find(":radio").attr("checked", false);
-        var data = {"delete": "yes"};
-        if (tag_id) {
-            data["tag_id"] = tag_id;
-        } else if (rubric_id) {
-            data["rubric_id"] = rubric_id;
-        }
-        if (window.rocon != undefined) {
-            $scores_ct.find("a").each(function(e, el) {
-                rocon.update(el);
-            });
-        }
-
-        $.post(evaluate_url, data);
-        $section.removeClass("scored").addClass("not-scored");
+        clear_score($scores);
     });
 
     $rubrics.delegate("a.next", "click", function(e) {
@@ -193,7 +209,7 @@ oer.evaluation_tool.init_rubrics = function() {
         select_tag($tag);
     });
 
-    $rubrics.find("a.save").click(function(e) {
+    $rubrics.find("a.save,a.add-standard").click(function(e) {
         e.preventDefault();
         var $this = $(this);
         var $section = $this.closest("section");
@@ -224,6 +240,16 @@ oer.evaluation_tool.init_rubrics = function() {
 };
 
 oer.evaluation_tool.open_tool = function(url) {
+
+    // Allow to drag the dialog out of the viewport.
+    if (!$.ui.dialog.prototype._makeDraggableBase) {
+        $.ui.dialog.prototype._makeDraggableBase = $.ui.dialog.prototype._makeDraggable;
+        $.ui.dialog.prototype._makeDraggable = function() {
+            this._makeDraggableBase();
+            this.uiDialog.draggable("option", "containment", false);
+        };
+    }
+
     var $dialog = null;
     oer.login.check_login(function() {
         if ($dialog === null) {
