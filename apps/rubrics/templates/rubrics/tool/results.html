@@ -23,17 +23,25 @@
             <tr>
               <td class="first">{{ score.name }}</td>
               <td>
-                {% if score.user_score == None %}
-                  <span class="na">N/A</span>
+                {% if score.user_score_class == "nr" %}
+                  <span class="nr"></span>
                 {% else %}
-                  <span class="s{{ score.user_score_class }}">{{ score.user_score|floatformat }}</span>
+                  {% if score.user_score == None %}
+                    <span class="na">N/A</span>
+                  {% else %}
+                    <span class="s{{ score.user_score_class }}">{{ score.user_score|floatformat }}</span>
+                  {% endif %}
                 {% endif %}
               </td>
               <td>
-                {% if score.average_score == None %}
-                  <span class="na">N/A</span>
+                {% if score.average_score_class == "nr" %}
+                  <span class="nr"></span>
                 {% else %}
-                  <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}</span>
+                  {% if score.average_score == None %}
+                    <span class="na">N/A</span>
+                  {% else %}
+                    <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}</span>
+                  {% endif %}
                 {% endif %}
               </td>
             </tr>
