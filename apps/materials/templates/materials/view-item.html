@@ -22,7 +22,7 @@
       {% if content_actions or workflow_actions %}
         oer.materials.view_item.init_content_actions();
       {% endif %}
-      $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
+      $("section.portlet a.tooltip").qtip(TOPLEFTSIDE_TOOLTIP_OPTIONS);
     });
   </script>
 {% endblock %}
@@ -281,6 +281,13 @@
     </div>
     <div>
       <a href="{{ toolbar_view_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
+      <a href="#evaluate-tooltip" rel="#evaluate-tooltip" class="tooltip"><small>What is this?</small></a>
+      <div style="display: none" id="evaluate-tooltip">
+          These seven rubrics will help users determine the degree of alignment of OER to
+          education standards and to determine aspects of OER quality (such as explanation of
+          content, assessment, and interactivity).
+      </div>
+
     </div>
     {% if evaluations_number and evaluation_scores %}
       <div class="evaluation-results">
