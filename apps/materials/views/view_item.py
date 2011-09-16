@@ -283,16 +283,29 @@ class ViewItem(BaseViewItemMixin, TemplateView):
         data["evaluations_number"] = item.evaluations_number
         data["evaluation_scores"] = []
 
-        for rubric_id, score in sorted(item.evaluation_scores.items()):
-            #noinspection PySimplifyBooleanCheck
-            if rubric_id == 0:
-                name = u"Degree of Alignment"
-            else:
-                name = get_name_from_id(Rubric, rubric_id)
+        scores = item.evaluation_scores
+
+        name = u"Degree of Alignment"
+        score = None
+        score_class = "nr"
+        if 0 in scores:
+            score = scores[0]
             if score is None:
                 score_class = None
             else:
                 score_class = int(score)
+        data["evaluation_scores"].append(dict(name=name, score=score, score_class=score_class))
+
+        for rubric_id, name in Rubric.objects.values_list("id", "name"):
+            #noinspection PySimplifyBooleanCheck
+            score = None
+            score_class = "nr"
+            if rubric_id in scores:
+                score = scores[rubric_id]
+                if score is None:
+                    score_class = None
+                else:
+                    score_class = int(score)
             data["evaluation_scores"].append(dict(name=name, score=score, score_class=score_class))
 
         data["toolbar_view_url"] = reverse("materials:%s:toolbar_view_item" % item.namespace,

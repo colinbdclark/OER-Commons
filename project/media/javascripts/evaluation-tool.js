@@ -189,7 +189,9 @@ oer.evaluation_tool.init_rubrics = function() {
     $rubrics.delegate("a.next", "click", function(e) {
         e.preventDefault();
         var $section = $(this).closest("section");
-        save_score($section);
+        if (!$section.hasClass("intro")) {
+            save_score($section);
+        }
         open_section($section.next("section"));
     });
 
