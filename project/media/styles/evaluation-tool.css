@@ -61,12 +61,8 @@ body.evaluation-tool {
   font-size: 16px;
 }
 
-.evaluation-tool .intro .guidelines ul {
-  list-style-position: inside;
-}
-
 .evaluation-tool .intro .guidelines ul li {
-  margin: 0.5em 0;
+  margin: 0.5em 0 0.5em 1.5em;
 }
 
 .evaluation-tool .intro a.start {
@@ -80,6 +76,10 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics {
   background-color: #d3dbdf;
+}
+
+.evaluation-tool .rubrics .guidelines ul {
+  margin: 1em 2em;
 }
 
 .evaluation-tool .rubrics section .body {
@@ -132,10 +132,17 @@ body.evaluation-tool {
   color: #fff;
 }
 
+.evaluation-tool .rubrics section .body > .description {
+  font-weight: bold;
+}
+
+.evaluation-tool .tip {
+  margin-top: 0.3em;
+}
+
 .evaluation-tool .rubrics .scores {
   position: relative;
   height: 155px;
-  margin-top: 1em;
 }
 
 .evaluation-tool .rubrics .scores a {
@@ -388,10 +395,6 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics .tags a.tag.selected span.value {
   color: #ffb21f;
-}
-
-.evaluation-tool .rubrics .tags .scores {
-  margin-top: 5px;
 }
 
 .evaluation-tool .rubrics section div.footer,

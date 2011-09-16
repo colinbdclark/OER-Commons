@@ -297,10 +297,14 @@
                 <tr>
                   <td class="first">{{ score.name }}</td>
                   <td>
-                    {% if score.score == None %}
-                      <span class="na">N/A</span>
+                    {% if score.score_class == "nr" %}
+                        <span class="nr"></span>
                     {% else %}
-                      <span class="s{{ score.score_class }}">{{ score.score|floatformat }}/3</span>
+                        {% if score.score == None %}
+                          <span class="na">N/A</span>
+                        {% else %}
+                          <span class="s{{ score.score_class }}">{{ score.score|floatformat }}/3</span>
+                        {% endif %}
                     {% endif %}
                   </td>
                 </tr>

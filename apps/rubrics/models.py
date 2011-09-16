@@ -108,20 +108,27 @@ class EvaluatedItemMixin(object):
     def evaluation_scores(self):
         scores = {}
         content_type = ContentType.objects.get_for_model(self)
-        scores[0] = StandardAlignmentScore.objects.filter(
+        alignment_scores = StandardAlignmentScore.objects.filter(
             content_type=content_type,
             object_id=self.pk,
             confirmed=True,
+        )
+        if alignment_scores.exists():
+            scores[0] = alignment_scores.aggregate(
+                models.Avg("score__value")
+            )["score__value__avg"]
 
-        ).aggregate(models.Avg("score__value"))["score__value__avg"]
         for rubric in Rubric.objects.all():
-            scores[rubric.id] = RubricScore.objects.filter(
+            rubric_scores = RubricScore.objects.filter(
                 content_type=content_type,
                 object_id=self.pk,
                 confirmed=True,
                 rubric=rubric,
-
-            ).aggregate(models.Avg("score__value"))["score__value__avg"]
+            )
+            if rubric_scores.exists():
+                scores[rubric.id] = rubric_scores.aggregate(
+                    models.Avg("score__value")
+                )["score__value__avg"]
         return scores
 
     @property
