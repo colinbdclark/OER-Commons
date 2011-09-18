@@ -70,8 +70,7 @@ body.green .page {
   margin-right: 3px;
 }
 
-.materials-index .details dd.topics a.green,.view-item .details dd.topics a.green
-  {
+.materials-index .details dd.topics a.green, .view-item .details dd.topics a.green {
   background: url(../images/green-icon-small.png) no-repeat 0 50%;
 }
 

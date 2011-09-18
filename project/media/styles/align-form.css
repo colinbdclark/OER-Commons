@@ -111,7 +111,7 @@ body.authenticated .portlet.align-item-tags .login {
   border: 2px solid #FFE4B8;
   background-color: #fff;
   display: inline-block;
-  padding: 0px;
+  padding: 0;
   margin: 3px 6px 3px 0;
   position: relative;
 }
@@ -131,7 +131,7 @@ body.authenticated .portlet.align-item-tags .login {
   display: block;
   position: absolute;
   right: 2px;
-  top: 0px;
+  top: 0;
   vertical-align: middle;
   width: 16px;
   height: 16px;

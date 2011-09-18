@@ -32,8 +32,7 @@
 }
 
 #content.topics .topic .body {
-  padding: 10px;
-  padding-top: 5px;
+  padding: 5px 10px 10px;
 }
 
 #content.topics ul {
@@ -59,7 +58,7 @@
 #content.topics .topic .body > ul > li {
   background: url(../images/dotted-line-hor.gif) repeat-x 0 0;
   padding-bottom: 7px;
-  margin-left: 0px;
+  margin-left: 0;
   padding-left: 10px;
   padding-top: 8px;
 }

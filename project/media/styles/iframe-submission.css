@@ -179,8 +179,7 @@ form.content-submission fieldset.step {
   font-size: inherit;
 }
 
-.iframe-submission form.content-submission .fields .required .label label
-  {
+.iframe-submission form.content-submission .fields .required .label label {
   background: none;
 }
 
@@ -256,7 +255,7 @@ form.content-submission fieldset.step {
 }
 
 .iframe-submission .success-message {
-  margin-right: 100px; 
+  margin-right: 100px;
 }
 
 .iframe-submission .success-message p {

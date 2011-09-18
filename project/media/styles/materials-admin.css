@@ -1,4 +1,4 @@
-fieldset.tabular table,fieldset.tabular table td {
+fieldset.tabular table, fieldset.tabular table td {
   border: none;
   padding: 0 5px;
 }
@@ -12,11 +12,11 @@ fieldset.tabular input[type='text'] {
   width: 25em;
 }
 
-ul li.ui-menu-item,.form-row ul li {
+ul li.ui-menu-item, .form-row ul li {
   list-style-type: none;
 }
 
-#id_content_creation_date,#id_rss_timestamp_0 {
+#id_content_creation_date, #id_rss_timestamp_0 {
   width: 7em;
 }
 

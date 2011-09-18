@@ -15,7 +15,7 @@
   color: #666666;
   font-size: 16px;
   font-weight: normal;
-  margin-bottom:5px;
+  margin-bottom: 5px;
 }
 
 .portlet h1.green {
@@ -55,9 +55,7 @@
 .portlet.twitter .tweets {
   list-style-type: none;
   background: white;
-  border-color: #CCC;
-  border-style: solid;
-  border-width: 1px;
+  border: 1px solid #CCC;
   height: 150px;
   overflow: auto;
   position: relative;
@@ -104,12 +102,12 @@
 
 .portlet.featured-searches li {
   font-weight: bold;
-  margin: 7px 0px;
+  margin: 7px 0;
 }
 
 .portlet.featured-provider dt {
   font-weight: bold;
-  margin: 5px 0px;
+  margin: 5px 0;
 }
 
 /* This selector is very specific to prevent multiple class bug in IE6 */
@@ -151,7 +149,7 @@
   font-size: 15px;
   background-color: #FFCA74;
   color: #1E4E62;
-  border:  1px solid #F5A456;
+  border: 1px solid #F5A456;
   margin: 10px 0;
 }
 

@@ -1,21 +1,20 @@
 input.text, textarea.text {
-  background:none;
-  background-color:#fff;
-  border:1px solid #9D9D9D;
-  font-size:14px;
-  padding:1px 2px;
+  background: #fff none;
+  border: 1px solid #9D9D9D;
+  font-size: 14px;
+  padding: 1px 2px;
   margin: 3px 0;
 }
 
 input.button {
-  background:url(../images/button-bg.png) repeat-x scroll 0 0 #DADADA;
-  border:1px solid #799BA5;
-  color:#0D5470;
-  font-size:14px;
-  overflow:visible;
-  padding:0 10px;
+  background: url(../images/button-bg.png) repeat-x scroll 0 0 #DADADA;
+  border: 1px solid #799BA5;
+  color: #0D5470;
+  font-size: 14px;
+  overflow: visible;
+  padding: 0 10px;
   line-height: 20px;
-  width:auto;
+  width: auto;
 }
 
 form.formatted .field {
@@ -41,7 +40,6 @@ form.formatted  label.show-password {
   background: none;
   font-weight: normal
 }
-
 
 form.formatted .field ul {
   list-style-type: none;

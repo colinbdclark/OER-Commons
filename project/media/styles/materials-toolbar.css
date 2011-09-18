@@ -20,23 +20,23 @@ iframe#resource {
 }
 
 #toolbar .c1 {
-  background: url(../images/toolbar-circle-1.png) no-repeat 130px 0%;
+  background: url(../images/toolbar-circle-1.png) no-repeat 130px 0;
 }
 
 #toolbar .c2 {
-  background: url(../images/toolbar-circle-2.png) no-repeat 30% 0%;
+  background: url(../images/toolbar-circle-2.png) no-repeat 30% 0;
 }
 
 #toolbar .c3 {
-  background: url(../images/toolbar-circle-3.png) no-repeat 60% 0%;
+  background: url(../images/toolbar-circle-3.png) no-repeat 60% 0;
 }
 
 #toolbar .c4 {
-  background: url(../images/toolbar-circle-4.png) no-repeat 90% 0%;
+  background: url(../images/toolbar-circle-4.png) no-repeat 90% 0;
 }
 
 #toolbar .green-bar {
-  background: url(../images/toolbar-green-bar.png) repeat-x 0% 100%;
+  background: url(../images/toolbar-green-bar.png) repeat-x 0 100%;
   padding: 7px 30px 9px 120px;
   height: 24px;
 }
@@ -60,10 +60,10 @@ iframe#resource {
 
 #toolbar ul {
   margin: 0;
-  padding: 2px 1px 2px 0px;
+  padding: 2px 1px 2px 0;
   list-style-type: none;
   float: left;
-  background: url(../images/dotted-line-vert.gif) 100% 0% repeat-y;
+  background: url(../images/dotted-line-vert.gif) 100% 0 repeat-y;
 }
 
 #toolbar li {
@@ -86,14 +86,14 @@ iframe#resource {
 
 #toolbar li a.loading {
   padding-left: 20px;
-  background: url(../images/ajax-loader.gif) 0% 50% no-repeat;
+  background: url(../images/ajax-loader.gif) 0 50% no-repeat;
 }
 
 #logo {
   display: block;
   z-index: 10;
   position: absolute;
-  top: 0px;
+  top: 0;
   left: 10px;
   width: 110px;
   height: 40px;
@@ -109,8 +109,7 @@ iframe#resource {
   right: 15px;
   width: 16px;
   height: 16px;
-  background: url(../javascripts/jquery/Aristo/images/icon_sprite.png) 0px
-    -16px no-repeat;
+  background: url(../javascripts/jquery/Aristo/images/icon_sprite.png) 0 -16px no-repeat;
   text-indent: -9999px;
 }
 
@@ -135,10 +134,10 @@ body.toolbar-view #status-messages .status-message {
 }
 
 #toolbar .view-item-navigation ul {
-  float: none; 
+  float: none;
 }
 
 #toolbar .add-this-ct {
-   float: right;
-   margin-top: 1px; 
+  float: right;
+  margin-top: 1px;
 }

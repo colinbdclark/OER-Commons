@@ -11,13 +11,13 @@
 }
 
 .advanced-search .filter dd.collapsible li label {
-  margin-left: 0px;
+  margin-left: 0;
   float: left;
 }
 
 #global-search-box .text {
   margin-top: 1px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 #global-search-box .button {
@@ -65,8 +65,8 @@
 .user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
 .user-tags li.tag, .portlet.item-tags .user-tags li.tag,
 fieldset.step p.content-submission-buttons a {
-    display: inline;
-    zoom: 1;
+  display: inline;
+  zoom: 1;
 }
 
 .rocon {

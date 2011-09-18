@@ -3,14 +3,12 @@
   margin-left: 5px;
 }
 
-form.formatted .field .autocomplete-list-widget ul,.autocomplete-list-widget ul
-  {
+form.formatted .field .autocomplete-list-widget ul, .autocomplete-list-widget ul {
   list-style-type: none;
   margin-bottom: 5px;
 }
 
-form.formatted .field .autocomplete-list-widget ul li,.autocomplete-list-widget ul li
-  {
+form.formatted .field .autocomplete-list-widget ul li, .autocomplete-list-widget ul li {
   padding: 3px 5px;
   float: left;
   margin-right: 5px;

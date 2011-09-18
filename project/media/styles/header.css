@@ -58,7 +58,7 @@ header.global nav span {
 }
 
 header.global nav a img {
-  vertical-align: middle; 
+  vertical-align: middle;
 }
 
 header.global nav a.button-contribute {
@@ -67,7 +67,7 @@ header.global nav a.button-contribute {
   height: 22px;
   width: 145px;
   margin-left: 10px;
-  padding: 0px;
+  padding: 0;
   text-indent: 9999px;
   overflow: hidden;
 }
@@ -89,7 +89,7 @@ header.global nav a.button-contribute {
   height: 40px;
   padding-left: 3px;
   margin-right: 2px;
-  background: url(../images/section-sep.gif) no-repeat 0% 50%;
+  background: url(../images/section-sep.gif) no-repeat 0 50%;
 }
 
 .global-tabs nav li span {
