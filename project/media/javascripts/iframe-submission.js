@@ -114,7 +114,7 @@ oer.iframe_submission.login.init = function() {
         } else if (response.status === "error") {
           if (response.errors.__all__ !== undefined) {
             $global_error_ct.append('<label class="error">' + response.errors.__all__ + '</label>');
-            delete response.errors.__all__
+            delete response.errors.__all__;
           }
           validator.showErrors(response.errors);
         }

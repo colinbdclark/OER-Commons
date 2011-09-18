@@ -233,8 +233,9 @@ oer.profile.init_geography = function() {
           var address_components = results[0].address_components;
           for (var i = 0; i < address_components.length; i++) {
             var component = address_components[i];
+            var code = null;
             if (component.types[0] === "country") {
-              var code = component.short_name;
+              code = component.short_name;
               $country_field.unbind("change");
               $country_field.val(code);
               $country_field.change(function() {
@@ -248,7 +249,7 @@ oer.profile.init_geography = function() {
               }
             }
             if (component.types[0] === "administrative_area_level_1") {
-              var code = component.short_name;
+              code = component.short_name;
               if ($us_state_field.find("option[value='" + code + "']").length) {
                 $us_state_field.unbind("change");
                 $us_state_field.val(code);
@@ -284,7 +285,7 @@ oer.profile.init_geography = function() {
   };
 
   var set_map_pin = function() {
-    if (map == null) {
+    if (map === null) {
       return;
     }
     var $selected_country = $country_field.find("option:selected");
@@ -365,7 +366,7 @@ oer.profile.init_roles = function() {
       if (is_educator) {
         return;
       }
-      if (EDUCATOR_ROLE_IDS.indexOf(parseInt(value)) != -1) {
+      if (EDUCATOR_ROLE_IDS.indexOf(parseInt(value, 10)) != -1) {
         is_educator = true;
       }
     });
@@ -376,7 +377,7 @@ oer.profile.init_roles = function() {
       $educator_fields_ct.fadeIn(300);
     } else {
       $buttons_ct.fadeOut(300, function() {
-        $buttons_ct.fadeIn(300)
+        $buttons_ct.fadeIn(300);
       });
       $educator_header.fadeOut(300);
       $educator_fields_ct.fadeOut(300);

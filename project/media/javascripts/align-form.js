@@ -140,7 +140,7 @@ oer.align_form.init = function() {
     }, function(data) {
       if (data.status === "success") {
         var $tags = $.tmpl("align-user-tags-item", data.tag).appendTo($user_tags);
-        if (window.rocon != undefined) {
+        if (window.rocon !== undefined) {
           $tags.each(function(e, el) {
             rocon.update(el);
           });
@@ -286,7 +286,7 @@ oer.align_tags_portlet.init = function() {
       $.each(data.tags, function(index, tag) {
         $item_tags.filter(":econtains(" + tag.code + ")").fadeOut(300);
         var $tag = $.tmpl("align-user-tags-item", tag).appendTo($portlet_user_tags);
-        if (window.rocon != undefined) {
+        if (window.rocon !== undefined) {
           rocon.update($tag.get(0));
         }
         oer.align_form.init_tag_tooltip($tag.find("a:first"));

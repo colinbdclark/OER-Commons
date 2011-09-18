@@ -67,7 +67,7 @@ oer.rating.init = function() {
       } else {
         x = e.pageX - $this.offset().left;
       }
-      var number = parseInt(x / star_width) + 1;
+      var number = parseInt(x / star_width, 10) + 1;
       if (number < 1) {
         number = 1;
       }
