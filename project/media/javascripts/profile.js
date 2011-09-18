@@ -224,6 +224,16 @@ oer.profile.init_geography = function() {
 
     // Pick country on map widget
     var pick_country = function(location) {
+
+      function on_country_change() {
+        select_country();
+        set_map_pin();
+      }
+
+      function on_state_change() {
+        set_map_pin();
+      }
+
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({
         'latLng': location
@@ -231,6 +241,7 @@ oer.profile.init_geography = function() {
         if (status == google.maps.GeocoderStatus.OK) {
           place_marker(results[0].geometry.location);
           var address_components = results[0].address_components;
+
           for (var i = 0; i < address_components.length; i++) {
             var component = address_components[i];
             var code = null;
@@ -238,10 +249,7 @@ oer.profile.init_geography = function() {
               code = component.short_name;
               $country_field.unbind("change");
               $country_field.val(code);
-              $country_field.change(function() {
-                select_country();
-                set_map_pin();
-              });
+              $country_field.change(on_country_change);
               if (code === "US") {
                 $us_state_field_ct.show();
               } else {
@@ -253,9 +261,7 @@ oer.profile.init_geography = function() {
               if ($us_state_field.find("option[value='" + code + "']").length) {
                 $us_state_field.unbind("change");
                 $us_state_field.val(code);
-                $us_state_field.change(function() {
-                  set_map_pin();
-                });
+                $us_state_field.change(on_state_change);
               }
             }
           }
