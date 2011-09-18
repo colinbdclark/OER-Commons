@@ -1,17 +1,17 @@
 .autocomplete-list-widget input.add {
-  width: 250px;
   margin-left: 5px;
+  width: 250px;
 }
 
 form.formatted .field .autocomplete-list-widget ul, .autocomplete-list-widget ul {
-  list-style-type: none;
   margin-bottom: 5px;
+  list-style-type: none;
 }
 
 form.formatted .field .autocomplete-list-widget ul li, .autocomplete-list-widget ul li {
-  padding: 3px 5px;
   float: left;
   margin-right: 5px;
+  padding: 3px 5px;
 }
 
 .autocomplete-list-widget ul li:hover {
@@ -19,19 +19,19 @@ form.formatted .field .autocomplete-list-widget ul li, .autocomplete-list-widget
 }
 
 .autocomplete-list-widget ul:after {
-  content: ".";
-  display: block;
-  height: 0;
   clear: both;
+  display: block;
   visibility: hidden;
+  height: 0;
+  content: ".";
 }
 
 .autocomplete-list-widget a.delete {
   float: right;
+  display: block;
+  margin-left: 3px;
   width: 15px;
   height: 15px;
-  display: block;
   background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
   text-indent: -9999px;
-  margin-left: 3px;
 }

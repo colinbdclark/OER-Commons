@@ -1,5 +1,5 @@
 .clearfix {
-  zoom: 1; /* triggers hasLayout */
+  zoom: 1;
 }
 
 .index-filters .filter input, .advanced-search .filter input {
@@ -11,8 +11,8 @@
 }
 
 .advanced-search .filter dd.collapsible li label {
-  margin-left: 0;
   float: left;
+  margin-left: 0;
 }
 
 #global-search-box .text {

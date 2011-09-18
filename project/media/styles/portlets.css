@@ -12,10 +12,10 @@
 }
 
 .portlet h1 {
-  color: #666666;
-  font-size: 16px;
-  font-weight: normal;
   margin-bottom: 5px;
+  color: #666666;
+  font-weight: normal;
+  font-size: 16px;
 }
 
 .portlet h1.green {
@@ -23,11 +23,11 @@
 }
 
 .portlet h2 {
-  color: #0A546D;
-  font-size: 13px;
-  font-weight: bold;
-  margin-bottom: 5px;
   margin-top: 10px;
+  margin-bottom: 5px;
+  color: #0A546D;
+  font-weight: bold;
+  font-size: 13px;
 }
 
 .portlet h2 a, .portlet h2 a:visited {
@@ -43,23 +43,23 @@
 }
 
 .portlet.oermaterials .topics li a {
-  display: block;
   float: left;
   clear: both;
-  font-size: 14px;
-  line-height: 16px;
+  display: block;
   padding-left: 22px;
+  line-height: 16px;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .portlet.twitter .tweets {
-  list-style-type: none;
-  background: white;
-  border: 1px solid #CCC;
-  height: 150px;
-  overflow: auto;
   position: relative;
+  overflow: auto;
   margin-bottom: 6px;
+  height: 150px;
+  border: 1px solid #CCC;
+  background: white;
+  list-style-type: none;
 }
 
 .portlet.twitter .tweets li {
@@ -69,18 +69,18 @@
 
 .portlet.twitter .tweets .date {
   display: block;
-  text-align: right;
-  color: #666;
   margin-top: 5px;
+  color: #666;
+  text-align: right;
 }
 
 .portlet.twitter a.follow-btn {
-  font-size: 16px;
-  display: block;
   float: left;
-  line-height: 32px;
+  display: block;
   padding-right: 40px;
   background: url(../images/twitter-icon.png) no-repeat 100% 0;
+  line-height: 32px;
+  font-size: 16px;
 }
 
 .portlet.cou ul {
@@ -96,29 +96,29 @@
 }
 
 .portlet.browse-providers a, .portlet.browse-materials a {
-  font-size: 16px;
   font-weight: bold;
+  font-size: 16px;
 }
 
 .portlet.featured-searches li {
-  font-weight: bold;
   margin: 7px 0;
+  font-weight: bold;
 }
 
 .portlet.featured-provider dt {
-  font-weight: bold;
   margin: 5px 0;
+  font-weight: bold;
 }
 
 /* This selector is very specific to prevent multiple class bug in IE6 */
 .column-left .portlet.advanced-search {
   padding: 5px 10px;
-  font-size: 14px;
-  font-weight: bold;
-  background: #F2F8F8;
-  color: #1a5565;
   border: solid #B5CDD9;
   border-width: 2px 1px;
+  background: #F2F8F8;
+  color: #1a5565;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 /* This selector is very specific to prevent multiple class bug in IE6 */
@@ -127,16 +127,16 @@
 }
 
 .portlet.bookmarklet {
-  background: url(../images/bookmarklet-portlet-bg.png) no-repeat 50% 50%;
-  height: 188px;
   padding: 10px;
+  height: 188px;
+  background: url(../images/bookmarklet-portlet-bg.png) no-repeat 50% 50%;
   text-align: center;
 }
 
 .portlet.bookmarklet h1 {
   color: #1E4E62;
-  font-size: 14px;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .portlet.bookmarklet p {
@@ -145,21 +145,21 @@
 
 .portlet.bookmarklet a {
   display: inline-block;
+  margin: 10px 0;
   padding: 5px 10px;
-  font-size: 15px;
+  border: 1px solid #F5A456;
   background-color: #FFCA74;
   color: #1E4E62;
-  border: 1px solid #F5A456;
-  margin: 10px 0;
+  font-size: 15px;
 }
 
 #sponsors-portlet p {
+  margin-right: 20px;
   color: #666;
   line-height: 16px;
-  margin-right: 20px;
 }
 
 #sponsors-portlet div {
-  text-align: center;
   margin: 15px 0;
+  text-align: center;
 }

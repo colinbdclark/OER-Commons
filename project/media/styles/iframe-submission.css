@@ -1,6 +1,6 @@
 body.iframe-submission {
-  background: #fff none;
   padding: 10px;
+  background: #fff none;
 }
 
 body.iframe-submission a {
@@ -16,20 +16,20 @@ body.iframe-submission a {
 }
 
 ul.stepy-titles {
-  list-style: none;
   margin: 0;
   padding: 0;
   width: 100%;
+  list-style: none;
 }
 
 ul.stepy-titles li {
-  color: #DDD;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 18px;
   float: left;
   margin-right: 20px;
   margin-bottom: 20px;
+  color: #DDD;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 ul.stepy-titles li.current-step {
@@ -38,31 +38,31 @@ ul.stepy-titles li.current-step {
 }
 
 ul.stepy-titles li span {
-  font: 11px verdana;
   display: block;
+  font: 11px verdana;
 }
 
 #close {
-  display: block;
   float: right;
-  font-size: 13px;
-  line-height: 15px;
-  padding-left: 15px;
-  background: url(../images/icon-delete-gray.png) no-repeat 0 50%;
+  display: block;
   margin-top: -5px;
   margin-right: -7px;
+  padding-left: 15px;
+  background: url(../images/icon-delete-gray.png) no-repeat 0 50%;
+  line-height: 15px;
+  font-size: 13px;
 }
 
 form.content-submission {
-  font-size: 13px;
   display: none;
   border: none;
   background: inherit;
+  font-size: 13px;
 }
 
 .content-submission .label label {
-  font-weight: bold;
   display: inline-block;
+  font-weight: bold;
 }
 
 .content-submission .required .label label {
@@ -75,8 +75,8 @@ form.content-submission {
 }
 
 .content-submission td.label label {
-  margin-right: 5px;
   margin-top: 3px;
+  margin-right: 5px;
 }
 
 .content-submission div.label {
@@ -92,22 +92,22 @@ form.content-submission {
 }
 
 .content-submission label.error {
-  color: red;
   display: block;
-  padding: 0;
   margin: 0;
+  padding: 0;
   background: none;
+  color: red;
   font-weight: normal;
   font-size: 11px;
 }
 
 fieldset.step p.content-submission-buttons {
-  background: #eee;
-  padding: 10px;
-  text-align: right;
   position: fixed;
   bottom: 10px;
+  padding: 10px;
   width: 610px;
+  background: #eee;
+  text-align: right;
 }
 
 fieldset.step p.content-submission-buttons a {
@@ -117,9 +117,9 @@ fieldset.step p.content-submission-buttons a {
 
 form.content-submission fieldset.step {
   clear: left;
-  border: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  border: none;
 }
 
 .content-submission #keywords-widget ul {
@@ -131,8 +131,8 @@ form.content-submission fieldset.step {
 }
 
 .content-submission #keywords-widget input.add {
-  width: 520px;
   margin-left: 0;
+  width: 520px;
 }
 
 .content-submission textarea {
@@ -162,8 +162,8 @@ form.content-submission fieldset.step {
 
 .iframe-submission form.content-submission .help {
   margin-bottom: 0;
-  font-size: 12px;
   color: #666;
+  font-size: 12px;
 }
 
 .iframe-submission form.content-submission .cou .help {
@@ -188,8 +188,8 @@ form.content-submission fieldset.step {
 }
 
 .iframe-submission form.content-submission #id_tech_requirements {
-  background: none;
   height: 33px;
+  background: none;
 }
 
 .iframe-submission form.content-submission #id_license_description {
@@ -197,8 +197,8 @@ form.content-submission fieldset.step {
 }
 
 .iframe-submission form.login {
-  width: 230px;
   margin: 0;
+  width: 230px;
 }
 
 .iframe-submission form.login p {
@@ -219,9 +219,9 @@ form.content-submission fieldset.step {
 }
 
 .iframe-submission .existing-resource h3 {
-  font-weight: bold;
   margin-top: 10px;
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .iframe-submission .existing-resource form.rate {
@@ -245,12 +245,12 @@ form.content-submission fieldset.step {
 }
 
 .iframe-submission .existing-resource .review .message {
-  background-color: #FC6;
-  border: 1px solid #A88743;
-  color: #544322;
   margin: 5px 0;
-  font-weight: bold;
   padding: 2px 5px;
+  border: 1px solid #A88743;
+  background-color: #FC6;
+  color: #544322;
+  font-weight: bold;
   font-size: 12px;
 }
 
@@ -259,6 +259,6 @@ form.content-submission fieldset.step {
 }
 
 .iframe-submission .success-message p {
-  font-size: 14px;
   margin-bottom: 10px;
+  font-size: 14px;
 }

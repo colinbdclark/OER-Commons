@@ -1,12 +1,12 @@
 .layout-columns {
-  background: url(../images/columns-bg.gif) repeat-y 190px 0;
   margin-top: 20px;
+  background: url(../images/columns-bg.gif) repeat-y 190px 0;
 }
 
 .column-main {
+  float: left;
   padding: 0 20px;
   width: 560px;
-  float: left;
 }
 
 .column-left {
@@ -24,8 +24,8 @@ body.no-columns .layout-columns {
 }
 
 body.no-columns .column-main {
-  padding: 0;
   float: none;
+  padding: 0;
   width: auto;
 }
 
@@ -43,8 +43,8 @@ body.wide-right-column .column-left {
 }
 
 body.wide-right-column .column-main {
-  width: 670px;
   padding-left: 0;
+  width: 670px;
 }
 
 body.wide-right-column .column-right {

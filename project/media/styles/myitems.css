@@ -13,9 +13,9 @@ dl.user-info dt {
 }
 
 .portlet.my-items-views ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  list-style-type: none;
   font-size: 14px;
 }
 
@@ -37,11 +37,11 @@ dl.user-info dt {
 }
 
 .materials-index.saved p.hint {
-  font-size: 14px;
-  padding-bottom: 10px;
   margin-bottom: 15px;
+  padding-bottom: 10px;
   line-height: 14px;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .materials-index.saved p.hint img {

@@ -1,8 +1,8 @@
 .stars {
-  height: 18px;
-  width: 86px;
-  background: url(../images/stars.png) no-repeat;
   margin-bottom: 5px;
+  width: 86px;
+  height: 18px;
+  background: url(../images/stars.png) no-repeat;
 }
 
 .stars.hover {

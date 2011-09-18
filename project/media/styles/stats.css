@@ -1,8 +1,8 @@
 .stats ul.periods {
-  list-style-type: none;
+  display: inline;
   margin: 0;
   padding: 0;
-  display: inline;
+  list-style-type: none;
 }
 
 .stats ul.periods a {
@@ -10,11 +10,11 @@
 }
 
 .stats ul.periods li {
-  list-style-type: none;
+  display: inline;
   margin: 0;
   padding: 0 0.5em;
-  display: inline;
   border-right: 1px solid #ccc;
+  list-style-type: none;
 }
 
 .stats ul.periods li.last {
