@@ -87,12 +87,12 @@
   line-height: 16px;
 }
 
-.materials-index .item .evaluted {
-  background: url(../images/evaluation/icon-evaluated.png) no-repeat 0 50%;
+.materials-index .item .evaluated {
   padding-left: 27px;
   height: 23px;
-  line-height: 23px;
+  background: url(../images/evaluation/icon-evaluated.png) no-repeat 0 50%;
   color: #666;
+  line-height: 23px;
 }
 
 .cou-bucket {
