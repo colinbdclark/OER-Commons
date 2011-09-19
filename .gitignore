@@ -32,3 +32,5 @@ project/production.py
 project/development.py
 project/staging.py
 project/test_settings.py
+
+/project/manage.py

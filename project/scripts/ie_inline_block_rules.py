@@ -1,6 +1,7 @@
 import cssutils
 import os
 import logging
+import sys
 
 
 cssutils.log.setLevel(logging.ERROR)
@@ -18,7 +19,7 @@ def run():
         if filename.startswith("ie"):
             continue
 
-        print "Processing", filename
+        print >> sys.stderr, "Processing", filename
 
         filename = os.path.join(styles_dir, filename)
         sheet = cssutils.parseFile(filename)
@@ -30,8 +31,6 @@ def run():
                 selectors.append(rule.selectorText)
 
     selectors.sort()
-    print
-    print
     print """%s {
     display: inline;
     zoom: 1;

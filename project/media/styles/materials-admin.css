@@ -1,6 +1,6 @@
-fieldset.tabular table,fieldset.tabular table td {
-  border: none;
+fieldset.tabular table, fieldset.tabular table td {
   padding: 0 5px;
+  border: none;
 }
 
 fieldset.tabular.aligned label {
@@ -12,17 +12,17 @@ fieldset.tabular input[type='text'] {
   width: 25em;
 }
 
-ul li.ui-menu-item,.form-row ul li {
+ul li.ui-menu-item, .form-row ul li {
   list-style-type: none;
 }
 
-#id_content_creation_date,#id_rss_timestamp_0 {
+#id_content_creation_date, #id_rss_timestamp_0 {
   width: 7em;
 }
 
 #id_rss_timestamp_1 {
-  width: 3em;
   margin-left: 1em;
+  width: 3em;
 }
 
 .form-row.tags ul {
@@ -30,9 +30,9 @@ ul li.ui-menu-item,.form-row ul li {
 }
 
 .form-row.tags ul li {
-  padding: 3px 5px;
   display: inline-block;
   margin-right: 5px;
+  padding: 3px 5px;
 }
 
 .form-row.tags ul li:hover {
@@ -40,10 +40,10 @@ ul li.ui-menu-item,.form-row ul li {
 }
 
 .form-row.tags a.delete {
+  display: inline-block;
+  margin-left: 3px;
   width: 15px;
   height: 15px;
-  display: inline-block;
   background: url(../images/icon-delete-gray.png) no-repeat 50% 50%;
   text-indent: -9999px;
-  margin-left: 3px;
 }

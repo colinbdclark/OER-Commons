@@ -1,7 +1,7 @@
 .materials-index .item {
-  border-bottom: 1px solid #BFC7CA;
   margin-bottom: 10px;
   padding-bottom: 8px;
+  border-bottom: 1px solid #BFC7CA;
 }
 
 .materials-index .item.last {
@@ -9,18 +9,18 @@
 }
 
 .materials-index h1 {
-  font-size: 14px;
-  font-style: normal;
-  font-weight: bold;
   margin-bottom: 4px;
   color: #1F4D64;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 14px;
 }
 
 .view-item h1 {
-  font-size: 20px;
-  font-style: normal;
-  font-weight: bold;
   margin-bottom: 15px;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 20px;
 }
 
 .view-item h1 a {
@@ -32,15 +32,15 @@
 }
 
 .view-item h1 a img {
-  vertical-align: text-top;
   margin-right: 1px;
+  vertical-align: text-top;
 }
 
 .materials-index h1 img {
   vertical-align: top;
 }
 
-.materials-index a,.view-item a {
+.materials-index a, .view-item a {
   text-decoration: none;
 }
 
@@ -48,24 +48,24 @@
   color: #1F4D64;
 }
 
-.materials-index .details dl,.view-item .details dl {
+.materials-index .details dl, .view-item .details dl {
   margin: 10px 0 0 0;
 }
 
-.materials-index .details dl a,.view-item .details dl a {
+.materials-index .details dl a, .view-item .details dl a {
   font-weight: bold;
 }
 
-.materials-index .details dt,.view-item .details dt {
+.materials-index .details dt, .view-item .details dt {
+  float: left;
   margin-right: 4px;
   color: #616161;
   font-weight: bold;
-  float: left;
 }
 
-.materials-index .details dd,.view-item .details dd {
-  margin-left: 0;
+.materials-index .details dd, .view-item .details dd {
   margin-bottom: 2px;
+  margin-left: 0;
 }
 
 .materials-index .details dl.collapsed {
@@ -73,15 +73,15 @@
 }
 
 .materials-index .details {
-  margin-left: 20px;
   margin-right: 120px;
+  margin-left: 20px;
 }
 
-.materials-index .details dt.topics,.view-item .details dt.topics {
+.materials-index .details dt.topics, .view-item .details dt.topics {
   line-height: 16px;
 }
 
-.materials-index .details dd.topics a,.view-item .details dd.topics a {
+.materials-index .details dd.topics a, .view-item .details dd.topics a {
   display: inline-block;
   padding-left: 20px;
   line-height: 16px;
@@ -96,15 +96,15 @@
 }
 
 .cou-bucket {
-  color: #0B7BA9;
-  font-size: 10px;
-  height: 29px;
-  line-height: 12px;
-  padding-left: 36px;
-  padding-right: 2px;
-  padding-top: 4px;
-  width: 50px;
   margin: 3px 0;
+  padding-top: 4px;
+  padding-right: 2px;
+  padding-left: 36px;
+  width: 50px;
+  height: 29px;
+  color: #0B7BA9;
+  line-height: 12px;
+  font-size: 10px;
   cursor: pointer;
 }
 
@@ -125,11 +125,11 @@
 }
 
 .materials-index .details .message {
-  background-color: #FC6;
+  padding: 2px 5px;
   border: 1px solid #A88743;
+  background-color: #FC6;
   color: #544322;
   font-weight: bold;
-  padding: 2px 5px;
 }
 
 .materials-index .expand-button {
@@ -141,7 +141,7 @@
   display: none;
 }
 
-.materials-index .item .right,.view-item .right {
+.materials-index .item .right, .view-item .right {
   float: right !important;
   margin-left: 10px;
 }
@@ -176,30 +176,30 @@
 }
 
 .materials-index .item dl.actions dd {
+  position: absolute;
+  top: 2em;
+  right: -1px;
+  z-index: 5;
+  display: none;
   margin: 0;
   padding: 0;
-  cursor: pointer;
-  display: none;
   height: auto;
-  position: absolute;
-  right: -1px;
-  top: 2em;
-  z-index: 5;
+  cursor: pointer;
 }
 
 .materials-index .item dl.actions.active dd {
-  display: block;
   z-index: 15;
+  display: block;
 }
 
 .materials-index .item dl.actions ul {
-  list-style-type: none;
+  position: relative;
+  left: -4px;
   margin: -2px 0 0;
   padding: 0;
-  background: #3D8298;
   border: 1px solid #1B536A;
-  left: -4px;
-  position: relative;
+  background: #3D8298;
+  list-style-type: none;
 }
 
 .materials-index .item dl.actions ul li {
@@ -208,10 +208,10 @@
 }
 
 .materials-index .item dl.actions ul a {
-  color: #ffffff;
-  padding: 2px 5px;
-  white-space: nowrap;
   display: block;
+  padding: 2px 5px;
+  color: #ffffff;
+  white-space: nowrap;
 }
 
 .materials-index .item dl.actions ul a:hover {
@@ -233,9 +233,9 @@
 }
 
 .materials-index .index-navigation ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .materials-index .index-navigation li {
@@ -269,8 +269,8 @@
 }
 
 .index-filters .search {
-  padding-bottom: 10px;
   margin-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .index-filters .search input.text {
@@ -278,67 +278,66 @@
 }
 
 .index-filters .search input.button {
+  margin: 5px 0;
+  padding-right: 5px;
+  padding-left: 5px;
   color: #333;
   font-size: 11px;
-  margin: 5px 0;
-  padding-left: 5px;
-  padding-right: 5px;
 }
 
 .index-filters .filter {
   clear: both;
-  padding-bottom: 11px;
   margin-bottom: 10px;
+  padding-bottom: 11px;
 }
 
-.index-filters .filter input,.advanced-search .filter input {
+.index-filters .filter input, .advanced-search .filter input {
   float: left;
   display: block;
 }
 
-.index-filters .filter label,.advanced-search .filter label {
-  display: block;
+.index-filters .filter label, .advanced-search .filter label {
   float: left;
+  display: block;
 }
 
-.index-filters .filter dt,.advanced-search .filter dt {
+.index-filters .filter dt, .advanced-search .filter dt {
   clear: both;
 }
 
-.index-filters .filter dd,.advanced-search .filter dd {
+.index-filters .filter dd, .advanced-search .filter dd {
   clear: both;
   margin-left: 16px;
 }
 
-.index-filters .filter dt label,.advanced-search .filter dt label {
+.index-filters .filter dt label, .advanced-search .filter dt label {
   color: #666;
   font-weight: bold;
 }
 
 .index-filters .filter dt label span {
-  display: block;
   float: left;
+  display: block;
 }
 
 .index-filters .filter dd label {
+  overflow: hidden;
+  width: 146px;
+  height: 16px;
   color: #0B7BA9;
   line-height: 16px;
-  height: 16px;
-  width: 146px;
-  overflow: hidden;
 }
 
-.index-filters .filter dd.collapsed,.index-filters .filter ul.collapsed,.advanced-search .filter dd.collapsed,.advanced-search .filter ul.collapsed
-  {
+.index-filters .filter dd.collapsed, .index-filters .filter ul.collapsed, .advanced-search .filter dd.collapsed, .advanced-search .filter ul.collapsed {
   display: none;
 }
 
 .index-filters dt .tooltip-button {
-  display: block;
   float: left;
+  display: block;
+  margin-left: 5px;
   width: 13px;
   height: 13px;
-  margin-left: 5px;
   background: url(../images/tooltip-btn-13.png) no-repeat;
 }
 
@@ -360,30 +359,30 @@
 }
 
 .item-tags .button-ct {
-  text-align: center;
   margin-top: 5px;
+  text-align: center;
 }
 
 .view-item-navigation {
-  text-align: center;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .view-item-navigation a {
-  font-size: 14px;
   text-decoration: none;
+  font-size: 14px;
 }
 
 .view-item-navigation a.item-link.prev {
-  background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;
-  padding-right: 14px;
   margin-right: 10px;
+  padding-right: 14px;
+  background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;
 }
 
 .view-item-navigation a.item-link.next {
-  background: url(../images/dotted-line-vert.gif) repeat-y 0 0;
-  padding-left: 14px;
   margin-left: 10px;
+  padding-left: 14px;
+  background: url(../images/dotted-line-vert.gif) repeat-y 0 0;
 }
 
 .view-item-navigation a.item-link.hidden {
@@ -416,15 +415,15 @@
 
 .view-item .reviews .by {
   display: block;
+  text-align: right;
   font-weight: bold;
   font-style: normal;
-  text-align: right;
 }
 
 .portlet.save a {
-  font-size: 18px;
   display: inline-block;
   line-height: 27px;
+  font-size: 18px;
 }
 
 .portlet.save a.save {
@@ -434,9 +433,9 @@
 
 /* Browse All */
 .content .browse-materials {
-  background: #f3f7f8;
   border: 1px #bccacd;
   border-style: none solid solid solid;
+  background: #f3f7f8;
 }
 
 .content .browse-materials table {
@@ -444,16 +443,15 @@
 }
 
 .content .browse-materials thead th {
+  padding: 7px 0 14px 0;
   background: #f3f7f8 url(../images/box-header-bg.png) repeat-x 0 0;
   color: white;
-  font-size: 16px;
-  font-weight: bold;
   text-align: center;
-  padding: 7px 0 14px 0;
+  font-weight: bold;
+  font-size: 16px;
 }
 
-.content .browse-materials  th a,.content .browse-materials  th a:visited
-  {
+.content .browse-materials  th a, .content .browse-materials  th a:visited {
   color: white;
 }
 
@@ -477,14 +475,13 @@
 .content .browse-materials  li {
   margin: 7px 15px;
   color: #2683a5;
-  font-weight: bold;
   list-style-type: none;
+  font-weight: bold;
 }
 
-.content .browse-materials  li a,.content .browse-materials  li a:visited
-  {
-  text-decoration: none;
+.content .browse-materials  li a, .content .browse-materials  li a:visited {
   color: #2683a5;
+  text-decoration: none;
 }
 
 .content .browse-materials  li span {
@@ -495,56 +492,55 @@
   background: #f3f7f8 url(../images/browse-table-column-sep.png) repeat-y 0 0;
 }
 
-.content .browse-materials td.sep div,.content .browse-materials  td.nosep div
-  {
+.content .browse-materials td.sep div, .content .browse-materials  td.nosep div {
   width: 11px;
 }
 
 .content .browse-materials.providers li {
-  font-size: 12px;
   margin: 7px 10px;
   list-style-type: none;
+  font-size: 12px;
 }
 
 .csv-icon {
   display: block;
+  margin-top: 2px;
   width: 16px;
   height: 16px;
   background: url(../images/csv-icon.png) no-repeat 0 0;
   text-indent: -9999px;
-  margin-top: 2px;
 }
 
 .rss-icon {
   display: block;
+  margin-top: 2px;
   width: 16px;
   height: 16px;
   background: url(../images/rss-icon.gif) no-repeat 0 0;
   text-indent: -9999px;
-  margin-top: 2px;
 }
 
 .email-icon {
   display: block;
+  margin-top: 2px;
   width: 16px;
   height: 16px;
   background: url(../images/email-icon.png) no-repeat 50% 50%;
   text-indent: -9999px;
-  margin-top: 2px;
 }
 
 .advanced-search .search-box {
-  background: #0c5671 url(../images/advancedsearch-searchbox-bg.png) repeat-x 0 0;
-  padding: 10px;
   margin-bottom: 20px;
+  padding: 10px;
+  background: #0c5671 url(../images/advancedsearch-searchbox-bg.png) repeat-x 0 0;
 }
 
 .advanced-search .search-box h3 {
+  margin-bottom: 10px;
   color: white;
-  font-size: 20px;
   font-weight: bold;
   font-style: normal;
-  margin-bottom: 10px;
+  font-size: 20px;
 }
 
 .advanced-search .search-box input.searchbutton {
@@ -552,23 +548,23 @@
 }
 
 .advanced-search .search-box input.text {
+  margin-bottom: 7px;
   width: 452px;
   border: 1px solid #9d9d9d;
-  margin-bottom: 7px;
 }
 
 .advanced-search .search-box select {
-  width: 147px;
   margin-right: 5px;
+  width: 147px;
 }
 
 .box.search-by-keyword label {
-  display: block;
   float: left;
   clear: both;
-  color: #1A5565;
+  display: block;
   margin-top: 10px;
   margin-left: 13px;
+  color: #1A5565;
 }
 
 .box.search-by-keyword input.text {
@@ -577,9 +573,9 @@
   margin-right: 13px;
 }
 
-.box.search-by-keyword .buttons,.box.filters .buttons {
-  text-align: right;
+.box.search-by-keyword .buttons, .box.filters .buttons {
   margin: 10px;
+  text-align: right;
 }
 
 .advanced-search #align-form,
@@ -593,8 +589,8 @@
 
 .advanced-search #align-form .field label,
 .advanced-search .rubric .field label {
-  font-weight: bold;
   margin-bottom: 2px;
+  font-weight: bold;
 }
 
 .advanced-search #align-form .field.loading label:after {
@@ -606,22 +602,22 @@
 }
 
 .advanced-search .filters .languages label {
-  color: #1A5565;
-  font-size: 14px;
-  font-weight: bold;
   margin-right: 10px;
+  color: #1A5565;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .advanced-search .filters table {
-  margin-left: 13px;
   margin-right: 13px;
+  margin-left: 13px;
   width: 530px;
 }
 
 .advanced-search .filter dt label {
   color: #1A5565;
-  font-size: 14px;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .advanced-search .filter dt {
@@ -645,21 +641,21 @@
 }
 
 .advanced-search .filter dd.collapsible ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .advanced-search .filter dd.collapsible li {
+  clear: both;
   margin: 0 0 0 16px;
   padding: 0;
-  clear: both;
 }
 
 .content-actions {
-  background-color: #CDE2A7;
-  border: 1px solid #74AE0B;
   margin-bottom: 10px;
+  border: 1px solid #74AE0B;
+  background-color: #CDE2A7;
   text-transform: lowercase;
 }
 
@@ -670,9 +666,9 @@
 }
 
 .content-actions ul li {
+  float: right;
   margin: 0;
   padding: 3px 5px;
-  float: right;
   border-left: 1px solid #74AE0B;
 }
 
@@ -699,29 +695,29 @@
 }
 
 .content-actions dl dd {
+  position: absolute;
+  top: 2em;
+  right: -1px;
+  z-index: 5;
+  display: none;
   margin: 0;
   padding: 0;
-  cursor: pointer;
-  display: none;
   height: auto;
-  position: absolute;
-  right: -1px;
-  top: 2em;
-  z-index: 5;
+  cursor: pointer;
 }
 
 .content-actions dl.active dd {
-  display: block;
   z-index: 15;
+  display: block;
 }
 
 .content-actions dl ul {
-  list-style-type: none;
+  position: relative;
   margin: -6px 0 0;
   padding: 0;
-  background: #CDE2A7;
   border: 1px solid #74AE0B;
-  position: relative
+  background: #CDE2A7;
+  list-style-type: none;
 }
 
 .content-actions dl ul li {
@@ -730,9 +726,9 @@
 }
 
 .content-actions dl ul a {
+  display: block;
   padding: 4px 5px;
   white-space: nowrap;
-  display: block;
 }
 
 .content-actions dl ul a:hover {
@@ -761,7 +757,7 @@
   background: none;
 }
 
-.tags-index .column-left,.tags-index .column-right {
+.tags-index .column-left, .tags-index .column-right {
   display: none;
 }
 
@@ -771,9 +767,9 @@
 }
 
 .tags-index ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .tags-index ul.letters {
@@ -784,11 +780,11 @@
   display: inline;
   margin: 0 8px 0 0;
   padding: 0;
-  font-size: 14px;
   text-transform: uppercase;
+  font-size: 14px;
 }
 
-.tags-index ul.letters li a,.tags-index ul.letters li span {
+.tags-index ul.letters li a, .tags-index ul.letters li span {
   padding: 2px 5px;
   border: 1px solid #ccc;
 }
@@ -797,16 +793,16 @@
   text-decoration: none;
 }
 
-.tags-index ul.letters li a:hover,.tags-index ul.letters li span {
+.tags-index ul.letters li a:hover, .tags-index ul.letters li span {
   border-color: #666;
 }
 
 .tags-index ul.tags {
   float: left;
+  overflow: hidden;
   margin-right: 10px;
   margin-left: 0;
   width: 210px;
-  overflow: hidden;
 }
 
 .tags-index ul.tags li {
@@ -823,9 +819,9 @@
 }
 
 #content.contribute h2 {
-  font-size: 16px;
-  font-weight: normal;
   color: #679801;
+  font-weight: normal;
+  font-size: 16px;
 }
 
 #content.contribute dt,
@@ -835,12 +831,12 @@
 
 #content.contribute dd,
 #content.contribute p {
-  margin-left: 1em;
   margin-right: 1em;
+  margin-left: 1em;
 }
 
 #content.contribute p.footnote {
-  margin-left: 0;
   margin-right: 0;
+  margin-left: 0;
   font-size: 12px;
 }
