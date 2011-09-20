@@ -8,10 +8,11 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
+from django import forms
 from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial
 from rubrics.models import Rubric, StandardAlignmentScoreValue, \
-    StandardAlignmentScore, RubricScore, RubricScoreValue
+    StandardAlignmentScore, RubricScore, RubricScoreValue, EvaluationComment
 from utils.decorators import login_required
 
 
@@ -202,6 +203,18 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         return HttpResponseBadRequest()
 
 
+class EvaluationCommentForm(forms.ModelForm):
+
+    text = forms.CharField(
+        widget=forms.Textarea(),
+        label=u"Additional Comments",
+    )
+
+    class Meta:
+        model = EvaluationComment
+        fields = ["text"]
+
+
 class Results(EvaluateViewMixin, TemplateView):
 
     template_name = "rubrics/tool/results.html"
@@ -309,6 +322,13 @@ class Results(EvaluateViewMixin, TemplateView):
             not_scored_section = "rubric%i" % sorted(not_scored_rubrics)[0]
 
         data["not_scored_section"] = not_scored_section
+
+        comment = get_object_or_None(EvaluationComment,
+                                     user=self.request.user,
+                                     content_type=self.content_type,
+                                     object_id=self.object.id)
+        data["form"] = EvaluationCommentForm(instance=comment)
+
         return data
 
 
@@ -316,6 +336,23 @@ class Finalize(EvaluateViewMixin, View):
 
     #noinspection PyUnusedLocal
     def post(self, request, *args, **kwargs):
+
+        comment = get_object_or_None(EvaluationComment,
+                                     user=self.request.user,
+                                     content_type=self.content_type,
+                                     object_id=self.object.id)
+        if not comment:
+            comment = EvaluationComment(
+                user=self.request.user,
+                content_type=self.content_type,
+                object_id=self.object.id,
+            )
+
+        form = EvaluationCommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+        elif comment.pk:
+            comment.delete()
 
         StandardAlignmentScore.objects.filter(
             content_type=self.content_type,

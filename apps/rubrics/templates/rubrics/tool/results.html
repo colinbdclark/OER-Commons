@@ -48,20 +48,24 @@
           {% endfor %}
         </tbody>
       </table>
-      <div class="footer">
-        <a class="rc3 back {% if not finalized %} gray{% endif %}"
-           href="{% url rubrics:evaluate_rubrics content_type_id=content_type.id,object_id=object.id %}{% if not_scored_section %}#{{ not_scored_section }}{% endif %}">
-          Go Back &amp; Change Your Scores
-        </a>
-        {% if not finalized %}
-          <a class="rc3 finalize" href="#">
-            Finalize OER Review
-          </a>
-        {% endif %}
-      </div>
     </figure>
-    <form id="finalize-form" action="{% url rubrics:evaluate_finalize content_type_id=content_type.id,object_id=object.id %}" method="post">
+    <form id="finalize-form" method="post" class="formatted"
+          action="{% url rubrics:evaluate_finalize content_type_id=content_type.id,object_id=object.id %}">
+      {% with form.text as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
     </form>
+    <div class="footer">
+      <a class="rc3 back {% if not finalized %} gray{% endif %}"
+         href="{% url rubrics:evaluate_rubrics content_type_id=content_type.id,object_id=object.id %}{% if not_scored_section %}#{{ not_scored_section }}{% endif %}">
+        Go Back &amp; Change Your Scores
+      </a>
+      {% if not finalized %}
+        <a class="rc3 finalize" href="#">
+          Finalize OER Review
+        </a>
+      {% endif %}
+    </div>
   </div>
 {% endblock %}
 
