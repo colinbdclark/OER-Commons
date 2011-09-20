@@ -540,11 +540,21 @@ body.evaluation-tool {
   width: 580px;
   border-top: 1px solid #ccc;
   background-color: #fff;
-  text-align: right;
 }
 
 .evaluation-tool footer.global a {
   color: #666;
+}
+
+.evaluation-tool footer.global a.results {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  display: inline-block;
+  padding: 1px 5px;
+  background-color: #194487;
+  color: #fff;
+  text-decoration: none;
 }
 
 #evaluate-dialog {

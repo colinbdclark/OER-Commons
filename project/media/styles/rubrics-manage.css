@@ -29,8 +29,8 @@ footer.global {
 
 .ui-jqgrid tr.jqgrow td,
 .ui-jqgrid .ui-jqgrid-htable th {
-  font-size: 13px;
   line-height: 22px;
+  font-size: 13px;
 }
 
 .ui-jqgrid .ui-icon-asc {
