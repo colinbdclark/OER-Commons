@@ -12,12 +12,12 @@
 
 .advanced-search .filter dd.collapsible li label {
   float: left;
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 #global-search-box .text {
   margin-top: 1px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 #global-search-box .button {

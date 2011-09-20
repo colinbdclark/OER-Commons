@@ -48,7 +48,6 @@ OER.showForm = function() {
   };
 
   container2.appendChild(iframe);
-
 };
 
 OER.showForm();

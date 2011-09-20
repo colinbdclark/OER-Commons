@@ -34,8 +34,7 @@
 }
 
 .stats table td.graph {
-  padding: 0;
-  padding-left: 5px;
+  padding: 0 0 0 5px;
 }
 
 .stats table .even td.graph {
