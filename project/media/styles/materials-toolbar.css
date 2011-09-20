@@ -20,10 +20,10 @@ iframe#resource {
 }
 
 #toolbar .view-item-navigation ul {
-  float: none; 
+  float: none;
 }
 
 #toolbar .add-this-ct {
-   float: right;
-   margin-top: 1px; 
+  float: right;
+  margin-top: 1px;
 }

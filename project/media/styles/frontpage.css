@@ -82,7 +82,7 @@
 
 #frontpage-promo {
   height: 227px;
-  background: url(../images/frontpage-promo-bg.jpg) no-repeat 0% 0%;
+  background: url(../images/frontpage-promo-bg.jpg) no-repeat 0 0;
 }
 
 #frontpage-promo .column1 {

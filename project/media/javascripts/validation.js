@@ -45,22 +45,22 @@ oer.validation.rules.send_this = {
 };
 
 oer.validation.rules.newsletter = {
-    email: {
-      required: true,
-      email: true
-    }
+  email: {
+    required: true,
+    email: true
+  }
 };
 
 $.validator.setDefaults({
   errorPlacement: function(error, element) {
-     error.appendTo(element.closest(".field").find(".errors"));
+    error.appendTo(element.closest(".field").find(".errors"));
   },
   submitHandler: function(form) {
-      if (!this.been_submited) {
-          this.been_submitted = true;
-          form.submit();
-      } else {
-          return false;
-      }
+    if (!this.been_submited) {
+      this.been_submitted = true;
+      form.submit();
+    } else {
+      return false;
+    }
   }
 });

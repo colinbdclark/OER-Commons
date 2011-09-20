@@ -68,8 +68,7 @@ hr.tall {
 
 .dotted {
   padding-bottom: 4px;
-  background: url(../images/dotted-line-hor.gif) repeat-x scroll 0 100%
-    transparent;
+  background: url(../images/dotted-line-hor.gif) repeat-x scroll 0 100% transparent;
 }
 
 .breadcrumbs {
@@ -223,7 +222,7 @@ div.box h3 {
   padding-bottom: 5px;
 }
 
-.ui-autocomplete,.ui-datepicker {
+.ui-autocomplete, .ui-datepicker {
   -webkit-box-shadow: 2px 2px 3px #999;
   -moz-box-shadow: 2px 2px 3px #999;
   box-shadow: 2px 2px 3px #999;
@@ -324,7 +323,7 @@ div.box h3 {
   font-size: 14px;
 }
 
-.global-notification .close a,.status-message .close a {
+.global-notification .close a, .status-message .close a {
   color: #544322;
   font-weight: normal;
   font-size: 11px;

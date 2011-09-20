@@ -58,14 +58,14 @@ header.global nav span {
 }
 
 header.global nav a img {
-  vertical-align: middle; 
+  vertical-align: middle;
 }
 
 header.global nav a.button-contribute {
   display: block;
   overflow: hidden;
   margin-left: 10px;
-  padding: 0px;
+  padding: 0;
   width: 145px;
   height: 22px;
   background: url(../images/contribute-btn.gif) no-repeat;
@@ -89,7 +89,7 @@ header.global nav a.button-contribute {
   margin-right: 2px;
   padding-left: 3px;
   height: 40px;
-  background: url(../images/section-sep.gif) no-repeat 0% 50%;
+  background: url(../images/section-sep.gif) no-repeat 0 50%;
 }
 
 .global-tabs nav li span {

@@ -12,7 +12,7 @@
 }
 
 .portlet h1 {
-  margin-bottom:5px;
+  margin-bottom: 5px;
   color: #666666;
   font-weight: normal;
   font-size: 16px;
@@ -57,9 +57,7 @@
   overflow: auto;
   margin-bottom: 6px;
   height: 150px;
-  border-color: #CCC;
-  border-style: solid;
-  border-width: 1px;
+  border: 1px solid #CCC;
   background: white;
   list-style-type: none;
 }
@@ -103,12 +101,12 @@
 }
 
 .portlet.featured-searches li {
-  margin: 7px 0px;
+  margin: 7px 0;
   font-weight: bold;
 }
 
 .portlet.featured-provider dt {
-  margin: 5px 0px;
+  margin: 5px 0;
   font-weight: bold;
 }
 
@@ -149,7 +147,7 @@
   display: inline-block;
   margin: 10px 0;
   padding: 5px 10px;
-  border:  1px solid #F5A456;
+  border: 1px solid #F5A456;
   background-color: #FFCA74;
   color: #1E4E62;
   font-size: 15px;

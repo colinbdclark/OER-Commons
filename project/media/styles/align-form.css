@@ -111,7 +111,7 @@ body.authenticated .portlet.align-item-tags .login {
   position: relative;
   display: inline-block;
   margin: 3px 6px 3px 0;
-  padding: 0px;
+  padding: 0;
   border: 2px solid #FFE4B8;
   background-color: #fff;
 }
@@ -129,7 +129,7 @@ body.authenticated .portlet.align-item-tags .login {
 .align-user-tags li.tag a.delete,
 .portlet.align-item-tags .align-user-tags li.tag a.delete {
   position: absolute;
-  top: 0px;
+  top: 0;
   right: 2px;
   display: block;
   margin: 0;

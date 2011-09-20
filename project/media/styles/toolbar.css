@@ -17,25 +17,25 @@ body.toolbar-view .page {
 }
 
 #toolbar .c1 {
-  background: url(../images/toolbar-circle-1.png) no-repeat 130px 0%;
+  background: url(../images/toolbar-circle-1.png) no-repeat 130px 0;
 }
 
 #toolbar .c2 {
-  background: url(../images/toolbar-circle-2.png) no-repeat 30% 0%;
+  background: url(../images/toolbar-circle-2.png) no-repeat 30% 0;
 }
 
 #toolbar .c3 {
-  background: url(../images/toolbar-circle-3.png) no-repeat 60% 0%;
+  background: url(../images/toolbar-circle-3.png) no-repeat 60% 0;
 }
 
 #toolbar .c4 {
-  background: url(../images/toolbar-circle-4.png) no-repeat 90% 0%;
+  background: url(../images/toolbar-circle-4.png) no-repeat 90% 0;
 }
 
 #toolbar .green-bar {
   padding: 7px 30px 9px 120px;
   height: 24px;
-  background: url(../images/toolbar-green-bar.png) repeat-x 0% 100%;
+  background: url(../images/toolbar-green-bar.png) repeat-x 0 100%;
 }
 
 #toolbar a {
@@ -49,8 +49,8 @@ body.toolbar-view .page {
 #toolbar ul {
   float: left;
   margin: 0;
-  padding: 2px 1px 2px 0px;
-  background: url(../images/dotted-line-vert.gif) 100% 0% repeat-y;
+  padding: 2px 1px 2px 0;
+  background: url(../images/dotted-line-vert.gif) 100% 0 repeat-y;
   list-style-type: none;
 }
 
@@ -74,12 +74,12 @@ body.toolbar-view .page {
 
 #toolbar li a.loading {
   padding-left: 20px;
-  background: url(../images/ajax-loader.gif) 0% 50% no-repeat;
+  background: url(../images/ajax-loader.gif) 0 50% no-repeat;
 }
 
 #logo {
   position: absolute;
-  top: 0px;
+  top: 0;
   left: 10px;
   z-index: 10;
   display: block;
@@ -97,8 +97,7 @@ body.toolbar-view .page {
   display: block;
   width: 16px;
   height: 16px;
-  background: url(../javascripts/jquery/Aristo/images/icon_sprite.png) 0px
-    -16px no-repeat;
+  background: url(../javascripts/jquery/Aristo/images/icon_sprite.png) 0 -16px no-repeat;
   text-indent: -9999px;
 }
 

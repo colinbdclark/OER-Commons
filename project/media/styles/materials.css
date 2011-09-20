@@ -45,7 +45,7 @@
   vertical-align: top;
 }
 
-.materials-index a,.view-item a {
+.materials-index a, .view-item a {
   text-decoration: none;
 }
 
@@ -53,22 +53,22 @@
   color: #1F4D64;
 }
 
-.materials-index .details dl,.view-item .details dl {
+.materials-index .details dl, .view-item .details dl {
   margin: 10px 0 0 0;
 }
 
-.materials-index .details dl a,.view-item .details dl a {
+.materials-index .details dl a, .view-item .details dl a {
   font-weight: bold;
 }
 
-.materials-index .details dt,.view-item .details dt {
+.materials-index .details dt, .view-item .details dt {
   float: left;
   margin-right: 4px;
   color: #616161;
   font-weight: bold;
 }
 
-.materials-index .details dd,.view-item .details dd {
+.materials-index .details dd, .view-item .details dd {
   margin-bottom: 2px;
   margin-left: 0;
 }
@@ -82,11 +82,11 @@
   margin-left: 20px;
 }
 
-.materials-index .details dt.topics,.view-item .details dt.topics {
+.materials-index .details dt.topics, .view-item .details dt.topics {
   line-height: 16px;
 }
 
-.materials-index .details dd.topics a,.view-item .details dd.topics a {
+.materials-index .details dd.topics a, .view-item .details dd.topics a {
   display: inline-block;
   padding-left: 20px;
   line-height: 16px;
@@ -146,7 +146,7 @@
   display: none;
 }
 
-.materials-index .item .right,.view-item .right {
+.materials-index .item .right, .view-item .right {
   float: right !important;
   margin-left: 10px;
 }
@@ -296,26 +296,26 @@
   padding-bottom: 11px;
 }
 
-.index-filters .filter input,.advanced-search .filter input {
+.index-filters .filter input, .advanced-search .filter input {
   float: left;
   display: block;
 }
 
-.index-filters .filter label,.advanced-search .filter label {
+.index-filters .filter label, .advanced-search .filter label {
   float: left;
   display: block;
 }
 
-.index-filters .filter dt,.advanced-search .filter dt {
+.index-filters .filter dt, .advanced-search .filter dt {
   clear: both;
 }
 
-.index-filters .filter dd,.advanced-search .filter dd {
+.index-filters .filter dd, .advanced-search .filter dd {
   clear: both;
   margin-left: 16px;
 }
 
-.index-filters .filter dt label,.advanced-search .filter dt label {
+.index-filters .filter dt label, .advanced-search .filter dt label {
   color: #666;
   font-weight: bold;
 }
@@ -333,8 +333,7 @@
   line-height: 16px;
 }
 
-.index-filters .filter dd.collapsed,.index-filters .filter ul.collapsed,.advanced-search .filter dd.collapsed,.advanced-search .filter ul.collapsed
-  {
+.index-filters .filter dd.collapsed, .index-filters .filter ul.collapsed, .advanced-search .filter dd.collapsed, .advanced-search .filter ul.collapsed {
   display: none;
 }
 
@@ -457,8 +456,7 @@
   font-size: 16px;
 }
 
-.content .browse-materials  th a,.content .browse-materials  th a:visited
-  {
+.content .browse-materials  th a, .content .browse-materials  th a:visited {
   color: white;
 }
 
@@ -486,8 +484,7 @@
   font-weight: bold;
 }
 
-.content .browse-materials  li a,.content .browse-materials  li a:visited
-  {
+.content .browse-materials  li a, .content .browse-materials  li a:visited {
   color: #2683a5;
   text-decoration: none;
 }
@@ -500,8 +497,7 @@
   background: #f3f7f8 url(../images/browse-table-column-sep.png) repeat-y 0 0;
 }
 
-.content .browse-materials td.sep div,.content .browse-materials  td.nosep div
-  {
+.content .browse-materials td.sep div, .content .browse-materials  td.nosep div {
   width: 11px;
 }
 
@@ -582,7 +578,7 @@
   margin-right: 13px;
 }
 
-.box.search-by-keyword .buttons,.box.filters .buttons {
+.box.search-by-keyword .buttons, .box.filters .buttons {
   margin: 10px;
   text-align: right;
 }
@@ -766,7 +762,7 @@
   background: none;
 }
 
-.tags-index .column-left,.tags-index .column-right {
+.tags-index .column-left, .tags-index .column-right {
   display: none;
 }
 
@@ -793,7 +789,7 @@
   font-size: 14px;
 }
 
-.tags-index ul.letters li a,.tags-index ul.letters li span {
+.tags-index ul.letters li a, .tags-index ul.letters li span {
   padding: 2px 5px;
   border: 1px solid #ccc;
 }
@@ -802,7 +798,7 @@
   text-decoration: none;
 }
 
-.tags-index ul.letters li a:hover,.tags-index ul.letters li span {
+.tags-index ul.letters li a:hover, .tags-index ul.letters li span {
   border-color: #666;
 }
 
@@ -828,7 +824,7 @@
 }
 
 .portlet.dotted.align-item-tags {
-  padding-bottom: 10px; 
+  padding-bottom: 10px;
 }
 
 #content.contribute h2 {

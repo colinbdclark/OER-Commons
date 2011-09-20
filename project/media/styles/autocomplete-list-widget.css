@@ -14,7 +14,7 @@ form.formatted .field .autocomplete-list-widget li {
   position: relative;
   display: inline-block;
   margin: 3px 6px 3px 0;
-  padding: 0px;
+  padding: 0;
   border: 2px solid #C1DEE8;
   background-color: #fff;
 }
@@ -29,7 +29,7 @@ form.formatted .field .autocomplete-list-widget li {
 
 .autocomplete-list-widget li a.delete {
   position: absolute;
-  top: 0px;
+  top: 0;
   right: 2px;
   float: right;
   display: block;

@@ -33,66 +33,6 @@
   background: none !important;
 }
 
-/* Items with display: inline-block */
-#align-form label,
-#define-form .goals a,
-#define-form .subjects li,
-#organize-form #content section header h1,
-#organize-form #show-align-form,
-#organize-form .image .controls,
-#organize-form .image .controls a,
-#organize-form .image .controls div,
-#organize-form section.align div.label,
-#toolbar .stars,
-#toolbar li,
-#toolbar li a,
-.accordion .accordion-header a,
-.align-user-tags li.tag a, .portlet.align-item-tags .align-user-tags li.tag a,
-.align-user-tags li.tag, .portlet.align-item-tags .align-user-tags li.tag,
-.authoring .buttons a.next,
-.authoring header.global nav ul li,
-.autocomplete-list-widget li span,
-.autocomplete-list-widget li, form.formatted .field .autocomplete-list-widget li,
-.button-blue-big,
-.column-left,
-.column-main,
-.column-right,
-.content-submission .label label,
-.evaluation-tool .intro a.learn,
-.evaluation-tool .intro a.start,
-.evaluation-tool .rubrics .scores a strong,
-.evaluation-tool .rubrics .tags a.tag,
-.evaluation-tool .rubrics .tags a.tag,
-.evaluation-tool .rubrics section .footer a.next, .evaluation-tool .rubrics section .footer a.save,
-.evaluation-tool .rubrics section .footer a.next-tag,
-.evaluation-tool header h1,
-.form-row.tags a.delete,
-.form-row.tags ul li,
-.frontpage-highlight .buttons li,
-.green-browse #content section.column,
-.iframe-submission .existing-resource .user-tags li,
-.materials-index .details dd.topics a, .view-item .details dd.topics a,
-.portlet.align-item-tags li,
-.portlet.bookmarklet a,
-.portlet.item-tags li,
-.portlet.save a,
-.profile-edit form[name="about"],
-.profile-edit form[name="roles"],
-.profile-edit section,
-.profile-edit section h1,
-.profile-view #upload-avatar-btn, .profile-edit #upload-avatar-btn,
-.profile-view .portlet.links ul li a,
-.profile-view a.edit,
-.profile-view section.avatar, .profile-view section.basic, .profile-view section.roles, .profile-view section.levels,
-.profile-views,
-.user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
-.user-tags li.tag, .portlet.item-tags .user-tags li.tag,
-fieldset.step p.content-submission-buttons a,
-form.login .buttons a {
-    display: inline;
-    zoom: 1;
-}
-
 .rocon {
   text-align: left;
 }
