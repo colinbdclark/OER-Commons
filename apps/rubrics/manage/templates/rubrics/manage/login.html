@@ -1,0 +1,33 @@
+{% extends "rubrics/manage/base.html" %}
+
+{% block search-form %}{% endblock %}
+
+
+{% block content %}
+  <form method="post" action="{% url rubrics_manage:login %}" id="login-form" class="formatted login">
+    {% for field in form.hidden_fields %}
+      {{ field }}
+    {% endfor %}
+
+    <div class="errors global"></div>
+
+    {% for field in form.visible_fields %}
+      {% include "include/form-field.html" %}
+    {% endfor %}
+    <div class="buttons">
+      <a href="{% url users:reset_password_init %}" class="forgot-password">Forgot your password?</a>
+      {% if in_dialog %}
+        <a href="#" class="cancel dashed">Cancel</a>
+      {% endif %}
+      <input type="submit" class="button" value="Log in" />
+    </div>
+  </form>
+{% endblock %}
+
+{% block extra-js %}
+  <script>
+    $(function() {
+      $("#id_password").showPasswordCheckbox();
+    });
+  </script>
+{% endblock %}

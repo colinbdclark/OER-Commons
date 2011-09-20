@@ -40,6 +40,9 @@ class Rubric(models.Model):
         return self.name
 
     class Meta:
+        permissions = (
+            ("can_manage", u"Can manage evaluations"),
+        )
         ordering = ["id"]
 
 

@@ -117,6 +117,7 @@ INSTALLED_APPS = (
     'newsletter',
     'preferences',
     'rubrics',
+    'rubrics.manage',
     'project',
 )
 

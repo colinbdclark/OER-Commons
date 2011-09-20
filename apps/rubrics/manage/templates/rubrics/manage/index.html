@@ -1,0 +1,13 @@
+{% extends "rubrics/manage/base.html" %}
+
+{% block content %}
+  <table id="grid" data-data-url="{% url rubrics_manage:index %}"></table>
+{% endblock %}
+
+{% block extra-js %}
+  <script>
+    $(function() {
+      var $grid = $("#grid");
+    });
+  </script>
+{% endblock %}
