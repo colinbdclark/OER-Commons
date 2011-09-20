@@ -45,15 +45,15 @@ oer.evaluation_tool.init_rubrics = function() {
 
     if ($scores.data("tag-id") !== undefined) {
       var tag_id = $scores.data("tag-id");
-      data["tag_id"] = tag_id;
+      data.tag_id = tag_id;
       var $tag = $section.find("a.tag[data-tag-id='" + tag_id + "']");
       $tag.find("span.value").text("No score");
       $tag.removeClass("scored");
     } else if ($scores.data("rubric-id") !== undefined) {
-      data["rubric_id"] = $scores.data("rubric-id");
+      data.rubric_id = $scores.data("rubric-id");
     }
 
-    if (window.rocon != undefined) {
+    if (window.rocon !== undefined) {
       $scores.find("a").each(function(e, el) {
         rocon.update(el);
       });
@@ -66,7 +66,7 @@ oer.evaluation_tool.init_rubrics = function() {
   function open_section($section) {
     var $current_section = $sections.filter(".expanded");
     if (!$current_section.hasClass("intro") && !$current_section.hasClass("scored")) {
-      $current_section.addClass("not-scored")
+      $current_section.addClass("not-scored");
     }
     $current_section.removeClass("expanded").find("div.body").show().slideUp("fast");
     if (!$section.hasClass("expanded")) {
@@ -91,7 +91,7 @@ oer.evaluation_tool.init_rubrics = function() {
     $tags_ct.find("div.footer[data-tag-id='" + tag_id + "']").addClass("selected");
     $tag.addClass("selected");
 
-    if (window.rocon != undefined) {
+    if (window.rocon !== undefined) {
       $tags_ct.find("a.tag").each(function(e, el) {
         rocon.update(el);
       });
@@ -131,7 +131,7 @@ oer.evaluation_tool.init_rubrics = function() {
     $scores.find("div.selected").removeClass("selected");
     $score.addClass("selected");
 
-    if (window.rocon != undefined) {
+    if (window.rocon !== undefined) {
       $scores.find("a").each(function(e, el) {
         rocon.update(el);
       });
@@ -155,7 +155,7 @@ oer.evaluation_tool.init_rubrics = function() {
   $score_selectors.find("a").mouseenter(function() {
     var $this = $(this);
     $this.closest("div").addClass("hover");
-    if (window.rocon != undefined) {
+    if (window.rocon !== undefined) {
       $this.closest("div.scores").find("a").each(function(e, el) {
         rocon.update(el);
       });
@@ -165,7 +165,7 @@ oer.evaluation_tool.init_rubrics = function() {
   $score_selectors.find("a").mouseleave(function() {
     var $this = $(this);
     $this.closest("div").removeClass("hover");
-    if (window.rocon != undefined) {
+    if (window.rocon !== undefined) {
       $this.closest("div.scores").find("a").each(function(e, el) {
         rocon.update(el);
       });

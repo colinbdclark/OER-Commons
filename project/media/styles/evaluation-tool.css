@@ -440,6 +440,7 @@ body.evaluation-tool {
 
 .evaluation-tool .evaluation-results figure {
   margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .evaluation-tool .evaluation-results table {
@@ -532,6 +533,22 @@ body.evaluation-tool {
   vertical-align: middle;
 }
 
+.evaluation-tool .evaluation-results #finalize-form label {
+  background: none;
+}
+
+.evaluation-tool .evaluation-results #finalize-form .label {
+  margin-bottom: 2px;
+}
+
+.evaluation-tool .evaluation-results #finalize-form textarea {
+  margin: 0;
+  width: 567px;
+  height: 150px;
+  border-color: #ccc;
+  resize: none;
+}
+
 .evaluation-tool footer.global {
   position: absolute;
   bottom: 0;
@@ -540,11 +557,21 @@ body.evaluation-tool {
   width: 580px;
   border-top: 1px solid #ccc;
   background-color: #fff;
-  text-align: right;
 }
 
 .evaluation-tool footer.global a {
   color: #666;
+}
+
+.evaluation-tool footer.global a.results {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  display: inline-block;
+  padding: 1px 5px;
+  background-color: #194487;
+  color: #fff;
+  text-decoration: none;
 }
 
 #evaluate-dialog {

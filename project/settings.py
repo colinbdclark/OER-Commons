@@ -118,6 +118,7 @@ INSTALLED_APPS = (
     'blog',
     'preferences',
     'rubrics',
+    'rubrics.manage',
     'oer',
     'project',
 )

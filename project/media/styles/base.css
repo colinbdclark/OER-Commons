@@ -8,6 +8,10 @@ body .page {
   background: url(../images/main-bg.png) repeat-x;
 }
 
+em{
+  font-style: italic;
+}
+
 a {
   color: #0B7BA9;
 }

@@ -119,6 +119,7 @@
   </div>
   <footer class="global">
     <a href="http://www.achieve.org/files/AchieveOERRubrics.pdf" target="_blank">OER Rubrics (PDF Version)</a>
+    <a href="{% url rubrics:evaluate_results content_type_id=content_type.id,object_id=object.id %}" class="results rc5">View Results</a>
   </footer>
 {% endblock %}
 

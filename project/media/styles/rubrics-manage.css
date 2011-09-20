@@ -1,0 +1,43 @@
+body {
+  height: 100%;
+}
+
+header.global {
+  position: relative;
+  height: 50px;
+  background: #96A9B4 url(../images/rubrics-manage/header.png) no-repeat 0 50%;
+}
+
+footer.global {
+  height: 125px;
+  background: #96A9B4 url(../images/rubrics-manage/footer.png) no-repeat 100% 50%;
+}
+
+#search-form {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+}
+
+.content {
+  padding: 2em;
+}
+
+#login-form {
+  margin: 2em auto;
+}
+
+.ui-jqgrid tr.jqgrow td,
+.ui-jqgrid .ui-jqgrid-htable th {
+  line-height: 22px;
+  font-size: 13px;
+}
+
+.ui-jqgrid .ui-icon-asc {
+  margin-top: 0;
+}
+
+.ui-jqgrid .ui-icon-desc {
+  margin-top: 6px;
+  background-position: -65px -16px;
+}

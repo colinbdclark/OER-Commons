@@ -40,6 +40,9 @@ class Rubric(models.Model):
         return self.name
 
     class Meta:
+        permissions = (
+            ("can_manage", u"Can manage evaluations"),
+        )
         ordering = ["id"]
 
 
@@ -52,7 +55,7 @@ class RubricScoreValue(ScoreValue):
         return u"%s - %s" % (self.rubric, self.get_value_display())
 
     class Meta:
-        ordering = ["rubric", "id"]
+        unique_together = ["rubric", "value"]
 
 
 class Score(models.Model):
@@ -74,6 +77,9 @@ class RubricScore(Score):
     score = models.ForeignKey(RubricScoreValue)
     rubric = models.ForeignKey(Rubric)
 
+    class Meta:
+        unique_together = ["user", "content_type", "object_id", "rubric"]
+
 
 class StandardAlignmentScoreValue(ScoreValue):
     pass
@@ -83,6 +89,23 @@ class StandardAlignmentScore(Score):
 
     score = models.ForeignKey(StandardAlignmentScoreValue)
     alignment_tag = models.ForeignKey(AlignmentTag)
+
+    class Meta:
+        unique_together = ["user", "content_type", "object_id", "alignment_tag"]
+
+
+class EvaluationComment(models.Model):
+
+    user = models.ForeignKey(User)
+
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+
+    text = models.TextField()
+
+    class Meta:
+        unique_together = ["user", "content_type", "object_id"]
 
 
 class EvaluatedItemMixin(object):
