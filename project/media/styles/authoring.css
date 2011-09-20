@@ -7,40 +7,40 @@ body.authoring {
 }
 
 .authoring #logo {
-  display: block;
   position: absolute;
   top: 0;
   left: 0;
-  background: url(../images/authoring/logo.png) no-repeat;
+  display: block;
   width: 116px;
   height: 94px;
+  background: url(../images/authoring/logo.png) no-repeat;
   text-indent: -9999px;
 }
 
 .authoring header.global {
+  position: relative;
   height: 56px;
   background: url(../images/authoring/header-bg.png) no-repeat 155px 0;
-  position: relative;
 }
 
 .authoring header.global h1 {
   position: absolute;
   top: 27px;
   left: 120px;
-  font-size: 17px;
   font-weight: bold;
+  font-size: 17px;
 }
 
 .authoring header.global nav {
   position: absolute;
-  right: 50px;
   top: 35px;
+  right: 50px;
 }
 
 .authoring header.global nav ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .authoring header.global nav ul li {
@@ -58,12 +58,12 @@ body.authoring {
 }
 
 .authoring .progress-bar {
-  background-repeat: no-repeat;
-  width: 400px;
-  height: 50px;
-  margin: auto;
   position: relative;
   top: 4px;
+  margin: auto;
+  width: 400px;
+  height: 50px;
+  background-repeat: no-repeat;
 }
 
 .authoring .progress-bar.step1 {
@@ -87,46 +87,46 @@ body.authoring {
 }
 
 .authoring .progress-bar a {
-  display: block;
   position: absolute;
-  text-indent: -9999px;
-  height: 15px;
+  display: block;
   width: 15px;
+  height: 15px;
+  text-indent: -9999px;
 }
 
 .authoring .progress-bar a.define {
   top: 8px;
   left: 4px;
-  height: 33px;
   width: 35px;
+  height: 33px;
 }
 
 .authoring .progress-bar a.organize {
   top: 8px;
   left: 70px;
-  height: 33px;
   width: 50px;
+  height: 33px;
 }
 
 .authoring .progress-bar a.outline {
   top: 8px;
   left: 160px;
-  height: 33px;
   width: 40px;
+  height: 33px;
 }
 
 .authoring .progress-bar a.add-content {
   top: 2px;
   left: 240px;
-  height: 43px;
   width: 70px;
+  height: 43px;
 }
 
 .authoring .progress-bar a.license {
   top: 8px;
   left: 347px;
-  height: 33px;
   width: 44px;
+  height: 33px;
 }
 
 .authoring .page {
@@ -165,13 +165,13 @@ body.authoring {
 }
 
 .authoring #content h1 {
-  font-size: 20px;
   line-height: 30px;
+  font-size: 20px;
 }
 
 .authoring aside h1 {
-  font-size: 16px;
   margin: 0.5em 0;
+  font-size: 16px;
 }
 
 .authoring aside ul {
@@ -202,14 +202,14 @@ body.authoring {
 
 .authoring .page form.formatted .help {
   margin: 4px 0 4px 1em;
-  font-size: 14px;
   font-style: normal;
+  font-size: 14px;
 }
 
 .authoring .page form.formatted input[type='text'],
 .authoring .page form.formatted textarea {
-  border: 1px solid #0B7BA8;
   padding-left: 4px;
+  border: 1px solid #0B7BA8;
 }
 
 .authoring .page form.formatted input[type='text'] {
@@ -230,8 +230,8 @@ body.authoring {
 }
 
 .authoring .buttons {
-  margin-bottom: 1em;
   position: relative;
+  margin-bottom: 1em;
 }
 
 .authoring .buttons a.next,
@@ -239,8 +239,8 @@ body.authoring {
   display: inline-block;
   padding: 10px 40px 10px 15px;
   color: #fff;
-  font-size: 16px;
   text-decoration: none;
+  font-size: 16px;
 }
 
 .authoring .buttons a.next {
@@ -248,19 +248,19 @@ body.authoring {
 }
 
 .authoring .buttons a.prev {
+  position: absolute;
+  left: 0;
   padding-right: 15px;
   padding-left: 40px;
   background: #FFCB66 url(../images/authoring/arrow-prev.png) no-repeat 8px 50%;
-  position: absolute;
-  left: 0;
 }
 
 .authoring a.gray-btn {
   display: inline-block;
   padding: 2px 10px;
   border: 1px solid #ccc;
-  text-decoration: none;
   color: #333;
+  text-decoration: none;
 }
 
 .authoring a.gray-btn:hover,
@@ -269,14 +269,14 @@ body.authoring {
 }
 
 .authoring a.add {
-  color: #679701;
-  border: 1px solid #D9E5C0;
   display: inline-block;
-  padding: 3px 10px 3px 25px;
-  line-height: 20px;
-  text-decoration: none;
   margin-left: 20px;
+  padding: 3px 10px 3px 25px;
+  border: 1px solid #D9E5C0;
   background: url(../images/authoring/icon-add.png) no-repeat 5px 50%;
+  color: #679701;
+  text-decoration: none;
+  line-height: 20px;
 }
 
 .authoring a.add:hover {
@@ -309,8 +309,8 @@ body.authoring {
 
 #define-form .subjects li {
   display: inline-block;
-  width: 200px;
   margin-right: 10px;
+  width: 200px;
   vertical-align: top;
 }
 
@@ -319,8 +319,8 @@ body.authoring {
 }
 
 #define-form .goals ul {
-  list-style: disc outside;
   margin-left: 20px;
+  list-style: disc outside;
 }
 
 #define-form .goals a {
@@ -348,10 +348,10 @@ body.authoring {
 }
 
 #organize-form #content section header span {
-  color: #999;
   position: relative;
   bottom: 1px;
   left: 1em;
+  color: #999;
 }
 
 #organize-form .image {
@@ -367,8 +367,8 @@ body.authoring {
 #organize-form .image .controls {
   display: inline-block;
   margin-left: 1em;
-  vertical-align: top;
   width: 275px;
+  vertical-align: top;
 }
 
 #organize-form .image .controls p {
@@ -395,27 +395,27 @@ body.authoring {
 
 #organize-form section.organize .field .errors {
   position: absolute;
-  right: 0;
   top: 0;
+  right: 0;
 }
 
 #organize-form #id_group {
   position: absolute;
-  right: 0;
   top: 14px;
+  right: 0;
 }
 
 #organize-form #id_instruction_date {
   position: absolute;
-  right: 0;
   top: 14px;
+  right: 0;
   width: 105px;
 }
 
 #organize-form #add-keywords {
   position: absolute;
-  right: 0;
   top: 14px;
+  right: 0;
   width: 195px;
 }
 
@@ -448,8 +448,8 @@ body.authoring {
 }
 
 #outline-form ol {
-  font-size: 16px;
   margin-top: 1em;
+  font-size: 16px;
 }
 
 #outline-form ol li {
@@ -461,17 +461,17 @@ body.authoring {
 }
 
 #outline-form input[type='text'] {
-  width: 415px;
   margin: 0;
+  width: 415px;
   vertical-align: middle;
 }
 
 #outline-form ol li .remove,
 #outline-form ol li .handle {
-  height: 22px;
-  width: 22px;
-  padding: 0;
   margin-left: 0.5em;
+  padding: 0;
+  width: 22px;
+  height: 22px;
   vertical-align: middle;
   text-indent: -9999px;
 }
@@ -489,15 +489,15 @@ body.authoring {
 }
 
 #add-content-form .title {
-  border-bottom: 1px dashed #ccc;
   margin-bottom: 0.5em;
+  border-bottom: 1px dashed #ccc;
   font-size: 18px;
 }
 
 #add-content-form .title input {
-  border: none;
-  width: 450px;
   padding-left: 0;
+  width: 450px;
+  border: none;
   font-size: 18px;
 }
 
@@ -507,8 +507,8 @@ body.authoring {
 }
 
 #add-content-form section.sections ol {
-  list-style-position: inside;
   margin-bottom: 1em;
+  list-style-position: inside;
   font-size: 14px;
 }
 

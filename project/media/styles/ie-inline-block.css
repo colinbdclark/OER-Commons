@@ -1,46 +1,8 @@
-.clearfix {
-  zoom: 1;
-}
-
-.index-filters .filter input, .advanced-search .filter input {
-  height: 16px;
-}
-
-.index-filters .filter dd label {
-  width: 140px;
-}
-
-.advanced-search .filter dd.collapsible li label {
-  float: left;
-  margin-left: 0px;
-}
-
-#global-search-box .text {
-  margin-top: 1px;
-  margin-bottom: 0px;
-}
-
-#global-search-box .button {
-  line-height: 16px;
-}
-
-.navigation li span {
-  float: left;
-}
-
-.index-filters .filter dd, a.expand-link, .materials-index dl.expanded, .materials-index dl.collapsed,
-.advanced-search .filter dd {
-  background: none !important;
-}
-
-/* Items with display: inline-block */
 #align-form label,
 #define-form .goals a,
 #define-form .subjects li,
 #organize-form #content section header h1,
-#organize-form #show-align-form,
 #organize-form .image .controls,
-#organize-form .image .controls a,
 #organize-form .image .controls div,
 #organize-form section.align div.label,
 #toolbar .stars,
@@ -49,7 +11,9 @@
 .accordion .accordion-header a,
 .align-user-tags li.tag a, .portlet.align-item-tags .align-user-tags li.tag a,
 .align-user-tags li.tag, .portlet.align-item-tags .align-user-tags li.tag,
-.authoring .buttons a.next,
+.authoring .buttons a.next, .authoring .buttons a.prev,
+.authoring a.add,
+.authoring a.gray-btn,
 .authoring header.global nav ul li,
 .autocomplete-list-widget li span,
 .autocomplete-list-widget li, form.formatted .field .autocomplete-list-widget li,
@@ -58,13 +22,14 @@
 .column-main,
 .column-right,
 .content-submission .label label,
+.evaluation-results td span.nr,
 .evaluation-tool .intro a.learn,
 .evaluation-tool .intro a.start,
 .evaluation-tool .rubrics .scores a strong,
 .evaluation-tool .rubrics .tags a.tag,
 .evaluation-tool .rubrics .tags a.tag,
-.evaluation-tool .rubrics section .footer a.next, .evaluation-tool .rubrics section .footer a.save,
-.evaluation-tool .rubrics section .footer a.next-tag,
+.evaluation-tool .rubrics section .footer a.next, .evaluation-tool .rubrics section .footer a.save, .evaluation-tool .evaluation-results .footer a.back, .evaluation-tool .evaluation-results .footer a.finalize,
+.evaluation-tool .rubrics section .footer a.next-tag, .evaluation-tool .rubrics section .footer a.prev-tag,
 .evaluation-tool header h1,
 .form-row.tags a.delete,
 .form-row.tags ul li,
@@ -91,8 +56,4 @@ fieldset.step p.content-submission-buttons a,
 form.login .buttons a {
     display: inline;
     zoom: 1;
-}
-
-.rocon {
-  text-align: left;
 }

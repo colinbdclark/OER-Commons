@@ -1,6 +1,6 @@
 form.login {
-  width: 330px;
   margin: 0 auto;
+  width: 330px;
 }
 
 form.login input.text {
@@ -27,8 +27,8 @@ form.login .buttons a.forgot-password {
 }
 
 form.login input.text {
-  font-size: 16px;
   padding: 3px 1px;
+  font-size: 16px;
 }
 
 form.login #id_password,

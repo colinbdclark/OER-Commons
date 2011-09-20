@@ -1,21 +1,21 @@
 input.text, textarea.text {
+  margin: 3px 0;
+  padding:1px 2px;
+  border:1px solid #9D9D9D;
   background:none;
   background-color:#fff;
-  border:1px solid #9D9D9D;
   font-size:14px;
-  padding:1px 2px;
-  margin: 3px 0;
 }
 
 input.button {
-  background:url(../images/button-bg.png) repeat-x scroll 0 0 #DADADA;
-  border:1px solid #799BA5;
-  color:#0D5470;
-  font-size:14px;
   overflow:visible;
   padding:0 10px;
-  line-height: 20px;
   width:auto;
+  border:1px solid #799BA5;
+  background:url(../images/button-bg.png) repeat-x scroll 0 0 #DADADA;
+  color:#0D5470;
+  line-height: 20px;
+  font-size:14px;
 }
 
 form.formatted .field {
@@ -23,11 +23,11 @@ form.formatted .field {
 }
 
 form.formatted label {
-  color: #333;
-  padding-top: 3px;
-  font-weight: bold;
-  margin-bottom: 3px;
   margin-top: 5px;
+  margin-bottom: 3px;
+  padding-top: 3px;
+  color: #333;
+  font-weight: bold;
 }
 
 form.formatted .required label {
@@ -39,14 +39,14 @@ form.formatted  label.show-password {
   padding-right: 0;
   padding-left: 10px;
   background: none;
-  font-weight: normal
+  font-weight: normal;
 }
 
 
 form.formatted .field ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 form.formatted .field ul li {
@@ -55,10 +55,10 @@ form.formatted .field ul li {
 }
 
 form.formatted .field ul label {
-  font-weight: normal;
-  margin-bottom: 0;
   margin-top: 0;
+  margin-bottom: 0;
   padding-top: 0;
+  font-weight: normal;
 }
 
 form.formatted .field.required ul label {
@@ -67,18 +67,18 @@ form.formatted .field.required ul label {
 }
 
 form.formatted .help {
-  color: #666;
-  font-size: 12px;
-  font-style: italic;
   margin-bottom: 3px;
+  color: #666;
+  font-style: italic;
+  font-size: 12px;
 }
 
 form.formatted label.error {
-  color: red;
   display: block;
-  padding: 0;
   margin: 0;
+  padding: 0;
   background: none;
+  color: red;
   font-weight: normal;
 }
 
@@ -91,8 +91,8 @@ form.formatted .buttons {
 }
 
 form.reset-password-init {
-  width: 400px;
   margin: 0 auto;
+  width: 400px;
 }
 
 form.reset-password-init input.text {
@@ -100,8 +100,8 @@ form.reset-password-init input.text {
 }
 
 form.reset-password {
-  width: 200px;
   margin: 0 auto;
+  width: 200px;
 }
 
 form.reset-password input.text {
@@ -118,19 +118,19 @@ form.registration-confirm input.text {
 }
 
 form.content-submission {
-  background: #F3F7F8;
   border: 1px solid #BCCACD;
+  background: #F3F7F8;
 }
 
 form.content-submission h3 {
-  background: #F3F7F8 url(../images/box-header-bg.png) repeat-x 0 0;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+  margin-top: 0;
+  padding-top: 7px;
   padding-bottom: 14px;
   padding-left: 10px;
-  padding-top: 7px;
-  margin-top: 0;
+  background: #F3F7F8 url(../images/box-header-bg.png) repeat-x 0 0;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 form.content-submission h3 span.required {
@@ -143,14 +143,14 @@ form.content-submission table {
 }
 
 form.content-submission .fields {
-  width: 526px;
-  margin-left: 15px;
   margin-bottom: 10px;
+  margin-left: 15px;
+  width: 526px;
 }
 
 form.content-submission table.fields td {
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
 form.content-submission .fields .label label {
@@ -171,9 +171,9 @@ form.content-submission textarea {
 }
 
 form.content-submission .buttons {
-  text-align: center;
-  margin-bottom: 10px;
   margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 form.content-submission .checkbox input {
@@ -181,10 +181,10 @@ form.content-submission .checkbox input {
 }
 
 form.content-submission .checkbox label {
-  margin-left: 25px;
-  margin-top: 0;
-  padding: 0;
   display: block;
+  margin-top: 0;
+  margin-left: 25px;
+  padding: 0;
   font-weight: normal;
 }
 
@@ -194,8 +194,8 @@ form.content-submission table.item-description.fields td {
 }
 
 form.content-submission table.item-description.fields .label {
-  width: 110px;
   padding-top: 5px;
+  width: 110px;
   vertical-align: top;
 }
 
@@ -204,8 +204,8 @@ form.content-submission table.item-description.fields .text.wide {
 }
 
 form.content-submission #id_abstract {
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
   height: 80px;
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission #id_content_creation_date {
@@ -213,13 +213,13 @@ form.content-submission #id_content_creation_date {
 }
 
 form.content-submission #id_tech_requirements {
-  background: #DDF0F6 url(../images/contribute-textinput-bg.png) repeat-x 0 0;
   height: 33px;
+  background: #DDF0F6 url(../images/contribute-textinput-bg.png) repeat-x 0 0;
 }
 
 form.content-submission .keywords td {
-  width: 50%;
   padding: 0;
+  width: 50%;
 }
 
 form.content-submission .keywords td.label {
@@ -231,24 +231,24 @@ form.content-submission .keywords select, form.content-submission .keywords text
 }
 
 form.content-submission .keywords select {
-  height: 175px;
   padding: 2px;
   width: 250px;
+  height: 175px;
 }
 
 form.content-submission .keywords textarea {
-  height: 170px;
   width: 250px;
+  height: 170px;
 }
 
 form.content-submission .keywords td.help {
-  color: #0C5670;
   padding-bottom: 10px;
+  color: #0C5670;
 }
 
 form.content-submission table.columns td {
-  width: 50%;
   padding: 0;
+  width: 50%;
 }
 
 form.content-submission .columns .field {
@@ -260,8 +260,8 @@ form.content-submission .columns .label {
 }
 
 form.content-submission .help {
-  color: #0C5670;
   margin-bottom: 10px;
+  color: #0C5670;
 }
 
 form.content-submission .cou a {
@@ -285,8 +285,8 @@ form.content-submission .cou .text.wide {
 }
 
 form.content-submission #id_license_description {
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
   height: 80px;
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission .cou .choose, form.content-submission .cou .change {
@@ -294,8 +294,8 @@ form.content-submission .cou .choose, form.content-submission .cou .change {
 }
 
 form.content-submission .cou a.name {
-  font-weight: bold;
   line-height: 20px;
+  font-weight: bold;
 }
 
 form.content-submission .cou .field.cc-latest {
@@ -342,26 +342,26 @@ form.content-submission .derived-fields .text {
 }
 
 form.content-submission #id_derived_description {
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
   height: 80px;
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission #id_curriculum_standards {
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
-  height: 80px;
   width: 520px;
+  height: 80px;
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission fieldset {
-  border: 1px solid #BCCACD;
-  padding: 10px;
   margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #BCCACD;
 }
 
 form.content-submission legend {
   color: #0C5670;
-  font-size: 14px;
   font-weight: bold;
+  font-size: 14px;
 }
 
 form.content-submission fieldset .columns .field {
@@ -377,14 +377,14 @@ form.content-submission .prerequisites-fields .text, form.content-submission .po
 }
 
 form.content-submission #id_rss_description {
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
-  height: 80px;
   width: 520px;
+  height: 80px;
+  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission #id_rss_timestamp_0 {
-  width: 100px;
   margin-right: 10px;
+  width: 100px;
 }
 
 form.content-submission #id_rss_timestamp_1 {
@@ -392,18 +392,18 @@ form.content-submission #id_rss_timestamp_1 {
 }
 
 form.delete {
-  width: 300px;
   margin: 0 auto;
+  width: 300px;
 }
 
 form.delete p {
-  font-size: 14px;
   text-align: right;
+  font-size: 14px;
 }
 
 form.feedback {
-  width: 550px;
   margin: 0 auto;
+  width: 550px;
 }
 
 form.feedback p {

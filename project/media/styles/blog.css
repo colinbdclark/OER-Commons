@@ -7,13 +7,13 @@
 }
 
 .frontpage-block.blog div {
-  font-size: 12px;
   margin-bottom: 15px;
+  font-size: 12px;
 }
 
 .frontpage-block.blog div h5 {
-  font-size: 14px;
   margin-bottom: 7px;
+  font-size: 14px;
 }
 
 #content.blog .post a {
@@ -21,43 +21,43 @@
 }
 
 #content.blog .post {
-  border-bottom: 1px solid #BFC7CA;
   margin-bottom: 10px;
   padding-bottom: 10px;
+  border-bottom: 1px solid #BFC7CA;
   font-size: 12px;
 }
 
 #content.blog .post h4 a {
   color: #1F4D64;
-  font-size: 14px;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .portlet.blogroll ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .portlet.blogroll li {
   margin: 0;
-  padding: 0;
   margin-bottom: 5px;
+  padding: 0;
 }
 
 .portlet.blogroll a.rss {
-  display: block;
   float: left;
+  display: block;
+  overflow: hidden;
   width: 16px;
   height: 16px;
-  text-indent: -9999px;
-  overflow: hidden;
   background: url(../images/rss-icon.gif) no-repeat 50% 50%;
+  text-indent: -9999px;
 }
 
 .portlet.blogroll a.link {
   display: block;
   margin-left: 20px;
-  font-size: 12px;
   line-height: 16px;
+  font-size: 12px;
 }

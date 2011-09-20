@@ -8,27 +8,27 @@ header.global.fixed-width {
 }
 
 #logo {
-  background: url(../images/logo.png) no-repeat;
-  display: block;
   float: left;
-  height: 83px;
+  display: block;
   margin-top: 12px;
   margin-left: 2px;
   width: 130px;
+  height: 83px;
+  background: url(../images/logo.png) no-repeat;
 }
 
 header.global nav ul {
-  list-style-type: none;
-  text-align: right;
-  float: right;
   position: relative;
   top: 80px;
+  float: right;
+  list-style-type: none;
+  text-align: right;
 }
 
 header.global nav li {
   float: left;
-  background: url(../images/header-link-sep.gif) no-repeat 100% 50%;
   padding: 0 10px;
+  background: url(../images/header-link-sep.gif) no-repeat 100% 50%;
 }
 
 header.global nav li.auth {
@@ -44,17 +44,17 @@ body.authenticated header.global nav li.anon {
 }
 
 header.global nav .last {
-  background: none;
   padding: 0;
+  background: none;
 }
 
 header.global nav a,
 header.global nav span {
+  padding: 0 5px;
   color: #707070;
+  text-decoration: none;
   line-height: 22px;
   font-weight: bolder;
-  padding: 0 5px;
-  text-decoration: none;
 }
 
 header.global nav a img {
@@ -62,33 +62,33 @@ header.global nav a img {
 }
 
 header.global nav a.button-contribute {
-  background: url(../images/contribute-btn.gif) no-repeat;
   display: block;
-  height: 22px;
-  width: 145px;
+  overflow: hidden;
   margin-left: 10px;
   padding: 0px;
+  width: 145px;
+  height: 22px;
+  background: url(../images/contribute-btn.gif) no-repeat;
   text-indent: 9999px;
-  overflow: hidden;
 }
 
 .global-tabs nav {
-  height: 40px;
   margin-bottom: 10px;
+  height: 40px;
 }
 
 .global-tabs nav ul {
-  list-style-type: none;
   float: left;
-  background: url(../images/section-sep.gif) no-repeat 100% 50%;
   padding-right: 1px;
+  background: url(../images/section-sep.gif) no-repeat 100% 50%;
+  list-style-type: none;
 }
 
 .global-tabs nav li {
   float: left;
-  height: 40px;
-  padding-left: 3px;
   margin-right: 2px;
+  padding-left: 3px;
+  height: 40px;
   background: url(../images/section-sep.gif) no-repeat 0% 50%;
 }
 
@@ -103,11 +103,11 @@ header.global nav a.button-contribute {
 }
 
 .global-tabs nav li a {
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 40px;
-  text-decoration: none;
   color: #0C5670;
+  text-decoration: none;
+  line-height: 40px;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .global-tabs nav li.selected a {
@@ -120,6 +120,6 @@ header.global nav a.button-contribute {
 }
 
 #global-search-box input.text {
-  height: 18px;
   width: 300px;
+  height: 18px;
 }

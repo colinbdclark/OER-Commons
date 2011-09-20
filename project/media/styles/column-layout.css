@@ -1,12 +1,12 @@
 .layout-columns {
-  background: url(../images/columns-bg.gif) repeat-y 190px 0;
   margin-top: 20px;
+  background: url(../images/columns-bg.gif) repeat-y 190px 0;
 }
 
 .column-main {
+  display: inline-block;
   padding: 0 20px;
   width: 560px;
-  display: inline-block;
   vertical-align: top;
 }
 
@@ -45,11 +45,11 @@ body.wide-right-column .column-left {
 }
 
 body.wide-right-column .column-main {
-  width: 670px;
   padding-left: 0;
+  width: 670px;
 }
 
 body.wide-right-column .column-right {
-  width: 250px;
   margin-left: 20px;
+  width: 250px;
 }

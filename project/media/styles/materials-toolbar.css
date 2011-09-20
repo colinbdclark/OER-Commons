@@ -1,9 +1,9 @@
 iframe#resource {
-  top: 40px;
   position: absolute;
+  top: 40px;
+  z-index: 1;
   width: 100%;
   height: 100px;
-  z-index: 1;
 }
 
 #toolbar li.rating span {
@@ -11,8 +11,8 @@ iframe#resource {
 }
 
 #toolbar .stars {
-  margin-top: -1px;
   display: inline-block;
+  margin-top: -1px;
 }
 
 #toolbar .view-item-navigation {

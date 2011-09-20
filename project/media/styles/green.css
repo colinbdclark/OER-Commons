@@ -7,67 +7,67 @@ body.green .page {
 }
 
 .green #logo {
-  background-image: url(../images/green-logo.jpg);
   width: 135px;
+  background-image: url(../images/green-logo.jpg);
 }
 
 .green #logo-green {
-  background: url(../images/green-logo.jpg) no-repeat -135px -43px;
+  float: left;
+  display: block;
+  margin-top: 55px;
   width: 140px;
   height: 40px;
-  display: block;
-  float: left;
-  margin-top: 55px;
+  background: url(../images/green-logo.jpg) no-repeat -135px -43px;
 }
 
 .green-feature {
-  background: url(../images/green-homepage-feature.jpg) no-repeat;
-  height: 119px;
-  padding-left: 22px;
-  padding-top: 18px;
   margin-top: 10px;
   margin-bottom: 20px;
+  padding-top: 18px;
+  padding-left: 22px;
   width: 936px;
+  height: 119px;
+  background: url(../images/green-homepage-feature.jpg) no-repeat;
 }
 
 .green-feature h2 {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  width: 466px;
+  background: url(../images/dotted-line-hor.gif) repeat-x 0 100%;
   color: #666;
   font-weight: normal;
   font-size: 22px;
-  width: 466px;
-  padding-bottom: 8px;
-  background: url(../images/dotted-line-hor.gif) repeat-x 0 100%;
-  margin-bottom: 12px;
 }
 
 .green-feature p {
-  font-size: 16px;
   color: #666;
+  font-size: 16px;
 }
 
 .green-feature p a {
-  font-weight: bold;
   color: #0C5670;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .green .content.microsite-frontpage h2 {
-  color: #666;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: normal;
-  margin-bottom: 15px;
   margin-top: 0;
+  margin-bottom: 15px;
+  color: #666;
   line-height: 28px;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 18px;
 }
 
 .green .content.microsite-frontpage h2 .icon {
-  display: block;
   float: left;
-  background: url(../images/green-icon.png) no-repeat;
+  display: block;
+  margin-right: 3px;
   width: 28px;
   height: 28px;
-  margin-right: 3px;
+  background: url(../images/green-icon.png) no-repeat;
 }
 
 .materials-index .details dd.topics a.green,.view-item .details dd.topics a.green
@@ -76,16 +76,16 @@ body.green .page {
 }
 
 .green .portlet.oermaterials {
-  background: url(../images/dotted-line-hor.gif) repeat-x 0 0;
   padding-top: 5px;
+  background: url(../images/dotted-line-hor.gif) repeat-x 0 0;
 }
 
 .green .portlet.oermaterials hgroup h2 {
-  color: #666;
-  font-size: 13px;
-  font-weight: bold;
-  margin-bottom: 10px;
   margin-top: 15px;
+  margin-bottom: 10px;
+  color: #666;
+  font-weight: bold;
+  font-size: 13px;
 }
 
 .green .portlet.oermaterials ul {
@@ -93,8 +93,8 @@ body.green .page {
 }
 
 .green .portlet.oermaterials .accordion {
-  padding-bottom: 20px;
   margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .green .portlet.oermaterials {
@@ -102,11 +102,11 @@ body.green .page {
 }
 
 body.green .top-keywords h4 .icon {
-  display: block;
   float: left;
+  display: block;
+  margin-right: 4px;
   width: 27px;
   height: 26px;
-  margin-right: 4px;
   background: url(../images/green-icon.png) no-repeat;
 }
 
@@ -119,8 +119,8 @@ body.green .top-keywords h4 {
 }
 
 .portlet.item-tags li.green {
-  background: #D8E5C3 url(../images/green-icon-small-green-bg.png) no-repeat 3px 50%;
   padding-left: 24px;
+  background: #D8E5C3 url(../images/green-icon-small-green-bg.png) no-repeat 3px 50%;
 }
 
 .portlet.item-tags li.green a {
@@ -132,17 +132,17 @@ body.green .top-keywords h4 {
 }
 
 .green-browse #content section h1 {
-  font-size: 18px;
+  margin: 0 0 10px 0;
   color: #679801;
   font-weight: normal;
-  margin: 0 0 10px 0;
+  font-size: 18px;
 }
 
 .green-browse #content section hgroup h2 {
-  font-size: 15px;
+  margin: 0 0 5px 0;
   color: #666;
   font-weight: normal;
-  margin: 0 0 5px 0;
+  font-size: 15px;
 }
 
 .green-browse #content .columns {
@@ -151,17 +151,17 @@ body.green .top-keywords h4 {
 }
 
 .green-browse #content section.column {
-  width: 250px;
   display: inline-block;
-  vertical-align: top;
   margin-bottom: 0;
+  width: 250px;
+  vertical-align: top;
 }
 
 .green-browse #content .accordion h2 {
-  color: #0A546D;
-  font-size: 13px;
-  font-weight: bold;
   margin-bottom: 5px;
+  color: #0A546D;
+  font-weight: bold;
+  font-size: 13px;
 }
 
 .green-browse #content .accordion h2 a {
@@ -179,9 +179,9 @@ body.green .top-keywords h4 {
 }
 
 .green-browse .portlet.recently-added ul {
+  color: #0B7BA9;
   list-style-position: inside;
   font-size: 14px;
-  color: #0B7BA9;
 }
 
 .green-browse .portlet.recently-added li {

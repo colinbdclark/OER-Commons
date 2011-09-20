@@ -15,20 +15,20 @@
 
 #align-form h3 {
   color: #1F4D64;
-  font-size: 14px;
   font-weight: bold;
+  font-size: 14px;
 }
 
 #align-tag-description {
-  display: none;
   float: right;
-  width: 350px;
-  margin-left: 10px;
+  display: none;
   margin-bottom: 10px;
-  background-color: #FFE4B8;
+  margin-left: 10px;
   padding: 10px;
-  font-size: 12px;
+  width: 350px;
+  background-color: #FFE4B8;
   line-height: 1.2em;
+  font-size: 12px;
 }
 
 #align-tag-description dt {
@@ -44,10 +44,10 @@
 }
 
 #align-form .align-user-tags-ct {
-  border: 1px solid #ccc;
-  padding: 3px 5px;
   margin-right: 380px;
   margin-bottom: 10px;
+  padding: 3px 5px;
+  border: 1px solid #ccc;
 }
 
 #align-form .align-user-tags-ct .tags-number {
@@ -61,10 +61,10 @@
 
 #align-form .align-user-tags-ct .not-aligned {
   display: none;
-  text-align: center;
   color: #ccc;
-  font-size: 16px;
+  text-align: center;
   line-height: 30px;
+  font-size: 16px;
 }
 
 #align-form .align-user-tags-ct.no-tags .not-aligned {
@@ -86,9 +86,9 @@ body.authenticated .portlet.align-item-tags .login {
 
 .portlet.align-item-tags ul,
 .align-user-tags {
-  list-style-type: none;
   margin: 10px 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .align-user-tags {
@@ -97,8 +97,8 @@ body.authenticated .portlet.align-item-tags .login {
 
 .portlet.align-item-tags li {
   display: inline-block;
-  padding: 3px 5px;
   margin: 3px 3px 3px 0;
+  padding: 3px 5px;
   background-color: #FFE4B8;
 }
 
@@ -108,37 +108,37 @@ body.authenticated .portlet.align-item-tags .login {
 
 .align-user-tags li.tag,
 .portlet.align-item-tags .align-user-tags li.tag {
+  position: relative;
+  display: inline-block;
+  margin: 3px 6px 3px 0;
+  padding: 0px;
   border: 2px solid #FFE4B8;
   background-color: #fff;
-  display: inline-block;
-  padding: 0px;
-  margin: 3px 6px 3px 0;
-  position: relative;
 }
 
 .align-user-tags li.tag a,
 .portlet.align-item-tags .align-user-tags li.tag a {
-  color: #1E4E62;
-  background-color: #FFE4B8;
   display: inline-block;
   margin-right: 20px;
   padding: 1px 5px 1px 3px;
+  background-color: #FFE4B8;
+  color: #1E4E62;
   text-decoration: none;
 }
 
 .align-user-tags li.tag a.delete,
 .portlet.align-item-tags .align-user-tags li.tag a.delete {
-  display: block;
   position: absolute;
-  right: 2px;
   top: 0px;
-  vertical-align: middle;
+  right: 2px;
+  display: block;
+  margin: 0;
+  padding: 0;
   width: 16px;
   height: 16px;
   background: transparent url(../images/icon-delete-gray.png) no-repeat 50% 50%;
+  vertical-align: middle;
   text-indent: -9999px;
-  padding: 0;
-  margin: 0;
 }
 
 .align-tag-tooltip .ui-tooltip-titlebar,
