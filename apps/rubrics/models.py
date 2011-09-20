@@ -56,6 +56,7 @@ class RubricScoreValue(ScoreValue):
 
     class Meta:
         unique_together = ["rubric", "value"]
+        ordering = ["id"]
 
 
 class Score(models.Model):
