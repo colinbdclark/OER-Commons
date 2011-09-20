@@ -55,7 +55,7 @@ class RubricScoreValue(ScoreValue):
         return u"%s - %s" % (self.rubric, self.get_value_display())
 
     class Meta:
-        ordering = ["rubric", "id"]
+        ordering = ["id"]
 
 
 class Score(models.Model):
