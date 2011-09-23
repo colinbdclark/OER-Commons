@@ -51,7 +51,7 @@
     </figure>
     <form id="finalize-form" method="post" class="formatted"
           action="{% url rubrics:evaluate_finalize content_type_id=content_type.id,object_id=object.id %}">
-      {% with form.text as field %}
+      {% with form.comment as field %}
         {% include "include/form-field.html" %}
       {% endwith %}
     </form>

@@ -13,7 +13,29 @@ SCORES = (
     (1, u"Limited"),
     (0, u"Very Weak"),
     (None, u"Not Applicable"),
-)
+    )
+
+
+class Evaluation(models.Model):
+
+    user = models.ForeignKey(User)
+
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+
+    confirmed = models.BooleanField(default=False)
+
+    timestamp = models.DateTimeField(auto_now=True)
+    comment = models.TextField(default=u"", blank=True)
+    ip = models.CharField(max_length=39, default=u"", blank=True)
+    hostname = models.CharField(max_length=100, default=u"", blank=True)
+
+    class Meta:
+        permissions = (
+            ("can_manage", u"Can manage evaluations"),
+            )
+        unique_together = ["user", "content_type", "object_id"]
 
 
 class ScoreValue(models.Model):
@@ -25,6 +47,7 @@ class ScoreValue(models.Model):
     def __unicode__(self):
         #noinspection PyUnresolvedReferences
         return self.get_value_display()
+
 
     class Meta:
         abstract = True
@@ -39,10 +62,8 @@ class Rubric(models.Model):
     def __unicode__(self):
         return self.name
 
+
     class Meta:
-        permissions = (
-            ("can_manage", u"Can manage evaluations"),
-        )
         ordering = ["id"]
 
 
@@ -61,13 +82,7 @@ class RubricScoreValue(ScoreValue):
 
 class Score(models.Model):
 
-    user = models.ForeignKey(User)
-
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey()
-
-    confirmed = models.BooleanField(default=False)
+    evaluation = models.ForeignKey(Evaluation)
 
     class Meta:
         abstract = True
@@ -79,7 +94,7 @@ class RubricScore(Score):
     rubric = models.ForeignKey(Rubric)
 
     class Meta:
-        unique_together = ["user", "content_type", "object_id", "rubric"]
+        unique_together = ["evaluation", "rubric"]
 
 
 class StandardAlignmentScoreValue(ScoreValue):
@@ -92,51 +107,32 @@ class StandardAlignmentScore(Score):
     alignment_tag = models.ForeignKey(AlignmentTag)
 
     class Meta:
-        unique_together = ["user", "content_type", "object_id", "alignment_tag"]
-
-
-class EvaluationComment(models.Model):
-
-    user = models.ForeignKey(User)
-
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey()
-
-    text = models.TextField()
-
-    class Meta:
-        unique_together = ["user", "content_type", "object_id"]
+        unique_together = ["evaluation", "alignment_tag"]
 
 
 class EvaluatedItemMixin(object):
 
-    EVALUATION_SCORE_ATTRIBUTE_RE = re.compile(r"^evaluation_score_rubric_(\d)$")
+    EVALUATION_SCORE_ATTRIBUTE_RE = re.compile(
+        r"^evaluation_score_rubric_(\d)$")
 
     @Lazy
     def evaluations_number(self):
         content_type = ContentType.objects.get_for_model(self)
-        user_ids = set()
-        for model in (StandardAlignmentScore, RubricScore):
-            user_ids.update(
-                model.objects.filter(
-                    content_type=content_type,
-                    object_id=self.pk,
-                    confirmed=True,
-                ).values_list("user__id", flat=True).distinct()
-            )
-        return len(user_ids)
-
+        return Evaluation.objects.filter(
+            content_type=content_type,
+            object_id=self.pk,
+            confirmed=True,
+            ).count()
 
     @Lazy
     def evaluation_scores(self):
         scores = {}
         content_type = ContentType.objects.get_for_model(self)
         alignment_scores = StandardAlignmentScore.objects.filter(
-            content_type=content_type,
-            object_id=self.pk,
-            confirmed=True,
-        )
+            evaluation__content_type=content_type,
+            evaluation__object_id=self.pk,
+            evaluation__confirmed=True,
+            )
         if alignment_scores.exists():
             scores[0] = alignment_scores.aggregate(
                 models.Avg("score__value")
@@ -144,11 +140,11 @@ class EvaluatedItemMixin(object):
 
         for rubric in Rubric.objects.all():
             rubric_scores = RubricScore.objects.filter(
-                content_type=content_type,
-                object_id=self.pk,
-                confirmed=True,
+                evaluation__content_type=content_type,
+                evaluation__object_id=self.pk,
+                evaluation__confirmed=True,
                 rubric=rubric,
-            )
+                )
             if rubric_scores.exists():
                 scores[rubric.id] = rubric_scores.aggregate(
                     models.Avg("score__value")
@@ -157,16 +153,17 @@ class EvaluatedItemMixin(object):
 
     @property
     def evaluated_rubrics(self):
-        return sorted([k for k, v in self.evaluation_scores.items() if v is not None])
+        return sorted(
+            [k for k, v in self.evaluation_scores.items() if v is not None])
 
     def __getattr__(self, name):
         r = self.EVALUATION_SCORE_ATTRIBUTE_RE.search(name)
         if r:
+            rubric_ids = [0] + list(Rubric.objects.values_list("id", flat=True))
             rubric_id = int(r.groups()[0])
-            try:
-                return self.evaluation_scores[rubric_id]
-            except KeyError:
+            if rubric_id not in rubric_ids:
                 raise AttributeError()
+            return self.evaluation_scores.get(rubric_id)
         #noinspection PyUnresolvedReferences
         return super(EvaluatedItemMixin, self).__getattr__(name)
 

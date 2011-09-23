@@ -12,8 +12,12 @@ from django import forms
 from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial
 from rubrics.models import Rubric, StandardAlignmentScoreValue, \
-    StandardAlignmentScore, RubricScore, RubricScoreValue, EvaluationComment
+    StandardAlignmentScore, RubricScore, RubricScoreValue, Evaluation
 from utils.decorators import login_required
+import urlparse
+
+
+HOSTNAME_COOKIE = "evaluation_tool_hostname"
 
 
 class Intro(TemplateView):
@@ -36,7 +40,16 @@ class Intro(TemplateView):
                 creator=self.request.user,
             )
 
-        return super(Intro, self).get(request, *args, **kwargs)
+        from_url = request.GET.get("from", u"").strip()
+        if from_url:
+            hostname = urlparse.urlparse(from_url).hostname or u""
+        else:
+            hostname = u""
+
+        response = super(Intro, self).get(request, *args, **kwargs)
+        response.set_cookie(HOSTNAME_COOKIE, hostname)
+
+        return response
 
     def get_context_data(self, **kwargs):
         data = super(Intro, self).get_context_data(**kwargs)
@@ -74,17 +87,26 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                 kwargs=dict(slug=self.object.slug),
             )
 
+        evaluation = Evaluation.objects.get_or_create(
+            content_type=self.content_type,
+            object_id=self.object.id,
+            user=self.request.user,
+        )[0]
+
+        evaluation.ip = self.request.META["REMOTE_ADDR"]
+        evaluation.hostname = self.request.COOKIES.get(HOSTNAME_COOKIE, u"")
+        evaluation.save()
+
         tags = AlignmentTag.objects.filter(
             id__in=self.object.alignment_tags.values_list("tag__id",
                                                           flat=True).distinct()
         )
         data["alignment_tags"] = []
         for tag in tags:
-            score = get_object_or_None(StandardAlignmentScore,
-                content_type=self.content_type,
-                object_id=self.object.id,
-                user=self.request.user,
-                alignment_tag=tag
+            score = get_object_or_None(
+                StandardAlignmentScore,
+                evaluation=evaluation,
+                alignment_tag=tag,
             )
             if score:
                 tag.score_value = score.score
@@ -98,11 +120,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
 
         data["rubrics"] = []
         for rubric in Rubric.objects.all():
-            score = get_object_or_None(RubricScore,
-                                       content_type=self.content_type,
-                                       object_id=self.object.id,
-                                       user=self.request.user,
-                                       rubric=rubric)
+            score = get_object_or_None(
+                RubricScore,
+                evaluation=evaluation,
+                rubric=rubric,
+            )
             if score:
                 rubric.score_value = score.score
                 rubric.scored = True
@@ -117,6 +139,16 @@ class Rubrics(EvaluateViewMixin, TemplateView):
     #noinspection PyUnusedLocal
     @method_decorator(ajax_request)
     def post(self, request, *args, **kwargs):
+
+        evaluation = get_object_or_None(
+            Evaluation,
+            content_type=self.content_type,
+            object_id=self.object.id,
+            user=request.user,
+        )
+        if not evaluation:
+            return HttpResponseBadRequest()
+
         delete = "delete" in request.POST
         score_value_id = None
 
@@ -141,10 +173,8 @@ class Rubrics(EvaluateViewMixin, TemplateView):
 
             if delete:
                 StandardAlignmentScore.objects.filter(
-                    content_type=self.content_type,
-                    object_id=self.object.id,
-                    user=request.user,
-                    alignment_tag=tag
+                    evaluation=evaluation,
+                    alignment_tag=tag,
                 ).delete()
             else:
                 score_value = get_object_or_None(StandardAlignmentScoreValue,
@@ -153,17 +183,13 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                     return HttpResponseBadRequest()
 
                 score, created = StandardAlignmentScore.objects.get_or_create(
-                    content_type=self.content_type,
-                    object_id=self.object.id,
-                    user=request.user,
+                    evaluation=evaluation,
                     alignment_tag=tag,
-                    defaults=dict(score=score_value, confirmed=False)
+                    defaults=dict(score=score_value)
                 )
                 if not created:
                     score.score = score_value
-                    score.confirmed = False
                     score.save()
-            return dict(status="success")
 
         elif rubric_id:
             try:
@@ -176,9 +202,7 @@ class Rubrics(EvaluateViewMixin, TemplateView):
 
             if delete:
                 RubricScore.objects.filter(
-                    content_type=self.content_type,
-                    object_id=self.object.id,
-                    user=request.user,
+                    evaluation=evaluation,
                     rubric=rubric
                 ).delete()
             else:
@@ -188,31 +212,34 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                     return HttpResponseBadRequest()
 
                 score, created = RubricScore.objects.get_or_create(
-                    content_type=self.content_type,
-                    object_id=self.object.id,
-                    user=request.user,
+                    evaluation=evaluation,
                     rubric=rubric,
-                    defaults=dict(score=score_value, confirmed=False)
+                    defaults=dict(score=score_value)
                 )
                 if not created:
                     score.score = score_value
-                    score.confirmed = False
                     score.save()
-            return dict(status="success")
 
-        return HttpResponseBadRequest()
+        evaluation.confirmed = False
+        evaluation.save()
+
+        if isinstance(self.object, Indexed):
+            self.object.reindex()
+
+        return dict(status="success")
 
 
 class EvaluationCommentForm(forms.ModelForm):
 
-    text = forms.CharField(
+    comment = forms.CharField(
         widget=forms.Textarea(),
         label=u"Additional Comments",
+        required=False,
     )
 
     class Meta:
-        model = EvaluationComment
-        fields = ["text"]
+        model = Evaluation
+        fields = ["comment"]
 
 
 class Results(EvaluateViewMixin, TemplateView):
@@ -224,12 +251,27 @@ class Results(EvaluateViewMixin, TemplateView):
         data = super(Results, self).get_context_data(**kwargs)
         data["content_type"] = self.content_type
         data["object"] = self.object
-
         data["scores"] = []
 
-        alignment_scores = StandardAlignmentScore.objects.filter(
+        evaluation = get_object_or_None(
+            Evaluation,
             content_type=self.content_type,
             object_id=self.object.id,
+            user=self.request.user,
+        )
+
+        if not evaluation:
+            return redirect("rubrics:evaluate_rubrics",
+                            kwargs=dict(
+                                content_type_id=self.content_type.id,
+                                object_id=self.object.id,
+                            ))
+
+        data["finalized"] = evaluation.confirmed
+
+        alignment_scores = StandardAlignmentScore.objects.filter(
+            evaluation__content_type=self.content_type,
+            evaluation__object_id=self.object.id,
         )
 
         average_score = alignment_scores.aggregate(
@@ -243,11 +285,9 @@ class Results(EvaluateViewMixin, TemplateView):
         else:
             average_score_class = int(average_score)
 
-        user_alignment_scores = alignment_scores.filter(
-            user=self.request.user
+        user_alignment_scores = StandardAlignmentScore.objects.filter(
+            evaluation=evaluation
         )
-
-        data["finalized"] = not user_alignment_scores.filter(confirmed=False).exists()
 
         user_score = user_alignment_scores.aggregate(Avg("score__value"))["score__value__avg"]
         if not user_alignment_scores.exists():
@@ -272,12 +312,12 @@ class Results(EvaluateViewMixin, TemplateView):
 
         rubrics = Rubric.objects.all()
         rubric_scores = RubricScore.objects.filter(
-            content_type=self.content_type,
-            object_id=self.object.id,
+            evaluation__content_type=self.content_type,
+            evaluation__object_id=self.object.id,
         )
         for rubric in rubrics:
             scores = rubric_scores.filter(rubric=rubric)
-            user_score = scores.filter(user=self.request.user)
+            user_score = scores.filter(evaluation__user=self.request.user)
 
             if not user_score.exists():
                 user_score = None
@@ -306,13 +346,13 @@ class Results(EvaluateViewMixin, TemplateView):
                 average_score_class=average_score_class,
             ))
 
-        data["finalized"] = data["finalized"] and not rubric_scores.filter(user=self.request.user, confirmed=False).exists()
-
         not_scored_section = None
         not_scored_tags = set(tags.values_list("id", flat=True)) - \
                           set(user_alignment_scores.values_list("alignment_tag__id",
                                                                 flat=True))
-        user_rubric_scores = rubric_scores.filter(user=self.request.user)
+        user_rubric_scores = rubric_scores.filter(
+            evaluation__user=self.request.user
+        )
         not_scored_rubrics = set(rubrics.values_list("id", flat=True)) - \
                              set(user_rubric_scores.values_list("rubric__id",
                                                                 flat=True))
@@ -323,11 +363,7 @@ class Results(EvaluateViewMixin, TemplateView):
 
         data["not_scored_section"] = not_scored_section
 
-        comment = get_object_or_None(EvaluationComment,
-                                     user=self.request.user,
-                                     content_type=self.content_type,
-                                     object_id=self.object.id)
-        data["form"] = EvaluationCommentForm(instance=comment)
+        data["form"] = EvaluationCommentForm(instance=evaluation)
 
         return data
 
@@ -337,34 +373,27 @@ class Finalize(EvaluateViewMixin, View):
     #noinspection PyUnusedLocal
     def post(self, request, *args, **kwargs):
 
-        comment = get_object_or_None(EvaluationComment,
-                                     user=self.request.user,
-                                     content_type=self.content_type,
-                                     object_id=self.object.id)
-        if not comment:
-            comment = EvaluationComment(
-                user=self.request.user,
-                content_type=self.content_type,
-                object_id=self.object.id,
-            )
+        evaluation = get_object_or_None(
+            Evaluation,
+            content_type=self.content_type,
+            object_id=self.object.id,
+            user=self.request.user,
+        )
 
-        form = EvaluationCommentForm(request.POST, instance=comment)
+        if not evaluation:
+            return redirect("rubrics:evaluate_rubrics",
+                            kwargs=dict(
+                                content_type_id=self.content_type.id,
+                                object_id=self.object.id,
+                            ))
+
+        form = EvaluationCommentForm(request.POST, instance=evaluation)
+
         if form.is_valid():
-            form.save()
-        elif comment.pk:
-            comment.delete()
+            form.save(commit=False)
 
-        StandardAlignmentScore.objects.filter(
-            content_type=self.content_type,
-            object_id=self.object.id,
-            user=request.user,
-        ).update(confirmed=True)
-
-        RubricScore.objects.filter(
-            content_type=self.content_type,
-            object_id=self.object.id,
-            user=request.user,
-        ).update(confirmed=True)
+        evaluation.confirmed = True
+        evaluation.save()
 
         if isinstance(self.object, Indexed):
             self.object.reindex()

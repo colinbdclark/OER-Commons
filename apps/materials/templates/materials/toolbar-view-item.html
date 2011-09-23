@@ -4,6 +4,7 @@
 {% load rating_tags %}
 {% load tags_tags %}
 {% load materials_tags %}
+{% load utils %}
 <html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
     <meta charset="utf-8"/>
@@ -79,7 +80,7 @@
         <ul>
           <li class="rating"><span>Rating: </span>{% stars item.identifier item.rating %}</li>
           <li class="sep"><a href="#" class="review">Review</a></li>
-          <li class="sep"><a href="{% url rubrics:evaluate_intro %}?url={{ item.url }}" data-evaluate-url="{% url rubrics:evaluate_rubrics content_type_id=content_type.id,object_id=item.id %}" id="evaluate-btn">Evaluate</a></li>
+          <li class="sep"><a href="{% url rubrics:evaluate_intro %}?url={{ item.url }}&from={{ request.path|full_url }}" id="evaluate-btn">Evaluate</a></li>
           <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
         </ul>
         {% endspaceless %}
