@@ -1,13 +1,37 @@
 {% extends "rubrics/manage/base.html" %}
 
 {% block content %}
-  <table id="grid" data-data-url="{% url rubrics_manage:index %}"></table>
+
+  <div id="summary">
+    <table><tbody><tr>
+      <td class="number">{{ week_evaluations }}</td>
+      <td class="sep">New Evaluations<br/> this Week</td>
+      <td class="number">{{ week_users }}</td>
+      <td>New Evaluators<br/> this Week</td>
+    </tr></tbody></table>
+  </div>
+
+  <h1>Welcome, {{ request.user }}</h1>
+
+  <div id="toolbar">
+    <select></select>
+    <div class="right">
+      Show evaluations from
+      <input type="text" class="date" size="11" maxlength="11" name="from_date">
+      to
+      <input type="text" class="date" size="11" maxlength="11" name="until_date">
+
+      <input type="search" name="search" placeholder="Search" />
+    </div>
+  </div>
+  <table id="grid" data-url="{% url rubrics_manage:index %}">
+  </table>
 {% endblock %}
 
 {% block extra-js %}
   <script>
     $(function() {
-      var $grid = $("#grid");
+      oer.rubrics_manage.init_index();
     });
   </script>
 {% endblock %}

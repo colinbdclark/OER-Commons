@@ -533,10 +533,6 @@ body.evaluation-tool {
   vertical-align: middle;
 }
 
-.evaluation-tool .evaluation-results #finalize-form label {
-  background: none;
-}
-
 .evaluation-tool .evaluation-results #finalize-form .label {
   margin-bottom: 2px;
 }

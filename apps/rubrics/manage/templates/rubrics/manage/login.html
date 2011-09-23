@@ -1,8 +1,5 @@
 {% extends "rubrics/manage/base.html" %}
 
-{% block search-form %}{% endblock %}
-
-
 {% block content %}
   <form method="post" action="{% url rubrics_manage:login %}" id="login-form" class="formatted login">
     {% for field in form.hidden_fields %}
