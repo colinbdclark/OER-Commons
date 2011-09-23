@@ -6,7 +6,7 @@
   {% compress css %}
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/reset.css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/slick.grid.css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/easyui/themes/gray/easyui.css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/base.css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/form.css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/login.css" />
@@ -16,11 +16,6 @@
 <body>
   <header class="global">
     <a href="{% url rubrics_manage:index %}" id="logo"></a>
-    {% block search-form %}
-    <form id="search-form" action="{% url rubrics_manage:index %}" method="get">
-      <input type="search" placeholder="Search" />
-    </form>
-    {% endblock %}
   </header>
   <div class="content">
     {% block content %}{% endblock %}
@@ -32,7 +27,9 @@
   {% include "include/cdn-js.html" %}
   {% compress js %}
     <script src="{{ STATIC_URL }}javascripts/jquery/jquery.showPasswordCheckbox.js"></script>
-    <script src="{{ STATIC_URL }}javascripts/jquery/slick.grid.js"></script>
+    <script src="{{ STATIC_URL }}javascripts/jquery/easyui/jquery.easyui.min.js"></script>
+    <script src="{{ STATIC_URL }}javascripts/namespace.js"></script>
+    <script src="{{ STATIC_URL }}javascripts/rubrics-manage.js"></script>
   {% endcompress %}
 
   {% block extra-js %}

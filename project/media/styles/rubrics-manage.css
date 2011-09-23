@@ -13,31 +13,84 @@ footer.global {
   background: #96A9B4 url(../images/rubrics-manage/footer.png) no-repeat 100% 50%;
 }
 
-#search-form {
-  position: absolute;
-  top: 12px;
-  right: 20px;
-}
-
 .content {
   padding: 2em;
+}
+
+.content h1 {
+  font-size: 150%;
+}
+
+.content h2 {
+  font-size: 130%;
 }
 
 #login-form {
   margin: 2em auto;
 }
 
-.ui-jqgrid tr.jqgrow td,
-.ui-jqgrid .ui-jqgrid-htable th {
-  line-height: 22px;
+.datagrid-pager.pagination table td {
+  vertical-align: middle;
+}
+
+#toolbar {
+  height: auto;
+  position: relative;
+}
+
+#toolbar .right {
+  position: absolute;
+  right: 5px;
+  top: 4px;
+}
+
+#toolbar {
+  padding: 4px;
+}
+
+#toolbar input[type='search'] {
+  margin-left: 3em;
+}
+
+#toolbar .datebox input.combo-text {
+  text-align: center;
+}
+
+#summary {
+  border: 1px solid #ccc;
+  padding: 10px;
+  float: right;
+  margin-left: 1em;
+  margin-bottom: 1em;
+}
+
+#summary td {
+  padding: 1px 5px;
+  font-size: 15px;
+  vertical-align: middle;
+  line-height: 20px;
+}
+
+#summary td.sep {
+  padding-right: 1em;
+}
+
+#summary td.number {
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 40px;
+}
+
+#summary td:last-child {
+  padding-right: 15px;
+}
+
+#summary td.small {
   font-size: 13px;
+  line-height: 20px;
+  padding-left: 5px;
 }
 
-.ui-jqgrid .ui-icon-asc {
-  margin-top: 0;
-}
-
-.ui-jqgrid .ui-icon-desc {
-  margin-top: 6px;
-  background-position: -65px -16px;
+.datagrid {
+  clear: both;
 }

@@ -1,0 +1,43 @@
+{% extends "rubrics/manage/base.html" %}
+
+{% block content %}
+
+  <div id="summary">
+    <table><tbody>
+      <tr>
+        <td rowspan="3" class="number">{{ total_evaluations }}</td>
+        <td rowspan="3" class="sep">Total<br/> Evaluations</td>
+        <td  class="align-center" colspan="{{ average_scores|length }}">Mean Scores</td>
+      </tr>
+      <tr>
+        {% for average_score in average_scores %}
+          <td class="align-center">{{ average_score.rubric }}</td>
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for average_score in average_scores %}
+          <td class="number small align-center">{{ average_score.score|floatformat }}</td>
+        {% endfor %}
+      </tr>
+    </tbody></table>
+  </div>
+
+  <h1>Resource: {{ object }}</h1>
+  {% if object.url %}
+    <h2>{{ object.url }}</h2>
+  {% endif %}
+  {% if object.institution %}
+    <h2>{{ object.institution }}</h2>
+  {% endif %}
+
+  <table id="grid" data-url="{% url rubrics_manage:resource content_type_id=content_type.id,object_id=object.id %}">
+  </table>
+{% endblock %}
+
+{% block extra-js %}
+  <script>
+    $(function() {
+      oer.rubrics_manage.init_resource();
+    });
+  </script>
+{% endblock %}
