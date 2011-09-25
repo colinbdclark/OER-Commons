@@ -3,13 +3,20 @@
 import os
 from random import choice
 
+import faker
+
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.core import mail
 from django.core.urlresolvers import reverse
 
 from sorl.thumbnail.shortcuts import delete
 
-from users.views.forms import GeographyForm, RolesForm, AboutMeForm
+from users.views.forms import (UserInfoForm, ChangePasswordForm, GeographyForm,
+    RolesForm, AboutMeForm)
+from users.models import Role
+from geo.models import Country
+from users.tests.utils import TestDataGenerator
 
 
 class TestLoginMixin(object):
@@ -50,10 +57,18 @@ class ProfileViewTest(TestCase, TestLoginMixin):
         self.assertContains(response, 'testtwitter')
 
 
-class ProfileEditTest(TestCase, TestLoginMixin):
+class ProfileEditTest(TestCase, TestLoginMixin, TestDataGenerator):
 
     def setUp(self):
         self.profile_edit_url = reverse('users:profile_edit')
+        self.unfilled_profile_edit_url = '%s?unfilled=yes' % self.profile_edit_url
+        self.geography_url = reverse('users:profile_geography')
+        self.roles_url = reverse('users:profile_roles')
+        self.about_url = reverse('users:profile_about')
+
+    def get_profile(self):
+        user = User.objects.get(username='testuser')
+        return user.get_profile()
 
     def test_login_required(self):
         # Test view without loggin in.
@@ -65,12 +80,204 @@ class ProfileEditTest(TestCase, TestLoginMixin):
         self.assertTrue(response['Location'].endswith(next_url))
 
     def test_get(self):
-        # Test that edit view works correctly with get request.
+        # Test that edit view works correctly with GET request.
         self.login()
         response = self.client.get(self.profile_edit_url)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'users/profile-edit.html')
+
+    def test_get_unfilled_country_none(self):
+        # Test GET request with unfilled arguments and country is None.
+        profile = self.get_profile()
+        profile.country = None
+        profile.save()
+
+        self.login()
+
+        response = self.client.get(self.unfilled_profile_edit_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(self.geography_url))
+
+    def test_get_unfilled_country_us(self):
+        # Test GET request with unfilled arguments and country is None.
+        country = Country.objects.get(code='US')
+        profile = self.get_profile()
+        profile.country = country
+        profile.us_state = None
+        profile.save()
+
+        self.login()
+
+        response = self.client.get(self.unfilled_profile_edit_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(self.geography_url))
+
+    def test_get_unfilled_roles(self):
+        # Test GET request with unfilled arguments and roles is None.
+        profile = self.get_profile()
+        profile.roles.clear()
+
+        self.login()
+
+        response = self.client.get(self.unfilled_profile_edit_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(self.roles_url))
+
+    def test_get_unfilled_educator_student_levels_none(self):
+        # Test GET request with educator student levels is None.
+        role = Role.objects.get(title='Educator')
+        profile = self.get_profile()
+        profile.roles.add(role)
+        profile.educator_student_levels.clear()
+
+        self.login()
+
+        response = self.client.get(self.unfilled_profile_edit_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(self.roles_url))
+
+    def test_get_unfilled_without_twitter(self):
+        # Test GET request with unfilled arguments and twitter is None.
+        profile = self.get_profile()
+        profile.twitter_id = None
+        profile.save()
+
+        self.login()
+
+        response = self.client.get(self.unfilled_profile_edit_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(self.about_url))
+
+    def test_post_success_user_info(self):
+        # Test POST request success with UserInfoForm form.
+        data = {
+            u'first_name': faker.name.first_name(),
+            u'last_name': faker.name.last_name(),
+            u'email': faker.internet.email(),
+            u'user-info': u'Save'
+        }
+        self.login()
+        response = self.client.post(self.profile_edit_url, data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(self.geography_url))
+
+    def test_ajax_post_success_user_info(self):
+        # Test ajax POST request success with UserInfoForm form.
+        data = {
+            u'first_name': faker.name.first_name(),
+            u'last_name': faker.name.last_name(),
+            u'email': faker.internet.email(),
+            u'user-info': u'Save'
+        }
+        self.login()
+        response = self.client.post(self.profile_edit_url, data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, u'success')
+        self.assertContains(response, UserInfoForm.success_message)
+
+    def test_post_unsuccess_user_info(self):
+        # Test POST request unsuccess with invalid UserInfoForm form.
+        data = {
+            u'first_name': faker.name.first_name(),
+            u'last_name': faker.name.last_name(),
+            u'email': u'',
+            u'user-info': u'Save'
+        }
+        self.login()
+        response = self.client.post(self.profile_edit_url, data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, UserInfoForm.error_message)
+
+    def test_ajax_post_unsuccess_user_info(self):
+        # Test ajax POST request unsuccess with invalid UserInfoForm form.
+        data = {
+            u'first_name': faker.name.first_name(),
+            u'last_name': faker.name.last_name(),
+            u'email': u'',
+            u'user-info': u'Save'
+        }
+        self.login()
+        response = self.client.post(self.profile_edit_url, data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, u'error')
+        self.assertContains(response, UserInfoForm.error_message)
+
+    def test_post_success_change_password(self):
+        # Test POST request success with ChangePasswordForm form.
+        password = self.get_test_password()
+        data = {
+            u'current_password': u'password',
+            u'new_password': password,
+            u'confirm_new_password': password,
+            u'change-password': u'Save'
+        }
+        self.login()
+        response = self.client.post(self.profile_edit_url, data)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject,
+                         u'OER Commons: Password Changed')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, ChangePasswordForm.success_message)
+
+    def test_ajax_post_success_change_password(self):
+        # Test ajax POST request success with ChangePasswordForm form.
+        password = self.get_test_password()
+        data = {
+            u'current_password': u'password',
+            u'new_password': password,
+            u'confirm_new_password': password,
+            u'change-password': u'Save'
+        }
+        self.login()
+        response = self.client.post(self.profile_edit_url, data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject,
+                         u'OER Commons: Password Changed')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, u'success')
+        self.assertContains(response, ChangePasswordForm.success_message)
+
+    def test_post_unsuccess_change_password(self):
+        # Test POST request unsuccess with invalid ChangePasswordForm form.
+        password = self.get_test_password()
+        data = {
+            u'current_password': u'password',
+            u'new_password': password,
+            u'confirm_new_password': u'',
+            u'change-password': u'Save'
+        }
+        self.login()
+        response = self.client.post(self.profile_edit_url, data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, ChangePasswordForm.error_message)
+
+    def test_ajax_post_unsuccess_change_password(self):
+        # Test ajax POST request unsuccess with invalid ChangePasswordForm form.
+        password = self.get_test_password()
+        data = {
+            u'current_password': u'password',
+            u'new_password': password,
+            u'confirm_new_password': u'',
+            u'change-password': u'Save'
+        }
+        self.login()
+        response = self.client.post(self.profile_edit_url, data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, u'error')
+        self.assertContains(response, ChangePasswordForm.error_message)
 
 
 class AvatarUpdateViewTest(TestCase, TestLoginMixin):
