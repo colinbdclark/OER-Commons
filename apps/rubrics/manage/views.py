@@ -1,6 +1,7 @@
 from annoying.decorators import ajax_request
 from django.conf import settings
 from django.contrib.auth import login
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
@@ -433,4 +434,160 @@ class ResourceEvaluations(ManageRubricsMixin, TemplateView):
 
 
 class UserEvaluations(ManageRubricsMixin, TemplateView):
-    pass
+
+    template_name = "rubrics/manage/user.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.user = get_object_or_404(User, id=int(kwargs["user_id"]))
+        return super(UserEvaluations, self).dispatch(request, *args, **kwargs)
+
+    def get_page_title(self):
+        return u"Evaluation by \"%s\"" % unicode(self.user)
+
+    #noinspection PyUnusedLocal
+    @method_decorator(ajax_request)
+    def post(self, request, *args, **kwargs):
+
+        qs = Evaluation.objects.filter(confirmed=True, user=self.user)
+
+        evaluated_resources = qs.values_list(
+                "content_type__id",
+                "object_id",
+            ).distinct()
+
+        evaluated_resources_dict = {}
+        for content_type_id, object_id in evaluated_resources:
+            if content_type_id not in evaluated_resources_dict:
+                evaluated_resources_dict[content_type_id] = [object_id]
+            else:
+                evaluated_resources_dict[content_type_id].append(object_id)
+
+        items = {}
+
+        for content_type_id, object_ids in evaluated_resources_dict.items():
+            model = ContentType.objects.get(id=content_type_id).model_class()
+            qs = model.objects.filter(id__in=object_ids)
+            if model in (Course, Library):
+                fields = ["title", "url", "institution__name"]
+            elif model == CommunityItem:
+                fields = ["title", "url"]
+            elif model == GenericMaterial:
+                fields = ["url"]
+            else:
+                continue
+
+            qs = qs.values("id", *fields)
+
+            for row in qs:
+                object_id = row.pop("id")
+                data = dict(
+                    title=u"", url=u"", institution__name=u"",
+                    hostname=u"", timestamp=None, ip=u"", average_score=None,
+                    manage_resource_url=reverse("rubrics_manage:resource",
+                        kwargs=dict(
+                            content_type_id=content_type_id,
+                            object_id=object_id,
+                        )
+                    )
+                )
+                for i in xrange(1, 8):
+                    data["r%i" % i] = None
+
+                data.update(row)
+                items[(content_type_id, object_id)] = data
+
+        qs = StandardAlignmentScore.objects.filter(
+            evaluation__confirmed=True,
+            evaluation__user=self.user
+        )
+        qs = qs.exclude(score__value=None).values(
+            "evaluation__content_type__id", "evaluation__object_id"
+        ).annotate(average_score=models.Avg("score__value"))
+        for row in qs:
+            k = (row["evaluation__content_type__id"],
+                 row["evaluation__object_id"])
+            if k not in items:
+                continue
+            items[k]["r1"] = row["average_score"]
+
+        for i, rubric_id in enumerate(Rubric.objects.values_list("id", flat=True)):
+            qs = RubricScore.objects.filter(
+                evaluation__confirmed=True,
+                rubric__id=rubric_id,
+                evaluation__user=self.user
+            )
+            qs = qs.exclude(score__value=None).values(
+                "evaluation__content_type__id", "evaluation__object_id"
+            ).annotate(
+                average_score=models.Avg("score__value")
+            )
+            for row in qs:
+                k = (row["evaluation__content_type__id"],
+                     row["evaluation__object_id"])
+                if k not in items:
+                    continue
+                items[k]["r%i" % (i + 2)] = row["average_score"]
+
+        qs = Evaluation.objects.filter(confirmed=True, user=self.user)
+        qs = qs.values(
+            "content_type__id",
+            "object_id",
+            "hostname",
+            "timestamp",
+            "ip",
+        )
+
+        for row in qs:
+            k = (row.pop("content_type__id"), row.pop("object_id"))
+            items[k].update(row)
+
+
+        for data in items.values():
+            scores = filter(lambda x: x is not None,
+                            map(lambda i: data["r%i" % i], xrange(1, 8)))
+            if scores:
+                data["average"] = sum(scores) / float(len(scores))
+
+
+        items = items.values()
+
+        if "sort" in request.POST:
+            sort_on = request.POST["sort"]
+            items.sort(key=lambda x: x[sort_on], reverse=request.POST.get("order") == "desc")
+
+        page = int(request.POST.get("page", "1"))
+        batch_size = int(request.POST.get("rows", "10"))
+
+        paginator = Paginator(items, batch_size)
+
+        items = paginator.page(page).object_list
+
+        for item in items:
+            for i in xrange(1, 8):
+                k = "r%s" % i
+                item[k] = floatformat(item[k])
+            if item["timestamp"] is not None:
+                item["timestamp"] = format(item["timestamp"],
+                                           settings.DATETIME_FORMAT)
+            item["average"] = floatformat(item["average"])
+
+        return dict(
+            total=paginator.count,
+            rows=paginator.page(page).object_list
+        )
+
+    def get_context_data(self, **kwargs):
+        data = super(UserEvaluations, self).get_context_data(**kwargs)
+        data["evaluator"] = self.user
+        evaluations = Evaluation.objects.filter(
+            confirmed=True,
+            user=self.user
+        )
+        data["total_evaluations"] = evaluations.count()
+        data["last_evaluated"] = None
+        if data["total_evaluations"]:
+            data["last_evaluated"] = format(
+                evaluations.order_by("-timestamp")[0].timestamp,
+                settings.DATE_FORMAT
+            )
+        return data
