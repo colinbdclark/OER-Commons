@@ -74,7 +74,7 @@ oer.evaluation_tool.init_rubrics = function() {
     }
   }
 
-  $sections.find("h1 a").click(function(e) {
+  $sections.find("h1 a:first").click(function(e) {
     e.preventDefault();
     open_section($(this).closest("section"));
   });
@@ -265,11 +265,20 @@ oer.evaluation_tool.open_tool = function(url) {
       }).appendTo($dialog);
       $dialog.appendTo($("body"));
       $dialog.dialog({
-        title: "Evaluate Resource",
+        title: "<span>Achieve</span> OER Evaluation Tool",
         width: 600,
         resizable: false,
+        dialogClass: "evaluate-dialog expanded",
         position: [$("body").innerWidth() - 620, 50]
       });
+
+      var $minimize = $('<a>', {href: "#"}).text("Minimize").addClass("minimize");
+      $minimize.click(function(e) {
+        e.preventDefault();
+        $dialog.dialog("widget").toggleClass("expanded collapsed");
+      });
+      $minimize.insertBefore($dialog.dialog("widget").find(".ui-dialog-titlebar .ui-dialog-titlebar-close"));
+
     } else {
       $dialog.find("iframe").attr("src", url);
       $dialog.dialog("open");

@@ -34,14 +34,14 @@ footer.global {
 }
 
 #toolbar {
-  height: auto;
   position: relative;
+  height: auto;
 }
 
 #toolbar .right {
   position: absolute;
-  right: 5px;
   top: 4px;
+  right: 5px;
 }
 
 #toolbar {
@@ -57,18 +57,18 @@ footer.global {
 }
 
 #summary {
-  border: 1px solid #ccc;
-  padding: 10px;
   float: right;
-  margin-left: 1em;
   margin-bottom: 1em;
+  margin-left: 1em;
+  padding: 10px;
+  border: 1px solid #ccc;
 }
 
 #summary td {
   padding: 1px 5px;
-  font-size: 15px;
   vertical-align: middle;
   line-height: 20px;
+  font-size: 15px;
 }
 
 #summary td.sep {
@@ -76,9 +76,9 @@ footer.global {
 }
 
 #summary td.number {
+  line-height: 40px;
   font-weight: bold;
   font-size: 30px;
-  line-height: 40px;
 }
 
 #summary td:last-child {
@@ -86,9 +86,9 @@ footer.global {
 }
 
 #summary td.small {
-  font-size: 13px;
-  line-height: 20px;
   padding-left: 5px;
+  line-height: 20px;
+  font-size: 13px;
 }
 
 .datagrid {
