@@ -40,11 +40,11 @@
         </div>
       </form>
     </section>
-  
+
     <section class="change-password">
       <h1>Change Password</h1>
       <form method="post" class="formatted"  name="change-password"
-            action="{% url users:profile %}" id="change-password">
+            action="{% url users:profile_edit %}" id="change-password">
         {% for field in change_password_form %}
           {% include "include/form-field.html" %}
         {% endfor %}
