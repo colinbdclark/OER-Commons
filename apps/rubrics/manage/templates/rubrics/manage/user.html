@@ -1,0 +1,30 @@
+{% extends "rubrics/manage/base.html" %}
+
+{% block content %}
+
+  <div id="summary">
+    <table><tbody>
+      <tr>
+        <td rowspan="2" class="number">{{ total_evaluations }}</td>
+        <td rowspan="2" class="sep">Total<br/> Evaluations</td>
+        <td class="align-center">Last Evaluation was on</td>
+      </tr>
+      <tr>
+        <td class="number small align-center">{{ last_evaluated }}</td>
+      </tr>
+    </tbody></table>
+  </div>
+
+  <h1>User: {{ evaluator }}</h1>
+
+  <table id="grid" data-url="{% url rubrics_manage:user user_id=evaluator.id %}">
+  </table>
+{% endblock %}
+
+{% block extra-js %}
+  <script>
+    $(function() {
+      oer.rubrics_manage.init_user();
+    });
+  </script>
+{% endblock %}

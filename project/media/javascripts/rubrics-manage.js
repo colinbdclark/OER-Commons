@@ -94,5 +94,34 @@ oer.rubrics_manage.init_resource = function() {
       ]
     ]
   });
+};
 
+
+oer.rubrics_manage.init_user = function() {
+  var $grid = $("#grid");
+
+  $grid.datagrid({
+    url: $grid.data("url"),
+    pagination: true,
+    fitColumns: true,
+    pageSize: 20,
+    columns: [
+      [
+        {field: "hostname", title: "Host", width: 70, sortable: true},
+        {field: "timestamp", title: "Evaluation Date", width: 70, sortable: true},
+        {field: "ip", title: "IP Address", width: 50, sortable: true},
+        {field: "title", title: "Resource Name", width: 70, sortable: true, formatter: oer.rubrics_manage.link_formatter("manage_resource_url")},
+        {field: "url", title: "Resource URL", width: 70, sortable: true},
+        {field: "institution__name", title: "Institution", width: 70, sortable: true},
+        {field: "r1", title: "R1", width: 10, sortable: true, align: "center"},
+        {field: "r2", title: "R2", width: 10, sortable: true, align: "center"},
+        {field: "r3", title: "R3", width: 10, sortable: true, align: "center"},
+        {field: "r4", title: "R4", width: 10, sortable: true, align: "center"},
+        {field: "r5", title: "R5", width: 10, sortable: true, align: "center"},
+        {field: "r6", title: "R6", width: 10, sortable: true, align: "center"},
+        {field: "r7", title: "R7", width: 10, sortable: true, align: "center"},
+        {field: "average", title: "Average Score", width: 30, sortable: true, align: "center"}
+      ]
+    ]
+  });
 };
