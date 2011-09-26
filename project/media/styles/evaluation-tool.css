@@ -4,27 +4,6 @@ body.evaluation-tool {
   width: 600px;
 }
 
-.evaluation-tool header {
-  border-bottom: 2px solid #123078;
-  background: #b5c3ca;
-  text-align: center;
-}
-
-.evaluation-tool header h1 {
-  display: inline-block;
-  padding-left: 40px;
-  background: url(../images/evaluation/header-bg.png) no-repeat 0 50%;
-  color: #fff;
-  line-height: 35px;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.evaluation-tool header h1 span {
-  color: #123078;
-  font-weight: normal;
-}
-
 .evaluation-tool .intro {
   padding: 2em;
 }
@@ -101,6 +80,7 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section h1 {
+  position: relative;
   padding: 0 10px;
   line-height: 26px;
   font-weight: bold;
@@ -129,6 +109,21 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section.expanded h1 a {
+  color: #fff;
+}
+
+.evaluation-tool .rubrics section h1 a.right {
+  position: absolute;
+  top: 0;
+  right: 1em;
+  display: block;
+  color: #0B7BA9;
+  text-decoration: underline;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+.evaluation-tool .rubrics section.expanded h1 a.right {
   color: #fff;
 }
 
@@ -525,6 +520,13 @@ body.evaluation-tool {
   font-size: 14px;
 }
 
+.evaluation-results td span span.users,
+.view-item .evaluation-results td span span.users {
+  color: #333;
+  font-weight: normal;
+  font-size: 13px;
+}
+
 .evaluation-results td span.nr {
   display: inline-block;
   width: 24px;
@@ -572,6 +574,51 @@ body.evaluation-tool {
 
 #evaluate-dialog {
   padding: 0;
+}
+
+.evaluate-dialog.ui-dialog .ui-dialog-titlebar {
+  padding: 0 10px;
+  border-bottom: 2px solid #123078;
+  background: #b5c3ca;
+}
+
+.evaluate-dialog.ui-dialog .ui-dialog-title {
+  padding-left: 40px;
+  background: url(../images/evaluation/header-bg.png) no-repeat 0 50%;
+  color: #fff;
+  text-shadow: none;
+  line-height: 35px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.evaluate-dialog .ui-dialog-title span {
+  color: #123078;
+  font-weight: normal;
+}
+
+.evaluate-dialog.ui-dialog .ui-dialog-titlebar .minimize {
+  position: absolute;
+  top: 55%;
+  right: 2em;
+  display: block;
+  margin: -10px 0 0 0;
+  width: 16px;
+  height: 16px;
+  background: url(../javascripts/jquery/Aristo/images/icon_sprite.png) 0 -64px no-repeat;
+  text-indent: -9999px;
+}
+
+.evaluate-dialog.ui-dialog.collapsed .ui-dialog-titlebar .minimize {
+  background-position: -16px -64px;
+}
+
+.evaluate-dialog.ui-dialog.collapsed .ui-dialog-titlebar {
+  border: none;
+}
+
+.evaluate-dialog.ui-dialog.collapsed .ui-dialog-content {
+  display: none;
 }
 
 .evaluation-tool .align {

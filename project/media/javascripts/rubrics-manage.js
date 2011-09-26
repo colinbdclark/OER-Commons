@@ -2,8 +2,8 @@ oer.rubrics_manage = {};
 
 oer.rubrics_manage.link_formatter = function(url_field) {
   return function(value, rowData) {
-    return '<a href="' + rowData[url_field] + '">' + value + '</a>'
-  }
+    return '<a href="' + rowData[url_field] + '">' + value + '</a>';
+  };
 };
 
 oer.rubrics_manage.init_index = function() {

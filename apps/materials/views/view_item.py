@@ -7,12 +7,11 @@ from django.views.generic.base import TemplateView
 from haystack.query import SearchQuerySet
 from materials.models.material import WORKFLOW_TRANSITIONS, PUBLISHED_STATE
 from materials.models.microsite import Microsite
-from materials.utils import get_name_from_id
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
 from reviews.views import ReviewForm
-from rubrics.models import Rubric
+from rubrics.models import Rubric, StandardAlignmentScore, RubricScore
 from saveditems.models import SavedItem
 from visitcounts.models import Visit
 import urllib
@@ -294,7 +293,15 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 score_class = None
             else:
                 score_class = int(score)
-        data["evaluation_scores"].append(dict(name=name, score=score, score_class=score_class))
+        data["evaluation_scores"].append(dict(
+            name=name,
+            score=score,
+            score_class=score_class,
+            evaluations_number=StandardAlignmentScore.objects.filter(
+                evaluation__content_type=self.content_type,
+                evaluation__object_id=self.item.id,
+            ).exclude(score__value=None).values("evaluation").distinct().count()
+        ))
 
         for rubric_id, name in Rubric.objects.values_list("id", "name"):
             #noinspection PySimplifyBooleanCheck
@@ -306,7 +313,16 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                     score_class = None
                 else:
                     score_class = int(score)
-            data["evaluation_scores"].append(dict(name=name, score=score, score_class=score_class))
+            data["evaluation_scores"].append(dict(
+                name=name,
+                score=score,
+                score_class=score_class,
+                evaluations_number=RubricScore.objects.filter(
+                    rubric__id=rubric_id,
+                    evaluation__content_type=self.content_type,
+                    evaluation__object_id=self.item.id,
+                ).exclude(score__value=None).values("evaluation").distinct().count()
+            ))
 
         data["toolbar_view_url"] = reverse("materials:%s:toolbar_view_item" % item.namespace,
                                        kwargs=dict(slug=item.slug))

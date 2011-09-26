@@ -297,7 +297,7 @@
             <thead>
               <tr>
                 <th>Rubric</th>
-                <th width="90">Average Score<br/> ({% blocktrans count count=evaluations_number %}{{ count }} user rating{% plural %}{{ count }} user ratings{% endblocktrans %})</th>
+                <th width="120">Average Score<br/> (3 Points Possible)</th>
               </tr>
             </thead>
             <tbody>
@@ -311,7 +311,11 @@
                         {% if score.score == None %}
                           <span class="na">N/A</span>
                         {% else %}
-                          <span class="s{{ score.score_class }}">{{ score.score|floatformat }}/3</span>
+                          <span class="s{{ score.score_class }}">{{ score.score|floatformat }}
+                            {% if score.evaluations_number %}
+                              <span class="users">({% blocktrans count count=score.evaluations_number %}{{ count }} user{% plural %}{{ count }} users{% endblocktrans %})</span>
+                            {% endif %}
+                          </span>
                         {% endif %}
                     {% endif %}
                   </td>
