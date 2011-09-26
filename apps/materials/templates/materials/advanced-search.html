@@ -5,6 +5,7 @@
   <script type="text/javascript">
     $(function() {
       oer.advanced_search.init();
+      $("div.rubric a.tooltip").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
     });
   </script>
 {% endblock %}
@@ -103,6 +104,12 @@
               <option value="{{ rubric.id }}">{{ rubric.name }}</option>
             {% endfor %}
           </select>
+          <a href="#evaluate-tooltip" rel="#evaluate-tooltip" class="tooltip"><small>What is this?</small></a>
+          <div style="display: none" id="evaluate-tooltip">
+              These seven rubrics will help users determine the degree of alignment of OER to
+              education standards and to determine aspects of OER quality (such as explanation of
+              content, assessment, and interactivity).
+          </div>
         </div>
       </div>
       <div class="languages">
