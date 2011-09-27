@@ -8,6 +8,10 @@ body.evaluation-tool {
   padding: 2em;
 }
 
+.evaluation-tool .intro p {
+  margin-bottom: 1em;
+}
+
 .evaluation-tool .rubrics .intro {
   padding: 0;
 }
@@ -57,14 +61,14 @@ body.evaluation-tool {
   background-color: #d3dbdf;
 }
 
-.evaluation-tool .rubrics .guidelines ul {
-  margin: 1em 2em;
-}
-
 .evaluation-tool .rubrics section .body {
   display: none;
   padding: 10px;
   background-color: #fff;
+}
+
+.evaluation-tool .rubrics .intro .body {
+  padding: 1em 2em;
 }
 
 .evaluation-tool .rubrics section {
