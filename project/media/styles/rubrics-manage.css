@@ -94,3 +94,8 @@ footer.global {
 .datagrid {
   clear: both;
 }
+
+.datagrid td input[type='text'] {
+  margin: 0;
+  text-align: center;
+}

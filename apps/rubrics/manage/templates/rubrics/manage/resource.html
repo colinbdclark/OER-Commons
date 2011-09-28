@@ -30,7 +30,9 @@
     <h2>{{ object.institution }}</h2>
   {% endif %}
 
-  <table id="grid" data-url="{% url rubrics_manage:resource content_type_id=content_type.id,object_id=object.id %}">
+  <table id="grid" data-url="{% url rubrics_manage:resource content_type_id=content_type.id,object_id=object.id %}"
+         data-delete-url="{% url rubrics_manage:delete %}"
+         data-edit-url="{% url rubrics_manage:edit %}">
   </table>
 {% endblock %}
 
