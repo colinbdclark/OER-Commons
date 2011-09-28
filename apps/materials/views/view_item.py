@@ -243,6 +243,9 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                         "title": transition["title"],
                     })
 
+            data["content_actions"] = content_actions
+            data["workflow_actions"] = workflow_actions
+
         tags = []
         tags_slugs = set()
         microsite_markers = set()
