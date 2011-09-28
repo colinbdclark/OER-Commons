@@ -14,7 +14,29 @@
   <h1>Welcome, {{ request.user }}</h1>
 
   <div id="toolbar">
-    <select></select>
+    Filter by:
+
+    <select name="rubric">
+      <option value="">- Rubric -</option>
+      {% for rubric in rubrics %}
+        <option value="{{ rubric.id }}">{{ rubric.name }}</option>
+      {% endfor %}
+    </select>
+
+    <select name="grade_level">
+      <option value="">- Grade Level -</option>
+      {% for grade_level in grade_levels %}
+        <option value="{{ grade_level.id }}">{{ grade_level.name }}</option>
+      {% endfor %}
+    </select>
+
+    <select name="general_subject">
+      <option value="">- General Subject -</option>
+      {% for general_subject in general_subjects %}
+        <option value="{{ general_subject.id }}">{{ general_subject.name }}</option>
+      {% endfor %}
+    </select>
+
     <div class="right">
       Show evaluations from
       <input type="text" class="date" size="11" maxlength="11" name="from_date">

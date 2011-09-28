@@ -37,6 +37,10 @@ oer.rubrics_manage.init_index = function() {
   });
 
   var $search = $("input[name='search']");
+  var $rubric = $("select[name='rubric']");
+  var $grade_level = $("select[name='grade_level']");
+  var $general_subject = $("select[name='general_subject']");
+
 
   var reload_grid = function() {
     var $from_date = $("input[name='from_date']");
@@ -55,6 +59,22 @@ oer.rubrics_manage.init_index = function() {
     if (until_date !== "") {
       params.until_date = until_date;
     }
+
+    var rubric = $rubric.val();
+    if (rubric !== "") {
+      params.rubric = rubric;
+    }
+
+    var grade_level = $grade_level.val();
+    if (grade_level !== "") {
+      params.grade_level = grade_level;
+    }
+
+    var general_subject = $general_subject.val();
+    if (general_subject !== "") {
+      params.general_subject = general_subject;
+    }
+
     $grid.datagrid("load", params);
   };
 
@@ -67,6 +87,11 @@ oer.rubrics_manage.init_index = function() {
   $("#toolbar input.date").datebox({
     onSelect: reload_grid
   });
+
+  $rubric.change(reload_grid);
+  $grade_level.change(reload_grid);
+  $general_subject.change(reload_grid);
+
 };
 
 oer.rubrics_manage.init_resource = function() {
