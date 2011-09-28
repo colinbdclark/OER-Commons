@@ -76,7 +76,10 @@ oer.evaluation_tool.init_rubrics = function() {
 
   $sections.find("h1 a:first").click(function(e) {
     e.preventDefault();
-    open_section($(this).closest("section"));
+    var $section = $(this).closest("section");
+    if (!$section.hasClass("expanded")) {
+      open_section($section);
+    }
   });
 
   function select_tag($tag) {

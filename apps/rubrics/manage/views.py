@@ -1,4 +1,5 @@
 from annoying.decorators import ajax_request
+from annoying.functions import get_object_or_None
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -11,7 +12,7 @@ from django.template.defaultfilters import floatformat
 from django.utils.dateformat import format
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView
-from materials.models import Course, Library, CommunityItem, GenericMaterial
+from materials.models import Course, Library, CommunityItem, GenericMaterial, GradeLevel, GeneralSubject
 from rubrics.models import StandardAlignmentScore, RubricScore, Rubric, \
     Evaluation
 from users.views.login import LoginForm
@@ -110,6 +111,15 @@ class Index(ManageRubricsMixin, TemplateView):
 
         items = {}
 
+
+        grade_level = request.POST.get("grade_level")
+        if grade_level:
+            grade_level = get_object_or_None(GradeLevel, id=int(grade_level))
+
+        general_subject = request.POST.get("general_subject")
+        if general_subject:
+            general_subject = get_object_or_None(GeneralSubject, id=int(general_subject))
+
         for content_type_id, object_ids in evaluated_resources_dict.items():
             model = ContentType.objects.get(id=content_type_id).model_class()
             qs = model.objects.filter(id__in=object_ids)
@@ -121,6 +131,18 @@ class Index(ManageRubricsMixin, TemplateView):
                 fields = ["url"]
             else:
                 continue
+
+            if grade_level:
+                if not hasattr(model, "grade_levels"):
+                    continue
+                qs = qs.filter(grade_levels=grade_level)
+                print "????", qs.query
+
+            if general_subject:
+                if not hasattr(model, "general_subjects"):
+                    continue
+                qs = qs.filter(general_subjects=general_subject)
+                print "!!!!", qs.query
 
             if search:
                 qs = qs.filter(reduce(or_, map(lambda f: models.Q(**{f+"__icontains":search}), fields)))
@@ -285,6 +307,12 @@ class Index(ManageRubricsMixin, TemplateView):
             ).values_list("user__id", flat=True).distinct())
 
         data["week_users"] = len(week_users - old_users)
+
+        data["grade_levels"] = GradeLevel.objects.values("id", "name")
+        data["general_subjects"] = GeneralSubject.objects.values("id", "name")
+        data["rubrics"] = [dict(id=0, name=u"Degree of Alignment")] + list(
+            Rubric.objects.values("id", "name")
+        )
 
         return data
 

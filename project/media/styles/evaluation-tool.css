@@ -63,7 +63,7 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics section .body {
   display: none;
-  padding: 10px;
+  padding: 0 10px 10px;
   background-color: #fff;
 }
 
@@ -101,9 +101,9 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section.expanded h1 {
+  padding-top: 5px;
   padding-left: 10px;
-  background: #ffb21f none;
-  font-size: 14px;
+  background: #fff;
 }
 
 .evaluation-tool .rubrics section h1 a {
@@ -113,7 +113,9 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section.expanded h1 a {
-  color: #fff;
+  display: inline;
+  color: #143073;
+  cursor: default;
 }
 
 .evaluation-tool .rubrics section h1 a.right {
@@ -133,10 +135,6 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics section .body > .description {
   font-weight: bold;
-}
-
-.evaluation-tool .tip {
-  margin-top: 0.3em;
 }
 
 .evaluation-tool .rubrics .scores {
@@ -207,6 +205,15 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics .scores .selected a {
   color: #fff;
+}
+
+.evaluation-tool .rubrics .scores .tip {
+  position: absolute;
+  top: 68px;
+  left: 190px;
+  z-index: 1;
+  color: #666;
+  font-style: italic;
 }
 
 .evaluation-tool .rubrics .scores .s1.selected a,
@@ -601,20 +608,43 @@ body.evaluation-tool {
   font-weight: normal;
 }
 
+.evaluate-dialog .ui-dialog-titlebar-close {
+  margin-top: -16px;
+  width: 31px;
+  height: 30px;
+  background: url(../images/evaluation/dialog-icons.png) no-repeat 0 0;
+}
+
+.evaluate-dialog .ui-dialog-titlebar-close.ui-state-hover {
+  background-position: 0 -31px;
+}
+
+.evaluate-dialog .ui-dialog-titlebar-close span {
+  display: none;
+}
+
 .evaluate-dialog.ui-dialog .ui-dialog-titlebar .minimize {
   position: absolute;
   top: 55%;
-  right: 2em;
+  right: 40px;
   display: block;
-  margin: -10px 0 0 0;
-  width: 16px;
-  height: 16px;
-  background: url(../javascripts/jquery/Aristo/images/icon_sprite.png) 0 -64px no-repeat;
+  margin: -16px 0 0 0;
+  width: 33px;
+  height: 30px;
+  background: url(../images/evaluation/dialog-icons.png) no-repeat 0 -62px;
   text-indent: -9999px;
 }
 
+.evaluate-dialog.ui-dialog .ui-dialog-titlebar .minimize:hover {
+  background-position: 0 -93px;
+}
+
 .evaluate-dialog.ui-dialog.collapsed .ui-dialog-titlebar .minimize {
-  background-position: -16px -64px;
+  background-position: 0 -124px;
+}
+
+.evaluate-dialog.ui-dialog.collapsed .ui-dialog-titlebar .minimize:hover {
+  background-position: 0 -155px;
 }
 
 .evaluate-dialog.ui-dialog.collapsed .ui-dialog-titlebar {

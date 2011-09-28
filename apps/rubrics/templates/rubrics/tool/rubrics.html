@@ -63,8 +63,6 @@
             </a>
           {% endfor %}
 
-          <p class="tip"><small>Mouse over for score descriptions</small></p>
-
           {% for tag in alignment_tags %}
             <div class="scores{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}">
               {% for score in alignment_score_values %}
@@ -72,6 +70,9 @@
                   <a href="#" class="rc5">
                     <input type="radio" name="tag{{ tag.id }}" value="{{ score.value }}" {% if tag.score_value == score %}checked{% endif %} />
                     <strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
+                  {% if forloop.first %}
+                    <p class="tip">Mouse over for score description</p>
+                  {% endif %}
                   <div class="description rc5">{{ score.description|markdown|safe }}</div>
                 </div>
               {% endfor %}
@@ -106,14 +107,15 @@
             {{ rubric.description|markdown|safe }}
           </div>
 
-          <p class="tip"><small>Mouse over for score descriptions</small></p>
-
           <div class="scores" data-rubric-id="{{ rubric.id }}">
             {% for score in rubric.score_values.all %}
               <div class="s{{ forloop.counter }}{% if rubric.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
                 <a href="#" class="rc5">
                   <input type="radio" name="rubric{{ rubric.id }}" value="{{ score.value }}" {% if rubric.score_value == score %}checked{% endif %} />
                   <strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
+                {% if forloop.first %}
+                  <p class="tip">Mouse over for score description</p>
+                {% endif %}
                 <div class="description rc5">{{ score.description|markdown|safe }}</div>
               </div>
             {% endfor %}
