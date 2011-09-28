@@ -136,13 +136,11 @@ class Index(ManageRubricsMixin, TemplateView):
                 if not hasattr(model, "grade_levels"):
                     continue
                 qs = qs.filter(grade_levels=grade_level)
-                print "????", qs.query
 
             if general_subject:
                 if not hasattr(model, "general_subjects"):
                     continue
                 qs = qs.filter(general_subjects=general_subject)
-                print "!!!!", qs.query
 
             if search:
                 qs = qs.filter(reduce(or_, map(lambda f: models.Q(**{f+"__icontains":search}), fields)))
