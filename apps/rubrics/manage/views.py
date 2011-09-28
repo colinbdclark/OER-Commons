@@ -11,10 +11,11 @@ from django.shortcuts import redirect, get_object_or_404
 from django.template.defaultfilters import floatformat
 from django.utils.dateformat import format
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, View
+from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial, GradeLevel, GeneralSubject
 from rubrics.models import StandardAlignmentScore, RubricScore, Rubric, \
-    Evaluation
+    Evaluation, RubricScoreValue
 from users.views.login import LoginForm
 from operator import or_
 import datetime
@@ -92,10 +93,30 @@ class Index(ManageRubricsMixin, TemplateView):
                 until_date = None
 
         qs = Evaluation.objects.filter(confirmed=True)
+
         if from_date:
             qs = qs.filter(timestamp__gte=from_date)
         if until_date:
             qs = qs.filter(timestamp__lte=until_date)
+
+        rubric_id = request.POST.get("rubric")
+        if rubric_id:
+            rubric_id = int(rubric_id)
+            if rubric_id == 0:
+                evaluations_ids = StandardAlignmentScore.objects.exclude(
+                    score__value=None
+                ).values_list(
+                    "evaluation__id",
+                    flat=True,
+                ).distinct()
+            else:
+                evaluations_ids = RubricScore.objects.exclude(
+                    score__value=None
+                ).filter(
+                    rubric__id=rubric_id
+                ).values_list("evaluation__id", flat=True)
+
+            qs = qs.filter(id__in=evaluations_ids)
 
         evaluated_resources = qs.values_list(
                 "content_type__id",
@@ -109,8 +130,8 @@ class Index(ManageRubricsMixin, TemplateView):
             else:
                 evaluated_resources_dict[content_type_id].append(object_id)
 
-        items = {}
 
+        items = {}
 
         grade_level = request.POST.get("grade_level")
         if grade_level:
@@ -379,7 +400,7 @@ class ResourceEvaluations(ManageRubricsMixin, TemplateView):
             object_id=self.object.id,
         ).values("id", "hostname", "timestamp", "user__id",
                  "user__username", "ip"):
-            id = row.pop("id")
+            id = row["id"]
             user_id = row.pop("user__id")
             items[id] = row
             for i in xrange(1,8):
@@ -556,6 +577,7 @@ class UserEvaluations(ManageRubricsMixin, TemplateView):
 
         qs = Evaluation.objects.filter(confirmed=True, user=self.user)
         qs = qs.values(
+            "id",
             "content_type__id",
             "object_id",
             "hostname",
@@ -617,3 +639,96 @@ class UserEvaluations(ManageRubricsMixin, TemplateView):
                 settings.DATE_FORMAT
             )
         return data
+
+
+class DeleteEvaluation(ManageRubricsMixin, View):
+
+    @method_decorator(ajax_request)
+    def post(self, request, *args, **kwargs):
+
+        result = dict(status="error")
+        try:
+            id = int(request.POST["id"])
+        except (KeyError, ValueError, TypeError):
+            return result
+
+        evaluation = get_object_or_None(Evaluation, id=id)
+        if not evaluation:
+            return result
+
+        object = evaluation.content_object
+        evaluation.delete()
+        if isinstance(object, Indexed):
+            object.reindex()
+        result["status"] = "success"
+
+        return result
+
+
+class EditEvaluation(ManageRubricsMixin, View):
+
+    @method_decorator(ajax_request)
+    def post(self, request, *args, **kwargs):
+
+        result = dict(status="error")
+        try:
+            id = int(request.POST["id"])
+        except (KeyError, ValueError, TypeError):
+            return result
+
+        evaluation = get_object_or_None(Evaluation, id=id)
+
+        if not evaluation:
+            return result
+
+        data = []
+        for rubric in Rubric.objects.all():
+            k = "r%i" % (rubric.id + 1)
+
+            if k in request.POST:
+                value = request.POST[k].strip() or None
+
+                if value is not None:
+                    try:
+                        value = int(value)
+                    except (TypeError, ValueError):
+                        continue
+
+                value = get_object_or_None(
+                    RubricScoreValue,
+                    rubric=rubric,
+                    value=value
+                )
+
+                if not value:
+                    continue
+
+                data.append((rubric, value))
+
+        if not data:
+            return result
+
+        object = evaluation.content_object
+
+        for rubric, value in data:
+            score = get_object_or_None(
+                RubricScore,
+                evaluation=evaluation,
+                rubric=rubric
+            )
+
+            if score:
+                score.score = value
+                score.save()
+            else:
+                RubricScore.objects.create(
+                    evaluation=evaluation,
+                    rubric=rubric,
+                    score=value,
+                )
+
+        if isinstance(object, Indexed):
+            object.reindex()
+        result["status"] = "success"
+
+        return result
