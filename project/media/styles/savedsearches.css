@@ -1,23 +1,23 @@
 form.save-search {
-  background: white;
-  border-color: #C0D8E4 #A3BFCD #96B0BD #A2BFCD;
-  border-style: solid;
-  border-width: 1px;
-  padding: 7px;
   position: absolute;
   z-index: 99;
   display: none;
+  padding: 7px;
   width: 258px;
+  border-color: #C0D8E4 #A3BFCD #96B0BD #A2BFCD;
+  border-style: solid;
+  border-width: 1px;
+  background: white;
 }
 
 form.save-search h4 {
-  color: #666;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: normal;
+  margin-top: 0;
   margin-bottom: 5px;
   padding-bottom: 3px;
-  margin-top: 0;
+  color: #666;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 14px;
 }
 
 form.save-search .field {

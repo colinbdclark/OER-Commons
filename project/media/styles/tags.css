@@ -1,7 +1,7 @@
 .tag-cloud a {
-  text-decoration: none;
   margin: 1px;
   color: #0b7ba9;
+  text-decoration: none;
   font-weight: normal;
 }
 
@@ -65,54 +65,52 @@ a.tag9 {
 }
 
 #id_tags.loading {
-  background-image: url(../images/ajax-loader.gif);
-  background-position: 100% 0;
-  background-repeat: no-repeat;
+  background: url(../images/ajax-loader.gif) no-repeat 100% 0;
 }
 
 .user-tags {
-  list-style-type: none;
-  margin-bottom: 5px;
   display: none;
+  margin-bottom: 5px;
+  list-style-type: none;
 }
 
 body.authenticated .user-tags {
-   display: block; 
+  display: block;
 }
 
 .user-tags li.tag,
 .portlet.item-tags .user-tags li.tag {
+  position: relative;
+  display: inline-block;
+  margin: 3px 6px 3px 0;
+  padding: 0;
   border: 2px solid #C1DEE8;
   background-color: #fff;
-  display: inline-block;
-  padding: 0px;
-  margin: 3px 6px 3px 0;
-  position: relative;
 }
 
 .user-tags li.tag a,
 .portlet.item-tags .user-tags li.tag a {
-  color: #017CA5;
-  background-color: #C1DEE8;
   display: inline-block;
   margin-right: 20px;
   padding: 1px 5px 1px 3px;
+  background-color: #C1DEE8;
+  color: #017CA5;
 }
 
 .user-tags li.tag a.delete,
 .portlet.item-tags .user-tags li.tag a.delete {
-  display: block;
-  float: right;
   position: absolute;
+  top: 0;
   right: 2px;
-  top: 0px;
-  vertical-align: middle;
+  float: right;
+  display: block;
+  margin: 0;
+  padding: 0;
   width: 16px;
   height: 16px;
   background: transparent url(../images/icon-delete-gray.png) no-repeat 50% 50%;
+  vertical-align: middle;
   text-indent: -9999px;
-  padding: 0;
-  margin: 0;
 }
 
 #add-tags-form {
@@ -120,19 +118,19 @@ body.authenticated .user-tags {
 }
 
 body.authenticated #add-tags-form {
-  display: block; 
+  display: block;
 }
 
 .portlet.item-tags ul {
-  list-style-type: none;
   margin: 10px 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .portlet.item-tags li {
   display: inline-block;
-  padding: 3px 5px;
   margin: 3px 3px 3px 0;
+  padding: 3px 5px;
 }
 
 .portlet.item-tags li.keyword,
@@ -154,7 +152,7 @@ body.authenticated #add-tags-form {
 }
 
 body.authenticated .portlet.item-tags .login {
-  display: none; 
+  display: none;
 }
 
 #add-tags-dialog .user-tags li {
@@ -173,12 +171,12 @@ body.authenticated .portlet.item-tags .login {
 }
 
 #add-tags-dialog #add-tags-form {
-  padding: 3px 5px;
   margin-bottom: 5px;
+  padding: 3px 5px;
 }
 
 #add-tags-dialog p {
-   font-size: 16px;
-   text-align: center;
-   margin-top: 25px;
+  margin-top: 25px;
+  text-align: center;
+  font-size: 16px;
 }

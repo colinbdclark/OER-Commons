@@ -1,5 +1,5 @@
 .clearfix {
-  zoom: 1; /* triggers hasLayout */
+  zoom: 1;
 }
 
 .index-filters .filter input, .advanced-search .filter input {
@@ -11,13 +11,13 @@
 }
 
 .advanced-search .filter dd.collapsible li label {
-  margin-left: 0px;
   float: left;
+  margin-left: 0;
 }
 
 #global-search-box .text {
   margin-top: 1px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 #global-search-box .button {
@@ -31,42 +31,6 @@
 .index-filters .filter dd, a.expand-link, .materials-index dl.expanded, .materials-index dl.collapsed,
 .advanced-search .filter dd {
   background: none !important;
-}
-
-/* Items with display: inline-block */
-#align-form label,
-#toolbar .stars,
-#toolbar li,
-#toolbar li a,
-.accordion .accordion-header a,
-.align-user-tags li.tag a, .portlet.align-item-tags .align-user-tags li.tag a,
-.align-user-tags li.tag, .portlet.align-item-tags .align-user-tags li.tag,
-.button-blue-big,
-.content-submission .label label,
-.form-row.tags a.delete,
-.form-row.tags ul li,
-.frontpage-highlight .buttons li,
-.green-browse #content section.column,
-.iframe-submission .existing-resource .user-tags li,
-.materials-index .details dd.topics a, .view-item .details dd.topics a,
-.portlet.align-item-tags li,
-.portlet.bookmarklet a,
-.portlet.item-tags li,
-.portlet.save a,
-.profile-edit form[name="about"],
-.profile-edit form[name="roles"],
-.profile-edit section,
-.profile-edit section h1,
-.profile-view #upload-avatar-btn, .profile-edit #upload-avatar-btn,
-.profile-view .portlet.links ul li a,
-.profile-view a.edit,
-.profile-view section.avatar, .profile-view section.basic, .profile-view section.roles, .profile-view section.levels,
-.profile-views,
-.user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
-.user-tags li.tag, .portlet.item-tags .user-tags li.tag,
-fieldset.step p.content-submission-buttons a {
-    display: inline;
-    zoom: 1;
 }
 
 .rocon {

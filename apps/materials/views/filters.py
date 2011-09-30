@@ -1,4 +1,6 @@
-from curriculum.models import TaggedMaterial, AlignmentTag
+from annoying.functions import get_object_or_None
+from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade,\
+    LearningObjectiveCategory
 from django.http import Http404
 from materials.models.common import Keyword, GeneralSubject, GradeLevel, \
     MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS, \
@@ -212,6 +214,17 @@ class AlignmentFilter(Filter):
             return None
         return value
 
+    def get_tag_from_full_code(self, code):
+        parts = code.split(".")[1:]
+        assert 3 <= len(parts) <= 4
+        if len(parts) == 3:
+            natural_key = parts
+        else:
+            natural_key = [parts[0], ".".join(parts[1:3]), parts[3]]
+
+        return AlignmentTag.objects.get_by_natural_key(*natural_key)
+
+
     def update_query(self, query, value):
         available_values = self.available_values
 
@@ -222,9 +235,9 @@ class AlignmentFilter(Filter):
         if set(value) - available_values:
             raise Http404()
 
-        value = [AlignmentTag.objects.get_by_natural_key(*(v.split("."))).id for v in value]
-        
-        return query.narrow(u"%s:(%s)" % (self.index_name, u" OR ".join([str(v) for v in value])))
+        value = map(self.get_tag_from_full_code, value)
+
+        return query.narrow(u"%s:(%s)" % (self.index_name, u" OR ".join([str(v.id) for v in value])))
 
     def update_query_string_params(self, query_string_params, value):
         query_string_params[self.request_name] = value
@@ -273,7 +286,7 @@ class SearchParameters(object):
             if self.any_words[0] not in self.all_words:
                 self.all_words.append(self.any_words[0])
             self.any_words = []
-        
+
         self.all_words = [w for w in self.all_words if w.lower() != "and"]
 
     def __nonzero__(self):

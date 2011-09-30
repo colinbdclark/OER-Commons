@@ -1,10 +1,10 @@
 footer.global {
-  border-top: 2px solid #999999;
-  color: #666666;
+  clear: both;
   margin-top: 20px;
   margin-bottom: 20px;
-  clear: both;
   padding-top: 10px;
+  border-top: 2px solid #999999;
+  color: #666666;
 }
 
 footer.global .cc-button {
@@ -12,19 +12,19 @@ footer.global .cc-button {
 }
 
 footer.global nav ul {
-  list-style-type: none;
   margin-bottom: 5px;
+  list-style-type: none;
 }
 
 footer.global nav li {
   display: inline;
-  border-left: 1px solid #666666;
-  padding-left: 5px;
   padding-right: 3px;
+  padding-left: 5px;
+  border-left: 1px solid #666666;
 }
 
 footer.global nav .first {
-  padding-left: 0px;
+  padding-left: 0;
   border: none;
 }
 

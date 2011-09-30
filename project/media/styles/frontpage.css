@@ -5,8 +5,8 @@
 }
 
 .frontpage-highlight em {
-  font-style: normal;
   color: #F3C237;
+  font-style: normal;
 }
 
 .frontpage-highlight ul {
@@ -19,16 +19,16 @@
 }
 
 .frontpage-highlight .buttons {
-  list-style-type: none;
-  padding: 0;
-  margin-left: 0;
   margin-top: 30px;
+  margin-left: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 .frontpage-highlight .buttons li {
-  padding: 0;
-  margin: 0;
   display: inline-block;
+  margin: 0;
+  padding: 0;
   vertical-align: top;
 }
 
@@ -50,11 +50,11 @@
 }
 
 .frontpage-block h4 {
-  color: #666666;
-  font-size: 16px;
-  font-weight: normal;
-  margin-bottom: 10px;
   margin-top: 0;
+  margin-bottom: 10px;
+  color: #666666;
+  font-weight: normal;
+  font-size: 16px;
 }
 
 .frontpage-block a {
@@ -72,8 +72,8 @@
 }
 
 .frontpage-blocks td {
-  vertical-align: top;
   padding: 0;
+  vertical-align: top;
 }
 
 .frontpage-blocks td.first {
@@ -81,43 +81,43 @@
 }
 
 #frontpage-promo {
-  background: url(../images/frontpage-promo-bg.jpg) no-repeat 0% 0%;
   height: 227px;
+  background: url(../images/frontpage-promo-bg.jpg) no-repeat 0 0;
 }
 
 #frontpage-promo .column1 {
-  color: white;
   float: left;
-  font-size: 35px;
-  font-weight: bold;
   margin-top: 137px;
   padding-top: 10px;
-  text-align: center;
   width: 480px;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 35px;
 }
 
 #frontpage-promo .column2 {
-  color: white;
   float: right;
-  font-size: 14px;
-  font-weight: bold;
   margin-top: 137px;
-  padding-left: 20px;
   padding-top: 12px;
+  padding-left: 20px;
   width: 460px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 #frontpage-promo .column2 em {
   color: #FC6;
-  font-size: 17px;
   font-style: normal;
+  font-size: 17px;
 }
 
 .tags a.view-all-tags,
 .tags a.view-all-tags:visited {
   color: #666;
-  font-size: 14px;
   font-weight: normal;
+  font-size: 14px;
 }
 
 .frontpage-block.tags h4 {
@@ -125,6 +125,6 @@
 }
 
 .tags .tag-cloud {
-  padding-bottom: 5px;
   margin-bottom: 5px;
+  padding-bottom: 5px;
 }

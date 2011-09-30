@@ -12,9 +12,9 @@
 }
 
 .profile-view #content ul {
-  list-style-type: none;
-  padding: 0;
   margin: 0 0 1em;
+  padding: 0;
+  list-style-type: none;
 }
 
 .profile-view #content ul li {
@@ -27,8 +27,8 @@
 .profile-view section.roles,
 .profile-view section.levels {
   display: inline-block;
-  vertical-align: top;
   margin-bottom: 2em;
+  vertical-align: top;
 }
 
 .profile-view section.avatar {
@@ -45,16 +45,16 @@
 }
 
 .profile-view section h1 {
-  font-size: 1em;
   font-weight: bold;
+  font-size: 1em;
 }
 
 .profile-view section.avatar .wrap,
 .profile-edit section.avatar .wrap {
-  width: 140px;
-  height: 140px;
   position: relative;
   margin-bottom: 5px;
+  width: 140px;
+  height: 140px;
 }
 
 .profile-view section.avatar .wrap.loading,
@@ -69,17 +69,17 @@
 
 .profile-view section.avatar .wrap span,
 .profile-edit section.avatar .wrap span {
-  display: block;
-  border-bottom-left-radius: 5px;
-  -moz-border-radius-bottomleft: 5px;
-  -webkit-border-bottom-left-radius: 5px;
-  background-color: #eee;
-  border: solid #ccc;
-  border-width: 0 0 1px 1px;
   position: absolute;
   top: 0;
   right: 0;
+  display: block;
   padding: 3px 5px;
+  border: solid #ccc;
+  border-width: 0 0 1px 1px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-left-radius: 5px;
+  background-color: #eee;
 }
 
 .profile-view #upload-avatar-btn,
@@ -89,31 +89,31 @@
 }
 
 .profile-view .name {
-  font-size: 2em;
   color: #0a546d;
+  font-size: 2em;
 }
 
 .profile-view a.edit {
   display: inline-block;
-  width: 160px;
   padding: 5px 0;
+  width: 160px;
   background: #679801;
   color: #fff;
-  font-size: 15px;
-  text-decoration: none;
   text-align: center;
+  text-decoration: none;
+  font-size: 15px;
 }
 
 .profile-view .portlet.links {
-  background-color: #CED9DD;
   padding: 1em;
+  background-color: #CED9DD;
   color: #0A546D;
 }
 
 .profile-view .portlet.links h1 {
+  margin-bottom: 1em;
   color: #0A546D;
   text-align: center;
-  margin-bottom: 1em;
 }
 
 .profile-view .portlet.links a {
@@ -136,23 +136,23 @@
 }
 
 .profile-view .portlet.links ul {
-  list-style-type: none;
-  padding: 0;
   margin: 1em 0 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 .profile-view .portlet.links ul li {
-  padding: 0;
   margin: 0.5em 0;
+  padding: 0;
 }
 
 .profile-view .portlet.links ul li a {
   display: inline-block;
-  height: 32px;
-  line-height: 32px;
   padding-left: 40px;
+  height: 32px;
   background: no-repeat 0 50%;
   text-decoration: none;
+  line-height: 32px;
 }
 
 .profile-view .portlet.links ul li a.facebook {
@@ -173,11 +173,11 @@
 }
 
 .profile-edit section h1 {
-  font-size: 20px;
+  display: inline-block;
+  margin-bottom: 10px;
   color: #0A546D;
   font-weight: normal;
-  margin-bottom: 10px;
-  display: inline-block;
+  font-size: 20px;
 }
 
 .profile-edit section h1.loading {
@@ -206,15 +206,15 @@
 }
 
 .profile-edit form.formatted input.text {
-  font-size: 14px;
-  height: 18px;
-  padding: 2px 4px;
   margin: 0;
+  padding: 2px 4px;
+  height: 18px;
+  font-size: 14px;
 }
 
 .profile-edit form.formatted textarea.text {
-  padding: 2px 4px;
   margin: 0;
+  padding: 2px 4px;
   resize: none;
 }
 
@@ -228,13 +228,13 @@
 
 .profile-edit .user-info {
   padding: 0 35px;
-  border-right: 1px solid #ccc;
   width: 250px;
+  border-right: 1px solid #ccc;
 }
 
 .profile-edit .change-password {
-  width: 250px;
   padding-left: 35px;
+  width: 250px;
 }
 
 .profile-edit .user-info input.text,
@@ -243,9 +243,9 @@
 }
 
 .profile-edit section#map {
+  margin-left: 35px;
   width: 350px;
   height: 250px;
-  margin-left: 35px;
 }
 
 .profile-edit form[name='roles'] {
@@ -280,23 +280,23 @@
 
 .profile-views {
   display: inline-block;
-  width: 150px;
   margin-right: 35px;
+  width: 150px;
   vertical-align: top;
 }
 
 .profile-views h1 {
-  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #0A546D;
   line-height: 20px;
   font-weight: bold;
-  color: #0A546D;
-  margin-bottom: 10px;
+  font-size: 1.2em;
 }
 
 .profile-views ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .profile-views ul li {

@@ -13,7 +13,12 @@ from harvester.views import add_job, job_errors, job_restart
 class AddRepositoryForm(forms.ModelForm):
 
     def clean_base_url(self):
+
         base_url = self.cleaned_data["base_url"]
+
+        # Drop the query string part
+        base_url = base_url.split("?")[0]
+
         client = Client(base_url)
         try:
             client.identify()
@@ -83,6 +88,8 @@ class JobAdmin(ModelAdmin):
                                                           status,
                                                           self.errors.count())
         if self.status in (COMPLETE, ERROR, NO_RECORDS_MATCH, None):
+            if status is None:
+                status = u""
             status += u""" - <a href="%s">restart</a>""" % reverse("admin:harvester_job_restart", args=(self.id,))
         return status
     status.allow_tags = True

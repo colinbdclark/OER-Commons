@@ -1,7 +1,7 @@
 body {
   color: #333;
-  font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
   font-size: 13px;
+  font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
 }
 
 body .page {
@@ -32,17 +32,17 @@ hr.tall {
 }
 
 .shadow {
-  -moz-box-shadow: 3px 3px 5px #888;
   -webkit-box-shadow: 3px 3px 5px #888;
+  -moz-box-shadow: 3px 3px 5px #888;
   box-shadow: 3px 3px 5px #888;
 }
 
 .clearfix:after {
-  content: ".";
-  display: block;
-  height: 0;
   clear: both;
+  display: block;
   visibility: hidden;
+  height: 0;
+  content: ".";
 }
 
 .clear {
@@ -54,14 +54,13 @@ hr.tall {
 }
 
 .fixed-width {
-  width: 960px;
   margin: 0 auto;
+  width: 960px;
 }
 
 .dotted {
-  background: url(../images/dotted-line-hor.gif) repeat-x scroll 0 100%
-    transparent;
   padding-bottom: 4px;
+  background: url(../images/dotted-line-hor.gif) repeat-x scroll 0 100% transparent;
 }
 
 .breadcrumbs {
@@ -73,10 +72,10 @@ hr.tall {
 }
 
 .page-title {
-  color: #668D16;
-  font-size: 25px;
-  font-weight: normal;
   margin-top: 5px;
+  color: #668D16;
+  font-weight: normal;
+  font-size: 25px;
 }
 
 .page-title span {
@@ -84,22 +83,22 @@ hr.tall {
 }
 
 .status-message {
-  background-color: #FC6;
-  border: 1px solid #A88743;
-  color: #544322;
-  font-weight: bold;
   margin-bottom: 10px;
   padding: 10px;
+  border: 1px solid #A88743;
+  background-color: #FC6;
+  color: #544322;
+  font-weight: bold;
 }
 
 .ui-widget {
-  font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
   font-size: 12px;
+  font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
 }
 
 .expand-button {
-  display: block;
   float: left;
+  display: block;
   width: 16px;
   height: 16px;
 }
@@ -113,22 +112,22 @@ a.expand-button.expanded {
 }
 
 .action-panel {
-  background: url(../images/actionpanel-bg.png) no-repeat 0 0;
-  height: 32px;
   margin-top: 10px;
   padding-top: 10px;
+  height: 32px;
+  background: url(../images/actionpanel-bg.png) no-repeat 0 0;
 }
 
 .action-panel.empty {
-  background: url(../images/actionpanel-empty-bg.png) no-repeat 0 0;
-  height: 25px;
   padding: 0;
+  height: 25px;
+  background: url(../images/actionpanel-empty-bg.png) no-repeat 0 0;
 }
 
 .action-panel ul {
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .action-panel ul.left {
@@ -146,8 +145,8 @@ a.expand-button.expanded {
   margin: 0 10px 0 0;
   padding: 0 11px 0 0;
   height: 20px;
-  line-height: 20px;
   background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;
+  line-height: 20px;
 }
 
 .action-panel li.last {
@@ -162,10 +161,10 @@ a.expand-button.expanded {
 }
 
 .promo {
-  background: #F4F8F9 url(../images/promo-bg.png) repeat-x 0 0;
-  border: 1px solid #AFCFDC;
   margin-bottom: 15px;
   padding: 15px 20px;
+  border: 1px solid #AFCFDC;
+  background: #F4F8F9 url(../images/promo-bg.png) repeat-x 0 0;
   font-size: 12px;
 }
 
@@ -174,21 +173,21 @@ a.expand-button.expanded {
 }
 
 div.box {
-  background: #F3F7F8;
   border: 1px solid #BCCACD;
+  background: #F3F7F8;
 }
 
 div.box h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 10px;
+  height: 39px;
   background: #F3F7F8 url(../images/box-header-bg.png) repeat-x 0 0;
   color: white;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: bold;
-  margin-bottom: 0;
-  margin-top: 0;
-  padding-left: 10px;
   line-height: 33px;
-  height: 39px;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 16px;
 }
 
 #content.contribute a {
@@ -200,10 +199,10 @@ div.box h3 {
 }
 
 .accordion .accordion-header a {
-  background: url(../images/collapsible-btn-closed.png) no-repeat 0 0;
   display: inline-block;
   padding-left: 20px;
   height: 16px;
+  background: url(../images/collapsible-btn-closed.png) no-repeat 0 0;
 }
 
 .accordion .accordion-header a.expanded {
@@ -215,9 +214,9 @@ div.box h3 {
   padding-bottom: 5px;
 }
 
-.ui-autocomplete,.ui-datepicker {
-  -moz-box-shadow: 2px 2px 3px #999;
+.ui-autocomplete, .ui-datepicker {
   -webkit-box-shadow: 2px 2px 3px #999;
+  -moz-box-shadow: 2px 2px 3px #999;
   box-shadow: 2px 2px 3px #999;
 }
 
@@ -230,14 +229,14 @@ div.box h3 {
 }
 
 .ui-dialog.dropdown {
-  border-top: none;
   position: fixed;
-  border-top-left-radius: 0;
+  border-top: none;
+  -webkit-border-top-right-radius: 0;
+  -moz-border-top-right-radius: 0;
   border-top-right-radius: 0;
   -webkit-border-top-left-radius: 0;
-  -webkit-border-top-right-radius: 0;
   -moz-border-top-left-radius: 0;
-  -moz-border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 
 .ui-dialog.loading .ui-dialog-title {
@@ -246,39 +245,39 @@ div.box h3 {
 }
 
 .rc3 {
-  border-radius: 3px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 
 .rc5 {
-  border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
+  border-radius: 5px;
 }
 
 .rc10 {
-  border-radius: 10px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
+  border-radius: 10px;
 }
 
 .button-blue-big {
   display: inline-block;
   margin: 3px;
-  text-decoration: none;
-  color: white;
-  background-color: #0B7BA8;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: center;
   padding: 2px 10px;
+  background-color: #0B7BA8;
+  color: white;
+  text-align: center;
+  text-decoration: none;
   text-shadow: 0 0 1px #333;
+  line-height: 24px;
+  font-size: 16px;
 }
 
 .qtip {
-  font-size: 13px;
   line-height: 1.3em;
+  font-size: 13px;
 }
 
 .qtip dt {
@@ -294,32 +293,32 @@ div.box h3 {
 }
 
 .ui-tooltip-dark-blue .ui-tooltip-titlebar {
+  border: none;
   background-color: #418ba8;
   color: #fff;
-  border: none;
 }
 
 .ui-tooltip-dark-blue .ui-tooltip-content {
-  background-color: #c9e7f2;
   border: none;
+  background-color: #c9e7f2;
   color: #000;
 }
 
 .global-notification {
   padding: 3px 0;
-  font-size: 14px;
-  background-color: #FC6;
   border-bottom: 1px solid #A88743;
+  background-color: #FC6;
   color: #544322;
-  font-weight: bold;
   text-align: center;
   line-height: 1.7;
+  font-weight: bold;
+  font-size: 14px;
 }
 
-.global-notification .close a,.status-message .close a {
-  font-size: 11px;
-  font-weight: normal;
+.global-notification .close a, .status-message .close a {
   color: #544322;
+  font-weight: normal;
+  font-size: 11px;
 }
 
 .status-message .close {
@@ -327,6 +326,6 @@ div.box h3 {
 }
 
 .ui-effects-transfer {
-  border: 1px solid #333;
   z-index: 9999;
+  border: 1px solid #333;
 }
