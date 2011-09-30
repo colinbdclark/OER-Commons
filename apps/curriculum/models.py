@@ -80,9 +80,9 @@ class LearningObjectiveCategory(models.Model):
 
 class AlignmentTagManager(models.Manager):
 
-    def get_by_natural_key(self, standard_code, grade_code, category_code, code):
-        return self.get(standard__code=standard_code, grade__code=grade_code,
-                        category__code=category_code, code=code)
+    def get_by_natural_key(self, grade_code, category_code, code):
+        return self.get(grade__code=grade_code, category__code=category_code,
+                        code=code)
 
 
 class AlignmentTag(models.Model):
@@ -98,11 +98,11 @@ class AlignmentTag(models.Model):
 
     @property
     def full_code(self):
-        return ".".join(self.natural_key())
+        return "%s.%s.%s.%s" % (self.standard.code, self.grade.code,
+                                self.category.code, self.code)
 
     def natural_key(self):
-        return (self.standard.code, self.grade.code, self.category.code,
-                self.code,)
+        return (self.grade.code, self.category.code, self.code,)
 
     def __unicode__(self):
         return "%s - %s" % (self.full_code, truncate_letters(self.description,
@@ -110,7 +110,7 @@ class AlignmentTag(models.Model):
 
     class Meta:
         ordering = ("standard", "grade", "category", "code",)
-        unique_together = ("standard", "grade", "category", "code")
+        unique_together = ("grade", "category", "code")
 
 
 class TaggedMaterial(models.Model):
@@ -132,4 +132,3 @@ class TaggedMaterial(models.Model):
 
     class Meta:
         unique_together = ("user", "tag", "content_type", "object_id")
-        

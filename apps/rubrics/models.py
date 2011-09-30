@@ -8,12 +8,12 @@ import re
 
 
 SCORES = (
-    (3, u"Superior"),
-    (2, u"Strong"),
-    (1, u"Limited"),
-    (0, u"Very Weak"),
-    (None, u"Not Applicable"),
-    )
+    (3, u"3"),
+    (2, u"2"),
+    (1, u"1"),
+    (0, u"0"),
+    (None, u"N/A"),
+)
 
 
 class Evaluation(models.Model):
@@ -27,7 +27,6 @@ class Evaluation(models.Model):
     confirmed = models.BooleanField(default=False)
 
     timestamp = models.DateTimeField(auto_now=True)
-    comment = models.TextField(default=u"", blank=True)
     ip = models.CharField(max_length=39, default=u"", blank=True)
     hostname = models.CharField(max_length=100, default=u"", blank=True)
 

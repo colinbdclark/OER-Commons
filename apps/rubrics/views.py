@@ -8,7 +8,6 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
-from django import forms
 from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial
 from rubrics.models import Rubric, StandardAlignmentScoreValue, \
@@ -229,19 +228,6 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         return dict(status="success")
 
 
-class EvaluationCommentForm(forms.ModelForm):
-
-    comment = forms.CharField(
-        widget=forms.Textarea(),
-        label=u"Additional Comments",
-        required=False,
-    )
-
-    class Meta:
-        model = Evaluation
-        fields = ["comment"]
-
-
 class Results(EvaluateViewMixin, TemplateView):
 
     template_name = "rubrics/tool/results.html"
@@ -363,8 +349,6 @@ class Results(EvaluateViewMixin, TemplateView):
 
         data["not_scored_section"] = not_scored_section
 
-        data["form"] = EvaluationCommentForm(instance=evaluation)
-
         return data
 
 
@@ -386,11 +370,6 @@ class Finalize(EvaluateViewMixin, View):
                                 content_type_id=self.content_type.id,
                                 object_id=self.object.id,
                             ))
-
-        form = EvaluationCommentForm(request.POST, instance=evaluation)
-
-        if form.is_valid():
-            form.save(commit=False)
 
         evaluation.confirmed = True
         evaluation.save()

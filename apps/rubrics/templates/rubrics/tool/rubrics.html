@@ -51,7 +51,7 @@
           {% for tag in alignment_tags %}
             <a href="#" class="tag rc5{% if forloop.first %} selected{% endif %}{% if tag.score_value %} scored{% endif %}" data-tag-id="{{ tag.id }}">
               <span class="code">{{ tag.full_code }}</span>
-              <span class="value">{% if tag.score_value %}{% if tag.score_value.value != None %}{{ tag.score_value.value }} {{ tag.score_value.get_value_display }}{% else %}N/A{% endif %} {% else %}No score{% endif %}</span>
+              <span class="value">{% if tag.score_value %}{{ tag.score_value.get_value_display }}{% else %}No score{% endif %}</span>
             </a>
           {% endfor %}
 
@@ -61,7 +61,7 @@
                 <div class="s{{ forloop.counter }}{% if tag.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
                   <a href="#" class="rc5">
                     <input type="radio" name="tag{{ tag.id }}" value="{{ score.value }}" {% if tag.score_value == score %}checked{% endif %} />
-                    <strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
+                    <strong>{{ score.get_value_display }}</strong></a>
                   {% if forloop.first %}
                     <p class="tip">Mouse over for score description</p>
                   {% endif %}
@@ -104,7 +104,7 @@
               <div class="s{{ forloop.counter }}{% if rubric.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
                 <a href="#" class="rc5">
                   <input type="radio" name="rubric{{ rubric.id }}" value="{{ score.value }}" {% if rubric.score_value == score %}checked{% endif %} />
-                  <strong>{% if score.value != None %}{{ score.value }}{% else %}N/A{% endif %}</strong> {{ score.get_value_display }}</a>
+                  <strong>{{ score.get_value_display }}</strong></a>
                 {% if forloop.first %}
                   <p class="tip">Mouse over for score description</p>
                 {% endif %}
