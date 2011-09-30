@@ -352,6 +352,7 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics .tags a.tag {
   display: inline-block;
+  margin-bottom: 5px;
   border: 2px solid #fff;
   text-align: center;
   text-decoration: none;
