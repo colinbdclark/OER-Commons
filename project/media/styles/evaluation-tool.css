@@ -135,7 +135,12 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section .body > .description {
+  margin-bottom: 5px;
   font-weight: bold;
+}
+
+.evaluation-tool .rubrics section#alignment .body > .description {
+  margin-bottom: 0;
 }
 
 .evaluation-tool .rubrics .scores {
