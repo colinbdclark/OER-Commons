@@ -24,15 +24,18 @@
       <h1><a href="{% if toolbar_view_url %}{{ toolbar_view_url }}#evaluate:standard{% else %}#{% endif %}">Degree of Alignment to Standards</a></h1>
       <div class="body">
         {% if not alignment_tags %}
-            <p>Please <a class="dashed" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">align resource</a> before evaluating alignment</p>
+          <p>Please <a class="dashed" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">align resource</a> before evaluating alignment</p>
         {% else %}
-            <div class="description">
-                <p>Applies to objects that have suggested alignments to the Common Core Standards. Used to rate
-                   the degree to which an OER aligns to the Common Core Standards. The degree of alignment of both content
-                   and performance expectations is determined. If appropriate, you may rate any of the standards that have
-                   been aligned to the item you are rating or align additional standards.</p>
-            </div>
-            <p><a class="dashed add-standard" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">Add an additional standard</a></p>
+          <div class="description">
+            <p>Applies to objects that have suggested alignments to the
+              Common Core State Standards and is used to rate the degree of
+              alignment. The degree of alignment of both content and
+              performance expectations are considered. If appropriate, you
+              may use the rubric to rate any of the standards that have
+              been aligned to the object you are rating or align additional
+              standards.</p>
+          </div>
+          <p><a class="dashed add-standard" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">Add an additional standard</a></p>
         {% endif %}
         <div class="tags">
 

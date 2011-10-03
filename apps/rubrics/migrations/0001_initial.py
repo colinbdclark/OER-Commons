@@ -16,7 +16,6 @@ class Migration(SchemaMigration):
             ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('confirmed', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('timestamp', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('comment', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
             ('ip', self.gf('django.db.models.fields.CharField')(default=u'', max_length=39, blank=True)),
             ('hostname', self.gf('django.db.models.fields.CharField')(default=u'', max_length=100, blank=True)),
         ))
@@ -149,7 +148,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'curriculum.alignmenttag': {
-            'Meta': {'ordering': "('standard', 'grade', 'category', 'code')", 'unique_together': "(('standard', 'grade', 'category', 'code'),)", 'object_name': 'AlignmentTag'},
+            'Meta': {'ordering': "('standard', 'grade', 'category', 'code')", 'unique_together': "(('grade', 'category', 'code'),)", 'object_name': 'AlignmentTag'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['curriculum.LearningObjectiveCategory']"}),
             'code': ('django.db.models.fields.CharField', [], {'max_length': '4', 'db_index': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
@@ -179,7 +178,6 @@ class Migration(SchemaMigration):
         },
         'rubrics.evaluation': {
             'Meta': {'unique_together': "(['user', 'content_type', 'object_id'],)", 'object_name': 'Evaluation'},
-            'comment': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'confirmed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'hostname': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '100', 'blank': 'True'}),
