@@ -13,15 +13,48 @@
       <table>
         <thead>
           <tr>
-            <th>Rubric</th>
+            <th colspan="2" width="50%">Rubric</th>
             <th>Your Score</th>
             <th>Average Score</th>
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td class="first no-border" colspan="2">Degree of Alignment</td>
+            <td class="no-border"></td>
+            <td class="no-border"></td>
+          </tr>
+          {% for score in tags %}
+            <tr>
+              <td{% if not forloop.last %} class="no-border"{% endif %}></td>
+              <td class="first" width="10%">{{ score.name }}</td>
+              <td>
+                {% if score.user_score_class == "nr" %}
+                  <span class="nr"></span>
+                {% else %}
+                  {% if score.user_score == None %}
+                    <span class="na">N/A</span>
+                  {% else %}
+                    <span class="s{{ score.user_score_class }}">{{ score.user_score|floatformat }}</span>
+                  {% endif %}
+                {% endif %}
+              </td>
+              <td>
+                {% if score.average_score_class == "nr" %}
+                  <span class="nr"></span>
+                {% else %}
+                  {% if score.average_score == None %}
+                    <span class="na">N/A</span>
+                  {% else %}
+                    <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}</span>
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor%}
           {% for score in scores %}
             <tr>
-              <td class="first">{{ score.name }}</td>
+              <td class="first" colspan="2">{{ score.name }}</td>
               <td>
                 {% if score.user_score_class == "nr" %}
                   <span class="nr"></span>

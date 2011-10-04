@@ -2,7 +2,6 @@ oer.materials.toolbar = {};
 
 oer.materials.toolbar.init = function() {
   oer.materials.toolbar.resize_iframe();
-
   $(window).resize(function() {
     oer.materials.toolbar.resize_iframe();
   });
@@ -16,7 +15,7 @@ oer.materials.toolbar.init = function() {
   var result = window.location.hash.match(/^#evaluate(?::(?:(standard|rubric\d+)))?$/);
   if (result) {
     if (result[1]) {
-       oer.evaluation_tool.open_tool($evaluate_btn.data("evaluate-url") + "#" + result[1]);
+      oer.evaluation_tool.open_tool($evaluate_btn.data("evaluate-url") + "#" + result[1]);
     } else {
       oer.evaluation_tool.open_tool($evaluate_btn.attr("href"));
     }

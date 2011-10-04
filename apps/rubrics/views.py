@@ -260,41 +260,46 @@ class Results(EvaluateViewMixin, TemplateView):
             evaluation__object_id=self.object.id,
         )
 
-        average_score = alignment_scores.aggregate(
-            Avg("score__value")
-        )["score__value__avg"]
-
-        if not alignment_scores.exists():
-            average_score_class = "nr"
-        elif average_score is None:
-            average_score_class = None
-        else:
-            average_score_class = int(average_score)
-
-        user_alignment_scores = StandardAlignmentScore.objects.filter(
-            evaluation=evaluation
-        )
-
-        user_score = user_alignment_scores.aggregate(Avg("score__value"))["score__value__avg"]
-        if not user_alignment_scores.exists():
-            user_score_class = "nr"
-        elif user_score is None:
-            user_score_class = None
-        else:
-            user_score_class = int(user_score)
-
-        data["scores"].append(dict(
-            name=u"Degree of Alignment",
-            user_score=user_score,
-            user_score_class=user_score_class,
-            average_score=average_score,
-            average_score_class=average_score_class,
-        ))
-
         tags = AlignmentTag.objects.filter(
             id__in=self.object.alignment_tags.values_list("tag__id",
                                                           flat=True).distinct()
         )
+
+        data["tags"] = []
+
+        for tag in tags:
+            tag_scores = alignment_scores.filter(alignment_tag__id=tag.id)
+            average_score = tag_scores.aggregate(Avg("score__value"))["score__value__avg"]
+
+            if not tag_scores.exists():
+                average_score_class = "nr"
+            elif average_score is None:
+                average_score_class = None
+            else:
+                average_score_class = int(average_score)
+
+            user_score_value = None
+
+            try:
+                user_tag_score = tag_scores.get(
+                    evaluation=evaluation
+                )
+                user_score_value = user_tag_score.score.value
+                if user_score_value is None:
+                    user_score_class = None
+                else:
+                    user_score_class = int(user_score_value)
+            except StandardAlignmentScore.DoesNotExist:
+                user_score_class = "nr"
+
+
+            data["tags"].append(dict(
+                name=tag.full_code,
+                user_score=user_score_value,
+                user_score_class=user_score_class,
+                average_score=average_score,
+                average_score_class=average_score_class,
+            ))
 
         rubrics = Rubric.objects.all()
         rubric_scores = RubricScore.objects.filter(
@@ -334,8 +339,8 @@ class Results(EvaluateViewMixin, TemplateView):
 
         not_scored_section = None
         not_scored_tags = set(tags.values_list("id", flat=True)) - \
-                          set(user_alignment_scores.values_list("alignment_tag__id",
-                                                                flat=True))
+                          set(alignment_scores.filter(evaluation=evaluation
+                          ).values_list("alignment_tag__id", flat=True))
         user_rubric_scores = rubric_scores.filter(
             evaluation__user=self.request.user
         )
