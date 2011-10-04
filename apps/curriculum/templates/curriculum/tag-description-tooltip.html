@@ -1,12 +1,12 @@
-<dl>
-  <dt>Standard:</dt>
-  <dd>{{ tag.standard }}</dd>
-  <dt>Grade:</dt>
-  <dd>{{ tag.grade }}</dd>
-  <dt>Category:</dt>
-  <dd>{{ tag.category}}</dd>
-  <dt>Domain</dt>
-  <dd>{{ tag.subcategory }}</dd>
-  <dt>Description</dt>
-  <dd class="last">{{ tag.description }}</dd>
-</dl>
+<h1>{{ tag.standard }}</h1>
+
+<p><strong>{{ tag.grade }}</strong>, <strong>{{ tag.category}}</strong></p>
+<p><strong>Domain:</strong> {{ tag.subcategory }}</p>
+<p><strong>Description:</strong> {{ tag.description }}</p>
+
+{% if score_verbose %}
+  <table class="score"><tbody><tr>
+    <td class="first">Degree of<br> Alignment:</td>
+    <td><span class="rc5 s{{ score_class }}">{{ score_value|floatformat }} {{ score_verbose }}</span></td>
+  </tr></tbody></table>
+{% endif %}

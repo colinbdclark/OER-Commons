@@ -1,3 +1,4 @@
+from curriculum.views import TagDescription
 from django.conf.urls.defaults import patterns, url
 
 
@@ -13,5 +14,5 @@ urlpatterns = patterns("curriculum.views",
     url(r"^curriculum/list_categories/existing/?$", "list_categories", dict(existing=True), name="list_existing_categories"),
     url(r"^curriculum/list_tags/?$", "list_tags", name="list_tags"),
     url(r"^curriculum/list_tags/existing/?$", "list_tags", dict(existing=True), name="list_existing_tags"),
-    url(r"^curriculum/get_tag_description/(\w+)\.(\w+)\.([\w.]+)\.(\w+)/?$", "get_tag_description", name="get_tag_description"),
+    url(r"^curriculum/get_tag_description/(?P<code>[\w\.]+)(?:/(?P<content_type_id>\d+)/(?P<object_id>\d+))?$", TagDescription.as_view(), name="get_tag_description"),
 )

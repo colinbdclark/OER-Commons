@@ -33,8 +33,8 @@ RIGHTSIDE_TOOLTIP_OPTIONS = $.extend(true, {}, DEFAULT_TOOLTIP_OPTIONS, {
 });
 
 TOPLEFTSIDE_TOOLTIP_OPTIONS = $.extend(true, {}, DEFAULT_TOOLTIP_OPTIONS, {
-    position: {
-        my: "right bottom",
-        at: "left top"
-    }
+  position: {
+    my: "right bottom",
+    at: "left top"
+  }
 });

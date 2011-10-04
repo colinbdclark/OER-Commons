@@ -11,7 +11,7 @@ from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
 from reviews.views import ReviewForm
-from rubrics.models import Rubric, StandardAlignmentScore, RubricScore, Rubric
+from rubrics.models import Rubric, StandardAlignmentScore, RubricScore
 from saveditems.models import SavedItem
 from visitcounts.models import Visit
 import urllib
