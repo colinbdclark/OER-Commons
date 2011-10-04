@@ -216,17 +216,6 @@ class AlignmentFilter(Filter):
             return None
         return value
 
-    def get_tag_from_full_code(self, code):
-        parts = code.split(".")[1:]
-        assert 3 <= len(parts) <= 4
-        if len(parts) == 3:
-            natural_key = parts
-        else:
-            natural_key = [parts[0], ".".join(parts[1:3]), parts[3]]
-
-        return AlignmentTag.objects.get_by_natural_key(*natural_key)
-
-
     def update_query(self, query, value):
         available_values = self.available_values
 
@@ -237,7 +226,7 @@ class AlignmentFilter(Filter):
         if set(value) - available_values:
             raise Http404()
 
-        value = map(self.get_tag_from_full_code, value)
+        value = map(AlignmentTag.objects.get_from_full_code, value)
 
         return query.narrow(u"%s:(%s)" % (self.index_name, u" OR ".join([str(v.id) for v in value])))
 

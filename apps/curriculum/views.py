@@ -4,10 +4,13 @@ from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade, \
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
+from django.db.models import Avg
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView
 from django.views.generic.simple import direct_to_template
 from haystack_scheduled.indexes import Indexed
+from rubrics.models import StandardAlignmentScore
 from utils.decorators import login_required
 
 
@@ -208,13 +211,50 @@ def list_tags(request, existing=False):
     return dict(optgroups=optgroups)
 
 
-def get_tag_description(request, standard, grade, category, code):
-    tag = get_object_or_404(AlignmentTag,
-                            standard__code=standard,
-                            grade__code=grade,
-                            category__code=category,
-                            code=code)
+class TagDescription(TemplateView):
 
-    return direct_to_template(request,
-                              "curriculum/tag-description-tooltip.html",
-                              dict(tag=tag))
+    template_name = "curriculum/tag-description-tooltip.html"
+
+    def get_context_data(self, **kwargs):
+        code = kwargs["code"]
+        content_type_id = kwargs.get("content_type_id")
+        object_id = kwargs.get("object_id")
+        try:
+            tag = AlignmentTag.objects.get_from_full_code(code)
+        except AlignmentTag.DoesNotExist:
+            raise Http404()
+
+
+        data = dict(tag=tag)
+
+        if content_type_id and object_id:
+            scores = StandardAlignmentScore.objects.filter(
+                alignment_tag=tag,
+                evaluation__content_type__id=int(content_type_id),
+                evaluation__object_id=int(object_id),
+            )
+            data["score_value"] = None
+            if scores.exists():
+                value = scores.aggregate(value=Avg("score__value"))["value"]
+                if value is None:
+                    data["score_verbose"] = u"Not Applicable"
+                    data["score_class"] = "5"
+                else:
+                    data["score_value"] = value
+                    if 2.5 < value <= 3:
+                        data["score_verbose"] = u"Superior"
+                        data["score_class"] = "1"
+                    elif 1.5 < value <= 2.5:
+                        data["score_verbose"] = u"Strong"
+                        data["score_class"] = "2"
+                    elif 0.5 < value <= 1.5:
+                        data["score_verbose"] = u"Limited"
+                        data["score_class"] = "3"
+                    else:
+                        data["score_verbose"] = u"Very Weak"
+                        data["score_class"] = "4"
+            else:
+                data["score_verbose"] = u"Not Rated"
+                data["score_class"] = "5"
+
+        return data

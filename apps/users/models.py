@@ -42,7 +42,7 @@ TWITTER_URL_RE = re.compile(r"^https?://twitter.com/(#!/)?(?P<twitter_id>[a-zA-Z
 
 
 class Role(models.Model):
-    
+
     title = models.CharField(max_length=100)
     is_educator = models.BooleanField(default=False)
 
@@ -54,9 +54,9 @@ class Role(models.Model):
 
 
 class EducatorSubject(models.Model):
-    
+
     title = models.CharField(max_length=100)
-    
+
     def __unicode__(self):
         return self.title
 
@@ -109,7 +109,7 @@ class Profile(models.Model):
     publish_profile = models.BooleanField(default=False,
                               verbose_name=_(u"Allow others to see "
                                               "you profile?"))
-    
+
     country = models.ForeignKey(Country, blank=True, null=True)
 
     us_state = models.ForeignKey(USState, blank=True, null=True)
@@ -123,13 +123,13 @@ class Profile(models.Model):
                             verbose_name=_(u"Role"))
 
     roles = models.ManyToManyField(Role, null=True, blank=True)
-    
+
     educator_student_levels = models.ManyToManyField(StudentLevel, null=True,
-                                                     blank=True) 
+                                                     blank=True)
 
     educator_subjects = AutoCreateManyToManyField(EducatorSubject, null=True,
-                                                  blank=True) 
-    
+                                                  blank=True)
+
     about_me = models.TextField(blank=True, null=True)
 
     website_url = models.URLField(blank=True, null=True)
@@ -188,7 +188,7 @@ class Profile(models.Model):
         if self.country and self.country.code == "US":
             fields += ["us_state"]
         return len(fields)
-    
+
     @property
     def filled_fields(self):
         number = 0
@@ -272,8 +272,7 @@ class RegistrationConfirmation(models.Model):
 class ResetPasswordConfirmation(models.Model):
 
     user = models.ForeignKey(User)
-    key = models.CharField(max_length=20, unique=True,
-                           default=gen_confirmation_key)
+    key = models.CharField(max_length=20, unique=True)
     confirmed = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 

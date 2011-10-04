@@ -143,6 +143,64 @@ body.authenticated .portlet.align-item-tags .login {
 
 .align-tag-tooltip .ui-tooltip-titlebar,
 .align-tag-tooltip .ui-tooltip-content {
-  border-color: #FFE4B8;
-  background-color: #FFE4B8;
+  border-color: #ffb930;
+  background-color: #fff;
+  color: #333;
+}
+
+.align-tag-tooltip {
+  max-width: 300px;
+}
+
+.align-tag-tooltip .ui-tooltip-content h1 {
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.align-tag-tooltip .ui-tooltip-content p {
+  margin-bottom: 5px;
+}
+
+.align-tag-tooltip .score {
+  margin-top: 10px;
+  margin-left: 50px;
+  width: auto;
+}
+
+.align-tag-tooltip .score td {
+  vertical-align: middle;
+}
+
+.align-tag-tooltip .score td.first {
+  padding-right: 10px;
+  width: 50px;
+  color: #666;
+}
+
+.align-tag-tooltip .score td span {
+  display: inline-block;
+  padding: 5px 15px;
+  color: #fff;
+}
+
+.align-tag-tooltip .score td span.s1 {
+  background-color: #679701;
+}
+
+.align-tag-tooltip .score td span.s2 {
+  background-color: #8CC63F;
+}
+
+.align-tag-tooltip .score td span.s3 {
+  background-color: #DBD639;
+}
+
+.align-tag-tooltip .score td span.s4 {
+  background-color: #FFCB66;
+}
+
+.align-tag-tooltip .score td span.s5 {
+  background-color: #B5C3CA;
 }

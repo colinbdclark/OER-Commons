@@ -501,7 +501,12 @@ body.evaluation-tool {
 }
 
 .evaluation-results td {
+  height: 27px;
   border-bottom: 1px dashed #ccc;
+}
+
+.evaluation-results td.no-border {
+  border-bottom: none;
 }
 
 .evaluation-results td.first {

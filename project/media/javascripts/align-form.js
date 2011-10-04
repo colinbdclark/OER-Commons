@@ -9,13 +9,23 @@ oer.align_form.TAGS_CHANGED_EVENT = "oer-align-form-tags-changed";
 $.template("align-user-tags-item", '<li data-id="${id}" class="tag rc3"><a href="${url}">${code}</a> <a href="#" class="delete">x</a></li>');
 
 oer.align_form.init_tag_tooltip = function($a) {
+  var $item = $("article.view-item");
+  var content_type = null, object_id = null;
+  if ($item.length) {
+    content_type = $item.data("content-type");
+    object_id = $item.data("object-id");
+  }
   $a.each(function() {
     var $this = $(this);
+    var tooltip_url = "/curriculum/get_tag_description/" + $this.text();
+    if (content_type && object_id) {
+      tooltip_url = tooltip_url + "/" + content_type + "/" + object_id;
+    }
     $this.qtip({
       content: {
         text: 'Loading...',
         ajax: {
-          url: "/curriculum/get_tag_description/" + $this.text()
+          url: tooltip_url
         }
       },
       position: {
@@ -25,7 +35,8 @@ oer.align_form.init_tag_tooltip = function($a) {
         effect: false
       },
       style: {
-        classes: "align-tag-tooltip ui-tooltip-shadow ui-tooltip-rounded"
+        classes: "align-tag-tooltip ui-tooltip-shadow ui-tooltip-rounded",
+        width: "300px"
       }
     });
   });
