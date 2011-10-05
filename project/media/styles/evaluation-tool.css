@@ -131,7 +131,7 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section.expanded h1 a.right {
-  color: #fff;
+  margin-top: 3px;
 }
 
 .evaluation-tool .rubrics section .body > .description {
@@ -432,6 +432,21 @@ body.evaluation-tool {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
+}
+
+.evaluation-tool .rubrics section .footer .spinner {
+  position: relative;
+  top: -2px;
+  display: none;
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+  background: url(../images/ajax-loader.gif) no-repeat;
+  vertical-align: middle;
+}
+
+.evaluation-tool .rubrics section .footer .spinner.active {
+  display: inline-block;
 }
 
 .evaluation-tool .evaluation-results  .footer a.back.gray {
