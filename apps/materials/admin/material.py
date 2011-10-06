@@ -22,6 +22,12 @@ def deaccession(modeladmin, request, queryset):
 deaccession.short_description = u"Deaccession selected items"
 
 
+#noinspection PyUnusedLocal
+def check_url(modeladmin, request, queryset):
+    queryset.update(url_fetched_on=None)
+check_url.short_description = u"Check URL status and update screenshot."
+
+
 class MaterialAdmin(ModelAdmin):
 
     def url(self):
@@ -37,7 +43,7 @@ class MaterialAdmin(ModelAdmin):
     list_filter = ["workflow_state", "featured", "http_status", "created_on"]
     search_fields = ["title"]
 
-    actions = [publish, deaccession]
+    actions = [publish, deaccession, check_url]
 
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
