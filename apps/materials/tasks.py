@@ -130,17 +130,14 @@ def update_screenshot(item):
     url_hash = md5_constructor(smart_str(url)).hexdigest()
     filename = "%s-%i-%s.png" % (item._meta.object_name.lower(), item.id, url_hash)
     filename = os.path.join(item.screenshot.field.get_directory_name(), filename)
+
+    # Remove existing screenshot
     if item.screenshot:
         try:
-            # check that the file actually exists
-            item.screenshot.size
-            if item.screenshot.name == filename:
-                return
-            else:
-                delete(item.screenshot)
-                update_item(item, screenshot=None)
+            delete(item.screenshot)
         except OSError:
             pass
+        update_item(item, screenshot=None)
 
     full_path = os.path.join(settings.MEDIA_ROOT, filename)
     dirname = os.path.dirname(full_path)

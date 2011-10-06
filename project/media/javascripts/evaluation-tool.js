@@ -8,12 +8,25 @@ oer.evaluation_tool.init_rubrics = function() {
   var $tags_ct = $rubrics.find("div.tags");
 
   function save_score($section, callback) {
-    var scored = true;
+    var $spinner = $section.find(".footer .spinner");
+    $section.ajaxStart(function() {
+      $section.unbind("ajaxStart");
+      $spinner.addClass("active");
+    });
+    $section.ajaxStop(function() {
+      $section.unbind("ajaxStop");
+      $spinner.removeClass("active");
+      if (callback) {
+        callback();
+      }
+    });
+    var scored = false;
     $.each($section.find("div.scores"), function(i, scores) {
       var $scores = $(scores);
       var $score = $scores.find("div.selected");
-      if (!$score.length) {
-        scored = false;
+      if ($score.length) {
+        scored = true;
+      } else {
         return;
       }
       var score_id = $score.data("score-id");
@@ -28,10 +41,14 @@ oer.evaluation_tool.init_rubrics = function() {
     if (scored) {
       $section.removeClass("not-scored").addClass("scored");
     } else {
+      // Remove AJAX events even if not AJAX calls were made.
+      $section.unbind("ajaxStart");
+      $section.unbind("ajaxStop");
+      // Run callback even if nothing is scored, thus not AJAX calls were made.
+      if (callback) {
+        callback();
+      }
       $section.removeClass("scored").addClass("not-scored");
-    }
-    if (callback) {
-      callback();
     }
   }
 
@@ -60,7 +77,18 @@ oer.evaluation_tool.init_rubrics = function() {
     }
 
     $.post(evaluate_url, data);
-    $section.removeClass("scored").addClass("not-scored");
+
+    var scored = false;
+    $.each($section.find("div.scores"), function(i, scores) {
+      var $scores = $(scores);
+      var $score = $scores.find("div.selected");
+      if ($score.length) {
+        scored = true;
+      }
+    });
+    if (!scored) {
+      $section.removeClass("scored").addClass("not-scored");
+    }
   }
 
   function open_section($section) {

@@ -20,14 +20,14 @@ from saveditems.models import SavedItem
 from tags.models import Tag
 from visitcounts.models import Visit
 import datetime
-import copy
 
 
 PUBLISHED_STATE = u"published"
-PRIVATE_STATE = "private"
+PRIVATE_STATE = u"private"
 PENDING_STATE = u"pending"
 REJECTED_STATE = u"rejected"
 IMPORTED_STATE = u"imported"
+DEACCESSIONED_STATE = u"deaccessioned"
 
 
 WORKFLOW_STATES = (
@@ -36,6 +36,7 @@ WORKFLOW_STATES = (
    (PENDING_STATE, _(u"Pending")),
    (REJECTED_STATE, _(u"Rejected")),
    (IMPORTED_STATE, _(u"Imported")),
+   (DEACCESSIONED_STATE, _(u"Deaccessioned"))
 )
 
 
