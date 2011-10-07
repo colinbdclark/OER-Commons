@@ -1,6 +1,4 @@
-from annoying.functions import get_object_or_None
-from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade,\
-    LearningObjectiveCategory
+from curriculum.models import TaggedMaterial, AlignmentTag
 from django.http import Http404
 from materials.models.common import Keyword, GeneralSubject, GradeLevel, \
     MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS, \
@@ -225,7 +223,7 @@ class AlignmentFilter(Filter):
         if set(value) - available_values:
             raise Http404()
 
-        value = map(AlignmentTag.objects.get_tag_from_full_code, value)
+        value = map(AlignmentTag.objects.get_from_full_code, value)
 
         return query.narrow(u"%s:(%s)" % (self.index_name, u" OR ".join([str(v.id) for v in value])))
 
