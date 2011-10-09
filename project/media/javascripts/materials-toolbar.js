@@ -11,6 +11,16 @@ oer.materials.toolbar.init = function() {
   oer.materials.toolbar.init_save();
   oer.materials.toolbar.init_review();
   oer.materials.view_item.init_navigation();
+  oer.evaluation_tool.init_evaluate_button();
+  var $evaluate_btn = $("#evaluate-btn");
+  var result = window.location.hash.match(/^#evaluate(?::(?:(standard|rubric\d+)))?$/);
+  if (result) {
+    if (result[1]) {
+       oer.evaluation_tool.open_tool($evaluate_btn.data("evaluate-url") + "#" + result[1]);
+    } else {
+      oer.evaluation_tool.open_tool($evaluate_btn.attr("href"));
+    }
+  }
 };
 
 oer.materials.toolbar.resize_iframe = function() {

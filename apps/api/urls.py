@@ -13,4 +13,6 @@ urlpatterns = patterns("api.views",
    url("^addLibrary/?$", "add_library.add_library"),
    url("^addMatter/?$", "add_community_item.add_community_item"),
    url("^getResource/?$", "get_resource.get_resource"),
+   url("^getEvaluations/?$", "get_evaluations.get_evaluations"),
+   url("^getEvaluation/?$", "get_evaluations.get_evaluation"),
 )

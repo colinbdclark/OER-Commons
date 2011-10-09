@@ -1,5 +1,4 @@
 import sys
-import haystack
 
 from django import forms
 from django.conf import settings
@@ -26,6 +25,9 @@ SIMPLE_FIELDS = [
     ("URL", "url"),
     ("NOTABLE_REQS", "tech_requirements"),
     ("CURRIC_STANDARDS", "curriculum_standards"),
+    ("LEVEL_NEW", "new_level"),
+    ("SUBJECT_NEW", "new_subject"),
+    ("AUDIENCE", "audience"),
 ]
 
 COURSE_SIMPLE_FIELDS = [

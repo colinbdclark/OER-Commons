@@ -4,6 +4,11 @@
   border-bottom: 1px solid #BFC7CA;
 }
 
+.materials-index.loading {
+  height: 200px;
+  background: url(../images/ajax-loader-big.gif) no-repeat 50% 50%;
+}
+
 .materials-index .item.last {
   border: none;
 }
@@ -85,6 +90,14 @@
   display: inline-block;
   padding-left: 20px;
   line-height: 16px;
+}
+
+.materials-index .item .evaluated {
+  padding-left: 27px;
+  height: 23px;
+  background: url(../images/evaluation/icon-evaluated.png) no-repeat 0 50%;
+  color: #122f78;
+  line-height: 23px;
 }
 
 .cou-bucket {
@@ -570,7 +583,8 @@
   text-align: right;
 }
 
-.advanced-search #align-form {
+.advanced-search #align-form,
+.advanced-search .rubric {
   margin: 5px 13px 20px 13px;
 }
 
@@ -578,7 +592,8 @@
   margin-bottom: 10px;
 }
 
-.advanced-search #align-form .field label {
+.advanced-search #align-form .field label,
+.advanced-search .rubric .field label {
   margin-bottom: 2px;
   font-weight: bold;
 }

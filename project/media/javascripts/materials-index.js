@@ -19,6 +19,20 @@ oer.materials.index.init_action_panel = function() {
 
 };
 
+oer.materials.index.pjax = function(url) {
+  var selector = "#content div.materials-index";
+  var $materials_index = $(selector);
+  $materials_index.fadeOut("fast", function() {
+    $materials_index.empty();
+    $materials_index.addClass("loading").show();
+    $.pjax({
+      container: selector,
+      url: url,
+      timeout: 5000
+    });
+  });
+};
+
 oer.materials.index.disable_unecessary_filters = function($form) {
   var disabled_filters = [];
   $form.find("dl.filter").each(function() {
@@ -48,8 +62,16 @@ oer.materials.index.init_filters = function() {
     }
   });
 
-  $form.submit(function() {
-    oer.materials.index.disable_unecessary_filters($form);
+  $form.submit(function(e) {
+    var disabled_filters = oer.materials.index.disable_unecessary_filters($form);
+    if ($.support.pjax) {
+      e.preventDefault();
+      var url = $form.attr("action") + "?" + $form.serialize();
+      $.each(disabled_filters, function(i, f) {
+        $(f).removeAttr("disabled");
+      });
+      oer.materials.index.pjax(url);
+    }
   });
 
   $form.delegate("dl.filter dd :checkbox", "click", function() {
@@ -62,6 +84,9 @@ oer.materials.index.init_filters = function() {
     } else {
       $filter.find("dt :checkbox").attr("checked", false);
     }
+    if ($.support.pjax) {
+      $form.submit();
+    }
   });
 
   $form.delegate("dl.filter dt :checkbox", "click", function(e) {
@@ -72,6 +97,9 @@ oer.materials.index.init_filters = function() {
       $filter.find("dd :checkbox").attr("checked", true);
     } else {
       $filter.find("dd :checkbox").attr("checked", false);
+    }
+    if ($.support.pjax) {
+      $form.submit();
     }
   });
 
@@ -249,4 +277,42 @@ oer.materials.index.init = function() {
   $("section.portlet.cou li a").qtip(DEFAULT_TOOLTIP_OPTIONS);
   $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
 
+  if ($.support.pjax) {
+
+    $.pjax.renderResponse = function($container, data) {
+      var $action_panel = $("div.action-panel");
+      var $first_item_number = $action_panel.find("span.first-item-number");
+      var $last_item_number = $action_panel.find("span.last-item-number");
+      var $total_items = $action_panel.find("strong.total-items");
+      var $title = $("title");
+      var base_window_title = $.trim($title.text().split("|").pop());
+      var $page_title = $("h1.page-title");
+      data = $.parseJSON(data);
+      $container.hide().removeClass("loading");
+      $container.html(data.items);
+      oer.rating.init();
+      $first_item_number.text(data.first_item_number);
+      $last_item_number.text(data.last_item_number);
+      $total_items.text(data.total_items);
+      var title = null;
+      var page_title = null;
+      if (data.page_subtitle !== "") {
+        title = data.page_title + " : " + data.page_subtitle + " | " + base_window_title;
+        page_title = data.page_title + ": <span>" + data.page_subtitle + "</span>";
+      } else {
+        title = data.page_title + " : " + base_window_title;
+        page_title = data.page_title;
+      }
+      $title.text(title);
+      $page_title.html(page_title);
+      $container.fadeIn("fast");
+    };
+
+    var $materials_index = $("#content div.materials-index");
+    $materials_index.delegate("ul.pagination a", "click", function(e) {
+      e.preventDefault();
+      var url = $(this).attr("href");
+      oer.materials.index.pjax(url);
+    });
+  }
 };

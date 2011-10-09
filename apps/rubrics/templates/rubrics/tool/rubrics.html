@@ -1,0 +1,144 @@
+{% extends "rubrics/tool/base.html" %}
+{% load markup %}
+
+{% block content %}
+  <div class="rubrics" data-evaluate-url="{% url rubrics:evaluate_rubrics content_type_id=content_type.id,object_id=object.id %}">
+    <section class="intro">
+      <h1><a href="#">Guidelines &amp; Reminders</a></h1>
+      <div class="body">
+
+        <p class="align-center">
+          <a href="http://www.achieve.org/oer-rubrics" target="_blank" class="rc5 learn">Learn about evaluating OER</a>
+        </p>
+
+        <div class="guidelines">
+          {% include "rubrics/tool/include/guidelines.html" %}
+        </div>
+
+        <div class="align-center">
+          <a href="#" class="rc5 start next">Start Evaluating</a>
+        </div>
+      </div>
+    </section>
+    <section id="alignment" class="expanded{% if alignment_scored %} scored{% endif %}">
+      <h1><a href="{% if toolbar_view_url %}{{ toolbar_view_url }}#evaluate:standard{% else %}#{% endif %}">Degree of Alignment to Standards</a></h1>
+      <div class="body">
+        {% if not alignment_tags %}
+          <p>Please <a class="dashed" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">align resource</a> before evaluating alignment</p>
+        {% else %}
+          <div class="description">
+            <p>Applies to objects that have suggested alignments to the
+              Common Core State Standards and is used to rate the degree of
+              alignment. The degree of alignment of both content and
+              performance expectations are considered. If appropriate, you
+              may use the rubric to rate any of the standards that have
+              been aligned to the object you are rating or align additional
+              standards.</p>
+          </div>
+          <p><a class="dashed add-standard" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">Add an additional standard</a></p>
+        {% endif %}
+        <div class="tags">
+
+          {% for tag in alignment_tags %}
+            <div class="tag-description{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}">
+              <div class="rc10">
+                <strong class="standard">{{ tag.standard }}</strong>
+                <span class="counter">{{ forloop.counter }} of {{ alignment_tags|length }}</span>
+                <p class="grade">{{ tag.grade }}, {{ tag.category }}</p>
+                <p><span>Domain:</span> {{ tag.subcategory }}</p>
+                <p><span>Description:</span> {{ tag.description }}</p>
+              </div>
+            </div>
+          {% endfor %}
+
+          {% for tag in alignment_tags %}
+            <a href="#" class="tag rc5{% if forloop.first %} selected{% endif %}{% if tag.score_value %} scored{% endif %}" data-tag-id="{{ tag.id }}">
+              <span class="code">{{ tag.full_code }}</span>
+              <span class="value">{% if tag.score_value %}{{ tag.score_value.get_value_display }}{% else %}No score{% endif %}</span>
+            </a>
+          {% endfor %}
+
+          {% for tag in alignment_tags %}
+            <div class="scores{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}">
+              {% for score in alignment_score_values %}
+                <div class="s{{ forloop.counter }}{% if tag.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
+                  <a href="#" class="rc5">
+                    <input type="radio" name="tag{{ tag.id }}" value="{{ score.value }}" {% if tag.score_value == score %}checked{% endif %} />
+                    <strong>{{ score.get_value_display }}</strong></a>
+                  {% if forloop.first %}
+                    <p class="tip">Mouse over for score description</p>
+                  {% endif %}
+                  <div class="description rc5">{{ score.description|markdown|safe }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+          {% for tag in alignment_tags %}
+            <div class="footer{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}">
+              <a href="#" class="dashed clear">Clear rating</a>
+              <span class="spinner"></span>
+              {% if not forloop.first %}
+                <a href="#" class="prev-tag rc5">Previous standard</a>
+              {% endif %}
+              {% if not forloop.last %}
+                <a href="#" class="next-tag rc5">Next standard</a>
+              {% endif %}
+              <a href="#" class="next rc5">Save &amp; Go to Next Rubric</a>
+            </div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </section>
+    {% for rubric in rubrics %}
+      <section class="rubric{% if rubric.scored %} scored{% endif %}" data-rubric-id="{{ rubric.id }}">
+        <h1><a href="{% if toolbar_view_url %}{{ toolbar_view_url }}#evaluate:rubric{{ rubric.id }}{% else %}#{% endif %}">{{ rubric.name }}</a>
+          {% if rubric.id == 6 %}
+            <a href="http://www.hewlett.org/programs/education-program/deeper-learning" target="_blank" class="right">What's this?</a>
+          {% endif %}
+        </h1>
+        <div class="body">
+          <div class="description">
+            {{ rubric.description|markdown|safe }}
+          </div>
+
+          <div class="scores" data-rubric-id="{{ rubric.id }}">
+            {% for score in rubric.score_values.all %}
+              <div class="s{{ forloop.counter }}{% if rubric.score_value == score %} selected{% endif %}" data-score-id="{{ score.id }}">
+                <a href="#" class="rc5">
+                  <input type="radio" name="rubric{{ rubric.id }}" value="{{ score.value }}" {% if rubric.score_value == score %}checked{% endif %} />
+                  <strong>{{ score.get_value_display }}</strong></a>
+                {% if forloop.first %}
+                  <p class="tip">Mouse over for score description</p>
+                {% endif %}
+                <div class="description rc5">{{ score.description|markdown|safe }}</div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="footer">
+            <a href="#" class="dashed clear">Clear rating</a>
+            <span class="spinner"></span>
+            {% if forloop.last %}
+              <a href="{% url rubrics:evaluate_results content_type_id=content_type.id,object_id=object.id %}" class="save rc5">Save &amp; View Results</a>
+            {% else %}
+              <a href="#" class="next rc5">Save &amp; Go to Next Rubric</a>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+  <footer class="global">
+    <a href="http://www.achieve.org/files/AchieveOERRubrics.pdf" target="_blank">OER Rubrics (PDF Version)</a>
+    <a href="{% url rubrics:evaluate_results content_type_id=content_type.id,object_id=object.id %}" class="results rc5">View Results</a>
+  </footer>
+{% endblock %}
+
+{% block extra-js %}
+  <script>
+    $(function() {
+      oer.evaluation_tool.init_rubrics();
+    });
+  </script>
+{% endblock %}

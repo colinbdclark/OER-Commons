@@ -123,6 +123,11 @@ class Course(Material):
                                        verbose_name=_(u"Derived From"),
                                        related_name="derived")
 
+    # New fields
+    new_subject = models.TextField(default="", blank=True)
+    new_level = models.TextField(default="", blank=True)
+    audience = models.TextField(default="", blank=True)
+
     def __unicode__(self):
         return self.title
 

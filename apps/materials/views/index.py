@@ -3,6 +3,8 @@ from autoslug.settings import slugify
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponsePermanentRedirect
+from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import GeneralSubject, GradeLevel, Collection, \
@@ -293,6 +295,8 @@ def populate_item_from_search_result(result):
             topics.append(topic)
         item["topics"] = topics
 
+    item["is_evaluated"] = bool(result.evaluated_rubrics)
+
     model = result.model
 
     namespace = getattr(model, "namespace", None)
@@ -480,6 +484,8 @@ def index(request, general_subjects=None, grade_levels=None,
 
     if len(filter_values) == 1 and "featured" in filter_values:
         query = query.order_by("-featured_on")
+    elif len(filter_values) == 1 and "evaluated_rubrics" in filter_values:
+        query = query.order_by("-evaluation_score_rubric_%i" % filter_values["evaluated_rubrics"][0])
     elif index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
 
@@ -537,6 +543,17 @@ def index(request, general_subjects=None, grade_levels=None,
                    keyword["slug"]
             keyword["name"] = name
 
+
+        if request.is_ajax():
+            output = render_to_string("materials/include/index-items.html",
+                                      RequestContext(request, locals()))
+            data = dict(items=output,
+                        first_item_number=pagination.first_item_number,
+                        last_item_number=pagination.last_item_number,
+                        total_items=pagination.total_items,
+                        page_title=unicode(page_title),
+                        page_subtitle=page_subtitle and unicode(page_subtitle or u""))
+            return JsonResponse(data)
         return direct_to_template(request, "materials/index.html", locals())
 
     elif format == "rss":

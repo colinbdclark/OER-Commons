@@ -80,6 +80,17 @@ class LearningObjectiveCategory(models.Model):
 
 class AlignmentTagManager(models.Manager):
 
+    def get_from_full_code(self, code):
+        parts = code.split(".")[1:]
+        assert 3 <= len(parts) <= 4
+        if len(parts) == 3:
+            return self.get_by_natural_key(*parts)
+        else:
+            try:
+                return self.get_by_natural_key(*[parts[0], ".".join(parts[1:3]), parts[3]])
+            except AlignmentTag.DoesNotExist:
+                return self.get_by_natural_key(*[parts[0], parts[1], ".".join(parts[2:])])
+
     def get_by_natural_key(self, grade_code, category_code, code):
         return self.get(grade__code=grade_code, category__code=category_code,
                         code=code)

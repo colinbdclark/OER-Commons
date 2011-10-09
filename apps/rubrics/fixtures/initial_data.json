@@ -1,0 +1,360 @@
+[
+  {
+    "pk": 1,
+    "model": "rubrics.rubric",
+    "fields": {
+      "name": "Quality of Explanation of the Subject Matter",
+      "description": "Applies to objects designed to explain content. Used to rate how thoroughly subject matter is explained or otherwise revealed in resource. Teachers might use object with whole class, small group, or individual student. Students might use this object to self-tutor."
+    }
+  },
+  {
+    "pk": 2,
+    "model": "rubrics.rubric",
+    "fields": {
+      "name": "Utility of Materials as Tools to Teach Others",
+      "description": "Applies to objects designed as an instructional tool to teach others. Primary user would be teacher looking for classroom tools. Evaluates the potential utility of an object for the majority of instructors at the intended grade level."
+    }
+  },
+  {
+    "pk": 3,
+    "model": "rubrics.rubric",
+    "fields": {
+      "name": "Quality of Assessments",
+      "description": "Applies to objects designed to determine what a student knows before, during, or after a topic is taught. When many assessments are included in one object, the rubric is applied to the entire set."
+    }
+  },
+  {
+    "pk": 4,
+    "model": "rubrics.rubric",
+    "fields": {
+      "name": "Degree of Interactivity",
+      "description": "Applies to objects that have a designed interactive component. Used to rate degree and quality of an object\u2019s interactivity. Interactivity broadly means that the object responds to the user \u2013 the object behaves differently based on what the user does."
+    }
+  },
+  {
+    "pk": 5,
+    "model": "rubrics.rubric",
+    "fields": {
+      "name": "Quality of Practice Exercises",
+      "description": "Applies to objects that contain collections or sets of practice exercises to help students better understand information or solidify skills and knowledge by doing tasks that help skills and procedures become routine. Typically a collection or pool of practice exercises is treated as a single object and the rubric is applied to the set."
+    }
+  },
+  {
+    "pk": 6,
+    "model": "rubrics.rubric",
+    "fields": {
+      "name": "Opportunities for Deeper Learning",
+      "description": "Applies to objects that engage learners to: Think critically and solve complex problems. Reason abstractly. Work collaboratively. Learn how to learn; Communicate effectively. Construct viable arguments and critique the reasoning of others. Apply discrete knowledge and skills to real-world situations. Construct, use, or analyze models. "
+    }
+  },
+  {
+    "pk": 1,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "Objects are designated as *superior* for content explanation if all of the following are true: Provides comprehensive information so effectively that target audience can easily understand the content. Connects the content with important associated concepts. Does not need to be augmented with additional explanation or materials. Main ideas of the subject matter n the object are clearly identified for the learner.",
+      "value": 3,
+      "rubric": 1
+    }
+  },
+  {
+    "pk": 2,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *strong* value for content explanation if the content is explained in a way that makes skills, procedures, concepts, and/or information understandable. It falls short of superior in that it does not make clear the important connections between and among the various aspects. *For example, a lesson on multi-digit addition may focus on the procedure and fail to connect it with place value.*",
+      "value": 2,
+      "rubric": 1
+    }
+  },
+  {
+    "pk": 3,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *limited* value for content explanation if the content is correctly explained, but is very limited. This is a cursory treatment of the content that is not developed enough to serve someone attempting to learn the content for the first time. The explanations are not thorough enough to serve as more than a review for most learners.",
+      "value": 1,
+      "rubric": 1
+    }
+  },
+  {
+    "pk": 4,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *very weak* or no value for content explanation if its explanations are confusing or contain errors. There is little likelihood that this object will contribute to understanding.",
+      "value": 0,
+      "rubric": 1
+    }
+  },
+  {
+    "pk": 5,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "This rubric is *not applicable* for an object that is not designed to explain content (e.g. a sheet of mathematical formulae, a map). It may be possible to apply the object in some way that aids a learner\u2019s understanding, but that is beyond any obvious or described purpose of the object.",
+      "value": null,
+      "rubric": 1
+    }
+  },
+  {
+    "pk": 6,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "Designation of an object as *superior* for teaching others is indicated if all of the following are true: Materials and ideas are comprehensive, easy to understand and used to teach others. Includes suggestions for use with a variety of learners. All components are provided and work as intended, including estimate of planning time and materials list. Facilitates mixed instructional approaches for larger objects.",
+      "value": 3,
+      "rubric": 2
+    }
+  },
+  {
+    "pk": 7,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as *strong* when it is a comprehensive, easy to understand and use unit or lesson designed to teach others. Falls short of Superior because either: 1) Object does not include suggestions for ways to use materials with variety of learners, or 2) core components are underdeveloped in the object.",
+      "value": 2,
+      "rubric": 2
+    }
+  },
+  {
+    "pk": 8,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *limited* value as a tool to teach others if it includes a useful approach or idea to teach an important topic but falls short of a higher rating because either: 1) the object is missing important elements, e.g. directions for some parts of a lesson are not included or 2) important elements do not do what they should, e.g. directions are unclear. Teachers would need to supplement this object to use it effectively.",
+      "value": 1,
+      "rubric": 2
+    }
+  },
+  {
+    "pk": 9,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as *very weak* when confusing, contains errors, is missing many important elements, and is simply not useful.",
+      "value": 0,
+      "rubric": 2
+    }
+  },
+  {
+    "pk": 10,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "This rubric is *not applicable* for an object that is not designed as a teacher\u2019s instructional tool. An enterprising educator may find an application for such an object during a lesson, but that would be an unintended use.",
+      "value": null,
+      "rubric": 2
+    }
+  },
+  {
+    "pk": 11,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having a *superior* assessment if all of the following are true: All concepts/skills assessed align clearly to content and performance expectations and included in the object\u2019s material; critical aspects are targeted and given appropriate weight/attention; types of assessments offered require clear demonstration of proficiency; and level of difficulty results from complexity of the subject area/cognitive demand, rather than unrelated issues (e.g. complex vocabulary).",
+      "value": 3,
+      "rubric": 3
+    }
+  },
+  {
+    "pk": 12,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having a *strong* assessment if it assesses all or nearly all of the content and performance expectations intended, but the assessment mode(s) offered fail(s) to require that the student demonstrate proficiency in the intended concept/skill.",
+      "value": 2,
+      "rubric": 3
+    }
+  },
+  {
+    "pk": 13,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having a *limited* assessment if it assesses some of the content or performance expectations intended, as stated or implicit in the object, but omits some important content or performance expectations.",
+      "value": 1,
+      "rubric": 3
+    }
+  },
+  {
+    "pk": 14,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *very weak* assessments if it contains significant errors, does not assess important content or performance, or is written in a way that is confusing to students. These are not the only reasons an assessment may fall short, but are illustrations of the type of objects that fall into this category.",
+      "value": 0,
+      "rubric": 3
+    }
+  },
+  {
+    "pk": 15,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "This rubric is deemed *not applicable* for an object that is not designed to have an assessment component. Even though one might imagine how aspects ways aspects of this object could be used for assessment purposes, not applicable is the appropriate score.",
+      "value": null,
+      "rubric": 3
+    }
+  },
+  {
+    "pk": 16,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having a *superior* degree of interactivity if all are true: Responsive to student input in a way the creates an individualized learning experience, adapts to the learner based on what s/he does, or allows flexibility or individual control during the learning experience. Interactive element is purposeful and directly related to learning. The object is well-designed and easy-to-use, encouraging learner use. Appears to function flawlessly on the expected platform.",
+      "value": 3,
+      "rubric": 4
+    }
+  },
+  {
+    "pk": 17,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having a *strong* degree of interactivity if the object has an interactive feature that is purposeful and directly related to learning, even if it does not provide an individualized learning experience. Like superior objects, strong interactive objects must be well designed, easy-to-use, and function flawlessly on the expected platform.",
+      "value": 2,
+      "rubric": 4
+    }
+  },
+  {
+    "pk": 18,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *limited* interactive elements if it neither relates to nor detracts from learning. These kinds of interactive elements (e.g., earning points or achieving levels for correct answers) might be designed to increase student motivation and to build content understanding by rewarding or entertaining the learner and extending the time the user engages with the content.",
+      "value": 1,
+      "rubric": 4
+    }
+  },
+  {
+    "pk": 19,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *very weak* or no value for interactivity if it has interactive features that are poorly conceived and/or executed. The interactive features might fail to operate as intended, or the \u201cbells and whistles\u201d distract the user or unnecessarily take up user time.",
+      "value": 0,
+      "rubric": 4
+    }
+  },
+  {
+    "pk": 20,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "This rubric is deemed *not applicable* for an object that does not contain an interactive element.",
+      "value": null,
+      "rubric": 4
+    }
+  },
+  {
+    "pk": 21,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *superior* practice exercises if ALL of the following are true: Offers an extensive number of practice exercises that support mastery of content and performance expectations. Exercises are clearly written and supported by accurate answer keys. There are a variety of exercise types and/or the exercises are available in a variety of formats, as appropriate (e.g. short/long/extended response, multiple choice) that cover the same expectations.",
+      "value": 3,
+      "rubric": 5
+    }
+  },
+  {
+    "pk": 22,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *strong* practice exercises if it offers a sufficient number of well-written exercises aligned to the content and performance expectations and supported by accurate answer keys, but provides little variety of exercise types or formats.",
+      "value": 2,
+      "rubric": 5
+    }
+  },
+  {
+    "pk": 23,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *limited* practice exercises if it includes only a few well-written exercises with no variation in format or type.",
+      "value": 1,
+      "rubric": 5
+    }
+  },
+  {
+    "pk": 24,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as having *very weak* or no practice exercises if they do not cover content and performance expectations as stated in the object, errors in or lacks an answer key, or is unsound for another reason. (OER with only one or two practice exercises should be scored N/A.)",
+      "value": 0,
+      "rubric": 5
+    }
+  },
+  {
+    "pk": 25,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "This rubric is *not applicable* to an object that is not designed to provide learner practice. Even though one might imagine ways it could be used is this way, *not applicable* is the appropriate score. In general, an OER with only one or two practice exercises should be scored *N/A* rather than *very weak*.",
+      "value": null,
+      "rubric": 5
+    }
+  },
+  {
+    "pk": 26,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as offering *superior* opportunity for deeper learning when All of the following are true: **Three** or more of the practices listed in the descriptors above are required; a range of cognitive demand appropriate to and supportive of material targeted are offered; appropriate scaffolding and direction is provided or available.",
+      "value": 3,
+      "rubric": 6
+    }
+  },
+  {
+    "pk": 27,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as *strong* when it contains **one or two** practices identified in this rubric, such as an object that involves a complex problem that requires abstract reasoning skills to reach a solution.",
+      "value": 2,
+      "rubric": 6
+    }
+  },
+  {
+    "pk": 28,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object is rated as *limited* when it contains a complex problem, but is missing clear guidance on how to tap into various aspects of deeper learning. *For example, an object might contain a provision for learners to collaborate, but the process and product are unclear.*",
+      "value": 1,
+      "rubric": 6
+    }
+  },
+  {
+    "pk": 29,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "An object\u2019s is *very weak* when it appears to be intended to provide some of the deeper learning opportunities but it is not useful in its present form. Might be based on poorly formulated problems and/or unclear directions, making it unlikely that this lesson or activity will lead to skills like critical thinking, abstract reasoning, constructing arguments, or modeling. ",
+      "value": 0,
+      "rubric": 6
+    }
+  },
+  {
+    "pk": 30,
+    "model": "rubrics.rubricscorevalue",
+    "fields": {
+      "description": "This rubric is *not applicable* to an object that does not appear to be designed to provide the opportunity for deeper learning. Even though one might imagine how it could be used to do this, *not applicable* is the appropriate score.",
+      "value": null,
+      "rubric": 6
+    }
+  },
+  {
+    "pk": 1,
+    "model": "rubrics.standardalignmentscorevalue",
+    "fields": {
+      "description": "*Superior* alignment is indicated if BOTH of the following are true: All of the content and performance expectations in the identified standard are completely addressed by the object.The content and performance expectations of the identified standard are the focus of the object. While some objects may cover a range of standards that could potentially be aligned, for a superior alignment the content and performance expectations must not be a peripheral part of the object.",
+      "value": 3
+    }
+  },
+  {
+    "pk": 2,
+    "model": "rubrics.standardalignmentscorevalue",
+    "fields": {
+      "description": "*Strong* alignment is indicated for one of two reasons: Covers all but minor elements of the standard, cluster or domain. The content and performance expectations of the standard align to a minor part of the object.\r\n",
+      "value": 2
+    }
+  },
+  {
+    "pk": 3,
+    "model": "rubrics.standardalignmentscorevalue",
+    "fields": {
+      "description": "An object has *limited* alignment if a significant part of the content or performance expectations of the identified standard is not addressed in the object, as long as there is fidelity to the part it does cover. *For example, an object that aligns to CCSS 2.NBT.2, \u201cCount within 1000; skip-count by 5s, 10s, and 100s,\u201d but only addresses counting numbers to 500 would be considered to have limited alignment.  The object aligns very closely with a limited part of the standard.*",
+      "value": 1
+    }
+  },
+  {
+    "pk": 4,
+    "model": "rubrics.standardalignmentscorevalue",
+    "fields": {
+      "description": "An object has *very weak* alignment for either one of two reasons: The object does not match the intended standards. The object matches only to minimally important aspects of a standard, cluster or domain. These objects will not typically be useful for instruction of core concepts and performances covered by the standard.",
+      "value": 0
+    }
+  },
+  {
+    "pk": 5,
+    "model": "rubrics.standardalignmentscorevalue",
+    "fields": {
+      "description": "This rubric is not applicable for an object that has not had standards suggested for alignment. For example, the rubric might not be applicable to a set of raw data.",
+      "value": null
+    }
+  }
+]

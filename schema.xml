@@ -65,11 +65,11 @@
   </types>
 
 
-  <fields>   
+  <fields>
     <!-- general -->
     <field name="id"      type="string"   indexed="true"  stored="true"  multiValued="false" required="true"/>
-    <field name="type"    type="string"   indexed="true"  stored="true"  multiValued="false" /> 
-    <field name="name"    type="string"   indexed="true"  stored="true"  multiValued="false" /> 
+    <field name="type"    type="string"   indexed="true"  stored="true"  multiValued="false" />
+    <field name="name"    type="string"   indexed="true"  stored="true"  multiValued="false" />
 
     <dynamicField name="*_i"  type="sint"    indexed="true"  stored="true"/>
     <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
@@ -79,7 +79,7 @@
     <dynamicField name="*_f"  type="sfloat"  indexed="true"  stored="true"/>
     <dynamicField name="*_d"  type="sdouble" indexed="true"  stored="true"/>
     <dynamicField name="*_dt" type="date"    indexed="true"  stored="true"/>
-    
+
     <field name="django_ct" type="string"   indexed="true"  stored="true"  multiValued="false" />
     <field name="django_id" type="string"   indexed="true"  stored="true"  multiValued="false" />
 
@@ -96,7 +96,7 @@
     <field name="featured" type="boolean" indexed="true" stored="true" multiValued="false" />
     <field name="featured_on" type="date" indexed="true" stored="true" multiValued="false" />
     <field name="visits" type="sint" indexed="true" stored="true" multiValued="false" />
-    
+
     <field name="member_activities" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="rating" type="sfloat" indexed="true" stored="true" multiValued="false" />
     <field name="alignment_tags" type="sint" indexed="true" stored="true" multiValued="true" />
@@ -108,7 +108,7 @@
     <field name="noted_by" type="sint" indexed="true" stored="true" multiValued="true" />
 
     <field name="creator" type="sint" indexed="true" stored="true" multiValued="false" />
-    
+
     <field name="license" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="cou_bucket" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="workflow_state" type="string" indexed="true" stored="true" multiValued="false" />
@@ -136,6 +136,15 @@
 
     <field name="course_or_module" type="string" indexed="true" stored="true" multiValued="false" />
     <field name="ocw" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="evaluated_rubrics" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="evaluation_score_rubric_0" type="sfloat" indexed="true" stored="true" multiValued="false" />
+    <field name="evaluation_score_rubric_1" type="sfloat" indexed="true" stored="true" multiValued="false" />
+    <field name="evaluation_score_rubric_2" type="sfloat" indexed="true" stored="true" multiValued="false" />
+    <field name="evaluation_score_rubric_3" type="sfloat" indexed="true" stored="true" multiValued="false" />
+    <field name="evaluation_score_rubric_4" type="sfloat" indexed="true" stored="true" multiValued="false" />
+    <field name="evaluation_score_rubric_5" type="sfloat" indexed="true" stored="true" multiValued="false" />
+    <field name="evaluation_score_rubric_6" type="sfloat" indexed="true" stored="true" multiValued="false" />
 
   </fields>
 

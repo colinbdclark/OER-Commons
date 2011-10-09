@@ -1,6 +1,4 @@
-from annoying.functions import get_object_or_None
-from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade,\
-    LearningObjectiveCategory
+from curriculum.models import TaggedMaterial, AlignmentTag
 from django.http import Http404
 from materials.models.common import Keyword, GeneralSubject, GradeLevel, \
     MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS, \
@@ -11,6 +9,7 @@ from materials.models.library import LibraryMaterialType
 from materials.models.material import MEMBER_ACTIVITY_TYPES
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_slug
+from rubrics.models import get_rubric_choices
 from tags.models import Tag
 import re
 
@@ -214,17 +213,6 @@ class AlignmentFilter(Filter):
             return None
         return value
 
-    def get_tag_from_full_code(self, code):
-        parts = code.split(".")[1:]
-        assert 3 <= len(parts) <= 4
-        if len(parts) == 3:
-            natural_key = parts
-        else:
-            natural_key = [parts[0], ".".join(parts[1:3]), parts[3]]
-
-        return AlignmentTag.objects.get_by_natural_key(*natural_key)
-
-
     def update_query(self, query, value):
         available_values = self.available_values
 
@@ -235,7 +223,7 @@ class AlignmentFilter(Filter):
         if set(value) - available_values:
             raise Http404()
 
-        value = map(self.get_tag_from_full_code, value)
+        value = map(AlignmentTag.objects.get_from_full_code, value)
 
         return query.narrow(u"%s:(%s)" % (self.index_name, u" OR ".join([str(v.id) for v in value])))
 
@@ -372,6 +360,18 @@ class SearchFilter(Filter):
         return unicode(value)
 
 
+class RubricFilter(ChoicesFilter):
+
+    def extract_value(self, request):
+        value = super(RubricFilter, self).extract_value(request)
+        if value is not None:
+            try:
+                value = map(int, value)
+            except (TypeError, ValueError):
+                raise Http404()
+        return value
+
+
 FILTERS = {
     "general_subjects": VocabularyFilter("general_subjects", "f.general_subject", GeneralSubject, u"Subject Area"),
     "grade_levels": VocabularyFilter("grade_levels", "f.edu_level", GradeLevel, u"Grade Level"),
@@ -392,6 +392,7 @@ FILTERS = {
     "topics": VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic"),
     "featured": BooleanFilter("featured", "f.featured", u"Featured Resources"),
     "alignment": AlignmentFilter("alignment_tags", "f.alignment"),
+    "evaluated_rubrics": RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric"),
     "search": SearchFilter(),
 }
 

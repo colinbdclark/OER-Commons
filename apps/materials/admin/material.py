@@ -3,8 +3,7 @@ from django.contrib.admin.options import ModelAdmin
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.functional import update_wrapper
-from haystack.sites import site
-from materials.models.material import PUBLISHED_STATE
+from materials.models.material import PUBLISHED_STATE, DEACCESSIONED_STATE
 
 
 #noinspection PyUnusedLocal
@@ -13,6 +12,20 @@ def publish(modeladmin, request, queryset):
         obj.workflow_state = PUBLISHED_STATE
         obj.save()
 publish.short_description = u"Publish selected items"
+
+
+#noinspection PyUnusedLocal
+def deaccession(modeladmin, request, queryset):
+    for obj in queryset:
+        obj.workflow_state = DEACCESSIONED_STATE
+        obj.save()
+deaccession.short_description = u"Deaccession selected items"
+
+
+#noinspection PyUnusedLocal
+def check_url(modeladmin, request, queryset):
+    queryset.update(url_fetched_on=None)
+check_url.short_description = u"Check URL status and update screenshot."
 
 
 class MaterialAdmin(ModelAdmin):
@@ -30,7 +43,7 @@ class MaterialAdmin(ModelAdmin):
     list_filter = ["workflow_state", "featured", "http_status", "created_on"]
     search_fields = ["title"]
 
-    actions = [publish]
+    actions = [publish, deaccession, check_url]
 
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
