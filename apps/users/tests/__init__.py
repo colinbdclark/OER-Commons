@@ -10,3 +10,6 @@ from views.profile import (ProfileViewTest, ProfileEditTest,
     RolesViewTest, AboutViewTest)
 from views.forms import (UserInfoFormTest, ChangePasswordFormTest,
     AvatarFormTest, GeographyFormTest, RolesFormTest, AboutMeFormTest)
+from models import (RoleTest, EducatorSubjectTest, ProfileTest,
+    GenConfirmationKeyTest, RegistrationConfirmationTest,
+    ResetPasswordConfirmationTest)

@@ -152,7 +152,6 @@ class InitViewTest(TestCase, TestDataGenerator):
         self.assertContains(response, u'We have sent a link to reset your password to your email.')
 
 
-
 class ResetPasswordViewTest(TestCase, TestDataGenerator):
 
     fixtures = ['users_data.json']
@@ -203,5 +202,3 @@ class ResetPasswordViewTest(TestCase, TestDataGenerator):
         response = self.client.post(self.reset_password_url, data)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, u'Please correct the indicated errors.')
-
-

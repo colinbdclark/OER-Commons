@@ -48,6 +48,7 @@ class RegistrationFormTest(TestCase, TestDataGenerator):
         self.assertEqual(form['password'].errors,
                          [u'Ensure this value has at least 5 characters (it has 3).'])
 
+
 class ConfirmationFormTest(TestCase):
 
     fixtures = ['users_data.json']
@@ -200,7 +201,6 @@ class RegistrationViewTest(TestCase, TestDataGenerator):
                 confirmation_link = '%s?code=%s' % (reversed_url, key)
                 self.assertTrue(confirmation_link in mail.outbox[0].body)
 
-
         # Test that warning message shows when user account isn't confirmed.
         now = datetime.datetime.now()
         confirmation.timestamp = now
@@ -240,7 +240,6 @@ class RegistrationViewTest(TestCase, TestDataGenerator):
         response = self.client.get(self.frontpage)
         message_with_days = 'Otherwise your account will be deleted today'
         self.assertContainsIgnoreWhitespace(response, message_with_days)
-
 
         # Test that link to resend email confirmation exists in warning message.
         quoted_email = urllib.quote(data['email'])
