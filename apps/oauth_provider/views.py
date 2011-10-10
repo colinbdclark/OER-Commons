@@ -108,6 +108,9 @@ def user_authorization(request, form_class=AuthorizeRequestTokenForm):
 def access_token(request):
     oauth_request = get_oauth_request(request)
 
+    if oauth_request is None:
+        return INVALID_PARAMS_RESPONSE
+
     missing_params = require_params(oauth_request, ('oauth_token', 'oauth_verifier'))
     if missing_params is not None:
         return missing_params
@@ -149,7 +152,7 @@ def protected_resource_example(request):
 def fake_authorize_view(request, token, callback, params):
     """
     Fake view for tests. It must return an ``HttpResponse``.
-    
+
     You need to define your own in ``settings.OAUTH_AUTHORIZE_VIEW``.
     """
     return HttpResponse('Fake authorize view for %s with params: %s.' % (token.consumer.name, params))
@@ -157,7 +160,7 @@ def fake_authorize_view(request, token, callback, params):
 def fake_callback_view(request, **args):
     """
     Fake view for tests. It must return an ``HttpResponse``.
-    
+
     You can define your own in ``settings.OAUTH_CALLBACK_VIEW``.
     """
     return HttpResponse('Fake callback view.')
