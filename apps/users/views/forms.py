@@ -10,7 +10,7 @@ from utils.forms import AutocompleteListField, AutocompleteListWidget
 
 class UserInfoForm(forms.ModelForm):
 
-    success_mesage = u"Your profile was saved."
+    success_message = u"Your profile was saved."
     error_message = u"Please correct the indicated errors."
 
     first_name = forms.CharField(max_length=30, label=u"First name:",
