@@ -27,6 +27,10 @@ class Login(FormView):
     template_name = "rubrics/manage/login.html"
     form_class = LoginForm
 
+    def get(self, request, *args, **kwargs):
+        request.session.set_test_cookie()
+        return super(Login, self).get(request, *args, **kwargs)
+
     def get_form_kwargs(self):
         kwargs = super(Login, self).get_form_kwargs()
         kwargs["request"] = self.request

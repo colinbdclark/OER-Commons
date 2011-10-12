@@ -35,11 +35,7 @@ class LoginForm(AuthenticationForm):
             elif not self.user_cache.is_active:
                 raise forms.ValidationError(_("This account is inactive. Make sure that you've followed the instructions in registration confirmation email."))
 
-        # TODO: determine whether this should move to its own method.
-        if self.request:
-            if not self.request.session.test_cookie_worked():
-                raise forms.ValidationError(_("Your Web browser doesn't appear to have cookies enabled. Cookies are required for logging in."))
-
+        self.check_for_test_cookie()
         return self.cleaned_data
 
 
@@ -67,20 +63,20 @@ def login(request):
                 for field_name, errors_list in form.errors.items():
                     errors[field_name] = errors_list[0]
                 return JsonResponse(dict(status="error", errors=errors))
-                
+
         else:
             if form.is_valid():
                 # Light security check -- make sure redirect_to isn't garbage.
                 if not redirect_to or ' ' in redirect_to:
                     redirect_to = reverse("frontpage")
-    
-                # Heavier security check -- redirects to http://example.com should 
-                # not be allowed, but things like /view/?param=http://example.com 
+
+                # Heavier security check -- redirects to http://example.com should
+                # not be allowed, but things like /view/?param=http://example.com
                 # should be allowed. This regex checks if there is a '//' *before* a
                 # question mark.
                 elif '//' in redirect_to and re.match(r'[^\?]*//', redirect_to):
                     redirect_to = reverse("frontpage")
-    
+
                 # Okay, security checks complete. Log the user in.
                 auth_login(request, form.get_user())
 
@@ -97,7 +93,7 @@ def login(request):
 def render_login_form(request):
     return render(request, "users/login-form.html", dict(form=LoginForm(),
                                                          in_dialog=True))
- 
+
 
 def logout(request):
     auth_logout(request)
