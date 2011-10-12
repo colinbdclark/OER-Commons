@@ -77,6 +77,7 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section.expanded {
+  margin-top: -1px;
   border-bottom: 2px solid #123078;
 }
 
@@ -102,9 +103,8 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section.expanded h1 {
-  padding-top: 5px;
   padding-left: 10px;
-  background: #fff;
+  background: #143073;
 }
 
 .evaluation-tool .rubrics section h1 a {
@@ -115,7 +115,7 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics section.expanded h1 a {
   display: inline;
-  color: #143073;
+  color: #fff;
   cursor: default;
 }
 
@@ -131,7 +131,7 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics section.expanded h1 a.right {
-  margin-top: 3px;
+  color: #fff;
 }
 
 .evaluation-tool .rubrics section .body > .description {

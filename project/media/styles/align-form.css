@@ -143,8 +143,8 @@ body.authenticated .portlet.align-item-tags .login {
 
 .align-tag-tooltip .ui-tooltip-titlebar,
 .align-tag-tooltip .ui-tooltip-content {
-  border-color: #ffb930;
-  background-color: #fff;
+  border-color: #FFE4B8;
+  background-color: #FFE4B8;
   color: #333;
 }
 
@@ -155,16 +155,16 @@ body.authenticated .portlet.align-item-tags .login {
 .align-tag-tooltip .ui-tooltip-content h1 {
   margin-bottom: 10px;
   text-align: center;
-  font-weight: normal;
-  font-size: 14px;
+  font-weight: bold;
+  font-size: 13px;
 }
 
 .align-tag-tooltip .ui-tooltip-content p {
-  margin-bottom: 5px;
+  margin-bottom: 0;
 }
 
 .align-tag-tooltip .score {
-  margin-top: 10px;
+  margin-top: 20px;
   margin-left: 50px;
   width: auto;
 }
