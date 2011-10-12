@@ -3,11 +3,11 @@
     <li>
       <a class="expand-all" href="#">Expand All</a>
     </li>
-    <li class="last"> 
+    <li class="last">
       <a class="collapse-all" href="#">Collapse All</a>
-    </li> 
+    </li>
   </ul>
-  
+
   {% if pagination.pages|length > 1 %}
   <ul class="pagination">
     <li>
@@ -17,7 +17,7 @@
     </li>
     <li>
       {% if pagination.prev_page_url %}
-      <a title="Previous page" href="{{ pagination.prev_page_url }}">&lt;&lt;</a>
+      <a title="Previous page" rel="prev" href="{{ pagination.prev_page_url }}">&lt;&lt;</a>
       {% else %}&lt;&lt;{% endif %}
     </li>
 
@@ -37,7 +37,7 @@
 
     <li>
       {% if pagination.next_page_url %}
-      <a title="Next page" href="{{ pagination.next_page_url }}">&gt;&gt;</a>
+      <a title="Next page" rel="next" href="{{ pagination.next_page_url }}">&gt;&gt;</a>
       {% else %}&gt;&gt;{% endif %}
     </li>
     <li class="last">

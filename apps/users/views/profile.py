@@ -1,4 +1,4 @@
-from annoying.decorators import ajax_request, JsonResponse
+from annoying.decorators import ajax_request
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
@@ -71,7 +71,7 @@ def profile_edit(request):
                 user_info_form.save()
 
                 if request.is_ajax():
-                    return ajax_form_success(user_info_form.success_mesage)
+                    return ajax_form_success(user_info_form.success_message)
 
                 return redirect("users:profile_geography")
 

@@ -219,6 +219,7 @@ class CourseAdmin(MaterialAdmin):
             short_url=short_url,
         )
     url.allow_tags = True
+    url.admin_order_field = "url"
 
     list_display = ["title", "collection", url, "http_status", "workflow_state", "creator"]
     search_fields = ["title", "collection__name", "institution__name"]

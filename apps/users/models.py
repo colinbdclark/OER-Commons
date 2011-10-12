@@ -36,7 +36,7 @@ CONNECT_OPTIONS = (
 )
 
 FACEBOOK_ID_RE = re.compile(r"^[a-z\d.]{5,}$")
-FACEBOOK_URL_RE = re.compile(r"^https?://(www.)?facebook.com/(?P<facebook_id>[a-z\d.]{5,})$")
+FACEBOOK_URL_RE = re.compile(r"^https?://(?:www.)?facebook.com/(?:profile\.php\?id=)?(?P<facebook_id>[a-z\d.]{5,})$")
 TWITTER_ID_RE = re.compile(r"^[a-zA-Z\d_]+$")
 TWITTER_URL_RE = re.compile(r"^https?://twitter.com/(#!/)?(?P<twitter_id>[a-zA-Z\d_]+)$")
 
@@ -136,6 +136,14 @@ class Profile(models.Model):
 
     facebook_id = models.CharField(max_length=50, blank=True, null=True,
                                    validators=[validators.RegexValidator(FACEBOOK_ID_RE)])
+
+    @property
+    def facebook_url(self):
+        if not self.facebook_id:
+            return None
+        if self.facebook_id.isdigit():
+            return "https://www.facebook.com/profile.php?id=%s" % self.facebook_id
+        return "https://www.facebook.com/%s" % self.facebook_id
 
     twitter_id = models.CharField(max_length=30, blank=True, null=True,
                                   validators=[validators.RegexValidator(TWITTER_ID_RE)])

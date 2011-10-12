@@ -10,7 +10,7 @@ from utils.forms import AutocompleteListField, AutocompleteListWidget
 
 class UserInfoForm(forms.ModelForm):
 
-    success_mesage = u"Your profile was saved."
+    success_message = u"Your profile was saved."
     error_message = u"Please correct the indicated errors."
 
     first_name = forms.CharField(max_length=30, label=u"First name:",
@@ -91,7 +91,7 @@ class GeographyForm(forms.ModelForm):
 
     success_message = u"Your geography information was saved."
     error_message = u"Please correct the indicated errors."
-    
+
     country = forms.ModelChoiceField(Country.objects.all(),
                                      label=u"Country:",
                                      to_field_name="code",
@@ -123,7 +123,7 @@ class RolesForm(forms.ModelForm):
 
     success_message = u"Your roles were saved."
     error_message = u"Please correct the indicated errors."
-    
+
     roles = forms.ModelMultipleChoiceField(Role.objects.all(),
                                      label=u"Which of these roles best describe you? Check all that apply.",
                                      required=False,
@@ -133,13 +133,13 @@ class RolesForm(forms.ModelForm):
                                      label=u"I teach students at the following levels. Check all that apply.",
                                      required=False,
                                      widget=forms.CheckboxSelectMultiple())
-    
+
     educator_subjects = AutocompleteListField(model=EducatorSubject,
                                               autocomplete_field="title",
                                               label=u"I teach my students the following subjects:",
                                               widget=AutocompleteListWidget(new_item_label=u"Add subject"),
                                               required=False)
-    
+
     def clean(self):
         cleaned_data = self.cleaned_data
         roles = cleaned_data.get("roles")
@@ -148,7 +148,7 @@ class RolesForm(forms.ModelForm):
             if not is_educator:
                 cleaned_data["educator_student_levels"] = []
         return cleaned_data
-    
+
     class Meta:
         model = Profile
         fields = ["roles", "educator_student_levels", "educator_subjects"]
@@ -158,7 +158,7 @@ class AboutMeForm(forms.ModelForm):
 
     success_message = u"Your profile was saved."
     error_message = u"Please correct the indicated errors."
-    
+
     about_me = forms.CharField(label=u"About me",
                                required=False,
                                widget=forms.Textarea(attrs={"class": "text"}))
@@ -180,6 +180,11 @@ class AboutMeForm(forms.ModelForm):
     skype_id = forms.CharField(label=u"Skype", required=False,
                                widget=forms.TextInput(attrs={"class": "text"}))
 
+    def __init__(self, *args, **kwargs):
+        super(AboutMeForm, self).__init__(*args, **kwargs)
+        if self.instance and self.instance.facebook_id and self.instance.facebook_id.isdigit():
+            self.initial["facebook_id"] = self.instance.facebook_url
+
     def clean_facebook_id(self):
         facebook_id = self.cleaned_data["facebook_id"]
         r = FACEBOOK_URL_RE.search(facebook_id)
@@ -198,4 +203,3 @@ class AboutMeForm(forms.ModelForm):
         model = Profile
         fields = ["about_me", "website_url", "facebook_id", "twitter_id",
                   "skype_id"]
-        

@@ -1,7 +1,5 @@
-from annoying.functions import get_object_or_None
 from common.models import GeneralSubject, Language, Keyword
-from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade,\
-    LearningObjectiveCategory
+from curriculum.models import TaggedMaterial, AlignmentTag
 from django.http import Http404
 from materials.models.common import  GradeLevel, \
     MediaFormat, GeographicRelevance, Collection, COU_BUCKETS, \

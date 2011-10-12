@@ -91,7 +91,7 @@
     {% if profile.facebook_id or profile.twitter_id or profile.skype_id %}
       <ul class="social">
         {% if profile.facebook_id %}
-          <li><a target="_blank" class="facebook" href="https://www.facebook.com/{{ profile.facebook_id }}">{{ profile.facebook_id }}</a></li>
+          <li><a target="_blank" class="facebook" href="{{ profile.facebook_url }}">{% if profile.facebook_id.isdigit %}Facebook{% else %}{{ profile.facebook_id }}{% endif %}</a></li>
         {% endif %}
         {% if profile.twitter_id %}
           <li><a target="_blank" class="twitter" href="https://twitter.com/{{ profile.twitter_id }}">{{ profile.twitter_id }}</a></li>
