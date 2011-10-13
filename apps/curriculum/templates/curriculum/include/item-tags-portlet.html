@@ -1,19 +1,15 @@
 {% load curriculum_tags %}
 <section class="portlet align-item-tags dotted">
   <h1>Curriculum Standards</h1>
-  {% if tags %}
-     <ul>
-     {% for tag in tags %}
-       <li class="tag rc3">
-         <a href="{% url materials:alignment_index alignment=tag.full_code %}">{{ tag.full_code }}</a>
-       </li>
-     {% endfor %}
-     </ul>
-  {% endif %}
-  <ul class="align-user-tags">
-    {% for tagged in user_tags %}
-      <li class="rc3 tag" data-id="{{ tagged.id }}">
-        <a href="{% url materials:alignment_index alignment=tagged.tag.full_code %}">{{ tagged.tag.full_code }}</a>
+  <ul class="align-tags">
+    {% for tag in tags %}
+      <li class="rc3">
+        <a href="{{ tag.url }}">{{ tag.code }}</a>
+      </li>
+    {% endfor %}
+    {% for tag in user_tags %}
+      <li class="rc3 user-tag" data-id="{{ tag.id }}">
+        <a href="{{ tag.url }}">{{ tag.code }}</a>
         <a href="#" class="delete">x</a>
       </li>
     {% endfor %}

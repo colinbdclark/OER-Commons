@@ -330,12 +330,16 @@ oer.evaluation_tool.init_align = function() {
 
   var $document = $(document);
   var $form = $("#align-form");
-  var $user_tags = $form.find("ul.align-user-tags");
+  var $tags = $form.find("ul.align-tags");
 
   $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
     $.each(data.tags, function(index, tag) {
-      var $tags = $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
-      oer.align_form.init_tag_tooltip($tags.find("a:first"));
+      var $tag = $.tmpl("align-tag", tag).appendTo($tags);
+      oer.align_form.init_tag_tooltip($tag.find("a:first"));
+    });
+    $.each(data.user_tags, function(index, tag) {
+      var $tag = $.tmpl("align-user-tag", tag).appendTo($tags);
+      oer.align_form.init_tag_tooltip($tag.find("a:first"));
     });
     $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
     $form.show();

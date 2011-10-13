@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models import permalink
 from django_extensions.utils.text import truncate_letters
 
 
@@ -118,6 +119,9 @@ class AlignmentTag(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.full_code, truncate_letters(self.description,
                                                              70))
+    @permalink
+    def get_absolute_url(self):
+        return ("materials:alignment_index", [], dict(alignment=self.full_code))
 
     class Meta:
         ordering = ("standard", "grade", "category", "code",)

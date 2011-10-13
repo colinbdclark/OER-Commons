@@ -31,35 +31,23 @@
   font-size: 12px;
 }
 
-#align-tag-description dt {
-  font-weight: bold;
-}
-
-#align-tag-description dd {
-  margin: 0.2em 0 0.5em 1em;
-}
-
-#align-tag-description dd.last {
-  margin-bottom: 0;
-}
-
-#align-form .align-user-tags-ct {
+#align-form .align-tags-ct {
   margin-right: 380px;
   margin-bottom: 10px;
   padding: 3px 5px;
   border: 1px solid #ccc;
 }
 
-#align-form .align-user-tags-ct .tags-number {
+#align-form .align-tags-ct .tags-number {
   display: block;
   margin-top: 10px;
 }
 
-#align-form .align-user-tags-ct.no-tags .tags-number {
+#align-form .align-tags-ct.no-tags .tags-number {
   display: none;
 }
 
-#align-form .align-user-tags-ct .not-aligned {
+#align-form .align-tags-ct .not-aligned {
   display: none;
   color: #ccc;
   text-align: center;
@@ -67,7 +55,7 @@
   font-size: 16px;
 }
 
-#align-form .align-user-tags-ct.no-tags .not-aligned {
+#align-form .align-tags-ct.no-tags .not-aligned {
   display: block;
 }
 
@@ -84,30 +72,29 @@ body.authenticated .portlet.align-item-tags .login {
   display: none;
 }
 
-.portlet.align-item-tags ul,
-.align-user-tags {
-  margin: 10px 0;
+.align-tags {
+  margin: 0;
   padding: 0;
   list-style-type: none;
 }
 
-.align-user-tags {
-  margin: 0;
+.portlet .align-tags {
+  margin: 10px 0;
 }
 
-.portlet.align-item-tags li {
+.align-tags li {
   display: inline-block;
   margin: 3px 3px 3px 0;
   padding: 3px 5px;
   background-color: #FFE4B8;
 }
 
-.portlet.align-item-tags li a {
+.align-tags li a {
   color: #1E4E62;
+  text-decoration: none;
 }
 
-.align-user-tags li.tag,
-.portlet.align-item-tags .align-user-tags li.tag {
+.align-tags li.user-tag {
   position: relative;
   display: inline-block;
   margin: 3px 6px 3px 0;
@@ -116,18 +103,15 @@ body.authenticated .portlet.align-item-tags .login {
   background-color: #fff;
 }
 
-.align-user-tags li.tag a,
-.portlet.align-item-tags .align-user-tags li.tag a {
+.align-tags li.user-tag a {
   display: inline-block;
   margin-right: 20px;
   padding: 1px 5px 1px 3px;
   background-color: #FFE4B8;
   color: #1E4E62;
-  text-decoration: none;
 }
 
-.align-user-tags li.tag a.delete,
-.portlet.align-item-tags .align-user-tags li.tag a.delete {
+.align-tags li.user-tag a.delete {
   position: absolute;
   top: 0;
   right: 2px;
@@ -152,14 +136,16 @@ body.authenticated .portlet.align-item-tags .login {
   max-width: 300px;
 }
 
-.align-tag-tooltip .ui-tooltip-content h1 {
+.align-tag-tooltip .ui-tooltip-content h1,
+#align-tag-description h1 {
   margin-bottom: 10px;
   text-align: center;
   font-weight: bold;
   font-size: 13px;
 }
 
-.align-tag-tooltip .ui-tooltip-content p {
+.align-tag-tooltip .ui-tooltip-content p,
+#align-tag-description p {
   margin-bottom: 0;
 }
 
