@@ -4,7 +4,7 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns("curriculum.views",
     url(r"^curriculum/add/(\w+)/(\w+)/(\d+)/?$", "align", name="align"),
-    url(r"^curriculum/get-tags/(\w+)/(\w+)/(\d+)/?$", "list_user_tags", name="list_user_tags"),
+    url(r"^curriculum/get-tags/(\w+)/(\w+)/(\d+)/?$", "get_item_tags", name="get_item_tags"),
     url(r"^curriculum/delete/?$", "delete_tag", name="delete_tag"),
     url(r"^curriculum/list_standards/?$", "list_standards", name="list_standards"),
     url(r"^curriculum/list_standards/existing/?$", "list_standards", dict(existing=True), name="list_existing_standards"),

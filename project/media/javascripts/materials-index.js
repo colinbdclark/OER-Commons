@@ -220,9 +220,9 @@ oer.materials.index.init_align_form = function() {
   });
 
   var $form = $("#align-form");
-  var $user_tags = $("ul.align-user-tags");
+  var $tags = $("ul.align-tags");
 
-  oer.align_form.init_user_tags($user_tags, $form);
+  oer.align_form.init_user_tags($tags, $form);
 
   var $materials_index = $("#content div.materials-index");
   $materials_index.delegate("dl.actions a.align-item", "click", function(e) {
@@ -241,11 +241,15 @@ oer.materials.index.init_align_form = function() {
       } else {
         oer.align_form.init();
       }
-      $user_tags.empty();
+      $tags.empty();
       $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
         $.each(data.tags, function(index, tag) {
-          var $tags = $.tmpl("align-user-tags-item", tag).appendTo($user_tags);
-          oer.align_form.init_tag_tooltip($tags.find("a:first"));
+          var $tag = $.tmpl("align-tag", tag).appendTo($tags);
+          oer.align_form.init_tag_tooltip($tag.find("a:first"));
+        });
+        $.each(data.user_tags, function(index, tag) {
+          var $tag = $.tmpl("align-user-tag", tag).appendTo($tags);
+          oer.align_form.init_tag_tooltip($tag.find("a:first"));
         });
         $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
         $form.show();
