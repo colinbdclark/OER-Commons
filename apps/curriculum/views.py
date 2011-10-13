@@ -1,6 +1,9 @@
+from __future__ import absolute_import
+
 from annoying.decorators import ajax_request
 from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade, \
     LearningObjectiveCategory
+from curriculum.utils import get_item_tags as get_item_tags_helper
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
@@ -69,22 +72,12 @@ def align(request, app_label, model, object_id):
 
 @login_required
 @ajax_request
-def list_user_tags(request, app_label, model, object_id):
-
+def get_item_tags(request, app_label, model, object_id):
     content_type = get_object_or_404(ContentType, app_label=app_label,
                                      model=model)
     object_id = int(object_id)
-
-    tags = []
-    for tagged in TaggedMaterial.objects.filter(content_type=content_type,
-                                                object_id=object_id,
-                                                user=request.user).select_related():
-        tag = tagged.tag
-        tags.append(dict(id=tagged.id, code=tag.full_code,
-                         url=reverse("materials:alignment_index",
-                                     kwargs=dict(alignment=tag.full_code))))
-
-    return dict(tags=tags)
+    item = get_object_or_404(content_type.model_class(), id=object_id)
+    return get_item_tags_helper(item, request.user)
 
 
 @login_required
