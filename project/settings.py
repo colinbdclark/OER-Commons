@@ -52,6 +52,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'utils.middleware.BrowserDetectMiddleware',
     'preferences.middleware.PreferencesMiddleware',
     'depiction.middleware.ProfilerMiddleware',
     'abtesting.middleware.ABTestingMiddleware',
