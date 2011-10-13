@@ -8,7 +8,6 @@ class BrowserDetectMiddleware(object):
     def process_request(self, request):
         request.is_ie = False
         ua = request.META.get("HTTP_USER_AGENT", "")
-        print "!!!!", ua, self.IE_RE.match(ua)
         if self.IE_RE.search(ua):
             request.is_ie = True
         return None
