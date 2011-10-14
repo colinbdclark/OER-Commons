@@ -9,7 +9,6 @@ oer.align_form.TAGS_CHANGED_EVENT = "oer-align-form-tags-changed";
 $.template("align-tag", '<li class="rc3"><a href="${url}">${code}</a></li>');
 $.template("align-user-tag", '<li data-id="${id}" class="user-tag rc3"><a href="${url}">${code}</a> <a href="#" class="delete">x</a></li>');
 
-
 oer.align_form.init_tag_tooltip = function($a) {
   var $item = $("article.view-item");
   var content_type = null, object_id = null;
@@ -45,21 +44,25 @@ oer.align_form.init_tag_tooltip = function($a) {
 };
 
 oer.align_form.init_user_tags = function($tags, $form) {
-  $tags.delegate("a.delete", "click", function(e) {
-    e.preventDefault();
+  $tags.delegate("a", "click", function(e) {
     var $this = $(this);
-    var $li = $this.closest("li");
-    var id = $li.data("id");
-    $.post($form.data("delete-url"), {
-      id: id
-    }, function() {
-    });
-    var code = $this.prev('a').text();
-    var $lis = $tags.find("a:econtains(" + code + ")").parent();
-    $lis.fadeOut(250, function() {
-      $(this).detach();
-      $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
-    });
+    if ($this.hasClass("delete")) {
+      e.preventDefault();
+      var $li = $this.closest("li");
+      var id = $li.data("id");
+      $.post($form.data("delete-url"), {
+        id: id
+      }, function() {
+      });
+      var code = $this.prev('a').text();
+      var $lis = $tags.find("a:econtains(" + code + ")").parent();
+      $lis.fadeOut(250, function() {
+        $(this).detach();
+        $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
+      });
+    } else if ($tags.parents("#align-form").length) {
+      e.preventDefault();
+    }
   });
 };
 
@@ -293,7 +296,7 @@ oer.align_tags_portlet.init = function() {
     oer.login.show_popup();
   });
 
-  $document.bind(oer.login.LOGGED_IN_EVENT, function(e) {
+  $document.bind(oer.login.LOGGED_IN_EVENT, function() {
     $portlet_tags.empty();
     $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
       $.each(data.tags, function(index, tag) {
@@ -326,11 +329,24 @@ oer.align_tags_portlet.init = function() {
       } else {
         oer.align_form.init();
         $dialog.dialog("option", "title", "Align " + $item.find("h1 a").first().text());
-        $portlet_tags.children("li").each(function(i, el) {
-          var $li = $(el).clone(true);
-          $form_tags.append($li);
+
+        $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
+          $.each(data.tags, function(index, tag) {
+            var $tag = $.tmpl("align-tag", tag).appendTo($form_tags);
+            if (window.rocon !== undefined) {
+              rocon.update($tag.get(0));
+            }
+            oer.align_form.init_tag_tooltip($tag.find("a:first"));
+          });
+          $.each(data.user_tags, function(index, tag) {
+            var $tag = $.tmpl("align-user-tag", tag).appendTo($form_tags);
+            if (window.rocon !== undefined) {
+              rocon.update($tag.get(0));
+            }
+            oer.align_form.init_tag_tooltip($tag.find("a:first"));
+          });
+          $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
         });
-        $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
       }
       $dialog.dialog("open");
       $form.find("select:first").focus();
