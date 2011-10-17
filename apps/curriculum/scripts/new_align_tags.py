@@ -32,7 +32,10 @@ def run():
                     d["code"]
                 )
                 for tagged in TaggedMaterial.objects.filter(tag=tag):
-                    item = tagged.content_object
+                    try:
+                        item = tagged.content_object
+                    except AttributeError:
+                        item = None
                     if TaggedMaterial.objects.filter(tag=existing, user=tagged.user,
                                                      content_type=tagged.content_type,
                                                      object_id=tagged.object_id).exists():
