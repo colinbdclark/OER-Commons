@@ -41,7 +41,7 @@ class GradeManager(models.Manager):
 class Grade(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
-    code = models.CharField(max_length=4, unique=True, db_index=True)
+    code = models.CharField(max_length=10, unique=True, db_index=True)
 
     objects = GradeManager()
 
@@ -104,7 +104,7 @@ class AlignmentTag(models.Model):
     grade = models.ForeignKey(Grade)
     category = models.ForeignKey(LearningObjectiveCategory)
     subcategory = models.TextField(verbose_name=u"Domain")
-    code = models.CharField(max_length=4, db_index=True)
+    code = models.CharField(max_length=10, db_index=True)
 
     objects = AlignmentTagManager()
 
