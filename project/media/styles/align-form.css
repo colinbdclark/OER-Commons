@@ -195,12 +195,15 @@ body.authenticated .portlet.align-item-tags .login {
 
 .align-tag-tooltip .score td span.s3 {
   background-color: #DBD639;
+  color: #000;
 }
 
 .align-tag-tooltip .score td span.s4 {
   background-color: #FFCB66;
+  color: #000;
 }
 
 .align-tag-tooltip .score td span.s5 {
   background-color: #B5C3CA;
+  color: #000;
 }
