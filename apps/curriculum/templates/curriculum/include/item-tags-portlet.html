@@ -2,19 +2,21 @@
 <section class="portlet align-item-tags dotted">
   <h1>Curriculum Standards</h1>
   <ul class="align-tags">
-    {% for tag in tags %}
-      <li class="rc3">
-        <a href="{{ tag.url }}">{{ tag.code }}</a>
-      </li>
-    {% endfor %}
-    {% for tag in user_tags %}
-      <li class="rc3 user-tag" data-id="{{ tag.id }}">
-        <a href="{{ tag.url }}">{{ tag.code }}</a>
-        <a href="#" class="delete">x</a>
-      </li>
-    {% endfor %}
+    {% spaceless %}
+      {% for tag in tags %}
+        {% if tag.id %}
+          <li class="rc3 user-tag" data-id="{{ tag.id }}">
+            <a href="{{ tag.url }}">{{ tag.code }}</a>
+            <a href="#" class="delete">x</a>
+          </li>
+        {% else %}
+          <li class="rc3">
+            <a href="{{ tag.url }}">{{ tag.code }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    {% endspaceless %}
   </ul>
-  <ul>
   <div class="login">
     <a href="{% url users:login %}" class="dashed">Log in</a> to align this item.
   </div>

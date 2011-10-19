@@ -84,7 +84,7 @@ body.authenticated .portlet.align-item-tags .login {
 
 .align-tags li {
   display: inline-block;
-  margin: 3px 3px 3px 0;
+  margin: 3px 6px 3px 0;
   padding: 3px 5px;
   background-color: #FFE4B8;
 }
@@ -97,7 +97,6 @@ body.authenticated .portlet.align-item-tags .login {
 .align-tags li.user-tag {
   position: relative;
   display: inline-block;
-  margin: 3px 6px 3px 0;
   padding: 0;
   border: 2px solid #FFE4B8;
   background-color: #fff;
@@ -151,7 +150,7 @@ body.authenticated .portlet.align-item-tags .login {
 
 .align-tag-tooltip .score {
   margin-top: 20px;
-  margin-left: 50px;
+  margin-left: 20px;
   width: auto;
 }
 
@@ -159,7 +158,7 @@ body.authenticated .portlet.align-item-tags .login {
   vertical-align: middle;
 }
 
-.align-tag-tooltip .score td.first {
+.align-tag-tooltip .score .label {
   padding-right: 10px;
   width: 50px;
   color: #666;
@@ -181,12 +180,23 @@ body.authenticated .portlet.align-item-tags .login {
 
 .align-tag-tooltip .score td span.s3 {
   background-color: #DBD639;
+  color: #000;
 }
 
 .align-tag-tooltip .score td span.s4 {
   background-color: #FFCB66;
+  color: #000;
 }
 
 .align-tag-tooltip .score td span.s5 {
   background-color: #B5C3CA;
+  color: #000;
+}
+
+.align-tag-tooltip .score .evaluations-number {
+  padding-bottom: 2px;
+  padding-left: 10px;
+  color: #666;
+  vertical-align: bottom;
+  font-size: 12px;
 }

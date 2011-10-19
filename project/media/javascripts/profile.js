@@ -351,7 +351,7 @@ oer.profile.init_roles = function() {
           }
           $header.removeClass("loading");
           $save_btn.val($save_btn.data("label"));
-          $inputs.attr("disabled", "");
+          $inputs.attr("disabled", null);
         });
       }
     }
@@ -426,7 +426,7 @@ oer.profile.init_about = function() {
           }
           $header.removeClass("loading");
           $save_btn.val($save_btn.data("label"));
-          $inputs.attr("disabled", "");
+          $inputs.attr("disabled", null);
         });
       }
     }

@@ -10,8 +10,7 @@ register = Library()
 @register.inclusion_tag("curriculum/include/item-tags-portlet.html", takes_context=True)
 def align_item_tags_portlet(context, item):
     user = context["request"].user
-    data = get_item_tags(item, user)
-    data["item"] = item
+    data = {"tags": get_item_tags(item, user), "item": item}
     return data
 
 

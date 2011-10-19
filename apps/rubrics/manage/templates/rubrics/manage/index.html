@@ -4,24 +4,40 @@
 
   <div id="summary">
     <table><tbody><tr>
-      <td class="number">{{ week_evaluations }}</td>
-      <td class="sep">New Evaluations<br/> this Week</td>
-      <td class="number">{{ week_users }}</td>
-      <td>New Evaluators<br/> this Week</td>
+      {% if rubric %}
+        <td class="number">{{ mean_score|floatformat }}</td>
+        <td class="sep">Mean<br/> Score</td>
+        <td class="number">{{ total_evaluations }}</td>
+        <td class="sep">Total<br/> Evaluations</td>
+        <td class="number">{{ week_evaluations}}</td>
+        <td>New Evaluations<br/> this Week</td>
+      {% else %}
+        <td class="number">{{ week_evaluations }}</td>
+        <td class="sep">New Evaluations<br/> this Week</td>
+        <td class="number">{{ week_users }}</td>
+        <td>New Evaluators<br/> this Week</td>
+      {% endif %}
     </tr></tbody></table>
   </div>
 
-  <h1>Welcome, {{ request.user }}</h1>
+  {% if rubric %}
+    <h1>Rubric: {{ rubric }}</h1>
+  {% else %}
+    <h1>Welcome, {{ request.user }}</h1>
+  {% endif %}
+
+  <ul class="rubrics">
+    {% for rubric in rubrics %}
+      {% if rubric.id == rubric_id %}
+        <li class="rc3 selected">{{ rubric.name }}</li>
+      {% else %}
+        <li class="rc3"><a href="{% url rubrics_manage:rubric rubric_id=rubric.id %}">{{ rubric.name }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
 
   <div id="toolbar">
     Filter by:
-
-    <select name="rubric">
-      <option value="">- Rubric -</option>
-      {% for rubric in rubrics %}
-        <option value="{{ rubric.id }}">{{ rubric.name }}</option>
-      {% endfor %}
-    </select>
 
     <select name="grade_level">
       <option value="">- Grade Level -</option>
@@ -46,7 +62,7 @@
       <input type="search" name="search" placeholder="Search" />
     </div>
   </div>
-  <table id="grid" data-url="{% url rubrics_manage:index %}">
+  <table id="grid" data-url="{% if rubric %}{% url rubrics_manage:rubric rubric_id=rubric_id %}{% else %}{% url rubrics_manage:index %}{% endif %}">
   </table>
 {% endblock %}
 

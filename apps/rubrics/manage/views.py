@@ -46,9 +46,31 @@ class Login(FormView):
         return data
 
 
+def evaluator_name(first_name, last_name, email, username):
+    if first_name and last_name:
+        return "%s %s" % (first_name, last_name)
+    elif email:
+        return email
+    return username
+
+
+RUBRICS_SHORT_NAMES = {
+    0: u"1 Alignment",
+    1: u"2 Explanation",
+    2: u"3 Materials",
+    3: u"4 Assessments",
+    4: u"5 Interactivity",
+    5: u"6 Practice Exercises",
+    6: u"7 Deeper Learning",
+}
+
+
 class ManageRubricsMixin(object):
 
     page_title = None
+
+    def get_breadcrumbs(self):
+        return getattr(self, "breadcrumbs", [])
 
     def get_page_title(self):
         return self.page_title
@@ -68,6 +90,10 @@ class ManageRubricsMixin(object):
         #noinspection PyUnresolvedReferences
         data = super(ManageRubricsMixin, self).get_context_data(**kwargs)
         data["page_title"] = self.get_page_title()
+        breadcrumbs = self.get_breadcrumbs()
+        if breadcrumbs:
+            data["breadcrumbs"] = [dict(url=reverse("rubrics_manage:index"),
+                                        name="Manage Evaluations")] + breadcrumbs
         return data
 
 
@@ -75,6 +101,24 @@ class Index(ManageRubricsMixin, TemplateView):
 
     template_name = "rubrics/manage/index.html"
     page_title = u"Manage Evaluations"
+
+    def get_breadcrumbs(self):
+        if self.rubric_name:
+            return [dict(name="Rubric: %s" % self.rubric_name)]
+        return []
+
+    def dispatch(self, request, *args, **kwargs):
+        #noinspection PyArgumentEqualDefault
+        self.rubric_id = kwargs.pop("rubric_id", None)
+        self.rubric_name = None
+        if self.rubric_id is not None:
+            self.rubric_id = int(self.rubric_id)
+            #noinspection PySimplifyBooleanCheck
+            if self.rubric_id == 0:
+                self.rubric_name = u"Degree of Alignment"
+            else:
+                self.rubric_name = get_object_or_404(Rubric, id=self.rubric_id).name
+        return super(Index, self).dispatch(request, *args, **kwargs)
 
     #noinspection PyUnusedLocal
     @method_decorator(ajax_request)
@@ -103,10 +147,9 @@ class Index(ManageRubricsMixin, TemplateView):
         if until_date:
             qs = qs.filter(timestamp__lte=until_date)
 
-        rubric_id = request.POST.get("rubric")
-        if rubric_id:
-            rubric_id = int(rubric_id)
-            if rubric_id == 0:
+        if self.rubric_id is not None:
+            #noinspection PySimplifyBooleanCheck
+            if self.rubric_id == 0:
                 evaluations_ids = StandardAlignmentScore.objects.exclude(
                     score__value=None
                 ).values_list(
@@ -117,7 +160,7 @@ class Index(ManageRubricsMixin, TemplateView):
                 evaluations_ids = RubricScore.objects.exclude(
                     score__value=None
                 ).filter(
-                    rubric__id=rubric_id
+                    rubric__id=self.rubric_id
                 ).values_list("evaluation__id", flat=True)
 
             qs = qs.filter(id__in=evaluations_ids)
@@ -259,18 +302,21 @@ class Index(ManageRubricsMixin, TemplateView):
             "object_id",
             "hostname",
             "timestamp",
+            "user__first_name",
+            "user__last_name",
+            "user__email",
             "user__username",
             "user__id",
             "ip",
         )
 
-        for content_type_id, object_id, hostname, timestamp, username, user_id, ip in qs:
+        for content_type_id, object_id, hostname, timestamp, first_name, last_name, email, username, user_id, ip in qs:
             k = (content_type_id, object_id)
             if k in items and items[k]["last_evaluated"] is None:
                 items[k].update(dict(
                     last_evaluated=timestamp,
                     hostname=hostname,
-                    evaluator=username,
+                    evaluator=evaluator_name(first_name, last_name, email, username),
                     ip=ip,
                     manage_user_url=reverse("rubrics_manage:user",
                         kwargs=dict(user_id=user_id)
@@ -316,26 +362,52 @@ class Index(ManageRubricsMixin, TemplateView):
                 week_start_date = week[0]
                 break
 
-        week_evaluations = Evaluation.objects.filter(
-            confirmed=True,
-            timestamp__gte=week_start_date,
-        )
-        data["week_evaluations"] = week_evaluations.count()
-
-        week_users = set(week_evaluations.values_list("user__id", flat=True).distinct())
-        old_users = set(
-            Evaluation.objects.filter(
+        if self.rubric_id is None:
+            week_evaluations = Evaluation.objects.filter(
                 confirmed=True,
-                timestamp__lt=week_start_date,
-            ).values_list("user__id", flat=True).distinct())
+                timestamp__gte=week_start_date,
+            )
+            data["week_evaluations"] = week_evaluations.count()
 
-        data["week_users"] = len(week_users - old_users)
+            week_users = set(week_evaluations.values_list("user__id", flat=True).distinct())
+            old_users = set(
+                Evaluation.objects.filter(
+                    confirmed=True,
+                    timestamp__lt=week_start_date,
+                ).values_list("user__id", flat=True).distinct())
+            data["week_users"] = len(week_users - old_users)
+        else:
+            #noinspection PySimplifyBooleanCheck
+            if self.rubric_id == 0:
+                scores = StandardAlignmentScore.objects.exclude(
+                    score__value=None
+                )
+            else:
+                scores = RubricScore.objects.filter(
+                    rubric__id=self.rubric_id
+                ).exclude(score__value=None)
+
+            data["mean_score"] = scores.aggregate(
+                models.Avg("score__value")
+            )["score__value__avg"]
+
+            evaluations = Evaluation.objects.filter(
+                confirmed=True,
+                id__in=scores.values_list("evaluation__id", flat=True)
+            )
+            data["total_evaluations"] = evaluations.count()
+            data["week_evaluations"] = evaluations.filter(
+                timestamp__gte=week_start_date
+            ).count()
 
         data["grade_levels"] = GradeLevel.objects.values("id", "name")
         data["general_subjects"] = GeneralSubject.objects.values("id", "name")
-        data["rubrics"] = [dict(id=0, name=u"Degree of Alignment")] + list(
-            Rubric.objects.values("id", "name")
+        data["rubrics"] = [dict(id=0, name=RUBRICS_SHORT_NAMES[0])] + map(
+            lambda id: dict(id=id, name=RUBRICS_SHORT_NAMES[id]),
+            Rubric.objects.values_list("id", flat=True)
         )
+        data["rubric_id"] = self.rubric_id
+        data["rubric"] = self.rubric_name
 
         return data
 
@@ -343,6 +415,7 @@ class Index(ManageRubricsMixin, TemplateView):
 class ResourceEvaluations(ManageRubricsMixin, TemplateView):
 
     template_name = "rubrics/manage/resource.html"
+    breadcrumbs = [dict(name="Resource Evaluations")]
 
     def dispatch(self, request, *args, **kwargs):
         self.content_type = get_object_or_404(ContentType,
@@ -402,10 +475,23 @@ class ResourceEvaluations(ManageRubricsMixin, TemplateView):
             confirmed=True,
             content_type=self.content_type,
             object_id=self.object.id,
-        ).values("id", "hostname", "timestamp", "user__id",
-                 "user__username", "ip"):
+        ).values("id",
+                 "hostname",
+                 "timestamp",
+                 "user__id",
+                 "user__first_name",
+                 "user__last_name",
+                 "user__email",
+                 "user__username",
+                 "ip"):
             id = row["id"]
             user_id = row.pop("user__id")
+            row["evaluator"] = evaluator_name(
+                row.pop("user__first_name"),
+                row.pop("user__last_name"),
+                row.pop("user__email"),
+                row.pop("user__username"),
+            )
             items[id] = row
             for i in xrange(1,8):
                 items[id]["r%i" % i] = None
@@ -487,6 +573,7 @@ class ResourceEvaluations(ManageRubricsMixin, TemplateView):
 class UserEvaluations(ManageRubricsMixin, TemplateView):
 
     template_name = "rubrics/manage/user.html"
+    breadcrumbs = [dict(name="Evaluations by User")]
 
     def dispatch(self, request, *args, **kwargs):
         self.user = get_object_or_404(User, id=int(kwargs["user_id"]))
@@ -599,6 +686,8 @@ class UserEvaluations(ManageRubricsMixin, TemplateView):
                             map(lambda i: data["r%i" % i], xrange(1, 8)))
             if scores:
                 data["average"] = sum(scores) / float(len(scores))
+            else:
+                data["average"] = None
 
 
         items = items.values()
@@ -647,6 +736,7 @@ class UserEvaluations(ManageRubricsMixin, TemplateView):
 
 class DeleteEvaluation(ManageRubricsMixin, View):
 
+    #noinspection PyUnusedLocal
     @method_decorator(ajax_request)
     def post(self, request, *args, **kwargs):
 
@@ -671,6 +761,7 @@ class DeleteEvaluation(ManageRubricsMixin, View):
 
 class EditEvaluation(ManageRubricsMixin, View):
 
+    #noinspection PyUnusedLocal
     @method_decorator(ajax_request)
     def post(self, request, *args, **kwargs):
 
@@ -687,6 +778,7 @@ class EditEvaluation(ManageRubricsMixin, View):
 
         data = []
         for rubric in Rubric.objects.all():
+            #noinspection PyTypeChecker
             k = "r%i" % (rubric.id + 1)
 
             if k in request.POST:

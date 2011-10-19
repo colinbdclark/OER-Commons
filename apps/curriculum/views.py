@@ -77,7 +77,7 @@ def get_item_tags(request, app_label, model, object_id):
                                      model=model)
     object_id = int(object_id)
     item = get_object_or_404(content_type.model_class(), id=object_id)
-    return get_item_tags_helper(item, request.user)
+    return dict(tags=get_item_tags_helper(item, request.user))
 
 
 @login_required
@@ -217,7 +217,6 @@ class TagDescription(TemplateView):
         except AlignmentTag.DoesNotExist:
             raise Http404()
 
-
         data = dict(tag=tag)
 
         if content_type_id and object_id:
@@ -227,7 +226,8 @@ class TagDescription(TemplateView):
                 evaluation__object_id=int(object_id),
             )
             data["score_value"] = None
-            if scores.exists():
+            data["evaluations_number"] = scores.count()
+            if data["evaluations_number"]:
                 value = scores.aggregate(value=Avg("score__value"))["value"]
                 if value is None:
                     data["score_verbose"] = u"Not Applicable"
