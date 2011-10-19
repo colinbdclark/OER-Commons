@@ -84,7 +84,7 @@ body.authenticated .portlet.align-item-tags .login {
 
 .align-tags li {
   display: inline-block;
-  margin: 3px 3px 3px 0;
+  margin: 3px 6px 3px 0;
   padding: 3px 5px;
   background-color: #FFE4B8;
 }
@@ -97,7 +97,6 @@ body.authenticated .portlet.align-item-tags .login {
 .align-tags li.user-tag {
   position: relative;
   display: inline-block;
-  margin: 3px 6px 3px 0;
   padding: 0;
   border: 2px solid #FFE4B8;
   background-color: #fff;
