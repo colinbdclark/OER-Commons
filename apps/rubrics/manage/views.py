@@ -686,6 +686,8 @@ class UserEvaluations(ManageRubricsMixin, TemplateView):
                             map(lambda i: data["r%i" % i], xrange(1, 8)))
             if scores:
                 data["average"] = sum(scores) / float(len(scores))
+            else:
+                data["average"] = None
 
 
         items = items.values()
