@@ -300,14 +300,8 @@ oer.align_tags_portlet.init = function() {
     $portlet_tags.empty();
     $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
       $.each(data.tags, function(index, tag) {
-        var $tag = $.tmpl("align-tag", tag).appendTo($portlet_tags);
-        if (window.rocon !== undefined) {
-          rocon.update($tag.get(0));
-        }
-        oer.align_form.init_tag_tooltip($tag.find("a:first"));
-      });
-      $.each(data.user_tags, function(index, tag) {
-        var $tag = $.tmpl("align-user-tag", tag).appendTo($portlet_tags);
+        var template = "id" in tag ? "align-user-tag" : "align-tag";
+        var $tag = $.tmpl(template, tag).appendTo($portlet_tags);
         if (window.rocon !== undefined) {
           rocon.update($tag.get(0));
         }
@@ -332,14 +326,8 @@ oer.align_tags_portlet.init = function() {
 
         $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
           $.each(data.tags, function(index, tag) {
-            var $tag = $.tmpl("align-tag", tag).appendTo($form_tags);
-            if (window.rocon !== undefined) {
-              rocon.update($tag.get(0));
-            }
-            oer.align_form.init_tag_tooltip($tag.find("a:first"));
-          });
-          $.each(data.user_tags, function(index, tag) {
-            var $tag = $.tmpl("align-user-tag", tag).appendTo($form_tags);
+            var template = "id" in tag ? "align-user-tag" : "align-tag";
+            var $tag = $.tmpl(template, tag).appendTo($form_tags);
             if (window.rocon !== undefined) {
               rocon.update($tag.get(0));
             }
