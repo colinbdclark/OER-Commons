@@ -287,7 +287,6 @@ class TagDescription(TemplateView):
         except AlignmentTag.DoesNotExist:
             raise Http404()
 
-
         data = dict(tag=tag)
 
         if content_type_id and object_id:
