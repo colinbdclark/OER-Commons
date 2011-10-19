@@ -77,7 +77,7 @@ def get_item_tags(request, app_label, model, object_id):
                                      model=model)
     object_id = int(object_id)
     item = get_object_or_404(content_type.model_class(), id=object_id)
-    return get_item_tags_helper(item, request.user)
+    return dict(tags=get_item_tags_helper(item, request.user))
 
 
 @login_required
