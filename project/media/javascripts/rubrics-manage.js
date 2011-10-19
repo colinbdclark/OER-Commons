@@ -37,7 +37,6 @@ oer.rubrics_manage.init_index = function() {
   });
 
   var $search = $("input[name='search']");
-  var $rubric = $("select[name='rubric']");
   var $grade_level = $("select[name='grade_level']");
   var $general_subject = $("select[name='general_subject']");
 
@@ -57,11 +56,6 @@ oer.rubrics_manage.init_index = function() {
     var until_date = $.trim($until_date.val());
     if (until_date !== "") {
       params.until_date = until_date;
-    }
-
-    var rubric = $rubric.val();
-    if (rubric !== "") {
-      params.rubric = rubric;
     }
 
     var grade_level = $grade_level.val();
@@ -87,7 +81,6 @@ oer.rubrics_manage.init_index = function() {
     onSelect: reload_grid
   });
 
-  $rubric.change(reload_grid);
   $grade_level.change(reload_grid);
   $general_subject.change(reload_grid);
 
@@ -173,7 +166,7 @@ oer.rubrics_manage.init_resource = function() {
       [
         {field: "hostname", title: "Host", width: 70, sortable: true},
         {field: "timestamp", title: "Evaluation Date", width: 70, sortable: true},
-        {field: "user__username", title: "Evaluator", width: 70, sortable: true, formatter: oer.rubrics_manage.link_formatter("manage_user_url")},
+        {field: "evaluator", title: "Evaluator", width: 70, sortable: true, formatter: oer.rubrics_manage.link_formatter("manage_user_url")},
         {field: "ip", title: "IP Address", width: 50, sortable: true},
         {field: "r1", title: "R1", width: 10, sortable: true, align: "center"},
         {field: "r2", title: "R2", width: 10, sortable: true, align: "center", editor: oer.rubrics_manage.grid_score_editor},

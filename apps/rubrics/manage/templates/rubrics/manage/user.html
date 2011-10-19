@@ -15,7 +15,23 @@
     </tbody></table>
   </div>
 
-  <h1>User: {{ evaluator }}</h1>
+  <h1>User:
+    {% if evaluator.first_name and evaluator.last_name %}{{ evaluator.first_name }} {{ evaluator.last_name }}{% else %}{{ evaluator.username }}{% endif %}{% if evaluator.email %}, {{ evaluator.email }}{% endif %}
+  </h1>
+
+  {% with evaluator.get_profile as profile %}
+    {% if profile.country %}
+      <div class="details">
+        Location: {% if profile.us_state %}{{ profile.us_state }}, {% endif %}{{ profile.country }}
+      </div>
+    {% endif %}
+    {% if profile.roles.all.exists %}
+      <div class="details">
+        Role: {% for role in profile.roles.all %}{{ role }}{% if not forloop.last %}, {% endif %}{% endfor %}
+
+      </div>
+    {% endif %}
+  {% endwith %}
 
   <table id="grid" data-url="{% url rubrics_manage:user user_id=evaluator.id %}"
          data-delete-url="{% url rubrics_manage:delete %}"
