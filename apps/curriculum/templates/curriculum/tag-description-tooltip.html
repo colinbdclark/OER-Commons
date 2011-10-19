@@ -1,3 +1,4 @@
+{% load i18n %}
 <h1>{{ tag.standard }}<br/> {{ tag.grade }}, {{ tag.category}}</h1>
 
 <p><strong>Domain:</strong> {{ tag.subcategory }}</p>
@@ -5,7 +6,8 @@
 
 {% if score_verbose %}
   <table class="score"><tbody><tr>
-    <td class="first">Degree of<br> Alignment:</td>
+    <td class="label">Degree of<br> Alignment:</td>
     <td><span class="rc5 s{{ score_class }}">{{ score_value|floatformat }} {{ score_verbose }}</span></td>
+    <td class="evaluations-number">({% blocktrans count counter=evaluations_number %}{{ evaluations_number }} user{% plural %}{{ evaluations_number }} users{% endblocktrans %})</td>
   </tr></tbody></table>
 {% endif %}

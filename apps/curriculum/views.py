@@ -217,7 +217,6 @@ class TagDescription(TemplateView):
         except AlignmentTag.DoesNotExist:
             raise Http404()
 
-
         data = dict(tag=tag)
 
         if content_type_id and object_id:
@@ -227,7 +226,8 @@ class TagDescription(TemplateView):
                 evaluation__object_id=int(object_id),
             )
             data["score_value"] = None
-            if scores.exists():
+            data["evaluations_number"] = scores.count()
+            if data["evaluations_number"]:
                 value = scores.aggregate(value=Avg("score__value"))["value"]
                 if value is None:
                     data["score_verbose"] = u"Not Applicable"
