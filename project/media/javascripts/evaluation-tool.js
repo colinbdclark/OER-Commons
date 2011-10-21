@@ -7,6 +7,61 @@ oer.evaluation_tool.init_rubrics = function() {
   var $sections = $rubrics.children("section");
   var $tags_ct = $rubrics.find("div.tags");
 
+  // Comment button
+  var $comment_btn = $("a.comment");
+  var $comment_form = $("#comment-form");
+  var $comment_popup = $("<div/>").qtip({
+    content: $comment_form,
+    style: {
+      classes: "comment-popup ui-tooltip-rounded ui-tooltip-shadow"
+    },
+    position: {
+      my: "top left",
+      at: "bottom center",
+      target: "event",
+      effect: false
+    },
+    show: {
+      target: $comment_btn,
+      event: "click"
+    },
+    hide: {
+      target: $comment_btn,
+      event: "click"
+    },
+    events: {
+      show: function(event) {
+        var $target = $(event.originalEvent.target);
+        $comment_form.find("textarea").val($target.data("comment"));
+        $comment_form.data("target", $target);
+      }
+    }
+  });
+
+  function hide_comment_popup() {
+    $comment_popup.qtip("api").hide();
+  }
+
+  $comment_form.find("a.clear").click(function(e) {
+    e.preventDefault();
+    $comment_form.find("textarea").val("");
+    $comment_form.data("target").removeClass("checked").data("comment", "");
+    hide_comment_popup();
+  });
+
+  $comment_form.find("a.save").click(function(e) {
+    e.preventDefault();
+    var text = $.trim($comment_form.find("textarea").val());
+    var $target = $comment_form.data("target");
+    $target.data("comment", text);
+    if (text === "") {
+      $target.removeClass("checked");
+    } else {
+      $target.addClass("checked");
+    }
+    hide_comment_popup();
+  });
+
   function save_score($section, callback) {
     var $spinner = $section.find(".footer .spinner");
     $section.ajaxStart(function() {
@@ -32,10 +87,16 @@ oer.evaluation_tool.init_rubrics = function() {
       var score_id = $score.data("score-id");
       if ($scores.data("tag-id") !== undefined) {
         var tag_id = $scores.data("tag-id");
-        $.post(evaluate_url, {score_id: score_id, tag_id: tag_id});
+        $.post(evaluate_url, {
+          score_id: score_id, tag_id: tag_id,
+          comment: $section.find("div.footer[data-tag-id='" + tag_id + "'] a.comment").data("comment")
+        });
       } else if ($scores.data("rubric-id") !== undefined) {
         var rubric_id = $scores.data("rubric-id");
-        $.post(evaluate_url, {score_id: score_id, rubric_id: rubric_id});
+        $.post(evaluate_url, {
+          score_id: score_id, rubric_id: rubric_id,
+          comment: $section.find("div.footer a.comment").data("comment")
+        });
       }
     });
     if (scored) {
@@ -88,6 +149,7 @@ oer.evaluation_tool.init_rubrics = function() {
   }
 
   function open_section($section) {
+    hide_comment_popup();
     var $current_section = $sections.filter(".expanded");
     if (!$current_section.hasClass("intro") && !$current_section.hasClass("scored")) {
       $current_section.addClass("not-scored");
@@ -110,8 +172,10 @@ oer.evaluation_tool.init_rubrics = function() {
     if ($tag.hasClass("selected")) {
       return;
     }
-    $tags_ct.children(".selected").removeClass("selected");
 
+    hide_comment_popup();
+
+    $tags_ct.children(".selected").removeClass("selected");
     var tag_id = $tag.data("tag-id");
     $tags_ct.find("div.tag-description[data-tag-id='" + tag_id + "']").addClass("selected");
     $tags_ct.find("div.scores[data-tag-id='" + tag_id + "']").addClass("selected");
@@ -250,6 +314,7 @@ oer.evaluation_tool.init_rubrics = function() {
       open_section($section);
     }
   }
+
 };
 
 oer.evaluation_tool.open_tool = function(url) {
@@ -329,6 +394,20 @@ oer.evaluation_tool.init_align = function() {
 };
 
 oer.evaluation_tool.init_results = function() {
+  $("span.comment").qtip({
+    content: {
+      text: function() {
+        return $(this).data("comment");
+      }
+    },
+    style: {
+      classes: "comment-popup ui-tooltip-rounded ui-tooltip-shadow"
+    },
+    position: {
+      my: "top center",
+      at: "bottom center",
+      effect: false
+    }});
   $("a.finalize").click(function(e) {
     e.preventDefault();
     $("#finalize-form").submit();

@@ -7,6 +7,7 @@
 {% load curriculum_tags %}
 {% load thumbnail %}
 {% load curriculum_tags %}
+{% load utils %}
 {% load i18n %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
@@ -224,38 +225,31 @@
        class="button-blue-big rc5">Go to OER Item</a>
   </div>
 
-  <div class="reviews">
-    {% with item.reviews.all as reviews %}
-      {% if reviews %}
-      <dl>
-        <dt>Reviews</dt>
-        {% for review in reviews %}
-          <dd itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
-            <span itemprop="reviewBody">{{ review.text|linebreaksbr }}</span>
-            {% with review.user as author %}
-            <span class="by">- <span itemprop="author">{{ author.first_name }} {{ author.last_name }}</span></span>
-            {% endwith %}
-          </dd>
-        {% endfor %}
-      </dl>
-      <div class="align-right">
-        <a href="{{ add_review_url }}" class="button-blue-big rc5 require-login with-next-url">Write a Review</a>
-      </div>
-      {% endif %}
-    {% endwith %}
-    {% for rating in item.ratings.all %}
-      <span itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
-        <span itemprop="reviewRating" itemscope="itemscope" itemtype="http://schema.org/Rating">
-           <meta itemprop="ratingValue" content="{{ rating.value }}" />
-           <meta itemprop="bestRating" content="5" />
-        </span>
-      </span>
-    {% endfor %}
-
-  </div>
-
-
 </article>
+
+{% if comments %}
+  <section class="comments">
+    <h1>Comments:</h1>
+    {% for comment in comments %}
+      <article itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
+        {% if comment.title %}<h1>{{ comment.title }}</h1>{% endif %}
+        <p itemprop="reviewBody">{{ comment.text|linebreaksbr }}</p>
+        <footer>
+          <span class="by" itemprop="author">- {{ comment.author|username }}</span>
+        </footer>
+      </article>
+    {% endfor %}
+  </section>
+{% endif %}
+
+{% for rating in item.ratings.all %}
+  <span itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
+    <span itemprop="reviewRating" itemscope="itemscope" itemtype="http://schema.org/Rating">
+       <meta itemprop="ratingValue" content="{{ rating.value }}" />
+       <meta itemprop="bestRating" content="5" />
+    </span>
+  </span>
+{% endfor %}
 
 {% include "include/cou-tooltips.html" %}
 

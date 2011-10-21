@@ -36,3 +36,7 @@
 .rocon {
   text-align: left;
 }
+
+.evaluation-results .comment {
+  top: -2px;
+}
