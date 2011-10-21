@@ -314,11 +314,9 @@ oer.evaluation_tool.init_align = function() {
 
   $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
     $.each(data.tags, function(index, tag) {
-      var $tag = $.tmpl("align-tag", tag).appendTo($tags);
-      oer.align_form.init_tag_tooltip($tag.find("a:first"));
-    });
-    $.each(data.user_tags, function(index, tag) {
-      var $tag = $.tmpl("align-user-tag", tag).appendTo($tags);
+      var template = "id" in tag ? "align-user-tag" : "align-tag";
+      var $tag = $.tmpl(template, tag).appendTo($tags);
+      rcorners($tag);
       oer.align_form.init_tag_tooltip($tag.find("a:first"));
     });
     $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
