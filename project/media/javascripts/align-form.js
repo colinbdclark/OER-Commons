@@ -156,11 +156,7 @@ oer.align_form.init = function() {
     }, function(data) {
       if (data.status === "success") {
         var $tag = $.tmpl("align-user-tag", data.tag).appendTo($tags);
-        if (window.rocon !== undefined) {
-          $tag.each(function(e, el) {
-            rocon.update(el);
-          });
-        }
+        rcorners($tag);
         oer.align_form.init_tag_tooltip($tag.find("a:first"));
         $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
         $("#id_curriculum_tag").effect("transfer", {
@@ -301,16 +297,12 @@ oer.align_tags_portlet.init = function() {
     $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
       $.each(data.tags, function(index, tag) {
         var $tag = $.tmpl("align-tag", tag).appendTo($portlet_tags);
-        if (window.rocon !== undefined) {
-          rocon.update($tag.get(0));
-        }
+        rcorners($tag);
         oer.align_form.init_tag_tooltip($tag.find("a:first"));
       });
       $.each(data.user_tags, function(index, tag) {
         var $tag = $.tmpl("align-user-tag", tag).appendTo($portlet_tags);
-        if (window.rocon !== undefined) {
-          rocon.update($tag.get(0));
-        }
+        rcorners($tag);
         oer.align_form.init_tag_tooltip($tag.find("a:first"));
       });
     });
@@ -333,16 +325,12 @@ oer.align_tags_portlet.init = function() {
         $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
           $.each(data.tags, function(index, tag) {
             var $tag = $.tmpl("align-tag", tag).appendTo($form_tags);
-            if (window.rocon !== undefined) {
-              rocon.update($tag.get(0));
-            }
+            rcorners($tag);
             oer.align_form.init_tag_tooltip($tag.find("a:first"));
           });
           $.each(data.user_tags, function(index, tag) {
             var $tag = $.tmpl("align-user-tag", tag).appendTo($form_tags);
-            if (window.rocon !== undefined) {
-              rocon.update($tag.get(0));
-            }
+            rcorners($tag);
             oer.align_form.init_tag_tooltip($tag.find("a:first"));
           });
           $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);

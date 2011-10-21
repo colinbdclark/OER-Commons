@@ -34,9 +34,7 @@ oer.tags_form.init = function() {
       $input.removeClass("loading");
       $.each(response.tags, function(i, tag) {
         var $tag = $.tmpl("user-tags-item", tag).appendTo($user_tags);
-        if (window.rocon !== undefined) {
-          rocon.update($tag.get(0));
-        }
+        rcorners($tag);
       });
       $input.val("");
     });
@@ -81,9 +79,7 @@ oer.tags_portlet.init = function() {
       $.each(user_tags, function(index, tag) {
         $item_tags.filter(":econtains(" + tag.name + ")").fadeOut(300);
         var $tag = $.tmpl("user-tags-item", tag).appendTo($user_tags);
-        if (window.rocon !== undefined) {
-          rocon.update($tag.get(0));
-        }
+        rcorners($tag);
       });
       $user_tags.fadeIn(300);
     });

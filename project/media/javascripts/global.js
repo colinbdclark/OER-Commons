@@ -38,3 +38,13 @@ TOPLEFTSIDE_TOOLTIP_OPTIONS = $.extend(true, {}, DEFAULT_TOOLTIP_OPTIONS, {
     at: "left top"
   }
 });
+
+function rcorners($els) {
+  // Apply rocon if it's installed. This actually happens only if we use IE.
+  // All other browser use CSS for rounded corners.
+  if (window.rocon) {
+    $els.each(function(i, el) {
+      window.rocon.update(el);
+    });
+  }
+}
