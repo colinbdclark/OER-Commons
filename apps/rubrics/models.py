@@ -16,6 +16,21 @@ SCORES = (
 )
 
 
+def get_verbose_score_name(value):
+    if value == 3:
+        return u"Superior"
+    elif value == 2:
+        return u"Strong"
+    elif value == 1:
+        return u"Limited"
+    elif value == 0:
+        return u"Very Weak"
+    elif value is None:
+        return u"Not Applicable"
+    else:
+        raise ValueError(u"Invalid value.")
+
+
 class Evaluation(models.Model):
 
     user = models.ForeignKey(User)
@@ -82,6 +97,7 @@ class RubricScoreValue(ScoreValue):
 class Score(models.Model):
 
     evaluation = models.ForeignKey(Evaluation)
+    comment = models.TextField(default=u"", blank=True)
 
     class Meta:
         abstract = True

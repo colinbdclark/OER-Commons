@@ -110,9 +110,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
             if score:
                 tag.score_value = score.score
                 tag.scored = True
+                tag.comment = score.comment
             else:
                 tag.score_value = None
                 tag.scored = False
+                tag.comment = u""
             data["alignment_tags"].append(tag)
 
         data["alignment_scored"] = data["alignment_tags"] and all(map(lambda x: x.score_value, data["alignment_tags"]))
@@ -127,9 +129,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
             if score:
                 rubric.score_value = score.score
                 rubric.scored = True
+                rubric.comment = score.comment
             else:
                 rubric.score_value = None
                 rubric.scored = False
+                rubric.comment = u""
             data["rubrics"].append(rubric)
 
         data["alignment_score_values"] = StandardAlignmentScoreValue.objects.all()
@@ -160,6 +164,7 @@ class Rubrics(EvaluateViewMixin, TemplateView):
 
         tag_id = request.POST.get("tag_id")
         rubric_id = request.POST.get("rubric_id")
+        comment = request.POST.get("comment", u"").strip()
         if tag_id:
             try:
                 tag_id = int(tag_id)
@@ -184,10 +189,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                 score, created = StandardAlignmentScore.objects.get_or_create(
                     evaluation=evaluation,
                     alignment_tag=tag,
-                    defaults=dict(score=score_value)
+                    defaults=dict(score=score_value, comment=comment)
                 )
                 if not created:
                     score.score = score_value
+                    score.comment = comment
                     score.save()
 
         elif rubric_id:
@@ -213,10 +219,11 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                 score, created = RubricScore.objects.get_or_create(
                     evaluation=evaluation,
                     rubric=rubric,
-                    defaults=dict(score=score_value)
+                    defaults=dict(score=score_value, comment=comment)
                 )
                 if not created:
                     score.score = score_value
+                    score.comment = comment
                     score.save()
 
         evaluation.confirmed = False
@@ -279,6 +286,7 @@ class Results(EvaluateViewMixin, TemplateView):
                 average_score_class = int(average_score)
 
             user_score_value = None
+            comment = None
 
             try:
                 user_tag_score = tag_scores.get(
@@ -289,6 +297,7 @@ class Results(EvaluateViewMixin, TemplateView):
                     user_score_class = None
                 else:
                     user_score_class = int(user_score_value)
+                comment = user_tag_score.comment
             except StandardAlignmentScore.DoesNotExist:
                 user_score_class = "nr"
 
@@ -299,6 +308,7 @@ class Results(EvaluateViewMixin, TemplateView):
                 user_score_class=user_score_class,
                 average_score=average_score,
                 average_score_class=average_score_class,
+                comment=comment,
             ))
 
         rubrics = Rubric.objects.all()
@@ -313,9 +323,12 @@ class Results(EvaluateViewMixin, TemplateView):
             if not user_score.exists():
                 user_score = None
                 user_score_class = "nr"
+                comment = None
             else:
-                user_score = user_score.values_list("score__value",
-                                                    flat=True)[0]
+                user_score, comment = user_score.values_list(
+                    "score__value",
+                    "comment"
+                )[0]
                 user_score_class = user_score
 
             average_score = scores.aggregate(
@@ -335,6 +348,7 @@ class Results(EvaluateViewMixin, TemplateView):
                 user_score_class=user_score_class,
                 average_score=average_score,
                 average_score_class=average_score_class,
+                comment=comment,
             ))
 
         not_scored_section = None
