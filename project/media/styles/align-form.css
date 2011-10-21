@@ -171,7 +171,7 @@ body.authenticated .portlet.align-item-tags .login {
   color: #fff;
 }
 
-.align-tag-tooltip .score td span.s1 {
+.align-tag-tooltip .score td span.s3 {
   background-color: #679701;
 }
 
@@ -179,17 +179,18 @@ body.authenticated .portlet.align-item-tags .login {
   background-color: #8CC63F;
 }
 
-.align-tag-tooltip .score td span.s3 {
+.align-tag-tooltip .score td span.s1 {
   background-color: #DBD639;
   color: #000;
 }
 
-.align-tag-tooltip .score td span.s4 {
+.align-tag-tooltip .score td span.s0 {
   background-color: #FFCB66;
   color: #000;
 }
 
-.align-tag-tooltip .score td span.s5 {
+.align-tag-tooltip .score td span.sna,
+.align-tag-tooltip .score td span.snr {
   background-color: #B5C3CA;
   color: #000;
 }

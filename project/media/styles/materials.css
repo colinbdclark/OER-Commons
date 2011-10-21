@@ -404,25 +404,34 @@
   clear: left;
 }
 
-.view-item .reviews {
-  margin-top: 20px;
+.view-item .comments {
+  margin-top: 2em;
 }
 
-.view-item .reviews dt {
-  color: #616161;
+.view-item .comments h1 {
+  color: #1F4D64;
   font-weight: bold;
+  font-size: 18px;
 }
 
-.view-item .reviews dd {
-  margin: 10px 20px;
+.view-item .comments article {
+  margin-bottom: 2em;
+}
+
+.view-item .comments article h1 {
+  margin-bottom: 0.5em;
+  color: #333;
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.view-item .comments p {
+  margin: 0.5em 3em;
   font-style: italic;
 }
 
-.view-item .reviews .by {
-  display: block;
-  text-align: right;
-  font-weight: bold;
-  font-style: normal;
+.view-item .comments footer {
+  padding-left: 400px;
 }
 
 .portlet.save a {

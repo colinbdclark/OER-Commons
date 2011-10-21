@@ -76,6 +76,7 @@
 
           {% for tag in alignment_tags %}
             <div class="footer{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}">
+              <a href="#" class="comment rc5{% if tag.comment %} checked{% endif %}" data-comment="{{ tag.comment }}">Comment</a>
               <a href="#" class="dashed clear">Clear rating</a>
               <span class="spinner"></span>
               {% if not forloop.first %}
@@ -117,6 +118,7 @@
             {% endfor %}
           </div>
           <div class="footer">
+            <a href="#" class="comment rc5{% if rubric.comment %} checked{% endif %}" data-comment="{{ rubric.comment }}">Comment</a>
             <a href="#" class="dashed clear">Clear rating</a>
             <span class="spinner"></span>
             {% if forloop.last %}
@@ -128,6 +130,13 @@
         </div>
       </section>
     {% endfor %}
+    <div id="comment-form">
+      <textarea name="comment"></textarea>
+      <footer>
+        <a href="#" class="clear dashed">Clear comment</a>
+        <a href="#" class="save rc5">Save</a>
+      </footer>
+    </div>
   </div>
   <footer class="global">
     <a href="http://www.achieve.org/files/AchieveOERRubrics.pdf" target="_blank">OER Rubrics (PDF Version)</a>

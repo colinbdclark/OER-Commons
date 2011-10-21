@@ -11,7 +11,8 @@ from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
 from reviews.views import ReviewForm
-from rubrics.models import Rubric, StandardAlignmentScore, RubricScore
+from rubrics.models import Rubric, StandardAlignmentScore, RubricScore, \
+    get_verbose_score_name
 from saveditems.models import SavedItem
 from visitcounts.models import Visit
 import urllib
@@ -297,15 +298,25 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 score_class = None
             else:
                 score_class = int(score)
+        standard_scores = StandardAlignmentScore.objects.filter(
+            evaluation__confirmed=True,
+            evaluation__content_type=self.content_type,
+            evaluation__object_id=self.item.id,
+        )
         data["evaluation_scores"].append(dict(
             name=name,
             score=score,
             score_class=score_class,
-            evaluations_number=StandardAlignmentScore.objects.filter(
-                evaluation__content_type=self.content_type,
-                evaluation__object_id=self.item.id,
-            ).exclude(score__value=None).values("evaluation").distinct().count()
+            evaluations_number=standard_scores.exclude(
+                score__value=None
+            ).values("evaluation").distinct().count()
         ))
+
+        rubric_scores = RubricScore.objects.filter(
+            evaluation__confirmed=True,
+            evaluation__content_type=self.content_type,
+            evaluation__object_id=self.item.id,
+        )
 
         for rubric_id, name in Rubric.objects.values_list("id", "name"):
             #noinspection PySimplifyBooleanCheck
@@ -321,15 +332,50 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 name=name,
                 score=score,
                 score_class=score_class,
-                evaluations_number=RubricScore.objects.filter(
-                    rubric__id=rubric_id,
-                    evaluation__content_type=self.content_type,
-                    evaluation__object_id=self.item.id,
-                ).exclude(score__value=None).values("evaluation").distinct().count()
+                evaluations_number=rubric_scores.filter(
+                    rubric__id=rubric_id
+                ).exclude(score__value=None).values(
+                    "evaluation"
+                ).distinct().count()
             ))
 
         data["toolbar_view_url"] = reverse("materials:%s:toolbar_view_item" % item.namespace,
                                        kwargs=dict(slug=item.slug))
+
+
+        comments = []
+
+        for qs in (standard_scores, rubric_scores):
+            for score in qs.exclude(comment="").select_related():
+                comment = dict(
+                    text=score.comment,
+                    timestamp=score.evaluation.timestamp,
+                    author=score.evaluation.user,
+                )
+
+                if isinstance(score, StandardAlignmentScore):
+                    title = u"Degree of Alignment to %s" % score.alignment_tag.full_code
+                else:
+                    title = score.rubric.name
+
+                comment["title"] = u"%s %s (%s)" % (
+                    title,
+                    get_verbose_score_name(score.score.value),
+                    score.score.get_value_display(),
+                )
+
+                comments.append(comment)
+
+        for review in item.reviews.all():
+            comments.append(dict(
+                title=u"",
+                text=review.text,
+                timestamp=review.timestamp,
+                author=review.user,
+            ))
+
+        comments.sort(key=lambda x: x["timestamp"])
+        data["comments"] = comments
 
         return data
 

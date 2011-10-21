@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from django.views.generic.simple import direct_to_template
 from haystack_scheduled.indexes import Indexed
-from rubrics.models import StandardAlignmentScore
+from rubrics.models import StandardAlignmentScore, get_verbose_score_name
 from utils.decorators import login_required
 
 
@@ -226,28 +226,19 @@ class TagDescription(TemplateView):
                 evaluation__content_type__id=int(content_type_id),
                 evaluation__object_id=int(object_id),
             )
-            data["score_value"] = None
             if scores.exists():
                 value = scores.aggregate(value=Avg("score__value"))["value"]
+                data["score_value"] = value
                 if value is None:
-                    data["score_verbose"] = u"Not Applicable"
-                    data["score_class"] = "5"
+                    data["score_class"] = "na"
                 else:
-                    data["score_value"] = value
-                    if 2.5 < value <= 3:
-                        data["score_verbose"] = u"Superior"
-                        data["score_class"] = "1"
-                    elif 1.5 < value <= 2.5:
-                        data["score_verbose"] = u"Strong"
-                        data["score_class"] = "2"
-                    elif 0.5 < value <= 1.5:
-                        data["score_verbose"] = u"Limited"
-                        data["score_class"] = "3"
-                    else:
-                        data["score_verbose"] = u"Very Weak"
-                        data["score_class"] = "4"
+                    value = int(round(value))
+                    data["score_class"] = str(value)
+                data["score_verbose"] = get_verbose_score_name(value)
+
             else:
+                data["score_value"] = None
                 data["score_verbose"] = u"Not Rated"
-                data["score_class"] = "5"
+                data["score_class"] = "nr"
 
         return data
