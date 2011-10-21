@@ -70,11 +70,7 @@ oer.evaluation_tool.init_rubrics = function() {
       data.rubric_id = $scores.data("rubric-id");
     }
 
-    if (window.rocon !== undefined) {
-      $scores.find("a").each(function(e, el) {
-        rocon.update(el);
-      });
-    }
+    rcorners($scores.find("a"));
 
     $.post(evaluate_url, data);
 
@@ -122,11 +118,7 @@ oer.evaluation_tool.init_rubrics = function() {
     $tags_ct.find("div.footer[data-tag-id='" + tag_id + "']").addClass("selected");
     $tag.addClass("selected");
 
-    if (window.rocon !== undefined) {
-      $tags_ct.find("a.tag").each(function(e, el) {
-        rocon.update(el);
-      });
-    }
+    rcorners($tags_ct.find("a.tag"));
   }
 
   $tags_ct.delegate("a.tag", "click", function(e) {
@@ -162,11 +154,7 @@ oer.evaluation_tool.init_rubrics = function() {
     $scores.find("div.selected").removeClass("selected");
     $score.addClass("selected");
 
-    if (window.rocon !== undefined) {
-      $scores.find("a").each(function(e, el) {
-        rocon.update(el);
-      });
-    }
+    rcorners($scores.find("a"));
 
     if ($scores.data("tag-id") !== undefined) {
       var tag_id = $scores.data("tag-id");
@@ -186,21 +174,13 @@ oer.evaluation_tool.init_rubrics = function() {
   $score_selectors.find("a").mouseenter(function() {
     var $this = $(this);
     $this.closest("div").addClass("hover");
-    if (window.rocon !== undefined) {
-      $this.closest("div.scores").find("a").each(function(e, el) {
-        rocon.update(el);
-      });
-    }
+    rcorners($this.closest("div.scores").find("a"));
   });
 
   $score_selectors.find("a").mouseleave(function() {
     var $this = $(this);
     $this.closest("div").removeClass("hover");
-    if (window.rocon !== undefined) {
-      $this.closest("div.scores").find("a").each(function(e, el) {
-        rocon.update(el);
-      });
-    }
+    rcorners($this.closest("div.scores").find("a"));
   });
 
   $rubrics.delegate("a.clear", "click", function(e) {
@@ -334,11 +314,9 @@ oer.evaluation_tool.init_align = function() {
 
   $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
     $.each(data.tags, function(index, tag) {
-      var $tag = $.tmpl("align-tag", tag).appendTo($tags);
-      oer.align_form.init_tag_tooltip($tag.find("a:first"));
-    });
-    $.each(data.user_tags, function(index, tag) {
-      var $tag = $.tmpl("align-user-tag", tag).appendTo($tags);
+      var template = "id" in tag ? "align-user-tag" : "align-tag";
+      var $tag = $.tmpl(template, tag).appendTo($tags);
+      rcorners($tag);
       oer.align_form.init_tag_tooltip($tag.find("a:first"));
     });
     $document.trigger(oer.align_form.TAGS_CHANGED_EVENT);
