@@ -716,7 +716,7 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics .comment.checked {
-  background: #bac8d1 url(../images/evaluation/icon-comment-checked.png) no-repeat 5px 3px;
+  background: #bac8d1 url(../images/evaluation/icon-comment-checked.png) no-repeat 4px 1px;
 }
 
 .comment-popup {
