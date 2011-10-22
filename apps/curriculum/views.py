@@ -105,6 +105,45 @@ def list_standards(request, existing=False):
     return dict(options=list(Standard.objects.filter(id__in=ids).values("id", "name")))
 
 
+def cmp_grades(grade1, grade2):
+    # Sort grades in the following order:
+    # K
+    # 1
+    # 2
+    # 3
+    # 4
+    # 5
+    # 6
+    # 7
+    # 8
+    # 6-8
+    # 9-10
+    # 11-12
+    # K-12
+
+    def int_grade(g):
+        if g == "K":
+            return 0
+        return int(g)
+
+    if "-" in grade1:
+        grade1_start, grade1_end = map(int_grade, grade1.split("-"))
+    else:
+        grade1_start = grade1_end = int_grade(grade1)
+    grade1_range = grade1_end - grade1_start
+
+    if "-" in grade2:
+        grade2_start, grade2_end = map(int_grade, grade2.split("-"))
+    else:
+        grade2_start = grade2_end = int_grade(grade2)
+    grade2_range = grade2_end - grade2_start
+
+    r = cmp(grade1_end, grade2_end)
+    if not r:
+        r = cmp(grade1_range, grade2_range)
+    return r
+
+
 @ajax_request
 def list_grades(request, existing=False):
     standard = request.POST.get("standard")
@@ -117,7 +156,13 @@ def list_grades(request, existing=False):
         ids = TaggedMaterial.objects.filter(tag__standard=standard).values_list("tag__grade", flat=True).order_by().distinct()
     else:
         ids = AlignmentTag.objects.filter(standard=standard).values_list("grade", flat=True).order_by().distinct()
-    return dict(options=list(Grade.objects.filter(id__in=ids).values("id", "name")))
+
+    grades = list(Grade.objects.filter(id__in=ids).values("id", "code", "name"))
+    grades.sort(cmp=cmp_grades, key=lambda x: x["code"])
+    for g in grades:
+        del g["code"]
+
+    return dict(options=grades)
 
 
 @ajax_request
