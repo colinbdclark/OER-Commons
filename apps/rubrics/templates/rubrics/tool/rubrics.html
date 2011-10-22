@@ -27,13 +27,12 @@
           <p>Please <a class="dashed" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">align resource</a> before evaluating alignment</p>
         {% else %}
           <div class="description">
-            <p>Applies to objects that have suggested alignments to the
-              Common Core State Standards and is used to rate the degree of
-              alignment. The degree of alignment of both content and
-              performance expectations are considered. If appropriate, you
-              may use the rubric to rate any of the standards that have
-              been aligned to the object you are rating or align additional
-              standards.</p>
+            <p>Applies to objects that have suggested alignments to the Common
+              Core State Standards and is used to rate the degree of alignment.
+              The degree of alignment of both content and performance
+              expectations are considered. If appropriate, you may use the
+              rubric to rate any of the standards that have been aligned to the
+              object you are rating or align additional standards.</p>
           </div>
           <p><a class="dashed add-standard" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">Add an additional standard</a></p>
         {% endif %}
@@ -68,7 +67,7 @@
                   {% if forloop.first %}
                     <p class="tip">Mouse over for score description</p>
                   {% endif %}
-                  <div class="description rc5">{{ score.description|markdown|safe }}</div>
+                  <div class="description rc5">{{ score.description|markdown|linebreaksbr|safe }}</div>
                 </div>
               {% endfor %}
             </div>
@@ -100,7 +99,7 @@
         </h1>
         <div class="body">
           <div class="description">
-            {{ rubric.description|markdown|safe }}
+            {{ rubric.description|markdown|linebreaksbr|safe }}
           </div>
 
           <div class="scores" data-rubric-id="{{ rubric.id }}">
@@ -112,7 +111,7 @@
                 {% if forloop.first %}
                   <p class="tip">Mouse over for score description</p>
                 {% endif %}
-                <div class="description rc5">{{ score.description|markdown|safe }}</div>
+                <div class="description rc5">{{ score.description|markdown|linebreaksbr|safe }}</div>
               </div>
             {% endfor %}
           </div>
