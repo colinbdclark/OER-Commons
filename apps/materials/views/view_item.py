@@ -288,13 +288,13 @@ class ViewItem(BaseViewItemMixin, TemplateView):
         data["evaluations_number"] = item.evaluations_number
         data["evaluation_scores"] = []
 
-        scores = StandardAlignmentScore.objects.filter(
+        standard_scores = StandardAlignmentScore.objects.filter(
+            evaluation__confirmed=True,
             evaluation__content_type=self.content_type,
             evaluation__object_id=self.item.id,
-            evaluation__confirmed=True,
         )
         data["alignment_scores"] = []
-        for row in scores.exclude(score__value=None).values(
+        for row in standard_scores.exclude(score__value=None).values(
             "alignment_tag").annotate(score=Avg("score__value")):
             data["alignment_scores"].append(dict(
                 code=AlignmentTag.objects.get(id=row["alignment_tag"]).full_code,
@@ -308,6 +308,8 @@ class ViewItem(BaseViewItemMixin, TemplateView):
             evaluation__object_id=self.item.id,
         )
 
+        scores = item.evaluation_scores
+        
         for rubric_id, name in Rubric.objects.values_list("id", "name"):
             #noinspection PySimplifyBooleanCheck
             score = None
