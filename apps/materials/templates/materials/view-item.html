@@ -25,6 +25,7 @@
         oer.materials.view_item.init_content_actions();
       {% endif %}
       $("section.portlet a.tooltip").qtip(TOPLEFTSIDE_TOOLTIP_OPTIONS);
+      oer.align_form.init_tag_tooltip($("div.evaluation-results td.alignment-scores span"));
     });
   </script>
 {% endblock %}
@@ -287,7 +288,7 @@
     {% if evaluations_number and evaluation_scores %}
       <div class="evaluation-results">
         <figure>
-          <table>
+          <table class="rc5">
             <thead>
               <tr>
                 <th>Rubric</th>
@@ -295,6 +296,14 @@
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td class="first">Degree of Alignment</td>
+                <td class="alignment-scores">
+                  {% for score in alignment_scores %}
+                    <span data-code="{{ score.code }}" class="s{{ score.score_class }}">{{ score.score|floatformat }}</span>
+                  {% endfor %}
+                </td>
+              </tr>
               {% for score in evaluation_scores %}
                 <tr>
                   <td class="first">{{ score.name }}</td>

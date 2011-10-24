@@ -18,7 +18,11 @@ oer.align_form.init_tag_tooltip = function($a) {
   }
   $a.each(function() {
     var $this = $(this);
-    var tooltip_url = "/curriculum/get_tag_description/" + $this.text();
+    var code = $this.data("code");
+    if (!code) {
+      code = $this.text();
+    }
+    var tooltip_url = "/curriculum/get_tag_description/" + code;
     if (content_type && object_id) {
       tooltip_url = tooltip_url + "/" + content_type + "/" + object_id;
     }
@@ -33,7 +37,8 @@ oer.align_form.init_tag_tooltip = function($a) {
         target: "event",
         my: "bottom center",
         at: "top center",
-        effect: false
+        effect: false,
+        viewport: $(window)
       },
       style: {
         classes: "align-tag-tooltip ui-tooltip-shadow ui-tooltip-rounded",

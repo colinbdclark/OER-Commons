@@ -283,7 +283,7 @@ class Results(EvaluateViewMixin, TemplateView):
             elif average_score is None:
                 average_score_class = None
             else:
-                average_score_class = int(average_score)
+                average_score_class = int(round(average_score))
 
             user_score_value = None
             comment = None
@@ -296,7 +296,7 @@ class Results(EvaluateViewMixin, TemplateView):
                 if user_score_value is None:
                     user_score_class = None
                 else:
-                    user_score_class = int(user_score_value)
+                    user_score_class = int(round(user_score_value))
                 comment = user_tag_score.comment
             except StandardAlignmentScore.DoesNotExist:
                 user_score_class = "nr"
@@ -340,7 +340,7 @@ class Results(EvaluateViewMixin, TemplateView):
             elif average_score is None:
                 average_score_class = None
             else:
-                average_score_class = int(average_score)
+                average_score_class = int(round(average_score))
 
             data["scores"].append(dict(
                 name=rubric.name,

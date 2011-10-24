@@ -93,11 +93,12 @@
 }
 
 .materials-index .item .evaluated {
-  padding-left: 27px;
+  padding-left: 30px;
   height: 23px;
   background: url(../images/evaluation/icon-evaluated.png) no-repeat 0 50%;
-  color: #122f78;
+  color: #1F4D64;
   line-height: 23px;
+  font-size: 12px;
 }
 
 .cou-bucket {
