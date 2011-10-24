@@ -1,5 +1,7 @@
+from curriculum.models import AlignmentTag
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, resolve
+from django.db.models import Avg
 from django.http import Http404, QueryDict, HttpRequest
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import MultiValueDict
@@ -286,26 +288,21 @@ class ViewItem(BaseViewItemMixin, TemplateView):
         data["evaluations_number"] = item.evaluations_number
         data["evaluation_scores"] = []
 
-        scores = item.evaluation_scores
+        scores = StandardAlignmentScore.objects.filter(
+            evaluation__content_type=self.content_type,
+            evaluation__object_id=self.item.id,
+            evaluation__confirmed=True,
+        )
+        data["alignment_scores"] = []
+        for row in scores.exclude(score__value=None).values(
+            "alignment_tag").annotate(score=Avg("score__value")):
+            data["alignment_scores"].append(dict(
+                code=AlignmentTag.objects.get(id=row["alignment_tag"]).full_code,
+                score=row["score"],
+                score_class=int(round(row["score"])),
+            ))
 
-        name = u"Degree of Alignment"
-        score = None
-        score_class = "nr"
-        if 0 in scores:
-            score = scores[0]
-            if score is None:
-                score_class = None
-            else:
-                score_class = int(score)
-        data["evaluation_scores"].append(dict(
-            name=name,
-            score=score,
-            score_class=score_class,
-            evaluations_number=StandardAlignmentScore.objects.filter(
-                evaluation__content_type=self.content_type,
-                evaluation__object_id=self.item.id,
-            ).exclude(score__value=None).values("evaluation").distinct().count()
-        ))
+        scores = item.evaluation_scores
 
         for rubric_id, name in Rubric.objects.values_list("id", "name"):
             #noinspection PySimplifyBooleanCheck
@@ -316,7 +313,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 if score is None:
                     score_class = None
                 else:
-                    score_class = int(score)
+                    score_class = int(round(score))
             data["evaluation_scores"].append(dict(
                 name=name,
                 score=score,
@@ -325,6 +322,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                     rubric__id=rubric_id,
                     evaluation__content_type=self.content_type,
                     evaluation__object_id=self.item.id,
+                    evaluation__confirmed=True,
                 ).exclude(score__value=None).values("evaluation").distinct().count()
             ))
 
