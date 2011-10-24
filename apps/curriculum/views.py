@@ -13,7 +13,8 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from django.views.generic.simple import direct_to_template
 from haystack_scheduled.indexes import Indexed
-from rubrics.models import StandardAlignmentScore, get_verbose_score_name
+from rubrics.models import StandardAlignmentScore, get_verbose_score_name, \
+    Evaluation
 from utils.decorators import login_required
 
 
@@ -221,10 +222,19 @@ class TagDescription(TemplateView):
         data = dict(tag=tag)
 
         if content_type_id and object_id:
+            object_id = int(object_id)
+            content_type = get_object_or_404(ContentType, id=content_type_id)
+
+            data["evaluations_number"] = Evaluation.objects.filter(
+                content_type=content_type,
+                object_id=object_id,
+                confirmed=True,
+            ).count()
+
             scores = StandardAlignmentScore.objects.filter(
                 alignment_tag=tag,
-                evaluation__content_type__id=int(content_type_id),
-                evaluation__object_id=int(object_id),
+                evaluation__content_type=content_type,
+                evaluation__object_id=object_id,
             )
             if scores.exists():
                 value = scores.aggregate(value=Avg("score__value"))["value"]
@@ -235,7 +245,6 @@ class TagDescription(TemplateView):
                     value = int(round(value))
                     data["score_class"] = str(value)
                 data["score_verbose"] = get_verbose_score_name(value)
-
             else:
                 data["score_value"] = None
                 data["score_verbose"] = u"Not Rated"
