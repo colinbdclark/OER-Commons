@@ -581,6 +581,24 @@ body.evaluation-tool {
   vertical-align: middle;
 }
 
+.view-item .evaluation-results .alignment-scores span {
+  margin: 0 0.2em;
+}
+
+.view-item .evaluation-results table {
+  border: 2px solid #CED9DD;
+}
+
+.view-item .evaluation-results th {
+  border-bottom: none;
+  background-color: #CED9DD;
+}
+
+.view-item .evaluation-results td {
+  border-top: 1px solid #CED9DD;
+  border-bottom: none;
+}
+
 .evaluation-tool .evaluation-results #finalize-form .label {
   margin-bottom: 2px;
 }
