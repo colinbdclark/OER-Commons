@@ -5,7 +5,6 @@ from materials.models.course import Course
 from materials.models.library import Library
 from materials.views.data_import import DataImport
 from materials.views.view_item import ViewItem, ToolbarViewItem
-from reviews.urls import add_review_patterns
 from saveditems.urls import saved_item_patterns
 
 
@@ -55,7 +54,6 @@ course_patterns = browse_patterns + patterns('materials.views',
     url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
     url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
 ) + \
-add_review_patterns + \
 saved_item_patterns
 
 library_patterns = browse_patterns + patterns('materials.views',
@@ -67,7 +65,6 @@ library_patterns = browse_patterns + patterns('materials.views',
     url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
     url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
 ) + \
-add_review_patterns + \
 saved_item_patterns
 
 community_patterns = general_subject_patterns + \
@@ -83,7 +80,6 @@ keyword_patterns + patterns('materials.views',
     url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
     url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
 ) + \
-add_review_patterns + \
 saved_item_patterns
 
 microsite_browse_patterns = browse_patterns + patterns('materials.views',

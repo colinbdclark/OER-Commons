@@ -79,7 +79,7 @@
         {% spaceless %}
         <ul>
           <li class="rating"><span>Rating: </span>{% stars item.identifier item.rating %}</li>
-          <li class="sep"><a href="#" class="review">Review</a></li>
+          <li class="sep"><a href="#" class="comment">Comment</a></li>
           <li class="sep"><a href="{% url rubrics:evaluate_intro %}?url={{ item.url }}&from={{ request.path|full_url }}" id="evaluate-btn">Evaluate</a></li>
           <li><a href="{{ add_tags_url }}" class="tags">Tags</a></li>
         </ul>
@@ -110,9 +110,9 @@
         {% add_tags_form %}
     </div>
 
-    <div id="review-dialog" style="display: none;">
-      <form action="{{ add_review_url }}" method="post" id="review-form" class="formatted review">
-        {% with review_form as form %}
+    <div id="comment-dialog" style="display: none;">
+      <form action="{{ comment_url }}" method="post" id="comment-form" class="formatted comment">
+        {% with comment_form as form %}
           {% for field in form.visible_fields %}
             <div class="help">{{ field.help_text }}</div>
             <div class="errors">
@@ -124,7 +124,7 @@
           {% endfor %}
         {% endwith %}
         <div class="buttons">
-            <input type="submit" value="Add review" />
+            <input type="submit" value="Add comment" />
         </div>
       </form>
     </div>

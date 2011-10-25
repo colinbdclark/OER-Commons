@@ -141,3 +141,8 @@ body.toolbar-view #status-messages .status-message {
   float: right;
   margin-top: 1px;
 }
+
+body.toolbar-view #comment-form textarea {
+  width: 550px;
+  resize: none;
+}
