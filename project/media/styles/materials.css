@@ -93,11 +93,12 @@
 }
 
 .materials-index .item .evaluated {
-  padding-left: 27px;
+  padding-left: 30px;
   height: 23px;
   background: url(../images/evaluation/icon-evaluated.png) no-repeat 0 50%;
-  color: #122f78;
+  color: #1F4D64;
   line-height: 23px;
+  font-size: 12px;
 }
 
 .cou-bucket {
@@ -431,7 +432,28 @@
 }
 
 .view-item .comments footer {
-  padding-left: 400px;
+  position: relative;
+  padding-left: 3em;
+  height: 16px;
+}
+
+.view-item .comments footer .by {
+  position: absolute;
+  left: 400px;
+}
+
+.view-item .comments footer a {
+  margin-right: 0.5em;
+}
+
+.view-item #comment-form textarea {
+  width: 660px;
+  height: 100px;
+  resize: vertical;
+}
+
+.view-item #comment-form .buttons {
+  text-align: right;
 }
 
 .portlet.save a {

@@ -131,12 +131,24 @@ footer.global {
   text-align: center;
 }
 
-ul.rubrics {
-  margin: 10px 0 0;
-  list-style-type: none;
+.rubrics-menu h1 {
+  display: inline-block;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  vertical-align: bottom;
+  line-height: 1.1em;
+  font-weight: normal;
+  font-size: 13px;
 }
 
-ul.rubrics li {
+.rubrics-menu ul {
+  display: inline-block;
+  margin: 10px 0 0;
+  list-style-type: none;
+  vertical-align: middle;
+}
+
+.rubrics-menu li {
   display: inline-block;
   margin: 0 0.5em 0.5em 0;
   padding: 2px 5px;
@@ -145,18 +157,19 @@ ul.rubrics li {
   -moz-border-radius: 3px;
   border-radius: 3px;
   color: #074c69;
+  vertical-align: middle;
 }
 
-ul.rubrics li.selected {
-  background-color: #c6e7f2;
+.rubrics-menu li.selected {
+  background-color: #CED9DD;
 }
 
-ul.rubrics li a {
+.rubrics-menu li a {
   color: #0B7BA9;
   text-decoration: none;
 }
 
-ul.rubrics li a:hover {
+.rubrics-menu li a:hover {
   text-decoration: underline;
 }
 
@@ -167,4 +180,8 @@ ul.rubrics li a:hover {
 
 .breadcrumbs a {
   text-decoration: underline;
+}
+
+.manage-rubrics .panel {
+  overflow: inherit;
 }

@@ -39,11 +39,13 @@
 .profile-view a.edit,
 .profile-view section.avatar, .profile-view section.basic, .profile-view section.roles, .profile-view section.levels,
 .profile-views,
+.rubrics-menu h1,
+.rubrics-menu li,
+.rubrics-menu ul,
 .user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
 .user-tags li.tag, .portlet.item-tags .user-tags li.tag,
 fieldset.step p.content-submission-buttons a,
-form.login .buttons a,
-ul.rubrics li {
+form.login .buttons a {
     display: inline;
     zoom: 1;
 }

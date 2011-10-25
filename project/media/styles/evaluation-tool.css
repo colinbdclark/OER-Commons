@@ -429,7 +429,7 @@ body.evaluation-tool {
 .evaluation-tool .rubrics section .footer a.save,
 .evaluation-tool .evaluation-results  .footer a.back,
 .evaluation-tool .evaluation-results  .footer a.finalize,
-#comment-form .save {
+.evaluation-tool #comment-form .save {
   display: inline-block;
   padding: 2px 5px;
   background-color: #ffb21f;
@@ -731,24 +731,24 @@ body.evaluation-tool {
   font-size: 12px;
 }
 
-#comment-form {
+.evaluation-tool #comment-form {
   display: none;
 }
 
-#comment-form textarea {
+.evaluation-tool #comment-form textarea {
   margin: 0;
   width: 300px;
   height: 100px;
   resize: none;
 }
 
-#comment-form footer {
+.evaluation-tool #comment-form footer {
   position: relative;
   margin-top: 3px;
   text-align: right;
 }
 
-#comment-form .clear {
+.evaluation-tool #comment-form .clear {
   position: absolute;
   left: 0;
 }

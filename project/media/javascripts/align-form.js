@@ -33,7 +33,8 @@ oer.align_form.init_tag_tooltip = function($a) {
         target: "event",
         my: "bottom center",
         at: "top center",
-        effect: false
+        effect: false,
+        viewport: $(window)
       },
       style: {
         classes: "align-tag-tooltip ui-tooltip-shadow ui-tooltip-rounded",

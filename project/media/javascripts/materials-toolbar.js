@@ -8,7 +8,7 @@ oer.materials.toolbar.init = function() {
 
   oer.materials.toolbar.init_tags();
   oer.materials.toolbar.init_save();
-  oer.materials.toolbar.init_review();
+  oer.materials.toolbar.init_comment();
   oer.materials.view_item.init_navigation();
   oer.evaluation_tool.init_evaluate_button();
   var $evaluate_btn = $("#evaluate-btn");
@@ -110,28 +110,28 @@ oer.materials.toolbar.init_save = function() {
   });
 };
 
-oer.materials.toolbar.init_review = function() {
+oer.materials.toolbar.init_comment = function() {
   var $toolbar = $("#toolbar");
 
-  var $dialog = $("#review-dialog").dialog({
+  var $dialog = $("#comment-dialog").dialog({
     modal: false,
     width: 583,
     autoOpen: false,
     resizable: false,
-    title: "Add review",
+    title: "Add comment",
     position: [$toolbar.width() - 583 - 30, $toolbar.height() + 10]
   });
 
-  var $review_btn = $toolbar.find("a.review");
+  var $comment_btn = $toolbar.find("a.comment");
 
-  $review_btn.click(function(e) {
+  $comment_btn.click(function(e) {
     e.preventDefault();
     oer.login.check_login(function() {
       $dialog.dialog("open");
     });
   });
 
-  var $form = $("#review-form");
+  var $form = $("#comment-form");
 
   var $submit_btn = $form.find("input[type='submit']").button();
 
@@ -148,5 +148,4 @@ oer.materials.toolbar.init_review = function() {
       }
     });
   });
-
 };

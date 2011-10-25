@@ -3,31 +3,13 @@ oer.login = {};
 oer.login.LOGGED_IN_EVENT = "oer-login-logged-in";
 oer.login.LOGGED_OUT_EVENT = "oer-login-logged-out";
 
-oer.login.init = function() {
-  $("header.global a.login").click(function(e) {
-    e.preventDefault();
-    oer.login.show_popup();
-  });
-
-  var $body = $("body");
-  var $next_url_form = $("form[name='next-url']");
-  $(document).delegate("a.require-login", "click", function(e) {
-    if ($body.hasClass("authenticated")) {
-      return true;
-    }
-    e.preventDefault();
-    var $this = $(this);
-    oer.login.show_popup(function() {
-      if ($this.hasClass("with-next-url")) {
-        $next_url_form.attr("action", $this.attr("href"));
-        $next_url_form.submit();
-      } else {
-        window.location = $this.attr("href");
-      }
-    });
-  });
+//Check if user is authenticated.
+oer.login.is_authenticated = function() {
+  return $("body").hasClass("authenticated");
 };
 
+//Show login popup. Run optional callback function if user is logged in
+//successfully.
 oer.login.show_popup = function(callback) {
   var $popup = $("#login-popup");
   var $body = $("body");
@@ -96,11 +78,37 @@ oer.login.show_popup = function(callback) {
   }
 };
 
+//Check if user is authenticated before running specified callback function.
+//Show login popup is user is not authenticated and run the callback if he
+//logs in successfully.
 oer.login.check_login = function(callback) {
-  var $body = $("body");
-  if ($body.hasClass("authenticated")) {
+  if (oer.login.is_authenticated()) {
     callback();
   } else {
     oer.login.show_popup(callback);
   }
+};
+
+oer.login.init = function() {
+  $("header.global a.login").click(function(e) {
+    e.preventDefault();
+    oer.login.show_popup();
+  });
+
+  var $next_url_form = $("form[name='next-url']");
+  $(document).delegate("a.require-login", "click", function(e) {
+    if (oer.login.is_authenticated()) {
+      return true;
+    }
+    e.preventDefault();
+    var $this = $(this);
+    oer.login.show_popup(function() {
+      if ($this.hasClass("with-next-url")) {
+        $next_url_form.attr("action", $this.attr("href"));
+        $next_url_form.submit();
+      } else {
+        window.location = $this.attr("href");
+      }
+    });
+  });
 };
