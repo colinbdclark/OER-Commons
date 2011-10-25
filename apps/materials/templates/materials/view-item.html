@@ -228,20 +228,37 @@
 
 </article>
 
-{% if comments %}
-  <section class="comments">
-    <h1>Comments:</h1>
-    {% for comment in comments %}
-      <article itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
-        {% if comment.title %}<h1>{{ comment.title }}</h1>{% endif %}
-        <p itemprop="reviewBody">{{ comment.text|linebreaksbr }}</p>
-        <footer>
-          <span class="by" itemprop="author">- {{ comment.author|username }}</span>
-        </footer>
-      </article>
-    {% endfor %}
-  </section>
-{% endif %}
+<section class="comments">
+  <h1>Comments:</h1>
+  {% for comment in comments %}
+    <article itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
+      {% if comment.title %}<h1>{{ comment.title }}</h1>{% endif %}
+      <p itemprop="reviewBody">{{ comment.text|linebreaksbr }}</p>
+      <footer>
+        {% if comment.author == request.user %}
+          <a href="#" class="edit dashed">Edit</a>
+          <a href="#" class="delete dashed">Delete</a>
+        {% endif %}
+        <span class="by" itemprop="author">- {{ comment.author|username }}</span>
+      </footer>
+    </article>
+  {% endfor %}
+  <form{% if hide_comment_form %} style="display: none;"{% endif %} id="comment-form" class="formatted" method="post" action="{{ comment_url }}">
+    {% with comment_form.text as field %}
+      <div class="field">
+        <div class="errors">
+          {% for error in field.errors %}
+            <label class="error">{{ error|safe }}</label>
+          {% endfor %}
+        </div>
+        {{ field }}
+      </div>
+    {% endwith %}
+    <div class="buttons">
+      <a href="#" class="button-blue-big rc5">Add Comment</a>
+    </div>
+  </form>
+</section>
 
 {% for rating in item.ratings.all %}
   <span itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
@@ -272,9 +289,6 @@
   <section class="portlet dotted">
     <h1>Rate and Review</h1>
     {% stars item.identifier item.ratings.all %}
-    <div>
-      <a href="{{ add_review_url }}" class="button-blue-big rc5 require-login with-next-url">Write a Review</a>
-    </div>
     <div>
       <a href="{{ toolbar_view_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
       <a href="#evaluate-tooltip" rel="#evaluate-tooltip" class="tooltip"><small>What is this?</small></a>

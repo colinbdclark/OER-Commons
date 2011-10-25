@@ -1,3 +1,4 @@
+from annoying.functions import get_object_or_None
 from curriculum.models import AlignmentTag
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, resolve
@@ -12,6 +13,7 @@ from materials.models.microsite import Microsite
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
+from reviews.models import Review
 from reviews.views import ReviewForm
 from rubrics.models import Rubric, StandardAlignmentScore, RubricScore, \
     get_verbose_score_name
@@ -23,8 +25,7 @@ import urllib
 class DummyRequest(HttpRequest):
 
     def __init__(self, data=None):
-        if not data:
-            data = {}
+        data = data if data else {}
         self.REQUEST = MultiValueDict(data)
         super(DummyRequest, self).__init__()
 
@@ -76,7 +77,6 @@ class BaseViewItemMixin(object):
         index_url = u""
 
         kwargs = {}
-
         filters = {}
         index_path = None
 
@@ -188,8 +188,10 @@ class BaseViewItemMixin(object):
         data["unsave_url"] = reverse("materials:%s:unsave_item" % item.namespace,
                        kwargs=dict(slug=item.slug))
 
-        data["add_review_url"] = reverse("materials:%s:add_review" % item.namespace,
-                               kwargs=dict(slug=item.slug))
+        data["comment_url"] = reverse(
+            "reviews:review",
+            kwargs=dict(content_type_id=content_type.id, object_id=item.id)
+        )
 
         data["add_tags_url"] = reverse("tags:add_tags", args=(
             content_type.app_label,
@@ -358,13 +360,20 @@ class ViewItem(BaseViewItemMixin, TemplateView):
 
                 comments.append(comment)
 
+        data["hide_comment_form"] = False
+        data["comment_form"] = ReviewForm()
+
         for review in item.reviews.all():
-            comments.append(dict(
+            comment = dict(
                 title=u"",
                 text=review.text,
                 timestamp=review.timestamp,
                 author=review.user,
-            ))
+            )
+            if review.user == request.user:
+                data["hide_comment_form"] = True
+                data["comment_form"] = ReviewForm(instance=review)
+            comments.append(comment)
 
         comments.sort(key=lambda x: x["timestamp"])
         data["comments"] = comments
@@ -383,9 +392,15 @@ class ToolbarViewItem(BaseViewItemMixin, TemplateView):
         item = self.item
         request = self.request
 
+        data["comment_form"] = ReviewForm()
         if request.user.is_authenticated():
-            data["review_form"] = ReviewForm(instance=item, user=request.user)
-        else:
-            data["review_form"] = ReviewForm()
+            review = get_object_or_None(
+                Review,
+                content_type=self.content_type,
+                object_id=item.id,
+                user=request.user,
+            )
+            if review:
+                data["comment_form"] = ReviewForm(instance=review)
 
         return data

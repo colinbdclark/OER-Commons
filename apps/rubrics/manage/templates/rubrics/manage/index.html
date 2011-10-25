@@ -26,15 +26,18 @@
     <h1>Welcome, {{ request.user }}</h1>
   {% endif %}
 
-  <ul class="rubrics">
-    {% for rubric in rubrics %}
-      {% if rubric.id == rubric_id %}
-        <li class="rc3 selected">{{ rubric.name }}</li>
-      {% else %}
-        <li class="rc3"><a href="{% url rubrics_manage:rubric rubric_id=rubric.id %}">{{ rubric.name }}</a></li>
-      {% endif %}
-    {% endfor %}
-  </ul>
+  <section class="rubrics-menu">
+    <h1>Evaluations<br/> by Rubric:</h1>
+    <ul>
+      {% for rubric in rubrics %}
+        {% if rubric.id == rubric_id %}
+          <li class="rc3 selected">{{ rubric.name }}</li>
+        {% else %}
+          <li class="rc3"><a href="{% url rubrics_manage:rubric rubric_id=rubric.id %}">{{ rubric.name }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </section>
 
   <div id="toolbar">
     Filter by:

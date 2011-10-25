@@ -24,7 +24,7 @@
 
   <h1>Resource: {{ object }}</h1>
   {% if object.url %}
-    <h2>{{ object.url }}</h2>
+    <h2><a href="{{ object.url }}">{{ object.url }}</a></h2>
   {% endif %}
   {% if object.institution %}
     <h2>{{ object.institution }}</h2>

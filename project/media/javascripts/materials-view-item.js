@@ -2,6 +2,7 @@ oer.materials.view_item = {};
 
 oer.materials.view_item.init = function() {
   oer.materials.view_item.init_navigation();
+  oer.materials.view_item.init_comment();
 };
 
 oer.materials.view_item.init_navigation = function() {
@@ -37,4 +38,62 @@ oer.materials.view_item.init_content_actions = function() {
   $(document).click(function() {
     $content_actions.find("dl").removeClass("active");
   });
+};
+
+$.template("comment", '<article><p>{{html text}}</p><footer><a class="edit dashed" href="#">Edit</a> <a class="delete dashed" href="#">Delete</a> <span class="by">- ${author}</span></footer></article>');
+
+oer.materials.view_item.init_comment = function() {
+  var $comments = $("section.comments");
+  var $form = $("#comment-form");
+
+  function init_delete_buttons() {
+    $comments.find("a.delete").inlineConfirmation({
+      confirm: '<a href="#" class="dashed"><strong>Yes, delete</strong></a>',
+      cancel: '<a href="#" class="dashed">Cancel</a>',
+      confirmCallback: function($button) {
+        var $comment = $button.closest("article");
+        $comment.remove();
+        $.post($form.attr("action"), {"delete": "yes"});
+        $form.find("textarea").val("");
+        $form.detach().appendTo($comments).show();
+      }
+    });
+  }
+  init_delete_buttons();
+
+  $form.find("div.buttons a").click(function(e) {
+    e.preventDefault();
+    $form.submit();
+  });
+
+  $form.validate({
+    rules: {
+      text: "required"
+    },
+    submitHandler: function() {
+      if (!oer.login.is_authenticated()) {
+        oer.login.show_popup(function() {
+          $form.submit();
+        });
+        return;
+      }
+      $.post($form.attr("action"), $form.serialize(), function(response) {
+        if (response.status === "success") {
+          oer.status_message.success(response.message, true);
+          $form.hide();
+          var $comment = $.tmpl("comment", response);
+          $comment.insertBefore($form);
+          init_delete_buttons();
+        }
+      });
+    }
+  });
+
+  $comments.delegate("a.edit", "click", function(e) {
+    e.preventDefault();
+    var $comment = $(this).closest("article");
+    $form.detach().insertAfter($comment).show();
+    $comment.remove();
+  });
+
 };
