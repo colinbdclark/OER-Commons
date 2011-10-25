@@ -305,9 +305,6 @@ def populate_item_from_search_result(result):
         item["get_absolute_url"] = reverse(
                                "materials:%s:view_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
-        item["add_review_url"] = reverse(
-                               "materials:%s:add_review" % namespace,
-                               kwargs=dict(slug=item["slug"]))
         item["save_item_url"] = reverse(
                                "materials:%s:save_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
