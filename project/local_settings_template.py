@@ -27,3 +27,8 @@ BROKER_VHOST = "oercommons"
 
 MAILCHIMP_API_KEY = ""
 MAILCHIMP_LIST_ID = ""
+
+LR_KEY = ""
+LR_KEY_LOCATION = ""
+LR_PASSPHRASE = ""
+LR_NODE = ""
