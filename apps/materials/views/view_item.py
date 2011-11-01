@@ -360,7 +360,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 else:
                     title = score.rubric.name
 
-                comment["title"] = u"%s %s (%s)" % (
+                comment["title"] = u"%s: %s (%s)" % (
                     title,
                     get_verbose_score_name(score.score.value),
                     score.score.get_value_display(),
