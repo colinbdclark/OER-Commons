@@ -501,18 +501,9 @@ body.evaluation-tool {
   text-align: center;
 }
 
-.view-item .evaluation-results th,
-.view-item .evaluation-results td {
-  padding: 2px 0;
-}
-
 .evaluation-results th {
   border-bottom: 2px solid #999;
   font-size: 14px;
-}
-
-.view-item .evaluation-results th {
-  font-size: inherit;
 }
 
 .evaluation-results td {
@@ -531,6 +522,21 @@ body.evaluation-tool {
 .evaluation-results td span {
   font-weight: bold;
   font-size: 18px;
+}
+
+.view-item .evaluation-results th,
+.view-item .evaluation-results td {
+  padding: 3px 0;
+}
+
+.view-item .evaluation-results th {
+  color: #1F4D64;
+  font-weight: bold;
+  font-size: inherit;
+}
+
+.view-item .evaluation-results td {
+  font-size: 12px;
 }
 
 .view-item .evaluation-results td span {
@@ -563,6 +569,10 @@ body.evaluation-tool {
   color: #333;
   font-weight: normal;
   font-size: 13px;
+}
+
+.view-item .evaluation-results td span span.users {
+  font-size: 12px;
 }
 
 .evaluation-results td span.nr {
