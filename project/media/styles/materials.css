@@ -93,11 +93,12 @@
 }
 
 .materials-index .item .evaluated {
-  padding-left: 30px;
+  padding-left: 27px;
   height: 23px;
-  background: url(../images/evaluation/icon-evaluated.png) no-repeat 0 50%;
+  background: url(../images/evaluation/icon-evaluated.png) no-repeat -3px 50%;
   color: #1F4D64;
   line-height: 23px;
+  font-weight: bold;
   font-size: 12px;
 }
 
