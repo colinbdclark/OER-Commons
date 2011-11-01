@@ -59,6 +59,7 @@
 .rubrics-menu ul,
 .user-tags li.tag a, .portlet.item-tags .user-tags li.tag a,
 .user-tags li.tag, .portlet.item-tags .user-tags li.tag,
+.view-item .comments footer .edit, .view-item .comments footer .delete,
 fieldset.step p.content-submission-buttons a,
 form.login .buttons a {
     display: inline;
