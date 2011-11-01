@@ -419,6 +419,11 @@
   margin-bottom: 2em;
 }
 
+.view-item .comments article.author {
+  padding-bottom: 0.5em;
+  border: 1px solid #ccc;
+}
+
 .view-item .comments article h1 {
   margin-bottom: 0.5em;
   color: #333;
@@ -444,6 +449,26 @@
 
 .view-item .comments footer a {
   margin-right: 0.5em;
+}
+
+.view-item .comments footer a span {
+  border-bottom: 1px dashed;
+}
+
+.view-item .comments footer .edit,
+.view-item .comments footer .delete {
+  display: inline-block;
+  margin-right: 1em;
+  padding-left: 20px;
+  background: no-repeat 0 50%;
+}
+
+.view-item .comments footer .edit {
+  background-image: url(../images/icon-comment-edit.png);
+}
+
+.view-item .comments footer .delete {
+  background-image: url(../images/icon-comment-delete.png);
 }
 
 .view-item #comment-form textarea {
