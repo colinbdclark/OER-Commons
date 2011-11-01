@@ -712,7 +712,7 @@ body.evaluation-tool {
   left: 0;
   display: inline-block;
   padding: 1px 5px 1px 20px;
-  border: 1px solid #293776;
+  border: 2px solid #B5C3CA;
   background: url(../images/evaluation/icon-add-comment.png) no-repeat 2px 2px;
   color: #293776;
   text-decoration: none;
@@ -721,6 +721,7 @@ body.evaluation-tool {
 
 .evaluation-tool .rubrics .comment.checked {
   background: #bac8d1 url(../images/evaluation/icon-comment-checked.png) no-repeat 4px 1px;
+  border-color: #293776;
 }
 
 .comment-popup {
@@ -729,7 +730,7 @@ body.evaluation-tool {
 
 .comment-popup .ui-tooltip-content {
   padding: 5px;
-  border: 2px solid #293776;
+  border: 2px solid #B5C3CA;
   background-color: #fff;
   line-height: 1.3;
   font-size: 12px;
