@@ -40,7 +40,7 @@ oer.materials.view_item.init_content_actions = function() {
   });
 };
 
-$.template("comment", '<article><p>{{html text}}</p><footer><a class="edit dashed" href="#">Edit</a> <a class="delete dashed" href="#">Delete</a> <span class="by">- ${author}</span></footer></article>');
+$.template("comment", '<article class="author rc5"><p>{{html text}}</p><footer><a class="edit" href="#"><span>Edit</span></a> <a class="delete" href="#"><span>Delete</span></a> <span class="by">- ${author}</span></footer></article>');
 
 oer.materials.view_item.init_comment = function() {
   var $comments = $("section.comments");
@@ -83,6 +83,7 @@ oer.materials.view_item.init_comment = function() {
           $form.hide();
           var $comment = $.tmpl("comment", response);
           $comment.insertBefore($form);
+          rcorners($comment);
           init_delete_buttons();
         }
       });
