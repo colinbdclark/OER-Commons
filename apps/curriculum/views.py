@@ -8,14 +8,14 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db.models import Avg
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
-from django.views.generic.simple import direct_to_template
 from haystack_scheduled.indexes import Indexed
 from rubrics.models import StandardAlignmentScore, get_verbose_score_name, \
     Evaluation
 from utils.decorators import login_required
+import re
 
 
 class TagResourceForm(forms.Form):
@@ -23,7 +23,9 @@ class TagResourceForm(forms.Form):
     tag = forms.ModelChoiceField(queryset=AlignmentTag.objects.all())
 
     def __init__(self, *args, **kwargs):
+        #noinspection PyArgumentEqualDefault
         self.instance = kwargs.pop("instance", None)
+        #noinspection PyArgumentEqualDefault
         self.user = kwargs.pop("user", None)
         super(TagResourceForm, self).__init__(*args, **kwargs)
 
@@ -89,7 +91,7 @@ def delete_tag(request):
 
     try:
         tagged = TaggedMaterial.objects.get(id=int(request.POST["id"]))
-    except:
+    except (ValueError, TypeError, TaggedMaterial.DoesNotExist):
         return dict(status="error")
 
     tagged.delete()
@@ -149,8 +151,8 @@ def list_grades(request, existing=False):
     standard = request.POST.get("standard")
     try:
         standard = Standard.objects.get(id=int(standard))
-    except:
-        return HttpResponse(u"", status=400)
+    except (ValueError, TypeError, Standard.DoesNotExist):
+        return HttpResponseBadRequest()
 
     if existing:
         ids = TaggedMaterial.objects.filter(tag__standard=standard).values_list("tag__grade", flat=True).order_by().distinct()
@@ -170,14 +172,14 @@ def list_categories(request, existing=False):
     standard = request.POST.get("standard")
     try:
         standard = Standard.objects.get(id=int(standard))
-    except:
-        return HttpResponse(u"", status=400)
+    except (ValueError, TypeError, Standard.DoesNotExist):
+        return HttpResponseBadRequest()
 
     grade = request.POST.get("grade")
     try:
         grade = Grade.objects.get(id=int(grade))
-    except:
-        return HttpResponse(u"", status=400)
+    except (ValueError, TypeError, Grade.DoesNotExist):
+        return HttpResponseBadRequest()
 
     if existing:
         ids = TaggedMaterial.objects.filter(tag__standard=standard,
@@ -189,25 +191,41 @@ def list_categories(request, existing=False):
     return dict(options=list(LearningObjectiveCategory.objects.filter(id__in=ids).values("id", "name")))
 
 
+TAG_CODE_RE = re.compile(r"(.+)?\.(\d+)[a-z]?$")
+
+
+def cmp_tags(tag1, tag2):
+    tag1 = tag1["full_code"]
+    tag2 = tag2["full_code"]
+
+    tag1_prefix, tag1_digit = TAG_CODE_RE.search(tag1).groups()
+    tag2_prefix, tag2_digit = TAG_CODE_RE.search(tag2).groups()
+
+    if tag1_prefix == tag2_prefix:
+        return cmp(int(tag1_digit), int(tag2_digit))
+
+    return cmp(tag1, tag2)
+
+
 @ajax_request
 def list_tags(request, existing=False):
     standard = request.POST.get("standard")
     try:
         standard = Standard.objects.get(id=int(standard))
-    except:
-        return HttpResponse(u"", status=400)
+    except (ValueError, TypeError, Standard.DoesNotExist):
+        return HttpResponseBadRequest()
 
     grade = request.POST.get("grade")
     try:
         grade = Grade.objects.get(id=int(grade))
-    except:
-        return HttpResponse(u"", status=400)
+    except (ValueError, TypeError, Grade.DoesNotExist):
+        return HttpResponseBadRequest()
 
     category = request.POST.get("category")
     try:
         category = LearningObjectiveCategory.objects.get(id=int(category))
-    except:
-        return HttpResponse(u"", status=400)
+    except (ValueError, TypeError, LearningObjectiveCategory.DoesNotExist):
+        return HttpResponseBadRequest()
 
     if existing:
         ids = TaggedMaterial.objects.filter(tag__standard=standard,
@@ -218,9 +236,12 @@ def list_tags(request, existing=False):
         tags = AlignmentTag.objects.filter(standard=standard, grade=grade,
                                            category=category)
 
-    optgroups = []
-    items = []
-    title = None
+    tags = [dict(id=t.id,
+                 name=unicode(t),
+                 subcategory=t.subcategory,
+                 full_code=t.full_code) for t in tags]
+
+    tags.sort(cmp=cmp_tags)
 
     # Group tag by subcategory and create the following structure:
     # tag1.subcategory
@@ -231,21 +252,24 @@ def list_tags(request, existing=False):
     # - tag4
     # - tag5 (has the same subcat as tag4)
     # ....
+    optgroups = []
+    items = []
+    title = None
 
     for tag in tags:
-        if tag.subcategory != title:
+        if tag["subcategory"] != title:
             # Start filling the next optgroup
             if title and items:
-                optgroups.append(dict(title=title, items=items))
-            title = tag.subcategory
+                optgroups.append(dict(title=title.rstrip("."), items=items))
+            title = tag["subcategory"]
             items = []
-        items.append(dict(id=tag.id,
-                          name=unicode(tag),
-                          code=tag.full_code))
+        items.append(dict(id=tag["id"],
+                          name=tag["name"],
+                          code=tag["full_code"]))
 
     if title and items:
         # Add the last optgroup to final results
-        optgroups.append(dict(title=title, items=items))
+        optgroups.append(dict(title=title.rstrip("."), items=items))
 
     return dict(optgroups=optgroups)
 
