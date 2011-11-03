@@ -1,4 +1,5 @@
 {% extends "rubrics/manage/base.html" %}
+{% load utils %}
 
 {% block content %}
 
@@ -34,6 +35,22 @@
          data-delete-url="{% url rubrics_manage:delete %}"
          data-edit-url="{% url rubrics_manage:edit %}">
   </table>
+
+  {% if comments %}
+    <section class="resource-comments">
+      <h1>Comments:</h1>
+      {% for comment in comments %}
+        <article>
+          {% if comment.title %}<h1>{{ comment.title }}</h1>{% endif %}
+          <p>{{ comment.text|linebreaksbr }}</p>
+          <footer>
+            <span class="by">- {{ comment.author|username }}</span>
+          </footer>
+        </article>
+      {% endfor %}
+    </section>
+  {% endif %}
+
 {% endblock %}
 
 {% block extra-js %}

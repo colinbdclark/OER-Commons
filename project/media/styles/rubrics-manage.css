@@ -185,3 +185,7 @@ footer.global {
 .manage-rubrics .panel {
   overflow: inherit;
 }
+
+.manage-rubrics .resource-comments {
+  margin-top: 1em;
+}

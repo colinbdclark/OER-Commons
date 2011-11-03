@@ -377,6 +377,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 text=review.text,
                 timestamp=review.timestamp,
                 author=review.user,
+                is_review=True,
             ))
             if review.user == request.user:
                 data["hide_comment_form"] = True

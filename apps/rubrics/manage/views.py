@@ -15,7 +15,7 @@ from django.views.generic import TemplateView, FormView, View
 from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial, GradeLevel, GeneralSubject
 from rubrics.models import StandardAlignmentScore, RubricScore, Rubric, \
-    Evaluation, RubricScoreValue
+    Evaluation, RubricScoreValue, get_verbose_score_name
 from users.views.login import LoginForm
 from operator import or_
 import datetime
@@ -440,29 +440,56 @@ class ResourceEvaluations(ManageRubricsMixin, TemplateView):
         data["total_evaluations"] = evaluations.count()
 
         data["average_scores"] = []
+
+        standard_scores = StandardAlignmentScore.objects.filter(
+            evaluation__confirmed=True,
+            evaluation__content_type=self.content_type,
+            evaluation__object_id=self.object.id,
+        )
         data["average_scores"].append(dict(
             rubric=u"R1",
-            score=StandardAlignmentScore.objects.filter(
-                evaluation__confirmed=True,
-                evaluation__content_type=self.content_type,
-                evaluation__object_id=self.object.id,
-            ).exclude(score__value=None).aggregate(
+            score=standard_scores.exclude(score__value=None).aggregate(
                 models.Avg("score__value")
             )["score__value__avg"]
         ))
 
+        rubric_scores = RubricScore.objects.filter(
+            evaluation__confirmed=True,
+            evaluation__content_type=self.content_type,
+            evaluation__object_id=self.object.id
+        )
         for i, rubric_id in enumerate(Rubric.objects.values_list("id", flat=True)):
             data["average_scores"].append(dict(
                 rubric=u"R%i" % (i + 2),
-                score=RubricScore.objects.filter(
-                    evaluation__confirmed=True,
-                    evaluation__content_type=self.content_type,
-                    evaluation__object_id=self.object.id,
-                    rubric__id=rubric_id,
+                score=rubric_scores.filter(
+                    rubric__id=rubric_id
                 ).exclude(score__value=None).aggregate(
                     models.Avg("score__value")
                 )["score__value__avg"]
             ))
+
+        comments = []
+        for qs in (standard_scores, rubric_scores):
+            for score in qs.exclude(comment="").select_related():
+                comment = dict(
+                    text=score.comment,
+                    timestamp=score.evaluation.timestamp,
+                    author=score.evaluation.user,
+                )
+
+                if isinstance(score, StandardAlignmentScore):
+                    title = u"Degree of Alignment to %s" % score.alignment_tag.full_code
+                else:
+                    title = score.rubric.name
+
+                comment["title"] = u"%s: %s (%s)" % (
+                    title,
+                    get_verbose_score_name(score.score.value),
+                    score.score.get_value_display(),
+                )
+
+                comments.append(comment)
+        data["comments"] = comments
 
         return data
 

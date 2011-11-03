@@ -43,7 +43,7 @@ oer.materials.view_item.init_content_actions = function() {
 $.template("comment", '<article class="author rc5"><p>{{html text}}</p><footer><a class="edit" href="#"><span>Edit</span></a> <a class="delete" href="#"><span>Delete</span></a> <span class="by">- ${author}</span></footer></article>');
 
 oer.materials.view_item.init_comment = function() {
-  var $comments = $("section.comments");
+  var $comments = $("section.resource-comments");
   var $form = $("#comment-form");
 
   function init_delete_buttons() {
