@@ -301,6 +301,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 score=row["score"],
                 score_class=int(round(row["score"])),
             ))
+        data["alignment_scores"].sort(key=lambda x: x["score"], reverse=True)
 
         scores = item.evaluation_scores
 
