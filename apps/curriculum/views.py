@@ -191,7 +191,7 @@ def list_categories(request, existing=False):
     return dict(options=list(LearningObjectiveCategory.objects.filter(id__in=ids).values("id", "name")))
 
 
-TAG_CODE_RE = re.compile(r"(.+)?\.(\d+)[a-z]?$")
+TAG_CODE_RE = re.compile(r"(.+)?\.(\d+)(?:\.?[a-z])?$")
 
 
 def cmp_tags(tag1, tag2):
@@ -201,7 +201,7 @@ def cmp_tags(tag1, tag2):
     tag1_prefix, tag1_digit = TAG_CODE_RE.search(tag1).groups()
     tag2_prefix, tag2_digit = TAG_CODE_RE.search(tag2).groups()
 
-    if tag1_prefix == tag2_prefix:
+    if tag1_prefix == tag2_prefix and tag1_digit != tag2_digit:
         return cmp(int(tag1_digit), int(tag2_digit))
 
     return cmp(tag1, tag2)
