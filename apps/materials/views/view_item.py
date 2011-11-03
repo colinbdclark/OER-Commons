@@ -303,6 +303,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 score=row["score"],
                 score_class=int(round(row["score"])),
             ))
+        data["alignment_scores"].sort(key=lambda x: x["score"], reverse=True)
 
         rubric_scores = RubricScore.objects.filter(
             evaluation__confirmed=True,
