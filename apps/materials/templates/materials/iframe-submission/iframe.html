@@ -36,11 +36,18 @@
     </div>
 
     {% include "include/cdn-js.html" %}
+
+    <!--[if lt IE 9]>
+      {% compress js %}
+      <script type="text/javascript" src="{{ STATIC_URL }}javascripts/lib/rounded-corners-min.js"></script>
+      {% endcompress %}
+    <![endif]-->
     {% compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.validate.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.tmpl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.stepy.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/namespace.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/global.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/content-submission.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/autocomplete-list-widget.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/validation.js"></script>

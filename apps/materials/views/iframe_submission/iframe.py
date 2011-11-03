@@ -113,11 +113,11 @@ def dispatch_iframe(request):
         if user_tags:
             item_tags = item_tags.exclude(id__in=user_tags.values_list("id", flat=True))
 
-        review_item_url = reverse("materials:%s:add_review" % item.namespace,
-                               kwargs=dict(slug=item.slug))
-
-        review_form = ReviewForm(instance=item,
-                                 user=user)
+        comment_url = reverse(
+            "reviews:review",
+            kwargs=dict(content_type_id=content_type.id, object_id=item.id)
+        )
+        comment_form = ReviewForm(instance=item)
 
         return direct_to_template(request, "materials/iframe-submission/existing-resource.html",
                                   dict(item=item,
@@ -125,8 +125,8 @@ def dispatch_iframe(request):
                                        item_tags=item_tags,
                                        app_label=content_type.app_label,
                                        model=content_type.model,
-                                       review_item_url=review_item_url,
-                                       review_form=review_form,
+                                       comment_url=comment_url,
+                                       comment_form=comment_form,
                                        ))
     else:
         return direct_to_template(

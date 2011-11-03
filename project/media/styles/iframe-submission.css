@@ -236,15 +236,15 @@ form.content-submission fieldset.step {
   margin-right: 20px;
 }
 
-.iframe-submission .existing-resource .review textarea {
+.iframe-submission .existing-resource .comment textarea {
   width: 463px;
 }
 
-.iframe-submission .existing-resource .review {
+.iframe-submission .existing-resource .comment {
   width: 470px;
 }
 
-.iframe-submission .existing-resource .review .message {
+.iframe-submission .existing-resource .comment .message {
   margin: 5px 0;
   padding: 2px 5px;
   border: 1px solid #A88743;
