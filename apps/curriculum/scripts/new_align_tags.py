@@ -27,9 +27,6 @@ def run():
 
         d = tags[tag.full_code]
 
-        if tag.id == 1313:
-            print tag.full_code, d
-
         if tag.grade.code != d["grade"]:
             try:
                 existing = AlignmentTag.objects.get_by_natural_key(
