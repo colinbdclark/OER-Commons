@@ -1,4 +1,4 @@
-
+from annoying.functions import get_object_or_None
 
 def run():
     import csv, os
@@ -22,7 +22,13 @@ def run():
     tags_removed = 0
 
     for tag in AlignmentTag.objects.all().select_related():
+        if tag.full_code not in tags:
+            continue
+
         d = tags[tag.full_code]
+
+        if tag.id == 1313:
+            print tag.full_code, d
 
         if tag.grade.code != d["grade"]:
             try:
@@ -59,3 +65,26 @@ def run():
 
     print "Tagged materials updated:", tagged_materials_updated
     print "Tags removed:", tags_removed
+
+    # Remove tags with K-12 grade
+    grade = get_object_or_None(Grade, code=u"K-12")
+    if grade:
+        print "Removing K-12 grade..."
+        tagged_materials_removed = 0
+        tags_removed = 0
+        for tag in AlignmentTag.objects.filter(grade=grade):
+            for tagged in TaggedMaterial.objects.filter(tag=tag):
+                try:
+                    item = tagged.content_object
+                except AttributeError:
+                    item = None
+                tagged.delete()
+                if isinstance(item, Indexed):
+                    item.reindex()
+                tagged_materials_removed += 1
+            tag.delete()
+            tags_removed += 1
+        grade.delete()
+        print "Tagged materials removed:", tagged_materials_removed
+        print "Tags removed:", tags_removed
+
