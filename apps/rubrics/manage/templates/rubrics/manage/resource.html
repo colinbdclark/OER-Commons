@@ -23,9 +23,13 @@
     </tbody></table>
   </div>
 
-  <h1>Resource: {{ object }}</h1>
+  <h1>Resource:
+    {% if object.get_absolute_url %}
+      <a target="_blank" href="{{ object.get_absolute_url }}">{{ object }}</a>
+    {% else %}{{ object }}{% endif %}
+  </h1>
   {% if object.url %}
-    <h2><a href="{{ object.url }}">{{ object.url }}</a></h2>
+    <h2><a target="_blank" href="{{ object.url }}">{{ object.url }}</a></h2>
   {% endif %}
   {% if object.institution %}
     <h2>{{ object.institution }}</h2>
