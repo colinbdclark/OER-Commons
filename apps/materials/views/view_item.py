@@ -313,6 +313,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
             evaluation__object_id=self.item.id,
         )
 
+        scores = item.evaluation_scores
         for rubric_id, name in Rubric.objects.values_list("id", "name"):
             #noinspection PySimplifyBooleanCheck
             score = None
