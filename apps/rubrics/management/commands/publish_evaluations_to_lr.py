@@ -1,7 +1,5 @@
-from django.core.exceptions import ImproperlyConfigured
 from django.core.management.base import NoArgsCommand
 import copy, datetime, logging, os, shlex, subprocess, simplejson
-from django.db.models import Avg
 
 
 logger = logging.getLogger("rubrics.publish_evaluations_to_lr")
@@ -13,6 +11,9 @@ class Command(NoArgsCommand):
 
     def handle_noargs(self, **options):
         from django.conf import settings
+        from django.contrib.sites.models import Site
+        from django.core.exceptions import ImproperlyConfigured
+        from django.db.models import Avg
         from curriculum.models import AlignmentTag
         from rubrics.models import Evaluation, StandardAlignmentScore, RubricScore, Rubric
 
@@ -87,10 +88,15 @@ class Command(NoArgsCommand):
         )
         evaluation_number = evaluations.count()
 
+        site_url = "http://%s" % Site.objects.get_current().domain
+
         for evaluation in evaluations:
             instance = evaluation.content_object
-            url = getattr(instance, "url", None)
-            if not url:
+            if hasattr(instance, "get_absolute_url"):
+                url = site_url + instance.get_absolute_url()
+            elif hasattr(instance, "url"):
+                url = instance.url
+            else:
                 continue
 
             for row in StandardAlignmentScore.objects.filter(
