@@ -13,7 +13,7 @@
     "model": "curriculum.standard", 
     "fields": {
       "code": "CC", 
-      "name": "Common Core Math", 
+      "name": "Common Core State Standards Math", 
       "substandard_code": "Math"
     }
   }, 
@@ -22,7 +22,7 @@
     "model": "curriculum.standard", 
     "fields": {
       "code": "CC", 
-      "name": "Common Core English Language Arts", 
+      "name": "Common Core State Standards English Language Arts", 
       "substandard_code": "ELA"
     }
   }, 
