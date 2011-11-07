@@ -218,8 +218,9 @@ class Index(ManageRubricsMixin, TemplateView):
             for row in qs:
                 object_id = row.pop("id")
                 data = dict(
-                    total_evaluations=0, title=u"", url=u"", institution__name=u"",
-                    hostname=u"", last_evaluated=None, evaluator=u"", ip=u"",
+                    total_evaluations=0, title=u"", url=u"",
+                    institution__name=u"", hostname=u"", last_evaluated=None,
+                    evaluator=u"", comments=False,
                     manage_resource_url=reverse("rubrics_manage:resource",
                         kwargs=dict(
                             content_type_id=content_type_id,
@@ -240,17 +241,6 @@ class Index(ManageRubricsMixin, TemplateView):
         if until_date:
             qs = qs.filter(timestamp__lte=until_date)
 
-        qs = qs.values(
-                "content_type__id",
-                "object_id",
-            ).annotate(evaluations_count=models.Count("id")).distinct()
-        for row in qs:
-            k = (row["content_type__id"],
-                 row["object_id"])
-            if k in items:
-                items[k]["total_evaluations"] = row["evaluations_count"]
-
-
         qs = StandardAlignmentScore.objects.filter(evaluation__confirmed=True)
         if from_date:
             qs = qs.filter(evaluation__timestamp__gte=from_date)
@@ -266,7 +256,6 @@ class Index(ManageRubricsMixin, TemplateView):
             if k not in items:
                 continue
             items[k]["r1"] = row["average_score"]
-
 
         for i, rubric_id in enumerate(Rubric.objects.values_list("id", flat=True)):
             qs = RubricScore.objects.filter(evaluation__confirmed=True,
@@ -307,21 +296,30 @@ class Index(ManageRubricsMixin, TemplateView):
             "user__email",
             "user__username",
             "user__id",
-            "ip",
         )
 
-        for content_type_id, object_id, hostname, timestamp, first_name, last_name, email, username, user_id, ip in qs:
+        for content_type_id, object_id, hostname, timestamp, first_name, last_name, email, username, user_id in qs:
             k = (content_type_id, object_id)
             if k in items and items[k]["last_evaluated"] is None:
                 items[k].update(dict(
                     last_evaluated=timestamp,
                     hostname=hostname,
                     evaluator=evaluator_name(first_name, last_name, email, username),
-                    ip=ip,
                     manage_user_url=reverse("rubrics_manage:user",
                         kwargs=dict(user_id=user_id)
                     )
                 ))
+
+        for model in (StandardAlignmentScore, RubricScore):
+            qs = model.objects.filter(
+                evaluation__confirmed=True,
+            ).exclude(comment=u"").values_list(
+                "evaluation__content_type__id",
+                "evaluation__object_id",
+            ).distinct()
+            for k in qs:
+                if k in items:
+                    items[k]["comments"] = True
 
         items = items.values()
 
@@ -482,6 +480,7 @@ class ResourceEvaluations(ManageRubricsMixin, TemplateView):
                 else:
                     title = score.rubric.name
 
+                #noinspection PyUnresolvedReferences
                 comment["title"] = u"%s: %s (%s)" % (
                     title,
                     get_verbose_score_name(score.score.value),

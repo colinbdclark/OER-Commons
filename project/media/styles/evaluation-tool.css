@@ -748,8 +748,8 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics .comment.checked {
-  background: #bac8d1 url(../images/evaluation/icon-comment-checked.png) no-repeat 4px 1px;
   border-color: #293776;
+  background: #bac8d1 url(../images/evaluation/icon-comment-checked.png) no-repeat 4px 1px;
 }
 
 .comment-popup {

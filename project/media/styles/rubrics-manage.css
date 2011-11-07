@@ -189,3 +189,11 @@ footer.global {
 .manage-rubrics .resource-comments {
   margin-top: 1em;
 }
+
+.datagrid .has-comments {
+  display: inline-block;
+  width: 24px;
+  height: 16px;
+  background: url(../images/evaluation/icon-comment.png) no-repeat 50% 50%;
+  vertical-align: middle;
+}
