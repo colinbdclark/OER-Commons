@@ -41,9 +41,11 @@ class RatingForm(forms.Form):
             self.instance.ratings.filter(user=self.user).delete()
         else:
             try:
-                rating_obj = Rating.objects.get(content_type=content_type,
-                                                   object_id=object_id,
-                                                   user=self.user)
+                rating_obj = Rating.objects.get(
+                    content_type=content_type,
+                    object_id=object_id,
+                    user=self.user
+                )
                 rating_obj.value = int(rating)
                 rating_obj.save()
             except Rating.DoesNotExist:
