@@ -82,15 +82,19 @@ class LearningObjectiveCategory(models.Model):
 class AlignmentTagManager(models.Manager):
 
     def get_from_full_code(self, code):
+        # Full code consists for the following parts [standard].[grade].[category].[code]
+        # Codes like CC.3.R.F.3.a are ambigous. We need to try different combinations
+        # of [category] and [code]: "R, 3.F.a", "R.F, 3.a", "R.F.3, a".
         parts = code.split(".")[1:]
-        assert 3 <= len(parts) <= 4
-        if len(parts) == 3:
-            return self.get_by_natural_key(*parts)
-        else:
+        grade = parts.pop(0)
+        for i in range(1, len(parts)):
             try:
-                return self.get_by_natural_key(*[parts[0], ".".join(parts[1:3]), parts[3]])
+                category = ".".join(parts[0:i])
+                code = ".".join(parts[i:])
+                return self.get_by_natural_key(grade, category, code)
             except AlignmentTag.DoesNotExist:
-                return self.get_by_natural_key(*[parts[0], parts[1], ".".join(parts[2:])])
+                continue
+        raise AlignmentTag.DoesNotExist()
 
     def get_by_natural_key(self, grade_code, category_code, code):
         return self.get(grade__code=grade_code, category__code=category_code,
