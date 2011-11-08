@@ -43,6 +43,16 @@ class Command(NoArgsCommand):
                                        "--key-location", key_location,
                                        "--passphrase", passphrase,
                                        "--publish-url", publish_url]
+
+        username = getattr(settings, "LR_NODE_USERNAME", None)
+        password = getattr(settings, "LR_NODE_PASSWORD", None)
+
+        if username and password:
+            args += [
+                "--publish-username", username,
+                "--publish-password", password,
+            ]
+
         ENVELOPE = {
             "TOS": {
                 "submission_TOS": "http://www.learningregistry.org/tos/cc0/v0-5/"
