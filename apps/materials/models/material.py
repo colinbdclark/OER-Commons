@@ -68,7 +68,8 @@ class GenericMaterial(models.Model, EvaluatedItemMixin):
 
     creator = models.ForeignKey(User, verbose_name=_("Creator"))
 
-    url = models.URLField(max_length=300, verbose_name=_(u"URL"), verify_exists=False)
+    url = models.URLField(max_length=300, verbose_name=_(u"URL"),
+                          unique=True)
 
     alignment_tags = generic.GenericRelation(TaggedMaterial)
 
