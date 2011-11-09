@@ -192,9 +192,9 @@ class Index(ManageRubricsMixin, TemplateView):
             model = ContentType.objects.get(id=content_type_id).model_class()
             qs = model.objects.filter(id__in=object_ids)
             if model in (Course, Library):
-                fields = ["title", "url", "institution__name"]
+                fields = ["slug", "title", "url", "institution__name"]
             elif model == CommunityItem:
-                fields = ["title", "url"]
+                fields = ["slug", "title", "url"]
             elif model == GenericMaterial:
                 fields = ["url"]
             else:
@@ -218,7 +218,7 @@ class Index(ManageRubricsMixin, TemplateView):
             for row in qs:
                 object_id = row.pop("id")
                 data = dict(
-                    total_evaluations=0, title=u"", url=u"",
+                    total_evaluations=0, title=u"", url=u"", oer_url=u"",
                     institution__name=u"", hostname=u"", last_evaluated=None,
                     evaluator=u"", comments=False,
                     manage_resource_url=reverse("rubrics_manage:resource",
@@ -232,6 +232,10 @@ class Index(ManageRubricsMixin, TemplateView):
                 for i in xrange(1, 8):
                     data["r%i" % i] = None
 
+                slug = row.pop("slug", None)
+                if slug:
+                    data["oer_url"] = reverse("materials:%s:view_item" % model.namespace,
+                                              kwargs=dict(slug=slug))
                 data.update(row)
                 items[(content_type_id, object_id)] = data
 

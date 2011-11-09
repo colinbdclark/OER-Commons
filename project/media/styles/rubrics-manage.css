@@ -197,3 +197,11 @@ footer.global {
   background: url(../images/evaluation/icon-comment.png) no-repeat 50% 50%;
   vertical-align: middle;
 }
+
+.datagrid .oer-url {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url(../images/rubrics-manage/icon-external-link.png) no-repeat 50% 0;
+  vertical-align: middle;
+}

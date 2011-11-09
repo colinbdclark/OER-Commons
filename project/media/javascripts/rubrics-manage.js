@@ -6,9 +6,17 @@ oer.rubrics_manage.link_formatter = function(url_field) {
   };
 };
 
-oer.rubrics_manage.comments_formatter = function(value, rowData) {
+oer.rubrics_manage.format_resource_name = function(value, rowData) {
+  var out = '<a href="' + rowData.manage_resource_url + '">' + value + '</a>';
+  if (rowData.oer_url !== "") {
+    out = '<a href="' + rowData.oer_url + '" class="oer-url" target="_blank"></a> ' + out;
+  }
+  return out;
+};
+
+oer.rubrics_manage.format_comment = function(value, rowData) {
   if (value) {
-    return '<span class="has-comments"></span>'
+    return '<span class="has-comments"></span>';
   }
   return "";
 };
@@ -24,7 +32,7 @@ oer.rubrics_manage.init_index = function() {
     toolbar: "#toolbar",
     columns: [
       [
-        {field: "title", title: "Resource Name", width: 70, sortable: true, formatter: oer.rubrics_manage.link_formatter("manage_resource_url")},
+        {field: "title", title: "Resource Name", width: 70, sortable: true, formatter: oer.rubrics_manage.format_resource_name},
         {field: "url", title: "Resource URL", width: 70, sortable: true},
         {field: "institution__name", title: "Institution", width: 70, sortable: true},
         {field: "hostname", title: "Host", width: 50, sortable: true},
@@ -37,7 +45,7 @@ oer.rubrics_manage.init_index = function() {
         {field: "r5", title: "R5", width: 10, sortable: true, align: "center"},
         {field: "r6", title: "R6", width: 10, sortable: true, align: "center"},
         {field: "r7", title: "R7", width: 10, sortable: true, align: "center"},
-        {field: "comments", title: "Comments", width: 10, sortable: true, formatter: oer.rubrics_manage.comments_formatter}
+        {field: "comments", title: "Comments", width: 10, sortable: true, formatter: oer.rubrics_manage.format_comment}
       ]
     ]
   });
