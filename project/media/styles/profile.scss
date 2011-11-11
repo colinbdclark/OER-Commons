@@ -1,0 +1,382 @@
+@import "mixins.scss";
+
+.profile-view {
+  .layout-columns {
+    background: none;
+  }
+
+  .column-left, .column-right {
+    width: 230px;
+  }
+
+  .column-main {
+    width: 460px;
+  }
+
+  #content {
+    ul {
+      margin: 0 0 1em;
+      padding: 0;
+      list-style-type: none;
+    }
+    li {
+      margin: 0 0 0.5em;
+      padding: 0;
+    }
+  }
+
+  section.avatar,
+  section.basic {
+    display: inline-block;
+    margin-bottom: 2em;
+    vertical-align: top;
+  }
+  section.avatar {
+    width: 160px;
+  }
+
+  section.basic {
+    width: 280px;
+  }
+  .name {
+    color: #0a546d;
+    font-size: 2em;
+  }
+
+  a.edit {
+    display: inline-block;
+    padding: 3px 0;
+    width: 120px;
+    background: #679801;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom: 1em;
+  }
+
+  .box {
+    border: 1px solid #e6ecee;
+    > h1 {
+      color: #0A546D;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 15px;
+      padding: 5px 0;
+      border-bottom: 1px dotted #e6ecee;
+      font-weight: bold;
+    }
+    > .body {
+      padding: 1em;
+    }
+    > footer {
+      background-color: #e6ecee;
+      @include no-border-radius-top;
+      text-align: center;
+      padding: 5px 0;
+    }
+    a {
+      color: #0A546D;
+    }
+  }
+
+  .portlet {
+    h1 {
+      background-color: #0A546D;
+      font-weight: bold;
+      color: white;
+      font-size: 14px;
+      padding: 3px 5px;
+      @include no-border-radius-bottom;
+    }
+
+    &.stats {
+      p {
+        font-size: 16px;
+        margin: 0.5em 0;
+      }
+    }
+
+    &.about {
+      dl {
+        color: #666;
+        margin-left: 3px;
+      }
+      dt {
+        font-weight: bold;
+        margin-top: 1em;
+      }
+      dd {
+        margin: 0.2em 0;
+      }
+    }
+  }
+
+
+  .links {
+    color: #0A546D;
+
+    p {
+      margin-bottom: 1em;
+      &.website {
+        a {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    ul {
+      margin: 1em 0 0;
+      padding: 0;
+      list-style-type: none;
+
+      li {
+        margin: 0.5em 0;
+        padding: 0;
+      }
+
+      li {
+        a {
+          display: inline-block;
+          padding-left: 40px;
+          height: 32px;
+          background: no-repeat 0 50%;
+          text-decoration: none;
+          line-height: 32px;
+
+          &.facebook {
+            background-image: url(../images/icon-facebook.png);
+          }
+
+          &.twitter {
+            background-image: url(../images/icon-twitter.png);
+          }
+
+          &.skype {
+            background-image: url(../images/icon-skype.png);
+          }
+        }
+      }
+    }
+  }
+
+  .activity {
+    > h1 {
+      margin-bottom: 0;
+    }
+    article {
+      border: 1px solid #c1dee8;
+      padding: 10px;
+      margin: 2px;
+      h1 {
+        font-size: 15px;
+        font-weight: bold;
+        color: #0b7ba9;
+        margin-bottom: 0;
+      }
+      &.resource {
+        h1 {
+          margin-bottom: 0.7em;
+        }
+        h1 a {
+          color: #1f4d64;
+          text-decoration: none;
+        }
+        &.saved {
+          border-color: #98e62c;
+          h1 span {
+            color: #31660a;
+          }
+        }
+        .actions {
+          float: right;
+          a {
+            text-decoration: none;
+            color: #666;
+            border: 1px solid #ccc;
+            display: inline-block;
+            margin-top: 5px;
+            padding: 3px 5px;
+          }
+        }
+        .thumbnail {
+          width: 300px;
+          height: 120px;
+          overflow: hidden;
+          @include box-shadow(0, 0, 5px, #ccc);
+        }
+      }
+    }
+  }
+}
+
+.profile-view,
+.profile-edit {
+  section.avatar {
+    .wrap {
+      position: relative;
+      margin-bottom: 5px;
+      width: 140px;
+      height: 140px;
+      span {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: block;
+        padding: 3px 5px;
+        border: solid #ccc;
+        border-width: 0 0 1px 1px;
+        background-color: #eee;
+        @include no-border-radius-top;
+        @include no-border-radius-bottom-right;
+      }
+      &.loading {
+        background: url(../images/ajax-loader-big.gif) no-repeat 50% 50%;
+        img {
+          display: none;
+        }
+      }
+    }
+  }
+
+  #upload-avatar-btn {
+    display: inline-block;
+    height: 16px;
+  }
+}
+
+.profile-edit {
+  section {
+    display: inline-block;
+    vertical-align: top;
+
+    h1 {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: #0A546D;
+      font-weight: normal;
+      font-size: 20px;
+      &.loading {
+        padding-right: 20px;
+        background: url(../images/ajax-loader.gif) no-repeat 100% 50%;
+      }
+    }
+  }
+
+  form {
+    .field {
+      margin-bottom: 15px;
+    }
+    &.formatted {
+      label {
+        margin: 0;
+        &.error {
+          font-size: 12px;
+        }
+      }
+      .required label {
+          background: none;
+      }
+      input.text {
+        margin: 0;
+        padding: 2px 4px;
+        height: 18px;
+        font-size: 14px;
+      }
+      textarea.text {
+        margin: 0;
+        padding: 2px 4px;
+        resize: none;
+      }
+      .autocomplete-list-widget label {
+        font-weight: normal;
+      }
+    }
+    &[name='roles'], &[name='about'] {
+      display: inline-block;
+    }
+  }
+
+  div.label {
+    margin-bottom: 5px;
+  }
+
+  section.avatar {
+    margin-top: 30px;
+  }
+
+  .user-info {
+    padding: 0 35px;
+    width: 250px;
+    border-right: 1px solid #ccc;
+  }
+
+  .change-password {
+    padding-left: 35px;
+    width: 250px;
+  }
+
+  .user-info, .change-password {
+    input.text {
+      width: 238px;
+    }
+  }
+
+  section#map {
+    margin-left: 35px;
+    width: 350px;
+    height: 250px;
+  }
+
+  section.roles,
+  section.educator {
+    width: 300px;
+  }
+
+  section.educator {
+    margin-left: 35px;
+  }
+
+  .about textarea {
+    width: 330px;
+    height: 198px;
+  }
+
+  .links {
+    margin-left: 35px;
+    input.text {
+      width: 300px;
+    }
+  }
+}
+
+.profile-views {
+  display: inline-block;
+  margin-right: 35px;
+  width: 150px;
+  vertical-align: top;
+
+  h1 {
+    margin-bottom: 10px;
+    color: #0A546D;
+    line-height: 20px;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  li {
+    margin: 0 0 0.5em;
+    padding: 0;
+    font-weight: bold;
+  }
+
+  li a {
+    font-weight: normal;
+  }
+}

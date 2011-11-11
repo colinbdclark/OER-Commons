@@ -49,10 +49,6 @@ class BaseViewItemMixin(object):
 
         self.content_type = ContentType.objects.get_for_model(self.item)
 
-        self.item.identifier = "%s.%s.%i" % (self.content_type.app_label,
-                                            self.content_type.model,
-                                            self.item.id)
-
         Visit.objects.count(request, self.item)
 
         return super(BaseViewItemMixin, self).get(request, *args, **kwargs)
@@ -334,10 +330,6 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                     "evaluation"
                 ).distinct().count()
             ))
-
-        data["toolbar_view_url"] = reverse("materials:%s:toolbar_view_item" % item.namespace,
-                                       kwargs=dict(slug=item.slug))
-
 
         comments = []
 
