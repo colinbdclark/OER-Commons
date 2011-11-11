@@ -154,6 +154,10 @@ class Material(Indexed, EvaluatedItemMixin):
     def get_absolute_url(self):
         return "materials:%s:view_item" % self.namespace, [], {"slug": self.slug}
 
+    @permalink
+    def toolbar_view_url(self):
+        return "materials:%s:toolbar_view_item" % self.namespace, [], {"slug": self.slug}
+
     @classmethod
     @permalink
     def get_parent_url(cls):
@@ -256,4 +260,8 @@ class Material(Indexed, EvaluatedItemMixin):
             object_id=self.id,
             confirmed=True).exists()
 
+    @property
+    def identifier(self):
+        model_name = self._meta.object_name.lower()
+        return "materials.%s.%i" % (model_name, self.id)
 

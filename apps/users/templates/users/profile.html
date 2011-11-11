@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load utils %}
+{% load rating_tags %}
+{% load i18n %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
       oer.profile.init_avatar();
+      oer.rating.init();
     });
   </script>
 {% endblock %}
@@ -15,7 +18,55 @@
 {% block above-content %}{% endblock %}
 
 {% block column-left %}
-  <a href="{% url users:profile_edit %}" class="edit rc10">Edit My Profile</a>
+  <a href="{% url users:profile_edit %}" class="edit rc5">Edit My Profile</a>
+
+  {% if saved or evaluated %}
+  <section class="portlet stats">
+    <h1 class="rc5">OER Stats</h1>
+    {% if saved %}
+      <p>
+        Saved: <strong>{{ saved }}</strong> {% blocktrans count counter=saved %}item{% plural %}items{% endblocktrans %}
+      </p>
+    {% endif %}
+    {% if evaluated %}
+      <p>
+        Saved: <strong>{{ evaluated }}</strong> {% blocktrans count counter=evaluated %}item{% plural %}items{% endblocktrans %}
+      </p>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  <section class="portlet about">
+    <h1 class="rc5">About</h1>
+    <dl>
+      {% if profile.roles.exists %}
+        <dt>Roles</dt>
+        {% for role in profile.roles.all %}
+          <dd>{{ role }}</dd>
+        {% endfor %}
+      {% endif %}
+
+      {% if profile.educator_student_levels.exists %}
+        <dt>Levels</dt>
+        {% for level in profile.educator_student_levels.all %}
+          <dd>{{ level }}</dd>
+        {% endfor %}
+      {% endif %}
+
+      {% if profile.educator_subjects.exists %}
+        <dt>Subjects</dt>
+        {% for subject in profile.educator_subjects.all %}
+          <dd>{{ subject }}</dd>
+        {% endfor %}
+      {% endif %}
+
+      {% if profile.about_me %}
+        <dt>About me</dt>
+        <dd>{{ profile.about_me|linebreaksbr }}</dd>
+      {% endif %}
+    </dl>
+  </section>
+
 {% endblock %}
 
 {% block content %}
@@ -23,9 +74,7 @@
   <section class="avatar">
     <div class="wrap">
       {{ profile.get_avatar_img }}
-      <span{% if profile.hide_avatar %} style="display: none;"{% endif %}><a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete</a></span>
     </div>
-    <a id="upload-avatar-btn" href="{% url users:profile_avatar_update %}" class="dashed">Change picture</a>
   </section>
   <section class="basic">
     <ul>
@@ -41,67 +90,71 @@
       {% endif %}
     </ul>
   </section>
-  {% if profile.roles.exists %}
-    <section class="roles">
-      <h1>Roles</h1>
-      <ul>
-        {% for role in profile.roles.all %}
-          <li>{{ role }}</li>
-        {% endfor %}
-      </ul>
-    </section>
-  {% endif %}
-  {% if profile.educator_student_levels.exists %}
-    <section class="levels">
-      <h1>Levels</h1>
-      <ul>
-        {% for level in profile.educator_student_levels.all %}
-          <li>{{ level }}</li>
-        {% endfor %}
-      </ul>
-      {% if profile.educator_subjects.exists %}
-        <h1>Subjects</h1>
-        <ul>
-          {% for subject in profile.educator_subjects.all %}
-            <li>{{ subject }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </section>
-  {% endif %}
 
-  {% if profile.about_me %}
-    <section class="about">
-      <h1>About me</h1>
-      <p>{{ profile.about_me|linebreaksbr }}</p>
+  {% if activity %}
+    <section class="box rc10 activity">
+      <h1>Recent Activity</h1>
+      {% for item in activity %}
+        <article class="{{ item.type }}{% if item.action %} {{ item.action }}{% endif %}">
+          {% if item.type == "resource" %}
+            <h1>
+              <span>
+                {% if item.action == "saved" %}Saved{% endif %}:
+              </span>
+              <a href="{{ item.resource.get_absolute_url }}">{{ item.resource }}</a>
+            </h1>
+            <div class="actions">
+              {% stars item.resource.identifier item.resource.rating %}
+              {% if item.action == "saved" %}
+                <a class="rc5" href="{{ item.resource.toolbar_view_url }}#evaluate">Evaluate</a>
+              {% endif %}
+            </div>
+            {% spaceless %}
+              <div class="thumbnail">
+                {% if item.resource.screenshot %}
+                  {% thumbnail item.resource.screenshot "300x120" crop="0px 0px" as im %}
+                      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                  {% endthumbnail %}
+                {% else %}
+                  <img src="http://placehold.it/300x120/f8f8f8/bbbbbb&text=No%20screenshot%20yet" width="300" height="120">
+                {% endif %}
+              </div>
+            {% endspaceless %}
+          {% endif %}
+        </article>
+      {% endfor %}
+      <footer class="rc10">
+        <a href="{% url myitems:myitems %}">See more in My Items</a>
+      </footer>
     </section>
   {% endif %}
-
 {% endblock %}
 
 {% block column-right %}
-  <section class="portlet links rc10">
-    <h1>Connect on the Web</h1>
-    {% if profile.website_url %}
-      <p class="website">
-        <span>Website or Blog</span>
-        <a href="{{ profile.website_url }}" target="_blank">{{ profile.website_url|truncatechars:30 }}</a>
-      </p>
-    {% endif %}
-    {% if profile.facebook_id or profile.twitter_id or profile.skype_id %}
-      <ul class="social">
-        {% if profile.facebook_id %}
-          <li><a target="_blank" class="facebook" href="{{ profile.facebook_url }}">{% if profile.facebook_id.isdigit %}Facebook{% else %}{{ profile.facebook_id }}{% endif %}</a></li>
-        {% endif %}
-        {% if profile.twitter_id %}
-          <li><a target="_blank" class="twitter" href="https://twitter.com/{{ profile.twitter_id }}">{{ profile.twitter_id }}</a></li>
-        {% endif %}
-        {% if profile.skype_id %}
-          <li><a class="skype" href="skype:{{ profile.skype_id }}?call">{{ profile.skype_id }}</a></li>
-        {% endif %}
-      </ul>
-    {% else %}
-      <p><a href="{% url users:profile_about %}">Add a link to your website, Facebook, Twitter or Skype accounts</a></p>
-    {% endif %}
+  <section class="box links rc10">
+    <h1>Connect</h1>
+    <div class="body">
+      {% if profile.website_url %}
+        <p class="website">
+          <a href="{{ profile.website_url }}" target="_blank">{{ profile.website_url|cut:"https://"|cut:"http://"|truncatechars:35 }}</a>
+        </p>
+      {% endif %}
+      {% if profile.facebook_id or profile.twitter_id or profile.skype_id %}
+        <ul class="social">
+          {% if profile.facebook_id %}
+            <li><a target="_blank" class="facebook" href="{{ profile.facebook_url }}">{% if profile.facebook_id.isdigit %}Facebook{% else %}{{ profile.facebook_id }}{% endif %}</a></li>
+          {% endif %}
+          {% if profile.twitter_id %}
+            <li><a target="_blank" class="twitter" href="https://twitter.com/{{ profile.twitter_id }}">{{ profile.twitter_id }}</a></li>
+          {% endif %}
+          {% if profile.skype_id %}
+            <li><a class="skype" href="skype:{{ profile.skype_id }}?call">{{ profile.skype_id }}</a></li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    </div>
+    <footer class="rc10">
+      <a class="dashed" href="{% url users:profile_about %}">Add links to social media</a>
+    </footer>
   </section>
 {% endblock %}

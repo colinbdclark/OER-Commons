@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load compress %}
+{% load scss %}
 <html>
 <head>
   <title>{{ page_title }}</title>
@@ -7,7 +8,7 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/reset.css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/easyui/themes/gray/easyui.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}styles/base.css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/base.scss" %}" />
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/form.css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/login.css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/rubrics-manage.css" />

@@ -99,7 +99,7 @@
   <div class="details">
     <h1 itemprop="name">
       {% if request.preferences.show_toolbar %}
-        <a href="{{ toolbar_view_url }}">
+        <a href="{{ item.toolbar_view_url }}">
       {% else %}
         <a href="{{ item.url }}" target="_blank">
       {% endif %}
@@ -221,7 +221,7 @@
   </div>
 
   <div class="align-right">
-    <a id="goto" {% if request.preferences.show_toolbar %}href="{{ toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
+    <a id="goto" {% if request.preferences.show_toolbar %}href="{{ item.toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
        class="button-blue-big rc5">Go to OER Item</a>
   </div>
 
@@ -289,7 +289,7 @@
     <h1>Rate and Review</h1>
     {% stars item.identifier item.ratings.all %}
     <div>
-      <a href="{{ toolbar_view_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
+      <a href="{{ item.toolbar_view_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
       <a href="#evaluate-tooltip" rel="#evaluate-tooltip" class="tooltip"><small>What is this?</small></a>
       <div style="display: none" id="evaluate-tooltip">
           These seven rubrics will help users determine the degree of alignment of OER to

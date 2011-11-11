@@ -1,0 +1,47 @@
+@mixin no-border-radius-top-right {
+  border-top-right-radius: 0;
+  -moz-border-radius-topright: 0;
+  .rocon-tr {
+    display: none;
+  }
+}
+
+@mixin no-border-radius-top-left {
+  border-top-left-radius: 0;
+  -moz-border-radius-topleft: 0;
+  .rocon-tl {
+    display: none;
+  }
+}
+
+@mixin no-border-radius-bottom-right {
+  border-bottom-right-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  .rocon-br {
+    display: none;
+  }
+}
+
+@mixin no-border-radius-bottom-left {
+  border-bottom-left-radius: 0;
+  -moz-border-radius-bottomleft: 0;
+  .rocon-bl {
+    display: none;
+  }
+}
+
+@mixin no-border-radius-top {
+  @include no-border-radius-top-right;
+  @include no-border-radius-top-left;
+}
+
+@mixin no-border-radius-bottom {
+  @include no-border-radius-bottom-right;
+  @include no-border-radius-bottom-left;
+}
+
+@mixin box-shadow($voffset, $hoffset, $blur, $color) {
+  -moz-box-shadow: $voffset $hoffset $blur $color;
+  -webkit-box-shadow: $voffset $hoffset $blur $color;
+  box-shadow: $voffset $hoffset $blur $color;
+}

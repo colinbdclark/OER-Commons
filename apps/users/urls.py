@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns, url
+from users.views.profile import ProfileView
 
 
 urlpatterns = patterns('users.views',
@@ -11,7 +12,7 @@ urlpatterns = patterns('users.views',
     url(r"^welcome/?$", "registration.welcome", name="welcome"),
     url(r"^reset-password/?$", "reset_password.init", name="reset_password_init"),
     url(r"^reset-password/(?P<key>[^/]+)/?$", "reset_password.reset_password", name="reset_password"),
-    url(r"^profile/?$", "profile.profile_view", name="profile"),
+    url(r"^profile/?$", ProfileView.as_view(), name="profile"),
     url(r"^profile/edit/?$", "profile.profile_edit", name="profile_edit"),
     url(r"^profile/avatar/update/?$", "profile.avatar_update", name="profile_avatar_update"),
     url(r"^profile/avatar/delete/?$", "profile.avatar_delete", name="profile_avatar_delete"),
