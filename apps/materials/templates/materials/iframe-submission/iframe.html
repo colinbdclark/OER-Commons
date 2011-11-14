@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load compress %}
 {% load flatblock_tags %}
+{% load scss %}
 <html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
     <meta charset="utf-8"/>
@@ -10,7 +11,7 @@
 
     <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all" />
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/base.css" media="all" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/base.scss" %}" media="all" />
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/form.css" media="all" />
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/autocomplete-list-widget.css" media="all" />
     <link rel="stylesheet" href="{{ STATIC_URL }}styles/iframe-submission.css" media="all" />
@@ -36,11 +37,18 @@
     </div>
 
     {% include "include/cdn-js.html" %}
+
+    <!--[if lt IE 9]>
+      {% compress js %}
+      <script type="text/javascript" src="{{ STATIC_URL }}javascripts/lib/rounded-corners-min.js"></script>
+      {% endcompress %}
+    <![endif]-->
     {% compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.validate.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.tmpl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.stepy.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/namespace.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}javascripts/global.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/content-submission.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/autocomplete-list-widget.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}javascripts/validation.js"></script>

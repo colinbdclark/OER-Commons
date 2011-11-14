@@ -77,6 +77,7 @@ INSTALLED_APPS = (
     'south',
     'staticfiles',
     'compressor',
+    'django_scss',
     'debug_toolbar',
     'haystack',
     'haystack_scheduled',

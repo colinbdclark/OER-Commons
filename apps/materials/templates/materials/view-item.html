@@ -100,7 +100,7 @@
   <div class="details">
     <h1 itemprop="name">
       {% if request.preferences.show_toolbar %}
-        <a href="{{ toolbar_view_url }}">
+        <a href="{{ item.toolbar_view_url }}">
       {% else %}
         <a href="{{ item.url }}" target="_blank">
       {% endif %}
@@ -222,20 +222,20 @@
   </div>
 
   <div class="align-right">
-    <a id="goto" {% if request.preferences.show_toolbar %}href="{{ toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
+    <a id="goto" {% if request.preferences.show_toolbar %}href="{{ item.toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
        class="button-blue-big rc5">Go to OER Item</a>
   </div>
 
 </article>
 
-<section class="comments">
+<section class="resource-comments">
   <h1>Comments:</h1>
   {% for comment in comments %}
-    <article{% if comment.author == request.user %} class="author rc5"{% endif %} itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
+    <article{% if comment.is_review and comment.author == request.user %} class="author rc5"{% endif %} itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
       {% if comment.title %}<h1>{{ comment.title }}</h1>{% endif %}
       <p itemprop="reviewBody">{{ comment.text|linebreaksbr }}</p>
       <footer>
-        {% if comment.author == request.user %}
+        {% if comment.is_review and comment.author == request.user %}
           <a href="#" class="edit"><span>Edit</span></a>
           <a href="#" class="delete"><span>Delete</span></a>
         {% endif %}
@@ -290,7 +290,7 @@
     <h1>Rate and Review</h1>
     {% stars item.identifier item.ratings.all %}
     <div>
-      <a href="{{ toolbar_view_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
+      <a href="{{ item.toolbar_view_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
       <a href="#evaluate-tooltip" rel="#evaluate-tooltip" class="tooltip"><small>What is this?</small></a>
       <div style="display: none" id="evaluate-tooltip">
           These seven rubrics will help users determine the degree of alignment of OER to

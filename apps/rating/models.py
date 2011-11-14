@@ -24,7 +24,7 @@ class Rating(models.Model):
     content_type = models.ForeignKey(ContentType,
                                      verbose_name=_(u"Content type"))
     object_id = models.PositiveIntegerField(verbose_name=_(u"Object ID"))
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = generic.GenericForeignKey()
 
     timestamp = models.DateTimeField(auto_now_add=True,
                                      default=datetime.datetime.now)
@@ -36,4 +36,4 @@ class Rating(models.Model):
     class Meta:
         verbose_name = _(u"Rating")
         verbose_name_plural = _(u"Ratings")
-
+        unique_together = ["content_type", "object_id", "user"]

@@ -1,4 +1,6 @@
 {% load compress %}
+{% load scss %}
+
 {% compress css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/reset.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/typography.css" media="all" />
@@ -8,14 +10,14 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/anythingslider.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/jquery.inline-labels.css" media="all" />
 
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/base.css" media="all" />
+<link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/base.scss" %}" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/form.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/header.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/column-layout.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/footer.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/login.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/registration.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/profile.css" media="all" />
+<link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/profile.scss" %}" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/frontpage.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/tags.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/align-form.css" media="all" />
@@ -23,6 +25,7 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/rating.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/autocomplete-list-widget.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/materials.css" media="all" />
+<link rel="stylesheet" href="{{ STATIC_URL }}styles/resource-comments.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/myitems.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/savedsearches.css" media="all" />
 <link rel="stylesheet" href="{{ STATIC_URL }}styles/information.css" media="all" />

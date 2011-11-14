@@ -17,11 +17,16 @@ class BaseViewMixin(object):
         return None
     breadcrumbs = property(get_breadcrumbs)
 
+    def get_hide_global_notifications(self):
+        return False
+    hide_global_notifications = property(get_hide_global_notifications)
+
     def get_context_data(self, *args, **kwargs):
         data = super(BaseViewMixin, self).get_context_data(*args, **kwargs)
         data["page_title"] = self.page_title
         data["page_subtitle"] = self.page_subtitle
         data["breadcrumbs"] = self.breadcrumbs
+        data["hide_global_notifications"] = self.hide_global_notifications
         return data
 
 

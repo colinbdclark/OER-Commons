@@ -15,7 +15,7 @@ from django.views.generic import TemplateView, FormView, View
 from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial, GradeLevel, GeneralSubject
 from rubrics.models import StandardAlignmentScore, RubricScore, Rubric, \
-    Evaluation, RubricScoreValue
+    Evaluation, RubricScoreValue, get_verbose_score_name
 from users.views.login import LoginForm
 from operator import or_
 import datetime
@@ -192,9 +192,9 @@ class Index(ManageRubricsMixin, TemplateView):
             model = ContentType.objects.get(id=content_type_id).model_class()
             qs = model.objects.filter(id__in=object_ids)
             if model in (Course, Library):
-                fields = ["title", "url", "institution__name"]
+                fields = ["slug", "title", "url", "institution__name"]
             elif model == CommunityItem:
-                fields = ["title", "url"]
+                fields = ["slug", "title", "url"]
             elif model == GenericMaterial:
                 fields = ["url"]
             else:
@@ -218,8 +218,9 @@ class Index(ManageRubricsMixin, TemplateView):
             for row in qs:
                 object_id = row.pop("id")
                 data = dict(
-                    total_evaluations=0, title=u"", url=u"", institution__name=u"",
-                    hostname=u"", last_evaluated=None, evaluator=u"", ip=u"",
+                    total_evaluations=0, title=u"", url=u"", oer_url=u"",
+                    institution__name=u"", hostname=u"", last_evaluated=None,
+                    evaluator=u"", comments=False,
                     manage_resource_url=reverse("rubrics_manage:resource",
                         kwargs=dict(
                             content_type_id=content_type_id,
@@ -231,6 +232,10 @@ class Index(ManageRubricsMixin, TemplateView):
                 for i in xrange(1, 8):
                     data["r%i" % i] = None
 
+                slug = row.pop("slug", None)
+                if slug:
+                    data["oer_url"] = reverse("materials:%s:view_item" % model.namespace,
+                                              kwargs=dict(slug=slug))
                 data.update(row)
                 items[(content_type_id, object_id)] = data
 
@@ -239,17 +244,6 @@ class Index(ManageRubricsMixin, TemplateView):
             qs = qs.filter(timestamp__gte=from_date)
         if until_date:
             qs = qs.filter(timestamp__lte=until_date)
-
-        qs = qs.values(
-                "content_type__id",
-                "object_id",
-            ).annotate(evaluations_count=models.Count("id")).distinct()
-        for row in qs:
-            k = (row["content_type__id"],
-                 row["object_id"])
-            if k in items:
-                items[k]["total_evaluations"] = row["evaluations_count"]
-
 
         qs = StandardAlignmentScore.objects.filter(evaluation__confirmed=True)
         if from_date:
@@ -266,7 +260,6 @@ class Index(ManageRubricsMixin, TemplateView):
             if k not in items:
                 continue
             items[k]["r1"] = row["average_score"]
-
 
         for i, rubric_id in enumerate(Rubric.objects.values_list("id", flat=True)):
             qs = RubricScore.objects.filter(evaluation__confirmed=True,
@@ -307,21 +300,30 @@ class Index(ManageRubricsMixin, TemplateView):
             "user__email",
             "user__username",
             "user__id",
-            "ip",
         )
 
-        for content_type_id, object_id, hostname, timestamp, first_name, last_name, email, username, user_id, ip in qs:
+        for content_type_id, object_id, hostname, timestamp, first_name, last_name, email, username, user_id in qs:
             k = (content_type_id, object_id)
             if k in items and items[k]["last_evaluated"] is None:
                 items[k].update(dict(
                     last_evaluated=timestamp,
                     hostname=hostname,
                     evaluator=evaluator_name(first_name, last_name, email, username),
-                    ip=ip,
                     manage_user_url=reverse("rubrics_manage:user",
                         kwargs=dict(user_id=user_id)
                     )
                 ))
+
+        for model in (StandardAlignmentScore, RubricScore):
+            qs = model.objects.filter(
+                evaluation__confirmed=True,
+            ).exclude(comment=u"").values_list(
+                "evaluation__content_type__id",
+                "evaluation__object_id",
+            ).distinct()
+            for k in qs:
+                if k in items:
+                    items[k]["comments"] = True
 
         items = items.values()
 
@@ -440,29 +442,57 @@ class ResourceEvaluations(ManageRubricsMixin, TemplateView):
         data["total_evaluations"] = evaluations.count()
 
         data["average_scores"] = []
+
+        standard_scores = StandardAlignmentScore.objects.filter(
+            evaluation__confirmed=True,
+            evaluation__content_type=self.content_type,
+            evaluation__object_id=self.object.id,
+        )
         data["average_scores"].append(dict(
             rubric=u"R1",
-            score=StandardAlignmentScore.objects.filter(
-                evaluation__confirmed=True,
-                evaluation__content_type=self.content_type,
-                evaluation__object_id=self.object.id,
-            ).exclude(score__value=None).aggregate(
+            score=standard_scores.exclude(score__value=None).aggregate(
                 models.Avg("score__value")
             )["score__value__avg"]
         ))
 
+        rubric_scores = RubricScore.objects.filter(
+            evaluation__confirmed=True,
+            evaluation__content_type=self.content_type,
+            evaluation__object_id=self.object.id
+        )
         for i, rubric_id in enumerate(Rubric.objects.values_list("id", flat=True)):
             data["average_scores"].append(dict(
                 rubric=u"R%i" % (i + 2),
-                score=RubricScore.objects.filter(
-                    evaluation__confirmed=True,
-                    evaluation__content_type=self.content_type,
-                    evaluation__object_id=self.object.id,
-                    rubric__id=rubric_id,
+                score=rubric_scores.filter(
+                    rubric__id=rubric_id
                 ).exclude(score__value=None).aggregate(
                     models.Avg("score__value")
                 )["score__value__avg"]
             ))
+
+        comments = []
+        for qs in (standard_scores, rubric_scores):
+            for score in qs.exclude(comment="").select_related():
+                comment = dict(
+                    text=score.comment,
+                    timestamp=score.evaluation.timestamp,
+                    author=score.evaluation.user,
+                )
+
+                if isinstance(score, StandardAlignmentScore):
+                    title = u"Degree of Alignment to %s" % score.alignment_tag.full_code
+                else:
+                    title = score.rubric.name
+
+                #noinspection PyUnresolvedReferences
+                comment["title"] = u"%s: %s (%s)" % (
+                    title,
+                    get_verbose_score_name(score.score.value),
+                    score.score.get_value_display(),
+                )
+
+                comments.append(comment)
+        data["comments"] = comments
 
         return data
 

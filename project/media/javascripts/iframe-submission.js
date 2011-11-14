@@ -190,16 +190,16 @@ oer.iframe_submission.existing_resource.init = function() {
     }
   });
 
-  var $review_form = $("form.review");
-  var validator = $review_form.validate({
+  var $comment_form = $("form.comment");
+  var validator = $comment_form.validate({
     rules: {
       text: "required"
     },
     submitHandler: function() {
-      $.post($review_form.attr("action"), $review_form.serialize(), function(response) {
+      $.post($comment_form.attr("action"), $comment_form.serialize(), function(response) {
         if (response.status === "success") {
           var $message = $('<div class="message">' + response.message + '</div>').hide();
-          $message.prependTo($review_form).fadeIn(300);
+          $message.prependTo($comment_form).fadeIn(300);
           setTimeout(function() {
             $message.fadeOut(300, function() {
               $message.detach();
@@ -212,8 +212,8 @@ oer.iframe_submission.existing_resource.init = function() {
     }
   });
 
-  $review_form.find("a.submit").button().click(function(e) {
+  $comment_form.find("a.submit").button().click(function(e) {
     e.preventDefault();
-    $review_form.submit();
+    $comment_form.submit();
   });
 };

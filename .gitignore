@@ -34,3 +34,5 @@ project/staging.py
 project/test_settings.py
 
 /project/manage.py
+project/media/LESS_CACHE/
+project/media/SCSS_CACHE/

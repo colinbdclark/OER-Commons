@@ -1,0 +1,55 @@
+.resource-comments article {
+  margin-bottom: 2em;
+}
+
+.resource-comments article.author {
+  padding-bottom: 0.5em;
+  border: 1px solid #ccc;
+}
+
+.resource-comments article h1 {
+  margin-bottom: 0.5em;
+  color: #333;
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.resource-comments p {
+  margin: 0.5em 3em;
+  font-style: italic;
+}
+
+.resource-comments footer {
+  position: relative;
+  padding-left: 3em;
+  height: 16px;
+}
+
+.resource-comments footer .by {
+  position: absolute;
+  left: 400px;
+}
+
+.resource-comments footer a {
+  margin-right: 0.5em;
+}
+
+.resource-comments footer a span {
+  border-bottom: 1px dashed;
+}
+
+.resource-comments footer .edit,
+.resource-comments footer .delete {
+  display: inline-block;
+  margin-right: 1em;
+  padding-left: 20px;
+  background: no-repeat 0 50%;
+}
+
+.resource-comments footer .edit {
+  background-image: url(../images/icon-comment-edit.png);
+}
+
+.resource-comments footer .delete {
+  background-image: url(../images/icon-comment-delete.png);
+}

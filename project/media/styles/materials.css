@@ -406,70 +406,14 @@
   clear: left;
 }
 
-.view-item .comments {
+.resource-comments {
   margin-top: 2em;
 }
 
-.view-item .comments h1 {
+.resource-comments h1 {
   color: #1F4D64;
   font-weight: bold;
   font-size: 18px;
-}
-
-.view-item .comments article {
-  margin-bottom: 2em;
-}
-
-.view-item .comments article.author {
-  padding-bottom: 0.5em;
-  border: 1px solid #ccc;
-}
-
-.view-item .comments article h1 {
-  margin-bottom: 0.5em;
-  color: #333;
-  font-weight: normal;
-  font-size: 14px;
-}
-
-.view-item .comments p {
-  margin: 0.5em 3em;
-  font-style: italic;
-}
-
-.view-item .comments footer {
-  position: relative;
-  padding-left: 3em;
-  height: 16px;
-}
-
-.view-item .comments footer .by {
-  position: absolute;
-  left: 400px;
-}
-
-.view-item .comments footer a {
-  margin-right: 0.5em;
-}
-
-.view-item .comments footer a span {
-  border-bottom: 1px dashed;
-}
-
-.view-item .comments footer .edit,
-.view-item .comments footer .delete {
-  display: inline-block;
-  margin-right: 1em;
-  padding-left: 20px;
-  background: no-repeat 0 50%;
-}
-
-.view-item .comments footer .edit {
-  background-image: url(../images/icon-comment-edit.png);
-}
-
-.view-item .comments footer .delete {
-  background-image: url(../images/icon-comment-delete.png);
 }
 
 .view-item #comment-form textarea {

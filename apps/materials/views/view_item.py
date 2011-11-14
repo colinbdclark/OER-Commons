@@ -49,10 +49,6 @@ class BaseViewItemMixin(object):
 
         self.content_type = ContentType.objects.get_for_model(self.item)
 
-        self.item.identifier = "%s.%s.%i" % (self.content_type.app_label,
-                                            self.content_type.model,
-                                            self.item.id)
-
         Visit.objects.count(request, self.item)
 
         return super(BaseViewItemMixin, self).get(request, *args, **kwargs)
@@ -295,6 +291,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
             evaluation__content_type=self.content_type,
             evaluation__object_id=self.item.id,
         )
+
         data["alignment_scores"] = []
         for row in standard_scores.exclude(score__value=None).values(
             "alignment_tag").annotate(score=Avg("score__value")):
@@ -312,7 +309,6 @@ class ViewItem(BaseViewItemMixin, TemplateView):
         )
 
         scores = item.evaluation_scores
-        
         for rubric_id, name in Rubric.objects.values_list("id", "name"):
             #noinspection PySimplifyBooleanCheck
             score = None
@@ -334,11 +330,10 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 ).distinct().count()
             ))
 
-        data["toolbar_view_url"] = reverse("materials:%s:toolbar_view_item" % item.namespace,
-                                       kwargs=dict(slug=item.slug))
-
-
         comments = []
+
+        data["hide_comment_form"] = False
+        data["comment_form"] = ReviewForm()
 
         for qs in (standard_scores, rubric_scores):
             for score in qs.exclude(comment="").select_related():
@@ -361,20 +356,17 @@ class ViewItem(BaseViewItemMixin, TemplateView):
 
                 comments.append(comment)
 
-        data["hide_comment_form"] = False
-        data["comment_form"] = ReviewForm()
-
         for review in item.reviews.all():
-            comment = dict(
+            comments.append(dict(
                 title=u"",
                 text=review.text,
                 timestamp=review.timestamp,
                 author=review.user,
-            )
+                is_review=True,
+            ))
             if review.user == request.user:
                 data["hide_comment_form"] = True
                 data["comment_form"] = ReviewForm(instance=review)
-            comments.append(comment)
 
         comments.sort(key=lambda x: x["timestamp"])
         data["comments"] = comments

@@ -2,12 +2,12 @@
 {% load tags_tags %}
 <div class="existing-resource">
   <p><strong>{{ item.title }}</strong> already exists in OER Commons database.</p>
-  <p>You can rate this item, tag it or add a review.</p>
-  
+  <p>You can rate this item, tag it or add a comment.</p>
+
   <table width="95%">
   	<tbody>
   		<tr>
-  			<td width="25%"">
+  			<td width="25%">
               <h3>Rating</h3>
                 <article class="item">
                   <div class="rating">
@@ -20,9 +20,9 @@
               {% spaceless %}
               <ul class="user-tags">
                 {% for tag in user_tags %}
-                  <li id="tag{{ tag.id }}">
-                    <a href="#" class="delete">Delete</a>
-                    <div><a href="{% url materials:keyword_index keywords=tag.slug %}" target="blank" class="name">{{ tag.name }}</a></div>
+                  <li data-id="{{ tag.id }}" class="tag rc3">
+                    <a href="{% url materials:keyword_index keywords=tag.slug %}" target="_blank">{{ tag.name }}</a>
+                    <a href="#" class="delete">x</a>
                   </li>
                 {% endfor %}
               </ul>
@@ -37,10 +37,10 @@
   	</tbody>
   </table>
 
-  <h3>Your Review</h3>
-  <form name="review" class="formatted review" method="post" action="{{ review_item_url }}">
-  
-    {% for field in review_form.visible_fields %}
+  <h3>Your Comment</h3>
+  <form name="comment" class="formatted comment" method="post" action="{{ comment_url }}">
+
+    {% for field in comment_form.visible_fields %}
       <div class="field">
           <div class="help">{{ field.help_text }}</div>
           <div class="errors"></div>
@@ -48,9 +48,9 @@
       </div>
     {% endfor %}
     <div class="buttons">
-      <a href="#" class="submit">Add review</a>
+      <a href="#" class="submit">Add comment</a>
     </div>
-    
+
   </form>
 
 </div>

@@ -68,7 +68,8 @@ class GenericMaterial(models.Model, EvaluatedItemMixin):
 
     creator = models.ForeignKey(User, verbose_name=_("Creator"))
 
-    url = models.URLField(max_length=300, verbose_name=_(u"URL"), verify_exists=False)
+    url = models.URLField(max_length=300, verbose_name=_(u"URL"),
+                          unique=True)
 
     alignment_tags = generic.GenericRelation(TaggedMaterial)
 
@@ -152,6 +153,10 @@ class Material(Indexed, EvaluatedItemMixin):
     @permalink
     def get_absolute_url(self):
         return "materials:%s:view_item" % self.namespace, [], {"slug": self.slug}
+
+    @permalink
+    def toolbar_view_url(self):
+        return "materials:%s:toolbar_view_item" % self.namespace, [], {"slug": self.slug}
 
     @classmethod
     @permalink
@@ -255,4 +260,8 @@ class Material(Indexed, EvaluatedItemMixin):
         return StandardAlignmentScore.objects.filter(**kwargs).exists() or \
                RubricScore.objects.filter(**kwargs).exists()
 
+    @property
+    def identifier(self):
+        model_name = self._meta.object_name.lower()
+        return "materials.%s.%i" % (model_name, self.id)
 

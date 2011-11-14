@@ -433,7 +433,7 @@ body.evaluation-tool {
 .evaluation-tool .rubrics section .footer a.save,
 .evaluation-tool .evaluation-results  .footer a.back,
 .evaluation-tool .evaluation-results  .footer a.finalize,
-.evaluation-tool #comment-form .save {
+#comment-form .save {
   display: inline-block;
   padding: 2px 5px;
   background-color: #ffb21f;
@@ -748,8 +748,8 @@ body.evaluation-tool {
 }
 
 .evaluation-tool .rubrics .comment.checked {
-  background: #bac8d1 url(../images/evaluation/icon-comment-checked.png) no-repeat 4px 1px;
   border-color: #293776;
+  background: #bac8d1 url(../images/evaluation/icon-comment-checked.png) no-repeat 4px 1px;
 }
 
 .comment-popup {

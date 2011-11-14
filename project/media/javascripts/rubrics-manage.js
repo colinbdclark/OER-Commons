@@ -6,6 +6,21 @@ oer.rubrics_manage.link_formatter = function(url_field) {
   };
 };
 
+oer.rubrics_manage.format_resource_name = function(value, rowData) {
+  var out = '<a href="' + rowData.manage_resource_url + '">' + value + '</a>';
+  if (rowData.oer_url !== "") {
+    out = '<a href="' + rowData.oer_url + '" class="oer-url" target="_blank"></a> ' + out;
+  }
+  return out;
+};
+
+oer.rubrics_manage.format_comment = function(value, rowData) {
+  if (value) {
+    return '<span class="has-comments"></span>';
+  }
+  return "";
+};
+
 oer.rubrics_manage.init_index = function() {
   var $grid = $("#grid");
 
@@ -17,21 +32,20 @@ oer.rubrics_manage.init_index = function() {
     toolbar: "#toolbar",
     columns: [
       [
-        {field: "title", title: "Resource Name", width: 70, sortable: true, formatter: oer.rubrics_manage.link_formatter("manage_resource_url")},
+        {field: "title", title: "Resource Name", width: 70, sortable: true, formatter: oer.rubrics_manage.format_resource_name},
         {field: "url", title: "Resource URL", width: 70, sortable: true},
         {field: "institution__name", title: "Institution", width: 70, sortable: true},
         {field: "hostname", title: "Host", width: 50, sortable: true},
         {field: "last_evaluated", title: "Last Evaluated", width: 50, sortable: true, formatter: oer.rubrics_manage.link_formatter("manage_user_url")},
         {field: "evaluator", title: "Latest Evaluator", width: 30, sortable: true, formatter: oer.rubrics_manage.link_formatter("manage_user_url")},
-        {field: "ip", title: "IP Address", width: 20, sortable: true},
-        {field: "total_evaluations", title: "Total Ev.", width: 20, sortable: true, align: "center", formatter: oer.rubrics_manage.link_formatter("manage_resource_url")},
         {field: "r1", title: "R1", width: 10, sortable: true, align: "center"},
         {field: "r2", title: "R2", width: 10, sortable: true, align: "center"},
         {field: "r3", title: "R3", width: 10, sortable: true, align: "center"},
         {field: "r4", title: "R4", width: 10, sortable: true, align: "center"},
         {field: "r5", title: "R5", width: 10, sortable: true, align: "center"},
         {field: "r6", title: "R6", width: 10, sortable: true, align: "center"},
-        {field: "r7", title: "R7", width: 10, sortable: true, align: "center"}
+        {field: "r7", title: "R7", width: 10, sortable: true, align: "center"},
+        {field: "comments", title: "Comments", width: 10, sortable: true, formatter: oer.rubrics_manage.format_comment}
       ]
     ]
   });
