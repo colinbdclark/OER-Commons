@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load users_tags %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.profile.init_privacy();
+    });
+  </script>
+{% endblock %}
+
+{% block bodyclass %}no-columns profile-edit{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+
+  {% profile_views %}
+
+  <section class="privacy">
+    <form method="post" class="formatted" name="privacy" action="{% url users:profile_privacy %}">
+      {% csrf_token %}
+
+      {% with form.privacy as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+    <div class="buttons">
+      <input type="submit" class="next" value="Save" />
+    </div>
+
+    </form>
+
+    <p><strong>Your email address will never be displayed on your profile.</strong></p>
+
+
+    <p><a href="#" class="delete">Please delete my account</a></p>
+    <form class="delete-account" method="post" action="{% url users:profile_delete %}">
+      {% csrf_token %}
+    </form>
+
+  </section>
+{% endblock %}

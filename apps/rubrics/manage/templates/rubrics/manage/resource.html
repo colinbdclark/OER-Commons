@@ -48,7 +48,7 @@
           {% if comment.title %}<h1>{{ comment.title }}</h1>{% endif %}
           <p>{{ comment.text|linebreaksbr }}</p>
           <footer>
-            <span class="by">- {{ comment.author|username }}</span>
+            <span class="by">- {{ comment.author.get_profile.name }}</span>
           </footer>
         </article>
       {% endfor %}

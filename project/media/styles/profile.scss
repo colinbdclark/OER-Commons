@@ -295,6 +295,12 @@
     &[name='roles'], &[name='about'] {
       display: inline-block;
     }
+    &.formatted[name='privacy'] {
+      width: 600px;
+      li {
+        margin: 0.5em 0;
+      }
+    }
   }
 
   div.label {
@@ -346,6 +352,15 @@
     margin-left: 35px;
     input.text {
       width: 300px;
+    }
+  }
+
+  .privacy {
+    p {
+      margin-top: 2em;
+    }
+    .inline-confirmation-block a {
+      margin-right: 0.5em;
     }
   }
 }

@@ -1,13 +1,13 @@
 oer.profile = {};
 
-oer.profile.init_profile_notification = function() {
+oer.profile.init_profile_notification = function () {
   var $notification = $("#profile-notification");
   if (!$notification.length) {
     return;
   }
   var total_fields = $notification.data("total-fields");
   var cookie_name = $notification.data("cookie-name");
-  $notification.find("div.close a").click(function(e) {
+  $notification.find("div.close a").click(function (e) {
     e.preventDefault();
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + 365);
@@ -17,7 +17,7 @@ oer.profile.init_profile_notification = function() {
   });
 };
 
-oer.profile.init_avatar = function() {
+oer.profile.init_avatar = function () {
   var $upload_btn = $("#upload-avatar-btn");
   var $avatar = $("section.avatar div.wrap");
   var $avatar_img = $avatar.find("img");
@@ -26,7 +26,7 @@ oer.profile.init_avatar = function() {
 
   $upload_btn.upload({
     action: $upload_btn.attr("href"),
-    onComplete: function(response) {
+    onComplete: function (response) {
       response = $.parseJSON(response);
       if (response.status === "error") {
         oer.status_message.error(response.message, true);
@@ -36,14 +36,14 @@ oer.profile.init_avatar = function() {
       }
       $avatar.removeClass("loading");
     },
-    onSubmit: function() {
+    onSubmit: function () {
       $avatar.addClass("loading");
     }
   });
-  $delete_btn.click(function(e) {
+  $delete_btn.click(function (e) {
     e.preventDefault();
     $avatar.addClass("loading");
-    $.post($delete_btn.attr("href"), function(response) {
+    $.post($delete_btn.attr("href"), function (response) {
       if (response.status === "error") {
         oer.status_message.error(response.message, true);
       } else if (response.status === "success") {
@@ -55,12 +55,12 @@ oer.profile.init_avatar = function() {
   });
 };
 
-oer.profile.init_user_info = function() {
+oer.profile.init_user_info = function () {
   var $form = $("form[name='user-info']");
   var $header = $("section.user-info h1");
   var $save_btn = $form.find("input[type='submit'].save");
   var $next_btn = $form.find("input[type='submit'].next");
-  $next_btn.click(function() {
+  $next_btn.click(function () {
     $form.data("next", true);
   });
   $save_btn.data("label", $save_btn.val());
@@ -75,7 +75,7 @@ oer.profile.init_user_info = function() {
         email: true
       }
     },
-    submitHandler: function(form) {
+    submitHandler: function (form) {
       if ($form.data("next")) {
         form.submit();
       } else {
@@ -83,7 +83,7 @@ oer.profile.init_user_info = function() {
         $save_btn.val("Saving...");
         var form_data = $form.serialize();
         $inputs.attr("disabled", "disabled");
-        $.post($form.attr("action"), form_data, function(data) {
+        $.post($form.attr("action"), form_data, function (data) {
           if (data.status === "success") {
             oer.status_message.success(data.message, true);
           } else if (data.status === "error") {
@@ -98,7 +98,7 @@ oer.profile.init_user_info = function() {
   });
 };
 
-oer.profile.init_change_password = function() {
+oer.profile.init_change_password = function () {
   var $form = $("form[name='change-password']");
   var $header = $("section.change-password h1");
   var $save_btn = $form.find("input[type='submit'].save");
@@ -119,12 +119,12 @@ oer.profile.init_change_password = function() {
         equalTo: "[name='new_password']"
       }
     },
-    submitHandler: function() {
+    submitHandler: function () {
       $header.addClass("loading");
       $save_btn.val("Changing...");
       var form_data = $form.serialize();
       $inputs.attr("disabled", "disabled");
-      $.post($form.attr("action"), form_data, function(data) {
+      $.post($form.attr("action"), form_data, function (data) {
         if (data.status === "success") {
           oer.status_message.success(data.message, true);
           $inputs.filter(":password").val("");
@@ -139,26 +139,26 @@ oer.profile.init_change_password = function() {
   });
 };
 
-oer.profile.init_geography = function() {
+oer.profile.init_geography = function () {
   var $form = $("form[name='geography']");
   var $header = $("section.geography h1");
   var $save_btn = $form.find("input[type='submit'].save");
   var $next_btn = $form.find("input[type='submit'].next");
-  $next_btn.click(function() {
+  $next_btn.click(function () {
     $form.data("next", true);
   });
   var $inputs = $form.find(":input");
   $save_btn.data("label", $save_btn.val());
   var validator = $form.validate({
     rules: {},
-    submitHandler: function(form) {
+    submitHandler: function (form) {
       if ($form.data("next")) {
         form.submit();
       } else {
         $header.addClass("loading");
         $save_btn.val("Saving...");
         var form_data = $form.serialize();
-        $.post($form.attr("action"), form_data, function(data) {
+        $.post($form.attr("action"), form_data, function (data) {
           if (data.status === "success") {
             oer.status_message.success(data.message, true);
           } else if (data.status === "error") {
@@ -192,7 +192,7 @@ oer.profile.init_geography = function() {
     map = new google.maps.Map(document.getElementById("map"), options);
     var marker = null;
 
-    var place_marker = function(location, set_center) {
+    var place_marker = function (location, set_center) {
       if (set_center !== undefined && set_center) {
         map.setCenter(location);
       }
@@ -206,11 +206,11 @@ oer.profile.init_geography = function() {
       }
     };
 
-    geocode_address = function(address) {
+    geocode_address = function (address) {
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({
         'address': address
-      }, function(results, status) {
+      }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           place_marker(results[0].geometry.location, true);
 
@@ -223,7 +223,7 @@ oer.profile.init_geography = function() {
     };
 
     // Pick country on map widget
-    var pick_country = function(location) {
+    var pick_country = function (location) {
 
       function on_country_change() {
         select_country();
@@ -237,7 +237,7 @@ oer.profile.init_geography = function() {
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({
         'latLng': location
-      }, function(results, status) {
+      }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           place_marker(results[0].geometry.location);
           var address_components = results[0].address_components;
@@ -273,14 +273,14 @@ oer.profile.init_geography = function() {
       });
     };
 
-    google.maps.event.addListener(map, 'click', function(e) {
+    google.maps.event.addListener(map, 'click', function (e) {
       pick_country(e.latLng);
     });
 
   }
 
   // Select country from dropdown list
-  var select_country = function() {
+  var select_country = function () {
     var $selected = $country_field.find("option:selected");
     if ($selected.val() === "US") {
       $us_state_field_ct.show();
@@ -290,7 +290,7 @@ oer.profile.init_geography = function() {
 
   };
 
-  var set_map_pin = function() {
+  var set_map_pin = function () {
     if (map === null) {
       return;
     }
@@ -311,12 +311,12 @@ oer.profile.init_geography = function() {
 
   };
 
-  $country_field.change(function() {
+  $country_field.change(function () {
     select_country();
     set_map_pin();
   });
 
-  $us_state_field.change(function() {
+  $us_state_field.change(function () {
     set_map_pin();
   });
 
@@ -324,26 +324,26 @@ oer.profile.init_geography = function() {
 
 };
 
-oer.profile.init_roles = function() {
+oer.profile.init_roles = function () {
   var $form = $("form[name='roles']");
   var $header = $("section.roles h1");
   var $save_btn = $form.find("input[type='submit'].save");
   var $next_btn = $form.find("input[type='submit'].next");
-  $next_btn.click(function() {
+  $next_btn.click(function () {
     $form.data("next", true);
   });
   var $inputs = $form.find(":input");
   $save_btn.data("label", $save_btn.val());
   var validator = $form.validate({
     rules: {},
-    submitHandler: function(form) {
+    submitHandler: function (form) {
       if ($form.data("next")) {
         form.submit();
       } else {
         $header.addClass("loading");
         $save_btn.val("Saving...");
         var form_data = $form.serialize();
-        $.post($form.attr("action"), form_data, function(data) {
+        $.post($form.attr("action"), form_data, function (data) {
           if (data.status === "success") {
             oer.status_message.success(data.message, true);
           } else if (data.status === "error") {
@@ -364,9 +364,9 @@ oer.profile.init_roles = function() {
   var $roles_input = $inputs.filter("[name='roles']");
 
   var EDUCATOR_ROLE_IDS = [ 1, 2, 3 ];
-  $roles_input.change(function() {
+  $roles_input.change(function () {
     var is_educator = false;
-    $roles_input.filter(":checked").each(function(index, el) {
+    $roles_input.filter(":checked").each(function (index, el) {
       var $el = $(el);
       var value = $el.val();
       if (is_educator) {
@@ -382,7 +382,7 @@ oer.profile.init_roles = function() {
       $educator_header.fadeIn(300);
       $educator_fields_ct.fadeIn(300);
     } else {
-      $buttons_ct.fadeOut(300, function() {
+      $buttons_ct.fadeOut(300, function () {
         $buttons_ct.fadeIn(300);
       });
       $educator_header.fadeOut(300);
@@ -391,12 +391,12 @@ oer.profile.init_roles = function() {
   });
 };
 
-oer.profile.init_about = function() {
+oer.profile.init_about = function () {
   var $form = $("form[name='about']");
   var $header = $("section.about h1");
   var $save_btn = $form.find("input[type='submit'].save");
   var $next_btn = $form.find("input[type='submit'].next");
-  $next_btn.click(function() {
+  $next_btn.click(function () {
     $form.data("next", true);
   });
   var $inputs = $form.find(":input");
@@ -411,14 +411,14 @@ oer.profile.init_about = function() {
         minlength: 6
       }
     },
-    submitHandler: function(form) {
+    submitHandler: function (form) {
       if ($form.data("next")) {
         form.submit();
       } else {
         $header.addClass("loading");
         $save_btn.val("Saving...");
         var form_data = $form.serialize();
-        $.post($form.attr("action"), form_data, function(data) {
+        $.post($form.attr("action"), form_data, function (data) {
           if (data.status === "success") {
             oer.status_message.success(data.message, true);
           } else if (data.status === "error") {
@@ -429,6 +429,16 @@ oer.profile.init_about = function() {
           $inputs.attr("disabled", null);
         });
       }
+    }
+  });
+};
+
+oer.profile.init_privacy = function () {
+  $("a.delete").inlineConfirmation({
+    confirm: '<a href="#" class="dashed"><strong>Yes, delete</strong></a>',
+    cancel: '<a href="#" class="dashed">Cancel</a>',
+    confirmCallback: function ($button) {
+      $("form.delete-account").submit();
     }
   });
 };

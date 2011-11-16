@@ -81,12 +81,3 @@ def truncatechars(value, arg, ellipsis=u"..."):
         value = value[:length-len(ellipsis)] + ellipsis
         assert len(value) == length
     return value
-
-
-@register.filter
-def username(value):
-    if not isinstance(value, User):
-        return u""
-    if value.first_name or value.last_name:
-        return u"%s %s" % (value.first_name, value.last_name)
-    return unicode(value)
