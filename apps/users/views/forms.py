@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from geo.models import Country, USState
 from users.backend import encrypt_password
 from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel, \
-    EducatorSubject, FACEBOOK_URL_RE, TWITTER_URL_RE
+    EducatorSubject, FACEBOOK_URL_RE, TWITTER_URL_RE, PRIVACY_CHOICES
 from utils.forms import AutocompleteListField, AutocompleteListWidget
 
 
@@ -203,3 +203,17 @@ class AboutMeForm(forms.ModelForm):
         model = Profile
         fields = ["about_me", "website_url", "facebook_id", "twitter_id",
                   "skype_id"]
+
+
+class PrivacyForm(forms.ModelForm):
+
+    privacy = forms.CharField(
+        widget=forms.RadioSelect(
+            choices=PRIVACY_CHOICES
+        ),
+        label=u"Privacy Settings",
+    )
+
+    class Meta:
+        model = Profile
+        fields = ["privacy"]

@@ -33,7 +33,7 @@ class LoginForm(AuthenticationForm):
             if self.user_cache is None:
                 raise forms.ValidationError(_("Please enter a correct email (username) and password. Note that password is cAsE-sEnsItiVe."))
             elif not self.user_cache.is_active:
-                raise forms.ValidationError(_("This account is inactive. Make sure that you've followed the instructions in registration confirmation email."))
+                raise forms.ValidationError(_("This account is inactive. Please contact site administration to re-activate it."))
 
         self.check_for_test_cookie()
         return self.cleaned_data
