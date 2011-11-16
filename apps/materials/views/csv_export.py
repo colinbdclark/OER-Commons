@@ -24,7 +24,7 @@ def process_author_names(value):
 
 
 def process_author_emails(value):
-    return "|".join(value.values_list("email", flat=True))
+    return "|".join(filter(bool, value.values_list("email", flat=True)))
 
 
 def process_author_countries(value):
@@ -161,7 +161,6 @@ def csv_export(query, title):
     has_courses = False
     has_libraries = False
     has_community_items = False
-    model = None
 
     for result in query:
         if result.model == Course:
@@ -198,10 +197,12 @@ def csv_export(query, title):
             attr_value = getattr(object, attr_name)
             if not attr_value:
                 row.append("")
+                continue
             if processor is not None:
                 attr_value = processor(attr_value)
             if not attr_value:
                 row.append("")
+                continue
             if isinstance(attr_value, unicode):
                 attr_value = attr_value.encode("utf-8")
             row.append(attr_value)
