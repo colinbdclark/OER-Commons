@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url
-from users.views.profile import ProfileView
+from users.views.profile import ProfileView, PrivacySettings, DeleteAccount
 
 
 urlpatterns = patterns('users.views',
@@ -19,5 +19,7 @@ urlpatterns = patterns('users.views',
     url(r"^profile/geography/?$", "profile.geography", name="profile_geography"),
     url(r"^profile/roles/?$", "profile.roles", name="profile_roles"),
     url(r"^profile/about/?$", "profile.about", name="profile_about"),
+    url(r"^profile/privacy/?$", PrivacySettings.as_view(), name="profile_privacy"),
+    url(r"^profile/delete/?$", DeleteAccount.as_view(), name="profile_delete"),
 )
 

@@ -1,12 +1,14 @@
 from annoying.decorators import ajax_request
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
+from django.views.decorators.csrf import csrf_protect, requires_csrf_token
+from django.views.generic import TemplateView, View
 from django.views.generic.simple import direct_to_template
 from django.shortcuts import redirect
 from geo.models import CountryIPDiapason
@@ -18,7 +20,7 @@ from rubrics.models import Evaluation
 from sorl.thumbnail.shortcuts import delete
 from users.models import Profile
 from users.views.forms import UserInfoForm, ChangePasswordForm, GeographyForm,\
-    RolesForm, AboutMeForm, AvatarForm
+    RolesForm, AboutMeForm, AvatarForm, PrivacyForm
 from utils.decorators import login_required
 from utils.shortcuts import ajax_form_success, ajax_form_error
 from utils.views import BaseViewMixin
@@ -313,3 +315,62 @@ def about(request):
             messages.error(request, form.error_message)
 
     return direct_to_template(request, "users/profile-about.html", locals())
+
+
+class PrivacySettings(BaseViewMixin, TemplateView):
+
+    template_name = "users/profile-privacy.html"
+
+    page_title = u"My Profile"
+    hide_global_notifications = True
+
+    def get_breadcrumbs(self):
+        return [{"url": reverse("users:profile"), "title": self.page_title}]
+
+    @method_decorator(login_required)
+    @method_decorator(csrf_protect)
+    def dispatch(self, request, *args, **kwargs):
+        return super(PrivacySettings, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        data = super(PrivacySettings, self).get_context_data(*args, **kwargs)
+        data["form"] = self.form
+        return data
+
+    def get(self, request, *args, **kwargs):
+        self.form = PrivacyForm(instance=self.request.user.get_profile())
+        return super(PrivacySettings, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = PrivacyForm(request.POST,
+                           instance=self.request.user.get_profile())
+        if form.is_valid():
+            messages.success(self.request, u"Your privacy settings were saved.")
+            form.save()
+        else:
+            messages.error(self.request, u"Please correct the indicated errors.")
+        self.form = form
+        return super(PrivacySettings, self).get(request, *args, **kwargs)
+
+
+class DeleteAccount(View):
+
+    @method_decorator(login_required)
+    @method_decorator(csrf_protect)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteAccount, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        profile = user.get_profile()
+        profile.privacy = "hide"
+        profile.save()
+        user.is_active = False
+        user.save()
+        logout(request)
+        messages.success(self.request,
+             u"Your account was removed. To restore it please contact " \
+             u"site administration.")
+        return redirect("frontpage")
+
+

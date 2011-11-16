@@ -7,6 +7,7 @@
 {% load curriculum_tags %}
 {% load thumbnail %}
 {% load curriculum_tags %}
+{% load users_tags %}
 {% load utils %}
 {% load i18n %}
 
@@ -239,7 +240,7 @@
           <a href="#" class="edit"><span>Edit</span></a>
           <a href="#" class="delete"><span>Delete</span></a>
         {% endif %}
-        <span class="by" itemprop="author">- {{ comment.author|username }}</span>
+        <span class="by" itemprop="author">- {% profile_link comment.author %}</span>
       </footer>
     </article>
   {% endfor %}
