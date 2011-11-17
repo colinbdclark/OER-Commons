@@ -15,6 +15,7 @@ from haystack_scheduled.indexes import Indexed
 from rubrics.models import StandardAlignmentScore, get_verbose_score_name, \
     Evaluation
 from utils.decorators import login_required
+from utils.templatetags.utils import truncatechars
 import re
 
 
@@ -252,26 +253,45 @@ def list_tags(request, existing=False):
     # - tag4
     # - tag5 (has the same subcat as tag4)
     # ....
-    optgroups = []
+    subcategories = []
     items = []
-    title = None
+    name = None
 
     for tag in tags:
-        if tag["subcategory"] != title:
+        if tag["subcategory"] != name:
             # Start filling the next optgroup
-            if title and items:
-                optgroups.append(dict(title=title.rstrip("."), items=items))
-            title = tag["subcategory"]
+            if name and items:
+                subcategories.append(dict(name=truncatechars(name.rstrip("."), 90), items=items))
+            name = tag["subcategory"]
             items = []
         items.append(dict(id=tag["id"],
                           name=tag["name"],
                           code=tag["full_code"]))
 
-    if title and items:
-        # Add the last optgroup to final results
-        optgroups.append(dict(title=title.rstrip("."), items=items))
+    if name and items:
+        # Add the last subcategory to final results
+        subcategories.append(dict(name=truncatechars(name.rstrip("."), 90), items=items))
 
-    return dict(optgroups=optgroups)
+    # Return data organized as simple dropdown. This allows to select
+    # subcategory (used on advanced search page).
+    if "no-optgroups" in request.REQUEST:
+        options = []
+        for subcat in subcategories:
+            code = "cluster:" + subcat["items"][0]["code"]
+            options.append(dict(
+                id=code,
+                code=code,
+                name=subcat["name"],
+            ))
+            for item in subcat["items"]:
+                item["name"] = "&#160;" * 4 + item["name"]
+                options.append(item)
+
+        return dict(options=options)
+
+    # Return data organized as optgroups (used in align resource widget).
+    else:
+        return dict(optgroups=subcategories)
 
 
 class TagDescription(TemplateView):

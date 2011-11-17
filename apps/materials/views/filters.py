@@ -12,6 +12,7 @@ from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_slug
 from rubrics.models import get_rubric_choices
 from tags.models import Tag
+from utils.templatetags.utils import truncatechars
 import re
 
 
@@ -238,6 +239,41 @@ class AlignmentFilter(Filter):
         return u"Alignment Tag: %s" % value
 
 
+class AlignmentClusterFilter(AlignmentFilter):
+
+    def update_query(self, query, value):
+        if not isinstance(value, list):
+            value = [value]
+
+        available_values = self.available_values
+
+        if set(value) - available_values:
+            raise Http404()
+
+        tags = set()
+
+        for code in value:
+            tag = AlignmentTag.objects.get_from_full_code(code)
+            tags.add(tag)
+            for same_subcategory_tag in AlignmentTag.objects.filter(
+                standard=tag.standard,
+                grade=tag.grade,
+                category=tag.category,
+                subcategory=tag.subcategory):
+                tags.add(same_subcategory_tag)
+
+        return query.narrow(u"%s:(%s)" % (self.index_name, u" OR ".join([str(t.id) for t in tags])))
+
+    def page_subtitle(self, value):
+        if not isinstance(value, list):
+            value = [value]
+        clusters = set()
+        for code in value:
+            tag = AlignmentTag.objects.get_from_full_code(code)
+            clusters.add(truncatechars(tag.subcategory, 90))
+        return "Cluster: %s" % ",".join(sorted(clusters))
+
+
 class SearchParameters(object):
 
     EXACT_PHRASES_RE = re.compile(r'"[\s]*([^"]+?)[\s]*"', re.I | re.U)
@@ -393,6 +429,7 @@ FILTERS = {
     "topics": VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic"),
     "featured": BooleanFilter("featured", "f.featured", u"Featured Resources"),
     "alignment": AlignmentFilter("alignment_tags", "f.alignment"),
+    "alignment_cluster": AlignmentClusterFilter("alignment_tags", "f.cluster"),
     "evaluated_rubrics": RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric"),
     "search": SearchFilter(),
 }

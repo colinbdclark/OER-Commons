@@ -19,7 +19,8 @@ oer.evaluation_tool.init_rubrics = function() {
       my: "top left",
       at: "bottom center",
       target: "event",
-      effect: false
+      effect: false,
+      viewport: $(window)
     },
     show: {
       target: $comment_btn,
