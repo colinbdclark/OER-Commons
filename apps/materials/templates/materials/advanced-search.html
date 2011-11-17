@@ -91,9 +91,10 @@
         </div>
         <div class="field tag">
           <div class="label"><label for="id_curriculum_tag">Alignment Tag:</label></div>
-          <select name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_existing_tags %}"></select>
+          <select name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_existing_tags %}?no-optgroups=true"></select>
         </div>
         <input type="hidden" name="f.alignment" value="" />
+        <input type="hidden" name="f.cluster" value="" />
       </div>
       <div class="rubric">
         <div class="field">
