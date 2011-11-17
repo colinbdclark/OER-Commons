@@ -9,14 +9,14 @@ oer.align_form.TAGS_CHANGED_EVENT = "oer-align-form-tags-changed";
 $.template("align-tag", '<li class="rc3"><a href="${url}">${code}</a></li>');
 $.template("align-user-tag", '<li data-id="${id}" class="user-tag rc3"><a href="${url}">${code}</a> <a href="#" class="delete">x</a></li>');
 
-oer.align_form.init_tag_tooltip = function($a) {
+oer.align_form.init_tag_tooltip = function ($a) {
   var $item = $("article.view-item");
   var content_type = null, object_id = null;
   if ($item.length) {
     content_type = $item.data("content-type");
     object_id = $item.data("object-id");
   }
-  $a.each(function() {
+  $a.each(function () {
     var $this = $(this);
     var code = $this.data("code");
     if (!code) {
@@ -48,8 +48,8 @@ oer.align_form.init_tag_tooltip = function($a) {
   });
 };
 
-oer.align_form.init_user_tags = function($tags, $form) {
-  $tags.delegate("a", "click", function(e) {
+oer.align_form.init_user_tags = function ($tags, $form) {
+  $tags.delegate("a", "click", function (e) {
     var $this = $(this);
     if ($this.hasClass("delete")) {
       e.preventDefault();
@@ -57,11 +57,11 @@ oer.align_form.init_user_tags = function($tags, $form) {
       var id = $li.data("id");
       $.post($form.data("delete-url"), {
         id: id
-      }, function() {
+      }, function () {
       });
       var code = $this.prev('a').text();
       var $lis = $tags.find("a:econtains(" + code + ")").parent();
-      $lis.fadeOut(250, function() {
+      $lis.fadeOut(250, function () {
         $(this).detach();
         $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
       });
@@ -71,7 +71,7 @@ oer.align_form.init_user_tags = function($tags, $form) {
   });
 };
 
-oer.align_form.init = function() {
+oer.align_form.init = function () {
 
   var $form = $("#align-form");
   var $tags = $("ul.align-tags");
@@ -80,7 +80,7 @@ oer.align_form.init = function() {
 
   var $submit_btn = $form.find("#align-form-buttons :submit").button();
 
-  $form.find("#align-form-buttons a.close").button().click(function(e) {
+  $form.find("#align-form-buttons a.close").button().click(function (e) {
     e.preventDefault();
     $("#align-dialog").dialog("close");
   });
@@ -100,13 +100,13 @@ oer.align_form.init = function() {
   var $document = $(document);
 
   $document.trigger(oer.align_form.LOADING_EVENT);
-  $.post($standard.data("source"), function(data) {
+  $.post($standard.data("source"), function (data) {
     oer.align_form.load_options($standard, data);
     $document.trigger(oer.align_form.LOADED_EVENT);
   });
 
   var $description = $("#align-tag-description");
-  $tag.change(function() {
+  $tag.change(function () {
     var value = $tag.val();
     if (value === "-") {
       $submit_btn.hide();
@@ -116,14 +116,14 @@ oer.align_form.init = function() {
       $submit_btn.focus();
       var code = $tag.find(":selected").data("code");
       $document.trigger(oer.align_form.LOADING_EVENT);
-      $description.load("/curriculum/get_tag_description/" + code, function() {
+      $description.load("/curriculum/get_tag_description/" + code, function () {
         $document.trigger(oer.align_form.LOADED_EVENT);
         $description.fadeIn();
       });
     }
   });
 
-  $document.bind(oer.align_form.TAGS_CHANGED_EVENT, function() {
+  $document.bind(oer.align_form.TAGS_CHANGED_EVENT, function () {
     var $tags_container = $tags.parent(".align-tags-ct");
     var $tags_number_message = $tags_container.find("span.tags-number");
     var tags_count = $tags_container.find("li").length;
@@ -143,7 +143,7 @@ oer.align_form.init = function() {
     }
   });
 
-  $form.submit(function(e) {
+  $form.submit(function (e) {
     e.preventDefault();
     var value = $tag.val();
     if (value === "" || value === "-") {
@@ -158,7 +158,7 @@ oer.align_form.init = function() {
     $document.trigger(oer.align_form.LOADING_EVENT);
     $.post($form.attr("action"), {
       tag: value
-    }, function(data) {
+    }, function (data) {
       if (data.status === "success") {
         var $tag = $.tmpl("align-user-tag", data.tag).appendTo($tags);
         rcorners($tag);
@@ -176,7 +176,7 @@ oer.align_form.init = function() {
 
 };
 
-oer.align_form.init_dropdown = function($dropdown) {
+oer.align_form.init_dropdown = function ($dropdown) {
   var $form = $dropdown.closest("form");
   var $document = $(document);
   var $field = $dropdown.closest("div.field");
@@ -188,7 +188,7 @@ oer.align_form.init_dropdown = function($dropdown) {
   var $next_dropdown = $next_dropdowns.first();
   var $submit_btn = $form.find("#align-form-buttons :submit");
   var $description = $("#align-tag-description");
-  $dropdown.change(function() {
+  $dropdown.change(function () {
     var value = $dropdown.val();
     $description.hide();
     $submit_btn.hide();
@@ -197,13 +197,13 @@ oer.align_form.init_dropdown = function($dropdown) {
     if (value !== "-") {
       var data = {};
       data[$dropdown.attr("name")] = value;
-      $prev_dropdowns.each(function() {
+      $prev_dropdowns.each(function () {
         var $d = $(this);
         data[$d.attr("name")] = $d.val();
       });
       $document.trigger(oer.align_form.LOADING_EVENT);
       $field.addClass("loading");
-      $.post($next_dropdown.data("source"), data, function(data) {
+      $.post($next_dropdown.data("source"), data, function (data) {
         oer.align_form.load_options($next_dropdown, data);
         $next_field.show();
         $document.trigger(oer.align_form.LOADED_EVENT);
@@ -214,22 +214,22 @@ oer.align_form.init_dropdown = function($dropdown) {
   });
 };
 
-oer.align_form.load_options = function($dropdown, data) {
+oer.align_form.load_options = function ($dropdown, data) {
   $dropdown.empty();
   $dropdown.append($("<option>").val("-").text("").attr("selected", "selected"));
   if ("options" in data) {
-    $.each(data.options, function(i, item) {
-      var $option = $("<option>").val(item.id).text(item.name);
+    $.each(data.options, function (i, item) {
+      var $option = $("<option>").val(item.id).html(item.name);
       if ("code" in item) {
         $option.data("code", item.code);
       }
       $dropdown.append($option);
     });
   } else if ("optgroups" in data) {
-    $.each(data.optgroups, function(i, optgroup) {
-      var $optgroup = $("<optgroup>").attr("label", optgroup.title);
-      $.each(optgroup.items, function(j, item) {
-        var $option = $("<option>").val(item.id).text(item.name);
+    $.each(data.optgroups, function (i, optgroup) {
+      var $optgroup = $("<optgroup>").attr("label", optgroup.name);
+      $.each(optgroup.items, function (j, item) {
+        var $option = $("<option>").val(item.id).html(item.name);
         if ("code" in item) {
           $option.data("code", item.code);
         }
@@ -240,7 +240,7 @@ oer.align_form.load_options = function($dropdown, data) {
   }
 };
 
-oer.align_form.reset = function() {
+oer.align_form.reset = function () {
   var $form = $("#align-form");
 
   $form.find("#id_curriculum_standard").val("-").focus();
@@ -261,7 +261,7 @@ oer.align_form.reset = function() {
 
 oer.align_tags_portlet = {};
 
-oer.align_tags_portlet.init = function() {
+oer.align_tags_portlet.init = function () {
 
   var $dialog = $("#align-dialog").dialog({
     modal: true,
@@ -272,10 +272,10 @@ oer.align_tags_portlet.init = function() {
   });
 
   var $document = $(document);
-  $document.bind(oer.align_form.LOADING_EVENT, function() {
+  $document.bind(oer.align_form.LOADING_EVENT, function () {
     $dialog.dialog("widget").addClass("loading");
   });
-  $document.bind(oer.align_form.LOADED_EVENT, function() {
+  $document.bind(oer.align_form.LOADED_EVENT, function () {
     $dialog.dialog("widget").removeClass("loading");
   });
 
@@ -284,7 +284,7 @@ oer.align_tags_portlet.init = function() {
 
   var $portlet = $("section.align-item-tags");
   var $portlet_tags = $portlet.find("ul.align-tags");
-  $.each($portlet_tags.find("li"), function(index, tag) {
+  $.each($portlet_tags.find("li"), function (index, tag) {
     var $tag = $(tag);
     oer.align_form.init_tag_tooltip($tag.find("a:first"));
   });
@@ -292,15 +292,15 @@ oer.align_tags_portlet.init = function() {
   var $all_tags = $("ul.align-tags");
   oer.align_form.init_user_tags($all_tags, $form);
 
-  $portlet.find(".login a").click(function(e) {
+  $portlet.find(".login a").click(function (e) {
     e.preventDefault();
     oer.login.show_popup();
   });
 
-  $document.bind(oer.login.LOGGED_IN_EVENT, function() {
+  $document.bind(oer.login.LOGGED_IN_EVENT, function () {
     $portlet_tags.empty();
-    $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
-      $.each(data.tags, function(index, tag) {
+    $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function (data) {
+      $.each(data.tags, function (index, tag) {
         var template = "id" in tag ? "align-user-tag" : "align-tag";
         var $tag = $.tmpl(template, tag).appendTo($portlet_tags);
         rcorners($tag);
@@ -311,11 +311,11 @@ oer.align_tags_portlet.init = function() {
 
   var $show_form_btn = $("#show-align-form");
 
-  $show_form_btn.click(function(e) {
+  $show_form_btn.click(function (e) {
     e.preventDefault();
     var $item = $("#content article.item");
 
-    oer.login.check_login(function() {
+    oer.login.check_login(function () {
       var initialized = !!$form.find("#id_curriculum_standard option").length;
       if (initialized) {
         oer.align_form.reset();
@@ -323,8 +323,8 @@ oer.align_tags_portlet.init = function() {
         oer.align_form.init();
         $dialog.dialog("option", "title", "Align " + $item.find("h1 a").first().text());
 
-        $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function(data) {
-          $.each(data.tags, function(index, tag) {
+        $.getJSON($form.attr("action").replace("/add/", "/get-tags/") + "?randNum=" + new Date().getTime(), function (data) {
+          $.each(data.tags, function (index, tag) {
             var template = "id" in tag ? "align-user-tag" : "align-tag";
             var $tag = $.tmpl(template, tag).appendTo($form_tags);
             rcorners($tag);
