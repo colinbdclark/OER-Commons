@@ -5,6 +5,7 @@
 {% load tags_tags %}
 {% load materials_tags %}
 {% load utils %}
+
 <html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
     <meta charset="utf-8"/>
@@ -129,7 +130,13 @@
       </form>
     </div>
 
-    <iframe id="resource" src="{{ item.url }}" width="100%" height="100%"></iframe>
+    {% if oembed %}
+      <div class="oembed">
+        {{ oembed|safe }}
+      </div>
+    {% else %}
+      <iframe id="resource" src="{{ item.url }}" width="100%" height="100%"></iframe>
+    {% endif %}
 
     {% include "include/cdn-js.html" %}
     {% compress js %}

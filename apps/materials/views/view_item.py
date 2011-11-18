@@ -13,12 +13,14 @@ from materials.models.microsite import Microsite
 from materials.views.filters import FILTERS
 from materials.views.index import PATH_FILTERS, IndexParams, \
     serialize_query_string_params
+from oembed.core import replace
 from reviews.models import Review
 from reviews.views import ReviewForm
 from rubrics.models import Rubric, StandardAlignmentScore, RubricScore, \
     get_verbose_score_name
 from saveditems.models import SavedItem
 from visitcounts.models import Visit
+import re
 import urllib
 
 
@@ -388,6 +390,8 @@ class ToolbarViewItem(BaseViewItemMixin, TemplateView):
     template_name = "materials/toolbar-view-item.html"
     view_item_name = "toolbar_view_item"
 
+    YOUTUBE_URL_RE = re.compile(r"^http://(?:(?:www\.)?youtube\.com|youtu\.be)")
+
     def get_context_data(self, **kwargs):
         data = super(ToolbarViewItem, self).get_context_data(**kwargs)
 
@@ -404,5 +408,12 @@ class ToolbarViewItem(BaseViewItemMixin, TemplateView):
             )
             if review:
                 data["comment_form"] = ReviewForm(instance=review)
+
+        if self.YOUTUBE_URL_RE.match(item.url):
+            oembed = replace(item.url, 600, 450)
+            if oembed != item.url:
+                # Add wmode=transparent to youtube iframe to fix z-index
+                oembed = re.sub(r'src="(http://www.youtube\.com.+?)"', r'src="\1&wmode=transparent"', oembed)
+                data["oembed"] = oembed
 
         return data
