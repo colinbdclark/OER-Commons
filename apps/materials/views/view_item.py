@@ -295,6 +295,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
             evaluation__confirmed=True,
             evaluation__content_type=self.content_type,
             evaluation__object_id=self.item.id,
+            alignment_tag__id__in=self.item.alignment_tags.all().values_list("tag__id", flat=True).distinct()
         )
 
         data["alignment_scores"] = []

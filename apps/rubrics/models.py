@@ -147,6 +147,7 @@ class EvaluatedItemMixin(object):
             evaluation__content_type=content_type,
             evaluation__object_id=self.pk,
             evaluation__confirmed=True,
+            alignment_tag__id__in=self.alignment_tags.all().values_list("tag__id", flat=True).distinct()
             )
         if alignment_scores.exists():
             scores[0] = alignment_scores.aggregate(

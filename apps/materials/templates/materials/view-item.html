@@ -314,6 +314,8 @@
                 <td class="alignment-scores">
                   {% for score in alignment_scores %}
                     <span data-code="{{ score.code }}" class="s{{ score.score_class }}">{{ score.score|floatformat }}</span>
+                  {% empty %}
+                    <span class="na">N/A</span>
                   {% endfor %}
                 </td>
               </tr>
