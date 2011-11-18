@@ -148,6 +148,11 @@ body.evaluation-tool {
   margin-bottom: 0;
 }
 
+.evaluation-tool .rubrics section#alignment .body > p {
+  margin: 0;
+  padding-top: 1em;
+}
+
 .evaluation-tool .rubrics .scores {
   position: relative;
   height: 155px;

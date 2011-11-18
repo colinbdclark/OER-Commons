@@ -348,13 +348,5 @@
       "description": "An object has *very weak* alignment for either one of two reasons: The object does not match the intended standards. The object matches only to minimally important aspects of a standard, cluster or domain. These objects will not typically be useful for instruction of core concepts and performances covered by the standard.",
       "value": 0
     }
-  },
-  {
-    "pk": 5,
-    "model": "rubrics.standardalignmentscorevalue",
-    "fields": {
-      "description": "This rubric is *not applicable* for an object that has no standards suggested for alignment. For example, the rubric might not be applicable to a set of raw data.",
-      "value": null
-    }
   }
 ]

@@ -15,7 +15,7 @@ from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
 from rating.models import Rating
 from reviews.models import Review
-from rubrics.models import StandardAlignmentScore, RubricScore, EvaluatedItemMixin
+from rubrics.models import StandardAlignmentScore, RubricScore, EvaluatedItemMixin, Evaluation
 from saveditems.models import SavedItem
 from tags.models import Tag
 from visitcounts.models import Visit
@@ -255,10 +255,10 @@ class Material(Indexed, EvaluatedItemMixin):
     @property
     def is_evaluated(self):
         content_type = ContentType.objects.get_for_model(self)
-        kwargs = dict(content_type=content_type, object_id=self.id,
-                      confirmed=True)
-        return StandardAlignmentScore.objects.filter(**kwargs).exists() or \
-               RubricScore.objects.filter(**kwargs).exists()
+        return Evaluation.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            confirmed=True).exists()
 
     @property
     def identifier(self):
