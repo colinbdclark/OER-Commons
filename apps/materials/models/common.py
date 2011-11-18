@@ -204,7 +204,7 @@ class License(models.Model):
     def type(self):
         if CC_LICENSE_URL_RE.match(self.url):
             return u"cc-" + CC_LICENSE_URL_RE.search(self.url).groupdict()["cc_type"]
-        if PUBLIC_DOMAIN_URL_RE.match(self.url):
+        if PUBLIC_DOMAIN_URL_RE.match(self.url) or self.name.lower() == "public domain":
             return u"public-domain"
         if GNU_FDL_URL_RE.match(self.url):
             return u"gnu-fdl"
