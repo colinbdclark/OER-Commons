@@ -5,28 +5,28 @@ from django.shortcuts import get_object_or_404
 
 class BaseViewMixin(object):
 
+    page_title = u""
     def get_page_title(self):
-        return None
-    page_title = property(get_page_title)
+        return self.page_title
 
+    page_subtitle = u""
     def get_page_subtitle(self):
-        return None
-    page_subtitle = property(get_page_subtitle)
+        return self.page_subtitle
 
+    breadcrumbs = []
     def get_breadcrumbs(self):
-        return None
-    breadcrumbs = property(get_breadcrumbs)
+        return self.breadcrumbs
 
+    hide_global_notifications = False
     def get_hide_global_notifications(self):
-        return False
-    hide_global_notifications = property(get_hide_global_notifications)
+        return self.hide_global_notifications
 
     def get_context_data(self, *args, **kwargs):
         data = super(BaseViewMixin, self).get_context_data(*args, **kwargs)
-        data["page_title"] = self.page_title
-        data["page_subtitle"] = self.page_subtitle
-        data["breadcrumbs"] = self.breadcrumbs
-        data["hide_global_notifications"] = self.hide_global_notifications
+        data["page_title"] = self.get_page_title()
+        data["page_subtitle"] = self.get_page_subtitle()
+        data["breadcrumbs"] = self.get_breadcrumbs()
+        data["hide_global_notifications"] = self.get_hide_global_notifications()
         return data
 
 
