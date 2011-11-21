@@ -18,7 +18,9 @@
 {% block above-content %}{% endblock %}
 
 {% block column-left %}
-  <a href="{% url users:profile_edit %}" class="edit rc5">Edit My Profile</a>
+  {% if not public %}
+    <a href="{% url users:profile_edit %}" class="edit rc5">Edit My Profile</a>
+  {% endif %}
 
   {% if saved or evaluated %}
   <section class="portlet stats">
@@ -30,7 +32,7 @@
     {% endif %}
     {% if evaluated %}
       <p>
-        Saved: <strong>{{ evaluated }}</strong> {% blocktrans count counter=evaluated %}item{% plural %}items{% endblocktrans %}
+        Evaluated: <strong>{{ evaluated }}</strong> {% blocktrans count counter=evaluated %}item{% plural %}items{% endblocktrans %}
       </p>
     {% endif %}
   </section>
@@ -79,9 +81,8 @@
   <section class="basic">
     <ul>
       <li class="name">
-        {{ request.user.first_name }} {{ request.user.last_name }}
+        {% if public %}{{ profile.public_name }}{% else %}{{ profile.name }}{% endif %}
       </li>
-      <li>{{ request.user.email }}</li>
       {% if profile.country %}
         <li>
           {% if profile.country.code == "US" and profile.us_state %}{{ profile.us_state }},{% endif %}
@@ -99,15 +100,14 @@
           {% if item.type == "resource" %}
             <h1>
               <span>
-                {% if item.action == "saved" %}Saved{% endif %}:
+                {% if item.action == "saved" %}Saved:{% endif %}
+                {% if item.action == "evaluated" %}Evaluated:{% endif %}
               </span>
               <a href="{{ item.resource.get_absolute_url }}">{{ item.resource }}</a>
             </h1>
             <div class="actions">
               {% stars item.resource.identifier item.resource.rating %}
-              {% if item.action == "saved" %}
-                <a class="rc5" href="{{ item.resource.toolbar_view_url }}#evaluate">Evaluate</a>
-              {% endif %}
+              <a class="rc5" href="{{ item.resource.toolbar_view_url }}#evaluate">Evaluate</a>
             </div>
             {% spaceless %}
               <div class="thumbnail">
@@ -123,9 +123,11 @@
           {% endif %}
         </article>
       {% endfor %}
-      <footer class="rc10">
-        <a href="{% url myitems:myitems %}">See more in My Items</a>
-      </footer>
+      {% if not public %}
+        <footer class="rc10">
+          <a href="{% url myitems:myitems %}">See more in My Items</a>
+        </footer>
+      {% endif %}
     </section>
   {% endif %}
 {% endblock %}
@@ -153,8 +155,10 @@
         </ul>
       {% endif %}
     </div>
-    <footer class="rc10">
-      <a href="{% url users:profile_about %}">Add links to social media</a>
-    </footer>
+    {% if not public %}
+      <footer class="rc10">
+        <a href="{% url users:profile_about %}">Add links to social media</a>
+      </footer>
+    {% endif %}
   </section>
 {% endblock %}

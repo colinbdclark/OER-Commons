@@ -87,6 +87,6 @@ def profile_link(user):
     profile = user.get_profile()
     name = profile.public_name
     if profile.privacy in ("full", "basic"):
-        profile_url = "#" # TODO: fix this when we have public profile pages
+        profile_url = reverse("users:profile_public", kwargs=dict(user_id=user.id))
         return mark_safe("""<a href="%s">%s</a>""" % (profile_url, name))
     return name

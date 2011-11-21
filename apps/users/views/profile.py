@@ -1,16 +1,17 @@
 from annoying.decorators import ajax_request
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect, requires_csrf_token
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView, View
 from django.views.generic.simple import direct_to_template
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from geo.models import CountryIPDiapason
 from materials.models.community import CommunityItem
 from materials.models.course import Course
@@ -32,51 +33,87 @@ class ProfileView(BaseViewMixin, TemplateView):
 
     template_name = "users/profile.html"
 
-    page_title = u"My Profile"
-    hide_global_notifications = True
-
     ACTIVITY_LENGTH = 5
 
     def get_breadcrumbs(self):
         return [{"url": reverse("users:profile"), "title": self.page_title}]
 
-    @method_decorator(login_required)
+    def get_page_title(self):
+        if not self.public:
+            return u"My Profile"
+        return u""
+
+    def get_hide_global_notifications(self):
+        if not self.public:
+            return True
+        return False
+
     def dispatch(self, request, *args, **kwargs):
+        self.show_activity = True
+        if "user_id" in kwargs:
+            self.user = get_object_or_404(User, id=int(kwargs["user_id"]))
+            self.profile = Profile.objects.get_or_create(user=self.user)[0]
+            if self.user == request.user:
+                self.public = False
+            else:
+                self.public = True
+                if self.profile.privacy == "hide":
+                    raise Http404()
+                elif self.profile.privacy == "basic":
+                    self.show_activity = False
+        elif not request.user.is_authenticated():
+            raise Http404()
+        else:
+            self.public = False
+            self.user = request.user
+            self.profile = Profile.objects.get_or_create(user=self.user)[0]
+
         return super(ProfileView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
         data = super(ProfileView, self).get_context_data(*args, **kwargs)
 
-        user = self.request.user
+        data["user"] = self.user
+        data["profile"] = self.profile
+        data["public"] = self.public
 
-        data["user"] = user
-        data["profile"] = Profile.objects.get_or_create(user=user)[0]
+        if self.show_activity:
+            data["saved"] = 0
+            data["evaluated"] = 0
 
-        data["saved"] = 0
+            activity = []
 
-        activity = []
+            for model in (Course, Library, CommunityItem):
+                qs = model.objects.filter(
+                    workflow_state=PUBLISHED_STATE,
+                    creator=self.user,
+                )
+                data["saved"] += qs.count()
+                for resource in qs[:self.ACTIVITY_LENGTH]:
+                    activity.append({
+                        "type": "resource",
+                        "action": "saved",
+                        "resource": resource,
+                        "timestamp": resource.created_on,
+                    })
 
-        for model in (Course, Library, CommunityItem):
-            qs = model.objects.filter(
-                workflow_state=PUBLISHED_STATE,
-                creator=user,
+            qs = Evaluation.objects.filter(
+                confirmed=True,
+                user=self.user,
             )
-            data["saved"] += qs.count()
-            for resource in qs[:self.ACTIVITY_LENGTH]:
+            data["evaluated"] = qs.count()
+
+            for evaluation in qs[:self.ACTIVITY_LENGTH]:
+                resource = evaluation.content_object
                 activity.append({
                     "type": "resource",
-                    "action": "saved",
+                    "action": "evaluated",
                     "resource": resource,
-                    "timestamp": resource.created_on,
+                    "timestamp": evaluation.timestamp,
                 })
 
-        activity.sort(key=lambda x: x["timestamp"], reverse=True)
-        data["activity"] = activity[:self.ACTIVITY_LENGTH]
-
-        data["evaluated"] = Evaluation.objects.filter(
-            confirmed=True,
-            user=user,
-        ).count()
+            activity.sort(key=lambda x: x["timestamp"], reverse=True)
+            data["activity"] = activity[:self.ACTIVITY_LENGTH]
 
         return data
 
