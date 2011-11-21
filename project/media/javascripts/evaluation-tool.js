@@ -296,6 +296,12 @@ oer.evaluation_tool.init_rubrics = function() {
     });
   });
 
+  $rubrics.find("#alignment a.skip").click(function(e) {
+    e.preventDefault();
+    var $section = $("#alignment").removeClass("not-scored").addClass("scored");
+    open_section($section.next("section"));
+  });
+
   var hash = window.location.hash;
   var result = hash.match(/^#(standard|rubric)(\d+)?$/);
   if (result !== null) {
