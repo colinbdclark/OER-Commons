@@ -23,7 +23,6 @@ import urllib
 
 MAX_TOP_KEYWORDS = 25
 
-
 def serialize_query_string_params(query_string_params, ignore_params=None):
     if not ignore_params: ignore_params = []
     params = []
@@ -86,7 +85,7 @@ class Pagination:
                 params["batch_start"] = (current_page + 1) * batch_size
                 self.next_page_url = path + serialize_query_string_params(params)
 
-            for page in first_neighbours_last(xrange(total_pages), current_page, 3, 3):
+            for page in first_neighbours_last(xrange(total_pages), current_page, 1, 1):
                 if page is None:
                     pass
                 elif page == current_page:

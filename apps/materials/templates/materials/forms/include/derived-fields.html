@@ -6,7 +6,7 @@
   {% endwith %}
 {% endwith %}
 
-<div class="derived-fields{% if not form.derived|bound_field_value %} hidden{% endif %}">
+<div class="derived-fields{% if not form.derived|bound_field_value %} hide{% endif %}">
   {% with form.derived_title as field %}
     {% include "include/form-field.html" %}
   {% endwith %}

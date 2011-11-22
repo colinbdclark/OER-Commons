@@ -1,0 +1,59 @@
+@import "bootstrap/variables.scss";
+@import "bootstrap/mixins.scss";
+
+.layout-columns {
+  @include fixed-container;
+  margin-top: $baseline;
+  background: url(../images/dotted-line-vert.gif) repeat-y ($sidebarColumns * ($gridColumnWidth + $gridGutterWidth) - 0.5 * $gridGutterWidth) 0;
+  > .wrap {
+    @include clearfix();
+    background: url(../images/dotted-line-vert.gif) repeat-y $siteWidth - ($sidebarColumns * ($gridColumnWidth + $gridGutterWidth) - 0.5 * $gridGutterWidth) 0;
+  }
+}
+
+.column-main {
+  @include gridColumn;
+  @include columns($gridColumns - $sidebarColumns * 2);
+}
+
+.column-left,
+.column-right {
+  @include gridColumn;
+  @include columns($sidebarColumns);
+}
+
+.column-left {
+  @include first-column;
+}
+
+body.no-columns {
+ .layout-columns {
+   background: none;
+  }
+  .column-main {
+    float: none;
+    padding: 0;
+    width: auto;
+  }
+  .column-left, .column-right {
+    display: none;
+  }
+}
+
+body.wide-right-column {
+  .layout-columns {
+    background: none;
+    > .wrap {
+      background: url(../images/dotted-line-vert.gif) repeat-y $siteWidth - ($wideSidebarColumns * ($gridColumnWidth + $gridGutterWidth) - 0.5 * $gridGutterWidth) 0;
+    }
+  }
+  .column-left {
+    display: none;
+  }
+  .column-main {
+    @include columns($gridColumns - $wideSidebarColumns);
+  }
+  .column-right {
+    @include columns($wideSidebarColumns);
+  }
+}

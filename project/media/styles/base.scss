@@ -1,20 +1,13 @@
-body {
-  color: #333;
-  font-size: 13px;
-  font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
-}
+@import "bootstrap/variables.scss";
+@import "bootstrap/mixins.scss";
+@import "mixins.scss";
 
 body .page {
   background: url(../images/main-bg.png) repeat-x;
 }
 
-em{
-  font-style: italic;
-}
-
-a {
-  color: #0B7BA9;
-}
+.clearfix { @include clearfix; }
+.fixed-container { @include fixed-container; }
 
 a.dashed {
   border-bottom: 1px dashed;
@@ -41,49 +34,28 @@ hr.tall {
   box-shadow: 3px 3px 5px #888;
 }
 
-.clearfix:after {
-  clear: both;
-  display: block;
-  visibility: hidden;
-  height: 0;
-  content: ".";
-}
-
 .clear {
   clear: both;
 }
 
-.hidden {
-  display: none;
-}
-
-.fixed-width {
-  margin: 0 auto;
-  width: 960px;
-}
-
 .dotted {
-  padding-bottom: 4px;
-  background: url(../images/dotted-line-hor.gif) repeat-x scroll 0 100% transparent;
+  @include dotted;
 }
 
 .breadcrumbs {
   margin-top: 5px;
-}
-
-.breadcrumbs a {
-  text-decoration: none;
+  @include fixed-container;
 }
 
 .page-title {
+  @include fixed-container;
   margin-top: 5px;
   color: #668D16;
   font-weight: normal;
   font-size: 25px;
-}
-
-.page-title span {
-  color: #666;
+  span {
+    color: #666;
+  }
 }
 
 .status-message {
@@ -116,6 +88,8 @@ a.expand-button.expanded {
 }
 
 .action-panel {
+  @include fixed-container;
+  position: relative;
   margin-top: 10px;
   padding-top: 10px;
   height: 32px;
@@ -135,17 +109,18 @@ a.expand-button.expanded {
 }
 
 .action-panel ul.left {
-  float: left;
-  margin-left: 10px;
+  position: absolute;
+  left: 10px;
 }
 
 .action-panel ul.right {
-  float: right;
-  margin-right: 10px;
+  position: absolute;
+  right: 10px;
 }
 
 .action-panel li {
-  float: left;
+  display: inline-block;
+  color: inherit;
   margin: 0 10px 0 0;
   padding: 0 11px 0 0;
   height: 20px;
@@ -202,14 +177,17 @@ div.box h3 {
   margin-top: 0;
 }
 
-.accordion .accordion-header a {
-  display: inline-block;
+.accordion .accordion-header {
   padding-left: 20px;
   height: 16px;
   background: url(../images/collapsible-btn-closed.png) no-repeat 0 0;
 }
 
-.accordion .accordion-header a.expanded {
+.accordion .accordion-header .handler {
+  cursor: pointer;
+}
+
+.accordion .accordion-header.expanded {
   background-image: url(../images/collapsible-btn-opened.png);
 }
 
@@ -264,18 +242,6 @@ div.box h3 {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-}
-
-.button-blue-big {
-  display: inline-block;
-  margin: 3px;
-  padding: 2px 10px;
-  background-color: #0B7BA8;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  line-height: 24px;
-  font-size: 16px;
 }
 
 .qtip {

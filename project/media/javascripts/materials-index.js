@@ -35,12 +35,12 @@ oer.materials.index.pjax = function(url) {
 
 oer.materials.index.disable_unecessary_filters = function($form) {
   var disabled_filters = [];
-  $form.find("dl.filter").each(function() {
+  $form.find("div.filter").each(function() {
     var $filter = $(this);
-    if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
-      var $checkbox = $filter.find(":checkbox");
-      $checkbox.attr("disabled", "disabled");
-      disabled_filters.push($checkbox);
+    var $checkboxes = $filter.find(":checkbox");
+    if ($checkboxes.length == $checkboxes.filter("[checked=true]").length) {
+      $checkboxes.attr("disabled", "disabled");
+      disabled_filters.push($checkboxes);
     }
   });
   var $search_filter = $form.find("input[name='f.search']");
@@ -48,7 +48,6 @@ oer.materials.index.disable_unecessary_filters = function($form) {
     $search_filter.attr("disabled", "disabled");
     disabled_filters.push($search_filter);
   }
-
   return disabled_filters;
 };
 
@@ -74,29 +73,32 @@ oer.materials.index.init_filters = function() {
     }
   });
 
-  $form.delegate("dl.filter dd :checkbox", "click", function() {
+  $form.delegate("div.filter li:not(.first) :checkbox", "click", function() {
     var $checkbox = $(this);
-    var $filter = $checkbox.parents("dl.filter").first();
+    var $filter = $checkbox.parents("div.filter").first();
+    var $checkboxes = $filter.find("li:not(.first) :checkbox");
+    var $header_checkbox = $filter.find("li.first :checkbox");
     if ($checkbox.attr("checked")) {
-      if ($filter.find("dd :checkbox").length == $filter.find("dd :checkbox[checked=true]").length) {
-        $filter.find("dt :checkbox").attr("checked", true);
+      if ($checkboxes.length == $checkboxes.filter("[checked=true]").length) {
+        $header_checkbox.attr("checked", true);
       }
     } else {
-      $filter.find("dt :checkbox").attr("checked", false);
+      $header_checkbox.attr("checked", false);
     }
     if ($.support.pjax) {
       $form.submit();
     }
   });
 
-  $form.delegate("dl.filter dt :checkbox", "click", function(e) {
-    var $checkbox = $(this);
-    var $filter = $checkbox.parents("dl.filter").first();
+  $form.delegate("div.filter li.first :checkbox", "click", function(e) {
+    var $header_checkbox = $(this);
+    var $filter = $header_checkbox.parents("div.filter").first();
+    var $checkboxes = $filter.find("li:not(.first) :checkbox");
     $filter.find(".collapsed").removeClass("collapsed").addClass("expanded");
-    if ($checkbox.attr("checked")) {
-      $filter.find("dd :checkbox").attr("checked", true);
+    if ($header_checkbox.attr("checked")) {
+      $checkboxes.attr("checked", true);
     } else {
-      $filter.find("dd :checkbox").attr("checked", false);
+      $checkboxes.attr("checked", false);
     }
     if ($.support.pjax) {
       $form.submit();
@@ -273,8 +275,8 @@ oer.materials.index.init = function() {
   oer.collapsibles.init($("#content"));
   oer.collapsibles.init($filters_portlet);
 
-  $("dl.cou a.tooltip-button").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
-  $("dl.grade-levels a.tooltip-button").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
+  $("div.cou a.tooltip-button").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
+  $("div.grade-levels a.tooltip-button").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);
 
   $("section.portlet.cou li a").qtip(DEFAULT_TOOLTIP_OPTIONS);
   $("#content div.cou-bucket").qtip(RIGHTSIDE_TOOLTIP_OPTIONS);

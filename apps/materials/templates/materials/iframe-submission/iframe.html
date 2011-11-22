@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 {% load compress %}
+{% load scss %}
 {% load flatblock_tags %}
 <html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
     <meta charset="utf-8"/>
     {% compress css %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/reset.css" media="all" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/typography.css" media="all" />
+      <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/bootstrap/bootstrap.scss" %}" media="all">
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all" />
+      <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all">
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/base.css" media="all" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/form.css" media="all" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/autocomplete-list-widget.css" media="all" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/iframe-submission.css" media="all" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/rating.css" media="all" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}styles/tags.css" media="all" />
+      <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/base.scss" %}" media="all">
+      <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/form.scss" %}" media="all">
+      <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/autocomplete-list-widget.scss" %}" media="all">
+      <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/iframe-submission.scss" %}" media="all">
+      <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/rating.scss" %}" media="all">
+      <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/tags.scss" %}" media="all">
     {% endcompress %}
 
     <!--[if lt IE 8]>
       {% compress css %}
-      <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/ie.css" media="all" />
       <link rel="stylesheet" href="{{ STATIC_URL }}styles/ie.css" media="all" />
       <link rel="stylesheet" href="{{ STATIC_URL }}styles/ie-inline-block.css" media="all" />
       {% endcompress %}

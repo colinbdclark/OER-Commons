@@ -17,12 +17,12 @@ oer.accordion.init = function($accordion) {
       var $this = $(this);
       if ($this.data("expanded")) {
         $this.data("expanded", false);
-        $this.data("$handler").removeClass("expanded");
+        $this.removeClass("expanded");
         $this.data("$body").slideUp(200);
       }
     });
     $header.data("expanded", true);
-    $header.data("$handler").addClass("expanded");
+    $header.addClass("expanded");
     $accordion.data("animated", true);
     $header.data("$body").slideDown(200, function() {
       $accordion.data("animated", false);
@@ -31,19 +31,20 @@ oer.accordion.init = function($accordion) {
 
   $headers.each(function() {
     var $header = $(this);
-    var $handler = $header.find("a");
+    var $handler = $header.find(".handler");
     $header.data("expanded", false);
-    $header.data("$handler", $handler);
     $header.data("$body", $header.next(".accordion-body"));
     $handler.mouseover(function() {
       open_section($header);
     });
-    $handler.click(function(e) {
-      var $this = $(this);
-      if ($this.attr("href") === "#") {
-        e.preventDefault();
-        open_section($header);
-      }
-    });
+    if ($handler.is("a")) {
+      $handler.click(function(e) {
+        var $this = $(this);
+        if ($this.attr("href") === "#") {
+          e.preventDefault();
+          open_section($header);
+        }
+      });
+    }
   });
 };

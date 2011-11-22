@@ -3,7 +3,7 @@
 {% with form.has_prerequisites as field %}
   {% include "materials/forms/include/checkbox-field.html" %}
 {% endwith %}
-<fieldset class="prerequisites-fields{% if not form.has_prerequisites|bound_field_value %} hidden{% endif %}">
+<fieldset class="prerequisites-fields{% if not form.has_prerequisites|bound_field_value %} hide{% endif %}">
   <legend>First suggested pre-requisite</legend>
   <table class="columns"><tbody><tr>
     <td>
@@ -19,7 +19,7 @@
   </tr></tbody></table>
 </fieldset>
 
-<fieldset class="prerequisites-fields{% if not form.has_prerequisites|bound_field_value %} hidden{% endif %}">
+<fieldset class="prerequisites-fields{% if not form.has_prerequisites|bound_field_value %} hide{% endif %}">
   <legend>Second suggested pre-requisite</legend>
   <table class="columns"><tbody><tr>
     <td>
@@ -38,7 +38,7 @@
 {% with form.has_postrequisites as field %}
   {% include "materials/forms/include/checkbox-field.html" %}
 {% endwith %}
-<fieldset class="postrequisites-fields{% if not form.has_postrequisites|bound_field_value %} hidden{% endif %}">
+<fieldset class="postrequisites-fields{% if not form.has_postrequisites|bound_field_value %} hide{% endif %}">
   <legend>First suggested post-requisite</legend>
   <table class="columns"><tbody><tr>
     <td>
@@ -54,7 +54,7 @@
   </tr></tbody></table>
 </fieldset>
 
-<fieldset class="postrequisites-fields{% if not form.has_postrequisites|bound_field_value %} hidden{% endif %}">
+<fieldset class="postrequisites-fields{% if not form.has_postrequisites|bound_field_value %} hide{% endif %}">
   <legend>Second suggested post-requisite</legend>
   <table class="columns"><tbody><tr>
     <td>

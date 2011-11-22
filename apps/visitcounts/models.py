@@ -10,7 +10,7 @@ ROBOT_RE = re.compile("bot|crawler|spider", re.I)
 
 
 class VisitManager(models.Manager):
-    
+
     def count(self, request, instance):
         ''' Count a visit for a given instance. Use session key to distinguish
         visits from different users. Count only if current user has visited
@@ -19,7 +19,7 @@ class VisitManager(models.Manager):
         user_agent = request.META.get("HTTP_USER_AGENT")
         if user_agent and ROBOT_RE.search(user_agent):
             return
-        
+
         session_key = request.session.session_key
         content_type = ContentType.objects.get_for_model(instance)
         object_id = instance.id
@@ -42,7 +42,7 @@ class VisitManager(models.Manager):
 class Visit(models.Model):
 
     session_key = models.CharField(max_length=32, db_index=True)
-    
+
     content_type = models.ForeignKey(ContentType,
                                      verbose_name=_(u"Content type"), db_index=True)
     object_id = models.PositiveIntegerField(verbose_name=_(u"Object ID"), db_index=True)
@@ -51,5 +51,4 @@ class Visit(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True,
                                      default=datetime.datetime.now,
                                      db_index=True)
-
     objects = VisitManager()

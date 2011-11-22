@@ -1,0 +1,26 @@
+@import "bootstrap/variables.scss";
+
+@mixin change-font-size($q) {
+  font-size: $basefont * $q;
+}
+
+@mixin change-line-height($q) {
+  line-height: $baseline * $q;
+}
+
+@mixin change-text-size($q) {
+  @include change-font-size($q);
+  @include change-line-height($q);
+}
+
+@mixin dotted {
+  padding-bottom: $baseline / 4;
+  background: url(../images/dotted-line-hor.gif) repeat-x scroll 0 100% transparent;
+}
+
+@mixin formColumns($columnSpan: 1 ) {
+  display: inline-block;
+  float: none;
+  width: (($gridColumnWidth) * $columnSpan) + ($gridGutterWidth * ($columnSpan - 1)) - 10;
+  margin-left: 0;
+}

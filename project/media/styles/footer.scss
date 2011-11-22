@@ -1,8 +1,11 @@
+@import "bootstrap/variables.scss";
+@import "bootstrap/mixins.scss";
+
 footer.global {
-  clear: both;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding-top: 10px;
+  @include fixed-container;
+  margin-top: $baseline;
+  margin-bottom: $baseline;
+  padding-top: $baseline / 2;
   border-top: 2px solid #999999;
   color: #666666;
 }
@@ -12,7 +15,8 @@ footer.global .cc-button {
 }
 
 footer.global nav ul {
-  margin-bottom: 5px;
+  margin-left: 0;
+  margin-bottom: $baseline / 2;
   list-style-type: none;
 }
 

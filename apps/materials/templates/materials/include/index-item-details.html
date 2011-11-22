@@ -1,4 +1,4 @@
-<a class="expand-link collapsed" href="#">(Complete Item Description)</a>
+<a class="expand-link collapsed dashed" href="#">Show item description</a>
 <dl class="collapsed">
   <dt>Abstract:</dt>
   <dd>{{ item.abstract|linebreaks }}</dd>
@@ -29,7 +29,7 @@
     {% endfor %}
   </dd>
   {% endif %}
-  
+
   {% if item.collection %}
   <dt>Collection:</dt>
   <dd>

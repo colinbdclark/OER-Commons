@@ -6,7 +6,7 @@
   {% endwith %}
 {% endwith %}
 
-<div class="rss-fields{% if not form.in_rss|bound_field_value %} hidden{% endif %}">
+<div class="rss-fields{% if not form.in_rss|bound_field_value %} hide{% endif %}">
   {% with form.rss_description as field %}
     <div class="field required">
       <div class="errors">

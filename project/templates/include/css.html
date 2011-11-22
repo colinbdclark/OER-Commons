@@ -1,43 +1,42 @@
 {% load compress %}
+{% load scss %}
 {% compress css %}
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/reset.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/typography.css" media="all" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/bootstrap/bootstrap.scss" %}" media="all">
 
-<link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/jquery.qtip.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/anythingslider.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/jquery.inline-labels.css" media="all" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/jquery.qtip.css" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/anythingslider.css" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/jquery.inline-labels.css" media="all">
 
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/base.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/form.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/header.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/column-layout.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/footer.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/login.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/registration.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/profile.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/frontpage.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/tags.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/align-form.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/portlets.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/rating.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/autocomplete-list-widget.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/materials.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/resource-comments.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/myitems.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/savedsearches.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/information.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/sendthis.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/green.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/stats.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/slider.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/newsletter.css" media="all" />
-<link rel="stylesheet" href="{{ STATIC_URL }}styles/evaluation-tool.css" media="all" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/base.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/layout.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/buttons.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/header.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/footer.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/login.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/registration.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/profile.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/frontpage.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/tags.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/align-form.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/portlets.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/rating.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/autocomplete-list-widget.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/materials.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/resource-comments.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/myitems.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/savedsearches.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/information.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/sendthis.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/green.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/stats.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/slider.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/newsletter.scss" %}" media="all">
+  <link rel="stylesheet" href="{{ STATIC_URL }}{% scss "styles/evaluation-tool.scss" %}" media="all">
 {% endcompress %}
 
 <!--[if lt IE 8]>
   {% compress css %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/ie.css" media="all" />
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/ie.css" media="all" />
   <link rel="stylesheet" href="{{ STATIC_URL }}styles/ie-inline-block.css" media="all" />
   {% endcompress %}

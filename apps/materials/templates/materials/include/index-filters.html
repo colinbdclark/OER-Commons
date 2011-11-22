@@ -1,7 +1,7 @@
 {% load materials_tags %}
 
 <section class="portlet index-filters">
-  <form name="index-filters" action="{{ request.path }}">
+  <form name="index-filters" class="form-stacked" action="{{ request.path }}">
 
     <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
     <input type="hidden" name="sort_by" value="{{ index_params.sort_by }}" />
@@ -10,186 +10,201 @@
     {% hidden_filters hidden_filters %}
 
     <h1 class="dotted">You searched for:</h1>
-    
-    <div class="dotted search">
-      <input type="text" class="text" name="f.search" value="{{ search_query }}" />
-      <input type="submit" class="button" value="Search Within These Results" />
+
+    <div class="search">
+      <input type="text" name="f.search" class="span5" value="{{ search_query }}" />
+      <div class="actions">
+        <input type="submit" class="btn" value="Search within these results" />
+      </div>
     </div>
-    
+
     <h1 class="dotted">Refine Your Search</h1>
-    
+
     {% with index_filters.general_subjects as filter %}
       {% if filter.options %}
-      <dl class="dotted filter collapsible clearfix">
-        <dt>
-           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <label for="{{ filter.name }}">
-             <input type="checkbox" name="{{ filter.name }}"
-                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ filter.title }}</label>
-        </dt>
-        {% for option in filter.options %}
-        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
-             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                    id="{{ option.input_id }}" value="{{ option.slug }}"
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ option.name|shrink:18 }} ({{ option.count }})</label>
-        </dd>
-        {% endfor %}
-      </dl>
+        <div class="dotted filter collapsible">
+          <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+          <ul class="inputs-list">
+            <li class="first">
+              <label>
+                <input type="checkbox" name="{{ filter.name }}"
+                       value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                       {% if filter.disabled %}disabled="disabled"{% endif %} />
+                <span>{{ filter.title }}</span>
+              </label>
+            </li>
+            {% for option in filter.options %}
+              <li class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <label title="{{ option.name }} ({{ option.count }})">
+                 <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                        value="{{ option.slug }}" {% if filter.disabled %}disabled="disabled"{% endif %} />
+                 <span>{{ option.name|shrink:16 }} ({{ option.count }})</span>
+               </label>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       {% endif %}
     {% endwith %}
 
     {% with index_filters.grade_levels as filter %}
       {% if filter.options %}
-      <dl class="dotted filter grade-levels collapsible clearfix">
-        <dt>
-           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <label for="{{ filter.name }}">
-             <input type="checkbox" name="{{ filter.name }}"
-                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             <span>{{ filter.title }}</span>
-             <a class="tooltip-button" rel="#grade-levels-tooltip" href="#grade-levels-tooltip" title="Grade Levels"></a>
-           </label>
-        </dt>
-        {% for option in filter.options %}
-        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
-             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                    id="{{ option.input_id }}" value="{{ option.slug }}"
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ option.name|shrink:18 }} ({{ option.count }})</label>
-        </dd>
-        {% endfor %}
-      </dl>
-
-      <div style="display: none; " id="grade-levels-tooltip">
-       <p><strong>Primary</strong>: Grades K-6</p>
-       <p><strong>Secondary</strong>: Grades 7-12</p>
-       <p><strong>Post-Secondary</strong>: University</p>
-      </div>
+        <div class="dotted filter grade-levels collapsible">
+          <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+          <ul class="inputs-list">
+            <li>
+              <label>
+                <input type="checkbox" name="{{ filter.name }}"
+                       value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                       {% if filter.disabled %}disabled="disabled"{% endif %} />
+                <span>{{ filter.title }}</span>
+                <a class="tooltip-button" rel="#grade-levels-tooltip" href="#grade-levels-tooltip" title="Grade Levels"></a>
+              </label>
+            </li>
+            {% for option in filter.options %}
+              <li class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+                 <label title="{{ option.name }} ({{ option.count }})">
+                   <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                          value="{{ option.slug }}" {% if filter.disabled %}disabled="disabled"{% endif %} />
+                   <span>{{ option.name|shrink:16 }} ({{ option.count }})</span>
+                 </label>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div style="display: none;" id="grade-levels-tooltip">
+          <p><strong>Primary</strong>: Grades K-6</p>
+          <p><strong>Secondary</strong>: Grades 7-12</p>
+          <p><strong>Post-Secondary</strong>: University</p>
+        </div>
       {% endif %}
-      
+
     {% endwith %}
 
     {% with index_filters.topics as filter %}
       {% if filter.options %}
-      <dl class="dotted filter collapsible clearfix">
-        <dt>
-           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <label for="{{ filter.name }}">
-             <input type="checkbox" name="{{ filter.name }}"
-                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ filter.title }}</label>
-        </dt>
-        {% for option in filter.options %}
-        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
-             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                    id="{{ option.input_id }}" value="{{ option.slug }}"
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ option.name|shrink:18 }} ({{ option.count }})</label>
-        </dd>
-        {% endfor %}
-      </dl>
+        <div class="dotted filter collapsible">
+          <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+          <ul class="inputs-list">
+            <li class="first">
+              <label>
+                <input type="checkbox" name="{{ filter.name }}"
+                       value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                       {% if filter.disabled %}disabled="disabled"{% endif %} />
+                <span>{{ filter.title }}</span>
+              </label>
+            </li>
+            {% for option in filter.options %}
+              <li class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <label title="{{ option.name }} ({{ option.count }})">
+                 <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                        value="{{ option.slug }}" {% if filter.disabled %}disabled="disabled"{% endif %} />
+                 <span>{{ option.name|shrink:16 }} ({{ option.count }})</span>
+               </label>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       {% endif %}
     {% endwith %}
 
     {% with index_filters.course_material_types as filter %}
       {% if filter.options %}
-      <dl class="dotted filter collapsible clearfix">
-        <dt>
-           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <label for="{{ filter.name }}">
-             <input type="checkbox" name="{{ filter.name }}"
-                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ filter.title }}</label>
-        </dt>
-        {% for option in filter.options %}
-        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
-             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                    id="{{ option.input_id }}" value="{{ option.slug }}"
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ option.name|shrink:18 }} ({{ option.count }})</label>
-        </dd>
-        {% endfor %}
-      </dl>
+        <div class="dotted filter collapsible">
+          <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+          <ul class="inputs-list">
+            <li class="first">
+              <label>
+                <input type="checkbox" name="{{ filter.name }}"
+                       value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                       {% if filter.disabled %}disabled="disabled"{% endif %} />
+                <span>{{ filter.title }}</span>
+              </label>
+            </li>
+            {% for option in filter.options %}
+              <li class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <label title="{{ option.name }} ({{ option.count }})">
+                 <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                        value="{{ option.slug }}" {% if filter.disabled %}disabled="disabled"{% endif %} />
+                 <span>{{ option.name|shrink:16 }} ({{ option.count }})</span>
+               </label>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       {% endif %}
     {% endwith %}
 
     {% with index_filters.media_formats as filter %}
       {% if filter.options %}
-      <dl class="dotted filter collapsible clearfix">
-        <dt>
-           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <label for="{{ filter.name }}">
-             <input type="checkbox" name="{{ filter.name }}"
-                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ filter.title }}</label>
-        </dt>
-        {% for option in filter.options %}
-        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
-             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                    id="{{ option.input_id }}" value="{{ option.slug }}"
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ option.name|shrink:18 }} ({{ option.count }})</label>
-        </dd>
-        {% endfor %}
-      </dl>
+        <div class="dotted filter collapsible">
+          <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+          <ul class="inputs-list">
+            <li class="first">
+              <label>
+                <input type="checkbox" name="{{ filter.name }}"
+                       value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                       {% if filter.disabled %}disabled="disabled"{% endif %} />
+                <span>{{ filter.title }}</span>
+              </label>
+            </li>
+            {% for option in filter.options %}
+              <li class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <label title="{{ option.name }} ({{ option.count }})">
+                 <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                        value="{{ option.slug }}" {% if filter.disabled %}disabled="disabled"{% endif %} />
+                 <span>{{ option.name|shrink:16 }} ({{ option.count }})</span>
+               </label>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       {% endif %}
     {% endwith %}
 
     {% with index_filters.cou_bucket as filter %}
       {% if filter.options %}
-      <dl class="dotted filter cou collapsible clearfix">
-        <dt>
-           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-           <label for="{{ filter.name }}">
-             <input type="checkbox" name="{{ filter.name }}"
-                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             <span>{{ filter.title }}</span>
-             <a class="tooltip-button" rel="#cou-tooltip" href="#cou-tooltip" title="Conditions of Use"></a>
-           </label>
-        </dt>
-        {% for option in filter.options %}
-        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
-             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
-                    id="{{ option.input_id }}" value="{{ option.slug }}"
-                    {% if filter.disabled %}disabled="disabled"{% endif %} />
-             {{ option.name|shrink:20 }} ({{ option.count }})</label>
-        </dd>
-        {% endfor %}
-      </dl>
-
-      <div style="display: none; " id="cou-tooltip">
-       <p><strong>No Strings Attached</strong><br/>
-       No restrictions on your remixing, redistributing, or making derivative 
-       works. Give credit to the author, as required.</p><br/>
-       <p><strong>Remix and Share</strong><br/>
-       Your remixing, redistributing, or making derivatives works comes with 
-       some restrictions, including how it is shared.</p><br/>
-       <p><strong>Share Only</strong><br/>
-       Your redistributing comes with some restrictions. Do not remix or make 
-       derivative works.</p><br/>
-       <p><strong>Read the Fine Print</strong><br/>
-       Copyrighted materials, available under Fair Use and the TEACH Act for
-       US-based educators, or other custom arrangements. Go to the resource 
-       provider to see their individual restrictions.</p> 
-      </div>      
-      
+        <div class="filter cou collapsible">
+          <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+          <ul class="inputs-list">
+            <li class="first">
+              <label>
+                <input type="checkbox" name="{{ filter.name }}"
+                       value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                       {% if filter.disabled %}disabled="disabled"{% endif %} />
+                <span>{{ filter.title }}</span>
+                <a class="tooltip-button" rel="#cou-tooltip" href="#cou-tooltip" title="Conditions of Use"></a>
+              </label>
+            </li>
+            {% for option in filter.options %}
+              <li class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               <label title="{{ option.name }} ({{ option.count }})">
+                 <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                        value="{{ option.slug }}" {% if filter.disabled %}disabled="disabled"{% endif %} />
+                 <span>{{ option.name|shrink:16 }} ({{ option.count }})</span>
+               </label>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div style="display: none; " id="cou-tooltip">
+          <p><strong>No Strings Attached</strong><br/>
+          No restrictions on your remixing, redistributing, or making derivative
+          works. Give credit to the author, as required.</p><br/>
+          <p><strong>Remix and Share</strong><br/>
+          Your remixing, redistributing, or making derivatives works comes with
+          some restrictions, including how it is shared.</p><br/>
+          <p><strong>Share Only</strong><br/>
+          Your redistributing comes with some restrictions. Do not remix or make
+          derivative works.</p><br/>
+          <p><strong>Read the Fine Print</strong><br/>
+          Copyrighted materials, available under Fair Use and the TEACH Act for
+          US-based educators, or other custom arrangements. Go to the resource
+          provider to see their individual restrictions.</p>
+        </div>
       {% endif %}
     {% endwith %}
 
   </form>
-  
+
 </section>

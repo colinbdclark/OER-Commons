@@ -25,8 +25,8 @@
 {% block promo %}{% endblock %}
 
 {% block above-content %}
-<div class="fixed-width">
-  <div class="frontpage-highlight left align-center">
+<div class="frontpage-top">
+  <div class="left align-center">
     OER Commons Green is dedicated to <em>sustainability</em> and resource conservation
     {% spaceless %}
     <ul class="buttons">
@@ -40,7 +40,10 @@
     </ul>
     {% endspaceless %}
   </div>
-  <div class="frontpage-highlight right">
+  <div class="middle">
+    {% include "include/slider.html" %}
+  </div>
+  <div class="right">
     <ul>
       <li>Free to Use</li>
       <li>Openly Licensed</li>
@@ -48,10 +51,9 @@
       <li>From K-12 to College Courses</li>
     </ul>
     <div class="align-center">
-      <a class="button-blue-big rc5" href="{% url materials:green_browse %}">Browse Now</a>
+      <a class="button blue rc5" href="{% url materials:green_browse %}">Browse Now</a>
     </div>
   </div>
-{% include "include/slider.html" %}
 </div>
 {% endblock %}
 
@@ -67,7 +69,7 @@
   <div class="accordion dotted clearfix">
   {% for topic, tree_info in topics %}
     {% if topic.level == 0 %}
-      <h2{% if not tree_info.closed_levels %} class="accordion-header"{% endif %}><a href="{% url materials:topic_index topics=topic.slug, microsite=microsite.slug %}" title="{{ topic.name }}">{{ topic.name }} ({{ topic.count }})</a></h2>
+      <h2{% if not tree_info.closed_levels %} class="accordion-header"{% endif %}><a href="{% url materials:topic_index topics=topic.slug, microsite=microsite.slug %}" title="{{ topic.name }}" class="handler">{{ topic.name }} ({{ topic.count }})</a></h2>
     {% else %}
       {% if tree_info.new_level %}
       <div class="accordion-body"><ul>
@@ -83,7 +85,7 @@
   </div>
 
   <div class="accordion dotted clearfix">
-    <h2 class="accordion-header"><a href="#">Grade Level</a></h2>
+    <h2 class="accordion-header"><span class="handler">Grade Level</span></h2>
     <div class="accordion-body">
       <ul>
         {% for level in grade_levels %}
@@ -91,7 +93,7 @@
         {% endfor %}
       </ul>
     </div>
-  	<h2 class="accordion-header"><a href="#">Material Type</a></h2>
+  	<h2 class="accordion-header"><span class="handler">Material Type</span></h2>
   	<div class="accordion-body">
   		<ul>
   		  {% for material_type in course_material_types %}

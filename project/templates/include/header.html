@@ -1,6 +1,6 @@
 {% load navigation %}
 <header class="global">
-  <div class="fixed-width">
+  <div class="fixed-container">
     {% if microsite and microsite.slug == "green" %}
       <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
       <a id="logo-green" title="Green OER" href="{% url materials:microsite microsite=microsite.slug %}"></a>
@@ -47,13 +47,13 @@
   </div>
 </header>
 
-<div class="global-tabs fixed-width">
+<div class="global-tabs">
   <div id="global-search-box">
     <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
       <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" placeholder="{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}" />
-      <input type="submit" value="Search" class="button" />
-      <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" /> 
+      <input type="submit" value="Search" class="button gray" />
+      <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button gray" />
     </form>
-  </div>  
+  </div>
   {% navigation %}
 </div>

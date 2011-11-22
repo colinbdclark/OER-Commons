@@ -1,17 +1,16 @@
 {% if form %}
-<section class="portlet dotted" id="portlet-newsletter">
-  <h1 class="dotted green">Newsletter Sign Up</h1>
+<section class="portlet" id="portlet-newsletter">
+  <h1 class="green">Newsletter Sign Up</h1>
   <form action="{% url newsletter:subscribe %}" method="post"
-        id="newsletter-subscribe" class="formatted">
+        id="newsletter-subscribe" class="form-stacked">
     {% with form.email as field %}
-    <div class="field">
+    <div class="clearfix">
       {{ field.label_tag }}
-      <div class="errors"></div>
       {{ field }}
     </div>
     {% endwith %}
-    <div class="buttons">
-      <input type="submit" value="Sign up" class="button" />
+    <div class="actions">
+      <input type="submit" value="Sign up" class="btn" />
     </div>
   </form>
 </section>

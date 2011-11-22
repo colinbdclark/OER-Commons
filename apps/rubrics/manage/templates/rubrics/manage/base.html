@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 {% load compress %}
+{% load scss %}
 <html>
 <head>
   <title>{{ page_title }}</title>
   {% compress css %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}styles/blueprint/reset.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/jquery/easyui/themes/gray/easyui.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}styles/base.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}styles/form.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}styles/login.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}styles/rubrics-manage.css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}styles/resource-comments.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/bootstrap/bootstrap.scss" %}" media="all">
+
+    <link rel="stylesheet" href="{{ STATIC_URL}}javascripts/jquery/Aristo/jquery-ui-1.8.7.custom.css" media="all">
+    <link rel="stylesheet" href="{{ STATIC_URL}}javascripts/jquery/easyui/themes/gray/easyui.css" media="all">
+
+    <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/base.scss" %}" media="all">
+    <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/form.scss" %}" media="all">
+    <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/login.scss" %}" media="all">
+    <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/rubrics-manage.scss" %}" media="all">
+    <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/resource-comments.scss" %}" media="all">
   {% endcompress %}
 </head>
 <body class="manage-rubrics">

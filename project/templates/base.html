@@ -17,7 +17,7 @@
     {% endif %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
-    
+
     {% block global-notification %}
       {% if not hide_global_notifications %}
         {% if request.abtesting == "a" %}
@@ -32,9 +32,9 @@
 
     {% block promo %}
     {% endblock %}
-    
+
     {% if breadcrumbs %}
-      <div class="breadcrumbs fixed-width">
+      <div class="breadcrumbs">
         <a href="{% url frontpage %}">Home</a> &rarr;
         {% for crumb in breadcrumbs %}
           {% if forloop.last %}
@@ -47,14 +47,14 @@
     {% endif %}
 
     {% block page-title %}{% if page_title %}
-      <h1 class="page-title fixed-width">{{ page_title }}{% if page_subtitle %}: <span>{{ page_subtitle|safe }}</span>{% endif %}</h1>
+      <h1 class="page-title">{{ page_title }}{% if page_subtitle %}: <span>{{ page_subtitle|safe }}</span>{% endif %}</h1>
     {% endif %}{% endblock %}
 
     {% block above-content %}
-      <div class="action-panel empty fixed-width"></div>
+      <div class="action-panel empty"></div>
     {% endblock %}
-    
-    <div class="layout-columns fixed-width clearfix" {% block content-itemscope-attrs %}{# this is a placeholder to insert microdata itemscope attribute on resource page #}{% endblock %}>
+
+    <div class="layout-columns" {% block content-itemscope-attrs %}{# this is a placeholder to insert microdata itemscope attribute on resource page #}{% endblock %}><div class="wrap">
 
       <div class="column-left">
         {% block column-left %}
@@ -70,7 +70,7 @@
             {% confirmation_notification "status-message" %}
           {% endif %}
         {% endif %}
-  
+
         <div id="content" class="content {% block contentclass %}{% endblock %}">
           {% block content %}
           {% endblock %}
@@ -83,12 +83,12 @@
         {% endblock %}
       </div>
 
-    </div>
-    
+    </div></div>
+
     <form name="next-url" action="/" method="get">
       <input type="hidden" name="next" value="{{ request.get_full_path }}" />
     </form>
-    
+
     {% include "include/footer.html" %}
 
     </div>
@@ -104,7 +104,7 @@
     {% endif %}
 
     {% block extra-footer %}
-    {% endblock %} 
+    {% endblock %}
 
   </body>
 </html>

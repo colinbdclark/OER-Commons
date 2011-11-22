@@ -1,6 +1,6 @@
-<div class="action-panel materials fixed-width">
-  
-    <form method="get" action="{{ request.path }}">   
+<div class="action-panel materials">
+
+    <form method="get" action="{{ request.path }}">
     <ul class="left">
       <li>
         Displaying <strong><span class="first-item-number">{{ pagination.first_item_number }}</span> - <span class="last-item-number">{{ pagination.last_item_number }}</span></strong> of <strong class="total-items">{{ pagination.total_items }}</strong> results
@@ -39,6 +39,6 @@
         <a href="#" class="save-search">Save this search</a>
       </li>
     </ul>
-    
+
     </form>
 </div>

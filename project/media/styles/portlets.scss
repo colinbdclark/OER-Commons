@@ -1,21 +1,20 @@
-.portlet {
-  margin-bottom: 10px;
-}
+@import "bootstrap/variables.scss";
+@import "bootstrap/mixins.scss";
+@import "mixins.scss";
 
-.portlet a {
-  text-decoration: none;
+.portlet {
+  margin-bottom: $baseline / 1.5;
 }
 
 .portlet.dotted {
-  margin-bottom: 15px;
-  padding-bottom: 17px;
+  padding-bottom: $baseline / 1.5 + 1;
 }
 
 .portlet h1 {
-  margin-bottom: 5px;
+  @include change-text-size(1.3);
+  margin-bottom: $baseline / 2;
   color: #666666;
   font-weight: normal;
-  font-size: 16px;
 }
 
 .portlet h1.green {
@@ -23,68 +22,71 @@
 }
 
 .portlet h2 {
-  margin-top: 10px;
-  margin-bottom: 5px;
-  color: #0A546D;
-  font-weight: bold;
-  font-size: 13px;
-}
-
-.portlet h2 a, .portlet h2 a:visited {
+  @include change-text-size(1);
+  margin-top: $baseline / 2;
+  margin-bottom: $baseline / 3;
   color: #0A546D;
 }
 
-.portlet.oermaterials ul {
-  list-style-type: none;
+.portlet h2:last-child {
+  margin-bottom: 0;
 }
 
-.portlet.oermaterials li a {
-  font-size: 11px;
+.portlet.oermaterials {
+  ul {
+    list-style-type: none;
+    margin-left: 0;
+    margin-bottom: 0;
+  }
+  li {
+    @include change-text-size(0.85);
+  }
+}
+
+.portlet.oermaterials .topics li {
+  @include change-text-size(1.1);
 }
 
 .portlet.oermaterials .topics li a {
-  float: left;
-  clear: both;
-  display: block;
+  display: inline-block;
   padding-left: 22px;
-  line-height: 16px;
   font-weight: bold;
-  font-size: 14px;
 }
 
 .portlet.twitter .tweets {
   position: relative;
   overflow: auto;
-  margin-bottom: 6px;
+  margin-left: 0;
+  margin-bottom: $baseline / 2;
   height: 150px;
   border: 1px solid #CCC;
-  background: white;
   list-style-type: none;
+  padding: $baseline / 3;
 }
 
 .portlet.twitter .tweets li {
-  margin: 5px 5px 10px 5px;
-  line-height: 1.25;
+  margin-bottom: $baseline / 2;
+  color: $grayDark;
 }
 
 .portlet.twitter .tweets .date {
   display: block;
-  margin-top: 5px;
-  color: #666;
+  margin-top: $baseline / 3;
+  color: $gray;
   text-align: right;
 }
 
 .portlet.twitter a.follow-btn {
-  float: left;
-  display: block;
+  @include change-font-size(1.3);
+  display: inline-block;
   padding-right: 40px;
   background: url(../images/twitter-icon.png) no-repeat 100% 0;
   line-height: 32px;
-  font-size: 16px;
 }
 
 .portlet.cou ul {
   list-style-type: none;
+  margin: 0;
 }
 
 .portlet.featured-searches ul {
@@ -134,18 +136,21 @@
 }
 
 .portlet.bookmarklet h1 {
+  @include change-text-size(1.1);
   color: #1E4E62;
   font-weight: bold;
-  font-size: 14px;
+  margin-bottom: $baseline / 4;
 }
 
 .portlet.bookmarklet p {
+  @include change-line-height(0.9);
+  margin-bottom: 0;
   color: #1E4E62;
 }
 
 .portlet.bookmarklet a {
   display: inline-block;
-  margin: 10px 0;
+  margin: $baseline / 2 0;
   padding: 5px 10px;
   border: 1px solid #F5A456;
   background-color: #FFCA74;

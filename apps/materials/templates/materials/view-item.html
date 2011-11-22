@@ -42,7 +42,7 @@
     {% if prev_item_url %}
       <a class="item-link prev" href="{{ prev_item_url }}">&laquo; Previous Item</a>
     {% else %}
-      <a class="item-link prev hidden" href="#">&laquo; Previous Item</a>
+      <a class="item-link prev hide" href="#">&laquo; Previous Item</a>
     {% endif %}
     {% if index_url %}
       <a href="{{ index_url }}">Return to Search Results...</a>
@@ -50,7 +50,7 @@
     {% if next_item_url %}
       <a class="item-link next" href="{{ next_item_url }}">Next Item &raquo;</a>
     {% else %}
-      <a class="item-link next hidden" href="#">Next Item &raquo;</a>
+      <a class="item-link next hide" href="#">Next Item &raquo;</a>
     {% endif %}
   </nav>
   {% endif %}
@@ -222,7 +222,7 @@
 
   <div class="align-right">
     <a id="goto" {% if request.preferences.show_toolbar %}href="{{ toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
-       class="button-blue-big rc5">Go to OER Item</a>
+       class="button blue rc5">Go to OER Item</a>
   </div>
 
 </article>
@@ -254,7 +254,7 @@
       </div>
     {% endwith %}
     <div class="buttons">
-      <a href="#" class="button-blue-big rc5">Add Comment</a>
+      <a href="#" class="button blue rc5">Add Comment</a>
     </div>
   </form>
 </section>
@@ -289,7 +289,7 @@
     <h1>Rate and Review</h1>
     {% stars item.identifier item.ratings.all %}
     <div>
-      <a href="{{ toolbar_view_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
+      <a href="{{ toolbar_view_url }}#evaluate" id="evaluate-btn" class="button blue rc5">Evaluate Resource</a>
       <a href="#evaluate-tooltip" rel="#evaluate-tooltip" class="tooltip"><small>What is this?</small></a>
       <div style="display: none" id="evaluate-tooltip">
           These seven rubrics will help users determine the degree of alignment of OER to

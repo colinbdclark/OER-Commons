@@ -1,3 +1,7 @@
+@import "bootstrap/variables.scss";
+@import "bootstrap/mixins.scss";
+@import "mixins.scss";
+
 .materials-index .item {
   margin-bottom: 10px;
   padding-bottom: 8px;
@@ -14,11 +18,8 @@
 }
 
 .materials-index h1 {
-  margin-bottom: 4px;
-  color: #1F4D64;
-  font-weight: bold;
-  font-style: normal;
-  font-size: 14px;
+  @include change-text-size(1.1);
+  margin-bottom: $baseline / 3;
 }
 
 .view-item h1 {
@@ -225,127 +226,107 @@
   background-color: #1C4D65;
 }
 
-.materials-index .index-navigation {
-  padding: 10px 0;
+.index-navigation {
+  position: relative;
+  height: $baseline + 4;
+  &.top {
+    margin-bottom: $baseline;
+  }
+  &.bottom {
+    margin-top: $baseline;
+  }
+  .expand-links {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    margin-top: 2px;
+    li {
+      display: inline-block;
+      margin: 0 $basefont / 2 0 0;
+      padding: 0 $basefont / 2 + 1 0 0;
+      background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;
+    }
+    li:last-child {
+      margin-right: 0;
+      padding-right: 0;
+      background: none;
+    }
+  }
+  .pagination {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    a {
+      @include change-font-size(0.9);
+      line-height: $baseline + 2;
+      padding: 0 6px;
+    }
+  }
 }
 
-.materials-index .index-navigation.top {
-  margin-bottom: 15px;
-  background: url(../images/dotted-line-hor.gif) repeat-x 0 100%;
+.index-filters {
+  .form-stacked {
+    padding-left: 0;
+  }
+  .search {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    .actions {
+      background: none;
+      border: none;
+      margin: $baseline / 2 0;
+      padding: 0;
+      .btn {
+        @include change-font-size(0.9);
+      }
+    }
+  }
+  .filter {
+    margin-bottom: 10px;
+    padding-bottom: 11px;
+  }
 }
 
-.materials-index .index-navigation.bottom {
-  margin-top: 15px;
-  background: url(../images/dotted-line-hor.gif) repeat-x 0 0;
-}
-
-.materials-index .index-navigation ul {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
-
-.materials-index .index-navigation li {
-  float: left;
-  margin: 0 10px 0 0;
-  padding: 0 11px 0 0;
-  background: url(../images/dotted-line-vert.gif) repeat-y 100% 0;
-}
-
-.materials-index .index-navigation li.last {
-  margin-right: 0;
-  padding-right: 0;
-  background: none;
-}
-
-.materials-index .index-navigation .expand-links {
-  float: left;
-}
-
-.materials-index .index-navigation .pagination {
-  float: right;
-  color: #999;
-}
-
-.materials-index .index-navigation .pagination strong {
-  color: #000;
-}
-
-.materials-index .index-navigation .pagination a {
-  color: #0B7BA9;
-}
-
-.index-filters .search {
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-}
-
-.index-filters .search input.text {
-  width: 173px;
-}
-
-.index-filters .search input.button {
-  margin: 5px 0;
-  padding-right: 5px;
-  padding-left: 5px;
-  color: #333;
-  font-size: 11px;
-}
-
-.index-filters .filter {
-  clear: both;
-  margin-bottom: 10px;
-  padding-bottom: 11px;
-}
-
-.index-filters .filter input, .advanced-search .filter input {
-  float: left;
-  display: block;
-}
-
-.index-filters .filter label, .advanced-search .filter label {
-  float: left;
-  display: block;
-}
-
-.index-filters .filter dt, .advanced-search .filter dt {
-  clear: both;
-}
-
-.index-filters .filter dd, .advanced-search .filter dd {
-  clear: both;
-  margin-left: 16px;
-}
-
-.index-filters .filter dt label, .advanced-search .filter dt label {
-  color: #666;
-  font-weight: bold;
-}
-
-.index-filters .filter dt label span {
-  float: left;
-  display: block;
-}
-
-.index-filters .filter dd label {
-  overflow: hidden;
-  width: 146px;
-  height: 16px;
-  color: #0B7BA9;
-  line-height: 16px;
-}
-
-.index-filters .filter dd.collapsed, .index-filters .filter ul.collapsed, .advanced-search .filter dd.collapsed, .advanced-search .filter ul.collapsed {
-  display: none;
-}
-
-.index-filters dt .tooltip-button {
-  float: left;
-  display: block;
-  margin-left: 5px;
-  width: 13px;
-  height: 13px;
-  background: url(../images/tooltip-btn-13.png) no-repeat;
+.filter {
+  overflow-x: hidden;
+  .expand-button {
+    margin-top: 1px;
+  }
+  .inputs-list {
+    margin-left: 16px;
+    .first label span {
+      font-weight: bold;
+      font-size: $basefont;
+    }
+    label {
+      padding-left: -16px;
+      @include change-font-size(0.9);
+      input {
+        position: relative;
+        top: 1px;
+        margin-right: 0;
+        margin-left: -16px;
+      }
+      white-space: nowrap;
+    }
+  }
+  .inputs-list {
+    width: auto;
+    li {
+      width: auto;
+      position: relative;
+    }
+  }
+  li.collapsed {
+    display: none;
+  }
+  .tooltip-button {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    background: url(../images/tooltip-btn-13.png) no-repeat;
+  }
 }
 
 .top-keywords .all {

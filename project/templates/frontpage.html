@@ -26,8 +26,8 @@
 {% block promo %}{% endblock %}
 
 {% block above-content %}
-<div class="fixed-width">
-  <div class="frontpage-highlight left align-center">
+<div class="frontpage-top">
+  <div class="left align-center">
     Find Free-to-Use Teaching and Learning Content from Around the World
     {% spaceless %}
     <ul class="buttons">
@@ -41,7 +41,10 @@
     </ul>
     {% endspaceless %}
   </div>
-  <div class="frontpage-highlight right">
+  <div class="middle">
+    {% include "include/slider.html" %}
+  </div>
+  <div class="right">
     <ul>
       <li>Free to Use</li>
       <li>Openly Licensed</li>
@@ -49,10 +52,9 @@
       <li>From K-12 to College Courses</li>
     </ul>
     <div class="align-center">
-      <a class="button-blue-big rc5" href="{% url materials:browse %}">Browse Now</a>
+      <a class="button blue rc5" href="{% url materials:browse %}">Browse Now</a>
     </div>
   </div>
-{% include "include/slider.html" %}
 </div>
 {% endblock %}
 
@@ -60,7 +62,7 @@
 <section class="portlet oermaterials dotted">
   <h1 class="dotted">OER Materials</h1>
   <div class="accordion clearfix">
-    <h2 class="accordion-header"><a href="#">Subject Areas</a></h2>
+    <h2 class="accordion-header"><span class="handler">Subject Areas</span></h2>
     <div class="accordion-body">
       <ul>
         {% for general_subject in general_subjects %}
@@ -72,7 +74,7 @@
         {% endfor %}
       </ul>
     </div>
-    <h2 class="accordion-header"><a href="#">Grade Levels</a></h2>
+    <h2 class="accordion-header"><span class="handler">Grade Levels</span></h2>
     <div class="accordion-body">
       <ul>
         {% for grade_level in grade_levels %}
@@ -86,7 +88,7 @@
     </div>
   </div>
   <h2>Topics</h2>
-  <div class="topics clearfix">
+  <div class="topics">
     <ul>
       {% for microsite in microsites %}
       <li>
@@ -112,24 +114,28 @@
 {% endblock %}
 
 {% block content %}
-  {% flatblock "recommended-resources" using "flatblocks/frontpage-block.html" %}
+  <div class="recommended-resources">
+    {% flatblock "recommended-resources" using "flatblocks/frontpage-block.html" %}
+  </div>
   {% include "include/featured-resources.html" %}
-  <div class="frontpage-block tags">
-    <h4 class="dotted">Tags</h4>
+  <section class="frontpage-block tags">
+    <h1>Tags</h1>
     <div class="tag-cloud dotted">
       {% for keyword in tagcloud %}
         <a href="{% url materials:keyword_index keywords=keyword.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
       {% endfor %}
     </div>
-    <a class="view-all-tags" href="{% url materials:tags %}">View All Tags</a>
-  </div>
+    <footer>
+      <a href="{% url materials:tags %}">View all tags</a>
+    </footer>
+  </section>
 {% endblock %}
 
 {% block column-right %}
 
 {% include "include/portlets/bookmarklet.html" %}
 
-<section class="portlet twitter dotted clearfix">
+<section class="portlet twitter dotted">
   <h1 class="green">OER Commons Tweets</h1>
   {% if tweets %}
   <ul class="tweets">

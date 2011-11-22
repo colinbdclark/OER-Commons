@@ -1,10 +1,9 @@
+@import "bootstrap/variables.scss";
+@import "bootstrap/mixins.scss";
+
 header.global {
   height: 110px;
   background: url(../images/header-bg.png) no-repeat 50% 50%;
-}
-
-header.global.fixed-width {
-  width: 965px;
 }
 
 #logo {
@@ -23,6 +22,7 @@ header.global nav ul {
   float: right;
   list-style-type: none;
   text-align: right;
+  margin: 0;
 }
 
 header.global nav li {
@@ -52,7 +52,6 @@ header.global nav a,
 header.global nav span {
   padding: 0 5px;
   color: #707070;
-  text-decoration: none;
   line-height: 22px;
   font-weight: bolder;
 }
@@ -72,20 +71,26 @@ header.global nav a.button-contribute {
   text-indent: 9999px;
 }
 
+.global-tabs {
+  @include fixed-container;
+  position: relative;
+}
+
 .global-tabs nav {
   margin-bottom: 10px;
   height: 40px;
 }
 
 .global-tabs nav ul {
-  float: left;
+  display: inline-block;
   padding-right: 1px;
   background: url(../images/section-sep.gif) no-repeat 100% 50%;
   list-style-type: none;
+  margin: 0;
 }
 
 .global-tabs nav li {
-  float: left;
+  display: inline-block;
   margin-right: 2px;
   padding-left: 3px;
   height: 40px;
@@ -115,11 +120,23 @@ header.global nav a.button-contribute {
 }
 
 #global-search-box {
-  float: right;
-  padding-top: 8px;
-}
-
-#global-search-box input.text {
-  width: 300px;
-  height: 18px;
+  position: absolute;
+  right: 0;
+  top: 8px;
+  form {
+    margin: 0;
+    .text {
+      width: 300px;
+      padding-top: 3px;
+      padding-bottom: 2px;
+      border-color: #ccc;
+      vertical-align: middle;
+      &:focus {
+        @include box-shadow(none);
+      }
+    }
+    .button {
+      vertical-align: middle;
+    }
+  }
 }
