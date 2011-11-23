@@ -990,6 +990,158 @@
     }
   }, 
   {
+    "pk": 2730, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2731, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2732, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2733, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2734, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2735, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2736, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2737, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "K"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
+    }
+  }, 
+  {
     "pk": 34, 
     "model": "curriculum.alignmenttag", 
     "fields": {
@@ -1386,6 +1538,158 @@
         "Math"
       ], 
       "description": "Partition circles and rectangles into two and four equal shares, describe the shares using the words halves, fourths, and quarters, and use the phrases half of, fourth of, and quarter of. Describe the whole as two of, or four of the shares. Understand for these examples that decomposing into more equal shares creates smaller shares."
+    }
+  }, 
+  {
+    "pk": 2738, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2739, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2740, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2741, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2742, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2743, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2744, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2745, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "1"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
     }
   }, 
   {
@@ -1880,6 +2184,158 @@
         "Math"
       ], 
       "description": "Partition circles and rectangles into two, three, or four equal shares, describe the shares using the words halves, thirds, half of, a third of, etc., and describe the whole as two halves, three thirds, four fourths. Recognize that equal shares of identical wholes need not have the same shape."
+    }
+  }, 
+  {
+    "pk": 2746, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "2"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2747, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "2"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2748, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "2"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2749, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "2"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2750, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "2"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2751, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "2"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2752, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "2"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2753, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "2"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
     }
   }, 
   {
@@ -2548,6 +3004,158 @@
     }
   }, 
   {
+    "pk": 2754, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "3"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2755, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "3"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2756, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "3"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2757, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "3"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2758, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "3"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2759, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "3"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2760, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "3"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2761, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "3"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
+    }
+  }, 
+  {
     "pk": 140, 
     "model": "curriculum.alignmenttag", 
     "fields": {
@@ -3210,6 +3818,158 @@
         "Math"
       ], 
       "description": "Compare two decimals to hundredths by reasoning about their size. Recognize that comparisons comparisons are valid only when two decimals refer to the same whole. Record the results of comparisons with the symbols >, =, or <, and justify the conclusions, e.g., by using a visual model. (Grade 4 expectations in this domain are limited to fractions with denominators 2, 3, 4, 5, 6, 8, 10, 12, and 100.)"
+    }
+  }, 
+  {
+    "pk": 2762, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "4"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2763, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "4"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2764, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "4"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2765, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "4"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2766, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "4"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2767, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "4"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2768, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "4"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2769, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "4"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
     }
   }, 
   {
@@ -3894,6 +4654,158 @@
         "Math"
       ], 
       "description": "Solve real-world problems involving division of unit fractions by non-zero whole numbers and division of whole numbers by unit fractions, e.g., by using visual fraction models and equations to represent the problem. For example, how much chocolate will each person get if 3 people share 1/2 lb of chocolate equally? How many 1/3-cup servings are in 2 cups of raisins?"
+    }
+  }, 
+  {
+    "pk": 2770, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "5"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2771, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "5"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2772, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "5"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2773, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "5"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2774, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "5"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2775, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "5"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2776, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "5"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2777, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "5"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
     }
   }, 
   {
@@ -4714,6 +5626,158 @@
     }
   }, 
   {
+    "pk": 2778, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "6"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2779, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "6"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2780, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "6"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2781, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "6"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2782, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "6"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2783, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "6"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2784, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "6"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2785, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "6"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
+    }
+  }, 
+  {
     "pk": 302, 
     "model": "curriculum.alignmenttag", 
     "fields": {
@@ -5531,6 +6595,158 @@
     }
   }, 
   {
+    "pk": 2786, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "7"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2787, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "7"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2788, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "7"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2789, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "7"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2790, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "7"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2791, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "7"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2792, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "7"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2793, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "7"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
+    }
+  }, 
+  {
     "pk": 349, 
     "model": "curriculum.alignmenttag", 
     "fields": {
@@ -6155,6 +7371,310 @@
         "Math"
       ], 
       "description": "Describe qualitatively the functional relationship between two quantities by analyzing a graph (e.g., where the function is increasing or decreasing, linear or nonlinear). Sketch a graph that exhibits the qualitative features of a function that has been described verbally."
+    }
+  }, 
+  {
+    "pk": 2794, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "8"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2795, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "8"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2796, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "8"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2797, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "8"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2798, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "8"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2799, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "8"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2800, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "8"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2801, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "8"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
+    }
+  }, 
+  {
+    "pk": 2802, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "1", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "9-12"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Make sense of problems and persevere in solving them. Mathematically proficient students start by explaining to themselves the meaning of a problem and looking for entry points to its solution. They analyze givens, constraints, relationships, and goals. They make conjectures about the form and meaning of the solution and plan a solution pathway rather than simply jumping into a solution attempt. They consider analogous problems, and try special cases and simpler forms of the original problem in order to gain insight into its solution. They monitor and evaluate their progress and change course if necessary. Older students might, depending on the context of the problem, transform algebraic expressions or change the viewing window on their graphing calculator to get the information they need. Mathematically proficient students can explain correspondences between equations, verbal descriptions, tables, and graphs or draw diagrams of important features and relationships, graph data, and search for regularity or trends. Younger students might rely on using concrete objects or pictures to help conceptualize and solve a problem. Mathematically proficient students check their answers to problems using a different method, and they continually ask themselves, \u201cDoes this make sense?\u201d They can understand the approaches of others to solving complex problems and identify correspondences between different approaches. "
+    }
+  }, 
+  {
+    "pk": 2803, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "2", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "9-12"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Reason abstractly and quantitatively. Mathematically proficient students make sense of the quantities and their relationships in problem situations. Students bring two complementary abilities to bear on problems involving quantitative relationships: the ability to decontextualize\u2014to abstract a given situation and represent it symbolically and manipulate the representing symbols as if they have a life of their own, without necessarily attending to their referents\u2014and the ability to contextualize, to pause as needed during the manipulation process in order to probe into the referents for the symbols involved. Quantitative reasoning entails habits of creating a coherent representation of the problem at hand; considering the units involved; attending to the meaning of quantities, not just how to compute them; and knowing and flexibly using different properties of operations and objects. "
+    }
+  }, 
+  {
+    "pk": 2804, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "3", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "9-12"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Construct viable arguments and critique the reasoning of others. Mathematically proficient students understand and use stated assumptions, definitions, and previously established results in constructing arguments. They make conjectures and build a logical progression of statements to explore the truth of their conjectures. They are able to analyze situations by breaking them into cases, and can recognize and use counterexamples. They justify their conclusions, communicate them to others, and respond to the arguments of others. They reason inductively about data, making plausible arguments that take into account the context from which the data arose. Mathematically proficient students are also able to compare the effectiveness of two plausible arguments, distinguish correct logic or reasoning from that which is flawed, and\u2014if there is a flaw in an argument\u2014explain what it is. Elementary students can construct arguments using concrete referents such as objects, drawings, diagrams, and actions. Such arguments can make sense and be correct, even though they are not generalized or made formal until later grades. Later, students learn to determine domains to which an argument applies. Students at all grades can listen or read the arguments of others, decide whether they make sense, and ask useful questions to clarify or improve the arguments. "
+    }
+  }, 
+  {
+    "pk": 2805, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "4", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "9-12"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Model with mathematics. Mathematically proficient students can apply the mathematics they know to solve problems arising in everyday life, society, and the workplace. In early grades, this might be as simple as writing an addition equation to describe a situation. In middle grades, a student might apply proportional reasoning to plan a school event or analyze a problem in the community. By high school, a student might use geometry to solve a design problem or use a function to describe how one quantity of interest depends on another. Mathematically proficient students who can apply what they know are comfortable making assumptions and approximations to simplify a complicated situation, realizing that these may need revision later. They are able to identify important quantities in a practical situation and map their relationships using such tools as diagrams, two-way tables, graphs, flowcharts and formulas. They can analyze those relationships mathematically to draw conclusions. They routinely interpret their mathematical results in the context of the situation and reflect on whether the results make sense, possibly improving the model if it has not served its purpose. "
+    }
+  }, 
+  {
+    "pk": 2806, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "5", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "9-12"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Use appropriate tools strategically. Mathematically proficient students consider the available tools when solving a mathematical problem. These tools might include pencil and paper, concrete models, a ruler, a protractor, a calculator, a spreadsheet, a computer algebra system, a statistical package, or dynamic geometry software. Proficient students are sufficiently familiar with tools appropriate for their grade or course to make sound decisions about when each of these tools might be helpful, recognizing both the insight to be gained and their limitations. For example, mathematically proficient high school students analyze graphs of functions and solutions generated using a graphing calculator. They detect possible errors by strategically using estimation and other mathematical knowledge. When making mathematical models, they know that technology can enable them to visualize the results of varying assumptions, explore consequences, and compare predictions with data. Mathematically proficient students at various grade levels are able to identify relevant external mathematical resources, such as digital content located on a website, and use them to pose or solve problems. They are able to use technological tools to explore and deepen their understanding of concepts. "
+    }
+  }, 
+  {
+    "pk": 2807, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "6", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "9-12"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Attend to precision. Mathematically proficient students try to communicate precisely to others. They try to use clear definitions in discussion with others and in their own reasoning. They state the meaning of the symbols they choose, including using the equal sign consistently and appropriately. They are careful about specifying units of measure, and labeling axes to clarify the correspondence with quantities in a problem. They calculate accurately and efficiently, express numerical answers with a degree of precision appropriate for the problem context. In the elementary grades, students give carefully formulated explanations to each other. By the time they reach high school they have learned to examine claims and make explicit use of definitions."
+    }
+  }, 
+  {
+    "pk": 2808, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "7", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "9-12"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and make use of structure. Mathematically proficient students look closely to discern a pattern or structure. Young students, for example, might notice that three and seven more is the same amount as seven and three more, or they may sort a collection of shapes according to how many sides the shapes have. Later, students will see 7 \u00d7 8 equals the well remembered 7 \u00d7 5 + 7 \u00d7 3, in preparation for learning about the distributive property. In the expression x^2 + 9x + 14, older students can see the 14 as 2 \u00d7 7 and the 9 as 2 + 7. They recognize the significance of an existing line in a geometric figure and can use the strategy of drawing an auxiliary line for solving problems. They also can step back for an overview and shift perspective. They can see complicated things, such as some algebraic expressions, as single objects or as being composed of several objects. For example, they can see 5 \u2013 3(x \u2013 y)^2 as 5 minus a positive number times a square and use that to realize that its value cannot be more than 5 for any real numbers x and y. "
+    }
+  }, 
+  {
+    "pk": 2809, 
+    "model": "curriculum.alignmenttag", 
+    "fields": {
+      "category": [
+        "MP"
+      ], 
+      "code": "8", 
+      "subcategory": "Mathematical practices", 
+      "grade": [
+        "9-12"
+      ], 
+      "standard": [
+        "CC", 
+        "Math"
+      ], 
+      "description": "Look for and express regularity in repeated reasoning. Mathematically proficient students notice if calculations are repeated, and look both for general methods and for shortcuts. Upper elementary students might notice when dividing 25 by 11 that they are repeating the same calculations over and over again, and conclude they have a repeating decimal. By paying attention to the calculation of slope as they repeatedly check whether points are on the line through (1, 2) with slope 3, middle school students might abstract the equation (y \u2013 2)/(x \u20131) = 3. Noticing the regularity in the way terms cancel when expanding (x \u2013 1)(x + 1), (x \u2013 1)(x^2 + x + 1), and (x \u2013 1)(x^3 + x^2 + x + 1) might lead them to the general formula for the sum of a geometric series. As they work to solve a problem, mathematically proficient students maintain oversight of the process, while attending to the details. They continually evaluate the reasonableness of their intermediate results. "
     }
   }, 
   {
