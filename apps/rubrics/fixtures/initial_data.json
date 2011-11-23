@@ -35,8 +35,8 @@
     "pk": 5,
     "model": "rubrics.rubric",
     "fields": {
-      "name": "Quality of Instructional Tasks and Practice Exercises",
-      "description": "Applies to objects that contain instructional tasks and/or sets of practice exercises to help foundational skills and procedures become routine. When concepts and skills are introduced, providing a sufficient number of exercises to support skill acquisition is critical. However when integrating skills in complex tasks, the number of exercises is less important than their richness. A group of practice exercises is treated as a single object, with the rubric applied to the entire set."
+      "name": "Quality of Instructional and Practice Exercises",
+      "description": "Applies to objects that contain exercises to help foundational skills and procedures become routine. When concepts and skills are introduced, providing a sufficient number of exercises to support skill acquisition is critical. However when integrating skills in complex tasks, as few as one or two may be sufficient. A group of practice exercises is treated as a single object, with the rubric applied to the entire set."
     }
   },
   {
@@ -96,7 +96,7 @@
     "pk": 6,
     "model": "rubrics.rubricscorevalue",
     "fields": {
-      "description": "An object is rated *superior* if all of the following are true: Materials are comprehensive and easy to understand and use. Includes suggestions for use with a variety of learners. All components are provided and function as intended, including estimate of planning time and materials list. For larger objects, materials facilitate mixed instructional approaches for larger objects.",
+      "description": "An object is rated *superior* if all of the following are true: Materials are comprehensive and easy to understand and use. Includes suggestions for use with a variety of learners. All components are provided and function as intended, including estimate of planning time and materials list. For larger objects, materials facilitate mixed instructional approaches.",
       "value": 3,
       "rubric": 2
     }
@@ -141,7 +141,7 @@
     "pk": 11,
     "model": "rubrics.rubricscorevalue",
     "fields": {
-      "description": "An object is rated *superior* **if all** of the following are true: All concepts/skills assessed align clearly to content and performance expectations and included in the object\u2019s material. Critical aspects are targeted and given appropriate weight/attention. Types of assessments offered require clear demonstration of proficiency. And level of difficulty results from complexity of the subject area/cognitive demand, rather than unrelated issues (e.g. complex vocabulary).",
+      "description": "An object is rated *superior* if all of the following are true: All concepts/skills assessed align clearly to content and performance expectations and included in the object\u2019s material. Critical aspects are targeted and given appropriate weight/attention. Types of assessments offered require clear demonstration of proficiency. Any level of difficulty results from complexity of the subject area/cognitive demand, rather than unrelated issues (e.g. complex vocabulary).",
       "value": 3,
       "rubric": 3
     }
@@ -195,7 +195,7 @@
     "pk": 17,
     "model": "rubrics.rubricscorevalue",
     "fields": {
-      "description": "An object, or interactive component of an object, is rated *strong* if the object has an interactive feature that is purposeful and directly related to learning, but does not provide an individualized learning experience. Like superior objects, strong interactive objects must be well designed, easy-to-use, and function flawlessly on the intended platform.",
+      "description": "An object, or interactive component of an object, is rated *strong* if the object has an interactive feature that is purposeful and directly related to learning, but does not provide an individualized learning experience. Strong interactive objects must also be well designed, easy-to-use, and function flawlessly. Some strong interactive elements (e.g. earning points or levels) might increase motivation and understanding by rewarding or entertaining, and may extend the time of user engagement.",
       "value": 2,
       "rubric": 4
     }
@@ -204,7 +204,7 @@
     "pk": 18,
     "model": "rubrics.rubricscorevalue",
     "fields": {
-      "description": "An object, or interactive component of an object, is rated *limited* if it neither relates to nor detracts from learning. These kinds of interactive elements (e.g., earning points or achieving levels for correct answers) might be designed to increase student motivation and to build content understanding by rewarding or entertaining the learner and extending the time the user engages with the content.",
+      "description": "An object, or interactive component of an object, is rated *limited* if it does not relate to the content and may detract from the learning experience. Although it may slightly increase motivation, it is unlikely the interactive feature will increase understanding of extend the time a user engages with the content.",
       "value": 1,
       "rubric": 4
     }
@@ -231,7 +231,7 @@
     "pk": 21,
     "model": "rubrics.rubricscorevalue",
     "fields": {
-      "description": "An object is rated *superior* if *ALL* of the following are true: Offers more exercises than needed, for the average student, to facilitate mastery of  targeted skills, as stated or implied in the object. Exercises are clearly written and supported by accurate answer keys/scoring guidelines. There are a variety of exercise types and/or formats, as appropriate, to facilitate mastery of targeted skills.",
+      "description": "An object is rated *superior* if *ALL* of the following are true: Offers more exercises than needed, for the average student, to support mastery of targeted skills, as stated or implied in the object. (For complex tasks, one or two rich tasks may be more than enough.) Exercises are clearly written and supported by accurate answer keys/scoring guidelines. There are a variety of exercise types and/or formats, as appropriate, and/or a variety of skills integrated in the practice of more complex tasks.",
       "value": 3,
       "rubric": 5
     }
@@ -240,7 +240,7 @@
     "pk": 22,
     "model": "rubrics.rubricscorevalue",
     "fields": {
-      "description": "An object is rated *strong* if it offers only a sufficient number of well-written exercises to facilitate mastery of targeted skills, is supported by accurate answer keys, but provides little variety of exercise types or formats.",
+      "description": "An object is rated *strong* if it offers only a sufficient number of well-written exercises to support mastery of targeted skills, which are supported by accurate answer keys, but provide little variety of exercise types or formats or, in more complex exercise, in integrated.",
       "value": 2,
       "rubric": 5
     }
@@ -249,7 +249,7 @@
     "pk": 23,
     "model": "rubrics.rubricscorevalue",
     "fields": {
-      "description": "An object is rated *limited* if it includes some, but too few exercises, without answer keys, and with no variation in format or type.",
+      "description": "An object is rated *limited* if it includes some, but too few exercises, without answer keys, and with no variation in exercise type, format, or integrated skills.",
       "value": 1,
       "rubric": 5
     }
