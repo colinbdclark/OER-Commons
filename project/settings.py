@@ -94,6 +94,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'django_coverage',
     'oembed',
+    'gunicorn',
     'utils',
     'abtesting',
     'common',
