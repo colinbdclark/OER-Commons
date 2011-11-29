@@ -240,7 +240,7 @@
     "pk": 22,
     "model": "rubrics.rubricscorevalue",
     "fields": {
-      "description": "An object is rated *strong* if it offers only a sufficient number of well-written exercises to support mastery of targeted skills, which are supported by accurate answer keys, but provide little variety of exercise types or formats or, in more complex exercise, in integrated.",
+      "description": "An object is rated *strong* if it offers only a sufficient number of well-written exercises to support mastery of targeted skills, which are supported by accurate answer keys, but provide little variety of exercise types or formats in more complex or integrated exercises.",
       "value": 2,
       "rubric": 5
     }
