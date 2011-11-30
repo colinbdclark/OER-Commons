@@ -170,28 +170,6 @@
           {% endif %}
         {% endwith %}
 
-        {% with filters.course_or_module as filter %}
-          {% if filter.options %}
-          <dl class="filter clearfix collapsible">
-            <dt>
-               <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-               <label for="{{ filter.name }}">
-                 <input type="checkbox" name="{{ filter.name }}"
-                        id="{{ filter.name }}" value="yes" />
-                 Course-Related Materials</label>
-            </dt>
-            {% for option in filter.options %}
-            <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-               <label title="{{ option.name }}" for="{{ option.input_id }}">
-                 <input type="checkbox" name="{{ filter.request_name }}"
-                        id="{{ option.input_id }}" value="{{ option.slug }}" />
-                 {{ option.name|shrink:30 }}</label>
-            </dd>
-            {% endfor %}
-          </dl>
-          {% endif %}
-        {% endwith %}
-
         {% with filters.member_activities as filter %}
           {% if filter.options %}
           <dl class="filter clearfix collapsible">
@@ -261,7 +239,7 @@
           {% endif %}
         {% endwith %}
 
-        {% with filters.library_material_types as filter %}
+        {% with filters.cou_bucket as filter %}
           {% if filter.options %}
           <dl class="filter clearfix collapsible">
             <dt>
@@ -269,100 +247,34 @@
                <label for="{{ filter.name }}">
                  <input type="checkbox" name="{{ filter.name }}"
                         id="{{ filter.name }}" value="yes" />
-                 Libraries &amp; Collections</label>
+                 {{ filter.title }}</label>
             </dt>
             {% for option in filter.options %}
-            <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+            <dd class="{% if option.options %}collapsible {% else %}not-collapsible {% endif %}{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+               {% if option.options %}
+                 <a href="#" class="expand-button collapsed"></a>
+               {% endif %}
                <label title="{{ option.name }}" for="{{ option.input_id }}">
                  <input type="checkbox" name="{{ filter.request_name }}"
                         id="{{ option.input_id }}" value="{{ option.slug }}" />
                  {{ option.name|shrink:30 }}</label>
+               {% if option.options %}
+               <ul class="collapsed">
+                 {% for sub_option in option.options %}
+                   <li>
+                   <label title="{{ sub_option.name }}" for="{{ sub_option.input_id }}">
+                     <input type="checkbox" name="{{ filter.sub_option_request_name }}"
+                            id="{{ sub_option.input_id }}" value="{{ sub_option.slug }}" />
+                     {{ sub_option.name|shrink:50 }}</label>
+                   </li>
+                 {% endfor %}
+               </ul>
+               {% endif %}
             </dd>
             {% endfor %}
           </dl>
           {% endif %}
         {% endwith %}
-
-          {% with filters.cou_bucket as filter %}
-            {% if filter.options %}
-            <dl class="filter clearfix collapsible">
-              <dt>
-                 <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-                 <label for="{{ filter.name }}">
-                   <input type="checkbox" name="{{ filter.name }}"
-                          id="{{ filter.name }}" value="yes" />
-                   {{ filter.title }}</label>
-              </dt>
-              {% for option in filter.options %}
-              <dd class="{% if option.options %}collapsible {% else %}not-collapsible {% endif %}{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-                 {% if option.options %}
-                   <a href="#" class="expand-button collapsed"></a>
-                 {% endif %}
-                 <label title="{{ option.name }}" for="{{ option.input_id }}">
-                   <input type="checkbox" name="{{ filter.request_name }}"
-                          id="{{ option.input_id }}" value="{{ option.slug }}" />
-                   {{ option.name|shrink:30 }}</label>
-                 {% if option.options %}
-                 <ul class="collapsed">
-                   {% for sub_option in option.options %}
-                     <li>
-                     <label title="{{ sub_option.name }}" for="{{ sub_option.input_id }}">
-                       <input type="checkbox" name="{{ filter.sub_option_request_name }}"
-                              id="{{ sub_option.input_id }}" value="{{ sub_option.slug }}" />
-                       {{ sub_option.name|shrink:50 }}</label>
-                     </li>
-                   {% endfor %}
-                 </ul>
-                 {% endif %}
-              </dd>
-              {% endfor %}
-            </dl>
-            {% endif %}
-          {% endwith %}
-
-          {% with filters.community_types as filter %}
-            {% if filter.options %}
-            <dl class="filter clearfix collapsible">
-              <dt>
-                 <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-                 <label for="{{ filter.name }}">
-                   <input type="checkbox" name="{{ filter.name }}"
-                          id="{{ filter.name }}" value="yes" />
-                   {{ filter.title }}</label>
-              </dt>
-              {% for option in filter.options %}
-              <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-                 <label title="{{ option.name }}" for="{{ option.input_id }}">
-                   <input type="checkbox" name="{{ filter.request_name }}"
-                          id="{{ option.input_id }}" value="{{ option.slug }}" />
-                   {{ option.name|shrink:30 }}</label>
-              </dd>
-              {% endfor %}
-            </dl>
-            {% endif %}
-          {% endwith %}
-
-          {% with filters.community_topics as filter %}
-            {% if filter.options %}
-            <dl class="filter clearfix collapsible">
-              <dt>
-                 <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
-                 <label for="{{ filter.name }}">
-                   <input type="checkbox" name="{{ filter.name }}"
-                          id="{{ filter.name }}" value="yes" />
-                   {{ filter.title }}</label>
-              </dt>
-              {% for option in filter.options %}
-              <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
-                 <label title="{{ option.name }}" for="{{ option.input_id }}">
-                   <input type="checkbox" name="{{ filter.request_name }}"
-                        id="{{ option.input_id }}" value="{{ option.slug }}" />
-                   {{ option.name|shrink:30 }}</label>
-              </dd>
-              {% endfor %}
-            </dl>
-            {% endif %}
-          {% endwith %}
 
         </td>
         </tr></tbody></table>

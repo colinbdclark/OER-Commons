@@ -15,7 +15,7 @@ from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
 from rating.models import Rating
 from reviews.models import Review
-from rubrics.models import StandardAlignmentScore, RubricScore, EvaluatedItemMixin, Evaluation
+from rubrics.models import EvaluatedItemMixin, Evaluation
 from saveditems.models import SavedItem
 from tags.models import Tag
 from visitcounts.models import Visit
@@ -54,7 +54,7 @@ TAGGED = u"tagged"
 
 MEMBER_ACTIVITY_TYPES = (
     (RATED, u'Only Items with Ratings'),
-    (REVIEWED, u'Only Items with Reviews'),
+    (REVIEWED, u'Only Items with Comments'),
     (TAGGED, u'Only Items with Tags'),
 )
 
