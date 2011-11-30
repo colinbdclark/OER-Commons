@@ -1,8 +1,8 @@
 import sys
 
-from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import MultipleObjectsReturned
 from django.db import transaction
 from django.http import HttpResponseForbidden
 from django.utils.decorators import method_decorator
@@ -22,7 +22,6 @@ SIMPLE_FIELDS = [
     ("SHORT_NAME", "slug"),
     ("ABSTRACT", "abstract"),
     ("CREATE_DATE", "content_creation_date"),
-    ("URL", "url"),
     ("NOTABLE_REQS", "tech_requirements"),
     ("CURRIC_STANDARDS", "curriculum_standards"),
     ("LEVEL_NEW", "new_level"),
@@ -77,9 +76,12 @@ class DataImport(TemplateView):
     def post(self, request, *args, **kwargs):
         self.form = ValidateCSVForm(request.POST, request.FILES)
 
-        if self.form.is_valid():
+        if not self.form.is_valid():
+            messages.error(request, u"Data is not valid, see below.")
+            return self.get(request, *args, **kwargs)
+
+        if self.form.validation_errors:
             self.validation_errors = self.form.validation_errors
-        else:
             messages.error(request, u"Data is not valid, see below.")
             return self.get(request, *args, **kwargs)
 
@@ -144,12 +146,29 @@ class DataImport(TemplateView):
                 data[field_name] = value
 
             try:
-                # Get or create the model here
-                obj = model(creator=request.user)
-                obj.workflow_state = IMPORTED_STATE
+                check_for_unique_url = True
+                try:
+                    obj = model.objects.get(url=data["URL"])
+                    new_url = data.get("NEW_URL")
+                    if new_url:
+                        obj.url = new_url
+                    else:
+                        check_for_unique_url = False
+                except MultipleObjectsReturned:
+                    self.validation_errors.append(
+                        (row_index + 1, u"", u"URL '%s' is registered multiple times, can't find an object to update." % data["URL"])
+                    )
+                    continue
+                except model.DoesNotExist:
+                    obj = model(creator=request.user)
+                    obj.url = data["URL"]
+                    obj.workflow_state = IMPORTED_STATE
 
-                if model.objects.filter(url=data["URL"]).exists():
-                    raise forms.ValidationError(u"URL '%s' is registered in database already." % data["URL"])
+                if check_for_unique_url and model.objects.filter(url=obj.url).exists():
+                    self.validation_errors.append(
+                        (row_index + 1, u"", u"URL '%s' is registered in database already." % obj.url)
+                    )
+                    continue
 
                 for csv_field_name, obj_field_name in simple_fields:
                     if csv_field_name in data:

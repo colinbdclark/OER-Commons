@@ -159,7 +159,7 @@ def check_in_list(available_values):
     def check(values):
         errors = []
         if not isinstance(values, (list, set, tuple)):
-            values = set(values)
+            values = set([values])
         for invalid_value in set(values) - available_values:
             errors.append("Invalid value: %s" % invalid_value)
         return errors
@@ -195,6 +195,7 @@ COURSE_FIELDS = {
     'CR_AUTHOR_COUNTRY': (extract_list_slugify, check_in_list(COUNTRY_SLUGS)),
     'CR_INSTITUTION': (extract_string, check_required),
     'CR_URL': (extract_string, [check_required, check_URL]),
+    'CR_NEW_URL': (extract_string, [check_URL]),
     'CR_IS_PART_OF_OCW': (extract_boolean, None),
     'CR_COLLECTION': (extract_string, check_required),
     'CR_SUBJECT': (extract_list_slugify, [check_required, check_in_list(GENERAL_SUBJECT_SLUGS)]),
@@ -227,6 +228,7 @@ COURSE_FIELDS = {
     'CR_LEVEL_NEW': (extract_string, None),
     'CR_SUBJECT_NEW': (extract_string, None),
     'CR_AUDIENCE': (extract_string, None),
+    'CR_COU_BUCKET' : (extract_string, None),
 }
 
 LIBRARY_FIELDS = {
@@ -241,6 +243,7 @@ LIBRARY_FIELDS = {
     'LIB_AUTHOR_COUNTRY': (extract_list_slugify, check_in_list(COUNTRY_SLUGS)),
     'LIB_INSTITUTION': (extract_string, check_required),
     'LIB_URL': (extract_string, [check_required, check_URL]),
+    'LIB_NEW_URL': (extract_string, [check_URL]),
     'LIB_COLLECTION': (extract_string, check_required),
     'LIB_SUBJECT': (extract_list_slugify, [check_required, check_in_list(GENERAL_SUBJECT_SLUGS)]),
     'LIB_MATERIAL_TYPE': (extract_list_slugify, [check_required, check_in_list(LIBRARY_MATERIAL_TYPE_SLUGS)]),
@@ -260,6 +263,7 @@ LIBRARY_FIELDS = {
     'LIB_LEVEL_NEW': (extract_string, None),
     'LIB_SUBJECT_NEW': (extract_string, None),
     'LIB_AUDIENCE': (extract_string, None),
+    'LIB_COU_BUCKET' : (extract_string, None),
 }
 
 
