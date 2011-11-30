@@ -22,7 +22,7 @@ VIEWS = [
     ("myitems", u"My Saved Items"),
     ("rated", u"My Rated Items"),
     ("tagged", u"My Tagged Items"),
-    ("reviewed", u"My Reviewed Items"),
+    ("commented", u"My Commented Items"),
     ("submitted", u"My Submitted Items"),
     ("searches", u"My Saved Searches"),
 ]
