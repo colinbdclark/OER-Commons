@@ -60,8 +60,8 @@ def tagged(request):
 
 
 @login_required
-def reviewed(request):
-    return myitems_index(request, "reviewed", u"My Reviewed Items", u"You have not reviewed any item yet.", "reviewed_by")
+def commented(request):
+    return myitems_index(request, "commented", u"My Commented Items", u"You have not commented any item yet.", "reviewed_by")
 
 
 @login_required

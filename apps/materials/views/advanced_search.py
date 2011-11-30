@@ -11,12 +11,8 @@ ADVANCED_SEARCH_FILTERS = (
    ("cou_bucket", False),
    ("languages", False),
    ("course_material_types", False),
-   ("course_or_module", False),
    ("media_formats", False),
    ("member_activities", False),
-   ("library_material_types", False),
-   ("community_types", True),
-   ("community_topics", True),
    ("cou_bucket", False),
 )
 
