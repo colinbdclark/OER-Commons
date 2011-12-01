@@ -89,8 +89,7 @@ class Material(Indexed, EvaluatedItemMixin):
     slug = AutoSlugField(max_length=500, populate_from='title', unique=True,
                          verbose_name=_(u"Slug"))
 
-    url = models.URLField(max_length=300, verbose_name=_(u"URL"),
-                          verify_exists=False)
+    url = models.URLField(max_length=300, verbose_name=_(u"URL"), db_index=True)
 
     created_on = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_(u"Created on"))
