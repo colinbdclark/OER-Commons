@@ -34,3 +34,6 @@ project/staging.py
 project/test_settings.py
 
 /project/manage.py
+apps/cssreload
+project/media/cssreload/
+project/media/SCSS_CACHE/

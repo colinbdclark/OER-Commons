@@ -59,6 +59,10 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG:
+    if "cssreload" in settings.INSTALLED_APPS:
+        urlpatterns += patterns('',
+            url(r"^", include("cssreload.urls")),
+        )
     urlpatterns += patterns('',
         (r'', include('staticfiles.urls')),
     )
