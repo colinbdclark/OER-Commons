@@ -1,2146 +1,2172 @@
 [
   {
-    "pk": 1, 
-    "model": "materials.keyword", 
+    "pk": 1,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Accounting", 
+      "suggested": true,
+      "name": "Accounting",
       "slug": "accounting"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.keyword", 
+    "pk": 2,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Agriculture", 
+      "suggested": true,
+      "name": "Agriculture",
       "slug": "agriculture"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.keyword", 
+    "pk": 3,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Anthropology", 
+      "suggested": true,
+      "name": "Anthropology",
       "slug": "anthropology"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.keyword", 
+    "pk": 4,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Archaeology", 
+      "suggested": true,
+      "name": "Archaeology",
       "slug": "archaeology"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.keyword", 
+    "pk": 5,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Architecture", 
+      "suggested": true,
+      "name": "Architecture",
       "slug": "architecture"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.keyword", 
+    "pk": 6,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Art History", 
+      "suggested": true,
+      "name": "Art History",
       "slug": "art-history"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.keyword", 
+    "pk": 7,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Astronomy", 
+      "suggested": true,
+      "name": "Astronomy",
       "slug": "astronomy"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.keyword", 
+    "pk": 8,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Biology", 
+      "suggested": true,
+      "name": "Biology",
       "slug": "biology"
     }
-  }, 
+  },
   {
-    "pk": 86, 
-    "model": "materials.keyword", 
+    "pk": 86,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": false, 
-      "name": "Business", 
+      "suggested": false,
+      "name": "Business",
       "slug": "business"
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "materials.keyword", 
+    "pk": 9,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Business Law", 
+      "suggested": true,
+      "name": "Business Law",
       "slug": "business-law"
     }
-  }, 
+  },
   {
-    "pk": 10, 
-    "model": "materials.keyword", 
+    "pk": 10,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Chemistry", 
+      "suggested": true,
+      "name": "Chemistry",
       "slug": "chemistry"
     }
-  }, 
+  },
   {
-    "pk": 11, 
-    "model": "materials.keyword", 
+    "pk": 11,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Cinema", 
+      "suggested": true,
+      "name": "Cinema",
       "slug": "cinema"
     }
-  }, 
+  },
   {
-    "pk": 12, 
-    "model": "materials.keyword", 
+    "pk": 12,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Communication Studies", 
+      "suggested": true,
+      "name": "Communication Studies",
       "slug": "communication-studies"
     }
-  }, 
+  },
   {
-    "pk": 13, 
-    "model": "materials.keyword", 
+    "pk": 13,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Computer Sciences", 
+      "suggested": true,
+      "name": "Computer Sciences",
       "slug": "computer-sciences"
     }
-  }, 
+  },
   {
-    "pk": 14, 
-    "model": "materials.keyword", 
+    "pk": 14,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Criminal Justice", 
+      "suggested": true,
+      "name": "Criminal Justice",
       "slug": "criminal-justice"
     }
-  }, 
+  },
   {
-    "pk": 15, 
-    "model": "materials.keyword", 
+    "pk": 15,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Dance", 
+      "suggested": true,
+      "name": "Dance",
       "slug": "dance"
     }
-  }, 
+  },
   {
-    "pk": 16, 
-    "model": "materials.keyword", 
+    "pk": 16,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Digital Media", 
+      "suggested": true,
+      "name": "Digital Media",
       "slug": "digital-media"
     }
-  }, 
+  },
   {
-    "pk": 17, 
-    "model": "materials.keyword", 
+    "pk": 17,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "E-Commerce", 
+      "suggested": true,
+      "name": "E-Commerce",
       "slug": "e-commerce"
     }
-  }, 
+  },
   {
-    "pk": 18, 
-    "model": "materials.keyword", 
+    "pk": 18,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Economics", 
+      "suggested": true,
+      "name": "Economics",
       "slug": "economics"
     }
-  }, 
+  },
   {
-    "pk": 19, 
-    "model": "materials.keyword", 
+    "pk": 19,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Education", 
+      "suggested": true,
+      "name": "Education",
       "slug": "education"
     }
-  }, 
+  },
   {
-    "pk": 20, 
-    "model": "materials.keyword", 
+    "pk": 20,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Engineering", 
+      "suggested": true,
+      "name": "Engineering",
       "slug": "engineering"
     }
-  }, 
+  },
   {
-    "pk": 21, 
-    "model": "materials.keyword", 
+    "pk": 21,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Environmental", 
+      "suggested": true,
+      "name": "Environmental",
       "slug": "environmental"
     }
-  }, 
+  },
   {
-    "pk": 22, 
-    "model": "materials.keyword", 
+    "pk": 22,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Finance", 
+      "suggested": true,
+      "name": "Finance",
       "slug": "finance"
     }
-  }, 
+  },
   {
-    "pk": 23, 
-    "model": "materials.keyword", 
+    "pk": 23,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Fine Arts", 
+      "suggested": true,
+      "name": "Fine Arts",
       "slug": "fine-arts"
     }
-  }, 
+  },
   {
-    "pk": 24, 
-    "model": "materials.keyword", 
+    "pk": 24,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Gender Studies", 
+      "suggested": true,
+      "name": "Gender Studies",
       "slug": "gender-studies"
     }
-  }, 
+  },
   {
-    "pk": 25, 
-    "model": "materials.keyword", 
+    "pk": 25,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Geography", 
+      "suggested": true,
+      "name": "Geography",
       "slug": "geography"
     }
-  }, 
+  },
   {
-    "pk": 26, 
-    "model": "materials.keyword", 
+    "pk": 26,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Geology", 
+      "suggested": true,
+      "name": "Geology",
       "slug": "geology"
     }
-  }, 
+  },
   {
-    "pk": 27, 
-    "model": "materials.keyword", 
+    "pk": 27,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Health Policy", 
+      "suggested": true,
+      "name": "Health Policy",
       "slug": "health-policy"
     }
-  }, 
+  },
   {
-    "pk": 28, 
-    "model": "materials.keyword", 
+    "pk": 28,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Health Sciences", 
+      "suggested": true,
+      "name": "Health Sciences",
       "slug": "health-sciences"
     }
-  }, 
+  },
   {
-    "pk": 29, 
-    "model": "materials.keyword", 
+    "pk": 29,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "History", 
+      "suggested": true,
+      "name": "History",
       "slug": "history"
     }
-  }, 
+  },
   {
-    "pk": 30, 
-    "model": "materials.keyword", 
+    "pk": 30,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Information Technology", 
+      "suggested": true,
+      "name": "Information Technology",
       "slug": "information-technology"
     }
-  }, 
+  },
   {
-    "pk": 31, 
-    "model": "materials.keyword", 
+    "pk": 31,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "International Business", 
+      "suggested": true,
+      "name": "International Business",
       "slug": "international-business"
     }
-  }, 
+  },
   {
-    "pk": 32, 
-    "model": "materials.keyword", 
+    "pk": 32,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Language and Literature", 
+      "suggested": true,
+      "name": "Language and Literature",
       "slug": "language-and-literature"
     }
-  }, 
+  },
   {
-    "pk": 33, 
-    "model": "materials.keyword", 
+    "pk": 33,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Law", 
+      "suggested": true,
+      "name": "Law",
       "slug": "law"
     }
-  }, 
+  },
   {
-    "pk": 34, 
-    "model": "materials.keyword", 
+    "pk": 34,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Library and Information Studies", 
+      "suggested": true,
+      "name": "Library and Information Studies",
       "slug": "library-and-information-studies"
     }
-  }, 
+  },
   {
-    "pk": 35, 
-    "model": "materials.keyword", 
+    "pk": 35,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Linguistics", 
+      "suggested": true,
+      "name": "Linguistics",
       "slug": "linguistics"
     }
-  }, 
+  },
   {
-    "pk": 36, 
-    "model": "materials.keyword", 
+    "pk": 36,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Management", 
+      "suggested": true,
+      "name": "Management",
       "slug": "management"
     }
-  }, 
+  },
   {
-    "pk": 37, 
-    "model": "materials.keyword", 
+    "pk": 37,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Marketing", 
+      "suggested": true,
+      "name": "Marketing",
       "slug": "marketing"
     }
-  }, 
+  },
   {
-    "pk": 38, 
-    "model": "materials.keyword", 
+    "pk": 38,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Mathematics", 
+      "suggested": true,
+      "name": "Mathematics",
       "slug": "mathematics"
     }
-  }, 
+  },
   {
-    "pk": 39, 
-    "model": "materials.keyword", 
+    "pk": 39,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Music", 
+      "suggested": true,
+      "name": "Music",
       "slug": "music"
     }
-  }, 
+  },
   {
-    "pk": 40, 
-    "model": "materials.keyword", 
+    "pk": 40,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Nanotechnology", 
+      "suggested": true,
+      "name": "Nanotechnology",
       "slug": "nanotechnology"
     }
-  }, 
+  },
   {
-    "pk": 41, 
-    "model": "materials.keyword", 
+    "pk": 41,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Philosophy", 
+      "suggested": true,
+      "name": "Philosophy",
       "slug": "philosophy"
     }
-  }, 
+  },
   {
-    "pk": 42, 
-    "model": "materials.keyword", 
+    "pk": 42,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Photography", 
+      "suggested": true,
+      "name": "Photography",
       "slug": "photography"
     }
-  }, 
+  },
   {
-    "pk": 43, 
-    "model": "materials.keyword", 
+    "pk": 43,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Physics", 
+      "suggested": true,
+      "name": "Physics",
       "slug": "physics"
     }
-  }, 
+  },
   {
-    "pk": 44, 
-    "model": "materials.keyword", 
+    "pk": 44,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Political Science", 
+      "suggested": true,
+      "name": "Political Science",
       "slug": "political-science"
     }
-  }, 
+  },
   {
-    "pk": 45, 
-    "model": "materials.keyword", 
+    "pk": 45,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Psychiatry", 
+      "suggested": true,
+      "name": "Psychiatry",
       "slug": "psychiatry"
     }
-  }, 
+  },
   {
-    "pk": 46, 
-    "model": "materials.keyword", 
+    "pk": 46,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Psychology", 
+      "suggested": true,
+      "name": "Psychology",
       "slug": "psychology"
     }
-  }, 
+  },
   {
-    "pk": 47, 
-    "model": "materials.keyword", 
+    "pk": 47,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Religion", 
+      "suggested": true,
+      "name": "Religion",
       "slug": "religion"
     }
-  }, 
+  },
   {
-    "pk": 48, 
-    "model": "materials.keyword", 
+    "pk": 48,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Rhetoric", 
+      "suggested": true,
+      "name": "Rhetoric",
       "slug": "rhetoric"
     }
-  }, 
+  },
   {
-    "pk": 49, 
-    "model": "materials.keyword", 
+    "pk": 49,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Sociology", 
+      "suggested": true,
+      "name": "Sociology",
       "slug": "sociology"
     }
-  }, 
+  },
   {
-    "pk": 50, 
-    "model": "materials.keyword", 
+    "pk": 50,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Statistics and Probability", 
+      "suggested": true,
+      "name": "Statistics and Probability",
       "slug": "statistics-and-probability"
     }
-  }, 
+  },
   {
-    "pk": 51, 
-    "model": "materials.keyword", 
+    "pk": 51,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Theatre", 
+      "suggested": true,
+      "name": "Theatre",
       "slug": "theatre"
     }
-  }, 
+  },
   {
-    "pk": 52, 
-    "model": "materials.keyword", 
+    "pk": 52,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "World Languages", 
+      "suggested": true,
+      "name": "World Languages",
       "slug": "world-languages"
     }
-  }, 
+  },
   {
-    "pk": 53, 
-    "model": "materials.keyword", 
+    "pk": 53,
+    "model": "materials.keyword",
     "fields": {
-      "suggested": true, 
-      "name": "Writing", 
+      "suggested": true,
+      "name": "Writing",
       "slug": "writing"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.generalsubject", 
+    "pk": 1,
+    "model": "materials.generalsubject",
     "fields": {
-      "description": "Art, History, Cinema, Dance, Fine Arts, Music, Photography, Theatre, Visual Arts", 
-      "name": "Arts", 
+      "description": "Art, History, Cinema, Dance, Fine Arts, Music, Photography, Theatre, Visual Arts",
+      "name": "Arts",
       "slug": "arts"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.generalsubject", 
+    "pk": 2,
+    "model": "materials.generalsubject",
     "fields": {
-      "description": "Accounting, E-Commerce, Economics, Finance, International Business, Management, Marketing", 
-      "name": "Business", 
+      "description": "Accounting, E-Commerce, Economics, Finance, International Business, Management, Marketing",
+      "name": "Business",
       "slug": "business"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.generalsubject", 
+    "pk": 3,
+    "model": "materials.generalsubject",
     "fields": {
-      "description": "History, Language and Literature, Library and Information Studies, Linguistics, Philosophy, Religion, Rhetoric, World Languages, Writing, Language Arts, Debate, Grammar, Journalism, Phonics, Reading, Speaking, Spelling, Storytelling, Vocabulary", 
-      "name": "Humanities", 
+      "description": "History, Language and Literature, Library and Information Studies, Linguistics, Philosophy, Religion, Rhetoric, World Languages, Writing, Language Arts, Debate, Grammar, Journalism, Phonics, Reading, Speaking, Spelling, Storytelling, Vocabulary",
+      "name": "Humanities",
       "slug": "humanities"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.generalsubject", 
+    "pk": 4,
+    "model": "materials.generalsubject",
     "fields": {
-      "description": "Mathematics, Statistics and Probability, Algebra, Arithmetic, Calculus, Geometry, Measurement, Number theory, Trigonometry", 
-      "name": "Mathematics and Statistics", 
+      "description": "Mathematics, Statistics and Probability, Algebra, Arithmetic, Calculus, Geometry, Measurement, Number theory, Trigonometry",
+      "name": "Mathematics and Statistics",
       "slug": "mathematics-and-statistics"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.generalsubject", 
+    "pk": 5,
+    "model": "materials.generalsubject",
     "fields": {
-      "description": "Agriculture, Architecture, Astronomy, Biology, Chemistry, Computer Sciences, Digital Media, Engineering, Environmental, Geology, Health Policy, Health Sciences, Information Technology, Nanotechnology, Physics, Psychiatry, Physical Education, Sports and Fitness, Life Sciences, Earth Science, Ecology, Meteorology, Oceanography, Paleontology, Pharmacology, Physical Sciences, Space Sciences", 
-      "name": "Science and Technology", 
+      "description": "Agriculture, Architecture, Astronomy, Biology, Chemistry, Computer Sciences, Digital Media, Engineering, Environmental, Geology, Health Policy, Health Sciences, Information Technology, Nanotechnology, Physics, Psychiatry, Physical Education, Sports and Fitness, Life Sciences, Earth Science, Ecology, Meteorology, Oceanography, Paleontology, Pharmacology, Physical Sciences, Space Sciences",
+      "name": "Science and Technology",
       "slug": "science-and-technology"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.generalsubject", 
+    "pk": 6,
+    "model": "materials.generalsubject",
     "fields": {
-      "description": "Anthropology, Archaeology, Business Law, Communication Studies, Criminal Justice, Education, Gender Studies, Geography, Law, Political Science, Psychology, Sociology, Social Studies, Civics, Current Events, Human Behavior, Human Relations, Social Work, State History, United States History, Urban Studies u", 
-      "name": "Social Sciences", 
+      "description": "Anthropology, Archaeology, Business Law, Communication Studies, Criminal Justice, Education, Gender Studies, Geography, Law, Political Science, Psychology, Sociology, Social Studies, Civics, Current Events, Human Behavior, Human Relations, Social Work, State History, United States History, Urban Studies u",
+      "name": "Social Sciences",
       "slug": "social-sciences"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.gradelevel", 
+    "pk": 1,
+    "model": "materials.gradelevel",
     "fields": {
-      "description": "includes Pre-K - Grade 6; Elementary; Lower Elementary; Upper Elementary", 
-      "name": "Primary", 
+      "description": "includes Pre-K - Grade 6; Elementary; Lower Elementary; Upper Elementary",
+      "name": "Primary",
       "slug": "primary"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.gradelevel", 
+    "pk": 2,
+    "model": "materials.gradelevel",
     "fields": {
-      "description": "includes Grades 7 - 12; High School; Middle School; Jr. High School", 
-      "name": "Secondary", 
+      "description": "includes Grades 7 - 12; High School; Middle School; Jr. High School",
+      "name": "Secondary",
       "slug": "secondary"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.gradelevel", 
+    "pk": 3,
+    "model": "materials.gradelevel",
     "fields": {
-      "description": "includes all Higher Education; College, University, Graduate Levels; Professional Development; Training", 
-      "name": "Post-secondary", 
+      "description": "includes all Higher Education; College, University, Graduate Levels; Professional Development; Training",
+      "name": "Post-secondary",
       "slug": "post-secondary"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.language", 
+    "pk": 1,
+    "model": "materials.language",
     "fields": {
-      "name": "Abkhazian", 
+      "name": "Abkhazian",
       "slug": "ab"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.language", 
+    "pk": 2,
+    "model": "materials.language",
     "fields": {
-      "name": "Afar", 
+      "name": "Afar",
       "slug": "aa"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.language", 
+    "pk": 3,
+    "model": "materials.language",
     "fields": {
-      "name": "Afrikaans", 
+      "name": "Afrikaans",
       "slug": "af"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.language", 
+    "pk": 4,
+    "model": "materials.language",
     "fields": {
-      "name": "Albanian", 
+      "name": "Albanian",
       "slug": "sq"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.language", 
+    "pk": 5,
+    "model": "materials.language",
     "fields": {
-      "name": "Amharic", 
+      "name": "Amharic",
       "slug": "am"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.language", 
+    "pk": 6,
+    "model": "materials.language",
     "fields": {
-      "name": "Arabic", 
+      "name": "Arabic",
       "slug": "ar"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.language", 
+    "pk": 7,
+    "model": "materials.language",
     "fields": {
-      "name": "Armenian", 
+      "name": "Armenian",
       "slug": "hy"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.language", 
+    "pk": 8,
+    "model": "materials.language",
     "fields": {
-      "name": "Assamese", 
+      "name": "Assamese",
       "slug": "as"
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "materials.language", 
+    "pk": 9,
+    "model": "materials.language",
     "fields": {
-      "name": "Aymara", 
+      "name": "Aymara",
       "slug": "ay"
     }
-  }, 
+  },
   {
-    "pk": 10, 
-    "model": "materials.language", 
+    "pk": 10,
+    "model": "materials.language",
     "fields": {
-      "name": "Azerbaijani", 
+      "name": "Azerbaijani",
       "slug": "az"
     }
-  }, 
+  },
   {
-    "pk": 11, 
-    "model": "materials.language", 
+    "pk": 11,
+    "model": "materials.language",
     "fields": {
-      "name": "Bashkir", 
+      "name": "Bashkir",
       "slug": "ba"
     }
-  }, 
+  },
   {
-    "pk": 12, 
-    "model": "materials.language", 
+    "pk": 12,
+    "model": "materials.language",
     "fields": {
-      "name": "Basque", 
+      "name": "Basque",
       "slug": "eu"
     }
-  }, 
+  },
   {
-    "pk": 13, 
-    "model": "materials.language", 
+    "pk": 13,
+    "model": "materials.language",
     "fields": {
-      "name": "Bengali", 
+      "name": "Bengali",
       "slug": "bn"
     }
-  }, 
+  },
   {
-    "pk": 14, 
-    "model": "materials.language", 
+    "pk": 14,
+    "model": "materials.language",
     "fields": {
-      "name": "Bhutani", 
+      "name": "Bhutani",
       "slug": "dz"
     }
-  }, 
+  },
   {
-    "pk": 15, 
-    "model": "materials.language", 
+    "pk": 15,
+    "model": "materials.language",
     "fields": {
-      "name": "Bihari", 
+      "name": "Bihari",
       "slug": "bh"
     }
-  }, 
+  },
   {
-    "pk": 16, 
-    "model": "materials.language", 
+    "pk": 16,
+    "model": "materials.language",
     "fields": {
-      "name": "Bislama", 
+      "name": "Bislama",
       "slug": "bi"
     }
-  }, 
+  },
   {
-    "pk": 17, 
-    "model": "materials.language", 
+    "pk": 17,
+    "model": "materials.language",
     "fields": {
-      "name": "Breton", 
+      "name": "Breton",
       "slug": "br"
     }
-  }, 
+  },
   {
-    "pk": 18, 
-    "model": "materials.language", 
+    "pk": 18,
+    "model": "materials.language",
     "fields": {
-      "name": "Bulgarian", 
+      "name": "Bulgarian",
       "slug": "bg"
     }
-  }, 
+  },
   {
-    "pk": 19, 
-    "model": "materials.language", 
+    "pk": 19,
+    "model": "materials.language",
     "fields": {
-      "name": "Burmese", 
+      "name": "Burmese",
       "slug": "my"
     }
-  }, 
+  },
   {
-    "pk": 20, 
-    "model": "materials.language", 
+    "pk": 20,
+    "model": "materials.language",
     "fields": {
-      "name": "Byelorussian (Belarussian)", 
+      "name": "Byelorussian (Belarussian)",
       "slug": "be"
     }
-  }, 
+  },
   {
-    "pk": 21, 
-    "model": "materials.language", 
+    "pk": 21,
+    "model": "materials.language",
     "fields": {
-      "name": "Cambodian", 
+      "name": "Cambodian",
       "slug": "km"
     }
-  }, 
+  },
   {
-    "pk": 22, 
-    "model": "materials.language", 
+    "pk": 22,
+    "model": "materials.language",
     "fields": {
-      "name": "Catalan", 
+      "name": "Catalan",
       "slug": "ca"
     }
-  }, 
+  },
   {
-    "pk": 23, 
-    "model": "materials.language", 
+    "pk": 23,
+    "model": "materials.language",
     "fields": {
-      "name": "Chinese", 
+      "name": "Chinese",
       "slug": "zh"
     }
-  }, 
+  },
   {
-    "pk": 24, 
-    "model": "materials.language", 
+    "pk": 24,
+    "model": "materials.language",
     "fields": {
-      "name": "Cornish", 
+      "name": "Cornish",
       "slug": "kw"
     }
-  }, 
+  },
   {
-    "pk": 25, 
-    "model": "materials.language", 
+    "pk": 25,
+    "model": "materials.language",
     "fields": {
-      "name": "Corsican", 
+      "name": "Corsican",
       "slug": "co"
     }
-  }, 
+  },
   {
-    "pk": 26, 
-    "model": "materials.language", 
+    "pk": 26,
+    "model": "materials.language",
     "fields": {
-      "name": "Croatian", 
+      "name": "Croatian",
       "slug": "hr"
     }
-  }, 
+  },
   {
-    "pk": 27, 
-    "model": "materials.language", 
+    "pk": 27,
+    "model": "materials.language",
     "fields": {
-      "name": "Czech", 
+      "name": "Czech",
       "slug": "cs"
     }
-  }, 
+  },
   {
-    "pk": 28, 
-    "model": "materials.language", 
+    "pk": 28,
+    "model": "materials.language",
     "fields": {
-      "name": "Danish", 
+      "name": "Danish",
       "slug": "da"
     }
-  }, 
+  },
   {
-    "pk": 29, 
-    "model": "materials.language", 
+    "pk": 29,
+    "model": "materials.language",
     "fields": {
-      "name": "Dutch", 
+      "name": "Dutch",
       "slug": "nl"
     }
-  }, 
+  },
   {
-    "pk": 30, 
-    "model": "materials.language", 
+    "pk": 30,
+    "model": "materials.language",
     "fields": {
-      "name": "English", 
+      "name": "English",
       "slug": "en",
       "order": 1
     }
-  }, 
+  },
   {
-    "pk": 31, 
-    "model": "materials.language", 
+    "pk": 31,
+    "model": "materials.language",
     "fields": {
-      "name": "Esperanto", 
+      "name": "Esperanto",
       "slug": "eo"
     }
-  }, 
+  },
   {
-    "pk": 32, 
-    "model": "materials.language", 
+    "pk": 32,
+    "model": "materials.language",
     "fields": {
-      "name": "Estonian", 
+      "name": "Estonian",
       "slug": "et"
     }
-  }, 
+  },
   {
-    "pk": 33, 
-    "model": "materials.language", 
+    "pk": 33,
+    "model": "materials.language",
     "fields": {
-      "name": "Faroese", 
+      "name": "Faroese",
       "slug": "fo"
     }
-  }, 
+  },
   {
-    "pk": 34, 
-    "model": "materials.language", 
+    "pk": 34,
+    "model": "materials.language",
     "fields": {
-      "name": "Fiji", 
+      "name": "Fiji",
       "slug": "fj"
     }
-  }, 
+  },
   {
-    "pk": 35, 
-    "model": "materials.language", 
+    "pk": 35,
+    "model": "materials.language",
     "fields": {
-      "name": "Finnish", 
+      "name": "Finnish",
       "slug": "fi"
     }
-  }, 
+  },
   {
-    "pk": 36, 
-    "model": "materials.language", 
+    "pk": 36,
+    "model": "materials.language",
     "fields": {
-      "name": "French", 
+      "name": "French",
       "slug": "fr"
     }
-  }, 
+  },
   {
-    "pk": 37, 
-    "model": "materials.language", 
+    "pk": 37,
+    "model": "materials.language",
     "fields": {
-      "name": "Frisian", 
+      "name": "Frisian",
       "slug": "fy"
     }
-  }, 
+  },
   {
-    "pk": 38, 
-    "model": "materials.language", 
+    "pk": 38,
+    "model": "materials.language",
     "fields": {
-      "name": "Galician", 
+      "name": "Galician",
       "slug": "gl"
     }
-  }, 
+  },
   {
-    "pk": 39, 
-    "model": "materials.language", 
+    "pk": 39,
+    "model": "materials.language",
     "fields": {
-      "name": "Georgian", 
+      "name": "Georgian",
       "slug": "ka"
     }
-  }, 
+  },
   {
-    "pk": 40, 
-    "model": "materials.language", 
+    "pk": 40,
+    "model": "materials.language",
     "fields": {
-      "name": "German", 
+      "name": "German",
       "slug": "de"
     }
-  }, 
+  },
   {
-    "pk": 41, 
-    "model": "materials.language", 
+    "pk": 41,
+    "model": "materials.language",
     "fields": {
-      "name": "Greek", 
+      "name": "Greek",
       "slug": "el"
     }
-  }, 
+  },
   {
-    "pk": 42, 
-    "model": "materials.language", 
+    "pk": 42,
+    "model": "materials.language",
     "fields": {
-      "name": "Greenlandic", 
+      "name": "Greenlandic",
       "slug": "kl"
     }
-  }, 
+  },
   {
-    "pk": 43, 
-    "model": "materials.language", 
+    "pk": 43,
+    "model": "materials.language",
     "fields": {
-      "name": "Guarani", 
+      "name": "Guarani",
       "slug": "gn"
     }
-  }, 
+  },
   {
-    "pk": 44, 
-    "model": "materials.language", 
+    "pk": 44,
+    "model": "materials.language",
     "fields": {
-      "name": "Gujarati", 
+      "name": "Gujarati",
       "slug": "gu"
     }
-  }, 
+  },
   {
-    "pk": 45, 
-    "model": "materials.language", 
+    "pk": 45,
+    "model": "materials.language",
     "fields": {
-      "name": "Haitian", 
+      "name": "Haitian",
       "slug": "ht"
     }
-  }, 
+  },
   {
-    "pk": 46, 
-    "model": "materials.language", 
+    "pk": 46,
+    "model": "materials.language",
     "fields": {
-      "name": "Hausa", 
+      "name": "Hausa",
       "slug": "ha"
     }
-  }, 
+  },
   {
-    "pk": 47, 
-    "model": "materials.language", 
+    "pk": 47,
+    "model": "materials.language",
     "fields": {
-      "name": "Hebrew", 
+      "name": "Hebrew",
       "slug": "he"
     }
-  }, 
+  },
   {
-    "pk": 48, 
-    "model": "materials.language", 
+    "pk": 48,
+    "model": "materials.language",
     "fields": {
-      "name": "Hindi", 
+      "name": "Hindi",
       "slug": "hi"
     }
-  }, 
+  },
   {
-    "pk": 49, 
-    "model": "materials.language", 
+    "pk": 49,
+    "model": "materials.language",
     "fields": {
-      "name": "Hungarian", 
+      "name": "Hungarian",
       "slug": "hu"
     }
-  }, 
+  },
   {
-    "pk": 50, 
-    "model": "materials.language", 
+    "pk": 50,
+    "model": "materials.language",
     "fields": {
-      "name": "Icelandic", 
+      "name": "Icelandic",
       "slug": "is"
     }
-  }, 
+  },
   {
-    "pk": 51, 
-    "model": "materials.language", 
+    "pk": 51,
+    "model": "materials.language",
     "fields": {
-      "name": "Indonesian", 
+      "name": "Indonesian",
       "slug": "id"
     }
-  }, 
+  },
   {
-    "pk": 52, 
-    "model": "materials.language", 
+    "pk": 52,
+    "model": "materials.language",
     "fields": {
-      "name": "Interlingua", 
+      "name": "Interlingua",
       "slug": "ia"
     }
-  }, 
+  },
   {
-    "pk": 53, 
-    "model": "materials.language", 
+    "pk": 53,
+    "model": "materials.language",
     "fields": {
-      "name": "Interlingue", 
+      "name": "Interlingue",
       "slug": "ie"
     }
-  }, 
+  },
   {
-    "pk": 54, 
-    "model": "materials.language", 
+    "pk": 54,
+    "model": "materials.language",
     "fields": {
-      "name": "Inuktitut", 
+      "name": "Inuktitut",
       "slug": "iu"
     }
-  }, 
+  },
   {
-    "pk": 55, 
-    "model": "materials.language", 
+    "pk": 55,
+    "model": "materials.language",
     "fields": {
-      "name": "Inupiak", 
+      "name": "Inupiak",
       "slug": "ik"
     }
-  }, 
+  },
   {
-    "pk": 56, 
-    "model": "materials.language", 
+    "pk": 56,
+    "model": "materials.language",
     "fields": {
-      "name": "Irish (Irish Gaelic)", 
+      "name": "Irish (Irish Gaelic)",
       "slug": "ga"
     }
-  }, 
+  },
   {
-    "pk": 57, 
-    "model": "materials.language", 
+    "pk": 57,
+    "model": "materials.language",
     "fields": {
-      "name": "Italian", 
+      "name": "Italian",
       "slug": "it"
     }
-  }, 
+  },
   {
-    "pk": 58, 
-    "model": "materials.language", 
+    "pk": 58,
+    "model": "materials.language",
     "fields": {
-      "name": "Japanese", 
+      "name": "Japanese",
       "slug": "ja"
     }
-  }, 
+  },
   {
-    "pk": 59, 
-    "model": "materials.language", 
+    "pk": 59,
+    "model": "materials.language",
     "fields": {
-      "name": "Javanese", 
+      "name": "Javanese",
       "slug": "jw"
     }
-  }, 
+  },
   {
-    "pk": 60, 
-    "model": "materials.language", 
+    "pk": 60,
+    "model": "materials.language",
     "fields": {
-      "name": "Kannada", 
+      "name": "Kannada",
       "slug": "kn"
     }
-  }, 
+  },
   {
-    "pk": 61, 
-    "model": "materials.language", 
+    "pk": 61,
+    "model": "materials.language",
     "fields": {
-      "name": "Kashmiri", 
+      "name": "Kashmiri",
       "slug": "ks"
     }
-  }, 
+  },
   {
-    "pk": 62, 
-    "model": "materials.language", 
+    "pk": 62,
+    "model": "materials.language",
     "fields": {
-      "name": "Kazakh", 
+      "name": "Kazakh",
       "slug": "kk"
     }
-  }, 
+  },
   {
-    "pk": 63, 
-    "model": "materials.language", 
+    "pk": 63,
+    "model": "materials.language",
     "fields": {
-      "name": "Kirghiz", 
+      "name": "Kirghiz",
       "slug": "ky"
     }
-  }, 
+  },
   {
-    "pk": 64, 
-    "model": "materials.language", 
+    "pk": 64,
+    "model": "materials.language",
     "fields": {
-      "name": "Kirundi", 
+      "name": "Kirundi",
       "slug": "rn"
     }
-  }, 
+  },
   {
-    "pk": 65, 
-    "model": "materials.language", 
+    "pk": 65,
+    "model": "materials.language",
     "fields": {
-      "name": "Kiyarwanda", 
+      "name": "Kiyarwanda",
       "slug": "rw"
     }
-  }, 
+  },
   {
-    "pk": 66, 
-    "model": "materials.language", 
+    "pk": 66,
+    "model": "materials.language",
     "fields": {
-      "name": "Korean", 
+      "name": "Korean",
       "slug": "ko"
     }
-  }, 
+  },
   {
-    "pk": 67, 
-    "model": "materials.language", 
+    "pk": 67,
+    "model": "materials.language",
     "fields": {
-      "name": "Kurdish", 
+      "name": "Kurdish",
       "slug": "ku"
     }
-  }, 
+  },
   {
-    "pk": 68, 
-    "model": "materials.language", 
+    "pk": 68,
+    "model": "materials.language",
     "fields": {
-      "name": "Laotian", 
+      "name": "Laotian",
       "slug": "lo"
     }
-  }, 
+  },
   {
-    "pk": 69, 
-    "model": "materials.language", 
+    "pk": 69,
+    "model": "materials.language",
     "fields": {
-      "name": "Latin", 
+      "name": "Latin",
       "slug": "la"
     }
-  }, 
+  },
   {
-    "pk": 70, 
-    "model": "materials.language", 
+    "pk": 70,
+    "model": "materials.language",
     "fields": {
-      "name": "Latvian Lettish", 
+      "name": "Latvian Lettish",
       "slug": "lv"
     }
-  }, 
+  },
   {
-    "pk": 71, 
-    "model": "materials.language", 
+    "pk": 71,
+    "model": "materials.language",
     "fields": {
-      "name": "Lingala", 
+      "name": "Lingala",
       "slug": "ln"
     }
-  }, 
+  },
   {
-    "pk": 72, 
-    "model": "materials.language", 
+    "pk": 72,
+    "model": "materials.language",
     "fields": {
-      "name": "Lithuanian", 
+      "name": "Lithuanian",
       "slug": "lt"
     }
-  }, 
+  },
   {
-    "pk": 73, 
-    "model": "materials.language", 
+    "pk": 73,
+    "model": "materials.language",
     "fields": {
-      "name": "Luxemburgish", 
+      "name": "Luxemburgish",
       "slug": "lb"
     }
-  }, 
+  },
   {
-    "pk": 74, 
-    "model": "materials.language", 
+    "pk": 74,
+    "model": "materials.language",
     "fields": {
-      "name": "Macedonian", 
+      "name": "Macedonian",
       "slug": "mk"
     }
-  }, 
+  },
   {
-    "pk": 75, 
-    "model": "materials.language", 
+    "pk": 75,
+    "model": "materials.language",
     "fields": {
-      "name": "Malagasy", 
+      "name": "Malagasy",
       "slug": "mg"
     }
-  }, 
+  },
   {
-    "pk": 76, 
-    "model": "materials.language", 
+    "pk": 76,
+    "model": "materials.language",
     "fields": {
-      "name": "Malay", 
+      "name": "Malay",
       "slug": "ms"
     }
-  }, 
+  },
   {
-    "pk": 77, 
-    "model": "materials.language", 
+    "pk": 77,
+    "model": "materials.language",
     "fields": {
-      "name": "Malayalam", 
+      "name": "Malayalam",
       "slug": "ml"
     }
-  }, 
+  },
   {
-    "pk": 78, 
-    "model": "materials.language", 
+    "pk": 78,
+    "model": "materials.language",
     "fields": {
-      "name": "Maltese", 
+      "name": "Maltese",
       "slug": "mt"
     }
-  }, 
+  },
   {
-    "pk": 79, 
-    "model": "materials.language", 
+    "pk": 79,
+    "model": "materials.language",
     "fields": {
-      "name": "Manx Gaelic", 
+      "name": "Manx Gaelic",
       "slug": "gv"
     }
-  }, 
+  },
   {
-    "pk": 80, 
-    "model": "materials.language", 
+    "pk": 80,
+    "model": "materials.language",
     "fields": {
-      "name": "Maori", 
+      "name": "Maori",
       "slug": "mi"
     }
-  }, 
+  },
   {
-    "pk": 81, 
-    "model": "materials.language", 
+    "pk": 81,
+    "model": "materials.language",
     "fields": {
-      "name": "Marathi", 
+      "name": "Marathi",
       "slug": "mr"
     }
-  }, 
+  },
   {
-    "pk": 82, 
-    "model": "materials.language", 
+    "pk": 82,
+    "model": "materials.language",
     "fields": {
-      "name": "Moldavian", 
+      "name": "Moldavian",
       "slug": "mo"
     }
-  }, 
+  },
   {
-    "pk": 83, 
-    "model": "materials.language", 
+    "pk": 83,
+    "model": "materials.language",
     "fields": {
-      "name": "Mongolian", 
+      "name": "Mongolian",
       "slug": "mn"
     }
-  }, 
+  },
   {
-    "pk": 84, 
-    "model": "materials.language", 
+    "pk": 84,
+    "model": "materials.language",
     "fields": {
-      "name": "Nauru", 
+      "name": "Nauru",
       "slug": "na"
     }
-  }, 
+  },
   {
-    "pk": 85, 
-    "model": "materials.language", 
+    "pk": 85,
+    "model": "materials.language",
     "fields": {
-      "name": "Nepali", 
+      "name": "Nepali",
       "slug": "ne"
     }
-  }, 
+  },
   {
-    "pk": 86, 
-    "model": "materials.language", 
+    "pk": 86,
+    "model": "materials.language",
     "fields": {
-      "name": "Northern S\u00e1mi", 
+      "name": "Northern S\u00e1mi",
       "slug": "se"
     }
-  }, 
+  },
   {
-    "pk": 87, 
-    "model": "materials.language", 
+    "pk": 87,
+    "model": "materials.language",
     "fields": {
-      "name": "Norwegian", 
+      "name": "Norwegian",
       "slug": "no"
     }
-  }, 
+  },
   {
-    "pk": 88, 
-    "model": "materials.language", 
+    "pk": 88,
+    "model": "materials.language",
     "fields": {
-      "name": "Occitan", 
+      "name": "Occitan",
       "slug": "oc"
     }
-  }, 
+  },
   {
-    "pk": 89, 
-    "model": "materials.language", 
+    "pk": 89,
+    "model": "materials.language",
     "fields": {
-      "name": "Oriya", 
+      "name": "Oriya",
       "slug": "or"
     }
-  }, 
+  },
   {
-    "pk": 90, 
-    "model": "materials.language", 
+    "pk": 90,
+    "model": "materials.language",
     "fields": {
-      "name": "Oromo", 
+      "name": "Oromo",
       "slug": "om"
     }
-  }, 
+  },
   {
-    "pk": 91, 
-    "model": "materials.language", 
+    "pk": 91,
+    "model": "materials.language",
     "fields": {
-      "name": "Pashto", 
+      "name": "Pashto",
       "slug": "ps"
     }
-  }, 
+  },
   {
-    "pk": 92, 
-    "model": "materials.language", 
+    "pk": 92,
+    "model": "materials.language",
     "fields": {
-      "name": "Persian", 
+      "name": "Persian",
       "slug": "fa"
     }
-  }, 
+  },
   {
-    "pk": 93, 
-    "model": "materials.language", 
+    "pk": 93,
+    "model": "materials.language",
     "fields": {
-      "name": "Polish", 
+      "name": "Polish",
       "slug": "pl"
     }
-  }, 
+  },
   {
-    "pk": 94, 
-    "model": "materials.language", 
+    "pk": 94,
+    "model": "materials.language",
     "fields": {
-      "name": "Portuguese", 
+      "name": "Portuguese",
       "slug": "pt"
     }
-  }, 
+  },
   {
-    "pk": 95, 
-    "model": "materials.language", 
+    "pk": 95,
+    "model": "materials.language",
     "fields": {
-      "name": "Punjabi", 
+      "name": "Punjabi",
       "slug": "pa"
     }
-  }, 
+  },
   {
-    "pk": 96, 
-    "model": "materials.language", 
+    "pk": 96,
+    "model": "materials.language",
     "fields": {
-      "name": "Quechua", 
+      "name": "Quechua",
       "slug": "qu"
     }
-  }, 
+  },
   {
-    "pk": 97, 
-    "model": "materials.language", 
+    "pk": 97,
+    "model": "materials.language",
     "fields": {
-      "name": "Rhaeto-Romance", 
+      "name": "Rhaeto-Romance",
       "slug": "rm"
     }
-  }, 
+  },
   {
-    "pk": 98, 
-    "model": "materials.language", 
+    "pk": 98,
+    "model": "materials.language",
     "fields": {
-      "name": "Romanian", 
+      "name": "Romanian",
       "slug": "ro"
     }
-  }, 
+  },
   {
-    "pk": 99, 
-    "model": "materials.language", 
+    "pk": 99,
+    "model": "materials.language",
     "fields": {
-      "name": "Russian", 
+      "name": "Russian",
       "slug": "ru"
     }
-  }, 
+  },
   {
-    "pk": 100, 
-    "model": "materials.language", 
+    "pk": 100,
+    "model": "materials.language",
     "fields": {
-      "name": "Samoan", 
+      "name": "Samoan",
       "slug": "sm"
     }
-  }, 
+  },
   {
-    "pk": 101, 
-    "model": "materials.language", 
+    "pk": 101,
+    "model": "materials.language",
     "fields": {
-      "name": "Sangho", 
+      "name": "Sangho",
       "slug": "sg"
     }
-  }, 
+  },
   {
-    "pk": 102, 
-    "model": "materials.language", 
+    "pk": 102,
+    "model": "materials.language",
     "fields": {
-      "name": "Sanskrit", 
+      "name": "Sanskrit",
       "slug": "sa"
     }
-  }, 
+  },
   {
-    "pk": 103, 
-    "model": "materials.language", 
+    "pk": 103,
+    "model": "materials.language",
     "fields": {
-      "name": "Scots Gaelic (Scottish Gaelic)", 
+      "name": "Scots Gaelic (Scottish Gaelic)",
       "slug": "gd"
     }
-  }, 
+  },
   {
-    "pk": 104, 
-    "model": "materials.language", 
+    "pk": 104,
+    "model": "materials.language",
     "fields": {
-      "name": "Serbian", 
+      "name": "Serbian",
       "slug": "sr"
     }
-  }, 
+  },
   {
-    "pk": 105, 
-    "model": "materials.language", 
+    "pk": 105,
+    "model": "materials.language",
     "fields": {
-      "name": "Serbo-Croatian", 
+      "name": "Serbo-Croatian",
       "slug": "sh"
     }
-  }, 
+  },
   {
-    "pk": 106, 
-    "model": "materials.language", 
+    "pk": 106,
+    "model": "materials.language",
     "fields": {
-      "name": "Sesotho", 
+      "name": "Sesotho",
       "slug": "st"
     }
-  }, 
+  },
   {
-    "pk": 107, 
-    "model": "materials.language", 
+    "pk": 107,
+    "model": "materials.language",
     "fields": {
-      "name": "Setswana", 
+      "name": "Setswana",
       "slug": "tn"
     }
-  }, 
+  },
   {
-    "pk": 108, 
-    "model": "materials.language", 
+    "pk": 108,
+    "model": "materials.language",
     "fields": {
-      "name": "Shona", 
+      "name": "Shona",
       "slug": "sn"
     }
-  }, 
+  },
   {
-    "pk": 109, 
-    "model": "materials.language", 
+    "pk": 109,
+    "model": "materials.language",
     "fields": {
-      "name": "Sindhi", 
+      "name": "Sindhi",
       "slug": "sd"
     }
-  }, 
+  },
   {
-    "pk": 110, 
-    "model": "materials.language", 
+    "pk": 110,
+    "model": "materials.language",
     "fields": {
-      "name": "Singhalese", 
+      "name": "Singhalese",
       "slug": "si"
     }
-  }, 
+  },
   {
-    "pk": 111, 
-    "model": "materials.language", 
+    "pk": 111,
+    "model": "materials.language",
     "fields": {
-      "name": "Siswati", 
+      "name": "Siswati",
       "slug": "ss"
     }
-  }, 
+  },
   {
-    "pk": 112, 
-    "model": "materials.language", 
+    "pk": 112,
+    "model": "materials.language",
     "fields": {
-      "name": "Slovak", 
+      "name": "Slovak",
       "slug": "sk"
     }
-  }, 
+  },
   {
-    "pk": 113, 
-    "model": "materials.language", 
+    "pk": 113,
+    "model": "materials.language",
     "fields": {
-      "name": "Slovenian", 
+      "name": "Slovenian",
       "slug": "sl"
     }
-  }, 
+  },
   {
-    "pk": 114, 
-    "model": "materials.language", 
+    "pk": 114,
+    "model": "materials.language",
     "fields": {
-      "name": "Somali", 
+      "name": "Somali",
       "slug": "so"
     }
-  }, 
+  },
   {
-    "pk": 115, 
-    "model": "materials.language", 
+    "pk": 115,
+    "model": "materials.language",
     "fields": {
-      "name": "Spanish", 
+      "name": "Spanish",
       "slug": "es"
     }
-  }, 
+  },
   {
-    "pk": 116, 
-    "model": "materials.language", 
+    "pk": 116,
+    "model": "materials.language",
     "fields": {
-      "name": "Sudanese", 
+      "name": "Sudanese",
       "slug": "su"
     }
-  }, 
+  },
   {
-    "pk": 117, 
-    "model": "materials.language", 
+    "pk": 117,
+    "model": "materials.language",
     "fields": {
-      "name": "Swahili", 
+      "name": "Swahili",
       "slug": "sw"
     }
-  }, 
+  },
   {
-    "pk": 118, 
-    "model": "materials.language", 
+    "pk": 118,
+    "model": "materials.language",
     "fields": {
-      "name": "Swedish", 
+      "name": "Swedish",
       "slug": "sv"
     }
-  }, 
+  },
   {
-    "pk": 119, 
-    "model": "materials.language", 
+    "pk": 119,
+    "model": "materials.language",
     "fields": {
-      "name": "Tagalog", 
+      "name": "Tagalog",
       "slug": "tl"
     }
-  }, 
+  },
   {
-    "pk": 120, 
-    "model": "materials.language", 
+    "pk": 120,
+    "model": "materials.language",
     "fields": {
-      "name": "Tajik", 
+      "name": "Tajik",
       "slug": "tg"
     }
-  }, 
+  },
   {
-    "pk": 121, 
-    "model": "materials.language", 
+    "pk": 121,
+    "model": "materials.language",
     "fields": {
-      "name": "Tamil", 
+      "name": "Tamil",
       "slug": "ta"
     }
-  }, 
+  },
   {
-    "pk": 122, 
-    "model": "materials.language", 
+    "pk": 122,
+    "model": "materials.language",
     "fields": {
-      "name": "Tatar", 
+      "name": "Tatar",
       "slug": "tt"
     }
-  }, 
+  },
   {
-    "pk": 123, 
-    "model": "materials.language", 
+    "pk": 123,
+    "model": "materials.language",
     "fields": {
-      "name": "Telugu", 
+      "name": "Telugu",
       "slug": "te"
     }
-  }, 
+  },
   {
-    "pk": 124, 
-    "model": "materials.language", 
+    "pk": 124,
+    "model": "materials.language",
     "fields": {
-      "name": "Thai", 
+      "name": "Thai",
       "slug": "th"
     }
-  }, 
+  },
   {
-    "pk": 125, 
-    "model": "materials.language", 
+    "pk": 125,
+    "model": "materials.language",
     "fields": {
-      "name": "Tibetan", 
+      "name": "Tibetan",
       "slug": "bo"
     }
-  }, 
+  },
   {
-    "pk": 126, 
-    "model": "materials.language", 
+    "pk": 126,
+    "model": "materials.language",
     "fields": {
-      "name": "Tigrinya", 
+      "name": "Tigrinya",
       "slug": "ti"
     }
-  }, 
+  },
   {
-    "pk": 127, 
-    "model": "materials.language", 
+    "pk": 127,
+    "model": "materials.language",
     "fields": {
-      "name": "Tonga", 
+      "name": "Tonga",
       "slug": "to"
     }
-  }, 
+  },
   {
-    "pk": 128, 
-    "model": "materials.language", 
+    "pk": 128,
+    "model": "materials.language",
     "fields": {
-      "name": "Tsonga", 
+      "name": "Tsonga",
       "slug": "ts"
     }
-  }, 
+  },
   {
-    "pk": 129, 
-    "model": "materials.language", 
+    "pk": 129,
+    "model": "materials.language",
     "fields": {
-      "name": "Turkish", 
+      "name": "Turkish",
       "slug": "tr"
     }
-  }, 
+  },
   {
-    "pk": 130, 
-    "model": "materials.language", 
+    "pk": 130,
+    "model": "materials.language",
     "fields": {
-      "name": "Turkmen", 
+      "name": "Turkmen",
       "slug": "tk"
     }
-  }, 
+  },
   {
-    "pk": 131, 
-    "model": "materials.language", 
+    "pk": 131,
+    "model": "materials.language",
     "fields": {
-      "name": "Twi", 
+      "name": "Twi",
       "slug": "tw"
     }
-  }, 
+  },
   {
-    "pk": 132, 
-    "model": "materials.language", 
+    "pk": 132,
+    "model": "materials.language",
     "fields": {
-      "name": "Uigur", 
+      "name": "Uigur",
       "slug": "ug"
     }
-  }, 
+  },
   {
-    "pk": 133, 
-    "model": "materials.language", 
+    "pk": 133,
+    "model": "materials.language",
     "fields": {
-      "name": "Ukrainian", 
+      "name": "Ukrainian",
       "slug": "uk"
     }
-  }, 
+  },
   {
-    "pk": 134, 
-    "model": "materials.language", 
+    "pk": 134,
+    "model": "materials.language",
     "fields": {
-      "name": "Urdu", 
+      "name": "Urdu",
       "slug": "ur"
     }
-  }, 
+  },
   {
-    "pk": 135, 
-    "model": "materials.language", 
+    "pk": 135,
+    "model": "materials.language",
     "fields": {
-      "name": "Uzbek", 
+      "name": "Uzbek",
       "slug": "uz"
     }
-  }, 
+  },
   {
-    "pk": 136, 
-    "model": "materials.language", 
+    "pk": 136,
+    "model": "materials.language",
     "fields": {
-      "name": "Vietnamese", 
+      "name": "Vietnamese",
       "slug": "vi"
     }
-  }, 
+  },
   {
-    "pk": 137, 
-    "model": "materials.language", 
+    "pk": 137,
+    "model": "materials.language",
     "fields": {
-      "name": "Volap\u00fck", 
+      "name": "Volap\u00fck",
       "slug": "vo"
     }
-  }, 
+  },
   {
-    "pk": 138, 
-    "model": "materials.language", 
+    "pk": 138,
+    "model": "materials.language",
     "fields": {
-      "name": "Welsh", 
+      "name": "Welsh",
       "slug": "cy"
     }
-  }, 
+  },
   {
-    "pk": 139, 
-    "model": "materials.language", 
+    "pk": 139,
+    "model": "materials.language",
     "fields": {
-      "name": "Wolof", 
+      "name": "Wolof",
       "slug": "wo"
     }
-  }, 
+  },
   {
-    "pk": 140, 
-    "model": "materials.language", 
+    "pk": 140,
+    "model": "materials.language",
     "fields": {
-      "name": "Xhosa", 
+      "name": "Xhosa",
       "slug": "xh"
     }
-  }, 
+  },
   {
-    "pk": 141, 
-    "model": "materials.language", 
+    "pk": 141,
+    "model": "materials.language",
     "fields": {
-      "name": "Yiddish", 
+      "name": "Yiddish",
       "slug": "yi"
     }
-  }, 
+  },
   {
-    "pk": 142, 
-    "model": "materials.language", 
+    "pk": 142,
+    "model": "materials.language",
     "fields": {
-      "name": "Yorouba", 
+      "name": "Yorouba",
       "slug": "yo"
     }
-  }, 
+  },
   {
-    "pk": 143, 
-    "model": "materials.language", 
+    "pk": 143,
+    "model": "materials.language",
     "fields": {
-      "name": "Zhuang", 
+      "name": "Zhuang",
       "slug": "za"
     }
-  }, 
+  },
   {
-    "pk": 144, 
-    "model": "materials.language", 
+    "pk": 144,
+    "model": "materials.language",
     "fields": {
-      "name": "Zulu", 
+      "name": "Zulu",
       "slug": "zu"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.mediaformat", 
+    "pk": 1,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Audio", 
+      "name": "Audio",
       "slug": "audio"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.mediaformat", 
+    "pk": 2,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Graphics/Photos", 
+      "name": "Graphics/Photos",
       "slug": "graphics-photos"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.mediaformat", 
+    "pk": 3,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Mobile", 
+      "name": "Mobile",
       "slug": "mobile"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.mediaformat", 
+    "pk": 4,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Other", 
+      "name": "Other",
       "slug": "other"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.mediaformat", 
+    "pk": 5,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Text/HTML", 
+      "name": "Text/HTML",
       "slug": "text-html"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.mediaformat", 
+    "pk": 6,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Downloadable docs", 
+      "name": "Downloadable docs",
       "slug": "downloadable-docs"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.mediaformat", 
+    "pk": 7,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Video", 
+      "name": "Video",
       "slug": "video"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.mediaformat", 
+    "pk": 8,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Interactive", 
+      "name": "Interactive",
       "slug": "interactive"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.geographicrelevance", 
+    "pk": 1,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "All", 
+      "name": "All",
       "slug": "all"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.geographicrelevance", 
+    "pk": 2,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Africa", 
+      "name": "Africa",
       "slug": "africa"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.geographicrelevance", 
+    "pk": 3,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Asia", 
+      "name": "Asia",
       "slug": "asia"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.geographicrelevance", 
+    "pk": 4,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Australia", 
+      "name": "Australia",
       "slug": "australia"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.geographicrelevance", 
+    "pk": 5,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Developing countries", 
+      "name": "Developing countries",
       "slug": "developing-countries"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.geographicrelevance", 
+    "pk": 6,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Europe", 
+      "name": "Europe",
       "slug": "europe"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.geographicrelevance", 
+    "pk": 7,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Middle East", 
+      "name": "Middle East",
       "slug": "middle-east"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.geographicrelevance", 
+    "pk": 8,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "North America", 
+      "name": "North America",
       "slug": "north-america"
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "materials.geographicrelevance", 
+    "pk": 9,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "South America", 
+      "name": "South America",
       "slug": "south-america"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.coursematerialtype", 
+    "pk": 1,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Activities and Labs", 
-      "slug": "activities-and-labs"
+      "name": "Activities and Labs",
+      "slug": "activities-and-labs",
+      "order": 1
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.coursematerialtype", 
+    "pk": 2,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Assessments", 
-      "slug": "assessments"
+      "name": "Assessments",
+      "slug": "assessments",
+      "order": 2
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.coursematerialtype", 
+    "pk": 3,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Audio Lectures", 
-      "slug": "audio-lectures"
+      "name": "Audio Lectures",
+      "slug": "audio-lectures",
+      "order": 3
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.coursematerialtype", 
+    "pk": 4,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Curriculum Standards", 
-      "slug": "curriculum-standards"
+      "name": "Curriculum Standards",
+      "slug": "curriculum-standards",
+      "order": 4
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.coursematerialtype", 
+    "pk": 5,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Discussion Forums", 
-      "slug": "discussion-forums"
+      "name": "Discussion Forums",
+      "slug": "discussion-forums",
+      "order": 5
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.coursematerialtype", 
+    "pk": 6,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Games", 
-      "slug": "games"
+      "name": "Games",
+      "slug": "games",
+      "order": 6
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.coursematerialtype", 
+    "pk": 7,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Homework and Assignments", 
-      "slug": "homework-and-assignments"
+      "name": "Homework and Assignments",
+      "slug": "homework-and-assignments",
+      "order": 7
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.coursematerialtype", 
+    "pk": 8,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Lecture Notes", 
-      "slug": "lecture-notes"
+      "name": "Lecture Notes",
+      "slug": "lecture-notes",
+      "order": 8
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "materials.coursematerialtype", 
+    "pk": 9,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Lesson Plans", 
-      "slug": "lesson-plans"
+      "name": "Lesson Plans",
+      "slug": "lesson-plans",
+      "order": 9
     }
-  }, 
+  },
   {
-    "pk": 10, 
-    "model": "materials.coursematerialtype", 
+    "pk": 10,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Readings", 
-      "slug": "readings"
+      "name": "Readings",
+      "slug": "readings",
+      "order": 10
     }
-  }, 
+  },
   {
-    "pk": 11, 
-    "model": "materials.coursematerialtype", 
+    "pk": 11,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Simulations", 
-      "slug": "simulations"
+      "name": "Simulations",
+      "slug": "simulations",
+      "order": 11
     }
-  }, 
+  },
   {
-    "pk": 12, 
-    "model": "materials.coursematerialtype", 
+    "pk": 12,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Syllabi", 
-      "slug": "syllabi"
+      "name": "Syllabi",
+      "slug": "syllabi",
+      "order": 12
     }
-  }, 
+  },
   {
-    "pk": 13, 
-    "model": "materials.coursematerialtype", 
+    "pk": 13,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Teaching and Learning Strategies", 
-      "slug": "teaching-and-learning-strategies"
+      "name": "Teaching and Learning Strategies",
+      "slug": "teaching-and-learning-strategies",
+      "order": 13
     }
-  }, 
+  },
   {
-    "pk": 14, 
-    "model": "materials.coursematerialtype", 
+    "pk": 14,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Textbooks", 
-      "slug": "textbooks"
+      "name": "Textbooks",
+      "slug": "textbooks",
+      "order": 14
     }
-  }, 
+  },
   {
-    "pk": 15, 
-    "model": "materials.coursematerialtype", 
+    "pk": 15,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Training Materials", 
-      "slug": "training-materials"
+      "name": "Training Materials",
+      "slug": "training-materials",
+      "order": 15
     }
-  }, 
+  },
   {
-    "pk": 16, 
-    "model": "materials.coursematerialtype", 
+    "pk": 16,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Video Lectures", 
-      "slug": "video-lectures"
+      "name": "Video Lectures",
+      "slug": "video-lectures",
+      "order": 16
     }
-  }, 
+  },
   {
-    "pk": 17, 
-    "model": "materials.coursematerialtype", 
+    "pk": 18,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Other", 
-      "slug": "other"
+      "name": "Full Course",
+      "slug": "full-course",
+      "order": 17
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.librarymaterialtype", 
+    "pk": 17,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Primary Source", 
+      "name": "Other",
+      "slug": "other",
+      "order": 18
+    }
+  },
+  {
+    "pk": 1,
+    "model": "materials.librarymaterialtype",
+    "fields": {
+      "name": "Primary Source",
       "slug": "primary-source"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.librarymaterialtype", 
+    "pk": 2,
+    "model": "materials.librarymaterialtype",
     "fields": {
-      "name": "Teaching and Learning Strategies", 
+      "name": "Teaching and Learning Strategies",
       "slug": "teaching-and-learning-strategies"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.librarymaterialtype", 
+    "pk": 3,
+    "model": "materials.librarymaterialtype",
     "fields": {
-      "name": "Other", 
+      "name": "Other",
       "slug": "other"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.communitytype", 
+    "pk": 1,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "News Stories", 
+      "name": "News Stories",
       "slug": "news-stories"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.communitytype", 
+    "pk": 2,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Articles and Reports", 
+      "name": "Articles and Reports",
       "slug": "articles-and-reports"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.communitytype", 
+    "pk": 3,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Tools and Technology", 
+      "name": "Tools and Technology",
       "slug": "tools-and-technology"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.communitytype", 
+    "pk": 4,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Organizations and Associations", 
+      "name": "Organizations and Associations",
       "slug": "organizations-and-associations"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.communitytype", 
+    "pk": 5,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Conferences and Workshops", 
+      "name": "Conferences and Workshops",
       "slug": "conferences-and-workshops"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.communitytype", 
+    "pk": 6,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Discussion Forums", 
+      "name": "Discussion Forums",
       "slug": "discussion-forums"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.communitytype", 
+    "pk": 7,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Blogs and Wikis", 
+      "name": "Blogs and Wikis",
       "slug": "blogs-and-wikis"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.communitytopic", 
+    "pk": 1,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "How and Why of OER", 
+      "name": "How and Why of OER",
       "slug": "how-and-why-of-oer"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.communitytopic", 
+    "pk": 2,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Teaching and Learning", 
+      "name": "Teaching and Learning",
       "slug": "teaching-and-learning"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.communitytopic", 
+    "pk": 3,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Localization", 
+      "name": "Localization",
       "slug": "localization"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.communitytopic", 
+    "pk": 4,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Standards/Certifications", 
+      "name": "Standards/Certifications",
       "slug": "standards-certifications"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.communitytopic", 
+    "pk": 5,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Intellectual Property", 
+      "name": "Intellectual Property",
       "slug": "intellectual-property"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.communitytopic", 
+    "pk": 6,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Open Source", 
+      "name": "Open Source",
       "slug": "open-source"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.communitytopic", 
+    "pk": 7,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Technology", 
+      "name": "Technology",
       "slug": "technology"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.communitytopic", 
+    "pk": 8,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Research", 
+      "name": "Research",
       "slug": "research"
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "materials.communitytopic", 
+    "pk": 9,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Policy", 
+      "name": "Policy",
       "slug": "policy"
     }
-  } 
+  }
 ]
