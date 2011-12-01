@@ -1,7 +1,8 @@
 [
   {
-    "pk": 1,
-    "model": "materials.gradelevel",
+    "pk": 1, 
+
+    "model": "materials.gradelevel", 
     "fields": {
       "description": "includes Pre-K - Grade 6; Elementary; Lower Elementary; Upper Elementary",
       "name": "Primary",
@@ -27,426 +28,452 @@
     }
   },
   {
-    "pk": 1, 
-    "model": "materials.mediaformat", 
+    "pk": 1,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Audio", 
+      "name": "Audio",
       "slug": "audio"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.mediaformat", 
+    "pk": 2,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Graphics/Photos", 
+      "name": "Graphics/Photos",
       "slug": "graphics-photos"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.mediaformat", 
+    "pk": 3,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Mobile", 
+      "name": "Mobile",
       "slug": "mobile"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.mediaformat", 
+    "pk": 4,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Other", 
+      "name": "Other",
       "slug": "other"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.mediaformat", 
+    "pk": 5,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Text/HTML", 
+      "name": "Text/HTML",
       "slug": "text-html"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.mediaformat", 
+    "pk": 6,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Downloadable docs", 
+      "name": "Downloadable docs",
       "slug": "downloadable-docs"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.mediaformat", 
+    "pk": 7,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Video", 
+      "name": "Video",
       "slug": "video"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.mediaformat", 
+    "pk": 8,
+    "model": "materials.mediaformat",
     "fields": {
-      "name": "Interactive", 
+      "name": "Interactive",
       "slug": "interactive"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.geographicrelevance", 
+    "pk": 1,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "All", 
+      "name": "All",
       "slug": "all"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.geographicrelevance", 
+    "pk": 2,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Africa", 
+      "name": "Africa",
       "slug": "africa"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.geographicrelevance", 
+    "pk": 3,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Asia", 
+      "name": "Asia",
       "slug": "asia"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.geographicrelevance", 
+    "pk": 4,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Australia", 
+      "name": "Australia",
       "slug": "australia"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.geographicrelevance", 
+    "pk": 5,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Developing countries", 
+      "name": "Developing countries",
       "slug": "developing-countries"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.geographicrelevance", 
+    "pk": 6,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Europe", 
+      "name": "Europe",
       "slug": "europe"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.geographicrelevance", 
+    "pk": 7,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "Middle East", 
+      "name": "Middle East",
       "slug": "middle-east"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.geographicrelevance", 
+    "pk": 8,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "North America", 
+      "name": "North America",
       "slug": "north-america"
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "materials.geographicrelevance", 
+    "pk": 9,
+    "model": "materials.geographicrelevance",
     "fields": {
-      "name": "South America", 
+      "name": "South America",
       "slug": "south-america"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.coursematerialtype", 
+    "pk": 1,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Activities and Labs", 
-      "slug": "activities-and-labs"
+      "name": "Activities and Labs",
+      "slug": "activities-and-labs",
+      "order": 1
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.coursematerialtype", 
+    "pk": 2,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Assessments", 
-      "slug": "assessments"
+      "name": "Assessments",
+      "slug": "assessments",
+      "order": 2
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.coursematerialtype", 
+    "pk": 3,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Audio Lectures", 
-      "slug": "audio-lectures"
+      "name": "Audio Lectures",
+      "slug": "audio-lectures",
+      "order": 3
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.coursematerialtype", 
+    "pk": 4,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Curriculum Standards", 
-      "slug": "curriculum-standards"
+      "name": "Curriculum Standards",
+      "slug": "curriculum-standards",
+      "order": 4
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.coursematerialtype", 
+    "pk": 5,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Discussion Forums", 
-      "slug": "discussion-forums"
+      "name": "Discussion Forums",
+      "slug": "discussion-forums",
+      "order": 5
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.coursematerialtype", 
+    "pk": 6,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Games", 
-      "slug": "games"
+      "name": "Games",
+      "slug": "games",
+      "order": 6
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.coursematerialtype", 
+    "pk": 7,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Homework and Assignments", 
-      "slug": "homework-and-assignments"
+      "name": "Homework and Assignments",
+      "slug": "homework-and-assignments",
+      "order": 7
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.coursematerialtype", 
+    "pk": 8,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Lecture Notes", 
-      "slug": "lecture-notes"
+      "name": "Lecture Notes",
+      "slug": "lecture-notes",
+      "order": 8
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "materials.coursematerialtype", 
+    "pk": 9,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Lesson Plans", 
-      "slug": "lesson-plans"
+      "name": "Lesson Plans",
+      "slug": "lesson-plans",
+      "order": 9
     }
-  }, 
+  },
   {
-    "pk": 10, 
-    "model": "materials.coursematerialtype", 
+    "pk": 10,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Readings", 
-      "slug": "readings"
+      "name": "Readings",
+      "slug": "readings",
+      "order": 10
     }
-  }, 
+  },
   {
-    "pk": 11, 
-    "model": "materials.coursematerialtype", 
+    "pk": 11,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Simulations", 
-      "slug": "simulations"
+      "name": "Simulations",
+      "slug": "simulations",
+      "order": 11
     }
-  }, 
+  },
   {
-    "pk": 12, 
-    "model": "materials.coursematerialtype", 
+    "pk": 12,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Syllabi", 
-      "slug": "syllabi"
+      "name": "Syllabi",
+      "slug": "syllabi",
+      "order": 12
     }
-  }, 
+  },
   {
-    "pk": 13, 
-    "model": "materials.coursematerialtype", 
+    "pk": 13,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Teaching and Learning Strategies", 
-      "slug": "teaching-and-learning-strategies"
+      "name": "Teaching and Learning Strategies",
+      "slug": "teaching-and-learning-strategies",
+      "order": 13
     }
-  }, 
+  },
   {
-    "pk": 14, 
-    "model": "materials.coursematerialtype", 
+    "pk": 14,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Textbooks", 
-      "slug": "textbooks"
+      "name": "Textbooks",
+      "slug": "textbooks",
+      "order": 14
     }
-  }, 
+  },
   {
-    "pk": 15, 
-    "model": "materials.coursematerialtype", 
+    "pk": 15,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Training Materials", 
-      "slug": "training-materials"
+      "name": "Training Materials",
+      "slug": "training-materials",
+      "order": 15
     }
-  }, 
+  },
   {
-    "pk": 16, 
-    "model": "materials.coursematerialtype", 
+    "pk": 16,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Video Lectures", 
-      "slug": "video-lectures"
+      "name": "Video Lectures",
+      "slug": "video-lectures",
+      "order": 16
     }
-  }, 
+  },
   {
-    "pk": 17, 
-    "model": "materials.coursematerialtype", 
+    "pk": 18,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Other", 
-      "slug": "other"
+      "name": "Full Course",
+      "slug": "full-course",
+      "order": 17
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.librarymaterialtype", 
+    "pk": 17,
+    "model": "materials.coursematerialtype",
     "fields": {
-      "name": "Primary Source", 
+      "name": "Other",
+      "slug": "other",
+      "order": 18
+    }
+  },
+  {
+    "pk": 1,
+    "model": "materials.librarymaterialtype",
+    "fields": {
+      "name": "Primary Source",
       "slug": "primary-source"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.librarymaterialtype", 
+    "pk": 2,
+    "model": "materials.librarymaterialtype",
     "fields": {
-      "name": "Teaching and Learning Strategies", 
+      "name": "Teaching and Learning Strategies",
       "slug": "teaching-and-learning-strategies"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.librarymaterialtype", 
+    "pk": 3,
+    "model": "materials.librarymaterialtype",
     "fields": {
-      "name": "Other", 
+      "name": "Other",
       "slug": "other"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.communitytype", 
+    "pk": 1,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "News Stories", 
+      "name": "News Stories",
       "slug": "news-stories"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.communitytype", 
+    "pk": 2,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Articles and Reports", 
+      "name": "Articles and Reports",
       "slug": "articles-and-reports"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.communitytype", 
+    "pk": 3,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Tools and Technology", 
+      "name": "Tools and Technology",
       "slug": "tools-and-technology"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.communitytype", 
+    "pk": 4,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Organizations and Associations", 
+      "name": "Organizations and Associations",
       "slug": "organizations-and-associations"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.communitytype", 
+    "pk": 5,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Conferences and Workshops", 
+      "name": "Conferences and Workshops",
       "slug": "conferences-and-workshops"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.communitytype", 
+    "pk": 6,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Discussion Forums", 
+      "name": "Discussion Forums",
       "slug": "discussion-forums"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.communitytype", 
+    "pk": 7,
+    "model": "materials.communitytype",
     "fields": {
-      "name": "Blogs and Wikis", 
+      "name": "Blogs and Wikis",
       "slug": "blogs-and-wikis"
     }
-  }, 
+  },
   {
-    "pk": 1, 
-    "model": "materials.communitytopic", 
+    "pk": 1,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "How and Why of OER", 
+      "name": "How and Why of OER",
       "slug": "how-and-why-of-oer"
     }
-  }, 
+  },
   {
-    "pk": 2, 
-    "model": "materials.communitytopic", 
+    "pk": 2,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Teaching and Learning", 
+      "name": "Teaching and Learning",
       "slug": "teaching-and-learning"
     }
-  }, 
+  },
   {
-    "pk": 3, 
-    "model": "materials.communitytopic", 
+    "pk": 3,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Localization", 
+      "name": "Localization",
       "slug": "localization"
     }
-  }, 
+  },
   {
-    "pk": 4, 
-    "model": "materials.communitytopic", 
+    "pk": 4,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Standards/Certifications", 
+      "name": "Standards/Certifications",
       "slug": "standards-certifications"
     }
-  }, 
+  },
   {
-    "pk": 5, 
-    "model": "materials.communitytopic", 
+    "pk": 5,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Intellectual Property", 
+      "name": "Intellectual Property",
       "slug": "intellectual-property"
     }
-  }, 
+  },
   {
-    "pk": 6, 
-    "model": "materials.communitytopic", 
+    "pk": 6,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Open Source", 
+      "name": "Open Source",
       "slug": "open-source"
     }
-  }, 
+  },
   {
-    "pk": 7, 
-    "model": "materials.communitytopic", 
+    "pk": 7,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Technology", 
+      "name": "Technology",
       "slug": "technology"
     }
-  }, 
+  },
   {
-    "pk": 8, 
-    "model": "materials.communitytopic", 
+    "pk": 8,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Research", 
+      "name": "Research",
       "slug": "research"
     }
-  }, 
+  },
   {
-    "pk": 9, 
-    "model": "materials.communitytopic", 
+    "pk": 9,
+    "model": "materials.communitytopic",
     "fields": {
-      "name": "Policy", 
+      "name": "Policy",
       "slug": "policy"
     }
   }

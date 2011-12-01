@@ -445,6 +445,7 @@ body.evaluation-tool {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
+  margin-left: 0.5em;
 }
 
 .evaluation-tool .rubrics section .footer .spinner {
@@ -482,6 +483,9 @@ body.evaluation-tool {
 .evaluation-tool .evaluation-results figure {
   margin-top: 1em;
   margin-bottom: 1em;
+  max-height: 640px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .evaluation-tool .evaluation-results table {

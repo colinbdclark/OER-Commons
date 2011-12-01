@@ -110,5 +110,5 @@ urlpatterns = patterns('',
     url(r'^submit/dispatch$', "iframe_submission.iframe.dispatch_iframe", name="iframe_dispatch"),
     url(r'^submit/login$', "iframe_submission.login.login", name="iframe_login"),
     url(r'^submit/post?$', "iframe_submission.submission_form.submit", name="iframe_submission_post"),
-    url(r'^(?P<microsite>[^/]+)/?$', "microsites.microsite", name="microsite"),
+    url(r'^(?P<microsite>(?:green))/?$', "microsites.microsite", name="microsite"),
 )

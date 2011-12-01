@@ -30,6 +30,7 @@ class CourseMaterialType(models.Model):
     slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
                          verbose_name=_(u"Slug"),
                          db_index=True)
+    order = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.name
@@ -38,7 +39,7 @@ class CourseMaterialType(models.Model):
         app_label = "materials"
         verbose_name = _(u"Course material type")
         verbose_name_plural = _(u"Course material types")
-        ordering = ("id",)
+        ordering = ("order", "id",)
 
     @permalink
     def get_absolute_url(self):

@@ -34,5 +34,6 @@ project/staging.py
 project/test_settings.py
 
 /project/manage.py
-project/media/LESS_CACHE/
+apps/cssreload
+project/media/cssreload/
 project/media/SCSS_CACHE/
