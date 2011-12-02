@@ -7,12 +7,12 @@ from django.utils.hashcompat import md5_constructor
 from haystack_scheduled.indexes import Indexed
 from sorl.thumbnail.shortcuts import delete
 from utils import update_item
+import httplib
+import logging
 import os
-import shlex
-import subprocess
 import sys
 import urllib
-import httplib
+import urllib2
 
 
 @task
@@ -75,16 +75,22 @@ def timeout(function=None, timeout_duration=10, default=None):
     return wrapper
 
 
+check_url_logger = logging.getLogger("oercommons.check_urls")
+
+
 def get_url_status_code(url):
     url = url.strip()
     url = urllib.quote(url, safe="%/:=&?~#+!$,;'@()*[]")
     if not url:
         return
 
+    check_url_logger.info(u"Check URL status for '%s'" % url)
+
     try:
         host = url.split('/')[2]
         path = "/" + "/".join(url.split('/')[3:])
     except:
+        check_url_logger.error(u"Invalid URL '%s'" % url)
         return None
 
     @timeout(timeout_duration=60)
@@ -95,11 +101,18 @@ def get_url_status_code(url):
             response = conn.getresponse()
             return response.status
         except TimeoutError:
+            check_url_logger.error(u"Timeout error '%s'" % url)
             raise
         except:
+            check_url_logger.error(u"'%s' %s %s" % (url, sys.exc_info()[0], sys.exc_info()[1]))
             return None
 
     status_code = get_status(host, path)
+
+    if status_code is not None:
+        check_url_logger.info(u"Response code for '%s' is %i" % (url, status_code))
+    else:
+        check_url_logger.error(u"Can't get response code code for '%s'" % url)
 
     return status_code
 
@@ -113,7 +126,18 @@ def check_url_status(item):
             item.reindex()
 
 
-def update_screenshot(item):
+
+screenshot_logger = logging.getLogger("oercommons.screenshots")
+
+
+def update_screenshot(item, force=False):
+
+    api_key = getattr(settings, "URL2PNG_KEY", None)
+    api_secret = getattr(settings, "URL2PNG_SECRET", None)
+    if not api_key or not api_secret:
+        screenshot_logger.warning(u"Either URL2PNG_KEY or URL2PNG_SECRET is missing. Can't fetch screenshot.")
+        return
+
     url = item.url
 
     url = url.strip()
@@ -122,9 +146,11 @@ def update_screenshot(item):
         return
 
     if item.http_status != 200:
-        if item.screenshot:
-            delete(item.screenshot)
-            update_item(item, screenshot=None)
+        screenshot_logger.warning(u"Skipping '%s'. HTTP status is not 200." % item.url)
+        return
+
+    if item.screenshot and not force:
+        screenshot_logger.warning(u"Skipping '%s'. Screenshot exists already." % item.url)
         return
 
     url_hash = md5_constructor(smart_str(url)).hexdigest()
@@ -144,36 +170,14 @@ def update_screenshot(item):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
-    width = 1024
-    height = 768
+    bounds = "1000x1000"
+    token = md5_constructor("%s+%s" % (api_secret, url)).hexdigest()
+    screenshot_url = "http://api.url2png.com/v3/%s/%s/%s/%s" % (api_key, token, bounds, url)
 
-    executable = settings.WEBKIT2PNG_EXECUTABLE % dict(filename=full_path,
-                                                       url='"%s"' % url.replace('"', '\\"'),
-                                                       width=width,
-                                                       height=height)
-    if isinstance(executable, unicode):
-        executable = executable.encode(sys.getfilesystemencoding())
-    args = shlex.split(executable)
+    response = urllib2.urlopen(screenshot_url, timeout=120)
+    f = open(full_path, "w+")
+    f.write(response.read())
+    f.close()
+    update_item(item, screenshot=filename)
+    screenshot_logger.info(u"Fetched screenshot for '%s'" % url)
 
-    @timeout(timeout_duration=60*2)
-    def fetch_screenshot(args):
-        p = subprocess.Popen(args)
-        try:
-            p.wait()
-            return 1
-        except TimeoutError:
-            p.kill()
-            raise
-        finally:
-            try:
-                p.terminate()
-            except OSError:
-                pass
-        return None
-
-    result = fetch_screenshot(args)
-    if result:
-        if os.path.exists(full_path):
-            update_item(item, screenshot=filename)
-    else:
-        update_item(item, screenshot=None)
