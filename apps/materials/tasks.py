@@ -177,9 +177,9 @@ def update_screenshot(item, force=False):
     try:
         response = urllib2.urlopen(screenshot_url, timeout=120)
     except:
-        screenshot_logger.error(u"Failed to fetch screenshot for '%s': %s %s" % (url, sys.exc_info()[0], sys.exc_info(1)))
+        screenshot_logger.error(u"Failed to fetch screenshot for '%s': %s %s" % (url, sys.exc_info()[0], sys.exc_info()[1]))
         return
-    
+
     f = open(full_path, "w+")
     f.write(response.read())
     f.close()
