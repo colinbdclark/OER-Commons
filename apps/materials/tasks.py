@@ -174,7 +174,12 @@ def update_screenshot(item, force=False):
     token = md5_constructor("%s+%s" % (api_secret, url)).hexdigest()
     screenshot_url = "http://api.url2png.com/v3/%s/%s/%s/%s" % (api_key, token, bounds, url)
 
-    response = urllib2.urlopen(screenshot_url, timeout=120)
+    try:
+        response = urllib2.urlopen(screenshot_url, timeout=120)
+    except:
+        screenshot_logger.error(u"Failed to fetch screenshot for '%s': %s %s" % (url, sys.exc_info()[0], sys.exc_info(1)))
+        return
+    
     f = open(full_path, "w+")
     f.write(response.read())
     f.close()
