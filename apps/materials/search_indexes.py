@@ -84,6 +84,9 @@ class MaterialSearchIndex(ScheduledSearchIndex, EvaluatedItemIndex):
 
     visits = IntegerField(model_attr="visits")
 
+    alignment_standards = MultiValueField(model_attr="alignment_standards")
+    alignment_grades = MultiValueField(model_attr="alignment_grades")
+    alignment_categories = MultiValueField(model_attr="alignment_categories")
     alignment_tags = AlignmentTagsField(model_attr="alignment_tags")
 
 

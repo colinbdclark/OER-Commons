@@ -178,10 +178,12 @@ class EvaluatedItemMixin(object):
             rubric_ids = [0] + list(Rubric.objects.values_list("id", flat=True))
             rubric_id = int(r.groups()[0])
             if rubric_id not in rubric_ids:
-                raise AttributeError()
+                raise AttributeError(name)
             return self.evaluation_scores.get(rubric_id)
         #noinspection PyUnresolvedReferences
-        return super(EvaluatedItemMixin, self).__getattr__(name)
+        if hasattr(super(EvaluatedItemMixin, self), "__getattr__"):
+            return super(EvaluatedItemMixin, self).__getattr__(name)
+        raise AttributeError(name)
 
 
 def get_rubric_choices():

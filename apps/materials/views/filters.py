@@ -1,4 +1,5 @@
-from curriculum.models import TaggedMaterial, AlignmentTag
+from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade,\
+    LearningObjectiveCategory
 from django.http import Http404
 from materials.models.common import Keyword, GeneralSubject, GradeLevel, \
     MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS, \
@@ -9,6 +10,7 @@ from materials.models.library import LibraryMaterialType
 from materials.models.material import MEMBER_ACTIVITY_TYPES
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_slug
+from ordereddict import OrderedDict
 from rubrics.models import get_rubric_choices
 from tags.models import Tag
 from utils.templatetags.utils import truncatechars
@@ -273,6 +275,68 @@ class AlignmentClusterFilter(AlignmentFilter):
         return "Cluster: %s" % ",".join(sorted(clusters))
 
 
+class AlignmentStandardFilter(AlignmentFilter):
+
+    @property
+    def available_values(self):
+        return set(TaggedMaterial.objects.all().values_list("tag__standard__id", flat=True).order_by().distinct())
+
+    def extract_value(self, request):
+        value = request.REQUEST.getlist(self.request_name)
+        if not value:
+            return None
+        value_ = []
+        for v in value:
+            try:
+                v = int(v)
+            except (TypeError, ValueError):
+                continue
+            value_.append(v)
+        if not value_:
+            return None
+        return value_
+
+    def update_query(self, query, value):
+        if not isinstance(value, list):
+            value = [value]
+
+        available_values = self.available_values
+
+        if set(value) - available_values:
+            raise Http404()
+
+        return query.narrow(u"%s:(%s)" % (self.index_name, u" OR ".join(map(str, value))))
+
+    def page_subtitle(self, value):
+        if not isinstance(value, list):
+            value = [value]
+        return ",".join([Standard.objects.get(id=id).name for id in value])
+
+
+class AlignmentGradeFilter(AlignmentStandardFilter):
+
+    @property
+    def available_values(self):
+        return set(TaggedMaterial.objects.all().values_list("tag__grade__id", flat=True).order_by().distinct())
+
+    def page_subtitle(self, value):
+        if not isinstance(value, list):
+            value = [value]
+        return ",".join([unicode(Grade.objects.get(id=id)) for id in value])
+
+
+class AlignmentCategoryFilter(AlignmentStandardFilter):
+
+    @property
+    def available_values(self):
+        return set(TaggedMaterial.objects.all().values_list("tag__category__id", flat=True).order_by().distinct())
+
+    def page_subtitle(self, value):
+        if not isinstance(value, list):
+            value = [value]
+        return ",".join([unicode(LearningObjectiveCategory.objects.get(id=id)) for id in value])
+
+
 class SearchParameters(object):
 
     EXACT_PHRASES_RE = re.compile(r'"[\s]*([^"]+?)[\s]*"', re.I | re.U)
@@ -408,28 +472,31 @@ class RubricFilter(ChoicesFilter):
         return value
 
 
-FILTERS = {
-    "general_subjects": VocabularyFilter("general_subjects", "f.general_subject", GeneralSubject, u"Subject Area"),
-    "grade_levels": VocabularyFilter("grade_levels", "f.edu_level", GradeLevel, u"Grade Level"),
-    "course_material_types": VocabularyFilter("course_material_types", "f.material_types", CourseMaterialType, u"Material Type"),
-    "library_material_types": VocabularyFilter("library_material_types", "f.lib_material_types", LibraryMaterialType, u"Material Type"),
-    "media_formats": VocabularyFilter("media_formats", "f.media_formats", MediaFormat, u"Media Format"),
-    "languages": VocabularyFilter("languages", "f.language", Language, u"Language"),
-    "geographic_relevance": VocabularyFilter("geographic_relevance", "f.geographic_relevance", GeographicRelevance, u"Intended Regional Relevance"),
-    "community_types": VocabularyFilter("community_types", "f.oer_type", CommunityType, u"OER Community Type"),
-    "community_topics": VocabularyFilter("community_topics", "f.oer_topic", CommunityTopic, u"OER Community Topic"),
-    "course_or_module": ChoicesFilter("course_or_module", "f.course_or_module", COURSE_OR_MODULE, u"Course Type"),
-    "cou_bucket": ChoicesFilter("cou_bucket", "f.cou_bucket", COU_BUCKETS, u"Conditions of Use"),
-    "license_type": ChoicesFilter("license", "f.license", LICENSE_TYPES, u"Conditions of Use"),
-    "member_activities": ChoicesFilter("member_activities", "f.member_activity", MEMBER_ACTIVITY_TYPES, u"Member Activity"),
-    "collection": VocabularyFilter("collection", "f.collection", Collection, u"Collection"),
-    "keywords": KeywordFilter("keywords", "f.keyword"),
-    "microsite": VocabularyFilter("microsites", "f.microsite", Microsite, u"Topic", ignore_all_values=False),
-    "topics": VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic"),
-    "featured": BooleanFilter("featured", "f.featured", u"Featured Resources"),
-    "alignment": AlignmentFilter("alignment_tags", "f.alignment"),
-    "alignment_cluster": AlignmentClusterFilter("alignment_tags", "f.cluster"),
-    "evaluated_rubrics": RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric"),
-    "search": SearchFilter(),
-}
+FILTERS = OrderedDict([
+    ("general_subjects", VocabularyFilter("general_subjects", "f.general_subject", GeneralSubject, u"Subject Area")),
+    ("grade_levels", VocabularyFilter("grade_levels", "f.edu_level", GradeLevel, u"Grade Level")),
+    ("course_material_types", VocabularyFilter("course_material_types", "f.material_types", CourseMaterialType, u"Material Type")),
+    ("library_material_types", VocabularyFilter("library_material_types", "f.lib_material_types", LibraryMaterialType, u"Material Type")),
+    ("media_formats", VocabularyFilter("media_formats", "f.media_formats", MediaFormat, u"Media Format")),
+    ("languages", VocabularyFilter("languages", "f.language", Language, u"Language")),
+    ("geographic_relevance", VocabularyFilter("geographic_relevance", "f.geographic_relevance", GeographicRelevance, u"Intended Regional Relevance")),
+    ("community_types", VocabularyFilter("community_types", "f.oer_type", CommunityType, u"OER Community Type")),
+    ("community_topics", VocabularyFilter("community_topics", "f.oer_topic", CommunityTopic, u"OER Community Topic")),
+    ("course_or_module", ChoicesFilter("course_or_module", "f.course_or_module", COURSE_OR_MODULE, u"Course Type")),
+    ("cou_bucket", ChoicesFilter("cou_bucket", "f.cou_bucket", COU_BUCKETS, u"Conditions of Use")),
+    ("license_type", ChoicesFilter("license", "f.license", LICENSE_TYPES, u"Conditions of Use")),
+    ("member_activities", ChoicesFilter("member_activities", "f.member_activity", MEMBER_ACTIVITY_TYPES, u"Member Activity")),
+    ("collection", VocabularyFilter("collection", "f.collection", Collection, u"Collection")),
+    ("keywords", KeywordFilter("keywords", "f.keyword")),
+    ("microsite", VocabularyFilter("microsites", "f.microsite", Microsite, u"Topic", ignore_all_values=False)),
+    ("topics", VocabularyFilter("indexed_topics", "f.subtopic", Topic, u"SubTopic")),
+    ("featured", BooleanFilter("featured", "f.featured", u"Featured Resources")),
+    ("alignment", AlignmentFilter("alignment_tags", "f.alignment")),
+    ("alignment_standards", AlignmentStandardFilter("alignment_standards", "f.alignment_standard")),
+    ("alignment_grades", AlignmentGradeFilter("alignment_grades", "f.alignment_grade")),
+    ("alignment_categories", AlignmentCategoryFilter("alignment_categories", "f.alignment_category")),
+    ("alignment_cluster", AlignmentClusterFilter("alignment_tags", "f.cluster")),
+    ("evaluated_rubrics", RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric")),
+    ("search", SearchFilter()),
+])
 

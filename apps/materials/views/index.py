@@ -457,10 +457,12 @@ def index(request, general_subjects=None, grade_levels=None,
     if not page_subtitle and model:
         page_subtitle = u"Content Type: %s" % model._meta.verbose_name_plural
     elif not page_subtitle and filter_values:
-        filter_name = filter_values.keys()[0]
-        filter = FILTERS[filter_name]
-        page_subtitle = filter.page_subtitle(filter_values[filter_name])
-
+        subtitles = []
+        for filter_name, filter in FILTERS.items():
+            if filter_name not in filter_values:
+                continue
+            subtitles.append(filter.page_subtitle(filter_values[filter_name]))
+        page_subtitle = u" / ".join(subtitles)
 
     index_params = IndexParams(request, format, search_query)
     query_string_params = index_params.update_query_string_params(query_string_params)
