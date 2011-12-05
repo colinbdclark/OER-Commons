@@ -15,6 +15,7 @@ from materials.utils import get_name_from_id, get_slug_from_id, \
     first_neighbours_last, get_name_from_slug, get_object
 from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
+from rubrics.models import Rubric
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 import urllib
@@ -483,7 +484,17 @@ def index(request, general_subjects=None, grade_levels=None,
 
     if len(filter_values) == 1 and "featured" in filter_values:
         query = query.order_by("-featured_on")
-    elif len(filter_values) == 1 and "evaluated_rubrics" in filter_values:
+    elif "evaluated_rubrics" in filter_values:
+        rubric_id = filter_values["evaluated_rubrics"][0]
+        if rubric_id == 0:
+            rubric_name = u"Degree of Alignment"
+        else:
+            rubric_name = Rubric.objects.get(id=rubric_id).name
+        index_params.SORT_BY_OPTIONS = list(index_params.SORT_BY_OPTIONS) + [
+            dict(value="evaluation_score_rubric_%i" % rubric_id,
+                 title=rubric_name)
+        ]
+        index_params.sort_by = "evaluation_score_rubric_%i" % rubric_id
         query = query.order_by("-evaluation_score_rubric_%i" % filter_values["evaluated_rubrics"][0])
     elif index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
