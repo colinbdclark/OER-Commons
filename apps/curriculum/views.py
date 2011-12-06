@@ -250,7 +250,7 @@ def list_tags(request, existing=False):
         return HttpResponseBadRequest()
 
     if existing:
-        tags = list(
+        tags = set(
             tagged.tag for tagged in TaggedMaterial.objects.filter(
                 tag__standard=standard,
                 tag__grade=grade,
