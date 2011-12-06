@@ -49,26 +49,29 @@ oer.align_form.init_tag_tooltip = function ($a) {
 };
 
 oer.align_form.init_user_tags = function ($tags, $form) {
-  $tags.delegate("a", "click", function (e) {
-    var $this = $(this);
-    if ($this.hasClass("delete")) {
-      e.preventDefault();
-      var $li = $this.closest("li");
-      var id = $li.data("id");
-      $.post($form.data("delete-url"), {
-        id: id
-      }, function () {
-      });
-      var code = $this.prev('a').text();
-      var $lis = $tags.find("a:econtains(" + code + ")").parent();
-      $lis.fadeOut(250, function () {
-        $(this).detach();
-        $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
-      });
-    } else if ($tags.parents("#align-form").length) {
-      e.preventDefault();
-    }
-  });
+  $tags.each(function(i, tags) {
+    var $tags = $(tags);
+    $tags.delegate("a", "click", function (e) {
+      var $this = $(this);
+      if ($this.hasClass("delete")) {
+        e.preventDefault();
+        var $li = $this.closest("li");
+        var id = $li.data("id");
+        $.post($form.data("delete-url"), {
+          id: id
+        }, function () {
+        });
+        var code = $this.prev('a').text();
+        var $lis = $tags.find("a:econtains(" + code + ")").parent();
+        $lis.fadeOut(250, function () {
+          $(this).detach();
+          $(document).trigger(oer.align_form.TAGS_CHANGED_EVENT);
+        });
+      } else if ($tags.parents("#align-form").length) {
+        e.preventDefault();
+      }
+    });
+  })
 };
 
 oer.align_form.init = function () {
