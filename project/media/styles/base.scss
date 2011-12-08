@@ -43,19 +43,25 @@ hr.tall {
 }
 
 .breadcrumbs {
-  margin-top: 5px;
   @include fixed-container;
+  margin-bottom: $baseline / 2;
 }
 
 .page-title {
   @include fixed-container;
-  margin-top: 5px;
+  @include change-text-size(2);
+  margin-bottom: $baseline / 2;
   color: #668D16;
   font-weight: normal;
-  font-size: 25px;
   span {
     color: #666;
   }
+}
+
+.page-title-sep {
+  @include fixed-container;
+  border-top: 1px solid $grayLighter;
+  margin-bottom: $baseline / 2;
 }
 
 .status-message {
@@ -149,24 +155,6 @@ a.expand-button.expanded {
 
 .promo a {
   text-decoration: none;
-}
-
-div.box {
-  border: 1px solid #BCCACD;
-  background: #F3F7F8;
-}
-
-div.box h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 10px;
-  height: 39px;
-  background: #F3F7F8 url(../images/box-header-bg.png) repeat-x 0 0;
-  color: white;
-  line-height: 33px;
-  font-weight: bold;
-  font-style: normal;
-  font-size: 16px;
 }
 
 #content.contribute a {
@@ -297,4 +285,20 @@ div.box h3 {
 .ui-effects-transfer {
   z-index: 9999;
   border: 1px solid #333;
+}
+
+.box {
+  margin-bottom: $baseline / 1.5;
+  h1 {
+    @include change-text-size(1.3);
+    @include dotted;
+    margin-bottom: $baseline / 2;
+    color: #666666;
+    font-weight: normal;
+    &.green {
+      color: #679801;
+      background: none;
+      padding-bottom: 0;
+    }
+  }
 }

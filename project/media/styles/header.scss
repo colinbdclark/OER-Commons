@@ -73,11 +73,11 @@ header.global nav a.button-contribute {
 
 .global-tabs {
   @include fixed-container;
+  margin-bottom: $baseline / 2;
   position: relative;
 }
 
 .global-tabs nav {
-  margin-bottom: 10px;
   height: 40px;
 }
 

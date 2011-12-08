@@ -50,16 +50,6 @@
   }
 }
 
-.frontpage-block {
-  h1 {
-    @include change-text-size(1.3);
-    @include dotted;
-    margin-bottom: $baseline / 2;
-    color: #666666;
-    font-weight: normal;
-  }
-}
-
 .featured-resources {
   background: url(../images/dotted-line-vert.gif) repeat-y ($contentWidth + $gridGutterWidth) / 2 0;
   margin-bottom: $baseline / 2;
@@ -81,7 +71,7 @@
   }
 }
 
-.frontpage-block.tags {
+.box.tags {
   .tag-cloud {
     @include change-line-height(1.3);
   }

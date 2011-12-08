@@ -40,6 +40,18 @@ body.no-columns {
   }
 }
 
+body.no-right-column {
+ .layout-columns > .wrap {
+   background: none;
+  }
+  .column-main {
+    @include columns($gridColumns - $sidebarColumns);
+  }
+  .column-right {
+    display: none;
+  }
+}
+
 body.wide-right-column {
   .layout-columns {
     background: none;

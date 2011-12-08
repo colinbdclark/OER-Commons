@@ -413,75 +413,27 @@
   background: url(../images/icon-save.png) no-repeat 0 50%;
 }
 
-/* Browse All */
-.content .browse-materials {
-  border: 1px #bccacd;
-  border-style: none solid solid solid;
-  background: #f3f7f8;
-}
-
-.content .browse-materials table {
-  margin-bottom: 10px;
-}
-
-.content .browse-materials thead th {
-  padding: 7px 0 14px 0;
-  background: #f3f7f8 url(../images/box-header-bg.png) repeat-x 0 0;
-  color: white;
-  text-align: center;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.content .browse-materials  th a, .content .browse-materials  th a:visited {
-  color: white;
-}
-
-.content .browse-materials  th.sep {
-  background: #f3f7f8 url(../images/box-header-sep.png) no-repeat 0 0;
-}
-
-.content .browse-materials  th.sep div {
-  width: 11px;
-}
-
-.content .browse-materials  td {
-  padding: 0;
-}
-
-.content .browse-materials  ul {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.content .browse-materials  li {
-  margin: 7px 15px;
-  color: #2683a5;
-  list-style-type: none;
-  font-weight: bold;
-}
-
-.content .browse-materials  li a, .content .browse-materials  li a:visited {
-  color: #2683a5;
-  text-decoration: none;
-}
-
-.content .browse-materials  li span {
-  float: right;
-}
-
-.content .browse-materials td.sep {
-  background: #f3f7f8 url(../images/browse-table-column-sep.png) repeat-y 0 0;
-}
-
-.content .browse-materials td.sep div, .content .browse-materials  td.nosep div {
-  width: 11px;
-}
-
-.content .browse-materials.providers li {
-  margin: 7px 10px;
-  list-style-type: none;
-  font-size: 12px;
+.browse-materials,
+.browse-providers {
+  ul {
+    margin-left: 1em;
+  }
+  li {
+    position: relative;
+    @include change-text-size(1.1);
+    padding-right: 3em;
+    margin-bottom: 0.5em;
+    span {
+      position: absolute;
+      top: 4px;
+      right: 0;
+      background: #fff;
+      @include change-text-size(0.9);
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .csv-icon {

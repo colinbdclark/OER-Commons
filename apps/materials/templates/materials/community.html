@@ -2,48 +2,41 @@
 {% load materials_tags %}
 
 
+{% block contentclass %}browse-materials{% endblock %}
+
 {% block content %}
+  <div class="promo">
+    We believe a culture of sharing resources and practices will help
+    facilitate change and innovation in education. OER Commons gathers relevant
+    materials about teaching, technology, research, and more, and encourages you
+    to add links to materials, projects, or news related to the emerging field of
+    Open Education. See the
+    <a href="http://wiki.oercommons.org/mediawiki/index.php/Main_Page">OER Commons
+    Wiki</a> for more about our ongoing programs and research.
+  </div>
 
-<div class="promo">
-  We believe a culture of sharing resources and practices will help 
-  facilitate change and innovation in education. OER Commons gathers relevant 
-  materials about teaching, technology, research, and more, and encourages you 
-  to add links to materials, projects, or news related to the emerging field of 
-  Open Education. See the
-  <a href="http://wiki.oercommons.org/mediawiki/index.php/Main_Page">OER Commons
-  Wiki</a> for more about our ongoing programs and research.
-</div>
-
-<div class="browse-materials">
-  <table cellspacing="0" border="0" width="100%">
-    <thead><tr>
-      <th width="50%">OER Community Topics</th>
-      <th class="sep"><div></div></th>
-      <th width="50%">OER Community Types</th>
-    </tr></thead>
-    <tbody><tr>
-      <td>
-        <ul>
-          {% for item in community_topics %}
-          <li>
-            <span>({{ item.count }})</span>
-            <a href="{% url materials:community:community_topic_index community_topics=item.slug %}">{{ item.name|shrink:100 }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </td>
-      <td class="sep"> </td>
-      <td>
-        <ul>
-          {% for item in community_types %}
-          <li>
-            <span>({{ item.count }})</span>
-            <a href="{% url materials:community:community_type_index community_types=item.slug %}">{{ item.name|shrink:100 }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </td>
-    </tr></tbody>
-  </table>
-</div>
+  <div class="row">
+    <div class="box span7">
+      <h1>OER community topics</h1>
+      <ul class="unstyled">
+        {% for item in community_topics %}
+        <li>
+          <a href="{% url materials:community:community_topic_index community_topics=item.slug %}">{{ item.name|shrink:100 }}</a>
+          <span>{{ item.count }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="box span7">
+      <h1>OER community types</h1>
+      <ul class="unstyled">
+        {% for item in community_types %}
+        <li>
+          <a href="{% url materials:community:community_type_index community_types=item.slug %}">{{ item.name|shrink:100 }}</a>
+          <span>{{ item.count }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 {% endblock %}

@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% load materials_tags %}
 
+{% block bodyclass %}no-right-column{% endblock %}
 
 {% block column-left %}
-  <section class="portlet browse-materials">
+  <section class="box portlet browse-materials">
     <a href="{% url materials:browse %}">Browse OER Materials</a>
   </section>
 
-  <section class="portlet featured-provider">
-    <h1 class="dotted">Featured Collection Provider</h1>
+  <section class="box portlet featured-provider">
+    <h1>Featured Collection Provider</h1>
     <dl>
       <dt><a href="/browse/collection/stories-of-the-american-south">Stories of the American South</a></dt>
       <dd>The library of the University of North Carolina at Chapel Hill presents Stories of the American South.</dd>
@@ -16,38 +17,31 @@
   </section>
 {% endblock %}
 
+{% block contentclass %}browse-providers{% endblock %}
 
 {% block content %}
-<div class="browse-materials providers">
-  <table cellspacing="0" border="0" width="100%">
-    <thead><tr>
-      <th width="50%">Course Related Materials</th>
-      <th class="sep"><div></div></th>
-      <th width="50%">Libraries and Collections</th>
-    </tr></thead>
-    <tbody><tr>
-      <td>
-        <ul>
-          {% for item in course_collections %}
-          <li>
-            <span>({{ item.count }})</span>
-            <a href="{% url materials:courses:collection_index collection=item.slug %}">{{ item.name }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </td>
-      <td class="sep"> </td>
-      <td>
-        <ul>
-          {% for item in library_collections %}
-          <li>
-            <span>({{ item.count }})</span>
-            <a href="{% url materials:libraries:collection_index collection=item.slug %}">{{ item.name }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </td>
-    </tr></tbody>
-  </table>
-</div>
+  <div class="row">
+    <div class="box span9">
+      <h1>Course related materials</h1>
+      <ul class="unstyled">
+        {% for item in course_collections %}
+        <li>
+          <a href="{% url materials:courses:collection_index collection=item.slug %}">{{ item.name }}</a>
+          <span>{{ item.count }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="box span9">
+      <h1>Libraries and collections</h1>
+      <ul class="unstyled">
+        {% for item in library_collections %}
+        <li>
+          <a href="{% url materials:libraries:collection_index collection=item.slug %}">{{ item.name }}</a>
+          <span>{{ item.count }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 {% endblock %}

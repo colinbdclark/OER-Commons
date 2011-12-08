@@ -2,23 +2,8 @@
 @import "bootstrap/mixins.scss";
 @import "mixins.scss";
 
-.portlet {
-  margin-bottom: $baseline / 1.5;
-}
-
 .portlet.dotted {
   padding-bottom: $baseline / 1.5 + 1;
-}
-
-.portlet h1 {
-  @include change-text-size(1.3);
-  margin-bottom: $baseline / 2;
-  color: #666666;
-  font-weight: normal;
-}
-
-.portlet h1.green {
-  color: #679801;
 }
 
 .portlet h2 {
@@ -89,22 +74,13 @@
   margin: 0;
 }
 
-.portlet.featured-searches ul {
-  list-style-type: none;
-}
-
 .portlet.browse-providers, .portlet.browse-materials {
   margin-bottom: 20px;
 }
 
 .portlet.browse-providers a, .portlet.browse-materials a {
   font-weight: bold;
-  font-size: 16px;
-}
-
-.portlet.featured-searches li {
-  margin: 7px 0;
-  font-weight: bold;
+  @include change-text-size(1.2);
 }
 
 .portlet.featured-provider dt {

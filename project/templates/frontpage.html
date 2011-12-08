@@ -59,8 +59,8 @@
 {% endblock %}
 
 {% block column-left %}
-<section class="portlet oermaterials dotted">
-  <h1 class="dotted">OER Materials</h1>
+<section class="box portlet oermaterials dotted">
+  <h1>OER Materials</h1>
   <div class="accordion clearfix">
     <h2 class="accordion-header"><span class="handler">Subject Areas</span></h2>
     <div class="accordion-body">
@@ -102,7 +102,7 @@
   <h2><a href="{% url materials:browse_providers %}">Browse by Provider</a></h2>
 </section>
 
-<section class="portlet" id="sponsors-portlet">
+<section class="box portlet" id="sponsors-portlet">
   <h1 class="green">Sponsorship</h1>
   <p>OER Commons is a project of <a href="http://www.iskme.org">ISKME</a></p>
   <div>
@@ -118,7 +118,7 @@
     {% flatblock "recommended-resources" using "flatblocks/frontpage-block.html" %}
   </div>
   {% include "include/featured-resources.html" %}
-  <section class="frontpage-block tags">
+  <section class="box tags">
     <h1>Tags</h1>
     <div class="tag-cloud dotted">
       {% for keyword in tagcloud %}
@@ -135,7 +135,7 @@
 
 {% include "include/portlets/bookmarklet.html" %}
 
-<section class="portlet twitter dotted">
+<section class="box portlet twitter dotted">
   <h1 class="green">OER Commons Tweets</h1>
   {% if tweets %}
   <ul class="tweets">

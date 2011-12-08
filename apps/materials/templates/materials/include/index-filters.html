@@ -1,6 +1,6 @@
 {% load materials_tags %}
 
-<section class="portlet index-filters">
+<section class="box portlet index-filters">
   <form name="index-filters" class="form-stacked" action="{{ request.path }}">
 
     <input type="hidden" name="batch_size" value="{{ index_params.batch_size }}" />
@@ -9,7 +9,7 @@
 
     {% hidden_filters hidden_filters %}
 
-    <h1 class="dotted">You searched for:</h1>
+    <h1>You searched for:</h1>
 
     <div class="search">
       <input type="text" name="f.search" class="span5" value="{{ search_query }}" />
@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <h1 class="dotted">Refine your search</h1>
+    <h1>Refine your search</h1>
 
     {% with index_filters.general_subjects as filter %}
       {% if filter.options %}
