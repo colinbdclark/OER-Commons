@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <h1 class="dotted">Refine Your Search</h1>
+    <h1 class="dotted">Refine your search</h1>
 
     {% with index_filters.general_subjects as filter %}
       {% if filter.options %}
@@ -52,7 +52,7 @@
         <div class="dotted filter grade-levels collapsible">
           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
           <ul class="inputs-list">
-            <li>
+            <li class="first">
               <label>
                 <input type="checkbox" name="{{ filter.name }}"
                        value="yes" {% if filter.all_checked %}checked="checked"{% endif %}

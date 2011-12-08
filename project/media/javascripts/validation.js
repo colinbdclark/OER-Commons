@@ -53,7 +53,15 @@ oer.validation.rules.newsletter = {
 
 $.validator.setDefaults({
   errorPlacement: function(error, element) {
-    error.appendTo(element.closest(".field").find(".errors"));
+    error.prependTo(element.closest(".input"));
+  },
+  errorElement: "span",
+  errorClass: "help-block",
+  highlight: function(element, errorClass, validClass) {
+    $(element).closest(".input").parent().addClass("error");
+  },
+  unhighlight: function(element, errorClass, validClass) {
+    $(element).closest(".input").parent().removeClass("error");
   },
   submitHandler: function(form) {
     if (!this.been_submited) {

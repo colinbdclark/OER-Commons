@@ -35,7 +35,7 @@
   <p class="no-items-match">No items match your search.</p>
   {% endif %}
   </div>
-  
+
   {% save_search_form index_url index_title %}
   {% send_this_form index_url %}
 
@@ -46,13 +46,13 @@
   <div id="align-dialog" style="display: none;">
       {% align_form %}
   </div>
-  
+
 {% endblock %}
 
 {% block column-right %}
    {% if items %}
-   <section class="portlet top-keywords dotted">
-     <h1 class="dotted">{% if microsite %}<span class="icon"></span> {% endif %}Top Keywords</h1>
+   <section class="portlet top-keywords">
+     <h1 class="dotted">{% if microsite %}<span class="icon"></span> {% endif %}Top keywords</h1>
      <div class="tag-cloud top dotted">
        {% for keyword in top_keywords %}
          <a href="{% url materials:keyword_index keywords=keyword.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>
@@ -68,7 +68,7 @@
      {% endif %}
    </section>
    {% endif %}
-   
+
    {% include "include/portlets/cou.html" %}
-   
+
 {% endblock %}

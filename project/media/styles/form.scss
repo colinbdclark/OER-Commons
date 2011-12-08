@@ -1,32 +1,6 @@
-input.text, textarea.text {
-  margin: 3px 0;
-  padding: 1px 2px;
-  border: 1px solid #9D9D9D;
-  background: #fff none;
-  font-size: 14px;
-}
-
-input.button {
-  overflow: visible;
-  padding: 0 10px;
-  width: auto;
-  border: 1px solid #799BA5;
-  background: url(../images/button-bg.png) repeat-x scroll 0 0 #DADADA;
-  color: #0D5470;
-  line-height: 20px;
-  font-size: 14px;
-}
-
-form.formatted .field {
-  margin-bottom: 10px;
-}
-
-form.formatted label {
-  margin-top: 5px;
-  margin-bottom: 3px;
-  padding-top: 3px;
-  color: #333;
-  font-weight: bold;
+.form-stacked div.clearfix.error {
+  padding: 0;
+  margin-left: 0;
 }
 
 form.formatted .required label {
@@ -39,53 +13,6 @@ form.formatted  label.show-password {
   padding-left: 10px;
   background: none;
   font-weight: normal;
-}
-
-form.formatted .field ul {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
-
-form.formatted .field ul li {
-  margin: 0;
-  padding: 0;
-}
-
-form.formatted .field ul label {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-top: 0;
-  font-weight: normal;
-}
-
-form.formatted .field.required ul label {
-  padding-right: 0;
-  background: none;
-}
-
-form.formatted .help {
-  margin-bottom: 3px;
-  color: #666;
-  font-style: italic;
-  font-size: 12px;
-}
-
-form.formatted label.error {
-  display: block;
-  margin: 0;
-  padding: 0;
-  background: none;
-  color: red;
-  font-weight: normal;
-}
-
-form.formatted label.error a {
-  text-decoration: none;
-}
-
-form.formatted .buttons {
-  text-align: right;
 }
 
 form.reset-password-init {

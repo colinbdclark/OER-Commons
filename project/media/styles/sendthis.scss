@@ -1,3 +1,5 @@
+@import "mixins.scss";
+
 form.send-this-popup {
   position: absolute;
   z-index: 99;
@@ -11,17 +13,10 @@ form.send-this-popup {
 }
 
 form.send-this-popup h4 {
-  margin-top: 0;
-  margin-bottom: 5px;
-  padding-bottom: 3px;
-  color: #666;
+  @include change-text-size(1.3);
+  margin-bottom: $baseline / 2;
+  color: #666666;
   font-weight: normal;
-  font-style: normal;
-  font-size: 14px;
-}
-
-form.send-this-popup .field {
-  margin-bottom: 0;
 }
 
 form.send-this-popup .text {
@@ -35,17 +30,4 @@ form.send-this-popup textarea {
 form.send-this-popup textarea,
 form.send-this textarea {
   resize: none;
-}
-
-form.send-this {
-  margin: 0 auto;
-  width: 550px;
-}
-
-form.send-this .text {
-  width: 542px;
-}
-
-form.send-this a {
-  text-decoration: none;
 }
