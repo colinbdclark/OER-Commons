@@ -277,7 +277,7 @@
 {% endblock %}
 
 {% block column-right %}
-  <section class="portlet dotted save">
+  <section class="box portlet save">
     {% if saved %}
       <a href="{{ unsave_url }}" class="require-login">Remove from My Items</a>
     {% else %}
@@ -285,7 +285,7 @@
     {% endif %}
   </section>
 
-  <section class="portlet dotted">
+  <section class="box portlet">
     <h1>Rate and Review</h1>
     {% stars item.identifier item.ratings.all %}
     <div>
@@ -348,7 +348,7 @@
 
   {% align_item_tags_portlet item %}
 
-  <section class="portlet addthis dotted">
+  <section class="box portlet addthis">
     <h1>Share</h1>
       <div class="addthis_toolbox addthis_32x32_style addthis_default_style">
           <a class="addthis_button_facebook"></a>
@@ -359,7 +359,7 @@
       <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=oercommons"></script>
   </section>
 
-  <section class="portlet item-tags">
+  <section class="box portlet item-tags">
     <h1>Tags</h1>
     <p>Keywords, descriptive words, interested groups &amp; more</p>
     <ul>
@@ -389,7 +389,8 @@
     </ul>
 
     <form action="{{ add_tags_url }}"
-          method="post" id="add-tags-form" name="add-tags-form">
+          method="post" id="add-tags-form" name="add-tags-form"
+            class="form-stacked">
       <label for="id_tags">Add new tag:</label>
       <input type="text" name="tags" id="id_tags" value="" class="text" />
     </form>

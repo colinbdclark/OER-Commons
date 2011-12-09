@@ -107,10 +107,14 @@ body.authenticated .user-tags {
   margin: 0;
   padding: 0;
   width: 16px;
-  height: 16px;
+  height: 20px;
   background: transparent url(../images/icon-delete-gray.png) no-repeat 50% 50%;
   vertical-align: middle;
   text-indent: -9999px;
+}
+
+.portlet.item-tags .form-stacked {
+  padding-left: 0;
 }
 
 #add-tags-form {

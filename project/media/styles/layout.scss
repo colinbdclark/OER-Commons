@@ -64,6 +64,7 @@ body.wide-right-column {
   }
   .column-main {
     @include columns($gridColumns - $wideSidebarColumns);
+    margin-left: 0;
   }
   .column-right {
     @include columns($wideSidebarColumns);

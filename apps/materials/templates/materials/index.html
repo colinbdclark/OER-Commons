@@ -59,7 +59,7 @@
        {% endfor %}
      </div>
      {% if all_keywords %}
-     <a href="#" class="see-more">See more</a>
+     <a href="#" class="dashed see-more">See more</a>
      <div class="tag-cloud all">
        {% for keyword in all_keywords %}
          <a href="{% url materials:keyword_index keywords=keyword.slug %}" class="tag{{ keyword.number }}">{{ keyword.name }}</a>

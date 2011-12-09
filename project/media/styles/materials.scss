@@ -22,24 +22,19 @@
   margin-bottom: $baseline / 3;
 }
 
-.view-item h1 {
-  margin-bottom: 15px;
-  font-weight: bold;
-  font-style: normal;
-  font-size: 20px;
-}
-
-.view-item h1 a {
-  color: #1F4D64;
-}
-
-.view-item h1 a:hover {
-  text-decoration: underline;
-}
-
-.view-item h1 a img {
-  margin-right: 1px;
-  vertical-align: text-top;
+.view-item.item {
+  h1 {
+    font-weight: bold;
+    @include change-text-size(1.5);
+    margin-bottom: $baseline;
+    a {
+      color: #1F4D64;
+      img {
+        margin-right: 1px;
+        vertical-align: text-top;
+      }
+    }
+  }
 }
 
 .materials-index h1 img {
@@ -382,16 +377,6 @@
   clear: left;
 }
 
-.resource-comments {
-  margin-top: 2em;
-}
-
-.resource-comments h1 {
-  color: #1F4D64;
-  font-weight: bold;
-  font-size: 18px;
-}
-
 .view-item #comment-form textarea {
   width: 660px;
   height: 100px;
@@ -416,7 +401,7 @@
 .browse-materials,
 .browse-providers {
   ul {
-    margin-left: 1em;
+    margin-left: 0.5em;
   }
   li {
     position: relative;

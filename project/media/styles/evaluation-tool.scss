@@ -1,3 +1,7 @@
+@import "bootstrap/variables.scss";
+@import "bootstrap/mixins.scss";
+@import "mixins.scss";
+
 body.evaluation-tool {
   margin: 0;
   padding: 0;
@@ -480,6 +484,10 @@ body.evaluation-tool {
   padding: 0 1em;
 }
 
+.evaluation-results figure {
+  margin: 0;
+}
+
 .evaluation-tool .evaluation-results figure {
   margin-top: 1em;
   margin-bottom: 1em;
@@ -538,7 +546,7 @@ body.evaluation-tool {
 
 .evaluation-results td span {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 12px;
 }
 
 .view-item .evaluation-results th,
@@ -553,11 +561,11 @@ body.evaluation-tool {
 }
 
 .view-item .evaluation-results td {
-  font-size: 12px;
+  @include change-font-size(0.9);
 }
 
 .view-item .evaluation-results td span {
-  font-size: 16px;
+  @include change-font-size(1.2);
 }
 
 .evaluation-results td span.s0 {

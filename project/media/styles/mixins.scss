@@ -14,7 +14,8 @@
 }
 
 @mixin dotted {
-  padding-bottom: $baseline / 4;
+  padding-bottom: $baseline / 2;
+  margin-bottom: $baseline / 2;
   background: url(../images/dotted-line-hor.gif) repeat-x scroll 0 100% transparent;
 }
 

@@ -218,18 +218,21 @@ a.expand-button.expanded {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
+  border-collapse: inherit;
 }
 
 .rc5 {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  border-collapse: inherit;
 }
 
 .rc10 {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
+  border-collapse: inherit;
 }
 
 .qtip {
@@ -288,10 +291,11 @@ a.expand-button.expanded {
 }
 
 .box {
-  margin-bottom: $baseline / 1.5;
+  margin-bottom: $baseline / 2;
   h1 {
     @include change-text-size(1.3);
-    @include dotted;
+    background: url(../images/dotted-line-hor.gif) 0 100% repeat-x;
+    padding-bottom: $baseline / 4;
     margin-bottom: $baseline / 2;
     color: #666666;
     font-weight: normal;
@@ -299,6 +303,7 @@ a.expand-button.expanded {
       color: #679801;
       background: none;
       padding-bottom: 0;
+      margin-bottom: $baseline / 3;
     }
   }
 }

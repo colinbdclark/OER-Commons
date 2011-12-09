@@ -1,28 +1,47 @@
+@import "bootstrap/variables.scss";
+@import "bootstrap/mixins.scss";
+@import "mixins.scss";
+
+.resource-comments {
+  margin-top: $baseline;
+  > h1 {
+    @include change-font-size(1.4);
+  }
+}
+
 .resource-comments article {
-  margin-bottom: 2em;
+  margin-bottom: $baseline;
+  padding: $baseline / 2;
 }
 
 .resource-comments article.author {
-  padding-bottom: 0.5em;
   border: 1px solid #ccc;
 }
 
 .resource-comments article h1 {
-  margin-bottom: 0.5em;
+  margin-bottom: $baseline / 4;
   color: #333;
   font-weight: normal;
-  font-size: 14px;
+  @include change-text-size(1.1);
 }
 
-.resource-comments p {
-  margin: 0.5em 3em;
-  font-style: italic;
+.resource-comments {
+  p {
+    font-style: italic;
+  }
+  h1+p {
+      margin-left: 1em;
+  }
 }
+
 
 .resource-comments footer {
   position: relative;
   padding-left: 3em;
   height: 16px;
+  border: none;
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .resource-comments footer .by {

@@ -2,8 +2,12 @@
 @import "bootstrap/mixins.scss";
 @import "mixins.scss";
 
+.portlet {
+  margin-bottom: $baseline;
+}
+
 .portlet.dotted {
-  padding-bottom: $baseline / 1.5 + 1;
+  padding-bottom: $baseline;
 }
 
 .portlet h2 {
