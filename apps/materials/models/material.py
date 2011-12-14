@@ -18,7 +18,7 @@ from reviews.models import Review
 from rubrics.models import StandardAlignmentScore, RubricScore, EvaluatedItemMixin, Evaluation
 from saveditems.models import SavedItem
 from tags.models import Tag
-from visitcounts.models import Visit
+from visitcounts.models import VisitCounter
 import datetime
 
 
@@ -242,7 +242,7 @@ class Material(Indexed, EvaluatedItemMixin):
 
     @property
     def visits(self):
-        return Visit.objects.get_visits_count(self, None)
+        return VisitCounter.objects.get_visits_count(self)
 
     @property
     def is_displayed(self):

@@ -19,9 +19,11 @@ from reviews.views import ReviewForm
 from rubrics.models import Rubric, StandardAlignmentScore, RubricScore, \
     get_verbose_score_name
 from saveditems.models import SavedItem
-from visitcounts.models import Visit
+from visitcounts.models import VisitCounter
 import re
 import urllib
+import ast
+import json
 
 
 class DummyRequest(HttpRequest):
@@ -34,6 +36,34 @@ class DummyRequest(HttpRequest):
 
 #noinspection PyUnresolvedReferences
 class BaseViewItemMixin(object):
+
+    def create_visit_counter(self, item):
+        # Creates new VisitCounter object for each new visited item.
+        return VisitCounter.objects.count_item(self.request, self.item)
+
+    def process_visit_data(self, item, content_type_id):
+        # Checks uniqueness of the visitors for different items and updates cookies.
+        current_cookies = self.request.COOKIES.get("visits", None)
+        new_cookies = {}
+
+        if current_cookies:
+            visits = json.loads(current_cookies)
+
+            if content_type_id in visits.keys():
+                object_ids = visits[content_type_id]
+
+                if object_ids:
+                    if item.id not in object_ids:
+                        object_ids.append(item.id)
+                        new_cookies[content_type_id] = object_ids
+                        self.create_visit_counter(self.item)
+                    else:
+                        new_cookies[content_type_id] = object_ids
+                    return json.dumps(new_cookies, separators=(",", ":"))
+
+        new_cookies[content_type_id] = [item.id]
+        self.create_visit_counter(self.item)
+        return json.dumps(new_cookies, separators=(",", ":"))
 
     def get(self, request, *args, **kwargs):
         self.slug = kwargs["slug"]
@@ -55,10 +85,11 @@ class BaseViewItemMixin(object):
                                             self.content_type.model,
                                             self.item.id)
 
-        Visit.objects.count(request, self.item)
-
-        return super(BaseViewItemMixin, self).get(request, *args, **kwargs)
-
+        response = super(BaseViewItemMixin, self).get(request, *args, **kwargs)
+        visits = self.process_visit_data(self.item, str(self.content_type.id))
+        if visits:
+            response.set_cookie('visits', visits)
+        return response
 
     def get_context_data(self, **kwargs):
         data = super(BaseViewItemMixin, self).get_context_data(**kwargs)
