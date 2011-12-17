@@ -13,21 +13,6 @@ ROBOT_RE = re.compile("bot|crawler|spider", re.I)
 
 class VisitCounterManager(models.Manager):
 
-    def manage_count(self, instance):
-        content_type = ContentType.objects.get_for_model(instance)
-        object_id = instance.id
-
-        visit_counter, created = VisitCounter.objects.get_or_create(
-            content_type=content_type,
-            object_id=object_id
-        )
-        visits = visit_counter.visits + 1
-        update_item(visit_counter, visits=visits)
-
-        if visits % 10 == 0:
-            if isinstance(instance, Indexed):
-                instance.reindex()
-
     def count_item(self, request, response, instance):
         ''' Count a visit for a given instance. Use session key to distinguish
         visits from different users.
@@ -37,32 +22,33 @@ class VisitCounterManager(models.Manager):
             return
 
         # Checks uniqueness of the visitors for different items and updates cookies.
-        current_cookies = request.COOKIES.get("visits", None)
         content_type = ContentType.objects.get_for_model(instance)
         content_type_id = str(content_type.id)
-        new_cookies = {}
 
-        if current_cookies:
-            visits = json.loads(current_cookies)
+        # we need to handle JSON parsing exception here
+        try:
+            visited = json.loads(request.COOKIES.get("visits", "{}"))
+        except (ValueError, TypeError):
+            visited = {}
+        else:
+            object_ids = visited.get(content_type_id, [])
 
-            if content_type_id in visits.keys():
-                object_ids = visits[content_type_id]
+            if instance.id not in object_ids:
+                object_ids.append(instance.id)
+                visited[content_type_id] = object_ids
+                visit_counter, created = VisitCounter.objects.get_or_create(
+                    content_type=content_type,
+                    object_id=instance.id
+                )
+                visits = visit_counter.visits + 1
+                update_item(visit_counter, visits=visits)
 
-                if object_ids:
-                    if instance.id not in object_ids:
-                        object_ids.append(instance.id)
-                        new_cookies[content_type_id] = object_ids
-                        self.manage_count(instance)
-                    else:
-                        new_cookies[content_type_id] = object_ids
+                if visits % 10 == 0:
+                    if isinstance(instance, Indexed):
+                        instance.reindex()
 
-        if not new_cookies:
-            new_cookies[content_type_id] = [instance.id]
-            self.manage_count(instance)
-
-        visits = json.dumps(new_cookies, separators=(",", ":"))
-        response.set_cookie('visits', visits)
-        return response
+                visits = json.dumps(visited, separators=(",", ":"))
+                response.set_cookie("visits", visits)
 
     def get_visits_count(self, instance):
         visit_counter, created = VisitCounter.objects.get_or_create(

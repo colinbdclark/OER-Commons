@@ -19,7 +19,7 @@ from reviews.views import ReviewForm
 from rubrics.models import Rubric, StandardAlignmentScore, RubricScore, \
     get_verbose_score_name
 from saveditems.models import SavedItem
-from visitcounts.models import VisitCounter
+from visitcounts.shortcuts import count_visit
 import re
 import urllib
 
@@ -56,7 +56,8 @@ class BaseViewItemMixin(object):
                                             self.item.id)
 
         response = super(BaseViewItemMixin, self).get(request, *args, **kwargs)
-        return VisitCounter.objects.count_item(request, response, self.item)
+        count_visit(request, response, self.item)
+        return response
 
     def get_context_data(self, **kwargs):
         data = super(BaseViewItemMixin, self).get_context_data(**kwargs)
