@@ -30,25 +30,25 @@ class VisitCounterManager(models.Manager):
             visited = json.loads(request.COOKIES.get("visits", "{}"))
         except (ValueError, TypeError):
             visited = {}
-        else:
-            object_ids = visited.get(content_type_id, [])
 
-            if instance.id not in object_ids:
-                object_ids.append(instance.id)
-                visited[content_type_id] = object_ids
-                visit_counter, created = VisitCounter.objects.get_or_create(
-                    content_type=content_type,
-                    object_id=instance.id
-                )
-                visits = visit_counter.visits + 1
-                update_item(visit_counter, visits=visits)
+        object_ids = visited.get(content_type_id, [])
 
-                if visits % 10 == 0:
-                    if isinstance(instance, Indexed):
-                        instance.reindex()
+        if instance.id not in object_ids:
+            object_ids.append(instance.id)
+            visited[content_type_id] = object_ids
+            visit_counter, created = VisitCounter.objects.get_or_create(
+                content_type=content_type,
+                object_id=instance.id
+            )
+            visits = visit_counter.visits + 1
+            update_item(visit_counter, visits=visits)
 
-                visits = json.dumps(visited, separators=(",", ":"))
-                response.set_cookie("visits", visits)
+            if visits % 10 == 0:
+                if isinstance(instance, Indexed):
+                    instance.reindex()
+
+            visits = json.dumps(visited, separators=(",", ":"))
+            response.set_cookie("visits", visits)
 
     def get_visits_count(self, instance):
         visit_counter, created = VisitCounter.objects.get_or_create(
