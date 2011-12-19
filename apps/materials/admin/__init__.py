@@ -4,10 +4,9 @@ from django.contrib.admin.sites import site
 from materials.admin.community_item import CommunityItemAdmin
 from materials.admin.course import CourseAdmin
 from materials.admin.library import LibraryAdmin
-from materials.admin.material import MaterialAdmin
 from materials.models import Course, Library, CommunityItem
 from materials.models.common import GeneralSubject, GradeLevel, \
-    Language, MediaFormat, GeographicRelevance, Keyword, Author
+    Language, MediaFormat, GeographicRelevance, Keyword, Author, Collection
 from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
 from materials.models.library import LibraryMaterialType
@@ -73,3 +72,12 @@ class TopicAdmin(ModelAdmin):
 
 
 site.register(Topic, TopicAdmin)
+
+
+class CollectionAdmin(ModelAdmin):
+
+    search_fields = ["name"]
+    list_display = ["name", "disable_alignment_evaluation"]
+    list_filter = ["disable_alignment_evaluation"]
+
+site.register(Collection, CollectionAdmin)

@@ -19,49 +19,51 @@
           </tr>
         </thead>
         <tbody>
-          {% if tags %}
-            <tr>
-              <td class="first no-border" colspan="2">Degree of Alignment</td>
-              <td class="no-border"></td>
-              <td class="no-border"></td>
-            </tr>
-            {% for score in tags %}
+          {% if enable_alignment_scores %}
+            {% if tags %}
               <tr>
-                <td{% if not forloop.last %} class="no-border"{% endif %}></td>
-                <td class="first" width="10%">{{ score.name }}</td>
-                <td>{% spaceless %}
-                  {% if score.user_score_class == "nr" %}
-                    <span class="nr"></span>
-                  {% else %}
-                    {% if score.user_score == None %}
-                      <span class="na">N/A</span>
-                    {% else %}
-                      <span class="s{{ score.user_score_class }}">{{ score.user_score|floatformat }}</span>
-                    {% endif %}
-                  {% endif %}
-                  {% if score.comment %}
-                    <span class="comment" data-comment="{{ score.comment }}"></span>
-                  {% endif %}
-                {% endspaceless %}</td>
-                <td>
-                  {% if score.average_score_class == "nr" %}
-                    <span class="nr"></span>
-                  {% else %}
-                    {% if score.average_score == None %}
-                      <span class="na">N/A</span>
-                    {% else %}
-                      <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}</span>
-                    {% endif %}
-                  {% endif %}
-                </td>
+                <td class="first no-border" colspan="2">Degree of Alignment</td>
+                <td class="no-border"></td>
+                <td class="no-border"></td>
               </tr>
-            {% endfor%}
-          {% else %}
-            <tr>
-              <td class="first" colspan="2">Degree of Alignment</td>
-              <td><span class="na">N/A</span></td>
-              <td><span class="na">N/A</span></td>
-            </tr>
+              {% for score in tags %}
+                <tr>
+                  <td{% if not forloop.last %} class="no-border"{% endif %}></td>
+                  <td class="first" width="10%">{{ score.name }}</td>
+                  <td>{% spaceless %}
+                    {% if score.user_score_class == "nr" %}
+                      <span class="nr"></span>
+                    {% else %}
+                      {% if score.user_score == None %}
+                        <span class="na">N/A</span>
+                      {% else %}
+                        <span class="s{{ score.user_score_class }}">{{ score.user_score|floatformat }}</span>
+                      {% endif %}
+                    {% endif %}
+                    {% if score.comment %}
+                      <span class="comment" data-comment="{{ score.comment }}"></span>
+                    {% endif %}
+                  {% endspaceless %}</td>
+                  <td>
+                    {% if score.average_score_class == "nr" %}
+                      <span class="nr"></span>
+                    {% else %}
+                      {% if score.average_score == None %}
+                        <span class="na">N/A</span>
+                      {% else %}
+                        <span class="s{{ score.average_score_class }}">{{ score.average_score|floatformat }}</span>
+                      {% endif %}
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor%}
+            {% else %}
+              <tr>
+                <td class="first" colspan="2">Degree of Alignment</td>
+                <td><span class="na">N/A</span></td>
+                <td><span class="na">N/A</span></td>
+              </tr>
+            {% endif %}
           {% endif %}
           {% for score in scores %}
             <tr>

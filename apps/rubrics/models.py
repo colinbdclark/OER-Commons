@@ -51,6 +51,13 @@ class Evaluation(models.Model):
             )
         unique_together = ["user", "content_type", "object_id"]
 
+    @classmethod
+    def enable_alignment_scores(cls, item):
+        collection = getattr(item, "collection")
+        if collection and collection.disable_alignment_evaluation:
+            return False
+        return True
+
 
 class ScoreValue(models.Model):
 
