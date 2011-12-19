@@ -102,15 +102,17 @@ def delete_tag(request):
 
 @ajax_request
 def list_standards(request, existing=False):
-    qs = AlignmentTag.objects.all()
 
     if existing:
-        ids = list(id for id, count in SearchQuerySet().narrow("is_displayed:true").facet("alignment_tags").facet_counts().get("fields")["alignment_tags"] if count)
-        qs = qs.filter(id__in=ids)
+        qs = TaggedMaterial.objects.all().values_list(
+            "tag__standard__id", "tag__standard__name"
+        ).order_by("tag__standard__id").distinct()
+    else:
+        qs = AlignmentTag.objects.all().values_list(
+            "standard__id", "standard__name"
+        ).order_by("standard__id").distinct()
 
-    standards = qs.values_list("standard__id", "standard__name").order_by("standard__id").distinct()
-
-    return dict(options=list(dict(id=id, name=name) for id, name in standards))
+    return dict(options=list(dict(id=id, name=name) for id, name in qs))
 
 
 def cmp_grades(grade1, grade2):
@@ -160,14 +162,20 @@ def list_grades(request, existing=False):
     except (ValueError, TypeError, Standard.DoesNotExist):
         return HttpResponseBadRequest()
 
-    qs = AlignmentTag.objects.filter(standard=standard)
-
     if existing:
-        ids = list(id for id, count in SearchQuerySet().narrow("is_displayed:true").facet("alignment_tags").facet_counts().get("fields")["alignment_tags"] if count)
-        qs = qs.filter(id__in=ids)
+        qs = TaggedMaterial.objects.filter(
+            tag__standard=standard
+        ).values_list(
+            "tag__grade__id", "tag__grade__code", "tag__grade__name"
+        ).order_by("tag__grade__id").distinct()
+    else:
+        qs = AlignmentTag.objects.filter(
+            standard=standard
+        ).values_list(
+            "grade__id", "grade__code", "grade__name"
+        ).order_by("grade__id").distinct()
 
-    grades = qs.values_list("grade__id", "grade__code", "grade__name").order_by("grade__id").distinct()
-    grades = list(dict(id=id, code=code, name=name) for id, code, name in grades)
+    grades = list(dict(id=id, code=code, name=name) for id, code, name in qs)
     grades.sort(cmp=cmp_grades, key=lambda x: x["code"])
     for g in grades:
         del g["code"]
@@ -189,14 +197,20 @@ def list_categories(request, existing=False):
     except (ValueError, TypeError, Grade.DoesNotExist):
         return HttpResponseBadRequest()
 
-    qs = AlignmentTag.objects.filter(standard=standard, grade=grade)
     if existing:
-        ids = list(id for id, count in SearchQuerySet().narrow("is_displayed:true").facet("alignment_tags").facet_counts().get("fields")["alignment_tags"] if count)
-        qs = qs.filter(id__in=ids)
+        qs = TaggedMaterial.objects.filter(
+            tag__standard=standard, tag__grade=grade
+        ).values_list(
+            "tag__category__id", "tag__category__name"
+        ).order_by("tag__category__id").distinct()
+    else:
+        qs = AlignmentTag.objects.filter(
+            standard=standard, grade=grade
+        ).values_list(
+            "category__id", "category__name"
+        ).order_by("category__id").distinct()
 
-    categories = qs.values_list("category__id", "category__name").order_by("category__id").distinct()
-
-    return dict(options=list(dict(id=id, name=name) for id, name in categories))
+    return dict(options=list(dict(id=id, name=name) for id, name in qs))
 
 
 TAG_CODE_RE = re.compile(r"(.+)?\.(\d+)(?:\.?[a-z])?$")
@@ -235,17 +249,22 @@ def list_tags(request, existing=False):
     except (ValueError, TypeError, LearningObjectiveCategory.DoesNotExist):
         return HttpResponseBadRequest()
 
-    qs = AlignmentTag.objects.filter(
-        standard=standard,
-        grade=grade,
-        category=category
-    )
-
     if existing:
-        ids = list(id for id, count in SearchQuerySet().narrow("is_displayed:true").facet("alignment_tags").facet_counts().get("fields")["alignment_tags"] if count)
-        qs = qs.filter(id__in=ids)
+        tags = set(
+            tagged.tag for tagged in TaggedMaterial.objects.filter(
+                tag__standard=standard,
+                tag__grade=grade,
+                tag__category=category
+            ).select_related()
+        )
+    else:
+        tags = AlignmentTag.objects.filter(
+            standard=standard,
+            grade=grade,
+            category=category
+        )
 
-    tags = list(dict(id=t.id, name=unicode(t), subcategory=t.subcategory, full_code=t.full_code) for t in qs)
+    tags = list(dict(id=t.id, name=unicode(t), subcategory=t.subcategory, full_code=t.full_code) for t in tags)
 
     tags.sort(cmp=cmp_tags)
 

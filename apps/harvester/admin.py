@@ -1,13 +1,14 @@
-from urllib2 import URLError, HTTPError
 from django import forms
 from django.conf.urls.defaults import patterns, url
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
 from django.core.urlresolvers import reverse
-from harvester.models import Repository, Job, ERROR, COMPLETE, NO_RECORDS_MATCH
+from harvester.models import Repository, Job, ERROR, COMPLETE, NO_RECORDS_MATCH, RSSFeed, RSSFeedItem
 from harvester.oaipmh.client import Client
 from harvester.oaipmh.error import XMLSyntaxError
-from harvester.views import add_job, job_errors, job_restart
+from harvester.views import add_job, job_errors, job_restart, harvest_feed, \
+    export_feed
+from urllib2 import URLError, HTTPError
 
 
 class AddRepositoryForm(forms.ModelForm):
@@ -119,3 +120,36 @@ class JobAdmin(ModelAdmin):
 
 
 site.register(Job, JobAdmin)
+
+
+class RSSFeedAdmin(ModelAdmin):
+
+    fields = ("url",)
+    list_display = ("title", "export", "harvest")
+
+    def harvest(self, obj):
+        return """<a href="%s">Harvest</a>""" % reverse("admin:harvester_harvest_feed", args=(obj.id,))
+    harvest.allow_tags = True
+
+    def export(self, obj):
+        total_items = RSSFeedItem.objects.filter(feed__id=obj.id).count()
+        if not total_items:
+            return ""
+        new_items = RSSFeedItem.objects.filter(feed__id=obj.id, exported=False).count()
+        html = ""
+        if new_items:
+            html += """<a href="%s">Export new (%i)</a> | """ % (reverse("admin:harvester_export_feed_new", args=(obj.id,)), new_items)
+        html += """<a href="%s">Export all (%i) </a>""" % (reverse("admin:harvester_export_feed_all", args=(obj.id,)), total_items)
+        return html
+    export.allow_tags = True
+
+    def get_urls(self):
+        urls = patterns("",
+            url("^(\d+)/harvest/$", self.admin_site.admin_view(harvest_feed), name="harvester_harvest_feed"),
+            url("^(\d+)/export/$", self.admin_site.admin_view(export_feed), name="harvester_export_feed_new"),
+            url("^(\d+)/export/all/$", self.admin_site.admin_view(export_feed), kwargs=dict(all_items=True), name="harvester_export_feed_all"),
+        )
+        return urls + super(RSSFeedAdmin, self).get_urls()
+
+
+site.register(RSSFeed, RSSFeedAdmin)

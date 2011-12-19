@@ -11,7 +11,7 @@
     "pk": 2,
     "model": "rubrics.rubric",
     "fields": {
-      "name": "Utility of Materials as Tools to Teach Others",
+      "name": "Utility of Materials Designed to Support Teaching",
       "description": "Applies to objects designed to support teachers in planning or presenting subject matter. Primary user would be teacher. Evaluates the potential utility of an object for the majority of instructors at the intended grade level."
     }
   },

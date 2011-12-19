@@ -276,6 +276,9 @@ class Collection(models.Model):
                          verbose_name=_(u"Slug"),
                          db_index=True)
 
+    # Disable evaluation of alignment tags for items in this collection
+    disable_alignment_evaluation = models.BooleanField(default=False)
+
     def __unicode__(self):
         return self.name
 

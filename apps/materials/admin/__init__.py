@@ -6,7 +6,7 @@ from materials.admin.community_item import CommunityItemAdmin
 from materials.admin.course import CourseAdmin
 from materials.admin.library import LibraryAdmin
 from materials.models import Course, Library, CommunityItem
-from materials.models.common import GradeLevel, MediaFormat, GeographicRelevance, Author
+from materials.models.common import GradeLevel, MediaFormat, GeographicRelevance, Author, Collection
 from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
 from materials.models.library import LibraryMaterialType
@@ -69,3 +69,12 @@ class TopicAdmin(ModelAdmin):
 
 
 site.register(Topic, TopicAdmin)
+
+
+class CollectionAdmin(ModelAdmin):
+
+    search_fields = ["name"]
+    list_display = ["name", "disable_alignment_evaluation"]
+    list_filter = ["disable_alignment_evaluation"]
+
+site.register(Collection, CollectionAdmin)

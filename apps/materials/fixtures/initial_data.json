@@ -209,12 +209,21 @@
     }
   },
   {
+    "pk": 18,
+    "model": "materials.coursematerialtype",
+    "fields": {
+      "name": "Full Course",
+      "slug": "full-course",
+      "order": 6
+    }
+  },
+  {
     "pk": 6,
     "model": "materials.coursematerialtype",
     "fields": {
       "name": "Games",
       "slug": "games",
-      "order": 6
+      "order": 7
     }
   },
   {
@@ -223,7 +232,7 @@
     "fields": {
       "name": "Homework and Assignments",
       "slug": "homework-and-assignments",
-      "order": 7
+      "order": 8
     }
   },
   {
@@ -232,7 +241,7 @@
     "fields": {
       "name": "Lecture Notes",
       "slug": "lecture-notes",
-      "order": 8
+      "order": 9
     }
   },
   {
@@ -241,7 +250,7 @@
     "fields": {
       "name": "Lesson Plans",
       "slug": "lesson-plans",
-      "order": 9
+      "order": 10
     }
   },
   {
@@ -250,7 +259,7 @@
     "fields": {
       "name": "Readings",
       "slug": "readings",
-      "order": 10
+      "order": 11
     }
   },
   {
@@ -259,7 +268,7 @@
     "fields": {
       "name": "Simulations",
       "slug": "simulations",
-      "order": 11
+      "order": 12
     }
   },
   {
@@ -268,7 +277,7 @@
     "fields": {
       "name": "Syllabi",
       "slug": "syllabi",
-      "order": 12
+      "order": 13
     }
   },
   {
@@ -277,7 +286,7 @@
     "fields": {
       "name": "Teaching and Learning Strategies",
       "slug": "teaching-and-learning-strategies",
-      "order": 13
+      "order": 14
     }
   },
   {
@@ -286,7 +295,7 @@
     "fields": {
       "name": "Textbooks",
       "slug": "textbooks",
-      "order": 14
+      "order": 15
     }
   },
   {
@@ -295,7 +304,7 @@
     "fields": {
       "name": "Training Materials",
       "slug": "training-materials",
-      "order": 15
+      "order": 16
     }
   },
   {
@@ -304,15 +313,6 @@
     "fields": {
       "name": "Video Lectures",
       "slug": "video-lectures",
-      "order": 16
-    }
-  },
-  {
-    "pk": 18,
-    "model": "materials.coursematerialtype",
-    "fields": {
-      "name": "Full Course",
-      "slug": "full-course",
       "order": 17
     }
   },

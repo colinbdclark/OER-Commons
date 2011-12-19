@@ -16,6 +16,7 @@ from materials.utils import get_name_from_id, get_slug_from_id, \
     first_neighbours_last, get_name_from_slug, get_object
 from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
+from rubrics.models import Rubric
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 import urllib
@@ -117,34 +118,34 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
     for filter_name, collapsed in BASIC_INDEX_FILTERS:
         if filter_name not in visible_filters:
             continue
-        filter = FILTERS[filter_name]
-        if not facets.get(filter.index_name):
+        filter_ = FILTERS[filter_name]
+        if not facets.get(filter_.index_name):
             continue
-        counts = dict(facets[filter.index_name])
+        counts = dict(facets[filter_.index_name])
         values = filter_values.get(filter_name, [])
         filter_data = {"name": filter_name,
-                       "title": filter.title,
+                       "title": filter_.title,
                        "disabled": filter_name == path_filter,
                        "options": [],
                        "all_checked": not bool(values),
-                       "request_name": filter.request_name,
+                       "request_name": filter_.request_name,
                        "collapsed": collapsed}
         if values:
             filter_data["collapsed"] = False
-        if isinstance(filter, VocabularyFilter):
+        if isinstance(filter_, VocabularyFilter):
             if not isinstance(values, list):
                 values = [values]
-            for option in filter.model.objects.values("id", "slug", "name"):
+            for option in filter_.model.objects.values("id", "slug", "name"):
                 count = counts.get(str(option["id"]), 0)
                 option["count"] = count
                 if filter_data["all_checked"] or option["slug"] in values:
                     option["checked"] = True
                 option["input_id"] = "%s-%i" % (filter_data["request_name"].replace(".", "-"), option["id"])
                 filter_data["options"].append(option)
-        elif isinstance(filter, ChoicesFilter):
+        elif isinstance(filter_, ChoicesFilter):
             if not isinstance(values, list):
                 values = [values]
-            for i, (slug, name) in enumerate(filter.choices):
+            for i, (slug, name) in enumerate(filter_.choices):
                 option = {"id": i, "slug": slug, "name": name}
                 count = counts.get(slug, 0)
                 option["count"] = count
@@ -158,17 +159,17 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
 
     if microsite:
         filter_name = "topics"
-        filter = FILTERS[filter_name]
-        if not facets.get(filter.index_name):
+        filter_ = FILTERS[filter_name]
+        if not facets.get(filter_.index_name):
             return filters
-        counts = dict(facets[filter.index_name])
+        counts = dict(facets[filter_.index_name])
         values = filter_values.get(filter_name, [])
         filter_data = {"name": filter_name,
-                       "title": u"%s %s" % (microsite.name, filter.title),
+                       "title": u"%s %s" % (microsite.name, filter_.title),
                        "disabled": filter_name == path_filter,
                        "options": [],
                        "all_checked": not bool(values),
-                       "request_name": filter.request_name,
+                       "request_name": filter_.request_name,
                        "collapsed": False}
         if not isinstance(values, list):
             values = [values]
@@ -216,6 +217,7 @@ class IndexParams:
         self.batch_start = 0
         self.batch_size = self.DEFAULT_BATCH_SIZE
         self.sort_by = self.default_sort_by
+        self.use_default_sort_by = True
         self.query_order_by = None
 
         try:
@@ -239,6 +241,7 @@ class IndexParams:
             elif search_query:
                 self.sort_by = "search"
         else:
+            self.use_default_sort_by = False
             self.sort_by = sort_by
 
 
@@ -402,13 +405,13 @@ def index(request, general_subjects=None, grade_levels=None,
     for filter_name in PATH_FILTERS:
         value = locals()[filter_name]
         if value is not None:
-            filter = FILTERS[filter_name]
-            query = filter.update_query(query, value)
+            filter_ = FILTERS[filter_name]
+            query = filter_.update_query(query, value)
             path_filter = filter_name
             if page_subtitle:
-                page_subtitle = u"%s &rarr; %s" % (page_subtitle, filter.page_subtitle(value))
+                page_subtitle = u"%s &rarr; %s" % (page_subtitle, filter_.page_subtitle(value))
             else:
-                page_subtitle = filter.page_subtitle(value)
+                page_subtitle = filter_.page_subtitle(value)
             filter_values[filter_name] = value
 
     visible_filters = ["search", "general_subjects", "grade_levels",
@@ -422,16 +425,16 @@ def index(request, general_subjects=None, grade_levels=None,
 
     search_query = u""
 
-    for filter_name, filter in FILTERS.items():
+    for filter_name, filter_ in FILTERS.items():
         if filter_name == path_filter:
             continue
-        value = filter.extract_value(request)
+        value = filter_.extract_value(request)
         if value is not None:
-            query = filter.update_query(query, value)
-            query_string_params = filter.update_query_string_params(query_string_params, value)
+            query = filter_.update_query(query, value)
+            query_string_params = filter_.update_query_string_params(query_string_params, value)
             filter_values[filter_name] = value
             if filter_name not in visible_filters:
-                hidden_filters[filter.request_name] = value
+                hidden_filters[filter_.request_name] = value
             if filter_name == "search":
                 search_query = value
 
@@ -458,10 +461,12 @@ def index(request, general_subjects=None, grade_levels=None,
     if not page_subtitle and model:
         page_subtitle = u"Content Type: %s" % model._meta.verbose_name_plural
     elif not page_subtitle and filter_values:
-        filter_name = filter_values.keys()[0]
-        filter = FILTERS[filter_name]
-        page_subtitle = filter.page_subtitle(filter_values[filter_name])
-
+        subtitles = []
+        for filter_name, filter_ in FILTERS.items():
+            if filter_name not in filter_values:
+                continue
+            subtitles.append(filter_.page_subtitle(filter_values[filter_name]))
+        page_subtitle = u" / ".join(subtitles)
 
     index_params = IndexParams(request, format, search_query)
     query_string_params = index_params.update_query_string_params(query_string_params)
@@ -481,10 +486,33 @@ def index(request, general_subjects=None, grade_levels=None,
     batch_end = index_params.batch_start + index_params.batch_size
 
     if len(filter_values) == 1 and "featured" in filter_values:
-        query = query.order_by("-featured_on")
-    elif len(filter_values) == 1 and "evaluated_rubrics" in filter_values:
-        query = query.order_by("-evaluation_score_rubric_%i" % filter_values["evaluated_rubrics"][0])
-    elif index_params.query_order_by is not None:
+        index_params.query_order_by = "-featured_on"
+
+    elif "evaluated_rubrics" in filter_values:
+        rubric_id = filter_values["evaluated_rubrics"][0]
+        if rubric_id == 0:
+            rubric_name = u"Degree of Alignment"
+        else:
+            rubric_name = Rubric.objects.get(id=rubric_id).name
+        index_params.SORT_BY_OPTIONS = list(index_params.SORT_BY_OPTIONS) + [
+            dict(value="evaluation_score_rubric_%i" % rubric_id,
+                 title=rubric_name)
+        ]
+        if index_params.use_default_sort_by:
+            index_params.sort_by = "evaluation_score_rubric_%i" % rubric_id
+            index_params.query_order_by = "-evaluation_score_rubric_%i" % rubric_id
+
+    elif filter(lambda f: f in filter_values, ("alignment", "alignment_standards",
+            "alignment_grades", "alignment_categories", "alignment_cluster")):
+        index_params.SORT_BY_OPTIONS = list(index_params.SORT_BY_OPTIONS) + [
+            dict(value="evaluation_score_rubric_0",
+                 title=u"Degree of Alignment")
+        ]
+        if index_params.use_default_sort_by:
+            index_params.sort_by = "evaluation_score_rubric_0"
+            index_params.query_order_by = "-evaluation_score_rubric_0"
+
+    if index_params.query_order_by:
         query = query.order_by(index_params.query_order_by)
 
     if index_params.sort_by == "visits" and not filter_values:

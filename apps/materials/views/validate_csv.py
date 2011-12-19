@@ -158,7 +158,9 @@ def check_in_list(available_values):
 
     def check(values):
         errors = []
-        if not isinstance(values, (list, set, tuple)):
+        if not values:
+            values = set()
+        elif not isinstance(values, (list, set, tuple)):
             values = set([values])
         for invalid_value in set(values) - available_values:
             errors.append("Invalid value: %s" % invalid_value)

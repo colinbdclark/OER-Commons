@@ -264,3 +264,14 @@ class Material(Indexed, EvaluatedItemMixin):
         model_name = self._meta.object_name.lower()
         return "materials.%s.%i" % (model_name, self.id)
 
+    @property
+    def alignment_standards(self):
+        return self.alignment_tags.values_list("tag__standard__id", flat=True).order_by().distinct()
+
+    @property
+    def alignment_grades(self):
+        return self.alignment_tags.values_list("tag__grade__id", flat=True).order_by().distinct()
+
+    @property
+    def alignment_categories(self):
+        return self.alignment_tags.values_list("tag__category__id", flat=True).order_by().distinct()

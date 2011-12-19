@@ -1,12 +1,15 @@
+import logging
 from autoslug.settings import slugify
 from celery.decorators import task
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 from django.core.files.base import File
 from django.core.mail.message import EmailMessage
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.dateformat import format
+from django.utils.html import strip_tags
 from harvester.metadata.ims1_2_1 import IMS1_2_1
 from harvester.metadata.nsdl_dc import NSDLDublinCore
 from harvester.metadata.oai_dc import OAI_DC
@@ -18,6 +21,7 @@ from urllib2 import HTTPError
 import csv
 import datetime
 import traceback
+import feedparser
 
 
 PROTOCOL_VERSIONS = (
@@ -294,3 +298,69 @@ class Error(models.Model):
 
     text = models.TextField()
     job = models.ForeignKey(Job, related_name="errors")
+
+
+class RSSFeed(models.Model):
+
+    url = models.URLField(max_length=1000, verify_exists=True)
+    title = models.CharField(max_length=1000, default=u"", blank=True)
+
+    def __unicode__(self):
+        return self.title or self.url
+
+    def clean(self):
+        try:
+            parsed = feedparser.parse(self.url)
+        except:
+            raise ValidationError(u"Can't parse RSS feed.")
+        self.title = parsed["feed"]["title"]
+
+    class Meta:
+        ordering = ("id",)
+        verbose_name = u"RSS Feed"
+        verbose_name_plural = u"RSS Feeds"
+
+    def harvest(self):
+        logger = logging.getLogger("oercommons.harvest_rss")
+        cnt = 0
+        try:
+            parsed = feedparser.parse(self.url)
+        except:
+            logger.error(u"Can't parse feed '%s'" % unicode(self))
+            return
+        for entry in parsed["entries"]:
+            url = entry["link"]
+            if self.items.filter(url=url).exists():
+                continue
+            date = entry.get("published_parsed", entry.get("created_parsed", entry.get("updated_parsed")))
+            if date:
+                date = datetime.datetime(*date[:6])
+            self.items.create(
+                url=url,
+                title=entry.get("title", u""),
+                description=strip_tags(entry.get("summary", u"")),
+                date=date,
+                keywords=u"|".join(map(lambda x: x["term"], entry.get("tags", []))),
+            )
+            cnt += 1
+        logger.info(u"Harvsted %i new items from '%s'" % (cnt, unicode(self)))
+        return cnt
+
+
+class RSSFeedItem(models.Model):
+
+    url = models.URLField(max_length=1000)
+    title = models.CharField(max_length=1000, default=u"")
+    description = models.TextField(default=u"")
+    date = models.DateTimeField(default=None)
+    keywords = models.TextField(default=u"")
+
+    feed = models.ForeignKey(RSSFeed, related_name="items")
+    exported = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.title or self.url
+
+    class Meta:
+        unique_together = ("url", "feed")
+

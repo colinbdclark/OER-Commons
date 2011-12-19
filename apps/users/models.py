@@ -61,7 +61,7 @@ class Role(models.Model):
 
 class EducatorSubject(models.Model):
 
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=300)
 
     def __unicode__(self):
         return self.title

@@ -68,6 +68,8 @@ class EvaluateViewMixin(object):
         object_id = kwargs.pop("object_id")
         model = self.content_type.model_class()
         self.object = get_object_or_404(model, id=int(object_id))
+        self.enable_alignment_scores = Evaluation.enable_alignment_scores(self.object)
+        print self.enable_alignment_scores
         #noinspection PyUnresolvedReferences
         return super(EvaluateViewMixin, self).dispatch(request, *args, **kwargs)
 
@@ -80,6 +82,7 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         data = super(Rubrics, self).get_context_data(**kwargs)
         data["content_type"] = self.content_type
         data["object"] = self.object
+        data["enable_alignment_scores"] = self.enable_alignment_scores
         if isinstance(self.object, (Course, Library, CommunityItem)):
             data["toolbar_view_url"] = reverse(
                 "materials:%s:toolbar_view_item" % self.object.namespace,
@@ -96,28 +99,30 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         evaluation.hostname = self.request.COOKIES.get(HOSTNAME_COOKIE, u"")
         evaluation.save()
 
-        tags = AlignmentTag.objects.filter(
-            id__in=self.object.alignment_tags.values_list("tag__id",
-                                                          flat=True).distinct()
-        )
-        data["alignment_tags"] = []
-        for tag in tags:
-            score = get_object_or_None(
-                StandardAlignmentScore,
-                evaluation=evaluation,
-                alignment_tag=tag,
+        if self.enable_alignment_scores:
+            tags = AlignmentTag.objects.filter(
+                id__in=self.object.alignment_tags.values_list("tag__id",
+                                                              flat=True).distinct()
             )
-            if score:
-                tag.score_value = score.score
-                tag.scored = True
-                tag.comment = score.comment
-            else:
-                tag.score_value = None
-                tag.scored = False
-                tag.comment = u""
-            data["alignment_tags"].append(tag)
+            data["alignment_tags"] = []
+            for tag in tags:
+                score = get_object_or_None(
+                    StandardAlignmentScore,
+                    evaluation=evaluation,
+                    alignment_tag=tag,
+                )
+                if score:
+                    tag.score_value = score.score
+                    tag.scored = True
+                    tag.comment = score.comment
+                else:
+                    tag.score_value = None
+                    tag.scored = False
+                    tag.comment = u""
+                data["alignment_tags"].append(tag)
 
-        data["alignment_scored"] = data["alignment_tags"] and all(map(lambda x: x.score_value, data["alignment_tags"]))
+            data["alignment_scored"] = data["alignment_tags"] and all(map(lambda x: x.score_value, data["alignment_tags"]))
+            data["alignment_score_values"] = StandardAlignmentScoreValue.objects.all()
 
         data["rubrics"] = []
         for rubric in Rubric.objects.all():
@@ -136,7 +141,6 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                 rubric.comment = u""
             data["rubrics"].append(rubric)
 
-        data["alignment_score_values"] = StandardAlignmentScoreValue.objects.all()
         return data
 
     #noinspection PyUnusedLocal
@@ -165,7 +169,8 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         tag_id = request.POST.get("tag_id")
         rubric_id = request.POST.get("rubric_id")
         comment = request.POST.get("comment", u"").strip()
-        if tag_id:
+
+        if self.enable_alignment_scores and tag_id:
             try:
                 tag_id = int(tag_id)
             except (TypeError, ValueError):
@@ -196,7 +201,7 @@ class Rubrics(EvaluateViewMixin, TemplateView):
                     score.comment = comment
                     score.save()
 
-        elif rubric_id:
+        if rubric_id:
             try:
                 rubric_id = int(rubric_id)
             except (TypeError, ValueError):
@@ -244,6 +249,7 @@ class Results(EvaluateViewMixin, TemplateView):
         data = super(Results, self).get_context_data(**kwargs)
         data["content_type"] = self.content_type
         data["object"] = self.object
+        data["enable_alignment_scores"] = self.enable_alignment_scores
         data["scores"] = []
 
         evaluation = get_object_or_None(
@@ -262,54 +268,60 @@ class Results(EvaluateViewMixin, TemplateView):
 
         data["finalized"] = evaluation.confirmed
 
-        alignment_scores = StandardAlignmentScore.objects.filter(
-            evaluation__content_type=self.content_type,
-            evaluation__object_id=self.object.id,
-        )
+        not_scored_tags = []
+        if self.enable_alignment_scores:
+            alignment_scores = StandardAlignmentScore.objects.filter(
+                evaluation__content_type=self.content_type,
+                evaluation__object_id=self.object.id,
+            )
 
-        tags = AlignmentTag.objects.filter(
-            id__in=self.object.alignment_tags.values_list("tag__id",
-                                                          flat=True).distinct()
-        )
+            tags = AlignmentTag.objects.filter(
+                id__in=self.object.alignment_tags.values_list("tag__id",
+                                                              flat=True).distinct()
+            )
 
-        data["tags"] = []
+            data["tags"] = []
 
-        for tag in tags:
-            tag_scores = alignment_scores.filter(alignment_tag__id=tag.id)
-            average_score = tag_scores.aggregate(Avg("score__value"))["score__value__avg"]
+            for tag in tags:
+                tag_scores = alignment_scores.filter(alignment_tag__id=tag.id)
+                average_score = tag_scores.aggregate(Avg("score__value"))["score__value__avg"]
 
-            if not tag_scores.exists():
-                average_score_class = "nr"
-            elif average_score is None:
-                average_score_class = None
-            else:
-                average_score_class = int(round(average_score))
-
-            user_score_value = None
-            comment = None
-
-            try:
-                user_tag_score = tag_scores.get(
-                    evaluation=evaluation
-                )
-                user_score_value = user_tag_score.score.value
-                if user_score_value is None:
-                    user_score_class = None
+                if not tag_scores.exists():
+                    average_score_class = "nr"
+                elif average_score is None:
+                    average_score_class = None
                 else:
-                    user_score_class = int(round(user_score_value))
-                comment = user_tag_score.comment
-            except StandardAlignmentScore.DoesNotExist:
-                user_score_class = "nr"
+                    average_score_class = int(round(average_score))
+
+                user_score_value = None
+                comment = None
+
+                try:
+                    user_tag_score = tag_scores.get(
+                        evaluation=evaluation
+                    )
+                    user_score_value = user_tag_score.score.value
+                    if user_score_value is None:
+                        user_score_class = None
+                    else:
+                        user_score_class = int(round(user_score_value))
+                    comment = user_tag_score.comment
+                except StandardAlignmentScore.DoesNotExist:
+                    user_score_class = "nr"
 
 
-            data["tags"].append(dict(
-                name=tag.full_code,
-                user_score=user_score_value,
-                user_score_class=user_score_class,
-                average_score=average_score,
-                average_score_class=average_score_class,
-                comment=comment,
-            ))
+                data["tags"].append(dict(
+                    name=tag.full_code,
+                    user_score=user_score_value,
+                    user_score_class=user_score_class,
+                    average_score=average_score,
+                    average_score_class=average_score_class,
+                    comment=comment,
+                ))
+
+            not_scored_tags = set(tags.values_list("id", flat=True)) - \
+                              set(alignment_scores.filter(evaluation=evaluation
+                              ).values_list("alignment_tag__id", flat=True))
 
         rubrics = Rubric.objects.all()
         rubric_scores = RubricScore.objects.filter(
@@ -352,9 +364,6 @@ class Results(EvaluateViewMixin, TemplateView):
             ))
 
         not_scored_section = None
-        not_scored_tags = set(tags.values_list("id", flat=True)) - \
-                          set(alignment_scores.filter(evaluation=evaluation
-                          ).values_list("alignment_tag__id", flat=True))
         user_rubric_scores = rubric_scores.filter(
             evaluation__user=self.request.user
         )

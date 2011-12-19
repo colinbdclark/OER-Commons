@@ -51,6 +51,13 @@ class Evaluation(models.Model):
             )
         unique_together = ["user", "content_type", "object_id"]
 
+    @classmethod
+    def enable_alignment_scores(cls, item):
+        collection = getattr(item, "collection")
+        if collection and collection.disable_alignment_evaluation:
+            return False
+        return True
+
 
 class ScoreValue(models.Model):
 
@@ -178,10 +185,12 @@ class EvaluatedItemMixin(object):
             rubric_ids = [0] + list(Rubric.objects.values_list("id", flat=True))
             rubric_id = int(r.groups()[0])
             if rubric_id not in rubric_ids:
-                raise AttributeError()
+                raise AttributeError(name)
             return self.evaluation_scores.get(rubric_id)
         #noinspection PyUnresolvedReferences
-        return super(EvaluatedItemMixin, self).__getattr__(name)
+        if hasattr(super(EvaluatedItemMixin, self), "__getattr__"):
+            return super(EvaluatedItemMixin, self).__getattr__(name)
+        raise AttributeError(name)
 
 
 def get_rubric_choices():
