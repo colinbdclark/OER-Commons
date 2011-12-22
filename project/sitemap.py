@@ -1,7 +1,8 @@
+from common.models import GradeLevel
 from django.contrib.sitemaps import GenericSitemap as BaseGenericSitemap, \
     Sitemap
 from django.core.urlresolvers import reverse
-from materials.models.common import GeneralSubject, GradeLevel
+from materials.models.common import GeneralSubject
 from materials.models.community import CommunityItem, CommunityType, \
     CommunityTopic
 from materials.models.course import Course, CourseMaterialType
@@ -19,7 +20,7 @@ class GenericSitemap(BaseGenericSitemap):
 
 class OERSitemap(Sitemap):
     changefreq = "daily"
-    lastmod = now 
+    lastmod = now
 
     def location(self, item):
         if hasattr(item, "get_absolute_url"):
@@ -41,14 +42,14 @@ class OERSitemap(Sitemap):
         items += list(LibraryMaterialType.objects.all())
         items += list(GeneralSubject.objects.all())
         items += list(GradeLevel.objects.all())
-        
+
         items += [
             ("materials:courses:course_or_module_index", [], {"course_or_module": "full-course"}),
             ("materials:courses:course_or_module_index", [], {"course_or_module": "learning-module"}),
         ]
-        
+
         items += list(CourseMaterialType.objects.all())
-        
+
         items += [
             ("materials:community", [], {}),
         ]
@@ -58,9 +59,9 @@ class OERSitemap(Sitemap):
         items += [
             ("feedback", [], {}),
         ]
-        
+
         return items
-        
+
 
 sitemaps = {
     'main': OERSitemap(),

@@ -1,7 +1,8 @@
 from __future__ import absolute_import
 
 from annoying.decorators import ajax_request
-from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade, \
+from common.models import Grade
+from curriculum.models import TaggedMaterial, AlignmentTag, Standard,\
     LearningObjectiveCategory
 from curriculum.utils import get_item_tags as get_item_tags_helper
 from django import forms
@@ -11,7 +12,6 @@ from django.db.models import Avg
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
-from haystack.query import SearchQuerySet
 from haystack_scheduled.indexes import Indexed
 from rubrics.models import StandardAlignmentScore, get_verbose_score_name, \
     Evaluation
@@ -131,26 +131,21 @@ def cmp_grades(grade1, grade2):
     # 11-12
     # K-12
 
-    def int_grade(g):
-        if g == "K":
-            return 0
-        return int(g)
+    # grade1 and grade2 are actually tuples:
+    # (start_grade_code, start_grade_order, start_grade_name,
+    #  end_grade_code, end_grade_order, end_grade_name).
+    # end_grade_* values may be None.
 
-    if "-" in grade1:
-        grade1_start, grade1_end = map(int_grade, grade1.split("-"))
-    else:
-        grade1_start = grade1_end = int_grade(grade1)
-    grade1_range = grade1_end - grade1_start
+    # Sort by end_grade order. If it's empty use start_grade order.
+    r = cmp(
+        grade1[4] if grade1[4] is not None else grade1[1],
+        grade2[4] if grade2[4] is not None else grade2[1],
+    )
 
-    if "-" in grade2:
-        grade2_start, grade2_end = map(int_grade, grade2.split("-"))
-    else:
-        grade2_start = grade2_end = int_grade(grade2)
-    grade2_range = grade2_end - grade2_start
-
-    r = cmp(grade1_end, grade2_end)
     if not r:
-        r = cmp(grade1_range, grade2_range)
+        # If end_grade's order are equal sort by start_grade order in reverse order
+        r = -cmp(grade1[1], grade2[1])
+
     return r
 
 
@@ -165,20 +160,23 @@ def list_grades(request, existing=False):
     if existing:
         qs = TaggedMaterial.objects.filter(
             tag__standard=standard
-        ).values_list(
-            "tag__grade__id", "tag__grade__code", "tag__grade__name"
-        ).order_by("tag__grade__id").distinct()
+        ).values_list("tag__grade__code", "tag__grade__order", "tag__grade__name",
+                      "tag__end_grade__code", "tag__end_grade__order", "tag__end_grade__name").order_by().distinct()
     else:
         qs = AlignmentTag.objects.filter(
             standard=standard
-        ).values_list(
-            "grade__id", "grade__code", "grade__name"
-        ).order_by("grade__id").distinct()
+        ).values_list("grade__code", "grade__order", "grade__name",
+                      "end_grade__code", "end_grade__order", "end_grade__name").order_by().distinct()
 
-    grades = list(dict(id=id, code=code, name=name) for id, code, name in qs)
-    grades.sort(cmp=cmp_grades, key=lambda x: x["code"])
-    for g in grades:
-        del g["code"]
+    grades = list(qs)
+    grades.sort(cmp=cmp_grades)
+
+    grades = list(
+        dict(
+            id="%s-%s" % (start_code, end_code) if end_code else start_code,
+            name="%s-%s Grades" % (start_code, end_code) if end_code else start_name,
+        ) for start_code, start_order, start_name,
+              end_code, end_order, end_name in grades)
 
     return dict(options=grades)
 
@@ -192,20 +190,27 @@ def list_categories(request, existing=False):
         return HttpResponseBadRequest()
 
     grade = request.POST.get("grade")
+    if "-" in grade:
+        grade, end_grade = grade.split("-")
+    else:
+        end_grade = None
     try:
-        grade = Grade.objects.get(id=int(grade))
+        grade = Grade.objects.get(code=grade)
+        if end_grade:
+            end_grade = Grade.objects.get(code=end_grade)
     except (ValueError, TypeError, Grade.DoesNotExist):
         return HttpResponseBadRequest()
 
     if existing:
         qs = TaggedMaterial.objects.filter(
-            tag__standard=standard, tag__grade=grade
+            tag__standard=standard, tag__grade=grade,
+            tag__end_grade=end_grade,
         ).values_list(
             "tag__category__id", "tag__category__name"
         ).order_by("tag__category__id").distinct()
     else:
         qs = AlignmentTag.objects.filter(
-            standard=standard, grade=grade
+            standard=standard, grade=grade, end_grade=end_grade,
         ).values_list(
             "category__id", "category__name"
         ).order_by("category__id").distinct()
@@ -238,8 +243,14 @@ def list_tags(request, existing=False):
         return HttpResponseBadRequest()
 
     grade = request.POST.get("grade")
+    if "-" in grade:
+        grade, end_grade = grade.split("-")
+    else:
+        end_grade = None
     try:
-        grade = Grade.objects.get(id=int(grade))
+        grade = Grade.objects.get(code=grade)
+        if end_grade:
+            end_grade = Grade.objects.get(code=end_grade)
     except (ValueError, TypeError, Grade.DoesNotExist):
         return HttpResponseBadRequest()
 
@@ -254,6 +265,7 @@ def list_tags(request, existing=False):
             tagged.tag for tagged in TaggedMaterial.objects.filter(
                 tag__standard=standard,
                 tag__grade=grade,
+                tag__end_grade=end_grade,
                 tag__category=category
             ).select_related()
         )
@@ -261,6 +273,7 @@ def list_tags(request, existing=False):
         tags = AlignmentTag.objects.filter(
             standard=standard,
             grade=grade,
+            end_grade=end_grade,
             category=category
         )
 

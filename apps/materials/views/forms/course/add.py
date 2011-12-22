@@ -1,10 +1,11 @@
+from common.models import GradeLevel
 from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
-from materials.models.common import GeneralSubject, GradeLevel, MediaFormat, \
+from materials.models.common import GeneralSubject, MediaFormat, \
     Language, GeographicRelevance, Keyword
 from materials.models.course import Course, CourseMaterialType, COURSE_OR_MODULE
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
@@ -124,7 +125,7 @@ class AddForm(SubmissionFormBase, ModelForm):
         model = Course
         fields = ["title", "url", "abstract", "institution", "collection",
                   "authors", "tech_requirements", "keywords", "general_subjects",
-                  "grade_levels", "material_types", "media_formats", 
+                  "grade_levels", "material_types", "media_formats",
                   "languages", "geographic_relevance",
                   "license_type", "license_cc", "license_cc_old",
                   "license_custom_url", "license_description",

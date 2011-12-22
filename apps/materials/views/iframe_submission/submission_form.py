@@ -1,9 +1,10 @@
 from annoying.decorators import ajax_request
+from common.models import GradeLevel
 from django import forms
 from django.forms.models import ModelForm
 from django.http import Http404
 from django.template.loader import render_to_string
-from materials.models.common import GeneralSubject, GradeLevel, Language, \
+from materials.models.common import GeneralSubject, Language, \
     GeographicRelevance, MediaFormat, Collection, Keyword
 from materials.models.course import Course, CourseMaterialType
 from materials.models.material import PENDING_STATE

@@ -1,3 +1,4 @@
+from common.models import  Grade
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -29,29 +30,6 @@ class Standard(models.Model):
 
     class Meta:
         unique_together = ["code", "substandard_code"]
-        ordering = ("id", )
-
-
-class GradeManager(models.Manager):
-
-    def get_by_natural_key(self, code):
-        return self.get(code=code)
-
-
-class Grade(models.Model):
-
-    name = models.CharField(max_length=100, unique=True)
-    code = models.CharField(max_length=10, unique=True, db_index=True)
-
-    objects = GradeManager()
-
-    def __unicode__(self):
-        return "%s (%s)" % (self.name, self.code)
-
-    def natural_key(self):
-        return self.code,
-
-    class Meta:
         ordering = ("id", )
 
 
@@ -87,18 +65,23 @@ class AlignmentTagManager(models.Manager):
         # of [category] and [code]: "R, 3.F.a", "R.F, 3.a", "R.F.3, a".
         parts = code.split(".")[1:]
         grade = parts.pop(0)
+        if "-" in grade:
+            grade, end_grade = grade.split("-")
+        else:
+            end_grade = None
         for i in range(1, len(parts)):
             try:
                 category = ".".join(parts[0:i])
                 code = ".".join(parts[i:])
-                return self.get_by_natural_key(grade, category, code)
+                return self.get_by_natural_key(grade, end_grade, category, code)
             except AlignmentTag.DoesNotExist:
                 continue
         raise AlignmentTag.DoesNotExist()
 
-    def get_by_natural_key(self, grade_code, category_code, code):
-        return self.get(grade__code=grade_code, category__code=category_code,
-                        code=code)
+    def get_by_natural_key(self, grade_code, end_grade_code, category_code, code):
+        return self.get(grade__code=grade_code, end_grade__code=end_grade_code,
+                        category__code=category_code, code=code)
+
 
 
 class AlignmentTag(models.Model):
@@ -106,6 +89,7 @@ class AlignmentTag(models.Model):
     description = models.TextField()
     standard = models.ForeignKey(Standard)
     grade = models.ForeignKey(Grade)
+    end_grade = models.ForeignKey(Grade, null=True, related_name="+")
     category = models.ForeignKey(LearningObjectiveCategory)
     subcategory = models.TextField(verbose_name=u"Domain")
     code = models.CharField(max_length=10, db_index=True)
@@ -114,18 +98,24 @@ class AlignmentTag(models.Model):
 
     @property
     def full_code(self):
-        return "%s.%s.%s.%s" % (self.standard.code, self.grade.code,
+        grade_code = "%s-%s" % (self.grade.code, self.end_grade.code) if self.end_grade else self.grade.code
+        return "%s.%s.%s.%s" % (self.standard.code, grade_code,
                                 self.category.code, self.code)
 
+    @property
+    def grade_name(self):
+        return "%s-%s Grades" % (self.grade.code, self.end_grade.code) if self.end_grade else unicode(self.grade)
+
     def natural_key(self):
-        return (self.grade.code, self.category.code, self.code,)
+        end_grade_code = self.end_grade.code if self.end_grade else None
+        return self.grade.code, end_grade_code, self.category.code, self.code
 
     def __unicode__(self):
         return "%s - %s" % (self.full_code, truncate_letters(self.description,
                                                              70))
     @permalink
     def get_absolute_url(self):
-        return ("materials:alignment_index", [], dict(alignment=self.full_code))
+        return "materials:alignment_index", [], dict(alignment=self.full_code)
 
     class Meta:
         ordering = ("standard", "grade", "category", "code",)

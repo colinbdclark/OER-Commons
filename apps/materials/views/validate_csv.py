@@ -1,9 +1,10 @@
+from common.models import GradeLevel, GradeSubLevel, Grade
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django import forms
 from geo.models import Country
-from materials.models import GeneralSubject, GradeLevel, CourseMaterialType,\
+from materials.models import GeneralSubject, CourseMaterialType,\
     MediaFormat, Language, GeographicRelevance, LibraryMaterialType, Course,\
     Library
 from materials.models.course import COURSE_OR_MODULE
@@ -173,6 +174,10 @@ GENERAL_SUBJECT_SLUGS = set(
     GeneralSubject.objects.all().values_list("slug", flat=True))
 GRADE_LEVEL_SLUGS = set(
     GradeLevel.objects.all().values_list("slug", flat=True))
+GRADE_SUBLEVEL_SLUGS = set(
+    GradeSubLevel.objects.all().values_list("slug", flat=True))
+GRADE_CODES = set(
+    Grade.objects.all().values_list("code", flat=True))
 COURSE_MATERIAL_TYPE_SLUGS = set(
     CourseMaterialType.objects.all().values_list("slug", flat=True))
 LIBRARY_MATERIAL_TYPE_SLUGS = set(
@@ -205,6 +210,8 @@ COURSE_FIELDS = {
     'CR_MEDIA_FORMATS': (extract_list_slugify, [check_required, check_in_list(MEDIA_FORMAT_SLUGS)]),
     'CR_NOTABLE_REQS': (extract_string, None),
     'CR_LEVEL': (extract_list_slugify, [check_required, check_in_list(GRADE_LEVEL_SLUGS)]),
+    'CR_SUBLEVEL': (extract_list_slugify, [check_in_list(GRADE_SUBLEVEL_SLUGS)]),
+    'CR_GRADE': (extract_list_slugify, [check_in_list(GRADE_CODES)]),
     'CR_ABSTRACT': (extract_string, check_required),
     'CR_KEYWORDS': (extract_keywords, check_required),
     'CR_LANGUAGE': (extract_list, check_in_list(LANGUAGE_SLUGS)),
@@ -253,6 +260,8 @@ LIBRARY_FIELDS = {
     'LIB_IS_HOME_PAGE': (extract_boolean, None),
     'LIB_NOTABLE_REQS': (extract_string, None),
     'LIB_LEVEL': (extract_list_slugify, [check_required, check_in_list(GRADE_LEVEL_SLUGS)]),
+    'LIB_SUBLEVEL': (extract_list_slugify, [check_in_list(GRADE_SUBLEVEL_SLUGS)]),
+    'LIB_GRADE': (extract_list_slugify, [check_in_list(GRADE_CODES)]),
     'LIB_ABSTRACT': (extract_string, check_required),
     'LIB_KEYWORDS': (extract_keywords, check_required),
     'LIB_LANGUAGE': (extract_list, check_in_list(LANGUAGE_SLUGS)),
