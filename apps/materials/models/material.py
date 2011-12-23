@@ -261,7 +261,10 @@ class Material(Indexed, EvaluatedItemMixin):
 
     @property
     def alignment_grades(self):
-        return self.alignment_tags.values_list("tag__grade__id", flat=True).order_by().distinct()
+        grades = []
+        for grade, end_grade in self.alignment_tags.values_list("tag__grade__code", "tag__end_grade__code").order_by().distinct():
+            grades.append("%s-%s" % (grade, end_grade) if grade else grade)
+        return grades
 
     @property
     def alignment_categories(self):

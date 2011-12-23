@@ -1,7 +1,8 @@
-from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade,\
+from common.models import Grade, GradeLevel
+from curriculum.models import TaggedMaterial, AlignmentTag, Standard,\
     LearningObjectiveCategory
 from django.http import Http404
-from materials.models.common import Keyword, GeneralSubject, GradeLevel, \
+from materials.models.common import Keyword, GeneralSubject,\
     MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS, \
     LICENSE_TYPES
 from materials.models.community import CommunityType, CommunityTopic
@@ -315,14 +316,23 @@ class AlignmentStandardFilter(AlignmentFilter):
 
 class AlignmentGradeFilter(AlignmentStandardFilter):
 
+    def extract_value(self, request):
+        value = request.REQUEST.getlist(self.request_name)
+        if not value:
+            return None
+        return value
+
     @property
     def available_values(self):
-        return set(TaggedMaterial.objects.all().values_list("tag__grade__id", flat=True).order_by().distinct())
+        grades = set()
+        for grade, end_grade in TaggedMaterial.objects.all().values_list("tag__grade__code", "tag__end_grade__code").order_by().distinct():
+            grades.add("%s-%s" % (grade, end_grade) if end_grade else grade)
+        return grades
 
     def page_subtitle(self, value):
         if not isinstance(value, list):
             value = [value]
-        return ",".join([unicode(Grade.objects.get(id=id)) for id in value])
+        return ",".join([u"%s Grades" % code if "-" in code else unicode(Grade.objects.get(code=code)) for code in value])
 
 
 class AlignmentCategoryFilter(AlignmentStandardFilter):

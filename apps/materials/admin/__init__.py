@@ -5,7 +5,7 @@ from materials.admin.community_item import CommunityItemAdmin
 from materials.admin.course import CourseAdmin
 from materials.admin.library import LibraryAdmin
 from materials.models import Course, Library, CommunityItem
-from materials.models.common import GeneralSubject, GradeLevel, \
+from materials.models.common import GeneralSubject,\
     Language, MediaFormat, GeographicRelevance, Keyword, Author, Collection
 from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
@@ -15,7 +15,6 @@ from utils.forms import AutocompleteListField
 
 
 site.register(GeneralSubject, ModelAdmin)
-site.register(GradeLevel, ModelAdmin)
 site.register(Language, ModelAdmin)
 site.register(CourseMaterialType, ModelAdmin)
 site.register(LibraryMaterialType, ModelAdmin)

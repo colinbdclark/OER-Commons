@@ -1,8 +1,11 @@
+from __future__ import absolute_import
+
 from autoslug.fields import AutoSlugField
+from common.models import GradeLevel, GradeSubLevel, Grade
 from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
-from materials.models.common import Author, Keyword, GeneralSubject, GradeLevel, \
+from materials.models.common import Author, Keyword, GeneralSubject,\
     Language, GeographicRelevance, MediaFormat, Institution, Collection, \
     AutoCreateManyToManyField, AutoCreateForeignKey
 from materials.models.material import Material
@@ -52,6 +55,9 @@ class Library(Material):
                                           verbose_name=_(u"General subjects"))
     grade_levels = models.ManyToManyField(GradeLevel,
                                           verbose_name=_(u"Grade level"))
+    grade_sublevels = models.ManyToManyField(GradeSubLevel,
+                                          verbose_name=_(u"Grade sub-level"))
+    grades = models.ManyToManyField(Grade, verbose_name=_(u"Grade"))
     languages = models.ManyToManyField(Language,
                                        verbose_name=_(u"Languages"))
     geographic_relevance = models.ManyToManyField(GeographicRelevance,

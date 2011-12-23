@@ -45,6 +45,10 @@ def process_slugs(value):
     return "|".join(value.values_list("slug", flat=True))
 
 
+def process_codes(value):
+    return "|".join(value.values_list("code", flat=True))
+
+
 class process_field_attr():
 
     def __init__(self, attr):
@@ -75,6 +79,8 @@ COURSE_FIELDS = (
     ('CR_MEDIA_FORMATS', "media_formats", process_vocabulary),
     ('CR_NOTABLE_REQS', "tech_requirements", None),
     ('CR_LEVEL', "grade_levels", process_vocabulary),
+    ('CR_SUBLEVEL', "grade_sublevels", process_vocabulary),
+    ('CR_GRADE', "grades", process_codes),
     ('CR_ABSTRACT', "abstract", None),
     ('CR_KEYWORDS', "keywords", process_vocabulary),
     ('CR_LANGUAGE', "languages", process_slugs),
@@ -113,6 +119,8 @@ LIBRARY_FIELDS = (
     ('LIB_IS_HOME_PAGE', "is_homepage", lambda x: x and 'Yes' or 'No'),
     ('LIB_INSTITUTION', "institution", lambda x: x and x.name or ""),
     ('LIB_LEVEL', "grade_levels", process_vocabulary),
+    ('LIB_SUBLEVEL', "grade_sublevels", process_vocabulary),
+    ('LIB_GRADE', "grades", process_codes),
     ('LIB_ABSTRACT', "abstract", None),
     ('LIB_SUBJECT', "general_subjects", process_vocabulary),
     ('LIB_NOTABLE_REQS', "tech_requirements", None),
@@ -141,6 +149,8 @@ COMMUNITY_ITEM_FIELDS = (
     ('OER_SUBJECT', "general_subjects", process_vocabulary),
     ('OER_NOTABLE_REQS', "tech_requirements", None),
     ('OER_LEVEL', "grade_levels", process_vocabulary),
+    ('OER_SUBLEVEL', "grade_sublevels", process_vocabulary),
+    ('OER_GRADE', "grades", process_codes),
     ('OER_ABSTRACT', "abstract", None),
     ('OER_KEYWORDS', "keywords", process_vocabulary),
     ('OER_LANGUAGE', "languages", process_slugs),
