@@ -142,7 +142,10 @@
     </div>
   </div>
   <footer class="global">
-    <a href="http://www.achieve.org/files/AchieveOERRubrics.pdf" target="_blank">OER Rubrics (PDF Version)</a>
+    <a href="http://www.achieve.org/files/AchieveOERRubrics.pdf" class="left" target="_blank">OER Rubrics (PDF Version)</a>
+    <div class="oer-logo">
+      <a href="http://www.oercommons.org" target="_blank">OER Commons</a>
+    </div>
     <a href="{% url rubrics:evaluate_results content_type_id=content_type.id,object_id=object.id %}" class="results rc5">View Results</a>
   </footer>
 {% endblock %}

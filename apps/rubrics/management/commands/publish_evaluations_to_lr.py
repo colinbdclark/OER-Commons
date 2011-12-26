@@ -42,7 +42,8 @@ class Command(NoArgsCommand):
         args = shlex.split(command) + ["--key", key,
                                        "--key-location", key_location,
                                        "--passphrase", passphrase,
-                                       "--publish-url", publish_url]
+                                       "--publish-url", publish_url,
+                                       "--lr-test-data", "false"]
 
         username = getattr(settings, "LR_NODE_USERNAME", None)
         password = getattr(settings, "LR_NODE_PASSWORD", None)
