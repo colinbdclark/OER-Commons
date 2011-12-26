@@ -300,11 +300,28 @@ body.evaluation-tool {
   border: 2px solid #679701;
   background-color: #fff;
   font-size: 12px;
+  line-height: 1.4;
 }
 
 .evaluation-tool .rubrics .scores .selected .description,
 .evaluation-tool .rubrics .scores .hover .description {
   display: block;
+}
+
+.evaluation-tool .rubrics .scores .description p {
+  margin-bottom: 0.5em;
+}
+
+.evaluation-tool .rubrics .scores .description ul {
+  list-style: disc inside;
+  margin-bottom: 0.5em;
+  margin-left: 0.2em;
+}
+
+.evaluation-tool .rubrics .scores .description ol {
+  list-style: decimal inside;
+  margin-bottom: 0.5em;
+  margin-left: 0.2em;
 }
 
 .evaluation-tool .rubrics .scores .hover .description {
