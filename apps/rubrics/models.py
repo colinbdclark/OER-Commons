@@ -53,7 +53,7 @@ class Evaluation(models.Model):
 
     @classmethod
     def enable_alignment_scores(cls, item):
-        collection = getattr(item, "collection")
+        collection = getattr(item, "collection", None)
         if collection and collection.disable_alignment_evaluation:
             return False
         return True
