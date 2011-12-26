@@ -69,7 +69,7 @@
                     {% if forloop.first %}
                       <p class="tip">Mouse over for score description</p>
                     {% endif %}
-                    <div class="description rc5">{{ score.description|markdown|linebreaksbr|safe }}</div>
+                    <div class="description rc5">{{ score.description|markdown|safe }}</div>
                   </div>
                 {% endfor %}
               </div>
@@ -104,7 +104,7 @@
         </h1>
         <div class="body">
           <div class="description">
-            {{ rubric.description|markdown|linebreaksbr|safe }}
+            {{ rubric.description|markdown|safe }}
           </div>
 
           <div class="scores" data-rubric-id="{{ rubric.id }}">
@@ -116,7 +116,7 @@
                 {% if forloop.first %}
                   <p class="tip">Mouse over for score description</p>
                 {% endif %}
-                <div class="description rc5">{{ score.description|markdown|linebreaksbr|safe }}</div>
+                <div class="description rc5">{{ score.description|markdown|safe }}</div>
               </div>
             {% endfor %}
           </div>
