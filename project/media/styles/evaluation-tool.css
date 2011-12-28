@@ -636,12 +636,44 @@ body.evaluation-tool {
   z-index: 10;
   padding: 4px 10px;
   width: 580px;
+  height: 25px;
   border-top: 1px solid #ccc;
   background-color: #fff;
 }
 
-.evaluation-tool footer.global a {
+.evaluation-tool .oer-logo {
+  color: #ccc;
+  font-size: 12px;
+  width: 70px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.evaluation-tool .oer-logo a {
+  color: #ccc;
+  font-size: 12px;
+  display: block;
+  width: 49px;
+  height: 25px;
+  background: url(../images/evaluation/oer-logo-small.png);
+  text-indent: -9999px;
+  margin: 0 auto;
+}
+
+.evaluation-tool .intro .oer-logo {
+  margin-top: 1em;
+}
+
+.evaluation-tool .intro .oer-logo a {
+  margin-top: 4px;
+}
+
+.evaluation-tool footer.global a.left {
   color: #666;
+  position: absolute;
+  display: inline-block;
+  top: 5px;
+  left: 10px;
 }
 
 .evaluation-tool footer.global a.results {
