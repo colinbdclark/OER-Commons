@@ -19,6 +19,8 @@ class GradeSubLevelInline(admin.TabularInline):
 
 class GradeLevelAdmin(admin.ModelAdmin):
 
+    list_display = ["name", "start_age", "end_age"]
+
     inlines = [
         GradeSubLevelInline
     ]
@@ -26,13 +28,15 @@ class GradeLevelAdmin(admin.ModelAdmin):
 
 class GradeSubLevelAdmin(admin.ModelAdmin):
 
+    list_display = ["name", "start_age", "end_age"]
+
     inlines = [
         GradeInline
     ]
 
 class GradeAdmin(admin.ModelAdmin):
 
-    list_display = ["name", "order"]
+    list_display = ["name", "order", "start_age", "end_age"]
     list_editable = ["order"]
 
 

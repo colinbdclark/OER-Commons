@@ -7,7 +7,7 @@ from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject,\
     Language, GeographicRelevance, MediaFormat, Institution, Collection, \
-    AutoCreateManyToManyField, AutoCreateForeignKey
+    AutoCreateManyToManyField, AutoCreateForeignKey, AgeRange
 from materials.models.material import Material
 
 
@@ -64,7 +64,7 @@ class RelatedMaterial(models.Model):
         ordering = ("title",)
 
 
-class Course(Material):
+class Course(Material, AgeRange):
 
     namespace = "courses"
 
@@ -91,6 +91,7 @@ class Course(Material):
     grade_sublevels = models.ManyToManyField(GradeSubLevel,
                                           verbose_name=_(u"Grade sub-level"))
     grades = models.ManyToManyField(Grade, verbose_name=_(u"Grade"))
+
     languages = models.ManyToManyField(Language, verbose_name=_(u"Languages"))
     geographic_relevance = models.ManyToManyField(GeographicRelevance,
                                       verbose_name=_(u"Geographic relevance"))

@@ -254,6 +254,11 @@ class DataImport(TemplateView):
                                 dict(title=title, url=url, description=description)
                             )
 
+                typical_age_range = data.get("TYPICAL_AGE_RANGE")
+                if typical_age_range:
+                    obj.start_age = typical_age_range[0]
+                    obj.end_age = typical_age_range[1]
+
                 obj.save()
 
                 for csv_field_name, obj_field_name, field_model, field_model_key in m2m_fields:
