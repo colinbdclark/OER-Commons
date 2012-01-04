@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load compress %}
+{% load flatblock_tags %}
+{% load users_tags %}
+{% load getsatisfaction %}
+<html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
+  <head>
+    <meta charset="utf-8"/>
+    <title>{% block title %}{% if page_title %}{{ page_title }}{% if page_subtitle %}: {{ page_subtitle|safe }}{% endif %} | {% endif %}OER Commons{% endblock %}</title>
+    {% block meta_description %}{% endblock %}
+    {% include "include/open-graph-meta.html" %}
+    <link rel="shortcut icon" href="{{STATIC_URL}}images/favicon.ico"/>
+    {% include "include/css.html" %}
+    {% include "include/modernizr.html" %}
+    {% block extra-css %}{% endblock %}
+    {% if not debug %}
+      {% flatblock "chartbeat-head" %}
+    {% endif %}
+  </head>
+  <body>
+
+    <div style="margin: 1em;">
+      {% if not request.user.is_authenticated %}
+        {% include "users/login-form.html" %}
+      {% else %}
+        <p class="align-center">You are logged in.</p>
+      {% endif %}
+    </div>
+
+    {% include "include/js.html" %}
+    {% compress js %}
+    {% block extra-js %}{% endblock %}
+    {% endcompress %}
+
+    {% fastpass %}
+
+    {% if not debug %}
+      {% flatblock "google-analytics" %}
+      {% flatblock "chartbeat-tracker" %}
+    {% endif %}
+
+  </body>
+</html>
