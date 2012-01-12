@@ -1,0 +1,258 @@
+#edit-authored-material {
+  .actions {
+    padding: 0;
+    margin: 0 0 10px 10px;
+    float: right;
+    a {
+      display: inline-block;
+      margin-left: 7px;
+      text-decoration: none;
+      color: #333;
+      font-size: 16px;
+      background-color: #eee;
+      padding: 0 10px;
+      line-height: 26px;
+      border: 1px solid #ccc;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      &.hidden {
+        display: none;
+      }
+      &:hover {
+        color: #fff;
+        background: #666;
+        border-color: #333;
+      }
+    }
+  }
+
+  #status-messages {
+    float: right;
+    .status-message {
+      line-height: 26px;
+      background: none;
+      border: none;
+      padding: 0;
+      color: #333;
+      &.success {
+        color: #060;
+      }
+      &.error {
+        color: #600;
+      }
+    }
+  }
+
+  #material-title {
+    font-size: 20px;
+    line-height: 26px;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0 3px;
+    color: #333;
+    max-width: 500px;
+    &:hover {
+       background-color: #eee;
+    }
+  }
+
+  .title-input {
+    margin: 0 -3px;
+    input {
+      font-size: 20px;
+      line-height: 24px;
+      height: 24px;
+      padding: 0 1px;
+      border: 1px solid #ccc;
+      font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
+      width: 500px;
+      color: #333;
+      &:focus {
+        outline-width: 0;
+      }
+    }
+  }
+
+  #editor {
+    clear: right;
+    margin-left: 230px;
+    .toolbar {
+      border: 1px solid #ccc;
+      background: #eee;
+      margin-bottom: 10px;
+      padding: 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      .sep {
+        display: block;
+        float: left;
+        height: 28px;
+        width: 10px;
+        vertical-align: middle;
+      }
+      .button, .text-style .select {
+        border: 1px solid #ccc;
+        background-color: #fff;
+        display: block;
+        height: 26px;
+        line-height: 26px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        &:hover {
+          background-color: #f5f5f5;
+        }
+      }
+      .button {
+        width: 26px;
+        margin-right: 3px;
+        text-indent: -9999px;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        float: left;
+        &.bold {
+          background-image: url(../images/authoring/font_bold_icon&16.png);
+        }
+        &.italic {
+          background-image: url(../images/authoring/font_italic_icon&16.png);
+        }
+        &.underline {
+          background-image: url(../images/authoring/font_underline_icon&16.png);
+        }
+        &.link {
+          background-image: url(../images/authoring/link_icon&16.png);
+        }
+        &.bullet-list {
+          background-image: url(../images/authoring/list_bullets_icon&16.png);
+        }
+        &.number-list {
+          background-image: url(../images/authoring/list_num_icon&16.png);
+        }
+      }
+      .text-style {
+        position: relative;
+        float: left;
+        .select {
+          text-decoration: none;
+          margin-right: 5px;
+          padding: 0 4px;
+          color: #333;
+          span {
+            display: block;
+            padding-right: 20px;
+            background-image: url(../images/collapsible-btn-opened.png);
+            background-repeat: no-repeat;
+            background-position: 100% 50%;
+          }
+        }
+        ul {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+          position: absolute;
+          border: 1;
+          margin: 3px;
+          padding: 3px;
+          border: 1px solid #ccc;
+          background: #fff;
+          width: 100px;
+          display: none;
+        }
+        li {
+          padding: 0;
+          margin: 0;
+          a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+            padding: 4px;
+            &:hover {
+              background: #eee;
+            }
+            &.header span {
+              font-size: 20px;
+              font-weight: bold;
+            }
+            &.sub-header span {
+              font-size: 16px;
+              font-weight: bold;
+            }
+            &.quote span {
+              padding-left: 7px;
+              border-left: 3px solid #ccc;
+            }
+          }
+        }
+        &.active ul {
+          display: block;
+        }
+      }
+    }
+    .editor-area {
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+      p, h1, h2, h3, ul, ol, dl, blockquote, pre, div {
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        background: #fff;
+      }
+      .image {
+        display: inline-block;
+        text-align: center;
+        margin-bottom: 5px;
+        padding: 5px;
+        &.center {
+          margin-left: auto;
+          margin-right: auto;
+        }
+        &.right {
+          margin-left: 5px;
+          margin-right: 0;
+        }
+        &.left {
+          margin-left: 0;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}
+
+#edit-link-dialog {
+  position: absolute;
+  display: none;
+  width: 258px;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 3px 0 #ccc;
+  -moz-box-shadow: 3px 0 #ccc;
+  -ms-box-shadow: 3px 0 #ccc;
+  box-shadow: 0 0 5px #666;
+  background-color: #fff;
+  padding: 5px;
+  text-align: right;
+  input {
+    width: 250px;
+    font-size: 13px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+  }
+  a {
+    font-size: 12px;
+    margin-left: 5px;
+    &.remove {
+      position: absolute;
+      left: 0;
+    }
+  }
+}
+

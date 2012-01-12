@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load scss %}
+
+{% block bodyclass %}no-columns{% endblock %}
+
+{% block extra-css %}
+  <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
+{% endblock %}
+
+{% block above-content %}{% endblock %}
+{% block status-messages %}{% endblock %}
+
+{% block content %}
+  <form id="edit-authored-material"
+        action="{% url authoring:edit material_id=material.id %}" method="post">
+    {% spaceless %}
+      <div class="actions">
+        <a href="#save" class="button">Save</a>
+        <a href="#preview" class="preview">Preview</a>
+        <a href="#edit" class="edit hidden">Edit</a>
+        <a href="#done" class="done">Done</a>
+      </div>
+      {% include "include/status-messages.html" %}
+      <h1 id="material-title">{% if material.title %}{{ material.title }}{% else %}Click here to edit title{% endif %}</h1>
+      {{ form.title }}
+    {% endspaceless %}
+    <div id="editor">
+      {% spaceless %}
+      <div class="toolbar">
+        <div class="text-style">
+          <a href="#" class="select"><span>Text style...</span></a>
+          <ul>
+            <li><a href="#regular" class="regular"><span>Regular text</span></a></li>
+            <li><a href="#header" class="header"><span>Header</span></a></li>
+            <li><a href="#sub-header" class="sub-header"><span>Sub-header</span></a></li>
+            <li><a href="#quote" class="quote"><span>Quote</span></a></li>
+          </ul>
+        </div>
+        <span class="sep"></span>
+        <a class="button bold" href="#bold">Bold</a>
+        <a class="button italic" href="#italic">Italic</a>
+        <a class="button underline" href="#underline">Underline</a>
+        <span class="sep"></span>
+        <a class="button link" href="#link">Link</a>
+        <span class="sep"></span>
+        <a class="button bullet-list" href="#bullet-list">Bullet list</a>
+        <a class="button number-list" href="#number-list">Number list</a>
+        <div class="clear"></div>
+      </div>
+      {% endspaceless %}
+      <div class="editor-area" contenteditable="true">
+        {% if material.text %}{{ material.text|safe }}{% else %}<p><br/></p>{% endif %}
+      </div>
+      <div class="preview hidden"></div>
+      {{ form.text }}
+    </div>
+  </form>
+  <div id="edit-link-dialog">
+    <input type="text" name="url" placeholder="http://">
+    <a href="#save" class="dashed">Save</a>
+    <a href="#cancel" class="dashed">Cancel</a>
+    <a href="#remove" class="remove dashed">Remove link</a>
+  </div>
+{% endblock %}
+
+{% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.jeditable.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring.js"></script>
+  <script>
+    $(function(e) {
+      new oer.authoring.Editor();
+    });
+  </script>
+{% endblock %}

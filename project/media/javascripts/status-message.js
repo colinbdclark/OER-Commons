@@ -16,3 +16,7 @@ oer.status_message.success = function(message, autohide) {
 oer.status_message.error = function(message, autohide) {
   oer.status_message.message(message, "error", autohide);
 };
+
+oer.status_message.clear = function() {
+  $("#status-messages").empty();
+}
