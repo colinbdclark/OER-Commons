@@ -64,7 +64,9 @@
       </div>
 
       <div class="column-main">
-        {% include "include/status-messages.html" %}
+        {% block status-messages %}
+          {% include "include/status-messages.html" %}
+        {% endblock %}
         {% if not hide_global_notifications %}
           {% if request.abtesting == "b" %}
             {% profile_notification "status-message" %}

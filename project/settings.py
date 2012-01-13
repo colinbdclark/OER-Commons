@@ -92,6 +92,7 @@ INSTALLED_APPS = (
     'mailchimp',
     'sorl.thumbnail',
     'django_coverage',
+    'django_scss',
     'oembed',
     'gunicorn',
     'utils',
@@ -122,6 +123,7 @@ INSTALLED_APPS = (
     'rubrics',
     'rubrics.manage',
     'getsatisfaction',
+    'authoring',
     'project',
 )
 

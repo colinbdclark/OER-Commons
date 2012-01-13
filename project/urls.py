@@ -2,7 +2,6 @@ from django.conf import settings
 from django.conf.urls.defaults import patterns, handler500, handler404, url, \
     include
 from django.contrib import admin
-from django.views.generic.simple import direct_to_template
 from oai.oer.oai_dc import OAIDublinCore
 from oai.oer.oai_oer2 import OAIOER2
 from oai.oer.oer_recommender import OERRecommender
@@ -46,8 +45,9 @@ urlpatterns = patterns('',
     url(r'', include('preferences.urls', app_name=None, namespace="preferences")),
     url(r'', include('curriculum.urls', app_name=None, namespace="curriculum")),
     url(r'', include('rubrics.urls', app_name=None, namespace="rubrics")),
+    url(r'^authoring/', include('authoring.urls', app_name=None, namespace="authoring")),
     url(r'^rubrics/manage/', include('rubrics.manage.urls', app_name=None, namespace="rubrics_manage")),
-    url(r'^my', include('myitems.urls', app_name=None, namespace="myitems")), # TODO! Set up redirect /portfolio -> /my
+    url(r'^my', include('myitems.urls', app_name=None, namespace="myitems")),
     url(r'^savedsearches', include('savedsearches.urls', app_name=None, namespace="savedsearches")),
     url(r'^oauth/', include('oauth_provider.urls')),
     url(r'^sentry/', include('sentry.urls')),
