@@ -45,11 +45,68 @@
         <span class="sep"></span>
         <a class="button bullet-list" href="#bullet-list">Bullet list</a>
         <a class="button number-list" href="#number-list">Number list</a>
+        <span class="sep"></span>
+        <a class="button media" href="#media">Media</a>
         <div class="clear"></div>
+      </div>
+      <div id="media-dialog">
+{#        TODO: add simple file input widget for browsers that don't support file drag'n'drop #}
+        <div class="step upload" data-url="{% url authoring:upload material_id=material.id %}">
+          <div class="left">
+            <h2>Drop in a file</h2>
+            <div class="drop-zone"></div>
+            <input type="file" name="file">
+          </div>
+          <div class="sep"><span>or</span></div>
+          <div class="right">
+            <h2>Grab it from the web</h2>
+            <input placeholder="http://" type="text" name="url">
+            <p>Enter the web address or paste the code<br/>
+            to the video, image, or document.</p>
+          </div>
+          <div class="actions">
+            <a href="#cancel">Cancel</a>
+            <a href="#ok">Ok</a>
+          </div>
+        </div>
+        <div class="step upload-progress">
+          <h2>Uploading your file, <strong></strong></h2>
+          <div class="progress-ct">
+            <div class="progress">
+              <div class="fill"></div>
+            </div>
+            <div class="legend">0%</div>
+          </div>
+          <div class="actions">
+            <a href="#cancel">Cancel</a>
+          </div>
+        </div>
+        <div class="step image">
+          <h2>Describe this image <strong></strong></h2>
+          <div class="left">
+          </div>
+          <div class="right">
+            <textarea placeholder="What's in this image? Describe it with a fiew words."></textarea>
+          </div>
+          <div class="actions">
+            <a href="#cancel">Cancel</a>
+            <a href="#ok">Ok</a>
+          </div>
+        </div>
+        <div class="step document">
+          <h2>Describe this attachment/document <strong></strong></h2>
+          <div class="left">
+            <input type="text" placeholder="Give this attachment/document a name">
+          </div>
+          <div class="actions">
+            <a href="#cancel">Cancel</a>
+            <a href="#ok">Ok</a>
+          </div>
+        </div>
       </div>
       {% endspaceless %}
       <div class="editor-area" contenteditable="true">
-        {% if material.text %}{{ material.text|safe }}{% else %}<p><br/></p>{% endif %}
+        {{ material.text|safe }}
       </div>
       <div class="preview hidden"></div>
       {{ form.text }}
@@ -65,6 +122,8 @@
 
 {% block extra-js %}
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.jeditable.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring.js"></script>
   <script>
     $(function(e) {
