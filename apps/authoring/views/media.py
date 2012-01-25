@@ -1,7 +1,8 @@
-from authoring.models import AuthoredMaterial, Image, Document
+from annoying.decorators import JsonResponse
+from authoring.models import AuthoredMaterial, Image, Document, Embed
 from cache_utils.decorators import cached
 from django.core.files import File
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import filesizeformat
 from django.views.generic.base import View
@@ -41,6 +42,7 @@ class MediaUploadForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.media_type = None
+        self.embed = None
         super(MediaUploadForm, self).__init__(*args, **kwargs)
 
     @cached(3600 * 24)
@@ -92,6 +94,9 @@ class MediaUploadForm(forms.Form):
             elif DOCUMENT_CONTENT_TYPE_RE.match(content_type):
                 self.media_type = "document"
 
+            else:
+                self.embed = Embed.get_for_url(url)
+
         else:
             content_type = file.content_type
             size = file._size
@@ -134,8 +139,9 @@ class MediaUpload(View):
                 return dict(
                     status="success",
                     type="image",
-                    thumbnail=get_thumbnail(image.image, "110x110", crop="center", upscale=False).url,
+                    thumbnail=get_thumbnail(image.image, "148x110", crop="center", upscale=False).url,
                     url=get_thumbnail(image.image, "650x650", upscale=False).url,
+                    original_url=image.image.url,
                     id=image.id,
                     name=image.image.name.split(os.path.sep)[-1],
                 )
@@ -156,6 +162,14 @@ class MediaUpload(View):
                         name="",
                         url=form.cleaned_data["url"],
                     )
+            elif form.embed and form.embed.type == "video":
+                video = form.embed
+                return dict(
+                    type="video",
+                    url=video.url,
+                    title=video.title or u"",
+                    thumbnail=video.thumbnail or u""
+                )
             else:
                 return dict(
                     status="success",
@@ -165,3 +179,24 @@ class MediaUpload(View):
 
         return dict(status="error", message=form._errors["__all__"][0])
 
+
+class LoadEmbed(View):
+
+    def post(self, request, *args, **kwargs):
+        url = request.POST.get("url")
+        if not url:
+            return HttpResponseBadRequest("Missing 'url' parameter.")
+
+        embed = Embed.get_for_url(url)
+        if not embed:
+            return HttpResponseBadRequest("Can't load embed from given URL.")
+
+        html = ""
+
+        if embed.type == "video":
+            html = embed.html
+
+        return JsonResponse(dict(
+            html=html,
+            url=embed.embed_url,
+        ))

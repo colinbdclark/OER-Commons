@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load scss %}
+
+{% block bodyclass %}no-columns{% endblock %}
+
+{% block extra-css %}
+  <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
+{% endblock %}
+
+{% block above-content %}{% endblock %}
+
+{% block content %}
+  <div class="authored-content">
+    {{ text|safe }}
+  </div>
+
+{% endblock %}
