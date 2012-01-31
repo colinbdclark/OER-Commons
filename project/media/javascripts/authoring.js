@@ -139,6 +139,9 @@ var AuthoringTool = function () {
   this.$area.find("figure.embed").each(function () {
     tool.loadEmbed($(this));
   });
+  this.$area.find("h2,h3").each(function () {
+    tool.initDND($(this));
+  });
 
   // Clean up HTML on paste and check for changes
   this.$area.bind("paste", function () {
@@ -476,9 +479,12 @@ AuthoringTool.prototype.changeBlockType = function (newType) {
   this.$focusBlock.remove();
   this.focusOnNode($newBlock);
   this.updateTextStyleIndicator(newType);
+  if ($newBlock.is("h2,h3")) {
+    this.initDND($newBlock);
+  }
 };
 
-AuthoringTool.prototype.updateTextStyleIndicator = function(tag) {
+AuthoringTool.prototype.updateTextStyleIndicator = function (tag) {
   if (tag == "h2") {
     this.$textStyleIndicator.text("Header");
   } else if (tag == "h3") {
@@ -685,48 +691,60 @@ AuthoringTool.prototype.initLinkUI = function () {
 };
 
 AuthoringTool.prototype.initFigure = function ($figure) {
-  // TODO: картинки склеиваются при перетаскивании
-  var tool = this;
   $figure.attr("contenteditable", "false");
 
   if (!$figure.hasClass("inline")) {
-    $figure.draggable({
-      helper: "clone",
-      opacity: 0.3,
-      appendTo: "body",
-      addClasses: false,
-      cursor: "move"
-    });
-    $figure.bind("dragstart", function () {
-      var $blocks = tool.$area.children().not($figure).not($figure.prev());
-      $blocks.droppable({
-        addClasses: false,
-        tolerance: "pointer"
-      });
-      $blocks.bind("dropover", function () {
-        var $this = $(this);
-        $this.stop(true).animate({
-          "margin-bottom": "70px"
-        });
-      });
-      $blocks.bind("dropout", function () {
-        var $this = $(this);
-        $this.stop(true).animate({
-          "margin-bottom": "1em"
-        });
-      });
-      $blocks.bind("drop", function () {
-        tool.$area.children().stop(true).css({
-          "margin-bottom": ""
-        });
-        tool.saveState();
-        $figure.detach().insertAfter($(this));
-      });
-    });
-    $figure.bind("dragstop", function () {
-      tool.$area.children().droppable("destroy");
-    });
+    this.initDND($figure);
+    this.initDND($figure);
   }
+};
+
+AuthoringTool.prototype.initDND = function ($block) {
+  // TODO: картинки склеиваются при перетаскивании
+  if (!$block.draggable("option", "disabled")) {
+    console.log("Draggabled already enabled for", $block);
+    return;
+  }
+  var tool = this;
+  $block.draggable({
+    helper: "clone",
+    opacity: 0.3,
+    appendTo: "body",
+    addClasses: false,
+    cursor: "move"
+  });
+  $block.bind("dragstart", function () {
+    var $blocks = tool.$area.children().not($block).not($block.prev());
+    $blocks.droppable({
+      addClasses: false,
+      tolerance: "pointer"
+    });
+    $blocks.bind("dropover", function () {
+      var $this = $(this);
+      $this.stop(true).animate({
+        "margin-bottom": "70px"
+      });
+    });
+    $blocks.bind("dropout", function () {
+      var $this = $(this);
+      $this.stop(true).animate({
+        "margin-bottom": ""
+      });
+    });
+    $blocks.bind("drop", function () {
+      tool.$area.children().stop(true).css({
+        "margin-bottom": ""
+      });
+      tool.saveState();
+      $block.detach().insertAfter($(this));
+      if ($block.is("h2,h3")) {
+        tool.updateOutline();
+      }
+    });
+  });
+  $block.bind("dragstop", function () {
+    tool.$area.children().droppable("destroy");
+  });
 };
 
 AuthoringTool.prototype.loadEmbed = function ($figure) {
@@ -784,13 +802,13 @@ AuthoringTool.prototype.updateOutline = function () {
     $this.append($("<li></li>").addClass("new").html(tool.newOutlineItemMessage($this.data("level"))));
   });
 
-  $list.children("li:not(.new)").filter(
-          function () {
-            return $(this).next("ul").length == 0;
-          }).after(function () {
-            var level = $(this).parent().data("level") + 1;
-            return $("<ul></ul>").data("level", level).append($("<li></li>").addClass("new").html(tool.newOutlineItemMessage(level)));
-          });
+  $list.children("li:not(.new)").filter(function () {
+    return $(this).next("ul").length == 0;
+  });
+  $list.after(function () {
+    var level = $(this).parent().data("level") + 1;
+    return $("<ul></ul>").data("level", level).append($("<li></li>").addClass("new").html(tool.newOutlineItemMessage(level)));
+  });
 
   this.$outline.data("levels", levels);
   this.$outline.children("ul").remove();
@@ -870,6 +888,7 @@ AuthoringTool.prototype.initOutline = function () {
           tool.$area.append($header);
         }
         $header.after($("<p><br/></p>"));
+        tool.initDND($header);
       }
     });
     $input.blur(reset).focus();
@@ -1160,9 +1179,9 @@ MediaDialog.ImageStep = function (dialog) {
 
     if (step.figureType == "download") {
       $figure = $("<figure></figure>").addClass("download").append(
-        $("<a target='_blank'></a>").attr("href", step.originalURL).addClass("download").text("Download: ").append(
-          $("<strong></strong>").text(title)
-        )
+              $("<a target='_blank'></a>").attr("href", step.originalURL).addClass("download").text("Download: ").append(
+                      $("<strong></strong>").text(title)
+              )
       );
     } else {
       if (description !== "") {
