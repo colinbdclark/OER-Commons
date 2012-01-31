@@ -111,11 +111,8 @@
         vertical-align: middle;
         background: url(../images/authoring/toolbar-sep.png);
       }
-      .button, .text-style .select {
-        display: block;
-        height: 41px;
-      }
       .button {
+        display: block;
         width: 39px;
         height: 39px;
         text-indent: -9999px;
@@ -159,15 +156,26 @@
         position: relative;
         float: left;
         .select {
+          display: block;
           margin-right: 5px;
-          padding: 0 4px;
           color: #333;
+          background: url(../images/authoring/icon-dropdown-closed.png) 100% 50% no-repeat;
+          padding-right: 20px;
           span {
             display: block;
-            padding-right: 20px;
-            background-image: url(../images/collapsible-btn-opened.png);
-            background-repeat: no-repeat;
-            background-position: 100% 50%;
+            height: 26px;
+            line-height: 26px;
+            margin-top: 6px;
+            font-family: "Times New Roman", serif;
+            font-size: 16px;
+            width: 100px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            padding: 0 4px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            -ms-border-radius: 3px;
+            border-radius: 3px;
           }
         }
         ul {
@@ -599,9 +607,6 @@
       strong {
         font-style: normal;
         color: #666;
-      }
-      a.download {
-        margin-left: 1em;
       }
     }
   }

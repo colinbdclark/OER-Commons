@@ -68,6 +68,7 @@ var AuthoringTool = function () {
   this.$toolbar = this.$editor.find(".toolbar");
   this.$area = this.$editor.find(".editor-area");
   this.$outline = $("#outline");
+  this.$textStyleIndicator = this.$toolbar.find(".text-style > a span");
 
   this.selection = null;
   this.range = null;
@@ -450,6 +451,10 @@ AuthoringTool.prototype.trackSelection = function () {
   this.$focusNode = $focusNode;
   this.$focusBlock = $focusBlock;
 
+  // Update text style menu
+  if ($focusBlock) {
+    this.updateTextStyleIndicator($focusBlock.get(0).tagName.toLowerCase());
+  }
 };
 
 AuthoringTool.prototype.changeBlockType = function (newType) {
@@ -470,6 +475,21 @@ AuthoringTool.prototype.changeBlockType = function (newType) {
   $newBlock.insertAfter(this.$focusBlock);
   this.$focusBlock.remove();
   this.focusOnNode($newBlock);
+  this.updateTextStyleIndicator(newType);
+};
+
+AuthoringTool.prototype.updateTextStyleIndicator = function(tag) {
+  if (tag == "h2") {
+    this.$textStyleIndicator.text("Header");
+  } else if (tag == "h3") {
+    this.$textStyleIndicator.text("Sub-Header");
+  } else if (tag == "blockquote") {
+    this.$textStyleIndicator.text("Long Quote");
+  } else if (tag == "p" || tag == "div") {
+    this.$textStyleIndicator.text("Paragraph");
+  } else {
+    this.$textStyleIndicator.text("Text style...");
+  }
 };
 
 AuthoringTool.prototype.insertList = function (listType) {
@@ -1098,7 +1118,7 @@ MediaDialog.ImageStep = function (dialog) {
   var $imageCt = this.$imageCt = $step.find("div.left");
   var $input = this.$input = $step.find("input:text");
   var $textarea = this.$textarea = $step.find("textarea");
-  this.figureType = "embed-download";
+  this.figureType = "embed";
   this.imageURL = null;
   this.originalURL = null;
 
@@ -1151,9 +1171,6 @@ MediaDialog.ImageStep = function (dialog) {
       var $caption = $("<figcaption></figcaption>").text(description);
       if (title) {
         $caption.prepend($("<strong></strong>").text(title));
-      }
-      if (step.figureType == "embed-download") {
-        $caption.append($("<a target='_blank'></a>").addClass("download").attr("href", step.originalURL).text("Download"));
       }
       $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL)).append($caption);
     }
