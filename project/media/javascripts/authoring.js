@@ -144,9 +144,6 @@ var AuthoringTool = function () {
   this.$area.find("figure.embed").each(function () {
     tool.loadEmbed($(this));
   });
-  this.$area.find("h2,h3").each(function () {
-    tool.initDND($(this));
-  });
 
   // Clean up HTML on paste and check for changes
   this.$area.bind("paste", function () {
@@ -481,9 +478,6 @@ AuthoringTool.prototype.changeBlockType = function (newType) {
   $newBlock.insertAfter(this.$focusBlock);
   this.$focusBlock.remove();
   this.focusOnNode($newBlock);
-  if ($newBlock.is("h2,h3")) {
-    this.initDND($newBlock);
-  }
   this.trackSelection();
 };
 
@@ -658,7 +652,7 @@ AuthoringTool.prototype.insertLink = function () {
   }
   if (args.text) {
     $link.html(args.text);
-  } else {
+  } else if ($link.text() == "#new-link") {
     $link.text("Link");
   }
   if (args["class"]) {
@@ -679,11 +673,19 @@ AuthoringTool.prototype.initLinkUI = function () {
 
   this.$toolbar.find("a.button.link").click(function (e) {
     e.preventDefault();
-    if (tool.$focusNode.is("a") || tool.$focusNode.parentsUntil(tool.$area, "a").length) {
-      // We are inside <a> element. Do nothing.
-      return;
+    var $link = null;
+    if (tool.$focusNode) {
+      $link = tool.$focusNode.closest("a", tool.$area);
     }
-    tool.insertLink();
+    if ($link && $link.length) {
+      if (!$link.hasClass("download")) {
+        tool.saveState();
+        tool.execCommand("unlink");
+        tool.trackSelection();
+      }
+    } else {
+      tool.insertLink();
+    }
   });
 
   var $dialog = $("#edit-link-dialog");
@@ -741,7 +743,6 @@ AuthoringTool.prototype.initFigure = function ($figure) {
   $figure.attr("contenteditable", "false");
 
   if (!$figure.hasClass("inline")) {
-    this.initDND($figure);
     this.initDND($figure);
   }
 };
@@ -935,7 +936,6 @@ AuthoringTool.prototype.initOutline = function () {
           tool.$area.append($header);
         }
         $header.after($("<p><br/></p>"));
-        tool.initDND($header);
       }
     });
     $input.blur(reset).focus();
