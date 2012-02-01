@@ -4,6 +4,10 @@ $.blockUI.defaults.css = {
 };
 $.blockUI.defaults.message = "Please wait...";
 
+jQuery.fn.outerHTML = function(s) {
+  return (s) ? this.before(s).remove() : jQuery("<p></p>").append(this.eq(0).clone()).html();
+};
+
 oer.authoring = {};
 
 var AuthoringTool = function () {
@@ -66,6 +70,7 @@ var AuthoringTool = function () {
   this.$form = $("#authoring-form");
   this.$editor = $("#editor");
   this.$toolbar = this.$editor.find(".toolbar");
+  this.$toolbarButtons = this.$toolbar.find("a.button");
   this.$area = this.$editor.find(".editor-area");
   this.$outline = $("#outline");
   this.$textStyleIndicator = this.$toolbar.find(".text-style > a span");
@@ -454,10 +459,8 @@ AuthoringTool.prototype.trackSelection = function () {
   this.$focusNode = $focusNode;
   this.$focusBlock = $focusBlock;
 
-  // Update text style menu
-  if ($focusBlock) {
-    this.updateTextStyleIndicator($focusBlock.get(0).tagName.toLowerCase());
-  }
+  this.updateToolbarState();
+
 };
 
 AuthoringTool.prototype.changeBlockType = function (newType) {
@@ -478,20 +481,58 @@ AuthoringTool.prototype.changeBlockType = function (newType) {
   $newBlock.insertAfter(this.$focusBlock);
   this.$focusBlock.remove();
   this.focusOnNode($newBlock);
-  this.updateTextStyleIndicator(newType);
   if ($newBlock.is("h2,h3")) {
     this.initDND($newBlock);
   }
+  this.trackSelection();
 };
 
-AuthoringTool.prototype.updateTextStyleIndicator = function (tag) {
-  if (tag == "h2") {
+AuthoringTool.prototype.activateButton = function(button) {
+  this.$toolbarButtons.filter("."+button).addClass("active");
+};
+
+AuthoringTool.prototype.updateToolbarState = function () {
+  var $focusNode = this.$focusNode;
+  var $focusBlock = this.$focusBlock;
+
+  this.$toolbarButtons.removeClass("active");
+
+  if (!$focusNode || !$focusBlock) {
+    return;
+  }
+
+  var $list = $focusNode.closest("ul,ol", this.$area);
+  if ($list.is("ul")) {
+    this.activateButton("bullet-list");
+  } else if ($list.is("ol")) {
+    this.activateButton("number-list");
+  }
+
+  if ($focusNode.closest("strong,b", this.$area).length) {
+    this.activateButton("bold");
+  }
+
+  if ($focusNode.closest("em,i", this.$area).length) {
+    this.activateButton("italic");
+  }
+
+  if ($focusNode.closest("u", this.$area).length) {
+    this.activateButton("underline");
+  }
+
+  if ($focusNode.closest("a", this.$area).length) {
+    this.activateButton("link");
+  }
+
+  var tag = $focusNode.get(0).tagName.toLowerCase();
+
+  if ($focusBlock.is("h2")) {
     this.$textStyleIndicator.text("Header");
-  } else if (tag == "h3") {
+  } else if ($focusBlock.is("h3")) {
     this.$textStyleIndicator.text("Sub-Header");
-  } else if (tag == "blockquote") {
+  } else if ($focusBlock.is("blockquote")) {
     this.$textStyleIndicator.text("Long Quote");
-  } else if (tag == "p" || tag == "div") {
+  } else if ($focusBlock.is("p,div")) {
     this.$textStyleIndicator.text("Paragraph");
   } else {
     this.$textStyleIndicator.text("Text style...");
@@ -513,6 +554,7 @@ AuthoringTool.prototype.insertList = function (listType) {
     this.$focusBlock = $list;
   }
   this.focusOnNode($li);
+  this.trackSelection();
 
   // TODO: make list from selection. If selection is not empty create list from it. Items are separated by new lines.
   // Take care of inline html.
@@ -570,16 +612,19 @@ AuthoringTool.prototype.initFormattingButtons = function () {
     e.preventDefault();
     tool.saveState();
     tool.execCommand("bold");
+    tool.trackSelection();
   });
   this.$toolbar.find("a.button.italic").click(function (e) {
     e.preventDefault();
     tool.saveState();
     tool.execCommand("italic");
+    tool.trackSelection();
   });
   this.$toolbar.find("a.button.underline").click(function (e) {
     e.preventDefault();
     tool.saveState();
     tool.execCommand("underline");
+    tool.trackSelection();
   });
 };
 
@@ -626,6 +671,7 @@ AuthoringTool.prototype.insertLink = function () {
     $link.data("new", true);
     $link.click();
   }
+  this.trackSelection();
 };
 
 AuthoringTool.prototype.initLinkUI = function () {
@@ -663,6 +709,7 @@ AuthoringTool.prototype.initLinkUI = function () {
         } else {
           $link.replaceWith($link.html());
         }
+        tool.trackSelection();
         break;
       case "#cancel":
         break;
@@ -935,6 +982,7 @@ AuthoringTool.prototype.undo = function () {
   }
   this.enableRedo();
   this.updateOutline();
+  this.trackSelection();
 };
 
 AuthoringTool.prototype.redo = function () {
@@ -961,6 +1009,7 @@ AuthoringTool.prototype.redo = function () {
   }
   this.enableUndo();
   this.updateOutline();
+  this.trackSelection();
 };
 
 AuthoringTool.prototype.disableUndo = function () {
