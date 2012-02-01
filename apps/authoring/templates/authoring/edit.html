@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load scss %}
 
-{% block bodyclass %}no-columns{% endblock %}
+{% block bodyclass %}no-columns authoring-tool{% endblock %}
 
 {% block extra-css %}
   <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
@@ -11,9 +11,9 @@
 {% block status-messages %}{% endblock %}
 
 {% block content %}
-  <form id="edit-authored-material"
+  <form id="authoring-form"
         action="{% url authoring:edit material_id=material.id %}" method="post">
-    {% spaceless %}
+    <div class="head">
       <div class="actions">
         <a href="#save" class="button">Save</a>
         <a href="#preview" class="preview">Preview</a>
@@ -23,92 +23,128 @@
       {% include "include/status-messages.html" %}
       <h1 id="material-title">{% if material.title %}{{ material.title }}{% else %}Click here to edit title{% endif %}</h1>
       {{ form.title }}
-    {% endspaceless %}
-    <div id="editor">
+    </div>
+    <div class="authoring-step editor" id="editor">
       {% spaceless %}
-      <div class="toolbar">
-        <div class="text-style">
-          <a href="#" class="select"><span>Text style...</span></a>
-          <ul>
-            <li><a href="#regular" class="regular"><span>Regular text</span></a></li>
-            <li><a href="#header" class="header"><span>Header</span></a></li>
-            <li><a href="#sub-header" class="sub-header"><span>Sub-header</span></a></li>
-            <li><a href="#quote" class="quote"><span>Quote</span></a></li>
-          </ul>
+        <div class="toolbar">
+          <a class="button undo disabled" href="#undo">Undo</a>
+          <a class="button redo disabled" href="#redo">Redo</a>
+          <span class="sep"></span>
+          <div class="text-style">
+            <a href="#" class="select"><span>Text style...</span></a>
+            <ul>
+              <li><a href="#header" class="header"><span>Header</span></a></li>
+              <li><a href="#sub-header" class="sub-header"><span>Sub-header</span></a></li>
+              <li><a href="#paragraph" class="paragraph"><span>Paragraph</span></a></li>
+              <li><a href="#quote" class="quote"><span>Long Quote</span></a></li>
+            </ul>
+          </div>
+          <a class="button bullet-list" href="#bullet-list">Bullet list</a>
+          <a class="button number-list" href="#number-list">Number list</a>
+          <a class="button indent" href="#indent">Increase indent</a>
+          <a class="button outdent" href="#outdent">Decrease indent</a>
+          <span class="sep"></span>
+          <a class="button table" href="#table">Insert table</a>
+          <span class="sep"></span>
+          <a class="button bold" href="#bold">Bold</a>
+          <a class="button italic" href="#italic">Italic</a>
+          <a class="button underline" href="#underline">Underline</a>
+          <span class="sep"></span>
+          <a class="button text-color" href="#text-color">Change text color</a>
+          <a class="button bg-color" href="#bg-color">Change background color</a>
+          <span class="sep"></span>
+          <a class="button link" href="#link">Insert link</a>
+          <span class="sep"></span>
+          <a class="button media" href="#media">Media</a>
+          <span class="sep"></span>
+          <a class="button reference" href="#reference">Insert reference</a>
+          <div class="clear"></div>
+
         </div>
-        <span class="sep"></span>
-        <a class="button bold" href="#bold">Bold</a>
-        <a class="button italic" href="#italic">Italic</a>
-        <a class="button underline" href="#underline">Underline</a>
-        <span class="sep"></span>
-        <a class="button link" href="#link">Link</a>
-        <span class="sep"></span>
-        <a class="button bullet-list" href="#bullet-list">Bullet list</a>
-        <a class="button number-list" href="#number-list">Number list</a>
-        <span class="sep"></span>
-        <a class="button media" href="#media">Media</a>
-        <div class="clear"></div>
-      </div>
-      <div id="media-dialog">
-{#        TODO: add simple file input widget for browsers that don't support file drag'n'drop #}
-        <div class="step upload" data-url="{% url authoring:upload material_id=material.id %}">
-          <div class="left">
-            <h2>Drop in a file</h2>
-            <div class="drop-zone"></div>
-            <input type="file" name="file">
-          </div>
-          <div class="sep"><span>or</span></div>
-          <div class="right">
-            <h2>Grab it from the web</h2>
-            <input placeholder="http://" type="text" name="url">
-            <p>Enter the web address or paste the code<br/>
-            to the video, image, or document.</p>
-          </div>
-          <div class="actions">
-            <a href="#cancel">Cancel</a>
-            <a href="#ok">Ok</a>
-          </div>
-        </div>
-        <div class="step upload-progress">
-          <h2>Uploading your file, <strong></strong></h2>
-          <div class="progress-ct">
-            <div class="progress">
-              <div class="fill"></div>
-            </div>
-            <div class="legend">0%</div>
-          </div>
-          <div class="actions">
-            <a href="#cancel">Cancel</a>
-          </div>
-        </div>
-        <div class="step image">
-          <h2>Describe this image <strong></strong></h2>
-          <div class="left">
-          </div>
-          <div class="right">
-            <textarea placeholder="What's in this image? Describe it with a fiew words."></textarea>
-          </div>
-          <div class="actions">
-            <a href="#cancel">Cancel</a>
-            <a href="#ok">Ok</a>
-          </div>
-        </div>
-        <div class="step document">
-          <h2>Describe this attachment/document <strong></strong></h2>
-          <div class="left">
-            <input type="text" placeholder="Give this attachment/document a name">
-          </div>
-          <div class="actions">
-            <a href="#cancel">Cancel</a>
-            <a href="#ok">Ok</a>
-          </div>
-        </div>
-      </div>
       {% endspaceless %}
-      <div class="editor-area" contenteditable="true">
-        {{ material.text|safe }}
+
+      <div class="left" id="outline">
+        <h2>Table of Contents</h2>
       </div>
-      <div class="preview hidden"></div>
+
+      <div class="right">
+
+        <div id="media-dialog">
+  {#        TODO: add simple file input widget for browsers that don't support file drag'n'drop #}
+          <div class="step upload" data-url="{% url authoring:upload material_id=material.id %}">
+            <div class="head">I have permission to upload this item: <a href="#hide" class="hide">hide</a></div>
+            <div class="body">
+              <div class="left">
+                <div class="drop-zone">
+                  <a href="#find">Find file</a>
+                  <span>drag &amp; drop</span>
+                </div>
+                <input type="file" name="file">
+              </div>
+              <div class="right">
+                <label for="id_url">Grab a video, image, audio, or document from the web</label>
+                <input placeholder="http://" type="text" name="url" id="id_url">
+                <a href="#submit" class="submit">submit</a>
+              </div>
+            </div>
+          </div>
+          <div class="step upload-progress">
+            <div class="head">I have permission to upload this item: <a href="#hide" class="hide">hide</a></div>
+            <div class="body">
+              uploading your file: <strong class="filename"></strong>
+              <div class="progress">
+                <div class="fill"><span class="legend">0%</span></div>
+              </div>
+              <a href="#cancel" class="cancel">cancel upload</a>
+            </div>
+          </div>
+          <div class="step image">
+            <div class="head">
+              <a href="#"></a>
+              <ul>
+                <li class="embed">embed</li>
+                <li class="download">download link</li>
+              </ul>
+            </div>
+            <div class="body">
+              <div class="left">
+              </div>
+              <div class="right">
+                <input type="text" placeholder="Image title">
+                <textarea placeholder="What's in this image? Describe it with a fiew words."></textarea>
+                <a href="#submit" class="submit">submit</a>
+              </div>
+            </div>
+          </div>
+          <div class="step document">
+            <h2>Describe this attachment/document <strong></strong></h2>
+            <div class="left">
+              <input type="text" placeholder="Give this attachment/document a name">
+            </div>
+            <div class="actions">
+              <a href="#cancel">Cancel</a>
+              <a href="#ok">Ok</a>
+            </div>
+          </div>
+          <div class="step video">
+            <div class="head">&nbsp;</div>
+            <div class="body">
+              <div class="left">
+              </div>
+              <div class="right">
+                <input type="text" placeholder="What's in this video? Describe it with a fiew words.">
+                <a href="#submit" class="submit">submit</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="editor-area authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
+          {{ material.text|safe }}
+        </div>
+
+        <div class="preview authored-content hidden"></div>
+      </div>
       {{ form.text }}
     </div>
   </form>
@@ -121,13 +157,16 @@
 {% endblock %}
 
 {% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-core.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-selectionsaverestore.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.blockUI.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.jeditable.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring.js"></script>
   <script>
     $(function(e) {
-      new oer.authoring.Editor();
+      new AuthoringTool();
     });
   </script>
 {% endblock %}

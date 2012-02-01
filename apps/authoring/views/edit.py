@@ -11,6 +11,8 @@ from utils.decorators import login_required
 class AuthoredMaterialForm(forms.ModelForm):
 
     # TODO: clean up HTML from `text` field.
+    # using lxml clean. Remove all styles, Keep only allowed classes,
+    # remove scripts, styles, forms, iframes, objects, embeds
 
     class Meta:
         model = AuthoredMaterial
