@@ -518,8 +518,6 @@ AuthoringTool.prototype.updateToolbarState = function () {
     this.activateButton("link");
   }
 
-  var tag = $focusNode.get(0).tagName.toLowerCase();
-
   if ($focusBlock.is("h2")) {
     this.$textStyleIndicator.text("Header");
   } else if ($focusBlock.is("h3")) {
@@ -637,7 +635,7 @@ AuthoringTool.prototype.initListButtons = function () {
 AuthoringTool.prototype.insertLink = function () {
   var args = {};
   if (arguments.length) {
-    args = arguments[0]
+    args = arguments[0];
   }
 
   this.saveState();
@@ -658,8 +656,8 @@ AuthoringTool.prototype.insertLink = function () {
   if (args["class"]) {
     $link.addClass(args["class"]);
   }
-  if (args["container"]) {
-    $link.detach().appendTo(args["container"])
+  if (args.container) {
+    $link.detach().appendTo(args.container);
   }
   if (new_) {
     $link.data("new", true);
@@ -748,7 +746,7 @@ AuthoringTool.prototype.initFigure = function ($figure) {
 };
 
 AuthoringTool.prototype.initDND = function ($block) {
-  // TODO: картинки склеиваются при перетаскивании
+  // TODO: images are glued together when dragging
   if (!$block.draggable("option", "disabled")) {
     console.log("Draggabled already enabled for", $block);
     return;
@@ -808,9 +806,9 @@ AuthoringTool.prototype.loadEmbed = function ($figure) {
 
 AuthoringTool.prototype.newOutlineItemMessage = function (level) {
   var text = "click to add new ";
-  if (level == 0) {
+  if (level === 0) {
     text += "header";
-  } else if (level == 1) {
+  } else if (level === 1) {
     text += "sub-header";
   }
   return "<span>" + text + "</span>";
@@ -823,14 +821,13 @@ AuthoringTool.prototype.updateOutline = function () {
   var levels = [];
   this.$area.find("h2,h3").each(function () {
     var level = tool.HEADER_LEVELS[this.tagName.toLowerCase()];
+    var i;
     if (level > prevLevel) {
-      //noinspection JSDuplicatedDeclaration
-      for (var i = 0; i < (level - prevLevel); i++) {
+      for (i = 0; i < (level - prevLevel); i++) {
         $list = $("<ul></ul>").data("level", level).appendTo($list);
       }
     } else if (level < prevLevel) {
-      //noinspection JSDuplicatedDeclaration
-      for (var i = 0; i < (prevLevel - level); i++) {
+      for (i = 0; i < (prevLevel - level); i++) {
         $list = $list.parent();
       }
     }
@@ -851,7 +848,7 @@ AuthoringTool.prototype.updateOutline = function () {
   });
 
   $list.children("li:not(.new)").filter(function () {
-    return $(this).next("ul").length == 0;
+    return $(this).next("ul").length === 0;
   });
   $list.after(function () {
     var level = $(this).parent().data("level") + 1;
@@ -915,7 +912,7 @@ AuthoringTool.prototype.initOutline = function () {
           return;
         }
         var $newLi = $("<li></li>").text(text).insertBefore($li);
-        if (level == 0) {
+        if (level === 0) {
           $newLi.after($("<ul></ul>").data("level", level).append($("<li></li>").addClass("new").html(tool.newOutlineItemMessage(level + 1))));
         }
         var headerType;
@@ -966,7 +963,7 @@ AuthoringTool.prototype.undo = function () {
   if (this.undoDisabled || this.undoDepth >= historyLength) {
     return;
   }
-  if (this.undoDepth == 0) {
+  if (this.undoDepth === 0) {
     var selection = rangy.saveSelection();
     this.lastState = {content: this.$area.html(), selection: selection};
     this.removeSelectionMarkers();
@@ -987,12 +984,12 @@ AuthoringTool.prototype.undo = function () {
 
 AuthoringTool.prototype.redo = function () {
   var historyLength = this.undoHistory.length;
-  if (this.redoDisabled || this.undoDepth == 0) {
+  if (this.redoDisabled || this.undoDepth === 0) {
     return;
   }
   this.undoDepth -= 1;
   var undoStep = null;
-  if (this.undoDepth == 0 && this.lastState) {
+  if (this.undoDepth === 0 && this.lastState) {
     undoStep = this.lastState;
   } else {
     undoStep = this.undoHistory[historyLength - this.undoDepth];
@@ -1004,7 +1001,7 @@ AuthoringTool.prototype.redo = function () {
   if (undoStep.selection) {
     rangy.restoreSelection(undoStep.selection);
   }
-  if (this.undoDepth == 0) {
+  if (this.undoDepth === 0) {
     this.disableRedo();
   }
   this.enableUndo();
@@ -1119,7 +1116,7 @@ MediaDialog.UploadProgressStep = function (dialog) {
 MediaDialog.UploadProgressStep.prototype = new MediaDialog.Step();
 MediaDialog.UploadProgressStep.prototype.constructor = MediaDialog.UploadProgressStep;
 MediaDialog.UploadProgressStep.prototype.prepare = function (data) {
-  this.$filename.text(data["name"]);
+  this.$filename.text(data.name);
   this.$fill.css({width: "0%"});
   this.$legend.text("0%");
   oer.status_message.clear();
@@ -1135,8 +1132,6 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
   var $step = this.$step = this.dialog.$steps.filter(".upload");
   var $input = this.$input = $step.find("input:text");
   this.uploadProgress = uploadProgress;
-
-  var step = this;
 
   $step.find("a.submit").click(function (e) {
     e.preventDefault();
@@ -1183,7 +1178,7 @@ MediaDialog.ImageStep = function (dialog) {
   MediaDialog.Step.call(this, dialog);
   var $step = this.$step = dialog.$steps.filter(".image");
 
-  var $imageCt = this.$imageCt = $step.find("div.left");
+  this.$imageCt = $step.find("div.left");
   var $input = this.$input = $step.find("input:text");
   var $textarea = this.$textarea = $step.find("textarea");
   this.figureType = "embed";
@@ -1234,7 +1229,7 @@ MediaDialog.ImageStep = function (dialog) {
       );
     } else {
       if (description !== "") {
-        title += ": "
+        title += ": ";
       }
       var $caption = $("<figcaption></figcaption>").text(description);
       if (title) {
@@ -1263,9 +1258,11 @@ MediaDialog.ImageStep.prototype.prepare = function (data) {
   this.$imageCt.empty();
   this.$input.val(data.name);
   this.$textarea.val("");
-  var $image = $("<img>").attr("src", data["thumbnail"]);
-  this.imageURL = data["url"];
-  this.originalURL = data["original_url"];
+  //noinspection JSUnresolvedVariable
+  var $image = $("<img>").attr("src", data.thumbnail);
+  this.imageURL = data.url;
+  //noinspection JSUnresolvedVariable
+  this.originalURL = data.original_url;
   $image.appendTo(this.$imageCt);
   this.$selectorOptions.first().click();
 };
@@ -1288,7 +1285,7 @@ MediaDialog.VideoStep = function (dialog) {
     var description = $.trim($textarea.val());
     var title = $.trim($input.val());
     if (description !== "") {
-      title += ": "
+      title += ": ";
     }
     var $caption = $("<figcaption></figcaption>").text(description);
     if (title) {
@@ -1314,7 +1311,8 @@ MediaDialog.VideoStep.prototype.constructor = MediaDialog.VideoStep;
 MediaDialog.VideoStep.prototype.prepare = function (data) {
   this.$step.data("url", data.url);
   this.$imageCt.empty();
-  var $image = $("<img>").attr("src", data["thumbnail"]);
+  //noinspection JSUnresolvedVariable
+  var $image = $("<img>").attr("src", data.thumbnail);
   $image.appendTo(this.$imageCt);
   this.$input.val(data.title);
   this.$textarea.val("");
