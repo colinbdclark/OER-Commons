@@ -14,15 +14,15 @@
   <form id="authoring-form"
         action="{% url authoring:edit material_id=material.id %}" method="post">
     <div class="head">
-      <div class="actions">
-        <a href="#save" class="button">Save</a>
-        <a href="#preview" class="preview">Preview</a>
-        <a href="#edit" class="edit hidden">Edit</a>
-        <a href="#done" class="done">Done</a>
-      </div>
-      {% include "include/status-messages.html" %}
+      <div class="steps-icons write"></div>
       <h1 id="material-title">{% if material.title %}{{ material.title }}{% else %}Click here to edit title{% endif %}</h1>
       {{ form.title }}
+      <div class="actions">
+        <a href="#preview" class="preview">Preview</a>
+        <a href="#edit" class="edit hidden">Edit</a>
+        <a href="#save" class="button">Save</a>
+      </div>
+      {% include "include/status-messages.html" %}
     </div>
     <div class="authoring-step editor" id="editor">
       {% spaceless %}
@@ -142,11 +142,16 @@
         <div class="editor-area authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
           {{ material.text|safe }}
         </div>
-
         <div class="preview authored-content hidden"></div>
       </div>
       {{ form.text }}
-    </div>
+
+      {% spaceless %}
+      <div class="buttons">
+        <a href="#" class="prev"><span class="icon"></span></a>
+        <a href="#" class="next"><span class="wrap">Next Step: <strong>Describe</strong></span><span class="icon"></span></a>
+      </div>
+      {% endspaceless %}
   </form>
   <div id="edit-link-dialog">
     <input type="text" name="url" placeholder="http://">
@@ -155,6 +160,8 @@
     <a href="#remove" class="remove dashed">Remove link</a>
   </div>
 {% endblock %}
+
+{% block footer %}{% endblock %}
 
 {% block extra-js %}
   <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-core.js"></script>
