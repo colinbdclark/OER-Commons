@@ -258,6 +258,7 @@ var AuthoringTool = function () {
           });
           break;
         case "#preview":
+          // TODO: disable table of contents
           $preview.html(tool.$area.html());
           tool.$toolbar.hide();
           tool.$area.hide();
@@ -266,6 +267,7 @@ var AuthoringTool = function () {
           $this.addClass("hidden");
           break;
         case "#edit":
+          // TODO: re-enable table of contents
           $preview.hide();
           tool.$toolbar.show();
           tool.$area.show();

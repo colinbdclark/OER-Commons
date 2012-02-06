@@ -19,44 +19,63 @@
 
   .head {
     background-color: #fff;
+    height: 81px;
+    margin: 10px 30px;
+    .steps-icons {
+      float: right;
+      background: url(../images/authoring/steps.png) 0 0 no-repeat;
+      width: 238px;
+      height: 81px;
+      margin-right: -5px;
+      &.write {
+        background-position: 0 0;
+      }
+      &.describe {
+        background-position: 0 -83px;
+      }
+      &.submit {
+        background-position: 0 -166px;
+      }
+    }
   }
 
   .actions {
     padding: 0;
-    margin: 0 0 10px 10px;
-    float: right;
+    float: left;
     a {
       display: inline-block;
-      margin-left: 7px;
+      margin-right: 7px;
       text-transform: uppercase;
-      color: #333;
+      color: #fff;
       font-size: 16px;
-      background-color: #eee;
+      background-color: #ccc;
       padding: 0 10px;
+      min-width: 75px;
+      text-align: center;
       line-height: 26px;
-      border: 1px solid #ccc;
-      -webkit-border-radius: 5px;
-      -moz-border-radius: 5px;
-      border-radius: 5px;
+      -webkit-box-shadow: 2px 2px 1px #ddd;
+      -moz-box-shadow: 2px 2px 1px #ddd;
+      -ms-box-shadow: 2px 2px 1px #ddd;
+      box-shadow: 2px 2px 1px #ddd;
       &.hidden {
         display: none;
       }
       &:hover {
-        color: #fff;
-        background: #666;
-        border-color: #333;
+        background: #989898;
       }
     }
   }
 
   #status-messages {
-    float: right;
+    float: left;
+    margin-left: 10px;
     .status-message {
       line-height: 26px;
       background: none;
       border: none;
       padding: 0;
       color: #333;
+      margin-bottom: 0;
       &.success {
         color: #060;
       }
@@ -67,8 +86,10 @@
   }
 
   #material-title {
-    font-size: 20px;
-    line-height: 26px;
+    font-size: 30px;
+    line-height: 35px;
+    margin-bottom: 15px;
+    height: 35px;
     cursor: pointer;
     display: inline-block;
     padding: 0 3px;
@@ -82,9 +103,10 @@
   .title-input {
     margin: 0 -3px;
     input {
-      font-size: 20px;
-      line-height: 24px;
-      height: 24px;
+      font-size: 30px;
+      line-height: 35px;
+      margin-bottom: 15px;
+      height: 35px;
       padding: 0 1px;
       border: 1px solid #ccc;
       font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
@@ -466,6 +488,68 @@
   }
   .dialog {
     margin-bottom: 10px;
+  }
+
+  .buttons {
+    position: relative;
+    height: 50px;
+    a {
+      display: inline-block;
+      line-height: 30px;
+      height: 30px;
+      font-family: "Myriad Pro", Helvetica, sans-serif;
+      font-size: 16px;
+      padding: 0 10px;
+      border: 1px solid #ccc;
+      background-color: #fdfdfd;
+      background: -moz-linear-gradient(top, #fefefe 0%, #f2f2f2 100%);
+      background: -webkit-linear-gradient(top, #fefefe 0%, #f2f2f2 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fefefe), color-stop(1, #f2f2f2));
+      background: -o-linear-gradient(top, #fefefe 0%, #f2f2f2 100%);
+      background: -ms-linear-gradient(top, #fefefe 0%, #f2f2f2 100%);
+      background: linear-gradient(top, #fefefe 0%, #f2f2f2 100%);
+      text-transform: uppercase;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      border-radius: 5px;
+      -webkit-box-shadow: 1px 1px 0 #fff;
+      -moz-box-shadow: 1px 1px 0 #fff;
+      -ms-box-shadow: 1px 1px 0 #fff;
+      box-shadow: 1px 1px 0 #fff;
+
+      span.wrap {
+        position: relative;
+        top: 1px;
+      }
+
+      &.next {
+        position: absolute;
+        right: 0;
+        padding-right: 0;
+        span.icon {
+          vertical-align: top;
+          display: inline-block;
+          height: 30px;
+          width: 40px;
+          border-left: 1px solid #ccc;
+          margin-left: 10px;
+          background: url(../images/authoring/icon-next.png) 14px 50% no-repeat;
+        }
+      }
+
+      &.prev {
+        padding: 0;
+        span.icon {
+          vertical-align: top;
+          display: inline-block;
+          height: 30px;
+          width: 40px;
+          background: url(../images/authoring/icon-prev.png) 13px 50% no-repeat;
+        }
+      }
+
+    }
   }
 }
 
