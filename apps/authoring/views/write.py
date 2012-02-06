@@ -8,7 +8,7 @@ from django.views.generic.base import  TemplateView
 from utils.decorators import login_required
 
 
-class AuthoredMaterialForm(forms.ModelForm):
+class Form(forms.ModelForm):
 
     # TODO: clean up HTML from `text` field.
     # using lxml clean. Remove all styles, Keep only allowed classes,
@@ -23,9 +23,9 @@ class AuthoredMaterialForm(forms.ModelForm):
         )
 
 
-class Edit(TemplateView):
+class Write(TemplateView):
 
-    template_name = "authoring/edit.html"
+    template_name = "authoring/write.html"
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -34,11 +34,11 @@ class Edit(TemplateView):
             id=int(kwargs["material_id"]),
             author=request.user
         )
-        self.form = AuthoredMaterialForm(instance=self.material)
-        return super(Edit, self).dispatch(request, *args, **kwargs)
+        self.form = Form(instance=self.material)
+        return super(Write, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, **kwargs):
-        self.form = AuthoredMaterialForm(request.POST, instance=self.material)
+        self.form = Form(request.POST, instance=self.material)
         if self.form.is_valid():
             self.form.save()
             if request.is_ajax():
@@ -59,7 +59,7 @@ class Edit(TemplateView):
             return self.get(request, **kwargs)
 
     def get_context_data(self, **kwargs):
-        data = super(Edit, self).get_context_data(**kwargs)
+        data = super(Write, self).get_context_data(**kwargs)
         data["form"] = self.form
         data["material"] = self.material
         return data

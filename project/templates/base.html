@@ -30,6 +30,8 @@
     <div class="page">
     {% include "include/header.html" %}
 
+    {% block layout %}
+
     {% block promo %}
     {% endblock %}
 
@@ -90,6 +92,8 @@
     <form name="next-url" action="/" method="get">
       <input type="hidden" name="next" value="{{ request.get_full_path }}" />
     </form>
+
+    {% endblock layout %}
 
     {% block footer %}
       {% include "include/footer.html" %}
