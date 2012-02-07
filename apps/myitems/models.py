@@ -15,6 +15,13 @@ class Folder(models.Model):
     slug = AutoSlugField(populate_from="name", verbose_name=_(u"Slug"))
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = (("user", "name"),)
+
+
+    def __unicode__(self):
+        return u"Folder '%s' of user '%s'" % (self.name, self.user)
+
 
 
 class FolderItem(models.Model):
@@ -26,3 +33,12 @@ class FolderItem(models.Model):
         db_index=True)
     content_object = generic.GenericForeignKey('content_type', 'object_id')
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (("folder", "content_type", "object_id"),)
+        verbose_name = _(u"Folder Item")
+        verbose_name_plural = _(u"Folder Items")
+
+
+    def __unicode__(self):
+        return u"%s stored in %s" % (self.content_object, self.user)
