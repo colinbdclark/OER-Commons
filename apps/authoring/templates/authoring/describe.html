@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load scss %}
+
+{% block bodyclass %}no-columns authoring-tool{% endblock %}
+
+{% block extra-css %}
+  <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
+{% endblock %}
+
+{% block above-content %}{% endblock %}
+{% block status-messages %}{% endblock %}
+
+{% block content %}
+  <form id="describe-form"
+        action="{% url authoring:describe material_id=material.id %}" method="post">
+    <div class="head">
+      <div class="steps-icons describe"></div>
+      <h1 id="material-title">{{ material.title }}</h1>
+      {% include "include/status-messages.html" %}
+    </div>
+    <div class="authoring-step">
+      {% spaceless %}
+        <div class="toolbar">
+        </div>
+      {% endspaceless %}
+
+      <div class="right">
+      </div>
+
+      {% spaceless %}
+      <div class="buttons">
+        <a href="#" class="prev"><span class="icon"></span></a>
+        <a href="#" class="next"><span class="wrap">Next Step: <strong>Submit</strong></span><span class="icon"></span></a>
+      </div>
+      {% endspaceless %}
+
+    </div>
+  </form>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/authoring/describe.js"></script>
+  <script>
+    $(function(e) {
+      new Describe();
+    });
+  </script>
+{% endblock %}

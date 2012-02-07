@@ -30,10 +30,10 @@
       min-width: 75px;
       text-align: center;
       line-height: 26px;
-      -webkit-box-shadow: 2px 2px 1px #ddd;
-      -moz-box-shadow: 2px 2px 1px #ddd;
-      -ms-box-shadow: 2px 2px 1px #ddd;
-      box-shadow: 2px 2px 1px #ddd;
+      -webkit-box-shadow: 2px 2px 1px #eee;
+      -moz-box-shadow: 2px 2px 1px #eee;
+      -ms-box-shadow: 2px 2px 1px #eee;
+      box-shadow: 2px 2px 1px #eee;
       &.hidden {
         display: none;
       }
@@ -179,7 +179,6 @@
 #toolbar {
   background: #efefef;
   height: 38px;
-  margin: 0 -30px;
   border-bottom: 1px solid #ccc;
   .sep {
     display: block;

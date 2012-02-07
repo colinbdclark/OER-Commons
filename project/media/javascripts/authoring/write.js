@@ -276,6 +276,14 @@ var Write = function () {
       }
     });
   })();
+
+  // Next step
+  this.$form.find("div.buttons a.next").click(function(e) {
+    e.preventDefault();
+    // TODO: clean and save HTML here
+    tool.$form.submit();
+  });
+
 };
 
 Write.prototype.cleanHTML = function () {
