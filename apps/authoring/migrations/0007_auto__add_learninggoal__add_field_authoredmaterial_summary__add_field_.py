@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding model 'LearningGoal'
         db.create_table('authoring_learninggoal', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -50,7 +50,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # Deleting model 'LearningGoal'
         db.delete_table('authoring_learninggoal')
 
@@ -109,9 +109,9 @@ class Migration(SchemaMigration):
             'grade_level': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['common.GradeLevel']", 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_new': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'keywords': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
+            'keywords': ('utils.fields.AutoCreateManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
             'language': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['materials.Language']", 'null': 'True'}),
-            'learning_goals': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['authoring.LearningGoal']", 'symmetrical': 'False'}),
+            'learning_goals': ('utils.fields.AutoCreateManyToManyField', [], {'to': "orm['authoring.LearningGoal']", 'symmetrical': 'False'}),
             'subjects': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GeneralSubject']", 'symmetrical': 'False'}),
             'summary': ('django.db.models.fields.TextField', [], {'default': "u''"}),
             'text': ('django.db.models.fields.TextField', [], {'default': "u''"}),
