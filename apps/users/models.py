@@ -10,9 +10,9 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from geo.models import Country, USState
-from materials.models.common import  AutoCreateManyToManyField
 from sorl.thumbnail.shortcuts import get_thumbnail
 from users.backend import encrypt_password
+from utils.fields import AutoCreateManyToManyField
 import hashlib
 import urllib
 import re

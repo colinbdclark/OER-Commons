@@ -8,11 +8,11 @@ from materials.models.common import GeneralSubject, Language, \
     GeographicRelevance, MediaFormat, Collection, Keyword
 from materials.models.course import Course, CourseMaterialType
 from materials.models.material import PENDING_STATE
-from materials.views.forms import SubmissionFormBase, AuthorsField, \
+from materials.views.forms import SubmissionFormBase, \
     LanguagesField, LicenseTypeFieldRenderer, CC_OLD_LICENSES, LICENSE_TYPES
-from materials.views.forms.course import InstitutionField
 from utils.decorators import login_required
-from utils.forms import AutocompleteListField
+from utils.forms import MultipleAutoCreateField, AutocompleteListWidget, \
+    AutoCreateField, MultipleAutoCreateInput
 
 
 class SubmissionForm(SubmissionFormBase, ModelForm):
@@ -23,15 +23,21 @@ class SubmissionForm(SubmissionFormBase, ModelForm):
 
     abstract = forms.CharField(widget=forms.Textarea(attrs={"class": "wide"}))
 
-    institution = InstitutionField(required=False,
-                                  widget=forms.TextInput(
-                                  attrs={"class": "wide"}))
+    institution = AutoCreateField(
+        "name",
+        label=u"Institution:",
+        required=False,
+        widget=forms.TextInput(attrs={"class": "text wide"})
+    )
 
-    authors = AuthorsField(required=False,
-                           widget=forms.TextInput(
-                           attrs={"class": "wide"}))
+    authors = MultipleAutoCreateField(
+        "name",
+        label=u"Authors:",
+        required=False,
+        widget=MultipleAutoCreateInput(attrs={"class": "text wide"})
+    )
 
-    keywords = AutocompleteListField(model=Keyword, label=u"Keywords")
+    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), label=u"Keywords")
 
     general_subjects = forms.ModelMultipleChoiceField(
                                 GeneralSubject.objects.all(),

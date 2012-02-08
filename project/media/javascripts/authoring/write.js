@@ -8,9 +8,7 @@ jQuery.fn.outerHTML = function(s) {
   return (s) ? this.before(s).remove() : jQuery("<p></p>").append(this.eq(0).clone()).html();
 };
 
-oer.authoring = {};
-
-var AuthoringTool = function () {
+var Write = function () {
   var tool = this;
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
@@ -67,11 +65,10 @@ var AuthoringTool = function () {
   this.CTRL = 17;
   this.CMD = 91;
 
-  this.$form = $("#authoring-form");
-  this.$editor = $("#editor");
-  this.$toolbar = this.$editor.find(".toolbar");
+  this.$form = $("#write-form");
+  this.$toolbar = $("#toolbar");
   this.$toolbarButtons = this.$toolbar.find("a.button");
-  this.$area = this.$editor.find(".editor-area");
+  this.$area = $("#editor-area");
   this.$outline = $("#outline");
   this.$textStyleIndicator = this.$toolbar.find(".text-style > a span");
 
@@ -238,7 +235,7 @@ var AuthoringTool = function () {
   // Save, Cancel, Done actions
   (function () {
     var $input = $("#id_text");
-    var $preview = tool.$editor.find("div.preview");
+    var $preview = tool.$form.find("div.preview");
     var $actions = $("div.actions a");
     $actions.click(function (e) {
       e.preventDefault();
@@ -253,7 +250,7 @@ var AuthoringTool = function () {
             if (response.status === "success") {
               oer.status_message.success(response.message, true);
             } else {
-              oer.status_message.success(response.message, false);
+              oer.status_message.error(response.message, false);
             }
           });
           break;
@@ -279,9 +276,23 @@ var AuthoringTool = function () {
       }
     });
   })();
+
+  // Next step
+  this.$form.find("div.buttons a").click(function(e) {
+    e.preventDefault();
+    // TODO: clean and save HTML here
+    var $next = tool.$form.find("input[name='next']");
+    if ($(this).hasClass("next")) {
+      $next.val("true");
+    } else {
+      $next.val("false");
+    }
+    tool.$form.submit();
+  });
+
 };
 
-AuthoringTool.prototype.cleanHTML = function () {
+Write.prototype.cleanHTML = function () {
   var tool = this;
   var $area = this.$area;
 
@@ -372,7 +383,7 @@ AuthoringTool.prototype.cleanHTML = function () {
 };
 
 // Ensure that we always have a text block at the end of editor area
-AuthoringTool.prototype.ensureTextInput = function () {
+Write.prototype.ensureTextInput = function () {
   var $area = this.$area;
   if (!$area.children().last().is(this.TOP_LEVEL_TEXT_TAGS)) {
     var $p = $("<p><br/></p>").appendTo($area);
@@ -382,7 +393,7 @@ AuthoringTool.prototype.ensureTextInput = function () {
   }
 };
 
-AuthoringTool.prototype.execCommand = function (command) {
+Write.prototype.execCommand = function (command) {
   if (arguments.length == 2) {
     document.execCommand(command, false, arguments[1]);
   } else {
@@ -390,7 +401,7 @@ AuthoringTool.prototype.execCommand = function (command) {
   }
 };
 
-AuthoringTool.prototype.focusOnNode = function ($node) {
+Write.prototype.focusOnNode = function ($node) {
   // TODO: rewrite this to rangy, allow to focus at specific offset
   var range, selection;
   var node = $node.get(0);
@@ -413,7 +424,7 @@ AuthoringTool.prototype.focusOnNode = function ($node) {
   }
 };
 
-AuthoringTool.prototype.trackSelection = function () {
+Write.prototype.trackSelection = function () {
   var selection = this.selection = rangy.getSelection();
   if (selection.rangeCount) {
     this.range = selection.getRangeAt(0);
@@ -462,7 +473,7 @@ AuthoringTool.prototype.trackSelection = function () {
 
 };
 
-AuthoringTool.prototype.changeBlockType = function (newType) {
+Write.prototype.changeBlockType = function (newType) {
   if (!this.$focusBlock) {
     return;
   }
@@ -483,11 +494,11 @@ AuthoringTool.prototype.changeBlockType = function (newType) {
   this.trackSelection();
 };
 
-AuthoringTool.prototype.activateButton = function(button) {
+Write.prototype.activateButton = function(button) {
   this.$toolbarButtons.filter("."+button).addClass("active");
 };
 
-AuthoringTool.prototype.updateToolbarState = function () {
+Write.prototype.updateToolbarState = function () {
   var $focusNode = this.$focusNode;
   var $focusBlock = this.$focusBlock;
 
@@ -533,7 +544,7 @@ AuthoringTool.prototype.updateToolbarState = function () {
   }
 };
 
-AuthoringTool.prototype.insertList = function (listType) {
+Write.prototype.insertList = function (listType) {
   if (!this.$focusBlock) {
     return;
   }
@@ -554,7 +565,7 @@ AuthoringTool.prototype.insertList = function (listType) {
   // Take care of inline html.
 };
 
-AuthoringTool.prototype.initUndoButtons = function () {
+Write.prototype.initUndoButtons = function () {
   var tool = this;
   this.$toolbar.find("a.button.undo").click(function (e) {
     e.preventDefault();
@@ -566,7 +577,7 @@ AuthoringTool.prototype.initUndoButtons = function () {
   });
 };
 
-AuthoringTool.prototype.initTextStyleMenu = function () {
+Write.prototype.initTextStyleMenu = function () {
   var tool = this;
   var $menu = this.$toolbar.find("div.text-style");
   $menu.find("a.select").click(function (e) {
@@ -600,7 +611,7 @@ AuthoringTool.prototype.initTextStyleMenu = function () {
   });
 };
 
-AuthoringTool.prototype.initFormattingButtons = function () {
+Write.prototype.initFormattingButtons = function () {
   var tool = this;
   this.$toolbar.find("a.button.bold").click(function (e) {
     e.preventDefault();
@@ -622,7 +633,7 @@ AuthoringTool.prototype.initFormattingButtons = function () {
   });
 };
 
-AuthoringTool.prototype.initListButtons = function () {
+Write.prototype.initListButtons = function () {
   var tool = this;
   this.$toolbar.find("a.button.bullet-list").click(function (e) {
     e.preventDefault();
@@ -634,7 +645,7 @@ AuthoringTool.prototype.initListButtons = function () {
   });
 };
 
-AuthoringTool.prototype.insertLink = function () {
+Write.prototype.insertLink = function () {
   var args = {};
   if (arguments.length) {
     args = arguments[0];
@@ -668,7 +679,7 @@ AuthoringTool.prototype.insertLink = function () {
   this.trackSelection();
 };
 
-AuthoringTool.prototype.initLinkUI = function () {
+Write.prototype.initLinkUI = function () {
   var tool = this;
 
   this.$toolbar.find("a.button.link").click(function (e) {
@@ -739,7 +750,7 @@ AuthoringTool.prototype.initLinkUI = function () {
   });
 };
 
-AuthoringTool.prototype.initFigure = function ($figure) {
+Write.prototype.initFigure = function ($figure) {
   $figure.attr("contenteditable", "false");
 
   if (!$figure.hasClass("inline")) {
@@ -747,7 +758,7 @@ AuthoringTool.prototype.initFigure = function ($figure) {
   }
 };
 
-AuthoringTool.prototype.initDND = function ($block) {
+Write.prototype.initDND = function ($block) {
   // TODO: images are glued together when dragging
   if (!$block.draggable("option", "disabled")) {
     console.log("Draggabled already enabled for", $block);
@@ -795,7 +806,7 @@ AuthoringTool.prototype.initDND = function ($block) {
   });
 };
 
-AuthoringTool.prototype.loadEmbed = function ($figure) {
+Write.prototype.loadEmbed = function ($figure) {
   var url = $figure.data("url");
   $figure.hide();
   if (url) {
@@ -806,7 +817,7 @@ AuthoringTool.prototype.loadEmbed = function ($figure) {
   }
 };
 
-AuthoringTool.prototype.newOutlineItemMessage = function (level) {
+Write.prototype.newOutlineItemMessage = function (level) {
   var text = "click to add new ";
   if (level === 0) {
     text += "header";
@@ -816,7 +827,7 @@ AuthoringTool.prototype.newOutlineItemMessage = function (level) {
   return "<span>" + text + "</span>";
 };
 
-AuthoringTool.prototype.updateOutline = function () {
+Write.prototype.updateOutline = function () {
   var tool = this;
   var prevLevel = 0;
   var $list = $("<ul></ul>").data("level", 0);
@@ -862,7 +873,7 @@ AuthoringTool.prototype.updateOutline = function () {
   this.$outline.append($list);
 };
 
-AuthoringTool.prototype.initOutline = function () {
+Write.prototype.initOutline = function () {
   var tool = this;
   this.updateOutline();
 
@@ -942,11 +953,11 @@ AuthoringTool.prototype.initOutline = function () {
 
 };
 
-AuthoringTool.prototype.removeSelectionMarkers = function () {
+Write.prototype.removeSelectionMarkers = function () {
   this.$area.find("span.rangySelectionBoundary").remove();
 };
 
-AuthoringTool.prototype.saveState = function () {
+Write.prototype.saveState = function () {
   if (!this.shouldSaveState) {
     return;
   }
@@ -960,7 +971,7 @@ AuthoringTool.prototype.saveState = function () {
   this.disableRedo();
 };
 
-AuthoringTool.prototype.undo = function () {
+Write.prototype.undo = function () {
   var historyLength = this.undoHistory.length;
   if (this.undoDisabled || this.undoDepth >= historyLength) {
     return;
@@ -984,7 +995,7 @@ AuthoringTool.prototype.undo = function () {
   this.trackSelection();
 };
 
-AuthoringTool.prototype.redo = function () {
+Write.prototype.redo = function () {
   var historyLength = this.undoHistory.length;
   if (this.redoDisabled || this.undoDepth === 0) {
     return;
@@ -1011,31 +1022,31 @@ AuthoringTool.prototype.redo = function () {
   this.trackSelection();
 };
 
-AuthoringTool.prototype.disableUndo = function () {
+Write.prototype.disableUndo = function () {
   this.disableButton("undo");
   this.undoDisabled = true;
 };
 
-AuthoringTool.prototype.enableUndo = function () {
+Write.prototype.enableUndo = function () {
   this.enableButton("undo");
   this.undoDisabled = false;
 };
 
-AuthoringTool.prototype.disableRedo = function () {
+Write.prototype.disableRedo = function () {
   this.disableButton("redo");
   this.redoDisabled = true;
 };
 
-AuthoringTool.prototype.enableRedo = function () {
+Write.prototype.enableRedo = function () {
   this.enableButton("redo");
   this.redoDisabled = false;
 };
 
-AuthoringTool.prototype.disableButton = function (button) {
+Write.prototype.disableButton = function (button) {
   this.$toolbar.find("." + button).addClass("disabled");
 };
 
-AuthoringTool.prototype.enableButton = function (button) {
+Write.prototype.enableButton = function (button) {
   this.$toolbar.find("." + button).removeClass("disabled");
 };
 

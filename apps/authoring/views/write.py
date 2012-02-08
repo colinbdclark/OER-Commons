@@ -2,13 +2,13 @@ from annoying.decorators import JsonResponse
 from authoring.models import AuthoredMaterial
 from django import forms
 from django.contrib import messages
-from django.shortcuts import  get_object_or_404
+from django.shortcuts import  get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic.base import  TemplateView
 from utils.decorators import login_required
 
 
-class AuthoredMaterialForm(forms.ModelForm):
+class Form(forms.ModelForm):
 
     # TODO: clean up HTML from `text` field.
     # using lxml clean. Remove all styles, Keep only allowed classes,
@@ -23,9 +23,9 @@ class AuthoredMaterialForm(forms.ModelForm):
         )
 
 
-class Edit(TemplateView):
+class Write(TemplateView):
 
-    template_name = "authoring/edit.html"
+    template_name = "authoring/write.html"
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -34,11 +34,11 @@ class Edit(TemplateView):
             id=int(kwargs["material_id"]),
             author=request.user
         )
-        self.form = AuthoredMaterialForm(instance=self.material)
-        return super(Edit, self).dispatch(request, *args, **kwargs)
+        self.form = Form(instance=self.material)
+        return super(Write, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, **kwargs):
-        self.form = AuthoredMaterialForm(request.POST, instance=self.material)
+        self.form = Form(request.POST, instance=self.material)
         if self.form.is_valid():
             self.form.save()
             if request.is_ajax():
@@ -46,8 +46,6 @@ class Edit(TemplateView):
                     status="success",
                     message=u"Saved.",
                 ))
-            messages.success(request, u"Saved.")
-            return self.get(request, **kwargs)
         else:
             if request.is_ajax():
                 # TODO: return error messages
@@ -57,9 +55,12 @@ class Edit(TemplateView):
                 ))
             messages.error(request, u"Please correct the indicated errors.")
             return self.get(request, **kwargs)
+        if request.POST.get("next") == "true":
+            return redirect("authoring:describe", material_id=self.material.id)
+        return self.get(request, **kwargs)
 
     def get_context_data(self, **kwargs):
-        data = super(Edit, self).get_context_data(**kwargs)
+        data = super(Write, self).get_context_data(**kwargs)
         data["form"] = self.form
         data["material"] = self.material
         return data

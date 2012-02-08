@@ -1,18 +1,14 @@
 {% extends "base.html" %}
 {% load scss %}
 
-{% block bodyclass %}no-columns authoring-tool{% endblock %}
+{% block bodyclass %}authoring-tool{% endblock %}
 
 {% block extra-css %}
   <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
 {% endblock %}
 
-{% block above-content %}{% endblock %}
-{% block status-messages %}{% endblock %}
-
-{% block content %}
-  <form id="authoring-form"
-        action="{% url authoring:edit material_id=material.id %}" method="post">
+{% block layout %}
+  <form id="write-form" action="{% url authoring:write material_id=material.id %}" method="post">
     <div class="head">
       <div class="steps-icons write"></div>
       <h1 id="material-title">{% if material.title %}{{ material.title }}{% else %}Click here to edit title{% endif %}</h1>
@@ -24,50 +20,52 @@
       </div>
       {% include "include/status-messages.html" %}
     </div>
-    <div class="authoring-step editor" id="editor">
-      {% spaceless %}
-        <div class="toolbar">
-          <a class="button undo disabled" href="#undo">Undo</a>
-          <a class="button redo disabled" href="#redo">Redo</a>
-          <span class="sep"></span>
-          <div class="text-style">
-            <a href="#" class="select"><span>Text style...</span></a>
-            <ul>
-              <li><a href="#header" class="header"><span>Header</span></a></li>
-              <li><a href="#sub-header" class="sub-header"><span>Sub-header</span></a></li>
-              <li><a href="#paragraph" class="paragraph"><span>Paragraph</span></a></li>
-              <li><a href="#quote" class="quote"><span>Long Quote</span></a></li>
-            </ul>
-          </div>
-          <a class="button bullet-list" href="#bullet-list">Bullet list</a>
-          <a class="button number-list" href="#number-list">Number list</a>
-          <a class="button indent" href="#indent">Increase indent</a>
-          <a class="button outdent" href="#outdent">Decrease indent</a>
-          <span class="sep"></span>
-          <a class="button table" href="#table">Insert table</a>
-          <span class="sep"></span>
-          <a class="button bold" href="#bold">Bold</a>
-          <a class="button italic" href="#italic">Italic</a>
-          <a class="button underline" href="#underline">Underline</a>
-          <span class="sep"></span>
-          <a class="button text-color" href="#text-color">Change text color</a>
-          <a class="button bg-color" href="#bg-color">Change background color</a>
-          <span class="sep"></span>
-          <a class="button link" href="#link">Insert link</a>
-          <span class="sep"></span>
-          <a class="button media" href="#media">Media</a>
-          <span class="sep"></span>
-          <a class="button reference" href="#reference">Insert reference</a>
-          <div class="clear"></div>
 
+    {% spaceless %}
+      <div id="toolbar">
+        <a class="button undo disabled" href="#undo">Undo</a>
+        <a class="button redo disabled" href="#redo">Redo</a>
+        <span class="sep"></span>
+        <div class="text-style">
+          <a href="#" class="select"><span>Text style...</span></a>
+          <ul>
+            <li><a href="#header" class="header"><span>Header</span></a></li>
+            <li><a href="#sub-header" class="sub-header"><span>Sub-header</span></a></li>
+            <li><a href="#paragraph" class="paragraph"><span>Paragraph</span></a></li>
+            <li><a href="#quote" class="quote"><span>Long Quote</span></a></li>
+          </ul>
         </div>
-      {% endspaceless %}
+        <a class="button bullet-list" href="#bullet-list">Bullet list</a>
+        <a class="button number-list" href="#number-list">Number list</a>
+        <a class="button indent" href="#indent">Increase indent</a>
+        <a class="button outdent" href="#outdent">Decrease indent</a>
+        <span class="sep"></span>
+        <a class="button table" href="#table">Insert table</a>
+        <span class="sep"></span>
+        <a class="button bold" href="#bold">Bold</a>
+        <a class="button italic" href="#italic">Italic</a>
+        <a class="button underline" href="#underline">Underline</a>
+        <span class="sep"></span>
+        <a class="button text-color" href="#text-color">Change text color</a>
+        <a class="button bg-color" href="#bg-color">Change background color</a>
+        <span class="sep"></span>
+        <a class="button link" href="#link">Insert link</a>
+        <span class="sep"></span>
+        <a class="button media" href="#media">Media</a>
+        <span class="sep"></span>
+        <a class="button reference" href="#reference">Insert reference</a>
+        <div class="clear"></div>
 
-      <div class="left" id="outline">
+      </div>
+    {% endspaceless %}
+
+    <div class="layout-columns">
+
+      <div class="column-left" id="outline">
         <h2>Table of Contents</h2>
       </div>
 
-      <div class="right">
+      <div class="column-main">
 
         <div id="media-dialog">
   {#        TODO: add simple file input widget for browsers that don't support file drag'n'drop #}
@@ -139,26 +137,30 @@
           </div>
         </div>
 
-        <div class="editor-area authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
+        <div id="editor-area" class="authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
           {{ material.text|safe }}
         </div>
         <div class="preview authored-content hidden"></div>
+        {{ form.text }}
       </div>
-      {{ form.text }}
 
       {% spaceless %}
       <div class="buttons">
-        <a href="#" class="prev"><span class="icon"></span></a>
+        <input type="hidden" name="next" value="true">
         <a href="#" class="next"><span class="wrap">Next Step: <strong>Describe</strong></span><span class="icon"></span></a>
       </div>
       {% endspaceless %}
+
+    </div>
+
+    <div id="edit-link-dialog">
+      <input type="text" name="url" placeholder="http://">
+      <a href="#save" class="dashed">Save</a>
+      <a href="#cancel" class="dashed">Cancel</a>
+      <a href="#remove" class="remove dashed">Remove link</a>
+    </div>
+
   </form>
-  <div id="edit-link-dialog">
-    <input type="text" name="url" placeholder="http://">
-    <a href="#save" class="dashed">Save</a>
-    <a href="#cancel" class="dashed">Cancel</a>
-    <a href="#remove" class="remove dashed">Remove link</a>
-  </div>
 {% endblock %}
 
 {% block footer %}{% endblock %}
@@ -170,10 +172,10 @@
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.jeditable.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
-  <script src="{{ STATIC_URL }}javascripts/authoring.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/write.js"></script>
   <script>
     $(function(e) {
-      new AuthoringTool();
+      new Write();
     });
   </script>
 {% endblock %}

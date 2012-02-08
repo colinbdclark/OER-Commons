@@ -10,10 +10,11 @@ from materials.models.common import GeneralSubject, Language, \
 from materials.models.community import CommunityItem, CommunityType, \
     CommunityTopic
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
-from materials.views.forms import AuthorsField, LICENSE_TYPES, \
+from materials.views.forms import LICENSE_TYPES, \
     CC_OLD_LICENSES, LicenseTypeFieldRenderer, SubmissionFormBase, LanguagesField
 from utils.decorators import login_required
-from utils.forms import AutocompleteListField
+from utils.forms import MultipleAutoCreateField, AutocompleteListWidget, \
+    MultipleAutoCreateInput
 
 
 class AddForm(SubmissionFormBase, ModelForm):
@@ -38,16 +39,19 @@ class AddForm(SubmissionFormBase, ModelForm):
                                   attrs={"class": "text"},
                                   format="%m/%d/%Y"))
 
-    authors = AuthorsField(label=u"Authors:", required=False,
-                           widget=forms.TextInput(
-                           attrs={"class": "text wide"}))
+    authors = MultipleAutoCreateField(
+        "name",
+        label=u"Authors:",
+        required=False,
+        widget=MultipleAutoCreateInput(attrs={"class": "text wide"})
+    )
 
     tech_requirements = forms.CharField(label=u"Notable Hard/Software:",
                                      required=False,
                                      widget=forms.Textarea(
                                      attrs={"class": "text wide"}))
 
-    keywords = AutocompleteListField(model=Keyword, label=u"Keywords")
+    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), label=u"Keywords")
 
     community_types = forms.ModelMultipleChoiceField(
                                 CommunityType.objects.all(),

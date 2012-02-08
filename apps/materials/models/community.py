@@ -6,8 +6,9 @@ from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject,\
-    Language, GeographicRelevance, AutoCreateManyToManyField, AgeRange
+    Language, GeographicRelevance, AgeRange
 from materials.models.material import Material
+from utils.fields import AutoCreateManyToManyField
 
 
 class CommunityType(models.Model):

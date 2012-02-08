@@ -40,3 +40,5 @@ project/media/SCSS_CACHE/
 django.log
 project/media/authoring/
 project/media/cache/
+.mr.developer.cfg
+src/

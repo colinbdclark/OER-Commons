@@ -20,7 +20,7 @@ from materials.models.common import Author, GeneralSubject, Language, \
 from materials.models.community import CommunityType, CommunityTopic, \
     CommunityItem
 from materials.views.forms import RSSFields
-from utils.forms import AutocompleteListField
+from utils.forms import MultipleAutoCreateField, AutocompleteListWidget
 
 
 COMMUNITY_ITEM_ADD_FIELDS = ["creator", "title", "url", "abstract", "workflow_state",
@@ -77,7 +77,7 @@ class CommunityItemAddForm(forms.ModelForm, LicenseFields, RSSFields):
                                 CommunityTopic.objects.all(),
                                 widget=forms.CheckboxSelectMultiple())
 
-    keywords = AutocompleteListField(model=Keyword)
+    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"))
 
     featured = forms.BooleanField(required=False, initial=False,
                          label=u"Marked as Featured",
