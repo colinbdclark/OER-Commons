@@ -11,13 +11,13 @@ from django.db.models.aggregates import Avg
 from django.utils.translation import ugettext_lazy as _
 from haystack_scheduled.indexes import Indexed
 from materials.models import License
-from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
 from rating.models import Rating
 from reviews.models import Review
 from rubrics.models import EvaluatedItemMixin, Evaluation
 from saveditems.models import SavedItem
 from tags.models import Tag
+from utils.fields import AutoCreateForeignKey
 from visitcounts.models import Visit
 import datetime
 

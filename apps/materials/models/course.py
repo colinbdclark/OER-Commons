@@ -6,9 +6,9 @@ from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject,\
-    Language, GeographicRelevance, MediaFormat, Institution, Collection, \
-    AutoCreateManyToManyField, AutoCreateForeignKey
+    Language, GeographicRelevance, MediaFormat, Institution, Collection
 from materials.models.material import Material
+from utils.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 
 
 COURSE_OR_MODULE = (

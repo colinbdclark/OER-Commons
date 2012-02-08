@@ -11,7 +11,7 @@ from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
 from materials.models.library import LibraryMaterialType
 from materials.models.microsite import Microsite, Topic
-from utils.forms import AutocompleteListField
+from utils.forms import MultipleAutoCreateField, MultipleAutoCreateTextarea
 
 
 site.register(GeneralSubject, ModelAdmin)
@@ -30,20 +30,9 @@ site.register(Library, LibraryAdmin)
 site.register(CommunityItem, CommunityItemAdmin)
 
 
-class AdminKeywordsWidget(forms.Textarea):
-
-    def render(self, name, value, attrs=None):
-        if isinstance(value, list):
-            value = u"\n".join(value)
-        return super(AdminKeywordsWidget, self).render(name, value, attrs=attrs)
-
-    def value_from_datadict(self, data, files, name):
-        return [v for v in data.get(name, u"").split("\n") if v]
-
-
 class MicrositeForm(forms.ModelForm):
 
-    keywords = AutocompleteListField(model=Keyword, widget=AdminKeywordsWidget())
+    keywords = MultipleAutoCreateField("name", widget=MultipleAutoCreateTextarea())
 
     class Meta:
         model = Microsite
@@ -59,7 +48,7 @@ site.register(Microsite, MicrositeAdmin)
 
 class TopicForm(forms.ModelForm):
 
-    keywords = AutocompleteListField(model=Keyword, widget=AdminKeywordsWidget())
+    keywords = MultipleAutoCreateField("name", widget=MultipleAutoCreateTextarea())
 
     class Meta:
         model = Topic

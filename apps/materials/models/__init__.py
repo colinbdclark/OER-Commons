@@ -1,3 +1,4 @@
+#noinspection PyUnresolvedReferences
 from common import *
 from material import *
 from course import *
