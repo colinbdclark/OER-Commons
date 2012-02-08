@@ -5,6 +5,8 @@ from materials.utils import get_name_from_slug
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 
+from myitems.models import Folder
+from myitems.views import FolderForm
 
 register = Library()
 
@@ -30,7 +32,8 @@ VIEWS = [
 
 @register.inclusion_tag("myitems/include/views-portlet.html", takes_context=True)
 def myitems_views_portlet(context):
-    current_path = context["request"].path
+    request = context["request"]
+    current_path = request.path
     views = []
     for view_name, view_title in VIEWS:
         url = reverse("myitems:%s" % view_name)
@@ -40,7 +43,7 @@ def myitems_views_portlet(context):
             "selected": url == current_path,
         })
 
-    for f in context["folders"]:
+    for f in Folder.objects.filter(user=request.user):
         url = reverse("myitems:folder", kwargs={"slug": f.slug})
         views.append({
             "url": url,
@@ -48,4 +51,4 @@ def myitems_views_portlet(context):
             "selected": url == current_path,
         })
 
-    return dict(views=views, form=context["folder_create_form"])
+    return dict(views=views, folder_create_form=FolderForm())

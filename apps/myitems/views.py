@@ -46,10 +46,6 @@ def myitems_index(request, view_name, page_title, no_items_message, index_name,
                             index_params.batch_size,
                             len(query))
 
-    folder_create_form = FolderForm()
-
-    folders = Folder.objects.filter(user=request.user)
-
     return direct_to_template(request, template, locals())
 
 
@@ -114,7 +110,7 @@ class FolderCreate(View):
             data=request.POST
         )
         if form.is_valid():
-            form.save()
-            return { "status": "success" }
+            folder = form.save()
+            return { "status": "success", "slug": folder.slug, "name": folder.name }
         else:
             return { "status": "error" }

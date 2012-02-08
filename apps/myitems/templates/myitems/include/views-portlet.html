@@ -1,10 +1,10 @@
 <section class="portlet my-items-views dotted">
   {% if views %}
-  <ul>
+  <ul id="folder-list">
     {% for view in views %}
       <li{% if view.selected %} class="selected"{% endif %}><a href="{{ view.url }}">{{ view.title }}</a></li>
     {% endfor %}
-    <li>{% include "myitems/include/folder-create.html" %}</li>
   </ul>
+  {% include "myitems/include/folder-create.html" %}
   {% endif %}
 </section>

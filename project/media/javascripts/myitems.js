@@ -4,6 +4,12 @@ oer.myitems.init = function() {
     var $form = $("#folder-create-form");
     var $button = $("#folder-create-button");
     var $submit = $("#folder-create-submit");
+    var $folderList = $("#folder-list");
+
+    var onFolderCreation = function(response) {
+        $folderList.append(
+            '<li><a href="/my/folders/'+response["slug"]+'}">'+response["name"]+'</a></li>');
+    }
 
     $button.click(function(e) {
         $form.show();
@@ -12,7 +18,7 @@ oer.myitems.init = function() {
         e.preventDefault();
     });
     $submit.click(function(e) {
-        $.post($form.attr("action"), $form.serialize(), function(response) {});
+        $.post($form.attr("action"), $form.serialize(), onFolderCreation);
         $form.hide();
         $submit.hide();
         $button.show();
