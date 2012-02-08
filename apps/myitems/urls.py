@@ -1,5 +1,7 @@
 from django.conf.urls.defaults import patterns, url
 
+from myitems.views import FolderCreate
+
 
 urlpatterns = patterns("myitems.views",
   url(r"^/?$", "saved", name="myitems"),
@@ -8,4 +10,5 @@ urlpatterns = patterns("myitems.views",
   url(r"^/commented/?$", "commented", name="commented"),
   url(r"^/submitted/?$", "submitted", name="submitted"),
   url(r"^/searches/?$", "searches", name="searches"),
+  url(r"^/folder-create/?$", FolderCreate.as_view(), name="folder_create"),
 )

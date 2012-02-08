@@ -1,10 +1,17 @@
+from django import forms
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
+from django.views.generic import CreateView
+from django.utils.decorators import method_decorator
+
 from haystack.query import SearchQuerySet
 from materials.views.index import IndexParams, populate_item_from_search_result, \
     Pagination
 from savedsearches.models import SavedSearch
 from utils.decorators import login_required
+from annoying.decorators import ajax_request
+
+from myitems.models import Folder
 
 
 def myitems_index(request, view_name, page_title, no_items_message, index_name,
@@ -82,3 +89,42 @@ def searches(request):
         item.unsave_item_url = reverse("savedsearches:unsave", kwargs=dict(id=item.id))
 
     return direct_to_template(request, "myitems/searches.html", locals())
+
+
+
+class FolderForm(forms.ModelForm):
+    class Meta:
+        model = Folder
+        fields = ("name", )
+        widgets = { "name": forms.TextInput(), }
+
+
+
+class FolderCreate(CreateView):
+    form_class = FolderForm
+    template_name = "myitems/include/folder-create.html"
+
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        return super(FolderCreate, self).get(request, *args, **kwargs)
+
+
+    @method_decorator(login_required)
+    @method_decorator(ajax_request)
+    def post(self, request, *args, **kwargs):
+        return super(FolderCreate, self).post(request, *args, **kwargs)
+
+
+    def get_form(self, form_class):
+        form = super(FolderCreate,self).get_form(form_class)
+        form.instance = Folder(user=self.request.user)
+        return form
+
+
+    def form_valid(self, form):
+        return { "status": "success" }
+
+
+    def form_invalid(self, form):
+        return { "status": "error" }
