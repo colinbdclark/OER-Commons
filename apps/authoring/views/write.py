@@ -46,7 +46,6 @@ class Write(TemplateView):
                     status="success",
                     message=u"Saved.",
                 ))
-            return redirect("authoring:describe", **kwargs)
         else:
             if request.is_ajax():
                 # TODO: return error messages
@@ -56,6 +55,9 @@ class Write(TemplateView):
                 ))
             messages.error(request, u"Please correct the indicated errors.")
             return self.get(request, **kwargs)
+        if request.POST.get("next") == "true":
+            return redirect("authoring:describe", material_id=self.material.id)
+        return self.get(request, **kwargs)
 
     def get_context_data(self, **kwargs):
         data = super(Write, self).get_context_data(**kwargs)

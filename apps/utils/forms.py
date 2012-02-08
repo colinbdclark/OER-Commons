@@ -67,7 +67,7 @@ class MultipleAutoCreateField(AutoCreateField):
 
     def to_python(self, value):
         if value in EMPTY_VALUES:
-            return None
+            return []
         return [{self.to_field_name: v} for v in value]
 
 

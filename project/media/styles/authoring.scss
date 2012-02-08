@@ -8,7 +8,7 @@
   width: auto;
   margin: 0;
   padding: 0 30px;
-  background: #e7e7e7;
+  background: #f2f2f2;
 }
 
 .head {
@@ -114,6 +114,7 @@
 }
 
 .buttons {
+  clear: both;
   position: relative;
   height: 50px;
   a {
@@ -180,6 +181,9 @@
   background: #efefef;
   height: 38px;
   border-bottom: 1px solid #ccc;
+  a {
+    text-decoration: none;
+  }
   .sep {
     display: block;
     float: left;
@@ -524,6 +528,14 @@
       display: block;
     }
   }
+}
+
+#toolbar.help {
+  font-size: 18px;
+  line-height: 39px;
+  padding-left: 20px;
+  color: #777;
+  text-shadow: 1px 1px 0 #fff;
 }
 
 #write-form {
@@ -920,6 +932,87 @@
     }
     .unisubs-widget {
       margin: 0 auto;
+    }
+  }
+}
+
+form.authoring {
+  .label {
+    margin-bottom: 5px;
+  }
+  .label label {
+    display: inline-block;
+    text-transform: uppercase;
+    color: #979797;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .errors {
+    color: #f00;
+    margin-top: -3px;
+    margin-bottom: 3px;
+  }
+  .required .label label {
+    background: url(../images/authoring/asterisk.png) 100% 0 no-repeat;
+    padding-right: 13px;
+  }
+  .field {
+    margin-bottom: 20px;
+  }
+}
+
+#describe-form {
+  .layout-columns {
+    padding-top: 30px;
+  }
+  .column-left, .column-main, .column-right {
+    float: left;
+    width: 30%;
+    margin-right: 20px;
+  }
+  .column-left, .column-main {
+    margin-right: 20px;
+  }
+  textarea, input[type='text'], .tagit.ui-widget-content {
+    box-sizing: border-box;
+    width: 100%;
+  }
+  #id_summary {
+    height: 20em;
+  }
+  .field.subjects ul {
+    list-style-type: none;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .field.learning-goals {
+    ul.tagit {
+      list-style-type: disc;
+      list-style-position: inside;
+      li {
+        background: none;
+        border: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        -ms-box-shadow: none;
+        box-shadow: none;
+        display: list-item;
+        margin-right: 0;
+        padding: 3px 0;
+        font-size: 14px;
+        &.tagit-new {
+          padding: 0;
+        }
+        .tagit-close {
+          position: relative;
+          display: inline-block;
+          top: 3px;
+          left: 3px;
+        }
+      }
+      input[type='text'] {
+        width: 90%;
+      }
     }
   }
 }

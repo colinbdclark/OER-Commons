@@ -13,7 +13,7 @@ from materials.views.forms import LICENSE_TYPES, CC_OLD_LICENSES, \
     LicenseTypeFieldRenderer, SubmissionFormBase, LanguagesField
 from utils.decorators import login_required
 from utils.forms import MultipleAutoCreateField, AutocompleteListWidget, \
-    AutoCreateField
+    AutoCreateField, MultipleAutoCreateInput
 
 
 class AddForm(SubmissionFormBase, ModelForm):

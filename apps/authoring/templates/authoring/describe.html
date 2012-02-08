@@ -1,39 +1,60 @@
 {% extends "base.html" %}
 {% load scss %}
 
-{% block bodyclass %}no-columns authoring-tool{% endblock %}
+{% block bodyclass %}authoring-tool{% endblock %}
 
 {% block extra-css %}
   <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
 {% endblock %}
 
-{% block above-content %}{% endblock %}
-{% block status-messages %}{% endblock %}
-
-{% block content %}
-  <form id="describe-form"
-        action="{% url authoring:describe material_id=material.id %}" method="post">
+{% block layout %}
+  <form id="describe-form" class="authoring" action="{% url authoring:describe material_id=material.id %}" method="post">
     <div class="head">
       <div class="steps-icons describe"></div>
       <h1 id="material-title">{{ material.title }}</h1>
       {% include "include/status-messages.html" %}
     </div>
-    <div class="authoring-step">
-      {% spaceless %}
-        <div class="toolbar">
-        </div>
-      {% endspaceless %}
 
-      <div class="right">
+    {% spaceless %}
+      <div id="toolbar" class="help">Enter descriptions to help others discover your work:</div>
+    {% endspaceless %}
+
+    <div class="layout-columns">
+
+      <div class="column-left">
+        {% with form.summary as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+      </div>
+
+      <div class="column-main">
+        {% with form.learning_goals as field %}{% with "learning-goals" as field_class %}
+          {% include "include/form-field.html" %}
+        {% endwith %}{% endwith %}
+        {% with form.keywords as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+      </div>
+
+      <div class="column-right">
+        {% with form.subjects as field %}{% with "subjects" as field_class %}
+          {% include "include/form-field.html" %}
+        {% endwith %}{% endwith %}
+        {% with form.grade_level as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
+        {% with form.language as field %}
+          {% include "include/form-field.html" %}
+        {% endwith %}
       </div>
 
       {% spaceless %}
       <div class="buttons">
+        <input type="hidden" name="next" value="">
         <a href="#" class="prev"><span class="icon"></span></a>
         <a href="#" class="next"><span class="wrap">Next Step: <strong>Submit</strong></span><span class="icon"></span></a>
       </div>
       {% endspaceless %}
-
     </div>
   </form>
 {% endblock %}

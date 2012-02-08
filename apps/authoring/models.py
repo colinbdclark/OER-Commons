@@ -1,8 +1,20 @@
+from common.models import GradeLevel
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from materials.models import  Keyword, \
+    GeneralSubject, Language
+from utils.fields import AutoCreateManyToManyField
 import embedly
 import os
+
+
+class LearningGoal(models.Model):
+
+    title = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return self.title
 
 
 class AuthoredMaterial(models.Model):
@@ -10,6 +22,14 @@ class AuthoredMaterial(models.Model):
     title = models.CharField(max_length=200, default=u"")
     text = models.TextField(default=u"")
     author = models.ForeignKey(User)
+
+    summary = models.TextField(default=u"")
+
+    learning_goals = AutoCreateManyToManyField(LearningGoal)
+    keywords = AutoCreateManyToManyField(Keyword)
+    subjects = models.ManyToManyField(GeneralSubject)
+    grade_level = models.ForeignKey(GradeLevel, null=True)
+    language = models.ForeignKey(Language, null=True)
 
     is_new = models.BooleanField(default=True)
 

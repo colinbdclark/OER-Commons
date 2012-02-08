@@ -278,9 +278,15 @@ var Write = function () {
   })();
 
   // Next step
-  this.$form.find("div.buttons a.next").click(function(e) {
+  this.$form.find("div.buttons a").click(function(e) {
     e.preventDefault();
     // TODO: clean and save HTML here
+    var $next = tool.$form.find("input[name='next']");
+    if ($(this).hasClass("next")) {
+      $next.val("true");
+    } else {
+      $next.val("false");
+    }
     tool.$form.submit();
   });
 
