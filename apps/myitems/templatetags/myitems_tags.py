@@ -33,10 +33,19 @@ def myitems_views_portlet(context):
     current_path = context["request"].path
     views = []
     for view_name, view_title in VIEWS:
-        view = {}
-        view["url"] = reverse("myitems:%s" % view_name)
-        view["title"] = view_title
-        view["selected"] = view["url"] == current_path
-        views.append(view)
+        url = reverse("myitems:%s" % view_name)
+        views.append({
+            "url": url,
+            "title": view_title,
+            "selected": url == current_path,
+        })
 
-    return dict(views=views)
+    for f in context["folders"]:
+        url = reverse("myitems:folder", kwargs={"slug": f.slug})
+        views.append({
+            "url": url,
+            "title": f.name,
+            "selected": url == current_path,
+        })
+
+    return dict(views=views, form=context["folder_create_form"])

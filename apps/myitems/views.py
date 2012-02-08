@@ -1,7 +1,7 @@
 from django import forms
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
-from django.views.generic import CreateView
+from django.views.generic import View
 from django.utils.decorators import method_decorator
 
 from haystack.query import SearchQuerySet
@@ -46,6 +46,9 @@ def myitems_index(request, view_name, page_title, no_items_message, index_name,
                             index_params.batch_size,
                             len(query))
 
+    folder_create_form = FolderForm()
+
+    folders = Folder.objects.filter(user=request.user)
 
     return direct_to_template(request, template, locals())
 
@@ -100,31 +103,18 @@ class FolderForm(forms.ModelForm):
 
 
 
-class FolderCreate(CreateView):
+class FolderCreate(View):
     form_class = FolderForm
-    template_name = "myitems/include/folder-create.html"
-
-
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        return super(FolderCreate, self).get(request, *args, **kwargs)
-
 
     @method_decorator(login_required)
     @method_decorator(ajax_request)
     def post(self, request, *args, **kwargs):
-        return super(FolderCreate, self).post(request, *args, **kwargs)
-
-
-    def get_form(self, form_class):
-        form = super(FolderCreate,self).get_form(form_class)
-        form.instance = Folder(user=self.request.user)
-        return form
-
-
-    def form_valid(self, form):
-        return { "status": "success" }
-
-
-    def form_invalid(self, form):
-        return { "status": "error" }
+        form = self.form_class(
+            instance=Folder(user=request.user),
+            data=request.POST
+        )
+        if form.is_valid():
+            form.save()
+            return { "status": "success" }
+        else:
+            return { "status": "error" }

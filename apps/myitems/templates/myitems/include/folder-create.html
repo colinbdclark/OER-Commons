@@ -1,3 +1,5 @@
-<form method="post" action="{{ request.path }}">
-    {{ form }}
+<form id="folder-create-form" method="post" action="{% url myitems:folder_create %}" style="display: none" >
+    {{ form.name }}
 </form>
+<a id="folder-create-button" class="dashed" href="#" style="float: right">Create a New Folder</a>
+<a id="folder-create-submit" class="dashed" href="#" style="float: right; display: none">Create</a>
