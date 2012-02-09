@@ -3,8 +3,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from materials.models import  Keyword, \
-    GeneralSubject, Language
-from utils.fields import AutoCreateManyToManyField
+    GeneralSubject, License
+from utils.fields import AutoCreateManyToManyField, AutoCreateForeignKey
 import embedly
 import os
 
@@ -29,9 +29,12 @@ class AuthoredMaterial(models.Model):
     keywords = AutoCreateManyToManyField(Keyword)
     subjects = models.ManyToManyField(GeneralSubject)
     grade_level = models.ForeignKey(GradeLevel, null=True)
-    language = models.ForeignKey(Language, null=True)
+    license = AutoCreateForeignKey(License, null=True, respect_all_fields=True)
 
     is_new = models.BooleanField(default=True)
+    published = models.BooleanField(default=False)
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+    modified_timestamp = models.DateTimeField(auto_now=True)
 
 
 def upload_to(prefix):

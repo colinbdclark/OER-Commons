@@ -1,0 +1,139 @@
+from authoring.models import AuthoredMaterial
+from django import forms
+from django.contrib import messages
+from django.shortcuts import  get_object_or_404, redirect
+from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic.base import  TemplateView
+from materials.models.common import CC_LICENSE_URL_RE, License
+from utils.decorators import login_required
+
+
+class LicenseWidget(forms.Widget):
+
+    DERIVATIVES_CHOICES = (
+        (u"y", "Yes, allow"),
+        (u"sa", "Yes, allow as long as others share alike"),
+        (u"n", "No, do not allow"),
+    )
+
+    COMMERCIAL_CHOICES = (
+        (u"y", "Yes, allow"),
+        (u"n", "No, do not allow"),
+    )
+
+    def value_from_datadict(self, data, files, name):
+        return data.get("%s_url" % name)
+
+    def render(self, name, value, attrs=None):
+        license_url = value.get("url", u"")
+        license_name = value.get("name", u"")
+        derivatives = u""
+        commercial = u""
+
+        r = CC_LICENSE_URL_RE.search(license_url)
+        if r:
+            cc_type = r.groupdict()["cc_type"]
+            if "nd" in cc_type:
+                derivatives = "n"
+            elif "sa" in cc_type:
+                derivatives = "sa"
+            else:
+                derivatives = "y"
+            commercial = "n" if "nc" in cc_type else "y"
+        else:
+            license_url = u""
+            license_name = u""
+
+        return mark_safe(render_to_string(
+            "authoring/include/license-widget.html",
+            dict(
+                name=name,
+                name_widget=forms.HiddenInput().render("%s_name" % name, license_name),
+                url_widget=forms.HiddenInput().render("%s_url" % name, license_url),
+                derivatives_widget=forms.RadioSelect().render(
+                    "%s_derivatives" % name,
+                    derivatives,
+                    choices=self.DERIVATIVES_CHOICES,
+                ),
+                commercial_widget=forms.RadioSelect().render(
+                    "%s_commercial" % name,
+                    commercial,
+                    choices=self.COMMERCIAL_CHOICES,
+                )
+            )
+        ))
+
+
+class LicenseField(forms.Field):
+
+    widget = LicenseWidget
+    default_error_messages = {
+        'required': _(u'Please select a license.'),
+        'invalid': _(u'Invalid license URL.'),
+    }
+
+    def prepare_value(self, value):
+        if hasattr(value, '_meta'):
+            value = value.serializable_value("url")
+        else:
+            value = value
+        name = License.objects.get_cc_license_name_from_url(value) if CC_LICENSE_URL_RE.match(value) else u""
+        return dict(url=value, name=name)
+
+    def to_python(self, value):
+        if value:
+            if not CC_LICENSE_URL_RE.match(value):
+                raise forms.ValidationError(self.default_error_messages["invalid"])
+            value = dict(url=value, name=License.objects.get_cc_license_name_from_url(value))
+        return value
+
+
+class SubmitForm(forms.ModelForm):
+
+    license = LicenseField()
+
+    class Meta:
+        model = AuthoredMaterial
+        fields = ["license"]
+
+
+class Submit(TemplateView):
+
+    template_name = "authoring/submit.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        self.material = get_object_or_404(
+            AuthoredMaterial,
+            id=int(kwargs["material_id"]),
+            author=request.user
+        )
+        self.form = SubmitForm(instance=self.material)
+        return super(Submit, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, **kwargs):
+        self.form = SubmitForm(request.POST, instance=self.material)
+        if self.form.is_valid():
+            self.form.save()
+        else:
+            messages.error(request, u"Please correct the indicated errors.")
+            return self.get(request, **kwargs)
+        if request.POST.get("next") == "true":
+            self.material.published = True
+            self.material.save()
+            return redirect("authoring:view", material_id=self.material.id)
+        elif request.POST.get("next") == "false":
+            return redirect("authoring:describe", material_id=self.material.id)
+        return self.get(request, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = super(Submit, self).get_context_data(**kwargs)
+        data["form"] = self.form
+        data["material"] = self.material
+        return data
+
+
+

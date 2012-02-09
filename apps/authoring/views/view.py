@@ -34,7 +34,8 @@ class ViewAuthoredMaterial(TemplateView):
         data = super(ViewAuthoredMaterial, self).get_context_data(**kwargs)
         data["material"] = material = get_object_or_404(
             AuthoredMaterial,
-            id=int(kwargs["material_id"])
+            id=int(kwargs["material_id"]),
+            published=True,
         )
         data["text"] = ViewAuthoredMaterial.prepare_content(material.text)
         return data

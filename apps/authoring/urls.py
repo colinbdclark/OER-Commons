@@ -1,4 +1,5 @@
 from authoring.views.describe import Describe
+from authoring.views.submit import Submit
 from authoring.views.write import Write
 from authoring.views.media import MediaUpload, LoadEmbed
 from authoring.views.new import New
@@ -11,6 +12,7 @@ urlpatterns = patterns("",
     url(r"edit/(?P<material_id>\d+)$", Write.as_view(), name="write"),
     url(r"edit/(?P<material_id>\d+)/upload$", MediaUpload.as_view(), name="upload"),
     url(r"edit/(?P<material_id>\d+)/describe$", Describe.as_view(), name="describe"),
+    url(r"edit/(?P<material_id>\d+)/submit$", Submit.as_view(), name="submit"),
     url(r"load-embed$", LoadEmbed.as_view(), name="load-embed"),
     url(r"(?P<material_id>\d+)$", ViewAuthoredMaterial.as_view(), name="view"),
 )
