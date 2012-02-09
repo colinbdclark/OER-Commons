@@ -14,13 +14,13 @@ dl.user-info dt {
 
 
 a.delete {
-    position: relative;
-    top: 2px;
-    display: inline-block;
-    height: 16px;
-    width: 16px;
-    text-indent: -9999px;
-    background: url(../images/icon-delete-gray.png) 50% 50% no-repeat;
+  position: relative;
+  top: 2px;
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  text-indent: -9999px;
+  background: url(../images/icon-delete-gray.png) 50% 50% no-repeat;
 }
 
 
@@ -69,5 +69,9 @@ a.delete {
 }
 
 #folder-create-button, #folder-create-submit {
-    float: right;
+  float: right;
+}
+
+#folder-create-form input {
+  display: none;
 }

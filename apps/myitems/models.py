@@ -25,7 +25,7 @@ class Folder(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ("myitems:folder", (), { "slug": self.slug })
+        return "myitems:folder", (), { "slug": self.slug }
 
 
 

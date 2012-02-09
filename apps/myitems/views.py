@@ -36,10 +36,8 @@ def myitems_index(request, view_name, page_title, no_items_message, index_name,
     if index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
 
-    items = []
     results = query[index_params.batch_start:batch_end]
-    for result in results:
-        items.append(populate_item_from_search_result(result))
+    items = [populate_item_from_search_result(result) for result in results]
 
     pagination = Pagination(request.path, query_string_params,
                             index_params.batch_start,
@@ -132,7 +130,6 @@ class FolderDelete(View):
                 id=request.REQUEST["id"]
             )
         except Folder.DoesNotExist:
-            # TODO: 404 or error
             pass
         else:
             folder.delete()

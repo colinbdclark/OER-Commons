@@ -41,8 +41,13 @@ def myitems_views_portlet(context):
         for view_name, view_title in VIEWS
     ]
     folders = [
-        { "url": f.get_absolute_url(), "title": f.name, "id": f.id }
-        for f in Folder.objects.filter(user=request.user)
+        {
+            "url": f.get_absolute_url(),
+            "title": f.name,
+            "id": f.id,
+            "count": f.folderitem__count
+        }
+        for f in Folder.objects.filter(user=request.user).annotate(Count('folderitem'))
     ]
     for item in chain(views, folders):
         if item["url"] == current_path:
