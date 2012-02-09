@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 {% load scss %}
 
-{% block bodyclass %}authoring-tool{% endblock %}
+{% block bodyclass %}authoring describe-step{% endblock %}
 
 {% block extra-css %}
   <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
 {% endblock %}
 
 {% block layout %}
-  <form id="describe-form" class="authoring" action="{% url authoring:describe material_id=material.id %}" method="post">
-    <div class="head">
+  <form id="describe-form" action="{% url authoring:describe material_id=material.id %}" method="post">
+    <div class="authoring-head">
       <div class="steps-icons describe"></div>
       <h1 id="material-title">{{ material.title }}</h1>
       {% include "include/status-messages.html" %}
+      <div class="clear"></div>
     </div>
 
     {% spaceless %}

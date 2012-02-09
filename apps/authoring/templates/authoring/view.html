@@ -1,17 +1,61 @@
 {% extends "base.html" %}
 {% load scss %}
 
-{% block bodyclass %}no-columns{% endblock %}
+{% block bodyclass %}authoring view-material{% endblock %}
 
 {% block extra-css %}
   <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
 {% endblock %}
 
-{% block above-content %}{% endblock %}
+{% block layout %}
 
-{% block content %}
-  <div class="authored-content">
-    {{ text|safe }}
+  {% if request.user == material.author %}
+    <div id="toolbar">
+      <a href="{% url authoring:write material_id=material.id %}">Back to edit mode</a>
+    </div>
+  {% endif %}
+
+  <div class="layout-columns">
+
+    <div class="column-left">
+      <section id="outline">
+        <h2>Table of Contents</h2>
+        {{ outline }}
+      </section>
+
+      <section>
+        <h2>Summary</h2>
+        {{ material.summary }}
+      </section>
+
+      <section>
+        <h2>Learning Goals</h2>
+        <ul>
+          {% for goal in material.learning_goals.all %}
+            <li>{{ goal }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <sectinon>
+        <a href="{{ material.get_absolute_url }}"><strong>"{{ material.title }}"</strong></a>
+        {{ material.modified_timestamp|date:"Y" }}
+        by <a href="#">{{ material.author }}</a>
+        <br/>under <a href="{{ material.license.url }}">{{ material.license.name }}</a>
+      </sectinon>
+
+    </div>
+
+    <div class="column-main">
+      <article class="authored-content">
+        <header>
+          <h1>{{ material.title }}</h1>
+          Created <strong>{{ material.modified_timestamp|date }}</strong> by <a href="#">{{ material.author }}</a>
+        </header>
+        {{ text }}
+      </article>
+    </div>
   </div>
-
 {% endblock %}
+
+{% block footer %}{% endblock %}

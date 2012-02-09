@@ -1,20 +1,69 @@
-#content {
-  a {
-    text-decoration: none;
+.authoring {
+  .layout-columns {
+    width: auto;
+    margin: 0;
+    padding: 30px;
+    background: #f2f2f2;
+    line-height: 1.4;
+    font-family: "Myriad Pro", Helvetica, sans-serif;
+    a {
+      text-decoration: none;
+    }
+  }
+  .column-left {
+    font-size: 15px;
+    section {
+      margin-bottom: 20px;
+      h2 {
+        font-size: 15px;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-shadow: 1px 1px 1px #fff;
+        color: #989898;
+        margin-bottom: 10px;
+      }
+    }
+    li {
+      padding: 5px 0;
+    }
+    ul {
+      margin-left: 1.5em;
+    }
+    a {
+      text-decoration: none;
+    }
   }
 }
 
-.layout-columns {
-  width: auto;
-  margin: 0;
-  padding: 0 30px;
-  background: #f2f2f2;
+.authoring form {
+  .label {
+    margin-bottom: 5px;
+  }
+  .label label {
+    display: inline-block;
+    text-transform: uppercase;
+    color: #979797;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .errors {
+    color: #f00;
+    margin-top: -3px;
+    margin-bottom: 3px;
+  }
+  .required .label label {
+    background: url(../images/authoring/asterisk.png) 100% 0 no-repeat;
+    padding-right: 13px;
+  }
+  .field {
+    margin-bottom: 20px;
+  }
 }
 
-.head {
+.authoring-head {
+  font-family: "Myriad Pro", Helvetica, sans-serif;
   background-color: #fff;
-  height: 81px;
-  margin: 10px 30px;
+  padding: 10px 30px;
   .actions {
     padding: 0;
     float: left;
@@ -63,11 +112,9 @@
 
 #material-title {
   font-size: 30px;
-  line-height: 35px;
-  margin-bottom: 15px;
-  height: 35px;
+  margin-bottom: 10px;
   cursor: pointer;
-  padding: 0 3px;
+  padding: 0;
   color: #333;
   max-width: 500px;
   &:hover {
@@ -78,15 +125,18 @@
 .title-input {
   margin: 0 -3px;
   input {
+    font-family: "Myriad Pro", Helvetica, sans-serif;
     font-size: 30px;
-    line-height: 35px;
-    margin-bottom: 15px;
-    height: 35px;
+    height: 33px;
+    margin: 0;
     padding: 0 1px;
     border: 1px solid #ccc;
-    font-family: Arial, Verdana, Tahoma, 'Lucida Grande', sans-serif;
     width: 500px;
     color: #333;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -ms-box-shadow: none;
+    box-shadow: none;
     &:focus {
       outline-width: 0;
     }
@@ -120,7 +170,6 @@
     display: inline-block;
     line-height: 30px;
     height: 30px;
-    font-family: "Myriad Pro", Helvetica, sans-serif;
     font-size: 16px;
     padding: 0 10px;
     border: 1px solid #ccc;
@@ -177,6 +226,7 @@
 }
 
 #toolbar {
+  clear: both;
   background: #efefef;
   height: 38px;
   border-bottom: 1px solid #ccc;
@@ -507,7 +557,6 @@
         &.sub-header span {
           color: #9c3;
           text-transform: uppercase;
-          font-family: Arial, sans-serif;
           font-weight: bold;
           font-size: 18px;
           margin-left: 5px;
@@ -538,7 +587,11 @@
 }
 
 #write-form {
+  .layout-columns {
+    padding-top: 0;
+  }
   .column-left {
+    padding-top: 30px;
     width: 250px;
     float: left;
   }
@@ -807,24 +860,18 @@
 }
 
 #outline {
-  margin-top: 30px;
-  font-family: Arial, sans-serif;
-  color: #069;
-  font-size: 15px;
-  h2 {
-    font-size: 13px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #989898;
-  }
-  li {
-    padding: 5px 0;
-  }
   ul {
+    color: #069;
+    margin-left: 0;
+    list-style-type: none;
     font-weight: bold;
+  }
+  & > ul a {
+    color: #069;
+    text-decoration: none;
   }
   ul > ul {
-    margin-left: 1em;
+    margin-left: 1.5em;
     list-style-type: circle;
     font-weight: normal;
     color: #39c;
@@ -874,7 +921,6 @@
   h3 {
     color: #9c3;
     text-transform: uppercase;
-    font-family: Arial, sans-serif;
     font-weight: bold;
     font-size: 18px;
   }
@@ -890,10 +936,6 @@
     padding-left: 20px;
     background: url(../images/authoring/icon-download.png) 0% 50% no-repeat;
     font-style: normal;
-  }
-
-  figcaption {
-    font-family: Arial, sans-serif;
   }
 
   figure.image {
@@ -932,31 +974,6 @@
     .unisubs-widget {
       margin: 0 auto;
     }
-  }
-}
-
-form.authoring {
-  .label {
-    margin-bottom: 5px;
-  }
-  .label label {
-    display: inline-block;
-    text-transform: uppercase;
-    color: #979797;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  .errors {
-    color: #f00;
-    margin-top: -3px;
-    margin-bottom: 3px;
-  }
-  .required .label label {
-    background: url(../images/authoring/asterisk.png) 100% 0 no-repeat;
-    padding-right: 13px;
-  }
-  .field {
-    margin-bottom: 20px;
   }
 }
 
@@ -1049,5 +1066,42 @@ form.authoring {
   }
   .license-widget ul {
     list-style-type: none;
+  }
+}
+
+.authoring.view-material {
+  #toolbar {
+    background-color: #3399cc;
+    border: none;
+    padding-left: 30px;
+    a {
+      color: #fff;
+      text-transform: uppercase;
+      font-size: 20px;
+      line-height: 39px;
+    }
+  }
+  .column-left {
+    padding-top: 10px;
+    width: 250px;
+  }
+  .column-main {
+    float: none;
+    width: auto;
+    margin-left: 270px;
+  }
+  .authored-content {
+    padding: 30px;
+    header {
+      background-color: #f5f5f5;
+      font-size: 18px;
+      color: #666;
+      padding: 15px 20px;
+      margin: -20px -20px 20px -20px;
+      h1 {
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+    }
   }
 }

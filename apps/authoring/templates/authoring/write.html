@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load scss %}
 
-{% block bodyclass %}authoring-tool{% endblock %}
+{% block bodyclass %}authoring write-step{% endblock %}
 
 {% block extra-css %}
   <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
@@ -9,7 +9,7 @@
 
 {% block layout %}
   <form id="write-form" action="{% url authoring:write material_id=material.id %}" method="post">
-    <div class="head">
+    <div class="authoring-head">
       <div class="steps-icons write"></div>
       <h1 id="material-title">{% if material.title %}{{ material.title }}{% else %}Click here to edit title{% endif %}</h1>
       {{ form.title }}
@@ -19,6 +19,7 @@
         <a href="#save" class="button">Save</a>
       </div>
       {% include "include/status-messages.html" %}
+      <div class="clear"></div>
     </div>
 
     {% spaceless %}
@@ -61,8 +62,10 @@
 
     <div class="layout-columns">
 
-      <div class="column-left" id="outline">
-        <h2>Table of Contents</h2>
+      <div class="column-left">
+        <section id="outline">
+          <h2>Table of Contents</h2>
+        </section>
       </div>
 
       <div class="column-main">
