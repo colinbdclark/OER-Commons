@@ -46,7 +46,7 @@ class SubjectsWidget(forms.CheckboxSelectMultiple):
         return mark_safe(u'\n'.join(output))
 
 
-class Form(forms.ModelForm):
+class DescribeForm(forms.ModelForm):
 
     learning_goals = MultipleAutoCreateField("title")
     keywords = MultipleAutoCreateField("name", required=False)
@@ -71,22 +71,21 @@ class Describe(TemplateView):
             id=int(kwargs["material_id"]),
             author=request.user
         )
-        self.form = Form(instance=self.material)
+        self.form = DescribeForm(instance=self.material)
         return super(Describe, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, **kwargs):
-        self.form = Form(request.POST, instance=self.material)
+        self.form = DescribeForm(request.POST, instance=self.material)
         if self.form.is_valid():
             self.form.save()
         else:
             messages.error(request, u"Please correct the indicated errors.")
             return self.get(request, **kwargs)
         if request.POST.get("next") == "true":
-            return self.get(request, **kwargs)
+            return redirect("authoring:submit", material_id=self.material.id)
         elif request.POST.get("next") == "false":
             return redirect("authoring:write", material_id=self.material.id)
         return self.get(request, **kwargs)
-
 
     def get_context_data(self, **kwargs):
         data = super(Describe, self).get_context_data(**kwargs)

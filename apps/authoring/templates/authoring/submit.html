@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load scss %}
+
+{% block bodyclass %}authoring-tool{% endblock %}
+
+{% block extra-css %}
+  <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
+{% endblock %}
+
+{% block layout %}
+  <form id="submit-form" class="authoring" action="{% url authoring:submit material_id=material.id %}" method="post">
+    <div class="head">
+      <div class="steps-icons submit"></div>
+      <h1 id="material-title">{{ material.title }}</h1>
+      {% include "include/status-messages.html" %}
+    </div>
+
+    {% spaceless %}
+      <div id="toolbar" class="help">Select a copyright license to define how others can use your work:</div>
+    {% endspaceless %}
+
+    <div class="layout-columns">
+
+        <div class="column-left">
+          <div class="current-license">
+            <h3>Current License</h3>
+            <a href="#" target="_blank" style="display: none;">Not selected</a>
+          </div>
+        </div>
+        <div class="column-main">
+          {% with form.license as field %}
+            {% if field.errors %}
+              <div class="field">
+                <div class="errors">
+                  {% for error in field.errors %}
+                    <label class="error">{{ error|safe }}</label>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+            {{ field }}
+          {% endwith %}
+        </div>
+
+      {% spaceless %}
+      <div class="buttons">
+        <input type="hidden" name="next" value="">
+        <a href="#" class="prev"><span class="icon"></span></a>
+        <a href="#" class="next"><span class="wrap"><strong>Publish</strong></span><span class="icon"></span></a>
+      </div>
+      {% endspaceless %}
+    </div>
+  </form>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.blockUI.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/submit.js"></script>
+  <script>
+
+    $(function(e) {
+      new Submit();
+    });
+  </script>
+{% endblock %}
