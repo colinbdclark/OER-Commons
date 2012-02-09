@@ -23,6 +23,11 @@ class Folder(models.Model):
         return u"Folder '%s' of user '%s'" % (self.name, self.user)
 
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ("myitems:folder", (), { "slug": self.slug })
+
+
 
 class FolderItem(models.Model):
     folder = models.ForeignKey(Folder)

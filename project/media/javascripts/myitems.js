@@ -1,25 +1,48 @@
 oer.myitems = {};
 
 oer.myitems.init = function() {
+    oer.myitems.init_folder_form();
+    oer.myitems.index.init();
+}
+
+oer.myitems.init_folder_form = function() {
     var $form = $("#folder-create-form");
     var $button = $("#folder-create-button");
     var $submit = $("#folder-create-submit");
-    var $folderList = $("#folder-list");
+    var $folderInput= $("#folder-name-input");
+    var $folderList = $form.find("ul");
+    var deleteUrl = $folderList.data("delete-url");
+
+    $folderList.find("a.delete").inlineConfirmation({
+        confirmCallback: function(action) {
+            var $parent = action.parent();
+            $.post(deleteUrl, {id: action.data("folder-id")}, function(response) {
+                if (response.status === "success") {
+                    $parent.remove();
+                } else {
+                    $parent.show();
+                }
+            });
+            $parent.fadeOut();
+        }
+    });
 
     var onFolderCreation = function(response) {
-        $folderList.append(
-            '<li><a href="/my/folders/'+response["slug"]+'}">'+response["name"]+'</a></li>');
-    }
+        $.tmpl(
+            '<li><a href="/my/folders/${slug}">${name}</a> <a href="#" class="delete" date-folder-id="${id}">Delete</a></li>',
+            response
+        ).insertBefore($folderInput);
+    };
 
     $button.click(function(e) {
-        $form.show();
+        $folderInput.show();
         $submit.show();
         $button.hide();
         e.preventDefault();
     });
     $submit.click(function(e) {
         $.post($form.attr("action"), $form.serialize(), onFolderCreation);
-        $form.hide();
+        $folderInput.hide();
         $submit.hide();
         $button.show();
         e.preventDefault();

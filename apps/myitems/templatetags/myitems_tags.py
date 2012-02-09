@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.core.urlresolvers import reverse
 from django.db.models.aggregates import Count
 from django.template import Library
@@ -34,21 +36,17 @@ VIEWS = [
 def myitems_views_portlet(context):
     request = context["request"]
     current_path = request.path
-    views = []
-    for view_name, view_title in VIEWS:
-        url = reverse("myitems:%s" % view_name)
-        views.append({
-            "url": url,
-            "title": view_title,
-            "selected": url == current_path,
-        })
+    views = [
+        { "url": reverse("myitems:%s" % view_name), "title": view_title }
+        for view_name, view_title in VIEWS
+    ]
+    folders = [
+        { "url": f.get_absolute_url(), "title": f.name, "id": f.id }
+        for f in Folder.objects.filter(user=request.user)
+    ]
+    for item in chain(views, folders):
+        if item["url"] == current_path:
+            item["selected"] = True
+            break
 
-    for f in Folder.objects.filter(user=request.user):
-        url = reverse("myitems:folder", kwargs={"slug": f.slug})
-        views.append({
-            "url": url,
-            "title": f.name,
-            "selected": url == current_path,
-        })
-
-    return dict(views=views, folder_create_form=FolderForm())
+    return dict(views=views, folders=folders, folder_create_form=FolderForm())

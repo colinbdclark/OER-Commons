@@ -1,10 +1,24 @@
 <section class="portlet my-items-views dotted">
   {% if views %}
-  <ul id="folder-list">
-    {% for view in views %}
-      <li{% if view.selected %} class="selected"{% endif %}><a href="{{ view.url }}">{{ view.title }}</a></li>
-    {% endfor %}
-  </ul>
-  {% include "myitems/include/folder-create.html" %}
+  <form id="folder-create-form" method="post" action="{% url myitems:folder_create %}">
+      <ul data-delete-url="{% url myitems:folder_delete %}">
+        {% for view in views %}
+          <li{% if view.selected %} class="selected"{% endif %}>
+              <a href="{{ view.url }}"><em>{{ view.title }}</em></a>
+          </li>
+        {% endfor %}
+        {% for f in folders %}
+          <li{% if f.selected %} class="selected"{% endif %}>
+              <a href="{{ f.url }}">{{ f.title }}</a>
+              <a href="#" class="delete" data-folder-id="{{ f.id }}">Delete</a>
+          </li>
+        {% endfor %}
+          <li>
+              <input id="folder-name-input" class="hidden" type="text" name="{{ folder_create_form.name.html_name }}" />
+              <a id="folder-create-button" class="dashed" href="#">Create a New Folder</a>
+              <a id="folder-create-submit" class="dashed hidden" href="#">Create</a>
+          </li>
+      </ul>
+  </form>
   {% endif %}
 </section>

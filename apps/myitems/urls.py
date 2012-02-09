@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-from myitems.views import FolderCreate
+from myitems.views import FolderCreate, FolderDelete
 
 
 urlpatterns = patterns("myitems.views",
@@ -11,5 +11,6 @@ urlpatterns = patterns("myitems.views",
   url(r"^/submitted/?$", "submitted", name="submitted"),
   url(r"^/searches/?$", "searches", name="searches"),
   url(r"^/folder-create/?$", FolderCreate.as_view(), name="folder_create"),
-  url(r"^/folder/(?P<slug>.*)/?$", FolderCreate.as_view(), name="folder"),
+  url(r"^/folder/(?P<slug>.+)/?$", FolderCreate.as_view(), name="folder"),
+  url(r"^/folder-delete/?$", FolderDelete.as_view(), name="folder_delete"),
 )

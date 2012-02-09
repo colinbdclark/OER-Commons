@@ -111,6 +111,29 @@ class FolderCreate(View):
         )
         if form.is_valid():
             folder = form.save()
-            return { "status": "success", "slug": folder.slug, "name": folder.name }
+            return {
+                "status": "success",
+                "slug": folder.slug,
+                "name": folder.name,
+                "id": folder.id
+            }
         else:
             return { "status": "error" }
+
+
+
+class FolderDelete(View):
+    @method_decorator(login_required)
+    @method_decorator(ajax_request)
+    def post(self, request, *args, **kwargs):
+        try:
+            folder = Folder.objects.get(
+                user=request.user,
+                id=request.REQUEST["id"]
+            )
+        except Folder.DoesNotExist:
+            # TODO: 404 or error
+            pass
+        else:
+            folder.delete()
+        return { "status": "success" }
