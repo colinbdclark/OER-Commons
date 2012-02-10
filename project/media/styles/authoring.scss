@@ -910,6 +910,7 @@
 
   ul > ul, ol > ol, ul > ol, ul > ol {
     margin-left: 2em;
+    margin-bottom: 0;
   }
 
   h2 {
@@ -929,6 +930,26 @@
     padding-left: 7px;
     border-left: 3px solid #fc3;
     font-style: italic;
+  }
+
+  blockquote.l1 {
+    margin-left: 2em;
+  }
+
+  blockquote.l2 {
+    margin-left: 4em;
+  }
+
+  blockquote.l3 {
+    margin-left: 6em;
+  }
+
+  blockquote.l4 {
+    margin-left: 8em;
+  }
+
+  blockquote.l5 {
+    margin-left: 10em;
   }
 
   a.download {

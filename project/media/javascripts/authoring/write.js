@@ -13,7 +13,7 @@ var Write = function () {
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
-  this.ALLOWED_CLASSES = ["embed", "image", "video", "document", "download", "button"];
+  this.ALLOWED_CLASSES = ["embed", "image", "video", "document", "download", "button", "l1", "l2", "l3", "l4", "l5"];
   this.HEADER_LEVELS = {
     h2: 0,
     h3: 1
@@ -129,6 +129,7 @@ var Write = function () {
   this.initTextStyleMenu();
   this.initUndoButtons();
   this.initFormattingButtons();
+  this.initIndentButtons();
   this.initListButtons();
   this.initLinkUI();
   this.initOutline();
@@ -422,6 +423,7 @@ Write.prototype.focusOnNode = function ($node) {
     range.move("character", -1);
     range.select();//Select the range (make it the visible selection)
   }
+  this.trackSelection();
 };
 
 Write.prototype.trackSelection = function () {
@@ -491,7 +493,6 @@ Write.prototype.changeBlockType = function (newType) {
   $newBlock.insertAfter(this.$focusBlock);
   this.$focusBlock.remove();
   this.focusOnNode($newBlock);
-  this.trackSelection();
 };
 
 Write.prototype.activateButton = function(button) {
@@ -499,20 +500,17 @@ Write.prototype.activateButton = function(button) {
 };
 
 Write.prototype.updateToolbarState = function () {
+  var $anchorNode = this.$anchorNode;
+  var $anchorBlock = this.$anchorBlock;
   var $focusNode = this.$focusNode;
   var $focusBlock = this.$focusBlock;
 
   this.$toolbarButtons.removeClass("active");
+  this.disableButton("indent");
+  this.disableButton("outdent");
 
   if (!$focusNode || !$focusBlock) {
     return;
-  }
-
-  var $list = $focusNode.closest("ul,ol", this.$area);
-  if ($list.is("ul")) {
-    this.activateButton("bullet-list");
-  } else if ($list.is("ol")) {
-    this.activateButton("number-list");
   }
 
   if ($focusNode.closest("strong,b", this.$area).length) {
@@ -537,11 +535,31 @@ Write.prototype.updateToolbarState = function () {
     this.$textStyleIndicator.text("Sub-Header");
   } else if ($focusBlock.is("blockquote")) {
     this.$textStyleIndicator.text("Long Quote");
+    if (this.getQuoteLevel($focusBlock) < 5) {
+      this.enableButton("indent");
+    }
+    this.enableButton("outdent");
   } else if ($focusBlock.is("p,div")) {
     this.$textStyleIndicator.text("Paragraph");
+    this.enableButton("indent");
   } else {
     this.$textStyleIndicator.text("Text style...");
   }
+
+  if ($focusBlock.is("ul,ol")) {
+    if ($focusBlock.is("ul")) {
+      this.activateButton("bullet-list");
+    } else if ($focusBlock.is("ol")) {
+      this.activateButton("number-list");
+    }
+    var $anchorLi = $anchorNode.closest("li", $anchorBlock);
+    var $focusLi = $focusNode.closest("li", $focusBlock);
+    if ($anchorLi.length && $focusLi.length && $anchorLi.parent().is($focusLi.parent())) {
+      this.enableButton("indent");
+      this.enableButton("outdent");
+    }
+  }
+
 };
 
 Write.prototype.insertList = function (listType) {
@@ -559,10 +577,10 @@ Write.prototype.insertList = function (listType) {
     this.$focusBlock = $list;
   }
   this.focusOnNode($li);
-  this.trackSelection();
 
   // TODO: make list from selection. If selection is not empty create list from it. Items are separated by new lines.
   // Take care of inline html.
+
 };
 
 Write.prototype.initUndoButtons = function () {
@@ -642,6 +660,125 @@ Write.prototype.initListButtons = function () {
   this.$toolbar.find("a.button.number-list").click(function (e) {
     e.preventDefault();
     tool.insertList("ol");
+  });
+};
+
+Write.prototype.getQuoteLevel = function($quote) {
+  var classes = {};
+  var classNames = $quote.attr("class");
+  if (!classNames) {
+    return 0;
+  }
+  $(classNames.split(" ")).each(function() {
+    classes[this] = this;
+  });
+  for (var className in classes) {
+    var match = className.match(/l([12345])/);
+    if (match) {
+      return parseInt(match[1]);
+    }
+  }
+  return 0;
+};
+
+Write.prototype.initIndentButtons = function () {
+  var tool = this;
+
+  this.$toolbar.find("a.button.indent").click(function (e) {
+    e.preventDefault();
+    var $anchorNode = tool.$anchorNode;
+    var $anchorBlock = tool.$anchorBlock;
+    var $focusBlock = tool.$focusBlock;
+    var $focusNode = tool.$focusNode;
+    if (!$focusBlock) {
+      return;
+    }
+
+    if ($focusBlock.is("p,div")) {
+      tool.changeBlockType("blockquote");
+    } else if ($focusBlock.is("blockquote")) {
+      var level = tool.getQuoteLevel($focusBlock);
+      if (level < 5) {
+        tool.saveState();
+        $focusBlock.removeClass().addClass("l" + (level + 1));
+        tool.trackSelection();
+      }
+    } else {
+      var $anchorLi = $anchorNode.closest("li", $anchorBlock);
+      var $focusLi = $focusNode.closest("li", $focusBlock);
+      var $parent = $anchorLi.parent();
+      if ($anchorLi.length && $focusLi.length && $parent.is($focusLi.parent())) {
+        var $siblings = $parent.children();
+        var start = $siblings.index($anchorLi);
+        var end = $siblings.index($focusLi);
+        if (start > end) {
+          var t = start; start = end; end = t;
+        }
+        var $indentedLis = $siblings.slice(start, end + 1);
+        var $wrapper = $parent.is("ul") ? $("<ul></ul>") : $("<ol></ol>");
+        tool.saveState();
+        var selection = rangy.saveSelection();
+        $wrapper.insertBefore($anchorLi).append($indentedLis.detach());
+        rangy.restoreSelection(selection);
+        tool.trackSelection();
+      }
+    }
+  });
+
+  this.$toolbar.find("a.button.outdent").click(function (e) {
+    e.preventDefault();
+    var $anchorNode = tool.$anchorNode;
+    var $anchorBlock = tool.$anchorBlock;
+    var $focusBlock = tool.$focusBlock;
+    var $focusNode = tool.$focusNode;
+    if (!$focusBlock) {
+      return;
+    }
+    if ($focusBlock.is("blockquote")) {
+      var level = tool.getQuoteLevel($focusBlock);
+      if (level === 0) {
+        tool.changeBlockType("p");
+      } else {
+        tool.saveState();
+        $focusBlock.removeClass().addClass("l" + (level - 1));
+        tool.trackSelection();
+      }
+    } else {
+      var $anchorLi = $anchorNode.closest("li", $anchorBlock);
+      var $focusLi = $focusNode.closest("li", $focusBlock);
+      var $parent = $anchorLi.parent();
+      if ($anchorLi.length && $focusLi.length && $parent.is($focusLi.parent())) {
+        var $siblings = $parent.children();
+        var start = $siblings.index($anchorLi);
+        var end = $siblings.index($focusLi);
+        if (start > end) {
+          var t = start; start = end; end = t;
+        }
+        var $prevLis = $siblings.slice(0, start);
+        var $nextLis = $siblings.slice(end + 1);
+        var $indentedLis = $siblings.slice(start, end + 1);
+        var $wrapper = $parent.is("ul") ? $("<ul></ul>") : $("<ol></ol>");
+        tool.saveState();
+        var selection = rangy.saveSelection();
+        if ($prevLis.length) {
+          $prevLis = $prevLis.detach();
+          $wrapper.clone(false).append($prevLis).insertBefore($parent);
+        }
+        if ($nextLis.length) {
+          $nextLis = $nextLis.detach();
+          $wrapper.clone(false).append($nextLis).insertAfter($parent);
+        }
+        $indentedLis.detach().insertBefore($parent);
+        if (!$parent.parents("ul,li").length) {
+          $indentedLis.filter("li").replaceWith(function() {
+            return $("<p></p>").html($(this).html());
+          });
+        }
+        $parent.remove();
+        rangy.restoreSelection(selection);
+        tool.trackSelection();
+      }
+    }
   });
 };
 
@@ -761,7 +898,6 @@ Write.prototype.initFigure = function ($figure) {
 Write.prototype.initDND = function ($block) {
   // TODO: images are glued together when dragging
   if (!$block.draggable("option", "disabled")) {
-    console.log("Draggabled already enabled for", $block);
     return;
   }
   var tool = this;
@@ -1232,9 +1368,10 @@ MediaDialog.ImageStep = function (dialog) {
       return;
     }
 
-    var $figure = null;
+    var $figure;
 
     if (step.figureType == "download") {
+      //noinspection JSUnusedAssignment
       $figure = $("<figure></figure>").addClass("download").append(
               $("<a target='_blank'></a>").attr("href", step.originalURL).addClass("download").text("Download: ").append(
                       $("<strong></strong>").text(title)
@@ -1356,7 +1493,7 @@ MediaDialog.DocumentStep = function (dialog) {
     if (type === "link") {
       if (tool.$focusBlock && tool.range) {
         if (this.$focusBlock.is("p")) {
-          tool.range.collapse();
+          tool.range.collapse(false);
           tool.range.insertNode($figure.get(0));
           tool.trackSelection();
         } else {
