@@ -8,10 +8,10 @@
 {% endblock %}
 
 {% block layout %}
-  <form id="describe-form" action="{% url authoring:describe material_id=material.id %}" method="post">
+  <form id="describe-form" action="{% url authoring:describe pk=object.pk %}" method="post">
     <div class="authoring-head">
       <div class="steps-icons describe"></div>
-      <h1 id="material-title">{{ material.title }}</h1>
+      <h1 id="material-title">{{ object.title }}</h1>
       {% include "include/status-messages.html" %}
       <div class="clear"></div>
     </div>

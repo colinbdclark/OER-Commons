@@ -9,10 +9,10 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns("",
     url(r"new$", New.as_view(), name="new"),
-    url(r"edit/(?P<material_id>\d+)$", Write.as_view(), name="write"),
-    url(r"edit/(?P<material_id>\d+)/upload$", MediaUpload.as_view(), name="upload"),
-    url(r"edit/(?P<material_id>\d+)/describe$", Describe.as_view(), name="describe"),
-    url(r"edit/(?P<material_id>\d+)/submit$", Submit.as_view(), name="submit"),
+    url(r"edit/(?P<pk>\d+)$", Write.as_view(), name="write"),
+    url(r"edit/(?P<pk>\d+)/upload$", MediaUpload.as_view(), name="upload"),
+    url(r"edit/(?P<pk>\d+)/describe$", Describe.as_view(), name="describe"),
+    url(r"edit/(?P<pk>\d+)/submit$", Submit.as_view(), name="submit"),
     url(r"load-embed$", LoadEmbed.as_view(), name="load-embed"),
-    url(r"(?P<material_id>\d+)$", ViewAuthoredMaterial.as_view(), name="view"),
+    url(r"(?P<pk>\d+)$", ViewAuthoredMaterial.as_view(), name="view"),
 )

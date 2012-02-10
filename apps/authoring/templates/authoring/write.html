@@ -8,10 +8,10 @@
 {% endblock %}
 
 {% block layout %}
-  <form id="write-form" action="{% url authoring:write material_id=material.id %}" method="post">
+  <form id="write-form" action="{% url authoring:write pk=object.pk %}" method="post">
     <div class="authoring-head">
       <div class="steps-icons write"></div>
-      <h1 id="material-title">{% if material.title %}{{ material.title }}{% else %}Click here to edit title{% endif %}</h1>
+      <h1 id="material-title">{% if object.title %}{{ object.title }}{% else %}Click here to edit title{% endif %}</h1>
       {{ form.title }}
       <div class="actions">
         <a href="#preview" class="preview">Preview</a>
@@ -72,7 +72,7 @@
 
         <div id="media-dialog">
   {#        TODO: add simple file input widget for browsers that don't support file drag'n'drop #}
-          <div class="step upload" data-url="{% url authoring:upload material_id=material.id %}">
+          <div class="step upload" data-url="{% url authoring:upload pk=object.pk %}">
             <div class="head">I have permission to upload this item: <a href="#hide" class="hide">hide</a></div>
             <div class="body">
               <div class="left">
@@ -141,7 +141,7 @@
         </div>
 
         <div id="editor-area" class="authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
-          {{ material.text|safe }}
+          {{ object.text|safe }}
         </div>
         <div class="preview authored-content hidden"></div>
         {{ form.text }}

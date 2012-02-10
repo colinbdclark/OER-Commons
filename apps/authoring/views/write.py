@@ -1,14 +1,13 @@
 from annoying.decorators import JsonResponse
 from authoring.models import AuthoredMaterial
+from authoring.views import EditMaterialViewMixin
 from django import forms
 from django.contrib import messages
-from django.shortcuts import  get_object_or_404, redirect
-from django.utils.decorators import method_decorator
-from django.views.generic.base import  TemplateView
-from utils.decorators import login_required
+from django.shortcuts import  redirect
+from django.views.generic import UpdateView
 
 
-class Form(forms.ModelForm):
+class WriteForm(forms.ModelForm):
 
     # TODO: clean up HTML from `text` field.
     # using lxml clean. Remove all styles, Keep only allowed classes,
@@ -23,47 +22,28 @@ class Form(forms.ModelForm):
         )
 
 
-class Write(TemplateView):
+class Write(EditMaterialViewMixin, UpdateView):
 
     template_name = "authoring/write.html"
+    form_class = WriteForm
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        self.material = get_object_or_404(
-            AuthoredMaterial,
-            id=int(kwargs["material_id"]),
-            author=request.user
-        )
-        self.form = Form(instance=self.material)
-        return super(Write, self).dispatch(request, *args, **kwargs)
+    def form_valid(self, form):
+        form.save()
+        if self.request.is_ajax():
+            return JsonResponse(dict(
+                status="success",
+                message=u"Saved.",
+            ))
+        if self.request.POST.get("next") == "true":
+            return redirect("authoring:describe", pk=self.object.pk)
+        return self.render_to_response(self.get_context_data(form=form))
 
-    def post(self, request, **kwargs):
-        self.form = Form(request.POST, instance=self.material)
-        if self.form.is_valid():
-            self.form.save()
-            if request.is_ajax():
-                return JsonResponse(dict(
-                    status="success",
-                    message=u"Saved.",
-                ))
-        else:
-            if request.is_ajax():
-                # TODO: return error messages
-                return JsonResponse(dict(
-                    status="error",
-                    message=u"Please correct the indicated errors.",
-                ))
-            messages.error(request, u"Please correct the indicated errors.")
-            return self.get(request, **kwargs)
-        if request.POST.get("next") == "true":
-            return redirect("authoring:describe", material_id=self.material.id)
-        return self.get(request, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = super(Write, self).get_context_data(**kwargs)
-        data["form"] = self.form
-        data["material"] = self.material
-        return data
-
-
-
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            # TODO: return error messages
+            return JsonResponse(dict(
+                status="error",
+                message=u"Please correct the indicated errors.",
+            ))
+        messages.error(self.request, u"Please correct the indicated errors.")
+        return self.render_to_response(self.get_context_data(form=form))

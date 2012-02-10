@@ -1,13 +1,17 @@
-from authoring.models import AuthoredMaterial
-from django.shortcuts import get_object_or_404
+from authoring.views import MaterialViewMixin
 from django.utils.safestring import mark_safe
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import BaseDetailView
 from pyquery import PyQuery as pq
 
 
-class ViewAuthoredMaterial(TemplateView):
+class ViewAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
 
     template_name = "authoring/view.html"
+
+    def get_queryset(self):
+        qs = super(ViewAuthoredMaterial, self).get_queryset()
+        return qs.filter(published=True)
 
     @classmethod
     def prepare_content(cls, text):
@@ -65,10 +69,5 @@ class ViewAuthoredMaterial(TemplateView):
 
     def get_context_data(self, **kwargs):
         data = super(ViewAuthoredMaterial, self).get_context_data(**kwargs)
-        data["material"] = material = get_object_or_404(
-            AuthoredMaterial,
-            id=int(kwargs["material_id"]),
-            published=True,
-        )
-        data["text"], data["outline"] = ViewAuthoredMaterial.prepare_content(material.text)
+        data["text"], data["outline"] = ViewAuthoredMaterial.prepare_content(data["object"].text)
         return data

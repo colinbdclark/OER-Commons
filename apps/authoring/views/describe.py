@@ -1,17 +1,16 @@
 from itertools import chain
 from authoring.models import AuthoredMaterial
+from authoring.views import EditMaterialViewMixin
 from django import forms
 from django.contrib import messages
 from django.forms import ModelMultipleChoiceField
 from django.forms.widgets import CheckboxInput
-from django.shortcuts import  get_object_or_404, redirect
-from django.utils.decorators import method_decorator
+from django.shortcuts import  redirect
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
-from django.views.generic.base import  TemplateView
+from django.views.generic import UpdateView
 from materials.models import GeneralSubject, Language
-from utils.decorators import login_required
 from utils.forms import MultipleAutoCreateField
 
 
@@ -60,38 +59,19 @@ class DescribeForm(forms.ModelForm):
             summary=forms.Textarea(attrs=dict(placeholder=u"Please give a short summary of your resource. This will appear as the preview in search results."))
         )
 
-class Describe(TemplateView):
+class Describe(EditMaterialViewMixin, UpdateView):
 
     template_name = "authoring/describe.html"
+    form_class = DescribeForm
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        self.material = get_object_or_404(
-            AuthoredMaterial,
-            id=int(kwargs["material_id"]),
-            author=request.user
-        )
-        self.form = DescribeForm(instance=self.material)
-        return super(Describe, self).dispatch(request, *args, **kwargs)
+    def form_invalid(self, form):
+        messages.error(self.request, u"Please correct the indicated errors.")
+        return super(Describe, self).form_invalid(form)
 
-    def post(self, request, **kwargs):
-        self.form = DescribeForm(request.POST, instance=self.material)
-        if self.form.is_valid():
-            self.form.save()
-        else:
-            messages.error(request, u"Please correct the indicated errors.")
-            return self.get(request, **kwargs)
-        if request.POST.get("next") == "true":
-            return redirect("authoring:submit", material_id=self.material.id)
-        elif request.POST.get("next") == "false":
-            return redirect("authoring:write", material_id=self.material.id)
-        return self.get(request, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = super(Describe, self).get_context_data(**kwargs)
-        data["form"] = self.form
-        data["material"] = self.material
-        return data
-
-
-
+    def form_valid(self, form):
+        form.save()
+        if self.request.POST.get("next") == "true":
+            return redirect("authoring:submit", pk=self.object.pk)
+        elif self.request.POST.get("next") == "false":
+            return redirect("authoring:write", pk=self.object.pk)
+        return self.render_to_response(self.get_context_data(form=form))
