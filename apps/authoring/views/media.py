@@ -1,12 +1,13 @@
 from annoying.decorators import JsonResponse
-from authoring.models import AuthoredMaterial, Image, Document, Embed
+from authoring.models import Image, Document, Embed
+from authoring.views import EditMaterialViewMixin
 from cache_utils.decorators import cached
 from django.core.files import File
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import filesizeformat
 from django.views.generic.base import View
 from django import forms
+from django.views.generic.edit import ProcessFormView, FormMixin
 from sorl.thumbnail.shortcuts import get_thumbnail
 import json
 import os
@@ -84,6 +85,7 @@ class MediaUploadForm(forms.Form):
                     extension = content_type.split("/")[-1]
                     if extension in ("pjpeg", "jpeg"):
                         extension = "jpg"
+                    #noinspection PyUnusedLocal
                     filename = ''.join(
                         random.choice(string.ascii_lowercase + string.digits) for x in xrange(10)
                     ) + extension
@@ -119,69 +121,68 @@ class MediaUploadForm(forms.Form):
         return self.cleaned_data
 
 
-class MediaUpload(View):
+class MediaUpload(EditMaterialViewMixin, FormMixin, ProcessFormView):
 
-    def dispatch(self, request, *args, **kwargs):
-        response = super(MediaUpload, self).dispatch(request, *args, **kwargs)
-        if isinstance(response, dict):
-            return HttpResponse(json.dumps(response), content_type="text/plain")
-        return response
+    form_class = MediaUploadForm
 
-    def post(self, request, *args, **kwargs):
-        material = get_object_or_404(AuthoredMaterial,
-                                     id=int(kwargs["material_id"]))
+    def json_response(self, data):
+        # We have to use "text/plain" here because it will be parsed by jquery.fileupload plugin
+        return HttpResponse(json.dumps(data), content_type="text/plain")
 
-        form = MediaUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            if form.media_type == "image":
-                image = Image(material=material, image=form.cleaned_data["file"])
-                image.save()
-                return dict(
+    def form_valid(self, form):
+        object = self.get_object()
+        if form.media_type == "image":
+            image = Image(material=object, image=form.cleaned_data["file"])
+            image.save()
+            response = dict(
+                status="success",
+                type="image",
+                thumbnail=get_thumbnail(image.image, "148x110", crop="center", upscale=False).url,
+                url=get_thumbnail(image.image, "650x650", upscale=False).url,
+                original_url=image.image.url,
+                id=image.id,
+                name=image.image.name.split(os.path.sep)[-1],
+            )
+        elif form.media_type == "document":
+            if form.cleaned_data["file"]:
+                document = Document(material=object, file=form.cleaned_data["file"])
+                document.save()
+                response = dict(
                     status="success",
-                    type="image",
-                    thumbnail=get_thumbnail(image.image, "148x110", crop="center", upscale=False).url,
-                    url=get_thumbnail(image.image, "650x650", upscale=False).url,
-                    original_url=image.image.url,
-                    id=image.id,
-                    name=image.image.name.split(os.path.sep)[-1],
-                )
-            elif form.media_type == "document":
-                if form.cleaned_data["file"]:
-                    document = Document(material=material, file=form.cleaned_data["file"])
-                    document.save()
-                    return dict(
-                        status="success",
-                        type="document",
-                        name=document.file.name.split(os.path.sep)[-1],
-                        url=document.file.url,
-                    )
-                else:
-                    return dict(
-                        status="success",
-                        type="document",
-                        name="",
-                        url=form.cleaned_data["url"],
-                    )
-            elif form.embed and form.embed.type == "video":
-                video = form.embed
-                return dict(
-                    type="video",
-                    url=video.url,
-                    title=video.title or u"",
-                    thumbnail=video.thumbnail or u""
+                    type="document",
+                    name=document.file.name.split(os.path.sep)[-1],
+                    url=document.file.url,
                 )
             else:
-                return dict(
+                response = dict(
                     status="success",
-                    type="link",
+                    type="document",
+                    name="",
                     url=form.cleaned_data["url"],
                 )
+        elif form.embed and form.embed.type == "video":
+            video = form.embed
+            response = dict(
+                type="video",
+                url=video.url,
+                title=video.title or u"",
+                thumbnail=video.thumbnail or u""
+            )
+        else:
+            response = dict(
+                status="success",
+                type="link",
+                url=form.cleaned_data["url"],
+            )
+        return self.json_response(response)
 
-        return dict(status="error", message=form._errors["__all__"][0])
+    def form_invalid(self, form):
+        self.json_response(dict(status="error", message=form._errors["__all__"][0]))
 
 
 class LoadEmbed(View):
 
+    #noinspection PyUnusedLocal
     def post(self, request, *args, **kwargs):
         url = request.POST.get("url")
         if not url:

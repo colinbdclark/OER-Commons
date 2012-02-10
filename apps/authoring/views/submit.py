@@ -1,14 +1,13 @@
 from authoring.models import AuthoredMaterial
+from authoring.views import EditMaterialViewMixin
 from django import forms
 from django.contrib import messages
-from django.shortcuts import  get_object_or_404, redirect
+from django.shortcuts import  redirect
 from django.template.loader import render_to_string
-from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic.base import  TemplateView
+from django.views.generic import UpdateView
 from materials.models.common import CC_LICENSE_URL_RE, License
-from utils.decorators import login_required
 
 
 class LicenseWidget(forms.Widget):
@@ -100,40 +99,22 @@ class SubmitForm(forms.ModelForm):
         fields = ["license"]
 
 
-class Submit(TemplateView):
+class Submit(EditMaterialViewMixin, UpdateView):
 
     template_name = "authoring/submit.html"
+    form_class = SubmitForm
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        self.material = get_object_or_404(
-            AuthoredMaterial,
-            id=int(kwargs["material_id"]),
-            author=request.user
-        )
-        self.form = SubmitForm(instance=self.material)
-        return super(Submit, self).dispatch(request, *args, **kwargs)
+    def form_invalid(self, form):
+        messages.error(self.request, u"Please correct the indicated errors.")
+        return super(Submit, self).form_invalid(form)
 
-    def post(self, request, **kwargs):
-        self.form = SubmitForm(request.POST, instance=self.material)
-        if self.form.is_valid():
-            self.form.save()
-        else:
-            messages.error(request, u"Please correct the indicated errors.")
-            return self.get(request, **kwargs)
-        if request.POST.get("next") == "true":
-            self.material.published = True
-            self.material.save()
-            return redirect("authoring:view", material_id=self.material.id)
-        elif request.POST.get("next") == "false":
-            return redirect("authoring:describe", material_id=self.material.id)
-        return self.get(request, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = super(Submit, self).get_context_data(**kwargs)
-        data["form"] = self.form
-        data["material"] = self.material
-        return data
-
-
-
+    def form_valid(self, form):
+        form.save()
+        if self.request.POST.get("next") == "true":
+            self.object.published = True
+            self.object.is_new = False
+            self.object.save()
+            return redirect("authoring:view", pk=self.object.pk)
+        elif self.request.POST.get("next") == "false":
+            return redirect("authoring:describe", pk=self.object.pk)
+        return self.render_to_response(self.get_context_data(form=form))

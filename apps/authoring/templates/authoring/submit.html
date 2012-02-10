@@ -8,10 +8,10 @@
 {% endblock %}
 
 {% block layout %}
-  <form id="submit-form" action="{% url authoring:submit material_id=material.id %}" method="post">
+  <form id="submit-form" action="{% url authoring:submit pk=object.pk %}" method="post">
     <div class="authoring-head">
       <div class="steps-icons submit"></div>
-      <h1 id="material-title">{{ material.title }}</h1>
+      <h1 id="material-title">{{ object.title }}</h1>
       {% include "include/status-messages.html" %}
       <div class="clear"></div>
     </div>
@@ -60,7 +60,6 @@
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.blockUI.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/submit.js"></script>
   <script>
-
     $(function(e) {
       new Submit();
     });
