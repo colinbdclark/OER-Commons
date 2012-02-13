@@ -47,8 +47,24 @@
         <a class="button italic" href="#italic">Italic</a>
         <a class="button underline" href="#underline">Underline</a>
         <span class="sep"></span>
-        <a class="button text-color" href="#text-color">Change text color</a>
-        <a class="button bg-color" href="#bg-color">Change background color</a>
+        <div class="color-selector">
+          <a class="button text-color" href="#text-color">Change text color</a>
+          <ul class="text">
+            {% for i in 12345|make_list %}
+              <li class="text-color-{{ i }}"></li>
+            {% endfor %}
+            <li class="text-color-remove"></li>
+          </ul>
+        </div>
+        <div class="color-selector">
+          <a class="button bg-color" href="#bg-color">Change background color</a>
+          <ul class="bg">
+            {% for i in 12345|make_list %}
+              <li class="bg-color-{{ i }}"></li>
+            {% endfor %}
+            <li class="bg-color-remove"></li>
+          </ul>
+        </div>
         <span class="sep"></span>
         <a class="button link" href="#link">Insert link</a>
         <span class="sep"></span>
@@ -171,6 +187,7 @@
 {% block extra-js %}
   <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-core.js"></script>
   <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-selectionsaverestore.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-cssclassapplier.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.blockUI.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.jeditable.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
