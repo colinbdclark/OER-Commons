@@ -14,6 +14,10 @@ var Write = function () {
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
   this.ALLOWED_CLASSES = ["embed", "image", "video", "document", "download", "button", "l1", "l2", "l3", "l4", "l5"];
+  for (var i = 1; i < 6; i++) {
+    this.ALLOWED_CLASSES.push("text-color-" + i);
+    this.ALLOWED_CLASSES.push("bg-color-" + i);
+  }
   this.HEADER_LEVELS = {
     h2: 0,
     h3: 1
@@ -132,6 +136,7 @@ var Write = function () {
   this.initIndentButtons();
   this.initListButtons();
   this.initLinkUI();
+  this.initColorButtons();
   this.initOutline();
 
   new MediaDialog(this);
@@ -154,11 +159,6 @@ var Write = function () {
   // Update selected nodes when user click on editor area or select text with mouse
   // and save selection.
   this.$area.mouseup(function () {
-    tool.trackSelection();
-  });
-
-  // Update selected nodes when user is about to click on toolbar button.
-  this.$toolbar.mousedown(function () {
     tool.trackSelection();
   });
 
@@ -233,7 +233,7 @@ var Write = function () {
     });
   })();
 
-  // Save, Cancel, Done actions
+  // Save, Cancel actions
   (function () {
     var $input = $("#id_text");
     var $preview = tool.$form.find("div.preview");
@@ -426,7 +426,8 @@ Write.prototype.focusOnNode = function ($node) {
   this.trackSelection();
 };
 
-Write.prototype.trackSelection = function () {
+Write.prototype.trackSelection = function() {
+
   var selection = this.selection = rangy.getSelection();
   if (selection.rangeCount) {
     this.range = selection.getRangeAt(0);
@@ -450,7 +451,7 @@ Write.prototype.trackSelection = function () {
     if ($anchorNode.parent().is(this.$area)) {
       $anchorBlock = $anchorNode;
     } else {
-      $anchorBlock = $anchorNode.parentsUntil(this.$area).slice(0, 1);
+      $anchorBlock = $anchorNode.parentsUntil(this.$area).slice(-1);
     }
   } else {
     $anchorNode = null;
@@ -460,7 +461,7 @@ Write.prototype.trackSelection = function () {
     if ($focusNode.parent().is(this.$area)) {
       $focusBlock = $focusNode;
     } else {
-      $focusBlock = $focusNode.parentsUntil(this.$area).slice(0, 1);
+      $focusBlock = $focusNode.parentsUntil(this.$area).slice(-1);
     }
   } else {
     $focusNode = null;
@@ -505,7 +506,7 @@ Write.prototype.updateToolbarState = function () {
   var $focusNode = this.$focusNode;
   var $focusBlock = this.$focusBlock;
 
-  this.$toolbarButtons.removeClass("active");
+  this.$toolbar.find(".active").removeClass("active");
   this.disableButton("indent");
   this.disableButton("outdent");
 
@@ -513,22 +514,33 @@ Write.prototype.updateToolbarState = function () {
     return;
   }
 
-  if ($focusNode.closest("strong,b", this.$area).length) {
-    this.activateButton("bold");
+  if (!this.selection || this.selection.isCollapsed) {
+    this.disableButton("bold");
+    this.disableButton("italic");
+    this.disableButton("underline");
+    this.disableButton("link");
+    this.disableButton("text-color");
+    this.disableButton("bg-color");
+  } else {
+    this.enableButton("bold");
+    this.enableButton("italic");
+    this.enableButton("underline");
+    this.enableButton("link");
+    this.enableButton("text-color");
+    this.enableButton("bg-color");
+    if ($focusNode.closest("strong,b", this.$area).length) {
+      this.activateButton("bold");
+    }
+    if ($focusNode.closest("em,i", this.$area).length) {
+      this.activateButton("italic");
+    }
+    if ($focusNode.closest("u", this.$area).length) {
+      this.activateButton("underline");
+    }
+    if ($focusNode.closest("a", this.$area).length) {
+      this.activateButton("link");
+    }
   }
-
-  if ($focusNode.closest("em,i", this.$area).length) {
-    this.activateButton("italic");
-  }
-
-  if ($focusNode.closest("u", this.$area).length) {
-    this.activateButton("underline");
-  }
-
-  if ($focusNode.closest("a", this.$area).length) {
-    this.activateButton("link");
-  }
-
   if ($focusBlock.is("h2")) {
     this.$textStyleIndicator.text("Header");
   } else if ($focusBlock.is("h3")) {
@@ -884,6 +896,72 @@ Write.prototype.initLinkUI = function () {
     });
     $dialog.show();
     $input.focus();
+  });
+};
+
+Write.prototype.initColorButtons = function() {
+  var tool = this;
+  var $toolbar = this.$toolbar;
+  var $selectors = $toolbar.find("div.color-selector");
+  $selectors.find("a.button").click(function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var $this = $(this);
+    var $selector = $this.parent();
+    if ($selector.hasClass("active")) {
+      $selector.removeClass("active");
+    } else {
+      var $lis = $selector.find("li").removeClass("selected");
+      $lis.slice(0,5).each(function() {
+        var $li = $(this);
+        var applier = rangy.createCssClassApplier($li.attr("class"));
+        if (applier.isAppliedToSelection()) {
+          $li.addClass("selected");
+        }
+      });
+      if (!$lis.filter(".selected").length) {
+        $lis.slice(-1).addClass("selected");
+      }
+      $selector.addClass("active");
+    }
+  });
+  $selectors.delegate("li", "mousedown", function(e) {
+    e.stopPropagation();
+    var $this = $(this);
+    var i, applier;
+    tool.saveState();
+
+    var classNames = $this.attr("class");
+    var classes = {};
+    var class_ = null;
+    var prefix = null;
+    $(classNames.split(" ")).each(function() {
+      classes[this] = this;
+    });
+    for (var className in classes) {
+      var match = className.match(/(text|bg)-color-(remove|[12345])/);
+      if (match) {
+        class_ = match[0];
+        prefix = match[1];
+        break;
+      }
+    }
+
+    // TODO: initialize and save CssclassAppliers on tool initialization and re-use them here
+
+    // Remove existing colors
+    for (i = 1; i < 6; i++) {
+      applier = rangy.createCssClassApplier(prefix + "-color-" + i);
+      applier.undoToSelection();
+    }
+    if (class_.indexOf("-remove") === -1) {
+      applier = rangy.createCssClassApplier(class_);
+      applier.applyToSelection();
+    }
+  });
+
+  $(document).click(function() {
+    $selectors.removeClass("active");
   });
 };
 
