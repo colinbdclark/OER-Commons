@@ -1,8 +1,6 @@
 {% with request.user as user %}
 {% with user.get_profile as profile %}
 <dl class="user-info dotted clearfix">
-  <dt>Name:</dt>
-  <dd>{{ user.first_name }} {{ user.last_name }}</dd>
   {% if profile.institution %}
     <dt>Institution:</dt>
     <dd>{{ profile.institution }}</dd>

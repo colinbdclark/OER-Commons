@@ -34,7 +34,7 @@ oer.myitems.init_folder_form = function() {
     var onFolderCreation = function(response) {
         if (response["status"] === "success") {
             var $item = $.tmpl(
-                '<li><a href="/my/folders/${slug}">${name} (0)</a> <a href="#" class="delete" data-folder-id="${id}">Delete</a></li>',
+                '<li><a href="/my/folder/${slug}">${name} (0)</a> <a href="#" class="delete" data-folder-id="${id}">Delete</a></li>',
                 response
             );
 

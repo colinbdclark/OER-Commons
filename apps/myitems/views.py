@@ -1,7 +1,8 @@
 from django import forms
+from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.utils.decorators import method_decorator
 
 from haystack.query import SearchQuerySet
@@ -15,11 +16,12 @@ from myitems.models import Folder
 
 
 def myitems_index(request, view_name, page_title, no_items_message, index_name,
-                  only_published=True, template="myitems/index.html"):
+                  term, only_published=True, template="myitems/index.html",
+                  reverse_params=None):
 
     breadcrumbs = [
         {"url": reverse("myitems:myitems"), "title": u"My Items"},
-        {"url": reverse("myitems:%s" % view_name), "title": page_title},
+        {"url": reverse("myitems:%s" % view_name, kwargs=reverse_params), "title": page_title},
     ]
 
     query_string_params = {}
@@ -31,7 +33,7 @@ def myitems_index(request, view_name, page_title, no_items_message, index_name,
     query = SearchQuerySet()
     if only_published:
         query = query.narrow("is_displayed:true")
-    query = query.narrow("%s:%i" % (index_name, request.user.id))
+    query = query.narrow("%s:%i" % (index_name, term))
 
     if index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
@@ -49,29 +51,34 @@ def myitems_index(request, view_name, page_title, no_items_message, index_name,
 
 @login_required
 def saved(request):
-    return myitems_index(request, "myitems", u"My Saved Items", u"You have not saved any item yet.", "saved_by",
-                         template="myitems/saved.html")
+    return myitems_index(request, "myitems", u"My Saved Items",
+        u"You have not saved any item yet.", "saved_by", request.user.id,
+        template="myitems/saved.html")
 
 
 @login_required
 def rated(request):
-    return myitems_index(request, "rated", u"My Rated Items", u"You have not rated any item yet.", "rated_by")
+    return myitems_index(request, "rated", u"My Rated Items",
+        u"You have not rated any item yet.", "rated_by", request.user.id)
 
 
 @login_required
 def tagged(request):
-    return myitems_index(request, "tagged", u"My Tagged Items", u"You have not tagged any item yet.", "tagged_by")
+    return myitems_index(request, "tagged", u"My Tagged Items",
+        u"You have not tagged any item yet.", "tagged_by", request.user.id)
 
 
 @login_required
 def commented(request):
-    return myitems_index(request, "commented", u"My Commented Items", u"You have not commented any item yet.", "reviewed_by")
+    return myitems_index(request, "commented", u"My Commented Items",
+        u"You have not commented any item yet.", "reviewed_by", request.user.id)
 
 
 @login_required
 def submitted(request):
-    return myitems_index(request, "submitted", u"My Submitted Items", u"You have not submitted any item yet.", "creator",
-                         only_published=False)
+    return myitems_index(request, "submitted", u"My Submitted Items",
+        u"You have not submitted any item yet.", "creator", request.user.id,
+         only_published=False)
 
 @login_required
 def searches(request):
@@ -134,3 +141,12 @@ class FolderDelete(View):
         else:
             folder.delete()
         return { "status": "success" }
+
+
+
+@login_required
+def folder(request, slug=None):
+    folder = get_object_or_404(Folder, user=request.user, slug=slug)
+    return myitems_index(request, "folder", folder.name,
+        u"You have not saved any item yet.", "foldered_in", folder.id,
+        template="myitems/saved.html", reverse_params={ "slug": slug })

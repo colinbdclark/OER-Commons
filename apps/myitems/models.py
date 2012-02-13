@@ -46,4 +46,4 @@ class FolderItem(models.Model):
 
 
     def __unicode__(self):
-        return u"%s stored in %s" % (self.content_object, self.user)
+        return u"%s stored in %s" % (self.content_object, self.folder)
