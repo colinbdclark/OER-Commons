@@ -148,5 +148,5 @@ class FolderDelete(View):
 def folder(request, slug=None):
     folder = get_object_or_404(Folder, user=request.user, slug=slug)
     return myitems_index(request, "folder", folder.name,
-        u"You have not saved any item yet.", "foldered_in", folder.id,
+        u"You have not saved any item yet.", "saved_in_folders", folder.id,
         template="myitems/saved.html", reverse_params={ "slug": slug })

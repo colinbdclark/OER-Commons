@@ -131,7 +131,7 @@ class Material(Indexed, EvaluatedItemMixin):
     folders = generic.GenericRelation(FolderItem)
 
     @property
-    def foldered_in(self):
+    def saved_in_folders(self):
         return self.folders.values_list("folder__id", flat=True)
 
     @property

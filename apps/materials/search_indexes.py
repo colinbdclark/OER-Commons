@@ -70,7 +70,7 @@ class MaterialSearchIndex(ScheduledSearchIndex, EvaluatedItemIndex):
     rated_by = ByField(model_attr="ratings")
     reviewed_by = ByField(model_attr="reviews")
 
-    foldered_in = MultiValueField(model_attr="foldered_in")
+    saved_in_folders = MultiValueField(model_attr="saved_in_folders")
 
     creator = IntegerField(model_attr="creator__id")
 
