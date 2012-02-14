@@ -4,7 +4,6 @@ from celery.decorators import task
 from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor
-from haystack_scheduled.indexes import Indexed
 from sorl.thumbnail.shortcuts import delete
 from utils import update_item
 import httplib
@@ -13,6 +12,7 @@ import os
 import sys
 import urllib
 import urllib2
+from core.search import reindex
 
 
 @task
@@ -36,8 +36,7 @@ def reindex_microsite_topic(topic):
             objects.add(result.object)
 
     for instance in objects:
-        if isinstance(instance, Indexed):
-            instance.reindex()
+        reindex(instance)
 
 
 class TimeoutError(Exception):
@@ -122,8 +121,7 @@ def check_url_status(item):
 
     if item.http_status != status_code:
         update_item(item, http_status=status_code)
-        if isinstance(item, Indexed):
-            item.reindex()
+        reindex(item)
 
 
 

@@ -9,7 +9,6 @@ from django.db import models
 from django.db.models import permalink
 from django.db.models.aggregates import Avg
 from django.utils.translation import ugettext_lazy as _
-from haystack_scheduled.indexes import Indexed
 from materials.models import License
 from materials.models.microsite import Microsite, Topic
 from rating.models import Rating
@@ -77,7 +76,7 @@ class GenericMaterial(models.Model, EvaluatedItemMixin):
         app_label = "materials"
 
 
-class Material(Indexed, EvaluatedItemMixin):
+class Material(models.Model, EvaluatedItemMixin):
 
     def __init__(self, *args, **kwargs):
         super(Material, self).__init__(*args, **kwargs)

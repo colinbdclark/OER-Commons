@@ -18,7 +18,7 @@ class OERRecommender(OERMetadataFormat):
         abstract = item.abstract
         if item.published_on:
             date = item.published_on
-        url = item.url
+        url = "http://%s%s" % (site.domain, item.get_absolute_url())
         oer_url = "http://%s%s" % (site.domain, item.get_absolute_url())
         identifier = self.repository.build_header(item).identifier
 

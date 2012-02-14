@@ -8,12 +8,12 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
-from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial
 from rubrics.models import Rubric, StandardAlignmentScoreValue, \
     StandardAlignmentScore, RubricScore, RubricScoreValue, Evaluation
 from utils.decorators import login_required
 import urlparse
+from core.search import reindex
 
 
 HOSTNAME_COOKIE = "evaluation_tool_hostname"
@@ -234,8 +234,7 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         evaluation.confirmed = False
         evaluation.save()
 
-        if isinstance(self.object, Indexed):
-            self.object.reindex()
+        reindex(self.object)
 
         return dict(status="success")
 
@@ -402,8 +401,7 @@ class Finalize(EvaluateViewMixin, View):
         evaluation.confirmed = True
         evaluation.save()
 
-        if isinstance(self.object, Indexed):
-            self.object.reindex()
+        reindex(self.object)
 
         return redirect("rubrics:evaluate_results",
             content_type_id=self.content_type.id,

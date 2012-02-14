@@ -79,7 +79,7 @@ INSTALLED_APPS = (
     'compressor',
     'debug_toolbar',
     'haystack',
-    'haystack_scheduled',
+    'celery_haystack',
     'flatblocks',
     'mptt',
     'indexer',
