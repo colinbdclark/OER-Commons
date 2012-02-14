@@ -3,9 +3,9 @@ from api.decorators import api_method
 from api.utils import get_object
 from django import forms
 from django.contrib.contenttypes.models import ContentType
-from haystack_scheduled.indexes import Indexed
 from oauth_provider.decorators import oauth_required
 from tags.models import Tag
+from core.search import reindex
 
 
 class TagsField(forms.Field):
@@ -46,8 +46,7 @@ class TagsForm(forms.Form):
                 Tag(content_type=content_type, object_id=object_id,
                     user=self.user, name=tag).save()
 
-        if isinstance(self.instance, Indexed):
-            self.instance.reindex()
+        reindex(self.instance)
 
 
 @oauth_required

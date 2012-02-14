@@ -1,11 +1,11 @@
 from haystack import site
 from haystack.fields import CharField, MultiValueField, IntegerField, \
     BooleanField, DateTimeField, FloatField
-from haystack_scheduled.indexes import ScheduledSearchIndex
 from materials.models.community import CommunityItem
 from materials.models.course import Course
 from materials.models.library import Library
 from rubrics.indexes import EvaluatedItemIndex
+from core.search import SearchIndex
 import re
 
 
@@ -52,7 +52,7 @@ class AlignmentTagsField(MultiValueField):
         return value.values_list("tag__id", flat=True).order_by().distinct()
 
 
-class MaterialSearchIndex(ScheduledSearchIndex, EvaluatedItemIndex):
+class MaterialSearchIndex(SearchIndex, EvaluatedItemIndex):
 
     text = CharField(document=True, use_template=True)
     slug = CharField(model_attr="slug", stored=True, indexed=False)

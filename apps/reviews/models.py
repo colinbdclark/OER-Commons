@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from haystack_scheduled.indexes import Indexed
+from core.search import reindex
 
 
 class Review(models.Model):
@@ -33,8 +33,7 @@ class Review(models.Model):
 def review_post_save(sender, **kwargs):
     instance = kwargs["instance"]
     content_object = instance.content_object
-    if isinstance(content_object, Indexed):
-        content_object.reindex()
+    reindex(content_object)
 
 
 #noinspection PyUnusedLocal
@@ -42,5 +41,4 @@ def review_post_save(sender, **kwargs):
 def review_post_delete(sender, **kwargs):
     instance = kwargs["instance"]
     content_object = instance.content_object
-    if isinstance(content_object, Indexed):
-        content_object.reindex()
+    reindex(content_object)

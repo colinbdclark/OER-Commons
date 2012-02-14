@@ -6,10 +6,10 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
-from haystack_scheduled.indexes import Indexed
 from notes.models import Note
 from saveditems.models import SavedItem
 from utils.decorators import login_required
+from core.search import reindex
 from utils.shortcuts import redirect_to_next_url
 
 
@@ -62,8 +62,7 @@ class NoteForm(forms.Form):
         else:
             self.instance.saved_items.filter(user=self.user).delete()
 
-        if isinstance(self.instance, Indexed):
-            self.instance.reindex()
+        reindex(self.instance)
 
 
 @login_required

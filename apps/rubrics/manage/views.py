@@ -12,7 +12,6 @@ from django.template.defaultfilters import floatformat
 from django.utils.dateformat import format
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, View
-from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial, GradeLevel, GeneralSubject
 from rubrics.models import StandardAlignmentScore, RubricScore, Rubric, \
     Evaluation, RubricScoreValue, get_verbose_score_name
@@ -20,6 +19,7 @@ from users.views.login import LoginForm
 from operator import or_
 import datetime
 import calendar
+from core.search import reindex
 
 
 class Login(FormView):
@@ -782,8 +782,7 @@ class DeleteEvaluation(ManageRubricsMixin, View):
 
         object = evaluation.content_object
         evaluation.delete()
-        if isinstance(object, Indexed):
-            object.reindex()
+        reindex(object)
         result["status"] = "success"
 
         return result
@@ -853,8 +852,7 @@ class EditEvaluation(ManageRubricsMixin, View):
                     score=value,
                 )
 
-        if isinstance(object, Indexed):
-            object.reindex()
+        reindex(object)
         result["status"] = "success"
 
         return result

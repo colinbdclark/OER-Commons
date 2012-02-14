@@ -3,9 +3,9 @@ from autoslug.settings import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
-from haystack_scheduled.indexes import Indexed
 from tags.models import Tag
 from utils.decorators import login_required
+from core.search import reindex
 
 
 @login_required
@@ -31,8 +31,7 @@ def add(request, app_label, model, object_id):
                 tag.save()
                 new_tags.append(tag)
 
-    if isinstance(item, Indexed):
-        item.reindex()
+    reindex(item)
 
     response = {"tags": []}
     for tag in new_tags:
@@ -61,8 +60,7 @@ def delete(request):
                 tag = Tag.objects.get(id=id, user=request.user)
                 item = tag.content_object
                 tag.delete()
-                if isinstance(item, Indexed):
-                    item.reindex()
+                reindex(item)
             except Tag.DoesNotExist:
                 pass
 
