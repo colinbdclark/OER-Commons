@@ -1,4 +1,5 @@
-<section class="portlet my-items-views dotted">
+<section class="portlet my-items-views">
+  <h1 class="dotted">Folders</h1>
   {% if views %}
   <form id="folder-create-form" method="post" action="{% url myitems:folder_create %}">
       <ul data-delete-url="{% url myitems:folder_delete %}">
@@ -13,7 +14,7 @@
               <a href="#" class="delete" data-folder-id="{{ f.id }}">Delete</a>
           </li>
         {% endfor %}
-          <li>
+          <li class="last">
               {{ folder_create_form.name }}
               <a id="folder-create-button" class="dashed" href="#">Create a New Folder</a>
               <a id="folder-create-submit" class="dashed hidden" href="#">Create</a>

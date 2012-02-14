@@ -37,9 +37,15 @@ a.delete {
 
 .portlet.my-items-views li.selected {
   font-weight: bold;
+  background-color: #AAAAFF;
+}
+
+.portlet.my-items-views li.selected a {
+    color: #1F4D64;
 }
 
 .portlet.my-items-views a {
+  color: #707070;
   text-decoration: none;
 }
 
@@ -70,6 +76,12 @@ a.delete {
 
 #folder-create-button, #folder-create-submit {
   float: right;
+  color: #1F4D64;
+}
+
+section.my-items-views li {
+    overflow: auto;
+    width: 100%;
 }
 
 #folder-create-form input {

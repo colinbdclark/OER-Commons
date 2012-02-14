@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load myitems_tags %}
+
+{% block column-left %}
+    {% myitems_views_portlet %}
+    {% my_tags_portlet %}
+{% endblock %}

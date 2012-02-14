@@ -1,5 +1,4 @@
-{% extends "base.html" %}
-{% load myitems_tags %}
+{% extends "myitems/myitems.html" %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -12,10 +11,6 @@
 
 {% block above-content %}
   {% include "myitems/include/index-action-panel.html" %}
-{% endblock %}
-
-{% block column-left %}
-  {% myitems_views_portlet %}
 {% endblock %}
 
 {% block content %}
@@ -40,8 +35,4 @@
   {% if no_items_message %}<p class="clear">{{ no_items_message }}</p>{% endif %}
   {% endif %}
     
-{% endblock %}
-
-{% block column-right %}
-  {% my_tags_portlet %}
 {% endblock %}
