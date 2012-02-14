@@ -3,9 +3,9 @@ from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from haystack_scheduled.indexes import Indexed
 from saveditems.models import SavedItem
 from utils.decorators import login_required
+from core.search import reindex
 from utils.shortcuts import redirect_to_next_url
 
 
@@ -25,8 +25,7 @@ def save(request, slug=None, model=None):
                           object_id=object_id,
                           user=request.user)
 
-    if isinstance(item, Indexed):
-        item.reindex()
+    reindex(item)
 
     if request.is_ajax():
         return JsonResponse(dict(status="success",
@@ -51,8 +50,7 @@ def unsave(request, slug=None, model=None):
                               object_id=object_id,
                               user=request.user).delete()
 
-        if isinstance(item, Indexed):
-            item.reindex()
+        reindex(item)
 
         if request.is_ajax():
             return JsonResponse(dict(status="success",
