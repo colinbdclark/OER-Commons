@@ -1,9 +1,10 @@
 # encoding: utf-8
 import datetime
-from haystack_scheduled.indexes import Indexed
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
+from core.search import reindex
+
 
 class Migration(SchemaMigration):
 
@@ -17,8 +18,7 @@ class Migration(SchemaMigration):
                 content_type = orm["contenttypes.ContentType"].objects.get(id=rating.content_type_id)
                 model = models.get_model(content_type.app_label, content_type.model)
                 item = model.objects.get(id=rating.object_id)
-                if isinstance(item, Indexed):
-                    item.reindex()
+                reindex(item)
                 print "Removing rating for ", unicode(item)
                 rating.delete()
             prev = k

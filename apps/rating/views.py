@@ -2,10 +2,10 @@ from annoying.decorators import ajax_request
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
-from haystack_scheduled.indexes import Indexed
 from rating import get_rating_stars_class
 from rating.models import RATING_VALUES, Rating
 from utils.decorators import login_required
+from core.search import reindex
 
 
 class RatingForm(forms.Form):
@@ -55,8 +55,7 @@ class RatingForm(forms.Form):
                                     value=int(rating))
                 rating_obj.save()
 
-        if isinstance(self.instance, Indexed):
-            self.instance.reindex()
+        reindex(self.instance)
 
 
 @login_required

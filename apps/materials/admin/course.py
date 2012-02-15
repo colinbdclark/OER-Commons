@@ -216,13 +216,13 @@ class CourseAdmin(MaterialAdmin):
         short_url = len(url) < 30 and url or "%s..." % url[:27]
         return """<a target="_blank" title="%(url)s" href="%(url)s">%(short_url)s</a>""" % dict(
             url=url,
-            short_url=short_url,
+            short_url=url,
         )
     url.allow_tags = True
     url.admin_order_field = "url"
 
     list_display = ["title", "collection", url, "http_status", "workflow_state", "creator"]
-    search_fields = ["title", "collection__name", "institution__name"]
+    search_fields = ["title", "collection__name", "institution__name", "url"]
 
     def add_view(self, request, form_url='', extra_context=None):
         model = self.model

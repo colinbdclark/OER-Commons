@@ -1,6 +1,7 @@
 from annoying.decorators import ajax_request
 from annoying.functions import get_object_or_None
 from common.models import GradeLevel
+from core.search import reindex
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -13,7 +14,6 @@ from django.template.defaultfilters import floatformat
 from django.utils.dateformat import format
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, View
-from haystack_scheduled.indexes import Indexed
 from materials.models import Course, Library, CommunityItem, GenericMaterial, GeneralSubject
 from rubrics.models import StandardAlignmentScore, RubricScore, Rubric, \
     Evaluation, RubricScoreValue, get_verbose_score_name
@@ -783,8 +783,7 @@ class DeleteEvaluation(ManageRubricsMixin, View):
 
         object = evaluation.content_object
         evaluation.delete()
-        if isinstance(object, Indexed):
-            object.reindex()
+        reindex(object)
         result["status"] = "success"
 
         return result
@@ -854,8 +853,7 @@ class EditEvaluation(ManageRubricsMixin, View):
                     score=value,
                 )
 
-        if isinstance(object, Indexed):
-            object.reindex()
+        reindex(object)
         result["status"] = "success"
 
         return result

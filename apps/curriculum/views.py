@@ -12,10 +12,10 @@ from django.db.models import Avg
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
-from haystack_scheduled.indexes import Indexed
 from rubrics.models import StandardAlignmentScore, get_verbose_score_name, \
     Evaluation
 from utils.decorators import login_required
+from core.search import reindex
 from utils.templatetags.utils import truncatechars
 import re
 
@@ -64,8 +64,7 @@ def align(request, app_label, model, object_id):
         tagged = form.save()
         tag = form.cleaned_data["tag"]
 
-        if isinstance(item, Indexed):
-            item.reindex()
+        reindex(item)
 
         return dict(status="success",
                     tag=dict(id=tagged.id, code=tag.full_code,
