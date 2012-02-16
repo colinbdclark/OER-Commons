@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'django_scss',
     'oembed',
     'gunicorn',
+    'core',
     'utils',
     'abtesting',
     'common',

@@ -95,7 +95,6 @@ class AutocompleteListWidget(MultipleAutoCreateInput):
         new_item_label = self.new_item_label or u"Add new %s " % opts.verbose_name.lower()
         if value and not isinstance(value, list):
             value = [value]
-        #noinspection PyUnresolvedReferences
         return render_to_string("core/include/autocomplete-list-widget.html",
                                 dict(name=name, value=value, attrs=attrs,
                                      autocomplete_url=autocomplete_url,
