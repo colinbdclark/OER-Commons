@@ -18,7 +18,7 @@ class WriteForm(forms.ModelForm):
         fields = ["title", "text"]
         widgets = dict(
             title=forms.HiddenInput(),
-            text=forms.HiddenInput(),
+            text=forms.Textarea(),
         )
 
 
@@ -40,10 +40,13 @@ class Write(EditMaterialViewMixin, UpdateView):
 
     def form_invalid(self, form):
         if self.request.is_ajax():
-            # TODO: return error messages
+            errors = {}
+            for field, errors_list in form.errors.items():
+                errors[field] = errors_list[0]
             return JsonResponse(dict(
                 status="error",
                 message=u"Please correct the indicated errors.",
+                errors=errors,
             ))
         messages.error(self.request, u"Please correct the indicated errors.")
         return self.render_to_response(self.get_context_data(form=form))

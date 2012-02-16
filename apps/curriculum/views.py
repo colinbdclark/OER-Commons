@@ -12,7 +12,6 @@ from django.db.models import Avg
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
-from haystack.query import SearchQuerySet
 from rubrics.models import StandardAlignmentScore, get_verbose_score_name, \
     Evaluation
 from utils.decorators import login_required
