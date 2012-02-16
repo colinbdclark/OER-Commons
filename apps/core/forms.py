@@ -1,3 +1,4 @@
+# coding: utf-8
 from django import forms
 from django.core.urlresolvers import reverse
 from django.core.validators import EMPTY_VALUES
@@ -31,16 +32,20 @@ class MultipleAutoCreateWidgetMixin(object):
 
     def __init__(self, separator=None, *args, **kwargs):
         self.separator = separator or self.default_separator
+        #noinspection PyArgumentList
         super(MultipleAutoCreateWidgetMixin, self).__init__(*args, **kwargs)
 
     def value_from_datadict(self, data, files, name):
+        #noinspection PyUnresolvedReferences
         value = super(MultipleAutoCreateWidgetMixin, self).value_from_datadict(data, files, name)
         return filter(None, map(string.strip, value.split(self.separator)))
 
     def render(self, name, value, attrs=None):
         if hasattr(value, '__iter__'):
             value = self.separator.join(value)
+        #noinspection PyUnresolvedReferences
         return super(MultipleAutoCreateWidgetMixin, self).render(name, value, attrs)
+
 
 
 class MultipleAutoCreateInput(MultipleAutoCreateWidgetMixin, forms.TextInput):
@@ -90,7 +95,8 @@ class AutocompleteListWidget(MultipleAutoCreateInput):
         new_item_label = self.new_item_label or u"Add new %s " % opts.verbose_name.lower()
         if value and not isinstance(value, list):
             value = [value]
-        return render_to_string("utils/include/autocomplete-list-widget.html",
+        #noinspection PyUnresolvedReferences
+        return render_to_string("core/include/autocomplete-list-widget.html",
                                 dict(name=name, value=value, attrs=attrs,
                                      autocomplete_url=autocomplete_url,
                                      new_item_label=new_item_label))

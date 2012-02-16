@@ -1,5 +1,7 @@
 from annoying.decorators import ajax_request
 from common.models import GradeLevel
+from core.forms import AutoCreateField, MultipleAutoCreateInput, \
+    MultipleAutoCreateField, AutocompleteListWidget
 from django import forms
 from django.forms.models import ModelForm
 from django.http import Http404
@@ -11,8 +13,6 @@ from materials.models.material import PENDING_STATE
 from materials.views.forms import SubmissionFormBase, \
     LanguagesField, LicenseTypeFieldRenderer, CC_OLD_LICENSES, LICENSE_TYPES
 from utils.decorators import login_required
-from utils.forms import MultipleAutoCreateField, AutocompleteListWidget, \
-    AutoCreateField, MultipleAutoCreateInput
 
 
 class SubmissionForm(SubmissionFormBase, ModelForm):

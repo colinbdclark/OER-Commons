@@ -1,3 +1,4 @@
+# coding: utf-8
 from django.db import models
 from south.modelsinspector import add_introspection_rules
 
@@ -22,14 +23,13 @@ class AutoCreateForeignKey(models.ForeignKey):
         super(AutoCreateForeignKey, self).save_form_data(instance, data)
 
     def value_from_object(self, obj):
-        "Returns the value of this field in the given model instance."
+        """Returns the value of this field in the given model instance."""
         pk = getattr(obj, self.attname)
         if pk is None:
             return
         return self.rel.to.objects.get(pk=pk)
 
-
-add_introspection_rules([], ["^utils\.fields\.AutoCreateForeignKey"])
+add_introspection_rules([], ["^core\.fields\.AutoCreateForeignKey"])
 
 
 class AutoCreateManyToManyField(models.ManyToManyField):
@@ -53,7 +53,4 @@ class AutoCreateManyToManyField(models.ManyToManyField):
                     data[i] = to.objects.get_or_create(**value)[0]
         super(AutoCreateManyToManyField, self).save_form_data(instance, data)
 
-
-add_introspection_rules([], ["^utils\.fields\.AutoCreateManyToManyField"])
-
-
+add_introspection_rules([], ["^core\.fields\.AutoCreateManyToManyField"])

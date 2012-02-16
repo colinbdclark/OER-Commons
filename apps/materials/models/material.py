@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from autoslug.fields import AutoSlugField
+from core.fields import AutoCreateForeignKey
 from curriculum.models import TaggedMaterial
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -16,7 +17,6 @@ from reviews.models import Review
 from rubrics.models import EvaluatedItemMixin, Evaluation
 from saveditems.models import SavedItem
 from tags.models import Tag
-from utils.fields import AutoCreateForeignKey
 from visitcounts.models import Visit
 import datetime
 

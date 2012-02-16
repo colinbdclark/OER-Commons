@@ -1,4 +1,5 @@
 from common.models import StudentLevel, GradeLevel
+from core.fields import AutoCreateManyToManyField
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -12,7 +13,6 @@ from django.utils.translation import ugettext_lazy as _
 from geo.models import Country, USState
 from sorl.thumbnail.shortcuts import get_thumbnail
 from users.backend import encrypt_password
-from utils.fields import AutoCreateManyToManyField
 import hashlib
 import urllib
 import re

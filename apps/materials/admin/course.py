@@ -1,4 +1,6 @@
 from common.models import GradeLevel
+from core.forms import AutoCreateField, MultipleAutoCreateField, \
+    AutocompleteListWidget
 from curriculum.models import AlignmentTag
 from django import forms
 from django.conf import settings
@@ -20,9 +22,6 @@ from materials.models.common import Author, GeneralSubject,\
 from materials.models.course import Course, CourseMaterialType
 from materials.views.forms import RSSFields
 from materials.views.forms.course import DerivedFields, PrePostRequisitesFields
-from utils.forms import MultipleAutoCreateField, AutocompleteListWidget, \
-    AutoCreateField
-
 
 COURSE_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "collection", "workflow_state",
                      "content_creation_date", "tech_requirements", "keywords",

@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from autoslug.fields import AutoSlugField
 from cache_utils.decorators import cached
+from core.fields import AutoCreateManyToManyField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import permalink
@@ -9,7 +10,6 @@ from django.db.models.signals import post_save
 from materials.models.common import  Keyword
 from materials.tasks import reindex_microsite_topic
 from mptt.models import MPTTModel
-from utils.fields import AutoCreateManyToManyField
 
 
 class MicrositeManager(models.Manager):

@@ -1,3 +1,4 @@
+from core.forms import MultipleAutoCreateField, AutocompleteListWidget
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -5,7 +6,6 @@ from geo.models import Country, USState
 from users.backend import encrypt_password
 from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel, \
     EducatorSubject, FACEBOOK_URL_RE, TWITTER_URL_RE
-from utils.forms import AutocompleteListWidget, MultipleAutoCreateField
 
 
 class UserInfoForm(forms.ModelForm):

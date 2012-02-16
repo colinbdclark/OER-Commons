@@ -1,4 +1,6 @@
 from common.models import GradeLevel
+from core.forms import AutoCreateField, MultipleAutoCreateInput, \
+    MultipleAutoCreateField, AutocompleteListWidget
 from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -12,8 +14,6 @@ from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
 from materials.views.forms import LICENSE_TYPES, CC_OLD_LICENSES, \
     LicenseTypeFieldRenderer, SubmissionFormBase, LanguagesField
 from utils.decorators import login_required
-from utils.forms import MultipleAutoCreateField, AutocompleteListWidget, \
-    AutoCreateField, MultipleAutoCreateInput
 
 
 class AddForm(SubmissionFormBase, ModelForm):
