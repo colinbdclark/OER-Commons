@@ -4,7 +4,7 @@ $.blockUI.defaults.css = {
 };
 $.blockUI.defaults.message = "Please wait...";
 
-jQuery.fn.outerHTML = function(s) {
+jQuery.fn.outerHTML = function (s) {
   return (s) ? this.before(s).remove() : jQuery("<p></p>").append(this.eq(0).clone()).html();
 };
 
@@ -13,7 +13,7 @@ var Write = function () {
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
-  this.ALLOWED_CLASSES = ["embed", "image", "video", "document", "download", "button", "l1", "l2", "l3", "l4", "l5"];
+  this.ALLOWED_CLASSES = ["embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5"];
   for (var i = 1; i < 6; i++) {
     this.ALLOWED_CLASSES.push("text-color-" + i);
     this.ALLOWED_CLASSES.push("bg-color-" + i);
@@ -75,6 +75,7 @@ var Write = function () {
   this.$area = $("#editor-area");
   this.$outline = $("#outline");
   this.$textStyleIndicator = this.$toolbar.find(".text-style > a span");
+  this.$footnotes = $("#footnotes");
 
   this.selection = null;
   this.range = null;
@@ -85,7 +86,7 @@ var Write = function () {
 
   this.shouldSaveState = true; // Flag to define if we should save current state in undo history
 
-  this.$area.find("figure").attr("contenteditable", "false");
+  this.$area.find("figure,a").attr("contenteditable", "false");
 
   this.cleanHTML();
   this.ensureTextInput();
@@ -135,9 +136,10 @@ var Write = function () {
   this.initFormattingButtons();
   this.initIndentButtons();
   this.initListButtons();
-  this.initLinkUI();
+  this.initLinks();
   this.initColorButtons();
   this.initOutline();
+  this.initReferences();
 
   new MediaDialog(this);
 
@@ -235,9 +237,10 @@ var Write = function () {
 
   // Save, Cancel actions
   (function () {
-    var $input = $("#id_text");
+    var $titleInput = $("#id_title");
+    var $textInput = $("#id_text");
     var $preview = tool.$form.find("div.preview");
-    var $actions = $("div.actions a");
+    var $actions = $("div.authoring-head div.actions a");
     $actions.click(function (e) {
       e.preventDefault();
       var $this = $(this);
@@ -245,9 +248,14 @@ var Write = function () {
       switch (href) {
         case "#save":
           tool.cleanHTML();
-          $input.val(tool.$area.html());
+          var html = tool.cleanHtmlPreSave(tool.$area.html());
+          $textInput.val(html);
           oer.status_message.clear();
-          $.post(tool.$form.attr("action"), tool.$form.serialize(), function (response) {
+          var data = {
+            title: $titleInput.val(),
+            text: $textInput.val()
+          };
+          $.post(tool.$form.attr("action"), data, function (response) {
             if (response.status === "success") {
               oer.status_message.success(response.message, true);
             } else {
@@ -279,7 +287,7 @@ var Write = function () {
   })();
 
   // Next step
-  this.$form.find("div.buttons a").click(function(e) {
+  this.$form.find("div.buttons a").click(function (e) {
     e.preventDefault();
     // TODO: clean and save HTML here
     var $next = tool.$form.find("input[name='next']");
@@ -383,6 +391,13 @@ Write.prototype.cleanHTML = function () {
 
 };
 
+Write.prototype.cleanHtmlPreSave = function (html) {
+  // TODO: remove interface elements here
+  var $document = $("<div></div>").html(html);
+  $document.find("[contenteditable]").removeAttr("contenteditable");
+  return $document.html();
+};
+
 // Ensure that we always have a text block at the end of editor area
 Write.prototype.ensureTextInput = function () {
   var $area = this.$area;
@@ -426,7 +441,7 @@ Write.prototype.focusOnNode = function ($node) {
   this.trackSelection();
 };
 
-Write.prototype.trackSelection = function() {
+Write.prototype.trackSelection = function () {
 
   var selection = this.selection = rangy.getSelection();
   if (selection.rangeCount) {
@@ -496,8 +511,8 @@ Write.prototype.changeBlockType = function (newType) {
   this.focusOnNode($newBlock);
 };
 
-Write.prototype.activateButton = function(button) {
-  this.$toolbarButtons.filter("."+button).addClass("active");
+Write.prototype.activateButton = function (button) {
+  this.$toolbarButtons.filter("." + button).addClass("active");
 };
 
 Write.prototype.updateToolbarState = function () {
@@ -518,14 +533,12 @@ Write.prototype.updateToolbarState = function () {
     this.disableButton("bold");
     this.disableButton("italic");
     this.disableButton("underline");
-    this.disableButton("link");
     this.disableButton("text-color");
     this.disableButton("bg-color");
   } else {
     this.enableButton("bold");
     this.enableButton("italic");
     this.enableButton("underline");
-    this.enableButton("link");
     this.enableButton("text-color");
     this.enableButton("bg-color");
     if ($focusNode.closest("strong,b", this.$area).length) {
@@ -537,10 +550,8 @@ Write.prototype.updateToolbarState = function () {
     if ($focusNode.closest("u", this.$area).length) {
       this.activateButton("underline");
     }
-    if ($focusNode.closest("a", this.$area).length) {
-      this.activateButton("link");
-    }
   }
+
   if ($focusBlock.is("h2")) {
     this.$textStyleIndicator.text("Header");
   } else if ($focusBlock.is("h3")) {
@@ -675,13 +686,13 @@ Write.prototype.initListButtons = function () {
   });
 };
 
-Write.prototype.getQuoteLevel = function($quote) {
+Write.prototype.getQuoteLevel = function ($quote) {
   var classes = {};
   var classNames = $quote.attr("class");
   if (!classNames) {
     return 0;
   }
-  $(classNames.split(" ")).each(function() {
+  $(classNames.split(" ")).each(function () {
     classes[this] = this;
   });
   for (var className in classes) {
@@ -724,7 +735,9 @@ Write.prototype.initIndentButtons = function () {
         var start = $siblings.index($anchorLi);
         var end = $siblings.index($focusLi);
         if (start > end) {
-          var t = start; start = end; end = t;
+          var t = start;
+          start = end;
+          end = t;
         }
         var $indentedLis = $siblings.slice(start, end + 1);
         var $wrapper = $parent.is("ul") ? $("<ul></ul>") : $("<ol></ol>");
@@ -764,7 +777,9 @@ Write.prototype.initIndentButtons = function () {
         var start = $siblings.index($anchorLi);
         var end = $siblings.index($focusLi);
         if (start > end) {
-          var t = start; start = end; end = t;
+          var t = start;
+          start = end;
+          end = t;
         }
         var $prevLis = $siblings.slice(0, start);
         var $nextLis = $siblings.slice(end + 1);
@@ -782,7 +797,7 @@ Write.prototype.initIndentButtons = function () {
         }
         $indentedLis.detach().insertBefore($parent);
         if (!$parent.parents("ul,li").length) {
-          $indentedLis.filter("li").replaceWith(function() {
+          $indentedLis.filter("li").replaceWith(function () {
             return $("<p></p>").html($(this).html());
           });
         }
@@ -799,8 +814,6 @@ Write.prototype.insertLink = function () {
   if (arguments.length) {
     args = arguments[0];
   }
-
-  this.saveState();
   this.execCommand("createLink", "#new-link");
   var $link = this.$area.find("a[href='#new-link']");
   var new_ = true;
@@ -810,7 +823,7 @@ Write.prototype.insertLink = function () {
   } else {
     $link.attr("href", "http://");
   }
-  if (args.text) {
+  if ("text" in args) {
     $link.html(args.text);
   } else if ($link.text() == "#new-link") {
     $link.text("Link");
@@ -825,85 +838,92 @@ Write.prototype.insertLink = function () {
     $link.data("new", true);
     $link.click();
   }
+  $link.attr("contenteditable", "false");
   this.trackSelection();
 };
 
-Write.prototype.initLinkUI = function () {
+Write.prototype.initLinks = function () {
   var tool = this;
 
-  this.$toolbar.find("a.button.link").click(function (e) {
+  this.$toolbarButtons.filter(".link").click(function (e) {
     e.preventDefault();
     var $link = null;
     if (tool.$focusNode) {
       $link = tool.$focusNode.closest("a", tool.$area);
     }
     if ($link && $link.length) {
-      if (!$link.hasClass("download")) {
-        tool.saveState();
-        tool.execCommand("unlink");
-        tool.trackSelection();
-      }
+      return;
+    }
+    if (tool.selection && tool.selection.isCollapsed) {
+      tool.insertLink({text: ""});
     } else {
       tool.insertLink();
     }
   });
 
-  var $dialog = $("#edit-link-dialog");
-  var $input = $dialog.find("input[name='url']");
+  var $dialog = $("#link-dialog");
+  var $urlInput = $dialog.find("input[name='url']");
+  var $textInput = $dialog.find("input[name='text']");
 
-  $dialog.delegate("a", "click", function (e) {
-    // TODO: use form with URL validation here.
+  $dialog.find("a.button[href='#cancel']").click(function (e) {
     e.preventDefault();
-    var href = $(e.target).attr("href");
     var $link = $dialog.data("link");
-    switch (href) {
-      case "#save":
-        if (!$link.data("new")) {
-          tool.saveState();
-        }
-        $dialog.data("link").attr("href", $input.val());
-        $link.data("new", false);
-        break;
-      case "#remove":
-        tool.saveState();
-        if ($link.data("new")) {
-          $link.remove();
-        } else {
-          $link.replaceWith($link.html());
-        }
-        tool.trackSelection();
-        break;
-      case "#cancel":
-        break;
-      default:
-        break;
+    if ($link.data("new")) {
+      $link.replaceWith(function () {
+        return $(this).html();
+      });
+      tool.trackSelection();
     }
+    $dialog.hide();
+  });
+
+  $dialog.find("a.button[href='#save']").click(function (e) {
+    e.preventDefault();
+    var $link = $dialog.data("link");
+    if (!$link.data("new")) {
+      tool.saveState();
+    }
+    $link.text($textInput.val());
+    $link.attr("href", $urlInput.val())
+    $dialog.hide();
+  });
+
+  $dialog.find("a.remove").click(function (e) {
+    e.preventDefault();
+    var $link = $dialog.data("link");
+    if (!$link.data("new")) {
+      tool.saveState();
+    }
+    $link.remove();
+    tool.trackSelection();
     $dialog.hide();
   });
 
   this.$area.delegate("a", "click", function (e) {
     e.preventDefault();
-    var $link = $(e.currentTarget);
-    if ($link.hasClass("download")) {
+    var $link = $(this);
+    if ($link.is(".download,.reference")) {
       return;
     }
     $dialog.data("link", $link);
-    $input.val($link.attr("href"));
+    $urlInput.val($link.attr("href"));
+    $textInput.val($.trim($link.text()));
     var offset = $link.offset();
     $dialog.css({
-      left: offset.left + 10 + "px",
-      top: offset.top + 16 + "px"
+      left: offset.left - 263 + "px",
+      top: offset.top + 35 + "px"
     });
     $dialog.show();
-    $input.focus();
+    $urlInput.focus();
   });
+
 };
 
-Write.prototype.initColorButtons = function() {
+Write.prototype.initColorButtons = function () {
   var tool = this;
   var $toolbar = this.$toolbar;
   var $selectors = $toolbar.find("div.color-selector");
-  $selectors.find("a.button").click(function(e) {
+  $selectors.find("a.button").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
     var $this = $(this);
@@ -912,7 +932,7 @@ Write.prototype.initColorButtons = function() {
       $selector.removeClass("active");
     } else {
       var $lis = $selector.find("li").removeClass("selected");
-      $lis.slice(0,5).each(function() {
+      $lis.slice(0, 5).each(function () {
         var $li = $(this);
         var applier = rangy.createCssClassApplier($li.attr("class"));
         if (applier.isAppliedToSelection()) {
@@ -925,7 +945,7 @@ Write.prototype.initColorButtons = function() {
       $selector.addClass("active");
     }
   });
-  $selectors.delegate("li", "mousedown", function(e) {
+  $selectors.delegate("li", "mousedown", function (e) {
     e.stopPropagation();
     var $this = $(this);
     var i, applier;
@@ -935,7 +955,7 @@ Write.prototype.initColorButtons = function() {
     var classes = {};
     var class_ = null;
     var prefix = null;
-    $(classNames.split(" ")).each(function() {
+    $(classNames.split(" ")).each(function () {
       classes[this] = this;
     });
     for (var className in classes) {
@@ -960,7 +980,7 @@ Write.prototype.initColorButtons = function() {
     }
   });
 
-  $(document).click(function() {
+  $(document).click(function () {
     $selectors.removeClass("active");
   });
 };
@@ -1167,6 +1187,114 @@ Write.prototype.initOutline = function () {
 
 };
 
+Write.prototype.initReferences = function () {
+  this.updateReferences();
+
+  var tool = this;
+  this.$toolbarButtons.filter(".reference").click(function (e) {
+    e.preventDefault();
+    var selection = tool.selection;
+    if (!selection) {
+      return;
+    }
+    if (!selection.isCollapsed) {
+      selection.collapse(false);
+      tool.trackSelection();
+    }
+
+    tool.saveState();
+
+    tool.execCommand("createLink", "#new-reference");
+    var $reference = tool.$area.find("a[href='#new-reference']");
+    $reference.addClass("reference");
+    $reference.attr("contenteditable", "false");
+    $reference.attr("data-text", "");
+    $reference.data("new", true);
+    tool.updateReferences();
+    $reference.click();
+  });
+
+  var $dialog = $("#reference-dialog");
+  $dialog.find("a.button[href='#cancel']").click(function (e) {
+    e.preventDefault();
+    var $reference = $dialog.data("reference");
+    if ($reference.data("new")) {
+      $reference.remove();
+    }
+    $dialog.hide();
+  });
+
+  $dialog.find("a.button[href='#save']").click(function (e) {
+    e.preventDefault();
+    var $reference = $dialog.data("reference");
+    var text = $.trim($dialog.find("textarea").val());
+    if (text !== $reference.data("text")) {
+      if (!$reference.data("new")) {
+        tool.saveState();
+      }
+      $reference.attr("data-text", text);
+      $reference.data("text", text);
+      tool.updateReferences();
+    }
+    $reference.data("new", false);
+    $dialog.hide();
+  });
+
+  $dialog.find("a.remove").click(function () {
+    var $reference = $dialog.data("reference");
+    if (!$reference.data("new")) {
+      tool.saveState();
+    }
+    $reference.remove();
+    tool.trackSelection();
+    tool.updateReferences();
+    $dialog.hide();
+  });
+
+  this.$area.delegate("a.reference", "click", function (e) {
+    e.preventDefault();
+    var $this = $(this);
+    $dialog.data("reference", $this);
+    $dialog.find("textarea").val($this.data("text"));
+    var offset = $this.offset();
+    $dialog.css({
+      left: offset.left - 255 + "px",
+      top: offset.top + 35 + "px"
+    });
+    $dialog.show();
+  });
+
+  this.$footnotes.delegate("a.ref", "click", function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $reference = $this.parent().data("reference");
+    $dialog.data("reference", $reference);
+    $dialog.find("textarea").val($reference.data("text"));
+    var offset = $this.offset();
+    $dialog.css({
+      left: offset.left - 255 + "px",
+      top: offset.top + 35 + "px"
+    });
+    $dialog.show();
+  });
+
+};
+
+Write.prototype.updateReferences = function () {
+  var $footnotes = this.$footnotes.empty();
+  this.$area.find("a.reference").each(function (i) {
+    var $this = $(this);
+    var name = "[" + (i + 1) + "]";
+    $this.text(name);
+    $this.attr("href", "#ref-" + (i + 1));
+    var $footnote = $("<div></div>").addClass("reference").
+            append($("<a></a>").addClass("ref").attr("href", "#").text(name)).
+            append($("<div></div>").text($this.data("text")).linkify());
+    $footnote.data("reference", $this);
+    $footnotes.append($footnote);
+  });
+};
+
 Write.prototype.removeSelectionMarkers = function () {
   this.$area.find("span.rangySelectionBoundary").remove();
 };
@@ -1206,6 +1334,7 @@ Write.prototype.undo = function () {
   }
   this.enableRedo();
   this.updateOutline();
+  this.updateReferences();
   this.trackSelection();
 };
 
@@ -1233,6 +1362,7 @@ Write.prototype.redo = function () {
   }
   this.enableUndo();
   this.updateOutline();
+  this.updateReferences();
   this.trackSelection();
 };
 

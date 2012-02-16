@@ -160,6 +160,7 @@
           {{ object.text|safe }}
         </div>
         <div class="preview authored-content hidden"></div>
+        <div id="footnotes"></div>
         {{ form.text }}
       </div>
 
@@ -172,11 +173,35 @@
 
     </div>
 
-    <div id="edit-link-dialog">
-      <input type="text" name="url" placeholder="http://">
-      <a href="#save" class="dashed">Save</a>
-      <a href="#cancel" class="dashed">Cancel</a>
-      <a href="#remove" class="remove dashed">Remove link</a>
+    <div id="link-dialog" class="popup-dialog">
+      <div class="head">Link <span class="triangle"></span></div>
+      <div class="body">
+        <div class="field">
+          <label for="id_link_text">Displayed text</label>
+          <input type="text" id="id_link_text" name="text" placeholder="Enter text link will appear as">
+        </div>
+        <div class="field">
+          <label for="id_link_url">Website, email</label>
+          <input type="text" id="id_link_url" name="url" placeholder="Enter link here">
+        </div>
+      </div>
+      <div class="actions">
+        <a href="#remove" class="remove">clear link</a>
+        <a href="#save" class="button primary">Save</a>
+        <a href="#cancel" class="button">Cancel</a>
+      </div>
+    </div>
+
+    <div id="reference-dialog" class="popup-dialog">
+      <div class="head">Reference <span class="triangle"></span></div>
+      <div class="body">
+        <textarea name="text" placeholder="Enter the source of this content through author, title of work, url, date, etc."></textarea>
+      </div>
+      <div class="actions">
+        <a href="#remove" class="remove">Clear reference</a>
+        <a href="#save" class="button primary">Save</a>
+        <a href="#cancel" class="button">Cancel</a>
+      </div>
     </div>
 
   </form>
@@ -192,6 +217,7 @@
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.jeditable.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.linkify.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/write.js"></script>
   <script>
     $(function(e) {
