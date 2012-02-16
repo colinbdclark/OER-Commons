@@ -1278,6 +1278,16 @@ Write.prototype.initReferences = function () {
     $dialog.show();
   });
 
+
+  function trackChanges() {
+    // Update only if the number of references has changed
+    if (tool.$area.find("a.reference").length !== tool.$footnotes.children("div.footnote").length) {
+      tool.updateReferences();
+    }
+    setTimeout(trackChanges, 1000);
+  }
+  setTimeout(trackChanges, 1000);
+
 };
 
 Write.prototype.updateReferences = function () {
@@ -1287,7 +1297,7 @@ Write.prototype.updateReferences = function () {
     var name = "[" + (i + 1) + "]";
     $this.text(name);
     $this.attr("href", "#ref-" + (i + 1));
-    var $footnote = $("<div></div>").addClass("reference").
+    var $footnote = $("<div></div>").addClass("footnote").
             append($("<a></a>").addClass("ref").attr("href", "#").text(name)).
             append($("<div></div>").text($this.data("text")).linkify());
     $footnote.data("reference", $this);
