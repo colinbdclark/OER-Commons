@@ -444,6 +444,11 @@ Write.prototype.focusOnNode = function ($node) {
 
 Write.prototype.trackSelection = function () {
 
+  // Rangy is not initialized?
+  if (!"getSelection" in rangy) {
+    return;
+  }
+
   var selection = this.selection = rangy.getSelection();
   if (selection.rangeCount) {
     this.range = selection.getRangeAt(0);
