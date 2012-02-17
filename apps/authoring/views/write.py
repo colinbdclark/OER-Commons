@@ -1,5 +1,5 @@
 from annoying.decorators import JsonResponse
-from authoring.models import AuthoredMaterial
+from authoring.models import AuthoredMaterialDraft
 from authoring.views import EditMaterialViewMixin
 from django import forms
 from django.contrib import messages
@@ -14,11 +14,11 @@ class WriteForm(forms.ModelForm):
     # remove scripts, styles, forms, iframes, objects, embeds
 
     class Meta:
-        model = AuthoredMaterial
+        model = AuthoredMaterialDraft
         fields = ["title", "text"]
         widgets = dict(
             title=forms.HiddenInput(),
-            text=forms.Textarea(),
+            text=forms.HiddenInput(),
         )
 
 
@@ -35,7 +35,7 @@ class Write(EditMaterialViewMixin, UpdateView):
                 message=u"Saved.",
             ))
         if self.request.POST.get("next") == "true":
-            return redirect("authoring:describe", pk=self.object.pk)
+            return redirect("authoring:describe", pk=self.object.material.pk)
         return self.render_to_response(self.get_context_data(form=form))
 
     def form_invalid(self, form):

@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from autoslug.fields import AutoSlugField
 from common.models import GradeLevel, GradeSubLevel, Grade
+from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
@@ -9,7 +10,6 @@ from materials.models.common import Author, Keyword, GeneralSubject,\
     Language, GeographicRelevance, MediaFormat, Institution, Collection, \
     AgeRange
 from materials.models.material import Material
-from utils.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 
 
 COURSE_OR_MODULE = (

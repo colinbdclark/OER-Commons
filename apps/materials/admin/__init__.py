@@ -1,3 +1,4 @@
+from core.forms import MultipleAutoCreateTextarea, MultipleAutoCreateField
 from django import forms
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import site
@@ -11,7 +12,6 @@ from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
 from materials.models.library import LibraryMaterialType
 from materials.models.microsite import Microsite, Topic
-from utils.forms import MultipleAutoCreateField, MultipleAutoCreateTextarea
 
 
 site.register(GeneralSubject, ModelAdmin)

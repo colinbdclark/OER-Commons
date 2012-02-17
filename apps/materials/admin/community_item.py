@@ -1,4 +1,5 @@
 from common.models import GradeLevel
+from core.forms import MultipleAutoCreateField, AutocompleteListWidget
 from curriculum.models import AlignmentTag
 from django import forms
 from django.conf import settings
@@ -20,7 +21,6 @@ from materials.models.common import Author, GeneralSubject, Language, \
 from materials.models.community import CommunityType, CommunityTopic, \
     CommunityItem
 from materials.views.forms import RSSFields
-from utils.forms import MultipleAutoCreateField, AutocompleteListWidget
 
 
 COMMUNITY_ITEM_ADD_FIELDS = ["creator", "title", "url", "abstract", "workflow_state",

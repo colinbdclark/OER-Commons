@@ -1,4 +1,5 @@
 from autoslug.fields import AutoSlugField
+from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 from cache_utils.decorators import cached
 from django.db import models
 from django.db.models import permalink

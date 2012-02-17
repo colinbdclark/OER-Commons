@@ -1,4 +1,6 @@
 from common.models import GradeLevel
+from core.forms import AutoCreateField, MultipleAutoCreateField, \
+    AutocompleteListWidget
 from curriculum.models import AlignmentTag
 from django import forms
 from django.conf import settings
@@ -19,8 +21,6 @@ from materials.models.common import Author, GeneralSubject,\
     MediaFormat, Language, GeographicRelevance, Keyword
 from materials.models.library import Library, LibraryMaterialType
 from materials.views.forms import RSSFields
-from utils.forms import MultipleAutoCreateField, AutocompleteListWidget, \
-    AutoCreateField
 
 
 LIBRARY_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "collection", "workflow_state",

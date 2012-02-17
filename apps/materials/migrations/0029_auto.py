@@ -6,26 +6,76 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
-    depends_on = (
-        ("common", "0003_auto__add_gradelevel"),
-    )
-
     def forwards(self, orm):
 
-        # Deleting model 'GradeLevel'
-        db.delete_table('materials_gradelevel')
+        # Adding M2M table for field grade_sublevels on 'Course'
+        db.create_table('materials_course_grade_sublevels', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('course', models.ForeignKey(orm['materials.course'], null=False)),
+            ('gradesublevel', models.ForeignKey(orm['common.gradesublevel'], null=False))
+        ))
+        db.create_unique('materials_course_grade_sublevels', ['course_id', 'gradesublevel_id'])
+
+        # Adding M2M table for field grades on 'Course'
+        db.create_table('materials_course_grades', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('course', models.ForeignKey(orm['materials.course'], null=False)),
+            ('grade', models.ForeignKey(orm['common.grade'], null=False))
+        ))
+        db.create_unique('materials_course_grades', ['course_id', 'grade_id'])
+
+        # Adding M2M table for field grade_sublevels on 'CommunityItem'
+        db.create_table('materials_communityitem_grade_sublevels', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('communityitem', models.ForeignKey(orm['materials.communityitem'], null=False)),
+            ('gradesublevel', models.ForeignKey(orm['common.gradesublevel'], null=False))
+        ))
+        db.create_unique('materials_communityitem_grade_sublevels', ['communityitem_id', 'gradesublevel_id'])
+
+        # Adding M2M table for field grades on 'CommunityItem'
+        db.create_table('materials_communityitem_grades', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('communityitem', models.ForeignKey(orm['materials.communityitem'], null=False)),
+            ('grade', models.ForeignKey(orm['common.grade'], null=False))
+        ))
+        db.create_unique('materials_communityitem_grades', ['communityitem_id', 'grade_id'])
+
+        # Adding M2M table for field grade_sublevels on 'Library'
+        db.create_table('materials_library_grade_sublevels', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('library', models.ForeignKey(orm['materials.library'], null=False)),
+            ('gradesublevel', models.ForeignKey(orm['common.gradesublevel'], null=False))
+        ))
+        db.create_unique('materials_library_grade_sublevels', ['library_id', 'gradesublevel_id'])
+
+        # Adding M2M table for field grades on 'Library'
+        db.create_table('materials_library_grades', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('library', models.ForeignKey(orm['materials.library'], null=False)),
+            ('grade', models.ForeignKey(orm['common.grade'], null=False))
+        ))
+        db.create_unique('materials_library_grades', ['library_id', 'grade_id'])
 
 
     def backwards(self, orm):
 
-        # Adding model 'GradeLevel'
-        db.create_table('materials_gradelevel', (
-            ('slug', self.gf('autoslug.fields.AutoSlugField')(max_length=100, unique_with=(), unique=True, populate_from=None, db_index=True)),
-            ('description', self.gf('django.db.models.fields.TextField')(default=u'', blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=100, unique=True)),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal('materials', ['GradeLevel'])
+        # Removing M2M table for field grade_sublevels on 'Course'
+        db.delete_table('materials_course_grade_sublevels')
+
+        # Removing M2M table for field grades on 'Course'
+        db.delete_table('materials_course_grades')
+
+        # Removing M2M table for field grade_sublevels on 'CommunityItem'
+        db.delete_table('materials_communityitem_grade_sublevels')
+
+        # Removing M2M table for field grades on 'CommunityItem'
+        db.delete_table('materials_communityitem_grades')
+
+        # Removing M2M table for field grade_sublevels on 'Library'
+        db.delete_table('materials_library_grade_sublevels')
+
+        # Removing M2M table for field grades on 'Library'
+        db.delete_table('materials_library_grades')
 
 
     models = {
@@ -61,12 +111,20 @@ class Migration(SchemaMigration):
         'common.grade': {
             'Meta': {'ordering': "('id',)", 'object_name': 'Grade'},
             'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '10', 'db_index': 'True'}),
+            'grade_sublevel': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['common.GradeSubLevel']", 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'})
         },
         'common.gradelevel': {
             'Meta': {'ordering': "('id',)", 'object_name': 'GradeLevel'},
             'description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
+        },
+        'common.gradesublevel': {
+            'Meta': {'ordering': "('id',)", 'object_name': 'GradeSubLevel'},
+            'grade_level': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['common.GradeLevel']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique': 'True', 'max_length': '100', 'populate_from': 'None', 'unique_with': '()', 'db_index': 'True'})
@@ -148,10 +206,11 @@ class Migration(SchemaMigration):
             'general_subjects': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GeneralSubject']", 'symmetrical': 'False'}),
             'geographic_relevance': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GeographicRelevance']", 'symmetrical': 'False'}),
             'grade_levels': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['common.GradeLevel']", 'symmetrical': 'False'}),
+            'grade_sublevels': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['common.GradeSubLevel']", 'symmetrical': 'False'}),
+            'grades': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['common.Grade']", 'symmetrical': 'False'}),
             'http_status': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_rss': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_indexed': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'keywords': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
             'languages': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Language']", 'symmetrical': 'False'}),
             'license': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.License']"}),
@@ -200,11 +259,12 @@ class Migration(SchemaMigration):
             'general_subjects': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GeneralSubject']", 'symmetrical': 'False'}),
             'geographic_relevance': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GeographicRelevance']", 'symmetrical': 'False'}),
             'grade_levels': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['common.GradeLevel']", 'symmetrical': 'False'}),
+            'grade_sublevels': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['common.GradeSubLevel']", 'symmetrical': 'False'}),
+            'grades': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['common.Grade']", 'symmetrical': 'False'}),
             'http_status': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_rss': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'institution': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.Institution']", 'null': 'True', 'blank': 'True'}),
-            'is_indexed': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'keywords': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
             'languages': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Language']", 'symmetrical': 'False'}),
             'license': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.License']"}),
@@ -292,12 +352,13 @@ class Migration(SchemaMigration):
             'general_subjects': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GeneralSubject']", 'symmetrical': 'False'}),
             'geographic_relevance': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.GeographicRelevance']", 'symmetrical': 'False'}),
             'grade_levels': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['common.GradeLevel']", 'symmetrical': 'False'}),
+            'grade_sublevels': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['common.GradeSubLevel']", 'symmetrical': 'False'}),
+            'grades': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['common.Grade']", 'symmetrical': 'False'}),
             'http_status': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_rss': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'institution': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.Institution']", 'null': 'True', 'blank': 'True'}),
             'is_homepage': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_indexed': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'keywords': ('materials.models.common.AutoCreateManyToManyField', [], {'to': "orm['materials.Keyword']", 'symmetrical': 'False'}),
             'languages': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['materials.Language']", 'symmetrical': 'False'}),
             'license': ('materials.models.common.AutoCreateForeignKey', [], {'to': "orm['materials.License']"}),

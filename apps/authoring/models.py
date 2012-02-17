@@ -1,10 +1,11 @@
+from annoying.functions import get_object_or_None
 from common.models import GradeLevel
+from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from materials.models import  Keyword, \
     GeneralSubject, License
-from utils.fields import AutoCreateManyToManyField, AutoCreateForeignKey
 import embedly
 import os
 
@@ -17,11 +18,10 @@ class LearningGoal(models.Model):
         return self.title
 
 
-class AuthoredMaterial(models.Model):
+class AbstractAuthoredMaterial(models.Model):
 
     title = models.CharField(max_length=200, default=u"")
     text = models.TextField(default=u"")
-    author = models.ForeignKey(User)
 
     summary = models.TextField(default=u"")
 
@@ -31,10 +31,48 @@ class AuthoredMaterial(models.Model):
     grade_level = models.ForeignKey(GradeLevel, null=True)
     license = AutoCreateForeignKey(License, null=True, respect_all_fields=True)
 
+    class Meta:
+        abstract = True
+
+
+class AuthoredMaterialDraft(AbstractAuthoredMaterial):
+
+    material = models.OneToOneField("authoring.AuthoredMaterial")
+
+
+class AuthoredMaterial(AbstractAuthoredMaterial):
+
+    owners = models.ManyToManyField(User, related_name="+")
+    author = models.ForeignKey(User, related_name="+")
+
     is_new = models.BooleanField(default=True)
     published = models.BooleanField(default=False)
     created_timestamp = models.DateTimeField(auto_now_add=True)
     modified_timestamp = models.DateTimeField(auto_now=True)
+
+    def get_draft(self):
+        draft = get_object_or_None(AuthoredMaterialDraft, material=self)
+        if not draft:
+            draft = AuthoredMaterialDraft(material=self)
+            for field in AbstractAuthoredMaterial._meta.fields:
+                setattr(draft, field.name, getattr(self, field.name))
+            draft.save()
+            for m2m in AbstractAuthoredMaterial._meta.many_to_many:
+                setattr(draft, m2m.name, getattr(self, m2m.name).all())
+        return draft
+
+    @classmethod
+    def publish_draft(cls, draft):
+        material = draft.material
+        for field in AbstractAuthoredMaterial._meta.fields:
+            setattr(material, field.name, getattr(draft, field.name))
+        for m2m in AbstractAuthoredMaterial._meta.many_to_many:
+            setattr(material, m2m.name, getattr(draft, m2m.name).all())
+        material.published = True
+        material.is_new = False
+        material.save()
+        draft.delete()
+        return material
 
 
 def upload_to(prefix):

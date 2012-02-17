@@ -296,6 +296,7 @@ var Write = function () {
     } else {
       $next.val("false");
     }
+    $("#id_text").val(tool.cleanHtmlPreSave(tool.$area.html()));
     tool.$form.submit();
   });
 
@@ -862,8 +863,8 @@ Write.prototype.initLinks = function () {
   });
 
   var $dialog = $("#link-dialog");
-  var $urlInput = $dialog.find("input[name='url']");
-  var $textInput = $dialog.find("input[name='text']");
+  var $urlInput = $dialog.find("input[name='link_url']");
+  var $textInput = $dialog.find("input[name='link_text']");
 
   $dialog.find("a.button[href='#cancel']").click(function (e) {
     e.preventDefault();
