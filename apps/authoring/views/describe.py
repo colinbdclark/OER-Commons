@@ -1,6 +1,7 @@
 from itertools import chain
-from authoring.models import AuthoredMaterial
+from authoring.models import AuthoredMaterialDraft
 from authoring.views import EditMaterialViewMixin
+from core.forms import MultipleAutoCreateField
 from django import forms
 from django.contrib import messages
 from django.forms import ModelMultipleChoiceField
@@ -11,7 +12,6 @@ from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.views.generic import UpdateView
 from materials.models import GeneralSubject, Language
-from utils.forms import MultipleAutoCreateField
 
 
 class SubjectsWidget(forms.CheckboxSelectMultiple):
@@ -53,7 +53,7 @@ class DescribeForm(forms.ModelForm):
     language = forms.ModelChoiceField(queryset=Language.objects.all(), required=False)
 
     class Meta:
-        model = AuthoredMaterial
+        model = AuthoredMaterialDraft
         fields = ["summary", "learning_goals", "keywords", "subjects", "grade_level", "language"]
         widgets = dict(
             summary=forms.Textarea(attrs=dict(placeholder=u"Please give a short summary of your resource. This will appear as the preview in search results."))
@@ -71,7 +71,7 @@ class Describe(EditMaterialViewMixin, UpdateView):
     def form_valid(self, form):
         form.save()
         if self.request.POST.get("next") == "true":
-            return redirect("authoring:submit", pk=self.object.pk)
+            return redirect("authoring:submit", pk=self.object.material.pk)
         elif self.request.POST.get("next") == "false":
-            return redirect("authoring:write", pk=self.object.pk)
+            return redirect("authoring:write", pk=self.object.material.pk)
         return self.render_to_response(self.get_context_data(form=form))

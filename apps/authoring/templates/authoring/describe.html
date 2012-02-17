@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block layout %}
-  <form id="describe-form" action="{% url authoring:describe pk=object.pk %}" method="post">
+  <form id="describe-form" action="{% url authoring:describe pk=object.material.pk %}" method="post">
     <div class="authoring-head">
       <div class="steps-icons describe"></div>
       <h1 id="material-title">{{ object.title }}</h1>

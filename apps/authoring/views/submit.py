@@ -1,4 +1,4 @@
-from authoring.models import AuthoredMaterial
+from authoring.models import AuthoredMaterialDraft, AuthoredMaterial
 from authoring.views import EditMaterialViewMixin
 from django import forms
 from django.contrib import messages
@@ -95,7 +95,7 @@ class SubmitForm(forms.ModelForm):
     license = LicenseField()
 
     class Meta:
-        model = AuthoredMaterial
+        model = AuthoredMaterialDraft
         fields = ["license"]
 
 
@@ -111,10 +111,8 @@ class Submit(EditMaterialViewMixin, UpdateView):
     def form_valid(self, form):
         form.save()
         if self.request.POST.get("next") == "true":
-            self.object.published = True
-            self.object.is_new = False
-            self.object.save()
-            return redirect("authoring:view", pk=self.object.pk)
+            material = AuthoredMaterial.publish_draft(self.object)
+            return redirect("authoring:view", pk=material.pk)
         elif self.request.POST.get("next") == "false":
-            return redirect("authoring:describe", pk=self.object.pk)
+            return redirect("authoring:describe", pk=self.object.material.pk)
         return self.render_to_response(self.get_context_data(form=form))
