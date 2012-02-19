@@ -15,6 +15,7 @@
     {% if not debug %}
       {% flatblock "chartbeat-head" %}
     {% endif %}
+    {% block extra-head %}{% endblock %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
 
