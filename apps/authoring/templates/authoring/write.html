@@ -7,6 +7,12 @@
   <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
 {% endblock %}
 
+{% block extra-head %}
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-core.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-selectionsaverestore.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-cssclassapplier.js"></script>
+{% endblock %}
+
 {% block layout %}
   <form id="write-form" action="{% url authoring:write pk=object.material.pk %}" method="post">
     <div class="authoring-head">
@@ -212,9 +218,6 @@
 {% block footer %}{% endblock %}
 
 {% block extra-js %}
-  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-core.js"></script>
-  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-selectionsaverestore.js"></script>
-  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-cssclassapplier.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.blockUI.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.jeditable.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
