@@ -890,7 +890,7 @@ Write.prototype.initLinks = function () {
       tool.saveState();
     }
     $link.text($textInput.val());
-    $link.attr("href", $urlInput.val())
+    $link.attr("href", $urlInput.val());
     $dialog.hide();
   });
 
@@ -1459,8 +1459,7 @@ MediaDialog.prototype.handleUploadResponse = function (response) {
     this.openStep("document", result);
   } else if (result.type === "video") {
     this.openStep("video", result);
-  } else if (result.type === "link") {
-    this.tool.insertLink(result.url, result.name, "download");
+  } else {
     this.hide();
   }
 };
@@ -1760,4 +1759,5 @@ MediaDialog.DocumentStep.prototype.constructor = MediaDialog.DocumentStep;
 MediaDialog.DocumentStep.prototype.prepare = function (data) {
   this.$selector.val("button");
   this.$input.val(data.name);
+  this.$step.data("url", data.url);
 };

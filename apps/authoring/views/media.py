@@ -23,9 +23,6 @@ import urlparse
 IMAGE_CONTENT_TYPE_RE = re.compile(r"^image/(png|p?jpeg|gif)", re.I)
 MAX_IMAGE_SIZE = 10485760   # 10 MB
 
-DOCUMENT_CONTENT_TYPE_RE = re.compile(r"^(?:application/.*(?:ms-?word|ms-excel|ms-powepoint|openxmlformats-officedocument|oasis\.opendocument|pdf))", re.I)
-MAX_DOCUMENT_SIZE = 104857600   # 100 MB
-
 IMAGE_FILENAME_RE = re.compile("^.+\.(?:png|gif|jpg|jpeg)$", re.I)
 
 
@@ -39,8 +36,6 @@ class MediaUploadForm(forms.Form):
         invalid_url=u"Invalid URL.",
         large_image=u"The file is too large. "
             u"Max allowed image size is %s." % filesizeformat(MAX_IMAGE_SIZE),
-        large_document=u"The file is too large. "
-            u"Max allowed file size is %s." % filesizeformat(MAX_DOCUMENT_SIZE)
     )
 
     def __init__(self, *args, **kwargs):
@@ -95,9 +90,6 @@ class MediaUploadForm(forms.Form):
                 file._size = content_length
                 self.cleaned_data["file"] = file
 
-            elif DOCUMENT_CONTENT_TYPE_RE.match(content_type):
-                self.media_type = "document"
-
             else:
                 self.embed = Embed.get_for_url(url)
 
@@ -115,10 +107,6 @@ class MediaUploadForm(forms.Form):
                 ).to_python(file)
                 self.media_type = "image"
 
-            elif DOCUMENT_CONTENT_TYPE_RE.match(content_type):
-                if size > MAX_DOCUMENT_SIZE:
-                    raise forms.ValidationError(self.error_messages["large_document"])
-                self.media_type = "document"
 
         return self.cleaned_data
 
@@ -151,7 +139,15 @@ class MediaUpload(SingleObjectMixin, FormMixin, ProcessFormView):
                 id=image.id,
                 name=image.image.name.split(os.path.sep)[-1],
             )
-        elif form.media_type == "document":
+        elif form.embed and form.embed.type == "video":
+            video = form.embed
+            response = dict(
+                type="video",
+                url=video.url,
+                title=video.title or u"",
+                thumbnail=video.thumbnail or u""
+            )
+        else:
             if form.cleaned_data["file"]:
                 document = Document(material=object, file=form.cleaned_data["file"])
                 document.save()
@@ -168,20 +164,6 @@ class MediaUpload(SingleObjectMixin, FormMixin, ProcessFormView):
                     name="",
                     url=form.cleaned_data["url"],
                 )
-        elif form.embed and form.embed.type == "video":
-            video = form.embed
-            response = dict(
-                type="video",
-                url=video.url,
-                title=video.title or u"",
-                thumbnail=video.thumbnail or u""
-            )
-        else:
-            response = dict(
-                status="success",
-                type="link",
-                url=form.cleaned_data["url"],
-            )
         return self.json_response(response)
 
     def form_invalid(self, form):
