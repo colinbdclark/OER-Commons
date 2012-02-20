@@ -881,27 +881,39 @@
       display: block;
       margin-bottom: 5px;
     }
-    input[type='file'] {
-      display: none;
-    }
     .drop-zone {
       border: 1px dashed #ccc;;
       height: 108px;
       width: 144px;
       background-color: #fff;
       text-align: center;
-      a {
-        margin-top: 30px;
-        display: inline-block;
+      color: #777;
+      span.find {
+        overflow: hidden;
+        position: relative;
+        margin: 30px auto 5px auto;
+        width: 50px;
+        display: block;
+        color: #0B7BA9;
         padding-left: 15px;
         background: url(../images/authoring/icon-search.png) 0 50% no-repeat;
         text-transform: lowercase;
         font-size: 15px;
-      }
-      span {
-        display: block;
-        margin-top: 5px;
-        color: #777;
+        input {
+          position: absolute;
+          top: 0;
+          right: 0;
+          margin: 0;
+          direction: ltr;
+          cursor: pointer;
+          opacity: 0;
+          filter: alpha(opacity=0);
+          -moz-transform: translate(-300px, 0) scale;
+          border: solid transparent;
+          border-width: 0 0 100px 200px;
+          height: 30px;
+          width: 200px;
+        }
       }
     }
   }

@@ -1518,10 +1518,9 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
 
   var $dropZone = $step.find("div.drop-zone");
 
-  $dropZone.fileupload({
+  $("#fileupload").fileupload({
     url: $step.data("url"),
     dropZone: $dropZone,
-    paramName: "file",
     formData: [
       {name: "fakefile_file", value: "authoring_tool_test_image"}
     ]
