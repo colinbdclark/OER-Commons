@@ -1,14 +1,16 @@
 from annoying.decorators import JsonResponse
-from authoring.models import Image, Document, Embed
-from authoring.views import EditMaterialViewMixin
+from authoring.models import Image, Document, Embed, AuthoredMaterial
 from cache_utils.decorators import cached
 from django.core.files import File
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.defaultfilters import filesizeformat
+from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from django import forms
-from django.views.generic.edit import ProcessFormView, FormMixin
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import FormMixin, ProcessFormView
 from sorl.thumbnail.shortcuts import get_thumbnail
+from utils.decorators import login_required
 import json
 import os
 import random
@@ -121,9 +123,15 @@ class MediaUploadForm(forms.Form):
         return self.cleaned_data
 
 
-class MediaUpload(EditMaterialViewMixin, FormMixin, ProcessFormView):
+class MediaUpload(SingleObjectMixin, FormMixin, ProcessFormView):
 
+    model = AuthoredMaterial
     form_class = MediaUploadForm
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        #noinspection PyUnresolvedReferences
+        return super(MediaUpload, self).dispatch(request, *args, **kwargs)
 
     def json_response(self, data):
         # We have to use "text/plain" here because it will be parsed by jquery.fileupload plugin
@@ -177,7 +185,7 @@ class MediaUpload(EditMaterialViewMixin, FormMixin, ProcessFormView):
         return self.json_response(response)
 
     def form_invalid(self, form):
-        self.json_response(dict(status="error", message=form._errors["__all__"][0]))
+        return self.json_response(dict(status="error", message=form._errors["__all__"][0]))
 
 
 class LoadEmbed(View):
