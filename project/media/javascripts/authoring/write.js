@@ -660,23 +660,44 @@ Write.prototype.initTextStyleMenu = function () {
 
 Write.prototype.initFormattingButtons = function () {
   var tool = this;
-  this.$toolbar.find("a.button.bold").click(function (e) {
+  var $bold = this.$toolbar.find("a.button.bold").click(function (e) {
     e.preventDefault();
     tool.saveState();
     tool.execCommand("bold");
     tool.trackSelection();
   });
-  this.$toolbar.find("a.button.italic").click(function (e) {
+  var $italic = this.$toolbar.find("a.button.italic").click(function (e) {
     e.preventDefault();
     tool.saveState();
     tool.execCommand("italic");
     tool.trackSelection();
   });
-  this.$toolbar.find("a.button.underline").click(function (e) {
+  var $underline = this.$toolbar.find("a.button.underline").click(function (e) {
     e.preventDefault();
     tool.saveState();
     tool.execCommand("underline");
     tool.trackSelection();
+  });
+
+  tool.$area.keydown(function(e) {
+    if (tool.cmdKey || tool.ctrlKey) {
+      if (e.which == 66) { // bold
+        if (!$bold.hasClass("disabled")) {
+          $bold.click();
+          e.preventDefault();
+        }
+      } else if (e.which == 73) { // italic
+        if (!$italic.hasClass("disabled")) {
+          $italic.click();
+          e.preventDefault();
+        }
+      } else if (e.which == 85) { // underline
+        if (!$underline.hasClass("disabled")) {
+          $underline.click();
+          e.preventDefault();
+        }
+      }
+    }
   });
 };
 
