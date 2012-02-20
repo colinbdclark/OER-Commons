@@ -1,9 +1,9 @@
-{% extends "base.html" %}
-{% load myitems_tags %}
+{% extends "myitems/myitems.html" %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
+      oer.myitems.init();
       oer.myitems.index.init();
       oer.rating.init();
       oer.myitems.index.init_saved_items();
@@ -15,48 +15,4 @@
   {% include "myitems/include/index-action-panel.html" %}
 {% endblock %}
 
-{% block column-left %}
-  {% myitems_views_portlet %}
-{% endblock %}
 
-{% block content %}
-  {% include "myitems/include/user-info.html" %}
-
-  {% if items %}
-    <div class="materials-index saved collapsibles">
-  
-    {% with "top" as class %}
-      {% include "materials/include/index-navigation.html" %}
-    {% endwith %}
-    
-    <p class="hint dotted">
-      Click <img alt="Remove from collection" src="{{ STATIC_URL }}images/remove-from-collection.png" />  to remove a saved item from My Items
-    </p>
-  
-    {% for item in items %}
-      {% include "myitems/include/index-saved-item.html" %}
-    {% endfor %}
-  
-    {% with "bottom" as class %}
-      {% include "materials/include/index-navigation.html" %}
-    {% endwith %}
-  
-    <p class="hint">
-      Click <img alt="Remove from collection" src="{{ STATIC_URL }}images/remove-from-collection.png" />  to remove a saved item from My Items
-    </p>
-  
-    </div>
-    
-    <div class="unsave-confirmation message">
-      Remove this item from your collection?
-      <a href="#" class="unsave">Yes, remove</a> | <a href="#" class="cancel">Cancel</a>
-    </div>
-  {% else %}
-    {% if no_items_message %}<p class="clear">{{ no_items_message }}</p>{% endif %}
-  {% endif %}  
-  
-{% endblock %}
-
-{% block column-right %}
-  {% my_tags_portlet %}
-{% endblock %}

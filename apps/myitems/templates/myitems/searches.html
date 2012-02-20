@@ -1,20 +1,16 @@
-{% extends "base.html" %}
+{% extends "myitems/myitems.html" %}
 {% load rating_tags %}
-{% load myitems_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
+      oer.myitems.init();
       oer.myitems.index.init_saved_items();
     });
   </script>
 {% endblock %}
 
 {% block above-content %}
-{% endblock %}
-
-{% block column-left %}
-  {% myitems_views_portlet %}
 {% endblock %}
 
 {% block content %}
@@ -45,8 +41,4 @@
     <p class="clear">You have not saved any search yet.</p>
   {% endif %}
   
-{% endblock %}
-
-{% block column-right %}
-  {% my_tags_portlet %}
 {% endblock %}

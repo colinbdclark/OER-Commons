@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+import datetime
 
 from autoslug.fields import AutoSlugField
 from core.fields import AutoCreateForeignKey
@@ -18,7 +19,7 @@ from rubrics.models import EvaluatedItemMixin, Evaluation
 from saveditems.models import SavedItem
 from tags.models import Tag
 from visitcounts.models import Visit
-import datetime
+from myitems.models import FolderItem
 
 
 PUBLISHED_STATE = u"published"
@@ -125,6 +126,12 @@ class Material(models.Model, EvaluatedItemMixin):
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
     alignment_tags = generic.GenericRelation(TaggedMaterial)
+
+    folders = generic.GenericRelation(FolderItem)
+
+    @property
+    def saved_in_folders(self):
+        return self.folders.values_list("folder__id", flat=True)
 
     @property
     def verbose_name(self):

@@ -8,7 +8,7 @@
       <li>
         <select name="batch_size">
           {% for option in index_params.BATCH_SIZE_OPTIONS %}
-            <option value="{{ option }}"{% if option == index_params.batch_size %}selected="selected"{% endif %}>{{ option }}</option>
+            <option value="{{ option }}"{% if option == index_params.batch_size %} selected="selected"{% endif %}>{{ option }}</option>
           {% endfor %}
         </select>
         results per page
@@ -17,7 +17,7 @@
         Sort by:
         <select name="sort_by">
           {% for option in index_params.SORT_BY_OPTIONS %}
-            <option value="{{ option.value }}"{% if option.value == index_params.sort_by %}selected="selected"{% endif %}>{{ option.title }}</option>
+            <option value="{{ option.value }}"{% if option.value == index_params.sort_by %} selected="selected"{% endif %}>{{ option.title }}</option>
           {% endfor %}
         </select>
       </li>
