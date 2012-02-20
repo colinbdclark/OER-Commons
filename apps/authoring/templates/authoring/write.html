@@ -94,7 +94,7 @@
 
         <div id="media-dialog">
   {#        TODO: add simple file input widget for browsers that don't support file drag'n'drop #}
-          <div class="step upload" data-url="{% url authoring:upload pk=object.pk %}">
+          <div class="step upload" data-url="{% url authoring:upload pk=object.material.pk %}">
             <div class="head">I have permission to upload this item: <a href="#hide" class="hide">hide</a></div>
             <div class="body">
               <div class="left">
