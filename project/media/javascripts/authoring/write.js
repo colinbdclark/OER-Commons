@@ -1484,11 +1484,21 @@ MediaDialog.UploadProgressStep = function (dialog) {
   this.$filename = this.$step.find(".filename");
   this.$fill = this.$step.find(".fill");
   this.$legend = this.$step.find(".legend");
+  this.xhr = null;
+  var step = this;
+  this.$step.find("a.cancel").click(function(e) {
+    e.preventDefault();
+    if (step.xhr) {
+      step.xhr.abort();
+    }
+    dialog.openStep("upload");
+  });
 };
 //noinspection JSCheckFunctionSignatures
 MediaDialog.UploadProgressStep.prototype = new MediaDialog.Step();
 MediaDialog.UploadProgressStep.prototype.constructor = MediaDialog.UploadProgressStep;
 MediaDialog.UploadProgressStep.prototype.prepare = function (data) {
+  this.xhr = data.xhr;
   this.$filename.text(data.name);
   this.$fill.css({width: "0%"});
   this.$legend.text("0%");
@@ -1506,6 +1516,11 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
   var $input = this.$input = $step.find("input:text");
   this.uploadProgress = uploadProgress;
 
+  $step.find("a.hide").click(function(e) {
+    e.preventDefault();
+    dialog.hide();
+  });
+
   $step.find("a.submit").click(function (e) {
     e.preventDefault();
     oer.status_message.clear();
@@ -1520,14 +1535,12 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
 
   $("#fileupload").fileupload({
     url: $step.data("url"),
-    dropZone: $dropZone,
-    formData: [
-      {name: "fakefile_file", value: "authoring_tool_test_image"}
-    ]
+    dropZone: $dropZone
   });
   $dropZone.bind("fileuploadsend", function (e, data) {
     dialog.openStep("uploadProgress", {
-      name: data.files[0].name
+      name: data.files[0].name,
+      xhr: data.xhr()
     });
   });
   $dropZone.bind("fileuploadprogress", function (e, data) {
@@ -1536,7 +1549,11 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
   });
   $dropZone.bind("fileuploaddone", function (e, data) {
     dialog.handleUploadResponse(data.result);
+    uploadProgress.xhr = null;
   });
+
+
+
 };
 //noinspection JSCheckFunctionSignatures
 MediaDialog.UploadStep.prototype = new MediaDialog.Step();
