@@ -50,3 +50,24 @@ body.wide-right-column .column-main {
 body.wide-right-column .column-right {
   width: 250px;
 }
+
+
+body.no-right-column .column-left {
+    float: left;
+    width: 210px;
+}
+
+body.no-right-column .layout-columns {
+  background: none;
+}
+
+body.no-right-column .column-right {
+  display: none;
+}
+
+body.no-right-column .column-main {
+    float: right;
+    padding: 0 0 20px 0;
+    width: 730px;
+}
+

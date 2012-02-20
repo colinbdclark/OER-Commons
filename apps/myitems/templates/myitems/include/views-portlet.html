@@ -1,16 +1,19 @@
-<section class="portlet my-items-views">
-  <h1 class="dotted">Folders</h1>
+<section class="portlet my-items-views myitems">
+  <h1 class="">Folders</h1>
   {% if views %}
   <form id="folder-create-form" method="post" action="{% url myitems:folder_create %}">
       <ul data-delete-url="{% url myitems:folder_delete %}">
         {% for view in views %}
-          <li{% if view.selected %} class="selected"{% endif %}>
-              <a href="{{ view.url }}"><em>{{ view.title }}</em></a>
+          <li class="view{% if view.selected %} selected{% endif %}">
+              <a href="{{ view.url }}"><em>{{ view.title }} ({{ view.count }})</em></a>
           </li>
         {% endfor %}
         {% for f in folders %}
-          <li{% if f.selected %} class="selected"{% endif %}>
-              <a href="{{ f.url }}">{{ f.title }} ({{ f.count }})</a>
+          <li class="folder{% if f.selected %} selected{% endif %}">
+              <a href="{{ f.url }}">
+                  <span class="name">{{ f.title }}</span>
+                  (<span class="number">{{ f.count }}</span>)
+              </a>
               <a href="#" class="delete" data-folder-id="{{ f.id }}">Delete</a>
           </li>
         {% endfor %}

@@ -24,20 +24,20 @@ a.delete {
 }
 
 
-.portlet.my-items-views ul {
-  margin: 0;
+.portlet.my-items-views.myitems ul {
+  margin: 0 3px 0 0;
   padding: 0;
   list-style-type: none;
   font-size: 14px;
 }
 
 .portlet.my-items-views li {
-  margin: 0 0 4px 0;
+  padding: 2px 0 2px 3px;
 }
 
 .portlet.my-items-views li.selected {
   font-weight: bold;
-  background-color: #AAAAFF;
+  background-color: #D5D5FF;
 }
 
 .portlet.my-items-views li.selected a {
@@ -48,6 +48,17 @@ a.delete {
   color: #707070;
   text-decoration: none;
 }
+
+
+.portlet.myitems h1 {
+  color: #FFFFFF;
+  background-color: #1F4D64;
+  border-top-left-radius: 6px 6px;
+  border-top-right-radius: 6px 6px;
+  padding: 2px 6px 0 6px;
+  font-weight: bold;
+}
+
 
 .materials-index.saved .index-navigation.top {
   margin-bottom: 5px;
@@ -86,4 +97,9 @@ section.my-items-views li {
 
 #folder-create-form input {
   display: none;
+}
+
+article ul.folder-list li {
+  display: inline-block;
+  list-style-type: none;
 }

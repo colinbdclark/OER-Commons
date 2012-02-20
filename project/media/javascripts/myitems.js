@@ -2,9 +2,85 @@ oer.myitems = {};
 oer.myitems.index = {};
 
 oer.myitems.init = function() {
+    $.template("folder", '<li><a href="/my/folder/${slug}">${name} (${number})</a> <a href="#" class="delete" data-folder-id="${id}">Delete</a></li>');
+    $.template("item-folder", '<li data-folder-id="${id}">${name}</li>');
+
     oer.myitems.init_folder_form();
     oer.myitems.index.init();
-}
+
+    var addItemURL = "/my/folder-add-item/";
+
+    var get_folders = function(request, callback) {
+        var term = $.trim(request.term);
+        var folders = [];
+        $("#folder-create-form li.folder span.name").each(function() {
+            var folder = $.trim($(this).text());
+            if (folder.substring(0, term.length) === term) {
+                folders.push(folder);
+            }
+        });
+        callback(folders);
+    };
+    var $inputs = $("article ul.folder-list li.last input");
+    $inputs.autocomplete({
+        source: get_folders
+    });
+
+
+
+    var getFolderByName = function(name) {
+        var $items = $("#folder-create-form li.folder span.name");
+        for(var i = 0; i < $items.length; i++) {
+            var $item = $items.eq(i);
+            if ($.trim($item.text()) === name) {
+                return $item.parent();
+            }
+        }
+    };
+
+    $inputs.keypress(function(e) {
+        if (e.which == 13) {
+            var $this = $(this);
+            e.preventDefault();
+            var value = $.trim($this.val());
+            if (value !== "") {
+                var identifier = $this.closest("article").data("identifier");
+
+                var request = {
+                    folder_name: value,
+                    item_id: identifier
+                };
+
+                $.post(addItemURL, request, function(response) {
+                    if (response["status"] === "success") {
+                        var context;
+                        if (response["folder_id"]) {
+                            context = {
+                                name: value,
+                                id: response["folder_id"],
+                                slug: response["folder_slug"],
+                                number: 1
+                            };
+                            var $folderLast = $.find("#folder-create-form li.last");
+                            $.tmpl("folder", context).insertBefore($folderLast);
+                        }
+                        else {
+                            var $folder = getFolderByName(value);
+                            context = {
+                                name: value,
+                                id: $folder.data("identifier")
+                            };
+                            var $number = $folder.find("span.number");
+                            $number.text($number.text()-0+1);
+                        }
+                        $this.parent().before($.tmpl("item-folder", context));
+                    }
+                });
+            }
+            $this.autocomplete("close");
+        }
+    });
+};
 
 oer.myitems.init_folder_form = function() {
     var $form = $("#folder-create-form");
@@ -12,6 +88,7 @@ oer.myitems.init_folder_form = function() {
     var $submit = $("#folder-create-submit");
     var $folderInput= $form.find("input");
     var $folderList = $form.find("ul");
+    var $folderLast = $folderList.find("li.last");
     var deleteUrl = $folderList.data("delete-url");
 
     var addConfirmation = function () {
@@ -33,13 +110,11 @@ oer.myitems.init_folder_form = function() {
 
     var onFolderCreation = function(response) {
         if (response["status"] === "success") {
-            var $item = $.tmpl(
-                '<li><a href="/my/folder/${slug}">${name} (0)</a> <a href="#" class="delete" data-folder-id="${id}">Delete</a></li>',
-                response
-            );
+            response["number"] = 0;
+            var $item = $.tmpl("folder", response);
 
             $item.hide();
-            $item.insertBefore($folderInput);
+            $item.insertBefore($folderLast);
             addConfirmation();
             $item.fadeIn();
         }
