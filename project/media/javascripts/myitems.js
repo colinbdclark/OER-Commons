@@ -2,8 +2,30 @@ oer.myitems = {};
 oer.myitems.index = {};
 
 oer.myitems.init = function() {
-    $.template("folder", '<li><a href="/my/folder/${slug}">${name} (${number})</a> <a href="#" class="delete" data-folder-id="${id}">Delete</a></li>');
+    $.template("folder",
+        '<li class="folder"><a href="/my/folder/${slug}"><span class="name">${name}</span> (<span class="number">${number}</span>)</a> <a href="#" class="delete" data-folder-id="${id}">Delete</a></li>');
     $.template("item-folder", '<li data-folder-id="${id}">${name}</li>');
+
+    var deleteUrl = $("#folder-create-form ul").data("delete-url");
+    oer.myitems.addConfirmation = function ($forAdd) {
+        $forAdd.inlineConfirmation({
+            confirmCallback: function(action) {
+                var $parent = action.parent();
+                var folderId = action.data("folder-id");
+                var $itemFolders = $("article li[data-folder-id='"+folderId+"']");
+                $.post(deleteUrl, {id: folderId}, function(response) {
+                    if (response.status === "success") {
+                        $parent.remove();
+                        $itemFolders.remove();
+                    } else {
+                        $parent.show();
+                    }
+                });
+                $parent.fadeOut();
+                $itemFolders.fadeOut();
+            }
+        });
+    };
 
     oer.myitems.init_folder_form();
     oer.myitems.index.init();
@@ -62,13 +84,16 @@ oer.myitems.init = function() {
                                 number: 1
                             };
                             var $folderLast = $.find("#folder-create-form li.last");
-                            $.tmpl("folder", context).insertBefore($folderLast);
+                            var $item = $.tmpl("folder", context);
+                            $item.insertBefore($folderLast);
+                            console.log($item.find("a.delete"));
+                            oer.myitems.addConfirmation($item.find("a.delete"));
                         }
                         else {
                             var $folder = getFolderByName(value);
                             context = {
                                 name: value,
-                                id: $folder.data("identifier")
+                                id: $folder.data("folder-id")
                             };
                             var $number = $folder.find("span.number");
                             $number.text($number.text()-0+1);
@@ -89,28 +114,8 @@ oer.myitems.init_folder_form = function() {
     var $folderInput= $form.find("input");
     var $folderList = $form.find("ul");
     var $folderLast = $folderList.find("li.last");
-    var deleteUrl = $folderList.data("delete-url");
 
-    var addConfirmation = function () {
-        $folderList.find("a.delete").inlineConfirmation({
-            confirmCallback: function(action) {
-                var $parent = action.parent();
-                var folderId = action.data("folder-id");
-                var $itemFolders = $("article li[data-folder-id='"+folderId+"']");
-                $.post(deleteUrl, {id: folderId}, function(response) {
-                    if (response.status === "success") {
-                        $parent.remove();
-                        $itemFolders.remove();
-                    } else {
-                        $parent.show();
-                    }
-                });
-                $parent.fadeOut();
-                $itemFolders.fadeOut();
-            }
-        });
-    };
-    addConfirmation();
+    oer.myitems.addConfirmation($folderList.find("a.delete"));
 
     var onFolderCreation = function(response) {
         if (response["status"] === "success") {
@@ -119,7 +124,7 @@ oer.myitems.init_folder_form = function() {
 
             $item.hide();
             $item.insertBefore($folderLast);
-            addConfirmation();
+            oer.myitems.addConfirmation($item.find("a.delete"));
             $item.fadeIn();
         }
     };
