@@ -143,6 +143,8 @@ var Write = function () {
 
   new MediaDialog(this);
 
+  this.initDND();
+
   this.$area.find("figure").each(function () {
     tool.initFigure($(this));
   });
@@ -380,6 +382,8 @@ Write.prototype.cleanHTML = function () {
     rangy.removeMarkers(selection);
   }
 
+  // Re-init DND
+  tool.updateDND();
 };
 
 Write.prototype.cleanHtmlPreSave = function (html) {
@@ -1004,58 +1008,41 @@ Write.prototype.initColorButtons = function () {
 
 Write.prototype.initFigure = function ($figure) {
   $figure.attr("contenteditable", "false");
-
-  if (!$figure.hasClass("inline")) {
-    this.initDND($figure);
-  }
 };
 
-Write.prototype.initDND = function ($block) {
-  // TODO: images are glued together when dragging
-  if (!$block.draggable("option", "disabled")) {
-    return;
-  }
-  var tool = this;
-  $block.draggable({
-    helper: "clone",
-    opacity: 0.3,
-    appendTo: "body",
-    addClasses: false,
-    cursor: "move"
-  });
-  $block.bind("dragstart", function () {
-    var $blocks = tool.$area.children().not($block).not($block.prev());
-    $blocks.droppable({
-      addClasses: false,
-      tolerance: "pointer"
-    });
-    $blocks.bind("dropover", function () {
-      var $this = $(this);
-      $this.stop(true).animate({
-        "margin-bottom": "70px"
-      });
-    });
-    $blocks.bind("dropout", function () {
-      var $this = $(this);
-      $this.stop(true).animate({
-        "margin-bottom": ""
-      });
-    });
-    $blocks.bind("drop", function () {
-      tool.$area.children().stop(true).css({
-        "margin-bottom": ""
-      });
-      tool.saveState();
-      $block.detach().insertAfter($(this));
-      if ($block.is("h2,h3")) {
-        tool.updateOutline();
-      }
-    });
-  });
-  $block.bind("dragstop", function () {
-    tool.$area.children().droppable("destroy");
+Write.prototype.initDND = function() {
+  this.$area.sortable({
+    handle: this.$area.find("figure:not(.inline)"),
+    distance: 15,
+    containment: this.$area,
+    cursor: "move",
+    axis: "y",
+    tolerance: "pointer",
+    delay: 300
   });
 };
+
+
+Write.prototype.updateDND = function() {
+  this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline)"));
+};
+
+//Write.prototype.initImageResize = function($img) {
+//  $img.load(function() {
+//    $(this).resizable({
+//      aspectRatio: true,
+//      autoHide: true,
+//      maxWidth: 800,
+//      minWidth: 100,
+//      create: function() {
+//        $(this).css({
+//          "margin-left": "auto",
+//          "margin-right": "auto"
+//        });
+//      }
+//    });
+//  });
+//};
 
 Write.prototype.loadEmbed = function ($figure) {
   var url = $figure.data("url");
@@ -1363,6 +1350,9 @@ Write.prototype.undo = function () {
   this.updateOutline();
   this.updateReferences();
   this.trackSelection();
+
+  this.updateDND();
+
 };
 
 Write.prototype.redo = function () {
@@ -1391,6 +1381,9 @@ Write.prototype.redo = function () {
   this.updateOutline();
   this.updateReferences();
   this.trackSelection();
+
+  this.updateDND();
+  
 };
 
 Write.prototype.disableUndo = function () {
@@ -1646,6 +1639,7 @@ MediaDialog.ImageStep = function (dialog) {
     }
     tool.initFigure($figure);
     tool.ensureTextInput();
+    tool.updateDND();
     dialog.hide();
   });
 
@@ -1702,6 +1696,7 @@ MediaDialog.VideoStep = function (dialog) {
     tool.loadEmbed($figure);
     tool.initFigure($figure);
     tool.ensureTextInput();
+    tool.updateDND();
     dialog.hide();
   });
 };
@@ -1761,6 +1756,7 @@ MediaDialog.DocumentStep = function (dialog) {
     }
     tool.initFigure($figure);
     tool.ensureTextInput();
+    tool.updateDND();
     dialog.hide();
   });
 };
