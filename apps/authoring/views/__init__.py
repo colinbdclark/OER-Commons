@@ -9,6 +9,11 @@ class MaterialViewMixin(SingleObjectMixin):
 
     model = AuthoredMaterial
 
+    def get_context_data(self, **kwargs):
+        data = super(MaterialViewMixin, self).get_context_data(**kwargs)
+        data["hide_getsatisfaction"] = True
+        return data
+
 
 class EditMaterialViewMixin(MaterialViewMixin):
 
