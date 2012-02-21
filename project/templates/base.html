@@ -20,12 +20,6 @@
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
 
     {% block global-notification %}
-      {% if not hide_global_notifications %}
-        {% if request.abtesting == "a" %}
-          {% profile_notification "global-notification" %}
-          {% confirmation_notification "global-notification" %}
-        {% endif %}
-      {% endif %}
     {% endblock %}
 
     <div class="page">
@@ -70,10 +64,8 @@
           {% include "include/status-messages.html" %}
         {% endblock %}
         {% if not hide_global_notifications %}
-          {% if request.abtesting == "b" %}
-            {% profile_notification "status-message" %}
-            {% confirmation_notification "status-message" %}
-          {% endif %}
+          {% profile_notification %}
+          {% confirmation_notification %}
         {% endif %}
 
         <div id="content" class="content {% block contentclass %}{% endblock %}">
