@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block layout %}
-  <form id="write-form" action="{% url authoring:write pk=object.material.pk %}" method="post">
+  <form id="write-form" action="{% url authoring:write pk=object.material.pk %}" method="post" class="authoring-form">
     <div class="authoring-head">
       <div class="steps-icons write"></div>
       <h1 id="material-title">{% if object.title %}{{ object.title }}{% else %}Click here to edit title{% endif %}</h1>
