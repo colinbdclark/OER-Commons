@@ -10,7 +10,7 @@ oer.myitems.init = function() {
 
     var addItemURL = "/my/folder-add-item/";
 
-    var get_folders = function(request, callback) {
+    var getFolders = function(request, callback) {
         var term = $.trim(request.term);
         var folders = [];
         $("#folder-create-form li.folder span.name").each(function() {
@@ -23,7 +23,7 @@ oer.myitems.init = function() {
     };
     var $inputs = $("article ul.folder-list li.last input");
     $inputs.autocomplete({
-        source: get_folders
+        source: getFolders
     });
 
 
@@ -95,14 +95,18 @@ oer.myitems.init_folder_form = function() {
         $folderList.find("a.delete").inlineConfirmation({
             confirmCallback: function(action) {
                 var $parent = action.parent();
-                $.post(deleteUrl, {id: action.data("folder-id")}, function(response) {
+                var folderId = action.data("folder-id");
+                var $itemFolders = $("article li[data-folder-id='"+folderId+"']");
+                $.post(deleteUrl, {id: folderId}, function(response) {
                     if (response.status === "success") {
                         $parent.remove();
+                        $itemFolders.remove();
                     } else {
                         $parent.show();
                     }
                 });
                 $parent.fadeOut();
+                $itemFolders.fadeOut();
             }
         });
     };
