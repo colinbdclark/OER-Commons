@@ -35,7 +35,7 @@
   }
 }
 
-.authoring form {
+.authoring-form {
   .label {
     margin-bottom: 5px;
   }
@@ -57,6 +57,17 @@
   }
   .field {
     margin-bottom: 20px;
+  }
+  ::-webkit-input-placeholder {
+    font-style: italic;
+  }
+  :-moz-placeholder {
+    font-style: italic;
+  }
+  input[type='text'], textarea {
+    color: #333;
+    font-size: 16px;
+    font-family: Myriad, Helvetica, sans-serif;
   }
 }
 
@@ -736,7 +747,17 @@
   .body {
     padding: 10px;
   }
-
+  ::-webkit-input-placeholder {
+    font-style: italic;
+  }
+  :-moz-placeholder {
+    font-style: italic;
+  }
+  input[type='text'], textarea {
+    color: #333;
+    font-size: 13px;
+    font-family: Myriad, Helvetica, sans-serif;
+  }
   label {
     display: block;
     text-transform: lowercase;
