@@ -108,8 +108,10 @@
     {% block extra-js %}{% endblock %}
     {% endcompress %}
 
-    {% fastpass %}
-    {% include "getsatisfaction/tab.html" %}
+    {% if not hide_getsatisfaction %}
+      {% fastpass %}
+      {% include "getsatisfaction/tab.html" %}
+    {% endif %}
 
     {% if not debug %}
       {% flatblock "google-analytics" %}
