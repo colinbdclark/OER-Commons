@@ -10,7 +10,11 @@
 {% block layout %}
   <form id="describe-form" action="{% url authoring:describe pk=object.material.pk %}" method="post" class="authoring-form">
     <div class="authoring-head">
-      <div class="steps-icons describe"></div>
+      <div class="step-icons">
+        <a href="{% url authoring:write pk=object.material.pk %}" class="write"></a>
+        <a href="{% url authoring:describe pk=object.material.pk %}" class="describe active"></a>
+        <a href="{% url authoring:submit pk=object.material.pk %}" class="submit"></a>
+      </div>
       <h1 id="material-title">{{ object.title }}</h1>
       {% include "include/status-messages.html" %}
       <div class="clear"></div>
@@ -49,11 +53,12 @@
         {% endwith %}
       </div>
 
+      <input type="hidden" name="next">
+
       {% spaceless %}
       <div class="buttons">
-        <input type="hidden" name="next" value="">
-        <a href="#" class="prev"><span class="icon"></span></a>
-        <a href="#" class="next"><span class="wrap">Next Step: <strong>Submit</strong></span><span class="icon"></span></a>
+        <a href="{% url authoring:write pk=object.material.pk %}" class="prev"><span class="icon"></span></a>
+        <a href="{% url authoring:submit pk=object.material.pk %}" class="next"><span class="wrap">Next Step: <strong>Submit</strong></span><span class="icon"></span></a>
       </div>
       {% endspaceless %}
     </div>
@@ -63,9 +68,11 @@
 {% block footer %}{% endblock %}
 
 {% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/authoring/base.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/describe.js"></script>
   <script>
     $(function(e) {
+      initStepButtons();
       new Describe();
     });
   </script>

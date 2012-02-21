@@ -16,7 +16,11 @@
 {% block layout %}
   <form id="write-form" action="{% url authoring:write pk=object.material.pk %}" method="post" class="authoring-form">
     <div class="authoring-head">
-      <div class="steps-icons write"></div>
+      <div class="step-icons">
+        <a href="{% url authoring:write pk=object.material.pk %}" class="write active"></a>
+        <a href="{% url authoring:describe pk=object.material.pk %}" class="describe"></a>
+        <a href="{% url authoring:submit pk=object.material.pk %}" class="submit"></a>
+      </div>
       <h1 id="material-title">{% if object.title %}{{ object.title }}{% else %}Click here to edit title{% endif %}</h1>
       {{ form.title }}
       <div class="actions">
@@ -173,10 +177,11 @@
         {{ form.text }}
       </div>
 
+      <input type="hidden" name="next">
+
       {% spaceless %}
       <div class="buttons">
-        <input type="hidden" name="next" value="true">
-        <a href="#" class="next"><span class="wrap">Next Step: <strong>Describe</strong></span><span class="icon"></span></a>
+        <a href="{% url authoring:describe pk=object.material.pk %}" class="next"><span class="wrap">Next Step: <strong>Describe</strong></span><span class="icon"></span></a>
       </div>
       {% endspaceless %}
 
@@ -226,9 +231,11 @@
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.linkify.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/base.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/write.js"></script>
   <script>
     $(function(e) {
+      initStepButtons();
       new Write();
     });
   </script>

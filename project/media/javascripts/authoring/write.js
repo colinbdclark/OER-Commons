@@ -286,18 +286,8 @@ var Write = function () {
     });
   })();
 
-  // Next step
-  this.$form.find("div.buttons a").click(function (e) {
-    e.preventDefault();
-    // TODO: clean and save HTML here
-    var $next = tool.$form.find("input[name='next']");
-    if ($(this).hasClass("next")) {
-      $next.val("true");
-    } else {
-      $next.val("false");
-    }
+  this.$form.submit(function() {
     $("#id_text").val(tool.cleanHtmlPreSave(tool.$area.html()));
-    tool.$form.submit();
   });
 
 };

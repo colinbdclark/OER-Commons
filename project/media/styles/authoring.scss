@@ -104,20 +104,45 @@
   }
 }
 
-.steps-icons {
+.step-icons {
   float: right;
-  background: url(../images/authoring/steps.png) 0 0 no-repeat;
-  width: 238px;
-  height: 81px;
-  margin-right: -5px;
-  &.write {
-    background-position: 0 0;
-  }
-  &.describe {
-    background-position: 0 -83px;
-  }
-  &.submit {
-    background-position: 0 -166px;
+  a {
+    display: inline-block;
+    margin-left: 5px;
+    width: 70px;
+    height: 70px;
+    background-image: url(../images/authoring/steps.png);
+    background-repeat: no-repeat;
+    &.active {
+      cursor: default;
+    }
+    &.write {
+      background-position: 0 0;
+    }
+    &.write:hover {
+      background-position: 0 -72px;
+    }
+    &.write.active {
+      background-position: 0 -144px;
+    }
+    &.describe {
+      background-position: -72px 0;
+    }
+    &.describe:hover {
+      background-position: -72px -72px;
+    }
+    &.describe.active {
+      background-position: -72px -144px;
+    }
+    &.submit {
+      background-position: -144px 0;
+    }
+    &.submit:hover {
+      background-position: -144px -72px;
+    }
+    &.submit.active {
+      background-position: -144px -144px;
+    }
   }
 }
 

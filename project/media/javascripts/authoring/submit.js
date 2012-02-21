@@ -41,15 +41,4 @@ var Submit = function () {
     }
   });
 
-  this.$form.find("div.buttons a").click(function(e) {
-    e.preventDefault();
-    var $next = tool.$form.find("input[name='next']");
-    if ($(this).hasClass("next")) {
-      $next.val("true");
-    } else {
-      $next.val("false");
-    }
-    tool.$form.submit();
-  });
-
 };

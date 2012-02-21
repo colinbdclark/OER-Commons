@@ -34,8 +34,9 @@ class Write(EditMaterialViewMixin, UpdateView):
                 status="success",
                 message=u"Saved.",
             ))
-        if self.request.POST.get("next") == "true":
-            return redirect("authoring:describe", pk=self.object.material.pk)
+        next = self.request.POST.get("next")
+        if next:
+            return redirect(next)
         return self.render_to_response(self.get_context_data(form=form))
 
     def form_invalid(self, form):

@@ -110,9 +110,7 @@ class Submit(EditMaterialViewMixin, UpdateView):
 
     def form_valid(self, form):
         form.save()
-        if self.request.POST.get("next") == "true":
-            material = AuthoredMaterial.publish_draft(self.object)
-            return redirect("authoring:view", pk=material.pk)
-        elif self.request.POST.get("next") == "false":
-            return redirect("authoring:describe", pk=self.object.material.pk)
+        next = self.request.POST.get("next")
+        if next:
+            return redirect(next)
         return self.render_to_response(self.get_context_data(form=form))
