@@ -70,8 +70,7 @@ class Describe(EditMaterialViewMixin, UpdateView):
 
     def form_valid(self, form):
         form.save()
-        if self.request.POST.get("next") == "true":
-            return redirect("authoring:submit", pk=self.object.material.pk)
-        elif self.request.POST.get("next") == "false":
-            return redirect("authoring:write", pk=self.object.material.pk)
+        next = self.request.POST.get("next")
+        if next:
+            return redirect(next)
         return self.render_to_response(self.get_context_data(form=form))
