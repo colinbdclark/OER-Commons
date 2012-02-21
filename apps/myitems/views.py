@@ -150,7 +150,11 @@ class FolderDelete(View):
         except Folder.DoesNotExist:
             pass
         else:
+            items = set(x.content_object for x in folder.folderitem_set.all())
             folder.delete()
+            for item in items:
+                reindex(item)
+
         return { "status": "success" }
 
 
