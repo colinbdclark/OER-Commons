@@ -27,10 +27,17 @@ class EditMaterialViewMixin(MaterialViewMixin):
     def get_object(self, queryset=None):
 
         #noinspection PyUnresolvedReferences
+        kwargs = dict(
+            pk=self.kwargs["pk"]
+        )
+        user = self.request.user
+        if not user.is_superuser and not user.is_staff:
+            kwargs["author"] = user
+            # TODO: or user in owners
+
         material = get_object_or_404(
             AuthoredMaterial,
-            author=self.request.user, # TODO: or request.user in owners
-            pk=self.kwargs["pk"],
+            **kwargs
         )
 
         draft = material.get_draft()
