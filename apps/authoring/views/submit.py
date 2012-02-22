@@ -75,6 +75,8 @@ class LicenseField(forms.Field):
     }
 
     def prepare_value(self, value):
+        if not value:
+            return {}
         if hasattr(value, '_meta'):
             value = value.serializable_value("url")
         else:
