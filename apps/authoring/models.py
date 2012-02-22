@@ -37,7 +37,7 @@ class AbstractAuthoredMaterial(models.Model):
 
 class AuthoredMaterialDraft(AbstractAuthoredMaterial):
 
-    material = models.OneToOneField("authoring.AuthoredMaterial")
+    material = models.OneToOneField("authoring.AuthoredMaterial", related_name="draft")
 
 
 class AuthoredMaterial(AbstractAuthoredMaterial):
