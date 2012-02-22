@@ -11,7 +11,7 @@ class AuthoredMaterialAdmin(admin.ModelAdmin):
     editor.allow_tags = True
 
     def author(self):
-        return self.author.get_full_name() or unicode(self.author)
+        return self.author.get_full_name() or self.author.email or unicode(self.author)
 
     list_display = ["title", editor, author, "published"]
 
