@@ -394,14 +394,31 @@ Write.prototype.cleanHtmlPreSave = function (html) {
 };
 
 // Ensure that we always have a text block at the end of editor area
+// We also need to insert empty paragraphs around all figures
 Write.prototype.ensureTextInput = function () {
   var $area = this.$area;
   if (!$area.children().last().is(this.TOP_LEVEL_TEXT_TAGS)) {
-    var $p = $("<p><br/></p>").appendTo($area);
+    var $p = $("<p><br></p>").data("auto", true).appendTo($area);
     if ($area.children().length == 1) {
       this.focusOnNode($p);
     }
   }
+  $area.find("figure:not(.inline)").each(function() {
+    var $figure = $(this);
+    if (!$figure.prev().is("p,div")) {
+      $("<p><br></p>").data("auto", true).insertBefore($figure);
+    }
+    if (!$figure.next().is("p,div")) {
+      $("<p><br></p>").text(" ").data("auto", true).insertBefore($figure);
+    }
+  });
+  // Remove duplicate empty paragraphs
+  $area.find("p + p").each(function() {
+    var $p = $(this);
+    if ($p.data("auto") && $.trim($p.text()) === "") {
+      $p.remove();
+    }
+  });
 };
 
 Write.prototype.execCommand = function (command) {
@@ -1011,6 +1028,7 @@ Write.prototype.initFigure = function ($figure) {
 };
 
 Write.prototype.initDND = function() {
+  var tool = this;
   this.$area.sortable({
     handle: this.$area.find("figure:not(.inline)"),
     distance: 15,
@@ -1018,7 +1036,10 @@ Write.prototype.initDND = function() {
     cursor: "move",
     axis: "y",
     tolerance: "pointer",
-    delay: 300
+    delay: 300,
+    update: function() {
+      tool.ensureTextInput();
+    }
   });
 };
 
@@ -1383,7 +1404,7 @@ Write.prototype.redo = function () {
   this.trackSelection();
 
   this.updateDND();
-  
+
 };
 
 Write.prototype.disableUndo = function () {
