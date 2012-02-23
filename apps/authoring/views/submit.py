@@ -2,6 +2,7 @@ from authoring.models import AuthoredMaterialDraft, AuthoredMaterial
 from authoring.views import EditMaterialViewMixin
 from django import forms
 from django.contrib import messages
+from django.core.urlresolvers import resolve
 from django.shortcuts import  redirect
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
@@ -111,8 +112,15 @@ class Submit(EditMaterialViewMixin, UpdateView):
         return super(Submit, self).form_invalid(form)
 
     def form_valid(self, form):
-        form.save()
+        draft = form.save()
         next = self.request.POST.get("next")
         if next:
+            match = resolve(next)
+            view_name = match.url_name
+            if match.namespace:
+                view_name = "%s:%s" % (match.namespace, view_name)
+            if view_name == "authoring:view":
+                # User clicks on "Publish" button
+                AuthoredMaterial.publish_draft(draft)
             return redirect(next)
         return self.render_to_response(self.get_context_data(form=form))
