@@ -2,7 +2,7 @@
   <h1 class="rc6">Folders</h1>
   {% if views %}
   <form id="folder-create-form" method="post" action="{% url myitems:folder_create %}">
-      <ul data-delete-url="{% url myitems:folder_delete %}">
+      <ul>
         {% for view in views %}
           <li class="view{% if view.selected %} selected{% endif %}">
               <a href="{{ view.url }}"><em>{{ view.title }} ({{ view.count }})</em></a>

@@ -20,14 +20,13 @@
             {% block top-hint %}{% endblock %}
 
             {% for item in items %}
-              {%  block item %}
                 <article class="item clearfix {% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
                     <h1>
                         <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
                     </h1>
                     <ul class="folder-list">
                         {% for folder in item.folders %}
-                            <li data-folder-id="{{ folder.id }}">{{ folder.name }}</li>
+                            <li data-folder-id="{{ folder.id }}">{{ folder.name }} <a href="#" class="delete">Delete</a></li>
                         {% endfor %}
                         <li class="last">
                             <a href="#">Add</a>
@@ -35,7 +34,6 @@
                         </li>
                     </ul>
                 </article>
-              {% endblock %}
             {% endfor %}
 
             {% block bottom-navigation %}{% endblock %}
