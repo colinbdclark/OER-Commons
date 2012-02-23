@@ -40,6 +40,7 @@ STATICFILES_MEDIA_DIRNAMES = (
 )
 STATICFILES_PREPEND_LABEL_APPS = (
     'django.contrib.admin',
+    'django_js_utils',
 )
 
 ADMIN_MEDIA_ROOT = os.path.join(STATIC_ROOT, 'admin')
@@ -122,6 +123,7 @@ INSTALLED_APPS = (
     'rubrics',
     'rubrics.manage',
     'project',
+    'django_js_utils',
 )
 
 TEMPLATE_LOADERS = (
@@ -201,9 +203,7 @@ def honeypot_verifier(value):
     # It must be positive and less than one hour.
     now = int(time.time())
     diff = now - value
-    if diff < 0 or diff > 3600:
-        return False
-    return True
+    return 0 <= diff <= 3600
 
 HONEYPOT_VERIFIER = honeypot_verifier
 
