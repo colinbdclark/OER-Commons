@@ -9,12 +9,12 @@
           </li>
         {% endfor %}
         {% for f in folders %}
-          <li class="folder{% if f.selected %} selected{% endif %}">
+          <li class="folder{% if f.selected %} selected{% endif %}" data-folder-id="{{ f.id }}">
               <a href="{{ f.url }}">
                   <span class="name">{{ f.title }}</span>
                   (<span class="number">{{ f.count }}</span>)
               </a>
-              <a href="#" class="delete" data-folder-id="{{ f.id }}">Delete</a>
+              <a href="#" class="delete">Delete</a>
           </li>
         {% endfor %}
           <li class="last">

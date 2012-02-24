@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, url
 from django_js_utils.core import expose_to_js
 
-from myitems.views import FolderCreate, FolderDelete, FolderAddItem
+from myitems.views import FolderCreate, FolderDelete, FolderAddItem, FolderDeleteItem
 
 
 urlpatterns = patterns("myitems.views",
@@ -15,4 +15,5 @@ urlpatterns = patterns("myitems.views",
   expose_to_js(url(r"^/folder/(?P<slug>.+)/?$", "folder", name="folder")),
   expose_to_js(url(r"^/folder-delete/?$", FolderDelete.as_view(), name="folder_delete")),
   expose_to_js(url(r"^/folder-add-item/?$", FolderAddItem.as_view(), name="folder_add_item")),
+  expose_to_js(url(r"^/folder-delete-item/?$", FolderDeleteItem.as_view(), name="folder_delete_item")),
 )

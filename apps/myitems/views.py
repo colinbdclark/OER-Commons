@@ -212,6 +212,29 @@ class FolderAddItem(View):
 
 
 
+class FolderDeleteItem(View):
+    @method_decorator(login_required)
+    @method_decorator(ajax_request)
+    def post(self, request, *args, **kwargs):
+        try:
+            folder_id = request.REQUEST["folder_id"]
+            item_id = request.REQUEST["item_id"]
+        except KeyError:
+            return { "status": "error"}
+
+        folder = Folder.objects.get(
+            user=request.user,
+            id=folder_id
+        )
+        material = get_material_object_or_404(*item_id.split('.'))
+        #FolderItem.objects.get(folder=folder, content_object=material).delete()
+        material.folders.filter(folder=folder).delete()
+        reindex(material)
+        to_return = { "status": "success" }
+        return to_return
+
+
+
 @login_required
 def folder(request, slug=None):
     folder = get_object_or_404(Folder, user=request.user, slug=slug)

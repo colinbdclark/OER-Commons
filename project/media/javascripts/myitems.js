@@ -6,22 +6,18 @@ oer.myitems.init = function() {
 
 
     $.template("myitems:folder",
-        '<li class="folder"><a href="${url}"><span class="name">${name}</span> (<span class="number">${number}</span>)</a> <a href="#" class="delete" data-folder-id="${id}">Delete</a></li>');
+        '<li class="folder" data-folder-id="${id}"><a href="${url}"><span class="name">${name}</span> (<span class="number">${number}</span>)</a> <a href="#" class="delete">Delete</a></li>');
     $.template("myitems:item-folder", '<li data-folder-id="${id}">${name} <a href="#" class="delete">Delete</a></li>');
 
     var addItemUrl = django_js_utils.urls.resolve('myitems:folder_add_item');
     var deleteUrl = django_js_utils.urls.resolve('myitems:folder_delete');
+    var deleteItemFolderUrl = django_js_utils.urls.resolve('myitems:folder_delete_item');
 
-    var folderElement = function(params) {
-        params.url = django_js_utils.urls.resolve('myitems:folder', {slug: params.slug});
-        return $.tmpl("myitems:folder", params);
-    };
-
-    var addConfirmation = function ($addTo) {
+    var addFolderDeleteConfirmation = function ($addTo) {
         $addTo.inlineConfirmation({
             confirmCallback: function(action) {
                 var $folder = action.parent();
-                var folderId = action.data("folder-id");
+                var folderId = $folder.data("folder-id");
                 var $itemFolders = $("article ul.folder-list li[data-folder-id='"+folderId+"']");
                 $.post(deleteUrl, {id: folderId}, function(response) {
                     if (response.status === "success") {
@@ -38,6 +34,43 @@ oer.myitems.init = function() {
         });
     };
 
+
+    var addItemFolderDeleteConfirmation = function ($addTo) {
+        $addTo.inlineConfirmation({
+            confirmCallback: function(action) {
+                var $itemFolder = action.parent();
+                var folderId = $itemFolder.data("folder-id");
+                var itemId = $itemFolder.closest("article").data("identifier");
+                var request = { folder_id: folderId, item_id: itemId };
+                console.log();
+                var $number = getFolderById(folderId).find("span.number");
+                $.post(deleteItemFolderUrl, request, function(response) {
+                    if (response.status === "success") {
+                        $itemFolder.remove();
+                    } else {
+                        $itemFolder.show();
+                        $number.text($number.text()-0+1);
+                    }
+                });
+                $itemFolder.fadeOut();
+                $number.text($number.text()-0-1);
+            }
+        });
+    };
+
+    var folderElement = function(params) {
+        params.url = django_js_utils.urls.resolve('myitems:folder', {slug: params.slug});
+        var $item = $.tmpl("myitems:folder", params);
+        addFolderDeleteConfirmation($item.find("a.delete"));
+        return $item;
+    };
+
+    var itemFolderElement = function(params) {
+        var $item = $.tmpl("myitems:item-folder", params);
+        addItemFolderDeleteConfirmation($item.find("a.delete"));
+        return $item;
+    };
+
     var getFolders = function(request, callback) {
         var term = $.trim(request.term);
         var folders = [];
@@ -51,16 +84,6 @@ oer.myitems.init = function() {
     };
 
 
-    var getFolderByName = function(name) {
-        var $items = $("#folder-create-form li.folder span.name");
-        for(var i = 0; i < $items.length; i++) {
-            var $item = $items.eq(i);
-            if ($.trim($item.text()) === name) {
-                return $item.parent();
-            }
-        }
-    };
-
     var $form = $("#folder-create-form");
     var $button = $("#folder-create-button");
     var $submit = $("#folder-create-submit");
@@ -69,8 +92,23 @@ oer.myitems.init = function() {
     var $folderLast = $folderList.find("li.last");
     var $inputs = $("article ul.folder-list li.last input");
 
+    var getFolderByName = function(name) {
+        var $items = $folderList.find("li.folder span.name");
+        for(var i = 0; i < $items.length; i++) {
+            var $item = $items.eq(i);
+            if ($.trim($item.text()) === name) {
+                return $item.parent();
+            }
+        }
+    };
 
-    addConfirmation($folderList.find("a.delete"));
+    var getFolderById = function(id) {
+        return $folderList.find("li.folder[data-folder-id='"+id+"']")
+    };
+
+
+    addFolderDeleteConfirmation($folderList.find("a.delete"));
+    addItemFolderDeleteConfirmation($("article ul.folder-list li a.delete"));
 
     $inputs.autocomplete({
         source: getFolders
@@ -103,7 +141,6 @@ oer.myitems.init = function() {
                             var $folderLast = $.find("#folder-create-form li.last");
                             var $item = folderElement(context);
                             $item.insertBefore($folderLast);
-                            addConfirmation($item.find("a.delete"));
                         }
                         else {
                             var $folder = getFolderByName(value);
@@ -114,7 +151,7 @@ oer.myitems.init = function() {
                             var $number = $folder.find("span.number");
                             $number.text($number.text()-0+1);
                         }
-                        $this.parent().before($.tmpl("myitems:item-folder", context));
+                        $this.parent().before(itemFolderElement(context));
                     }
                 });
             }
@@ -126,10 +163,8 @@ oer.myitems.init = function() {
         if (response["status"] === "success") {
             response["number"] = 0;
             var $item = folderElement(response);
-
             $item.hide();
             $item.insertBefore($folderLast);
-            addConfirmation($item.find("a.delete"));
             $item.fadeIn();
         }
     };
