@@ -1,5 +1,6 @@
 from celery.decorators import task
 from django.conf import settings
+from mailchimp.chimpy.chimpy import ChimpyException
 import mailchimp
 
 
@@ -18,5 +19,9 @@ def subscribe(email, first_name=None, last_name=None):
         user_data["FNAME"] = first_name
     if last_name:
         user_data["LNAME"] = last_name
-    list.subscribe(email, user_data, email_type="html",
-                   double_optin=False)
+    try:
+        list.subscribe(email, user_data, email_type="html",
+                       double_optin=False)
+    except ChimpyException:
+        pass # TODO: fix this. We need to check if a user is subscribed already
+
