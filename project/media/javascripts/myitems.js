@@ -109,6 +109,7 @@ oer.myitems.init = function() {
     };
 
     $itemFolderAddButton.click(function(e) {
+        $itemFolderInput.autocomplete("enable");
         $itemFolderForm.next().fadeIn();
         $itemFolderForm.detach();
         $(e.target).hide();
@@ -121,6 +122,7 @@ oer.myitems.init = function() {
         e.preventDefault();
     });
     $itemFolderForm.submit(function(e) {
+        $itemFolderInput.autocomplete("disable");
         $itemFolderForm.next().fadeIn();
         $itemFolderForm.hide();
         var value = $.trim($itemFolderInput.val());
@@ -159,7 +161,6 @@ oer.myitems.init = function() {
                 }
             });
         }
-        $itemFolderInput.autocomplete("close");
         e.preventDefault();
     });
 
