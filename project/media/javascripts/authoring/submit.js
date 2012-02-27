@@ -1,9 +1,3 @@
-$.blockUI.defaults.css = {
-  color: "#fff",
-  fontSize: "20px"
-};
-$.blockUI.defaults.message = "Please wait...";
-
 var Submit = function () {
   var tool = this;
 
@@ -39,6 +33,17 @@ var Submit = function () {
         $currentLicense.unblock();
       });
     }
+  });
+
+  var $slider = $("#slider");
+  var $step = $("#step-submit");
+  $step.find("div.buttons a").click(function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    if ($this.hasClass("next")) {
+      return;
+    }
+    $slider.authoringToolSlider("slideTo", $this.attr("href"));
   });
 
 };

@@ -1,5 +1,5 @@
 {% if slides %}
-<ul class="slider">
+<ul class="frontpage-slider">
   {% for slide in slides %}
   <li>
     <div class="wrapper {{slide.title|slugify}}"{% if slide.image %} style="background-image: url({{slide.image.url}});"{% endif %}>

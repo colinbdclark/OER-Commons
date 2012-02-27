@@ -70,7 +70,7 @@ var Write = function () {
   this.CMD = 91;
 
   this.$form = $("#write-form");
-  this.$toolbar = $("#toolbar");
+  this.$toolbar = $("#write-toolbar");
   this.$toolbarButtons = this.$toolbar.find("a.button");
   this.$area = $("#editor-area");
   this.$outline = $("#outline");
@@ -288,6 +288,14 @@ var Write = function () {
     });
   })();
 
+  var $slider = $("#slider");
+  var $step = $("#step-write");
+  $step.find("div.buttons a").click(function(e) {
+    e.preventDefault();
+    $slider.authoringToolSlider("slideTo", $(this).attr("href"));
+  });
+
+  // TODO: this should be done when publish button is pressed on the last step
   this.$form.submit(function() {
     $("#id_text").val(tool.cleanHtmlPreSave(tool.$area.html()));
   });

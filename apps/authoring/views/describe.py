@@ -1,16 +1,13 @@
 from itertools import chain
 from authoring.models import AuthoredMaterialDraft
-from authoring.views import EditMaterialViewMixin
+from authoring.views import EditMaterialProcessForm
 from core.forms import MultipleAutoCreateField
 from django import forms
-from django.contrib import messages
 from django.forms import ModelMultipleChoiceField
 from django.forms.widgets import CheckboxInput
-from django.shortcuts import  redirect
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
-from django.views.generic import UpdateView
 from materials.models import GeneralSubject, Language
 
 
@@ -59,18 +56,6 @@ class DescribeForm(forms.ModelForm):
             summary=forms.Textarea(attrs=dict(placeholder=u"Please give a short summary of your resource. This will appear as the preview in search results."))
         )
 
-class Describe(EditMaterialViewMixin, UpdateView):
+class Describe(EditMaterialProcessForm):
 
-    template_name = "authoring/describe.html"
     form_class = DescribeForm
-
-    def form_invalid(self, form):
-        messages.error(self.request, u"Please correct the indicated errors.")
-        return super(Describe, self).form_invalid(form)
-
-    def form_valid(self, form):
-        form.save()
-        next = self.request.POST.get("next")
-        if next:
-            return redirect(next)
-        return self.render_to_response(self.get_context_data(form=form))

@@ -92,7 +92,6 @@ INSTALLED_APPS = (
     'mailchimp',
     'sorl.thumbnail',
     'django_coverage',
-    'django_scss',
     'oembed',
     'gunicorn',
     'core',

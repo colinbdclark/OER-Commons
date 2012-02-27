@@ -1,0 +1,34 @@
+<form id="submit-form" action="{% url authoring:submit pk=object.material.pk %}" method="post" class="authoring-form">
+  <div class="toolbar help">Select a copyright license to define how others can use your work:</div>
+
+  <div class="layout-columns">
+
+      <div class="column-left">
+        <div class="current-license">
+          <h3>Current License</h3>
+          <a href="#" target="_blank" style="display: none;">Not selected</a>
+        </div>
+      </div>
+      <div class="column-main">
+        {% with form.license as field %}
+          {% if field.errors %}
+            <div class="field">
+              <div class="errors">
+                {% for error in field.errors %}
+                  <label class="error">{{ error|safe }}</label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+          {{ field }}
+        {% endwith %}
+      </div>
+
+    {% spaceless %}
+    <div class="buttons">
+      <a href="#step-describe" class="prev"><span class="icon"></span></a>
+      <a href="#" class="next"><span class="wrap"><strong>Publish</strong></span><span class="icon"></span></a>
+    </div>
+    {% endspaceless %}
+  </div>
+</form>
