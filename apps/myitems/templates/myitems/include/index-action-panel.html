@@ -3,7 +3,11 @@
     <form method="get" action="{{ request.path }}">   
     <ul class="left">
       <li>
-        Displaying <strong>{{ pagination.first_item_number }} - {{ pagination.last_item_number }}</strong> of <strong>{{ pagination.total_items }}</strong> results
+         {% if pagination.total_items %}
+           Displaying <strong>{{ pagination.first_item_number }} - {{ pagination.last_item_number }}</strong> of <strong>{{ pagination.total_items }}</strong> results
+         {% else %}
+           No results
+         {% endif %}
       </li>
       <li>
         <select name="batch_size">

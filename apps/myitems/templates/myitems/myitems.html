@@ -19,12 +19,9 @@
                 <input type="text" />
                 <a class="dashed" href="#">Submit</a>
             </form>
-            {% block top-navigation %}{% endblock %}
-
-            {% block top-hint %}{% endblock %}
 
             {% for item in items %}
-                <article class="item clearfix {% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
+                <article class="item clearfix{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
                     <h1>
                         <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
                     </h1>
@@ -39,9 +36,9 @@
                 </article>
             {% endfor %}
 
-            {% block bottom-navigation %}{% endblock %}
-
-            {% block bottom-hint %}{% endblock %}
+            {% with "bottom" as class %}
+                {% include "materials/include/index-navigation.html" %}
+            {% endwith %}
         </div>
 
     {% else %}

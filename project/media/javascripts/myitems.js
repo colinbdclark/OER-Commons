@@ -42,7 +42,6 @@ oer.myitems.init = function() {
                 var folderId = $itemFolder.data("folder-id");
                 var itemId = $itemFolder.closest("article").data("identifier");
                 var request = { folder_id: folderId, item_id: itemId };
-                console.log();
                 var $number = getFolderById(folderId).find("span.number");
                 $.post(deleteItemFolderUrl, request, function(response) {
                     if (response.status === "success") {
