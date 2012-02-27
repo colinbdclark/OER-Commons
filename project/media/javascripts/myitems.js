@@ -90,7 +90,9 @@ oer.myitems.init = function() {
     var $folderInput= $form.find("input");
     var $folderList = $form.find("ul");
     var $folderLast = $folderList.find("li.last");
-    var $inputs = $("article ul.folder-list li.last input");
+    var $itemFolderAddButton = $("article ul.folder-list li.last a");
+    var $itemFolderForm = $("#folder-item-form");
+    var $itemFolderInput = $itemFolderForm.find("input");
 
     var getFolderByName = function(name) {
         var $items = $folderList.find("li.folder span.name");
@@ -106,57 +108,66 @@ oer.myitems.init = function() {
         return $folderList.find("li.folder[data-folder-id='"+id+"']")
     };
 
+    $itemFolderAddButton.click(function(e) {
+        $itemFolderForm.next().fadeIn();
+        $itemFolderForm.detach();
+        $(e.target).hide();
+        $itemFolderForm.insertBefore(e.target);
+        $itemFolderForm.fadeIn();
+        e.preventDefault();
+    });
+    $itemFolderForm.find("a").click(function(e) {
+        $itemFolderForm.submit();
+        e.preventDefault();
+    });
+    $itemFolderForm.submit(function(e) {
+        $itemFolderForm.next().fadeIn();
+        $itemFolderForm.hide();
+        var value = $.trim($itemFolderInput.val());
+        if (value !== "") {
+            var identifier = $itemFolderForm.closest("article").data("identifier");
+
+            var request = {
+                folder_name: value,
+                item_id: identifier
+            };
+
+            $.post(addItemUrl, request, function(response) {
+                if (response["status"] === "success") {
+                    var context;
+                    if (response["folder_id"]) {
+                        context = {
+                            name: value,
+                            id: response["folder_id"],
+                            slug: response["folder_slug"],
+                            number: 1
+                        };
+                        var $folderLast = $.find("#folder-create-form li.last");
+                        var $item = folderElement(context);
+                        $item.insertBefore($folderLast);
+                    }
+                    else {
+                        var $folder = getFolderByName(value);
+                        context = {
+                            name: value,
+                            id: $folder.data("folder-id")
+                        };
+                        var $number = $folder.find("span.number");
+                        $number.text($number.text()-0+1);
+                    }
+                    $itemFolderForm.parent().before(itemFolderElement(context));
+                }
+            });
+        }
+        $itemFolderInput.autocomplete("close");
+        e.preventDefault();
+    });
 
     addFolderDeleteConfirmation($folderList.find("a.delete"));
     addItemFolderDeleteConfirmation($("article ul.folder-list li a.delete"));
 
-    $inputs.autocomplete({
+    $itemFolderInput.autocomplete({
         source: getFolders
-    });
-
-
-    $inputs.keypress(function(e) {
-        if (e.which == 13) {
-            var $this = $(this);
-            e.preventDefault();
-            var value = $.trim($this.val());
-            if (value !== "") {
-                var identifier = $this.closest("article").data("identifier");
-
-                var request = {
-                    folder_name: value,
-                    item_id: identifier
-                };
-
-                $.post(addItemUrl, request, function(response) {
-                    if (response["status"] === "success") {
-                        var context;
-                        if (response["folder_id"]) {
-                            context = {
-                                name: value,
-                                id: response["folder_id"],
-                                slug: response["folder_slug"],
-                                number: 1
-                            };
-                            var $folderLast = $.find("#folder-create-form li.last");
-                            var $item = folderElement(context);
-                            $item.insertBefore($folderLast);
-                        }
-                        else {
-                            var $folder = getFolderByName(value);
-                            context = {
-                                name: value,
-                                id: $folder.data("folder-id")
-                            };
-                            var $number = $folder.find("span.number");
-                            $number.text($number.text()-0+1);
-                        }
-                        $this.parent().before(itemFolderElement(context));
-                    }
-                });
-            }
-            $this.autocomplete("close");
-        }
     });
 
     var onFolderCreation = function(response) {

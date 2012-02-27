@@ -14,7 +14,11 @@
     {% include "myitems/include/user-info.html" %}
 
     {% if items %}
-        <div class="materials-index collapsibles">
+        <div class="materials-index">
+            <form id="folder-item-form" class="hidden">
+                <input type="text" />
+                <a class="dashed" href="#">Submit</a>
+            </form>
             {% block top-navigation %}{% endblock %}
 
             {% block top-hint %}{% endblock %}
@@ -29,8 +33,7 @@
                             <li data-folder-id="{{ folder.id }}">{{ folder.name }} <a href="#" class="delete">Delete</a></li>
                         {% endfor %}
                         <li class="last">
-                            <a href="#">Add</a>
-                            <input type="text" />
+                            <a class="dashed" href="#">Add</a>
                         </li>
                     </ul>
                 </article>
