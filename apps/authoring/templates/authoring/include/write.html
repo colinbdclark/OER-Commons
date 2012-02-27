@@ -1,0 +1,153 @@
+{% spaceless %}
+  <div class="toolbar" id="write-toolbar">
+    <a class="button undo disabled" href="#undo">Undo</a>
+    <a class="button redo disabled" href="#redo">Redo</a>
+    <span class="sep"></span>
+    <div class="text-style">
+      <a href="#" class="select"><span>Text style...</span></a>
+      <ul>
+        <li><a href="#header" class="header"><span>Header</span></a></li>
+        <li><a href="#sub-header" class="sub-header"><span>Sub-header</span></a></li>
+        <li><a href="#paragraph" class="paragraph"><span>Paragraph</span></a></li>
+        <li><a href="#quote" class="quote"><span>Long Quote</span></a></li>
+      </ul>
+    </div>
+    <a class="button bullet-list" href="#bullet-list">Bullet list</a>
+    <a class="button number-list" href="#number-list">Number list</a>
+    <a class="button indent" href="#indent">Increase indent</a>
+    <a class="button outdent" href="#outdent">Decrease indent</a>
+    <span class="sep"></span>
+    <a class="button table" href="#table">Insert table</a>
+    <span class="sep"></span>
+    <a class="button bold" href="#bold">Bold</a>
+    <a class="button italic" href="#italic">Italic</a>
+    <a class="button underline" href="#underline">Underline</a>
+    <span class="sep"></span>
+    <div class="color-selector">
+      <a class="button text-color" href="#text-color">Change text color</a>
+      <ul class="text">
+        {% for i in 12345|make_list %}
+          <li class="text-color-{{ i }}"></li>
+        {% endfor %}
+        <li class="text-color-remove"></li>
+      </ul>
+    </div>
+    <div class="color-selector">
+      <a class="button bg-color" href="#bg-color">Change background color</a>
+      <ul class="bg">
+        {% for i in 12345|make_list %}
+          <li class="bg-color-{{ i }}"></li>
+        {% endfor %}
+        <li class="bg-color-remove"></li>
+      </ul>
+    </div>
+    <span class="sep"></span>
+    <a class="button link" href="#link">Insert link</a>
+    <span class="sep"></span>
+    <a class="button media" href="#media">Media</a>
+    <span class="sep"></span>
+    <a class="button reference" href="#reference">Insert reference</a>
+    <div class="clear"></div>
+
+  </div>
+{% endspaceless %}
+
+<div class="layout-columns">
+
+  <div class="column-left">
+    <section id="outline">
+      <h2>Table of Contents</h2>
+    </section>
+  </div>
+
+  <div class="column-main">
+
+    <div id="media-dialog">
+      <div class="step upload" data-url="{% url authoring:upload pk=object.material.pk %}">
+        <div class="head">I have permission to upload this item: <a href="#hide" class="hide">hide</a></div>
+        <div class="body">
+          <div class="left">
+            <div class="drop-zone">
+              <span class="find">Find file
+                <input id="fileupload" type="file" name="file">
+              </span>
+              <span>drag &amp; drop</span>
+            </div>
+          </div>
+          <div class="right">
+            <label for="id_url">Grab a video, image, audio, or document from the web</label>
+            <input placeholder="http://" type="text" name="url" id="id_url">
+            <a href="#submit" class="submit">submit</a>
+          </div>
+        </div>
+      </div>
+      <div class="step upload-progress">
+        <div class="head">I have permission to upload this item:</div>
+        <div class="body">
+          uploading your file: <strong class="filename"></strong>
+          <div class="progress">
+            <div class="fill"><span class="legend">0%</span></div>
+          </div>
+          <a href="#cancel" class="cancel">cancel upload</a>
+        </div>
+      </div>
+      <div class="step image">
+        <div class="head">
+          <a href="#"></a>
+          <ul>
+            <li class="embed">embed</li>
+            <li class="download">download link</li>
+          </ul>
+        </div>
+        <div class="body">
+          <div class="left">
+          </div>
+          <div class="right">
+            <input type="text" placeholder="Image title">
+            <textarea placeholder="What's in this image? Describe it with a few words."></textarea>
+            <a href="#submit" class="submit">submit</a>
+          </div>
+        </div>
+      </div>
+      <div class="step document">
+        <div class="head">&nbsp;</div>
+        <div class="body">
+          <div class="left">
+
+          </div>
+          <div class="right">
+            <input type="text" placeholder="Give this attachment/document a name">
+            <a href="#submit" class="submit">submit</a>
+          </div>
+        </div>
+      </div>
+      <div class="step video">
+        <div class="head">&nbsp;</div>
+        <div class="body">
+          <div class="left">
+          </div>
+          <div class="right">
+            <input type="text" placeholder="What's in this video? Describe it with a few words.">
+            <a href="#submit" class="submit">submit</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form id="write-form" action="{% url authoring:write pk=object.material.pk %}" method="post" class="authoring-form">
+      <div id="editor-area" class="authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
+        {{ object.text|safe }}
+      </div>
+      <div class="preview authored-content hidden"></div>
+      <div id="footnotes"></div>
+      {{ form.text }}
+    </form>
+  </div>
+
+  {% spaceless %}
+  <div class="buttons">
+    <a href="#step-describe" class="next"><span class="wrap">Next Step: <strong>Describe</strong></span><span class="icon"></span></a>
+  </div>
+  {% endspaceless %}
+
+</div>

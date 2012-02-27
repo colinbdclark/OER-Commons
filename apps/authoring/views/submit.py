@@ -1,13 +1,9 @@
-from authoring.models import AuthoredMaterialDraft, AuthoredMaterial
-from authoring.views import EditMaterialViewMixin
+from authoring.models import AuthoredMaterialDraft
+from authoring.views import EditMaterialProcessForm
 from django import forms
-from django.contrib import messages
-from django.core.urlresolvers import resolve
-from django.shortcuts import  redirect
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import UpdateView
 from materials.models.common import CC_LICENSE_URL_RE, License
 
 
@@ -102,25 +98,6 @@ class SubmitForm(forms.ModelForm):
         fields = ["license"]
 
 
-class Submit(EditMaterialViewMixin, UpdateView):
+class Submit(EditMaterialProcessForm):
 
-    template_name = "authoring/submit.html"
     form_class = SubmitForm
-
-    def form_invalid(self, form):
-        messages.error(self.request, u"Please correct the indicated errors.")
-        return super(Submit, self).form_invalid(form)
-
-    def form_valid(self, form):
-        draft = form.save()
-        next = self.request.POST.get("next")
-        if next:
-            match = resolve(next)
-            view_name = match.url_name
-            if match.namespace:
-                view_name = "%s:%s" % (match.namespace, view_name)
-            if view_name == "authoring:view":
-                # User clicks on "Publish" button
-                AuthoredMaterial.publish_draft(draft)
-            return redirect(next)
-        return self.render_to_response(self.get_context_data(form=form))

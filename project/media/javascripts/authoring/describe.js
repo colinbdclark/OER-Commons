@@ -12,4 +12,11 @@ var Describe = function () {
     placeholderText: "Enter new keyword"
   });
 
+  var $slider = $("#slider");
+  var $step = $("#step-describe");
+  $step.find("div.buttons a").click(function(e) {
+    e.preventDefault();
+    $slider.authoringToolSlider("slideTo", $(this).attr("href"));
+  });
+
 };

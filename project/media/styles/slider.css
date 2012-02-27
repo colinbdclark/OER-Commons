@@ -1,15 +1,15 @@
-.slider {
+.frontpage-slider {
   visibility: hidden;
   width: 540px;
   height: 190px;
   list-style-type: none;
 }
 
-.slider .wrapper {
+.frontpage-slider .wrapper {
   background: no-repeat 50% 50%;
 }
 
-.slider .learning-is-sharing .column1 {
+.frontpage-slider .learning-is-sharing .column1 {
   float: left;
   margin-top: 137px;
   padding-top: 10px;
@@ -20,7 +20,7 @@
   font-size: 35px;
 }
 
-.slider .learning-is-sharing .column2 {
+.frontpage-slider .learning-is-sharing .column2 {
   float: right;
   margin-top: 137px;
   padding-top: 12px;
@@ -31,7 +31,7 @@
   font-size: 14px;
 }
 
-.slider .learning-is-sharing .column2 em {
+.frontpage-slider .learning-is-sharing .column2 em {
   color: #ffcc66;
   font-style: normal;
   font-size: 17px;

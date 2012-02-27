@@ -1,9 +1,12 @@
 .authoring {
+  #slider {
+    background-color: #F2F2F2;
+  }
   .layout-columns {
     width: auto;
     margin: 0;
     padding: 30px;
-    background: #f2f2f2;
+    background: none;
     line-height: 1.4;
     font-family: "Myriad Pro", Helvetica, sans-serif;
     a {
@@ -261,11 +264,21 @@
   }
 }
 
-#toolbar {
+.toolbar {
   clear: both;
   background: #efefef;
   height: 38px;
   border-bottom: 1px solid #ccc;
+  &.help {
+    font-size: 18px;
+    line-height: 39px;
+    padding-left: 20px;
+    color: #777;
+    text-shadow: 1px 1px 0 #fff;
+  }
+}
+
+#write-toolbar {
   a {
     text-decoration: none;
   }
@@ -712,15 +725,7 @@
   }
 }
 
-#toolbar.help {
-  font-size: 18px;
-  line-height: 39px;
-  padding-left: 20px;
-  color: #777;
-  text-shadow: 1px 1px 0 #fff;
-}
-
-#write-form {
+#step-write {
   .layout-columns {
     padding-top: 0;
   }
@@ -744,6 +749,7 @@
   &:focus {
     outline-width: 0;
   }
+  overflow-y: auto;
 }
 
 .popup-dialog {
@@ -849,6 +855,7 @@
   font-size: 17px;
   color: #666;
   margin-top: -20px;
+  margin-bottom: -184px;
   .step {
     background-color: #f2f2f2;
     border: 1px solid #cfcfcf;
@@ -1109,7 +1116,7 @@
   }
 }
 
-#describe-form {
+#step-describe {
   .layout-columns {
     padding-top: 30px;
   }
@@ -1165,7 +1172,7 @@
   }
 }
 
-#submit-form {
+#step-submit {
   .layout-columns {
     padding-top: 30px;
   }
@@ -1400,4 +1407,3 @@
   }
 
 }
-

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block bodyclass %}authoring{% endblock %}
+
+{% block extra-css %}
+  <link rel="stylesheet" href="{{ STATIC_URL}}styles/authoring.css">
+{% endblock %}
+
+{% block extra-head %}
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-core.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-selectionsaverestore.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-cssclassapplier.js"></script>
+{% endblock %}
+
+{% block layout %}
+  <div class="authoring-head">
+    <div class="step-icons">
+      <a href="#step-write" class="write active"></a>
+      <a href="#step-describe" class="describe"></a>
+      <a href="#step-submit" class="submit"></a>
+    </div>
+    <h1 id="material-title">{% if object.title %}{{ object.title }}{% else %}Click here to edit title{% endif %}</h1>
+    {{ form.title }}
+    <div class="actions">
+      <a href="#preview" class="preview">Preview</a>
+      <a href="#edit" class="edit hidden">Edit</a>
+      <a href="#save" class="button">Save</a>
+    </div>
+    {% include "include/status-messages.html" %}
+    <div class="clear"></div>
+  </div>
+
+  <div id="slider">
+    <div class="slide" id="step-write">
+      {% with write_form as form %}
+        {% include "authoring/include/write.html" %}
+      {% endwith %}
+    </div>
+    <div class="slide" id="step-describe">
+      {% with describe_form as form %}
+        {% include "authoring/include/describe.html" %}
+      {% endwith %}
+    </div>
+    <div class="slide" id="step-submit">
+      {% with submit_form as form %}
+        {% include "authoring/include/submit.html" %}
+      {% endwith %}
+    </div>
+  </div>
+
+  <div id="link-dialog" class="popup-dialog">
+    <div class="head">Link <span class="triangle"></span></div>
+    <div class="body">
+      <div class="field">
+        <label for="id_link_text">Displayed text</label>
+        <input type="text" id="id_link_text" name="link_text" placeholder="Enter text link will appear as">
+      </div>
+      <div class="field">
+        <label for="id_link_url">Website, email</label>
+        <input type="text" id="id_link_url" name="link_url" placeholder="Enter link here">
+      </div>
+    </div>
+    <div class="actions">
+      <a href="#remove" class="remove">clear link</a>
+      <a href="#save" class="button primary">Save</a>
+      <a href="#cancel" class="button">Cancel</a>
+    </div>
+  </div>
+
+  <div id="reference-dialog" class="popup-dialog">
+    <div class="head">Reference <span class="triangle"></span></div>
+    <div class="body">
+      <textarea name="referebce_text" placeholder="Enter the source of this content through author, title of work, url, date, etc."></textarea>
+    </div>
+    <div class="actions">
+      <a href="#remove" class="remove">Clear reference</a>
+      <a href="#save" class="button primary">Save</a>
+      <a href="#cancel" class="button">Cancel</a>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.blockUI.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.jeditable.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.linkify.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/slider.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/steps-buttons.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/write.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/describe.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/submit.js"></script>
+  <script>
+    $(function(e) {
+      $("#slider").authoringToolSlider();
+      new Write();
+      new Describe();
+      new Submit();
+    });
+  </script>
+{% endblock %}

@@ -55,13 +55,15 @@
   </div>
 </header>
 
+{% if not hide_global_tabs %}
 <div class="global-tabs fixed-width">
   <div id="global-search-box">
     <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
       <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" placeholder="{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}" />
       <input type="submit" value="Search" class="button" />
-      <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" /> 
+      <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" />
     </form>
-  </div>  
+  </div>
   {% navigation %}
 </div>
+{% endif %}
