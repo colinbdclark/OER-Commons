@@ -121,6 +121,7 @@ oer.myitems.init = function() {
         e.preventDefault();
     });
     $itemFolderForm.submit(function(e) {
+        $itemFolderInput.autocomplete("close");
         $itemFolderInput.autocomplete("disable");
         $itemFolderForm.next().fadeIn();
         $itemFolderForm.hide();
