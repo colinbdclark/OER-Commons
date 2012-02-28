@@ -126,6 +126,7 @@ oer.myitems.init = function() {
         $itemFolderForm.hide();
         var value = $.trim($itemFolderInput.val());
         if (value !== "") {
+            $itemFolderInput.val("");
             var identifier = $itemFolderForm.closest("article").data("identifier");
 
             var request = {
@@ -190,6 +191,7 @@ oer.myitems.init = function() {
         $.post($form.attr("action"), $form.serialize(), onFolderCreation);
         $folderInput.fadeOut();
         $submit.hide();
+        $folderInput.val("");
         $button.show();
         e.preventDefault();
     });
