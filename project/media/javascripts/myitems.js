@@ -114,6 +114,7 @@ oer.myitems.init = function() {
         $(e.target).hide();
         $itemFolderForm.insertBefore(e.target);
         $itemFolderForm.fadeIn();
+        $itemFolderInput.focus();
         e.preventDefault();
     });
     $itemFolderForm.find("a").click(function(e) {
@@ -186,6 +187,7 @@ oer.myitems.init = function() {
         $folderInput.fadeIn();
         $submit.show();
         $button.hide();
+        $folderInput.focus();
         e.preventDefault();
     });
     $form.submit(function(e) {
