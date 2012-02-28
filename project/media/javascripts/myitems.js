@@ -13,12 +13,12 @@ oer.myitems.init = function() {
     var deleteUrl = django_js_utils.urls.resolve('myitems:folder_delete');
     var deleteItemFolderUrl = django_js_utils.urls.resolve('myitems:folder_delete_item');
 
-    var addFolderDeleteConfirmation = function ($addTo) {
-        $addTo.inlineConfirmation({
+    var addFolderDeleteConfirmation = function () {
+        $folderList.find("a.delete").inlineConfirmation({
             confirmCallback: function(action) {
                 var $folder = action.parent();
                 var folderId = $folder.data("folder-id");
-                var $itemFolders = $("article ul.folder-list li[data-folder-id='"+folderId+"']");
+                var $itemFolders = $itemFolderLists.find("li[data-folder-id='"+folderId+"']");
                 $.post(deleteUrl, {id: folderId}, function(response) {
                     if (response.status === "success") {
                         $folder.remove();
@@ -35,8 +35,8 @@ oer.myitems.init = function() {
     };
 
 
-    var addItemFolderDeleteConfirmation = function ($addTo) {
-        $addTo.inlineConfirmation({
+    var addItemFolderDeleteConfirmation = function () {
+        $itemFolderLists.find("li a.delete").inlineConfirmation({
             confirmCallback: function(action) {
                 var $itemFolder = action.parent();
                 var folderId = $itemFolder.data("folder-id");
@@ -57,16 +57,18 @@ oer.myitems.init = function() {
         });
     };
 
-    var folderElement = function(params) {
+    var addFolderElement = function(params) {
         params.url = django_js_utils.urls.resolve('myitems:folder', {slug: params.slug});
         var $item = $.tmpl("myitems:folder", params);
-        addFolderDeleteConfirmation($item.find("a.delete"));
+        $item.hide();
+        $item.insertBefore($folderLast);
+        $item.fadeIn();
+        addFolderDeleteConfirmation();
         return $item;
     };
 
     var itemFolderElement = function(params) {
         var $item = $.tmpl("myitems:item-folder", params);
-        addItemFolderDeleteConfirmation($item.find("a.delete"));
         return $item;
     };
 
@@ -89,7 +91,8 @@ oer.myitems.init = function() {
     var $folderInput= $form.find("input");
     var $folderList = $form.find("ul");
     var $folderLast = $folderList.find("li.last");
-    var $itemFolderAddButton = $("article ul.folder-list li.last a");
+    var $itemFolderLists = $("article ul.folder-list");
+    var $itemFolderAddButton = $itemFolderLists.find("li.last a");
     var $itemFolderForm = $("#folder-item-form");
     var $itemFolderInput = $itemFolderForm.find("input");
 
@@ -98,7 +101,7 @@ oer.myitems.init = function() {
         for(var i = 0; i < $items.length; i++) {
             var $item = $items.eq(i);
             if ($.trim($item.text()) === name) {
-                return $item.parent();
+                return $item.closest("li");
             }
         }
     };
@@ -146,9 +149,7 @@ oer.myitems.init = function() {
                             slug: response["folder_slug"],
                             number: 1
                         };
-                        var $folderLast = $.find("#folder-create-form li.last");
-                        var $item = folderElement(context);
-                        $item.insertBefore($folderLast);
+                        addFolderElement(context);
                     }
                     else {
                         var $folder = getFolderByName(value);
@@ -160,14 +161,15 @@ oer.myitems.init = function() {
                         $number.text($number.text()-0+1);
                     }
                     $itemFolderForm.parent().before(itemFolderElement(context));
+                    addItemFolderDeleteConfirmation();
                 }
             });
         }
         e.preventDefault();
     });
 
-    addFolderDeleteConfirmation($folderList.find("a.delete"));
-    addItemFolderDeleteConfirmation($("article ul.folder-list li a.delete"));
+    addFolderDeleteConfirmation();
+    addItemFolderDeleteConfirmation();
 
     $itemFolderInput.autocomplete({
         source: getFolders
@@ -176,10 +178,7 @@ oer.myitems.init = function() {
     var onFolderCreation = function(response) {
         if (response["status"] === "success") {
             response["number"] = 0;
-            var $item = folderElement(response);
-            $item.hide();
-            $item.insertBefore($folderLast);
-            $item.fadeIn();
+            addFolderElement(response);
         }
     };
 
