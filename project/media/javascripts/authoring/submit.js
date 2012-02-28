@@ -1,5 +1,4 @@
-var Submit = function () {
-  var tool = this;
+var SubmitStep = function (tool) {
 
   this.$form = $("#submit-form");
 
@@ -35,7 +34,6 @@ var Submit = function () {
     }
   });
 
-  var $slider = $("#slider");
   var $step = $("#step-submit");
   $step.find("div.buttons a").click(function(e) {
     e.preventDefault();
@@ -43,7 +41,7 @@ var Submit = function () {
     if ($this.hasClass("next")) {
       return;
     }
-    $slider.authoringToolSlider("slideTo", $this.attr("href"));
+    tool.slider.slideTo($this.attr("href"));
   });
 
 };

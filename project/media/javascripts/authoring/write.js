@@ -1,3 +1,4 @@
+// TODO: move these defaults elsewhere
 $.blockUI.defaults.css = {
   color: "#fff",
   fontSize: "20px"
@@ -8,8 +9,9 @@ jQuery.fn.outerHTML = function (s) {
   return (s) ? this.before(s).remove() : jQuery("<p></p>").append(this.eq(0).clone()).html();
 };
 
-var Write = function () {
-  var tool = this;
+var WriteStep = function (tool) {
+  this.tool = tool;
+  var editor = this;
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
@@ -96,23 +98,23 @@ var Write = function () {
   this.cmdKey = false;
   $(document).keydown(
           function (e) {
-            if (e.which == tool.CTRL) {
-              tool.ctrlKey = true;
+            if (e.which == editor.CTRL) {
+              editor.ctrlKey = true;
             }
-            if (e.which == tool.CMD) {
-              tool.cmdKey = true;
+            if (e.which == editor.CMD) {
+              editor.cmdKey = true;
             }
-            if ((tool.ctrlKey || tool.cmdKey) && e.which == 90) {
-              tool.undo();
+            if ((editor.ctrlKey || editor.cmdKey) && e.which == 90) {
+              editor.undo();
               e.preventDefault();
             }
           }).keyup(function (e) {
             // Track Ctrl+Z / Cmd+Z
-            if (e.which == tool.CTRL) {
-              tool.ctrlKey = false;
+            if (e.which == editor.CTRL) {
+              editor.ctrlKey = false;
             }
-            if (e.which == tool.CMD) {
-              tool.cmdKey = false;
+            if (e.which == editor.CMD) {
+              editor.cmdKey = false;
             }
           });
 
@@ -146,47 +148,47 @@ var Write = function () {
   this.initDND();
 
   this.$area.find("figure").each(function () {
-    tool.initFigure($(this));
+    editor.initFigure($(this));
   });
   this.$area.find("figure.embed").each(function () {
-    tool.loadEmbed($(this));
+    editor.loadEmbed($(this));
   });
 
   // Clean up HTML on paste and check for changes
   this.$area.bind("paste", function () {
-    tool.saveState();
+    editor.saveState();
     setTimeout(function () {
-      tool.cleanHTML();
+      editor.cleanHTML();
     }, 200);
   });
 
   // Update selected nodes when user click on editor area or select text with mouse
   // and save selection.
   this.$area.mouseup(function () {
-    tool.trackSelection();
+    editor.trackSelection();
   });
 
   // Track editor changes caused by pressing keys.
-  tool.$area.keyup(function (e) {
+  editor.$area.keyup(function (e) {
 
-    if ($.inArray(e.which, tool.SPECIAL_KEY_CODES) != -1) {
+    if ($.inArray(e.which, editor.SPECIAL_KEY_CODES) != -1) {
       return;
     }
 
     // Update the focused nodes if user moves the caret.
-    if ($.inArray(e.which, tool.NAVIGATION_KEYS) != -1 || $.inArray(e.which, [tool.ENTER, tool.BACKSPACE, tool.DELETE]) != -1) {
-      tool.trackSelection();
-      if ($.inArray(e.which, [tool.BACKSPACE, tool.DELETE]) == -1) {
+    if ($.inArray(e.which, editor.NAVIGATION_KEYS) != -1 || $.inArray(e.which, [editor.ENTER, editor.BACKSPACE, editor.DELETE]) != -1) {
+      editor.trackSelection();
+      if ($.inArray(e.which, [editor.BACKSPACE, editor.DELETE]) == -1) {
         return;
       }
     }
 
     // Update the outline if current block is a header
-    if (tool.$focusBlock && tool.$focusBlock.is("h1,h2,h3")) {
-      var $header = tool.$focusBlock;
+    if (editor.$focusBlock && editor.$focusBlock.is("h1,h2,h3")) {
+      var $header = editor.$focusBlock;
       var $li = $header.data("outline");
       if (!$li) {
-        tool.updateOutline();
+        editor.updateOutline();
         $li = $header.data("outline");
       }
       $li.text($header.text());
@@ -196,26 +198,26 @@ var Write = function () {
 
   var keydownTimeout = null;
   // User is about to type something. Save current state.
-  tool.$area.keydown(function (e) {
+  editor.$area.keydown(function (e) {
 
-    if (tool.ctrlKey || tool.cmdKey || $.inArray(e.which, tool.SPECIAL_KEY_CODES) != -1 || $.inArray(e.which, tool.NAVIGATION_KEYS) != -1) {
+    if (editor.ctrlKey || editor.cmdKey || $.inArray(e.which, editor.SPECIAL_KEY_CODES) != -1 || $.inArray(e.which, editor.NAVIGATION_KEYS) != -1) {
       return;
     }
 
-    tool.saveState();
-    tool.shouldSaveState = false;
+    editor.saveState();
+    editor.shouldSaveState = false;
     if (keydownTimeout) {
       clearTimeout(keydownTimeout);
     }
     keydownTimeout = setTimeout(function () {
-      tool.shouldSaveState = true;
+      editor.shouldSaveState = true;
       keydownTimeout = null;
     }, 1000);
   });
 
-  tool.$area.keyup(function (e) {
-    if (e.which == tool.DELETE || e.which == tool.BACKSPACE) {
-      tool.ensureTextInput();
+  editor.$area.keyup(function (e) {
+    if (e.which == editor.DELETE || e.which == editor.BACKSPACE) {
+      editor.ensureTextInput();
     }
   });
 
@@ -241,7 +243,7 @@ var Write = function () {
   (function () {
     var $titleInput = $("#id_title");
     var $textInput = $("#id_text");
-    var $preview = tool.$form.find("div.preview");
+    var $preview = editor.$form.find("div.preview");
     var $actions = $("div.authoring-head div.actions a");
     $actions.click(function (e) {
       e.preventDefault();
@@ -249,15 +251,15 @@ var Write = function () {
       var href = $this.attr("href");
       switch (href) {
         case "#save":
-          tool.cleanHTML();
-          var html = tool.cleanHtmlPreSave(tool.$area.html());
+          editor.cleanHTML();
+          var html = editor.cleanHtmlPreSave(editor.$area.html());
           $textInput.val(html);
           oer.status_message.clear();
           var data = {
             title: $titleInput.val(),
             text: $textInput.val()
           };
-          $.post(tool.$form.attr("action"), data, function (response) {
+          $.post(editor.$form.attr("action"), data, function (response) {
             if (response.status === "success") {
               oer.status_message.success(response.message, true);
             } else {
@@ -267,9 +269,9 @@ var Write = function () {
           break;
         case "#preview":
           // TODO: disable table of contents
-          $preview.html(tool.$area.html());
-          tool.$toolbar.hide();
-          tool.$area.hide();
+          $preview.html(editor.$area.html());
+          editor.$toolbar.hide();
+          editor.$area.hide();
           $preview.show();
           $actions.filter(".edit").removeClass("hidden");
           $this.addClass("hidden");
@@ -277,8 +279,8 @@ var Write = function () {
         case "#edit":
           // TODO: re-enable table of contents
           $preview.hide();
-          tool.$toolbar.show();
-          tool.$area.show();
+          editor.$toolbar.show();
+          editor.$area.show();
           $actions.filter(".preview").removeClass("hidden");
           $this.addClass("hidden");
           break;
@@ -288,22 +290,21 @@ var Write = function () {
     });
   })();
 
-  var $slider = $("#slider");
   var $step = $("#step-write");
   $step.find("div.buttons a").click(function(e) {
     e.preventDefault();
-    $slider.authoringToolSlider("slideTo", $(this).attr("href"));
+    tool.slider.slideTo($(this).attr("href"));
   });
 
   // TODO: this should be done when publish button is pressed on the last step
   this.$form.submit(function() {
-    $("#id_text").val(tool.cleanHtmlPreSave(tool.$area.html()));
+    $("#id_text").val(editor.cleanHtmlPreSave(editor.$area.html()));
   });
 
 };
 
-Write.prototype.cleanHTML = function () {
-  var tool = this;
+WriteStep.prototype.cleanHTML = function () {
+  var editor = this;
   var $area = this.$area;
 
   var selection = null;
@@ -336,7 +337,7 @@ Write.prototype.cleanHTML = function () {
     oldClasses.sort();
     var remove = [];
     for (i = 0; i < oldClasses.length; i++) {
-      if ($.inArray(oldClasses[i], tool.ALLOWED_CLASSES) === -1) {
+      if ($.inArray(oldClasses[i], editor.ALLOWED_CLASSES) === -1) {
         remove.push(oldClasses[i]);
       }
     }
@@ -391,10 +392,10 @@ Write.prototype.cleanHTML = function () {
   }
 
   // Re-init DND
-  tool.updateDND();
+  editor.updateDND();
 };
 
-Write.prototype.cleanHtmlPreSave = function (html) {
+WriteStep.prototype.cleanHtmlPreSave = function (html) {
   // TODO: remove interface elements here
   var $document = $("<div></div>").html(html);
   $document.find("[contenteditable]").removeAttr("contenteditable");
@@ -403,7 +404,7 @@ Write.prototype.cleanHtmlPreSave = function (html) {
 
 // Ensure that we always have a text block at the end of editor area
 // We also need to insert empty paragraphs around all figures
-Write.prototype.ensureTextInput = function () {
+WriteStep.prototype.ensureTextInput = function () {
   var $area = this.$area;
   if (!$area.children().last().is(this.TOP_LEVEL_TEXT_TAGS)) {
     var $p = $("<p><br></p>").data("auto", true).appendTo($area);
@@ -429,7 +430,7 @@ Write.prototype.ensureTextInput = function () {
   });
 };
 
-Write.prototype.execCommand = function (command) {
+WriteStep.prototype.execCommand = function (command) {
   if (arguments.length == 2) {
     document.execCommand(command, false, arguments[1]);
   } else {
@@ -437,7 +438,7 @@ Write.prototype.execCommand = function (command) {
   }
 };
 
-Write.prototype.focusOnNode = function ($node) {
+WriteStep.prototype.focusOnNode = function ($node) {
   // TODO: rewrite this to rangy, allow to focus at specific offset
   var range, selection;
   var node = $node.get(0);
@@ -461,7 +462,7 @@ Write.prototype.focusOnNode = function ($node) {
   this.trackSelection();
 };
 
-Write.prototype.trackSelection = function () {
+WriteStep.prototype.trackSelection = function () {
 
   // Rangy is not initialized?
   if (!"getSelection" in rangy) {
@@ -516,7 +517,7 @@ Write.prototype.trackSelection = function () {
 
 };
 
-Write.prototype.changeBlockType = function (newType) {
+WriteStep.prototype.changeBlockType = function (newType) {
   if (!this.$focusBlock) {
     return;
   }
@@ -536,11 +537,11 @@ Write.prototype.changeBlockType = function (newType) {
   this.focusOnNode($newBlock);
 };
 
-Write.prototype.activateButton = function (button) {
+WriteStep.prototype.activateButton = function (button) {
   this.$toolbarButtons.filter("." + button).addClass("active");
 };
 
-Write.prototype.updateToolbarState = function () {
+WriteStep.prototype.updateToolbarState = function () {
   var $anchorNode = this.$anchorNode;
   var $anchorBlock = this.$anchorBlock;
   var $focusNode = this.$focusNode;
@@ -610,7 +611,7 @@ Write.prototype.updateToolbarState = function () {
 
 };
 
-Write.prototype.insertList = function (listType) {
+WriteStep.prototype.insertList = function (listType) {
   if (!this.$focusBlock) {
     return;
   }
@@ -631,20 +632,20 @@ Write.prototype.insertList = function (listType) {
 
 };
 
-Write.prototype.initUndoButtons = function () {
-  var tool = this;
+WriteStep.prototype.initUndoButtons = function () {
+  var editor = this;
   this.$toolbar.find("a.button.undo").click(function (e) {
     e.preventDefault();
-    tool.undo();
+    editor.undo();
   });
   this.$toolbar.find("a.button.redo").click(function (e) {
     e.preventDefault();
-    tool.redo();
+    editor.redo();
   });
 };
 
-Write.prototype.initTextStyleMenu = function () {
-  var tool = this;
+WriteStep.prototype.initTextStyleMenu = function () {
+  var editor = this;
   var $menu = this.$toolbar.find("div.text-style");
   $menu.find("a.select").click(function (e) {
     e.preventDefault();
@@ -660,16 +661,16 @@ Write.prototype.initTextStyleMenu = function () {
     var href = $target.attr("href");
     switch (href) {
       case "#header":
-        tool.changeBlockType("h2");
+        editor.changeBlockType("h2");
         break;
       case "#sub-header":
-        tool.changeBlockType("h3");
+        editor.changeBlockType("h3");
         break;
       case "#paragraph":
-        tool.changeBlockType("p");
+        editor.changeBlockType("p");
         break;
       case "#quote":
-        tool.changeBlockType("blockquote");
+        editor.changeBlockType("blockquote");
         break;
       default:
         break;
@@ -677,29 +678,29 @@ Write.prototype.initTextStyleMenu = function () {
   });
 };
 
-Write.prototype.initFormattingButtons = function () {
-  var tool = this;
+WriteStep.prototype.initFormattingButtons = function () {
+  var editor = this;
   var $bold = this.$toolbar.find("a.button.bold").click(function (e) {
     e.preventDefault();
-    tool.saveState();
-    tool.execCommand("bold");
-    tool.trackSelection();
+    editor.saveState();
+    editor.execCommand("bold");
+    editor.trackSelection();
   });
   var $italic = this.$toolbar.find("a.button.italic").click(function (e) {
     e.preventDefault();
-    tool.saveState();
-    tool.execCommand("italic");
-    tool.trackSelection();
+    editor.saveState();
+    editor.execCommand("italic");
+    editor.trackSelection();
   });
   var $underline = this.$toolbar.find("a.button.underline").click(function (e) {
     e.preventDefault();
-    tool.saveState();
-    tool.execCommand("underline");
-    tool.trackSelection();
+    editor.saveState();
+    editor.execCommand("underline");
+    editor.trackSelection();
   });
 
-  tool.$area.keydown(function(e) {
-    if (tool.cmdKey || tool.ctrlKey) {
+  editor.$area.keydown(function(e) {
+    if (editor.cmdKey || editor.ctrlKey) {
       if (e.which == 66) { // bold
         if (!$bold.hasClass("disabled")) {
           $bold.click();
@@ -720,19 +721,19 @@ Write.prototype.initFormattingButtons = function () {
   });
 };
 
-Write.prototype.initListButtons = function () {
-  var tool = this;
+WriteStep.prototype.initListButtons = function () {
+  var editor = this;
   this.$toolbar.find("a.button.bullet-list").click(function (e) {
     e.preventDefault();
-    tool.insertList("ul");
+    editor.insertList("ul");
   });
   this.$toolbar.find("a.button.number-list").click(function (e) {
     e.preventDefault();
-    tool.insertList("ol");
+    editor.insertList("ol");
   });
 };
 
-Write.prototype.getQuoteLevel = function ($quote) {
+WriteStep.prototype.getQuoteLevel = function ($quote) {
   var classes = {};
   var classNames = $quote.attr("class");
   if (!classNames) {
@@ -750,27 +751,27 @@ Write.prototype.getQuoteLevel = function ($quote) {
   return 0;
 };
 
-Write.prototype.initIndentButtons = function () {
-  var tool = this;
+WriteStep.prototype.initIndentButtons = function () {
+  var editor = this;
 
   this.$toolbar.find("a.button.indent").click(function (e) {
     e.preventDefault();
-    var $anchorNode = tool.$anchorNode;
-    var $anchorBlock = tool.$anchorBlock;
-    var $focusBlock = tool.$focusBlock;
-    var $focusNode = tool.$focusNode;
+    var $anchorNode = editor.$anchorNode;
+    var $anchorBlock = editor.$anchorBlock;
+    var $focusBlock = editor.$focusBlock;
+    var $focusNode = editor.$focusNode;
     if (!$focusBlock) {
       return;
     }
 
     if ($focusBlock.is("p,div")) {
-      tool.changeBlockType("blockquote");
+      editor.changeBlockType("blockquote");
     } else if ($focusBlock.is("blockquote")) {
-      var level = tool.getQuoteLevel($focusBlock);
+      var level = editor.getQuoteLevel($focusBlock);
       if (level < 5) {
-        tool.saveState();
+        editor.saveState();
         $focusBlock.removeClass().addClass("l" + (level + 1));
-        tool.trackSelection();
+        editor.trackSelection();
       }
     } else {
       var $anchorLi = $anchorNode.closest("li", $anchorBlock);
@@ -787,32 +788,32 @@ Write.prototype.initIndentButtons = function () {
         }
         var $indentedLis = $siblings.slice(start, end + 1);
         var $wrapper = $parent.is("ul") ? $("<ul></ul>") : $("<ol></ol>");
-        tool.saveState();
+        editor.saveState();
         var selection = rangy.saveSelection();
         $wrapper.insertBefore($anchorLi).append($indentedLis.detach());
         rangy.restoreSelection(selection);
-        tool.trackSelection();
+        editor.trackSelection();
       }
     }
   });
 
   this.$toolbar.find("a.button.outdent").click(function (e) {
     e.preventDefault();
-    var $anchorNode = tool.$anchorNode;
-    var $anchorBlock = tool.$anchorBlock;
-    var $focusBlock = tool.$focusBlock;
-    var $focusNode = tool.$focusNode;
+    var $anchorNode = editor.$anchorNode;
+    var $anchorBlock = editor.$anchorBlock;
+    var $focusBlock = editor.$focusBlock;
+    var $focusNode = editor.$focusNode;
     if (!$focusBlock) {
       return;
     }
     if ($focusBlock.is("blockquote")) {
-      var level = tool.getQuoteLevel($focusBlock);
+      var level = editor.getQuoteLevel($focusBlock);
       if (level === 0) {
-        tool.changeBlockType("p");
+        editor.changeBlockType("p");
       } else {
-        tool.saveState();
+        editor.saveState();
         $focusBlock.removeClass().addClass("l" + (level - 1));
-        tool.trackSelection();
+        editor.trackSelection();
       }
     } else {
       var $anchorLi = $anchorNode.closest("li", $anchorBlock);
@@ -831,7 +832,7 @@ Write.prototype.initIndentButtons = function () {
         var $nextLis = $siblings.slice(end + 1);
         var $indentedLis = $siblings.slice(start, end + 1);
         var $wrapper = $parent.is("ul") ? $("<ul></ul>") : $("<ol></ol>");
-        tool.saveState();
+        editor.saveState();
         var selection = rangy.saveSelection();
         if ($prevLis.length) {
           $prevLis = $prevLis.detach();
@@ -849,13 +850,13 @@ Write.prototype.initIndentButtons = function () {
         }
         $parent.remove();
         rangy.restoreSelection(selection);
-        tool.trackSelection();
+        editor.trackSelection();
       }
     }
   });
 };
 
-Write.prototype.insertLink = function () {
+WriteStep.prototype.insertLink = function () {
   var args = {};
   if (arguments.length) {
     args = arguments[0];
@@ -888,22 +889,22 @@ Write.prototype.insertLink = function () {
   this.trackSelection();
 };
 
-Write.prototype.initLinks = function () {
-  var tool = this;
+WriteStep.prototype.initLinks = function () {
+  var editor = this;
 
   this.$toolbarButtons.filter(".link").click(function (e) {
     e.preventDefault();
     var $link = null;
-    if (tool.$focusNode) {
-      $link = tool.$focusNode.closest("a", tool.$area);
+    if (editor.$focusNode) {
+      $link = editor.$focusNode.closest("a", editor.$area);
     }
     if ($link && $link.length) {
       return;
     }
-    if (tool.selection && tool.selection.isCollapsed) {
-      tool.insertLink({text: ""});
+    if (editor.selection && editor.selection.isCollapsed) {
+      editor.insertLink({text: ""});
     } else {
-      tool.insertLink();
+      editor.insertLink();
     }
   });
 
@@ -918,7 +919,7 @@ Write.prototype.initLinks = function () {
       $link.replaceWith(function () {
         return $(this).html();
       });
-      tool.trackSelection();
+      editor.trackSelection();
     }
     $dialog.hide();
   });
@@ -927,7 +928,7 @@ Write.prototype.initLinks = function () {
     e.preventDefault();
     var $link = $dialog.data("link");
     if (!$link.data("new")) {
-      tool.saveState();
+      editor.saveState();
     }
     $link.text($textInput.val());
     $link.attr("href", $urlInput.val());
@@ -938,10 +939,10 @@ Write.prototype.initLinks = function () {
     e.preventDefault();
     var $link = $dialog.data("link");
     if (!$link.data("new")) {
-      tool.saveState();
+      editor.saveState();
     }
     $link.remove();
-    tool.trackSelection();
+    editor.trackSelection();
     $dialog.hide();
   });
 
@@ -965,8 +966,8 @@ Write.prototype.initLinks = function () {
 
 };
 
-Write.prototype.initColorButtons = function () {
-  var tool = this;
+WriteStep.prototype.initColorButtons = function () {
+  var editor = this;
   var $toolbar = this.$toolbar;
   var $selectors = $toolbar.find("div.color-selector");
   $selectors.find("a.button").click(function (e) {
@@ -995,7 +996,7 @@ Write.prototype.initColorButtons = function () {
     e.stopPropagation();
     var $this = $(this);
     var i, applier;
-    tool.saveState();
+    editor.saveState();
 
     var classNames = $this.attr("class");
     var classes = {};
@@ -1013,7 +1014,7 @@ Write.prototype.initColorButtons = function () {
       }
     }
 
-    // TODO: initialize and save CssclassAppliers on tool initialization and re-use them here
+    // TODO: initialize and save CssclassAppliers on editor initialization and re-use them here
 
     // Remove existing colors
     for (i = 1; i < 6; i++) {
@@ -1031,12 +1032,12 @@ Write.prototype.initColorButtons = function () {
   });
 };
 
-Write.prototype.initFigure = function ($figure) {
+WriteStep.prototype.initFigure = function ($figure) {
   $figure.attr("contenteditable", "false");
 };
 
-Write.prototype.initDND = function() {
-  var tool = this;
+WriteStep.prototype.initDND = function() {
+  var editor = this;
   this.$area.sortable({
     handle: this.$area.find("figure:not(.inline)"),
     distance: 15,
@@ -1046,17 +1047,17 @@ Write.prototype.initDND = function() {
     tolerance: "pointer",
     delay: 300,
     update: function() {
-      tool.ensureTextInput();
+      editor.ensureTextInput();
     }
   });
 };
 
 
-Write.prototype.updateDND = function() {
+WriteStep.prototype.updateDND = function() {
   this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline)"));
 };
 
-//Write.prototype.initImageResize = function($img) {
+//WriteStep.prototype.initImageResize = function($img) {
 //  $img.load(function() {
 //    $(this).resizable({
 //      aspectRatio: true,
@@ -1073,7 +1074,7 @@ Write.prototype.updateDND = function() {
 //  });
 //};
 
-Write.prototype.loadEmbed = function ($figure) {
+WriteStep.prototype.loadEmbed = function ($figure) {
   var url = $figure.data("url");
   $figure.hide();
   if (url) {
@@ -1084,7 +1085,7 @@ Write.prototype.loadEmbed = function ($figure) {
   }
 };
 
-Write.prototype.newOutlineItemMessage = function (level) {
+WriteStep.prototype.newOutlineItemMessage = function (level) {
   var text = "click to add new ";
   if (level === 0) {
     text += "header";
@@ -1094,13 +1095,13 @@ Write.prototype.newOutlineItemMessage = function (level) {
   return "<span>" + text + "</span>";
 };
 
-Write.prototype.updateOutline = function () {
-  var tool = this;
+WriteStep.prototype.updateOutline = function () {
+  var editor = this;
   var prevLevel = 0;
   var $list = $("<ul></ul>").data("level", 0);
   var levels = [];
   this.$area.find("h2,h3").each(function () {
-    var level = tool.HEADER_LEVELS[this.tagName.toLowerCase()];
+    var level = editor.HEADER_LEVELS[this.tagName.toLowerCase()];
     var i;
     if (level > prevLevel) {
       for (i = 0; i < (level - prevLevel); i++) {
@@ -1124,7 +1125,7 @@ Write.prototype.updateOutline = function () {
 
   $list.find("ul").andSelf().each(function () {
     var $this = $(this);
-    $this.append($("<li></li>").addClass("new").html(tool.newOutlineItemMessage($this.data("level"))));
+    $this.append($("<li></li>").addClass("new").html(editor.newOutlineItemMessage($this.data("level"))));
   });
 
   $list.children("li:not(.new)").filter(function () {
@@ -1132,7 +1133,7 @@ Write.prototype.updateOutline = function () {
   });
   $list.after(function () {
     var level = $(this).parent().data("level") + 1;
-    return $("<ul></ul>").data("level", level).append($("<li></li>").addClass("new").html(tool.newOutlineItemMessage(level)));
+    return $("<ul></ul>").data("level", level).append($("<li></li>").addClass("new").html(editor.newOutlineItemMessage(level)));
   });
 
   this.$outline.data("levels", levels);
@@ -1140,23 +1141,23 @@ Write.prototype.updateOutline = function () {
   this.$outline.append($list);
 };
 
-Write.prototype.initOutline = function () {
-  var tool = this;
+WriteStep.prototype.initOutline = function () {
+  var editor = this;
   this.updateOutline();
 
   function trackChanges() {
     // Update only if the structure of headers has changed
     var areaLevels = [];
-    tool.$area.find("h2,h3").each(function () {
-      areaLevels.push(tool.HEADER_LEVELS[this.tagName.toLowerCase()]);
+    editor.$area.find("h2,h3").each(function () {
+      areaLevels.push(editor.HEADER_LEVELS[this.tagName.toLowerCase()]);
     });
-    var outlineLevels = tool.$outline.data("levels");
+    var outlineLevels = editor.$outline.data("levels");
     if (areaLevels.length != outlineLevels.length) {
-      tool.updateOutline();
+      editor.updateOutline();
     } else {
       for (var i = 0; i < areaLevels.length; i++) {
         if (areaLevels[i] != outlineLevels[i]) {
-          tool.updateOutline();
+          editor.updateOutline();
           break;
         }
       }
@@ -1166,24 +1167,24 @@ Write.prototype.initOutline = function () {
 
   setTimeout(trackChanges, 1000);
 
-  tool.$outline.delegate("li.new span", "click", function () {
+  editor.$outline.delegate("li.new span", "click", function () {
     var $li = $(this).parent();
     $li.empty();
 
     function reset() {
-      $li.html(tool.newOutlineItemMessage($li.parent().data("level")));
+      $li.html(editor.newOutlineItemMessage($li.parent().data("level")));
     }
 
     var $input = $('<input type="text" value="">').appendTo($li);
     $input.keydown(function (e) {
       var text;
-      if (e.which === tool.BACKSPACE) {
+      if (e.which === editor.BACKSPACE) {
         text = $input.val();
         if (text === "") {
           e.preventDefault();
           reset();
         }
-      } else if (e.which === tool.ENTER) {
+      } else if (e.which === editor.ENTER) {
         e.preventDefault();
         var level = $li.parent().data("level");
         text = $.trim($input.val());
@@ -1193,24 +1194,24 @@ Write.prototype.initOutline = function () {
         }
         var $newLi = $("<li></li>").text(text).insertBefore($li);
         if (level === 0) {
-          $newLi.after($("<ul></ul>").data("level", level).append($("<li></li>").addClass("new").html(tool.newOutlineItemMessage(level + 1))));
+          $newLi.after($("<ul></ul>").data("level", level).append($("<li></li>").addClass("new").html(editor.newOutlineItemMessage(level + 1))));
         }
         var headerType;
-        for (var t in tool.HEADER_LEVELS) {
-          if (tool.HEADER_LEVELS[t] === level) {
+        for (var t in editor.HEADER_LEVELS) {
+          if (editor.HEADER_LEVELS[t] === level) {
             headerType = t;
             break;
           }
         }
-        tool.saveState();
+        editor.saveState();
         var $header = $("<" + headerType + ">").text(text).data("outline", $newLi);
         $newLi.data("header", $header);
-        var $lis = tool.$outline.find("li:not(.new)");
+        var $lis = editor.$outline.find("li:not(.new)");
         var nextHeaderIndex = $lis.index($newLi[0]) + 1;
         if (nextHeaderIndex < $lis.length) {
           $header.insertBefore($($lis[nextHeaderIndex]).data("header"));
         } else {
-          tool.$area.append($header);
+          editor.$area.append($header);
         }
         $header.after($("<p><br/></p>"));
       }
@@ -1220,30 +1221,30 @@ Write.prototype.initOutline = function () {
 
 };
 
-Write.prototype.initReferences = function () {
+WriteStep.prototype.initReferences = function () {
   this.updateReferences();
 
-  var tool = this;
+  var editor = this;
   this.$toolbarButtons.filter(".reference").click(function (e) {
     e.preventDefault();
-    var selection = tool.selection;
+    var selection = editor.selection;
     if (!selection) {
       return;
     }
     if (!selection.isCollapsed) {
       selection.collapse(false);
-      tool.trackSelection();
+      editor.trackSelection();
     }
 
-    tool.saveState();
+    editor.saveState();
 
-    tool.execCommand("createLink", "#new-reference");
-    var $reference = tool.$area.find("a[href='#new-reference']");
+    editor.execCommand("createLink", "#new-reference");
+    var $reference = editor.$area.find("a[href='#new-reference']");
     $reference.addClass("reference");
     $reference.attr("contenteditable", "false");
     $reference.attr("data-text", "");
     $reference.data("new", true);
-    tool.updateReferences();
+    editor.updateReferences();
     $reference.click();
   });
 
@@ -1263,11 +1264,11 @@ Write.prototype.initReferences = function () {
     var text = $.trim($dialog.find("textarea").val());
     if (text !== $reference.data("text")) {
       if (!$reference.data("new")) {
-        tool.saveState();
+        editor.saveState();
       }
       $reference.attr("data-text", text);
       $reference.data("text", text);
-      tool.updateReferences();
+      editor.updateReferences();
     }
     $reference.data("new", false);
     $dialog.hide();
@@ -1276,11 +1277,11 @@ Write.prototype.initReferences = function () {
   $dialog.find("a.remove").click(function () {
     var $reference = $dialog.data("reference");
     if (!$reference.data("new")) {
-      tool.saveState();
+      editor.saveState();
     }
     $reference.remove();
-    tool.trackSelection();
-    tool.updateReferences();
+    editor.trackSelection();
+    editor.updateReferences();
     $dialog.hide();
   });
 
@@ -1314,8 +1315,8 @@ Write.prototype.initReferences = function () {
 
   function trackChanges() {
     // Update only if the number of references has changed
-    if (tool.$area.find("a.reference").length !== tool.$footnotes.children("div.footnote").length) {
-      tool.updateReferences();
+    if (editor.$area.find("a.reference").length !== editor.$footnotes.children("div.footnote").length) {
+      editor.updateReferences();
     }
     setTimeout(trackChanges, 1000);
   }
@@ -1323,7 +1324,7 @@ Write.prototype.initReferences = function () {
 
 };
 
-Write.prototype.updateReferences = function () {
+WriteStep.prototype.updateReferences = function () {
   var $footnotes = this.$footnotes.empty();
   this.$area.find("a.reference").each(function (i) {
     var $this = $(this);
@@ -1338,11 +1339,11 @@ Write.prototype.updateReferences = function () {
   });
 };
 
-Write.prototype.removeSelectionMarkers = function () {
+WriteStep.prototype.removeSelectionMarkers = function () {
   this.$area.find("span.rangySelectionBoundary").remove();
 };
 
-Write.prototype.saveState = function () {
+WriteStep.prototype.saveState = function () {
   if (!this.shouldSaveState) {
     return;
   }
@@ -1356,7 +1357,7 @@ Write.prototype.saveState = function () {
   this.disableRedo();
 };
 
-Write.prototype.undo = function () {
+WriteStep.prototype.undo = function () {
   var historyLength = this.undoHistory.length;
   if (this.undoDisabled || this.undoDepth >= historyLength) {
     return;
@@ -1384,7 +1385,7 @@ Write.prototype.undo = function () {
 
 };
 
-Write.prototype.redo = function () {
+WriteStep.prototype.redo = function () {
   var historyLength = this.undoHistory.length;
   if (this.redoDisabled || this.undoDepth === 0) {
     return;
@@ -1415,36 +1416,36 @@ Write.prototype.redo = function () {
 
 };
 
-Write.prototype.disableUndo = function () {
+WriteStep.prototype.disableUndo = function () {
   this.disableButton("undo");
   this.undoDisabled = true;
 };
 
-Write.prototype.enableUndo = function () {
+WriteStep.prototype.enableUndo = function () {
   this.enableButton("undo");
   this.undoDisabled = false;
 };
 
-Write.prototype.disableRedo = function () {
+WriteStep.prototype.disableRedo = function () {
   this.disableButton("redo");
   this.redoDisabled = true;
 };
 
-Write.prototype.enableRedo = function () {
+WriteStep.prototype.enableRedo = function () {
   this.enableButton("redo");
   this.redoDisabled = false;
 };
 
-Write.prototype.disableButton = function (button) {
+WriteStep.prototype.disableButton = function (button) {
   this.$toolbar.find("." + button).addClass("disabled");
 };
 
-Write.prototype.enableButton = function (button) {
+WriteStep.prototype.enableButton = function (button) {
   this.$toolbar.find("." + button).removeClass("disabled");
 };
 
-function MediaDialog(tool) {
-  this.tool = tool;
+function MediaDialog(editor) {
+  this.editor = editor;
   this.displayed = false;
   this.$dialog = $("#media-dialog");
   this.$steps = this.$dialog.find("div.step");
@@ -1458,7 +1459,7 @@ function MediaDialog(tool) {
   };
 
   var dialog = this;
-  tool.$toolbar.find("a.media").click(function (e) {
+  editor.$toolbar.find("a.media").click(function (e) {
     e.preventDefault();
     if (dialog.displayed) {
       dialog.hide();
@@ -1606,7 +1607,7 @@ MediaDialog.ImageStep = function (dialog) {
   this.imageURL = null;
   this.originalURL = null;
 
-  var tool = dialog.tool;
+  var editor = dialog.editor;
   var step = this;
 
   var $selector = this.$selector = $step.find("div.head a");
@@ -1660,15 +1661,15 @@ MediaDialog.ImageStep = function (dialog) {
       $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL)).append($caption);
     }
 
-    tool.saveState();
-    if (tool.$focusBlock) {
-      $figure.insertAfter(tool.$focusBlock);
+    editor.saveState();
+    if (editor.$focusBlock) {
+      $figure.insertAfter(editor.$focusBlock);
     } else {
-      tool.$area.append($figure);
+      editor.$area.append($figure);
     }
-    tool.initFigure($figure);
-    tool.ensureTextInput();
-    tool.updateDND();
+    editor.initFigure($figure);
+    editor.ensureTextInput();
+    editor.updateDND();
     dialog.hide();
   });
 
@@ -1698,12 +1699,12 @@ MediaDialog.VideoStep = function (dialog) {
   var $input = this.$input = $step.find("input:text");
   var $textarea = this.$textarea = $step.find("textarea");
 
-  var tool = dialog.tool;
+  var editor = dialog.editor;
 
   $step.find("a.submit").click(function (e) {
     e.preventDefault();
     oer.status_message.clear();
-    tool.saveState();
+    editor.saveState();
 
     var description = $.trim($textarea.val());
     var title = $.trim($input.val());
@@ -1717,15 +1718,15 @@ MediaDialog.VideoStep = function (dialog) {
 
     var $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
 
-    if (tool.$focusBlock) {
-      $figure.insertAfter(tool.$focusBlock);
+    if (editor.$focusBlock) {
+      $figure.insertAfter(editor.$focusBlock);
     } else {
-      tool.$area.append($figure);
+      editor.$area.append($figure);
     }
-    tool.loadEmbed($figure);
-    tool.initFigure($figure);
-    tool.ensureTextInput();
-    tool.updateDND();
+    editor.loadEmbed($figure);
+    editor.initFigure($figure);
+    editor.ensureTextInput();
+    editor.updateDND();
     dialog.hide();
   });
 };
@@ -1749,7 +1750,7 @@ MediaDialog.DocumentStep = function (dialog) {
   var $input = this.$input = $step.find("input:text");
   var $selector = this.$selector = $step.find("input:radio");
 
-  var tool = dialog.tool;
+  var editor = dialog.editor;
 
   $step.find("a.submit").click(function (e) {
     e.preventDefault();
@@ -1761,31 +1762,31 @@ MediaDialog.DocumentStep = function (dialog) {
       oer.status_message.error("Please enter the title of this document.");
       return;
     }
-    tool.saveState();
+    editor.saveState();
     var $figure = $("<figure></figure>").addClass("download").text("Download: ");
     $figure.append($('<a target="_blank"></a>').attr("href", $step.data("url")).append("<strong></strong>").text(caption));
     if (type === "link") {
-      if (tool.$focusBlock && tool.range) {
+      if (editor.$focusBlock && editor.range) {
         if (this.$focusBlock.is("p")) {
-          tool.range.collapse(false);
-          tool.range.insertNode($figure.get(0));
-          tool.trackSelection();
+          editor.range.collapse(false);
+          editor.range.insertNode($figure.get(0));
+          editor.trackSelection();
         } else {
           $("<p></p>").append($figure).insertAfter(this.$focusBlock);
         }
       } else {
-        $("<p></p>").append($figure).appendTo(tool.$area);
+        $("<p></p>").append($figure).appendTo(editor.$area);
       }
     } else {
-      if (tool.$focusBlock) {
-        $figure.insertAfter(tool.$focusBlock);
+      if (editor.$focusBlock) {
+        $figure.insertAfter(editor.$focusBlock);
       } else {
-        tool.$area.append($figure);
+        editor.$area.append($figure);
       }
     }
-    tool.initFigure($figure);
-    tool.ensureTextInput();
-    tool.updateDND();
+    editor.initFigure($figure);
+    editor.ensureTextInput();
+    editor.updateDND();
     dialog.hide();
   });
 };

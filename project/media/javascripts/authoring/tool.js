@@ -1,12 +1,12 @@
 (function() {
-  var Slider,
+  var Slider, Tool, UserMenu,
     __indexOf = Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Slider = (function() {
 
-    function Slider(slider) {
+    function Slider() {
       var _this = this;
-      this.slider = slider;
+      this.slider = $("#slider");
       this.slides = this.slider.children(".slide");
       this.slides.css({
         float: "left",
@@ -110,19 +110,40 @@
 
   })();
 
-  (function($) {
-    return $.fn.authoringToolSlider = function(action, arg) {
-      return this.each(function() {
-        var $this, slider;
-        $this = $(this);
-        slider = $this.data("authoring-tool-slider");
-        if (!slider) {
-          slider = new Slider($this);
-          $this.data("authoring-tool-slider", slider);
-        }
-        if (action) return slider[action](arg);
+  UserMenu = (function() {
+
+    function UserMenu() {
+      var _this = this;
+      this.menu = $("#user-menu");
+      this.toggle = this.menu.find("a.toggle");
+      this.toggle.click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return _this.menu.toggleClass("opened");
       });
-    };
-  })(jQuery);
+      $(document).click(function() {
+        return _this.menu.removeClass("opened");
+      });
+    }
+
+    return UserMenu;
+
+  })();
+
+  Tool = (function() {
+
+    function Tool() {
+      this.slider = new Slider();
+      this.userMenu = new UserMenu();
+      this.writeStep = new WriteStep(this);
+      this.describeStep = new DescribeStep(this);
+      this.submitStep = new SubmitStep(this);
+    }
+
+    return Tool;
+
+  })();
+
+  window.AuthoringTool = Tool;
 
 }).call(this);

@@ -1,7 +1,7 @@
-
 class Slider
 
-  constructor: (@slider) ->
+  constructor: ->
+    @slider = $("#slider")
     @slides = @slider.children(".slide")
     @slides.css({
       float: "left",
@@ -96,17 +96,30 @@ class Slider
       height: e["#{a}Height"]
     return viewport
 
-(($)->
 
-  $.fn.authoringToolSlider = (action, arg)->
-    @.each(->
-      $this = $(@)
-      slider = $this.data("authoring-tool-slider")
-      if not slider
-        slider = new Slider($this)
-        $this.data("authoring-tool-slider", slider)
-      if action
-        slider[action](arg)
+# TODO: user bootstrap dropdown for this
+class UserMenu
+
+  constructor: ->
+    @menu = $("#user-menu")
+    @toggle = @menu.find("a.toggle")
+    @toggle.click((e)=>
+      e.preventDefault()
+      e.stopPropagation()
+      @menu.toggleClass("opened")
+    )
+    $(document).click(=>
+      @menu.removeClass("opened")
     )
 
-)(jQuery)
+
+class Tool
+  constructor:->
+    @slider = new Slider()
+    @userMenu = new UserMenu()
+    @writeStep = new WriteStep(@)
+    @describeStep = new DescribeStep(@)
+    @submitStep = new SubmitStep(@)
+
+
+window.AuthoringTool = Tool

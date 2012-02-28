@@ -18,5 +18,4 @@ class Edit(EditMaterialViewMixin, TemplateView):
         data["write_form"] = WriteForm(instance=self.object)
         data["describe_form"] = DescribeForm(instance=self.object)
         data["submit_form"] = SubmitForm(instance=self.object)
-        data["hide_global_tabs"] = True
         return data

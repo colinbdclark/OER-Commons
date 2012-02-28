@@ -14,6 +14,15 @@
 
 {% block layout %}
   <div class="authoring-head">
+    <a href="{% url frontpage %}" class="logo">OER Commons</a>
+    <div id="user-menu">
+      <a href="#" class="toggle">{{ request.user.get_full_name }}</a>
+      <ul>
+        <li><a href="{% url myitems:myitems %}">My Items</a></li>
+        <li><a href="{% url authoring:new %}">New OER</a></li>
+        <li><a href="{% url users:logout %}">Log Out</a></li>
+      </ul>
+    </div>
     <div class="step-icons">
       <a href="#step-write" class="write active"></a>
       <a href="#step-describe" class="describe"></a>
@@ -89,16 +98,13 @@
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.linkify.js"></script>
-  <script src="{{ STATIC_URL }}javascripts/authoring/slider.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/write.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/describe.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/submit.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/tool.js"></script>
   <script>
     $(function(e) {
-      $("#slider").authoringToolSlider();
-      new Write();
-      new Describe();
-      new Submit();
+      new AuthoringTool();
     });
   </script>
 {% endblock %}
