@@ -14,33 +14,36 @@
     {% include "myitems/include/user-info.html" %}
 
     {% if items %}
-        <div class="materials-index collapsibles">
-            {% block top-navigation %}{% endblock %}
-
-            {% block top-hint %}{% endblock %}
+        <div class="materials-index">
+            <form id="folder-item-form" class="hidden">
+                <input type="text" />
+                <a class="dashed" href="#">Submit</a>
+            </form>
 
             {% for item in items %}
-              {%  block item %}
-                <article class="item clearfix {% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
-                    <h1>
-                        <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
-                    </h1>
-                    <ul class="folder-list">
-                        {% for folder in item.folders %}
-                            <li data-folder-id="{{ folder.id }}">{{ folder.name }}</li>
-                        {% endfor %}
-                        <li class="last">
-                            <a href="#">Add</a>
-                            <input type="text" />
-                        </li>
-                    </ul>
+                <article class="item clearfix{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
+                    <div class="right">
+                        {{ item.relation_to_user|upper }}
+                    </div>
+                    <div class="details">
+                        <h1>
+                            <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
+                        </h1>
+                        <ul class="folder-list">
+                            {% for folder in item.folders %}
+                                <li data-folder-id="{{ folder.id }}">{{ folder.name }} <a href="#" class="delete">Delete</a></li>
+                            {% endfor %}
+                            <li class="last">
+                                <a class="dashed" href="#">Add</a>
+                            </li>
+                        </ul>
+                    </div>
                 </article>
-              {% endblock %}
             {% endfor %}
 
-            {% block bottom-navigation %}{% endblock %}
-
-            {% block bottom-hint %}{% endblock %}
+            {% with "bottom" as class %}
+                {% include "myitems/include/index-navigation.html" %}
+            {% endwith %}
         </div>
 
     {% else %}

@@ -2,15 +2,75 @@ oer.myitems = {};
 oer.myitems.index = {};
 
 oer.myitems.init = function() {
-    $.template("folder", '<li><a href="/my/folder/${slug}">${name} (${number})</a> <a href="#" class="delete" data-folder-id="${id}">Delete</a></li>');
-    $.template("item-folder", '<li data-folder-id="${id}">${name}</li>');
-
-    oer.myitems.init_folder_form();
     oer.myitems.index.init();
 
-    var addItemURL = "/my/folder-add-item/";
 
-    var get_folders = function(request, callback) {
+    $.template("myitems:folder",
+        '<li class="folder" data-folder-id="${id}"><a href="${url}"><span class="name">${name}</span> (<span class="number">${number}</span>)</a> <a href="#" class="delete">Delete</a></li>');
+    $.template("myitems:item-folder", '<li data-folder-id="${id}">${name} <a href="#" class="delete">Delete</a></li>');
+
+    var addItemUrl = django_js_utils.urls.resolve('myitems:folder_add_item');
+    var deleteUrl = django_js_utils.urls.resolve('myitems:folder_delete');
+    var deleteItemFolderUrl = django_js_utils.urls.resolve('myitems:folder_delete_item');
+
+    var addFolderDeleteConfirmation = function ($addTo) {
+        $addTo.inlineConfirmation({
+            confirmCallback: function(action) {
+                var $folder = action.parent();
+                var folderId = $folder.data("folder-id");
+                var $itemFolders = $("article ul.folder-list li[data-folder-id='"+folderId+"']");
+                $.post(deleteUrl, {id: folderId}, function(response) {
+                    if (response.status === "success") {
+                        $folder.remove();
+                        $itemFolders.remove();
+                    } else {
+                        $folder.show();
+                        $itemFolders.show();
+                    }
+                });
+                $folder.fadeOut();
+                $itemFolders.fadeOut();
+            }
+        });
+    };
+
+
+    var addItemFolderDeleteConfirmation = function ($addTo) {
+        $addTo.inlineConfirmation({
+            confirmCallback: function(action) {
+                var $itemFolder = action.parent();
+                var folderId = $itemFolder.data("folder-id");
+                var itemId = $itemFolder.closest("article").data("identifier");
+                var request = { folder_id: folderId, item_id: itemId };
+                var $number = getFolderById(folderId).find("span.number");
+                $.post(deleteItemFolderUrl, request, function(response) {
+                    if (response.status === "success") {
+                        $itemFolder.remove();
+                    } else {
+                        $itemFolder.show();
+                        $number.text($number.text()-0+1);
+                    }
+                });
+                $itemFolder.fadeOut();
+                $number.text($number.text()-0-1);
+            }
+        });
+    };
+
+    var folderElement = function(params) {
+        params.url = django_js_utils.urls.resolve('myitems:folder', {slug: params.slug});
+        var $item = $.tmpl("myitems:folder", params);
+        addFolderDeleteConfirmation($item.find("a.delete"));
+        return $item;
+    };
+
+    var itemFolderElement = function(params) {
+        var $item = $.tmpl("myitems:item-folder", params);
+        addItemFolderDeleteConfirmation($item.find("a.delete"));
+        return $item;
+    };
+
+    var getFolders = function(request, callback) {
         var term = $.trim(request.term);
         var folders = [];
         $("#folder-create-form li.folder span.name").each(function() {
@@ -21,15 +81,20 @@ oer.myitems.init = function() {
         });
         callback(folders);
     };
-    var $inputs = $("article ul.folder-list li.last input");
-    $inputs.autocomplete({
-        source: get_folders
-    });
 
 
+    var $form = $("#folder-create-form");
+    var $button = $("#folder-create-button");
+    var $submit = $("#folder-create-submit");
+    var $folderInput= $form.find("input");
+    var $folderList = $form.find("ul");
+    var $folderLast = $folderList.find("li.last");
+    var $itemFolderAddButton = $("article ul.folder-list li.last a");
+    var $itemFolderForm = $("#folder-item-form");
+    var $itemFolderInput = $itemFolderForm.find("input");
 
     var getFolderByName = function(name) {
-        var $items = $("#folder-create-form li.folder span.name");
+        var $items = $folderList.find("li.folder span.name");
         for(var i = 0; i < $items.length; i++) {
             var $item = $items.eq(i);
             if ($.trim($item.text()) === name) {
@@ -38,84 +103,79 @@ oer.myitems.init = function() {
         }
     };
 
-    $inputs.keypress(function(e) {
-        if (e.which == 13) {
-            var $this = $(this);
-            e.preventDefault();
-            var value = $.trim($this.val());
-            if (value !== "") {
-                var identifier = $this.closest("article").data("identifier");
-
-                var request = {
-                    folder_name: value,
-                    item_id: identifier
-                };
-
-                $.post(addItemURL, request, function(response) {
-                    if (response["status"] === "success") {
-                        var context;
-                        if (response["folder_id"]) {
-                            context = {
-                                name: value,
-                                id: response["folder_id"],
-                                slug: response["folder_slug"],
-                                number: 1
-                            };
-                            var $folderLast = $.find("#folder-create-form li.last");
-                            $.tmpl("folder", context).insertBefore($folderLast);
-                        }
-                        else {
-                            var $folder = getFolderByName(value);
-                            context = {
-                                name: value,
-                                id: $folder.data("identifier")
-                            };
-                            var $number = $folder.find("span.number");
-                            $number.text($number.text()-0+1);
-                        }
-                        $this.parent().before($.tmpl("item-folder", context));
-                    }
-                });
-            }
-            $this.autocomplete("close");
-        }
-    });
-};
-
-oer.myitems.init_folder_form = function() {
-    var $form = $("#folder-create-form");
-    var $button = $("#folder-create-button");
-    var $submit = $("#folder-create-submit");
-    var $folderInput= $form.find("input");
-    var $folderList = $form.find("ul");
-    var $folderLast = $folderList.find("li.last");
-    var deleteUrl = $folderList.data("delete-url");
-
-    var addConfirmation = function () {
-        $folderList.find("a.delete").inlineConfirmation({
-            confirmCallback: function(action) {
-                var $parent = action.parent();
-                $.post(deleteUrl, {id: action.data("folder-id")}, function(response) {
-                    if (response.status === "success") {
-                        $parent.remove();
-                    } else {
-                        $parent.show();
-                    }
-                });
-                $parent.fadeOut();
-            }
-        });
+    var getFolderById = function(id) {
+        return $folderList.find("li.folder[data-folder-id='"+id+"']")
     };
-    addConfirmation();
+
+    $itemFolderAddButton.click(function(e) {
+        $itemFolderInput.autocomplete("enable");
+        $itemFolderForm.next().fadeIn();
+        $itemFolderForm.detach();
+        $(e.target).hide();
+        $itemFolderForm.insertBefore(e.target);
+        $itemFolderForm.fadeIn();
+        e.preventDefault();
+    });
+    $itemFolderForm.find("a").click(function(e) {
+        $itemFolderForm.submit();
+        e.preventDefault();
+    });
+    $itemFolderForm.submit(function(e) {
+        $itemFolderInput.autocomplete("disable");
+        $itemFolderForm.next().fadeIn();
+        $itemFolderForm.hide();
+        var value = $.trim($itemFolderInput.val());
+        if (value !== "") {
+            var identifier = $itemFolderForm.closest("article").data("identifier");
+
+            var request = {
+                folder_name: value,
+                item_id: identifier
+            };
+
+            $.post(addItemUrl, request, function(response) {
+                if (response["status"] === "success") {
+                    var context;
+                    if (response["folder_id"]) {
+                        context = {
+                            name: value,
+                            id: response["folder_id"],
+                            slug: response["folder_slug"],
+                            number: 1
+                        };
+                        var $folderLast = $.find("#folder-create-form li.last");
+                        var $item = folderElement(context);
+                        $item.insertBefore($folderLast);
+                    }
+                    else {
+                        var $folder = getFolderByName(value);
+                        context = {
+                            name: value,
+                            id: $folder.data("folder-id")
+                        };
+                        var $number = $folder.find("span.number");
+                        $number.text($number.text()-0+1);
+                    }
+                    $itemFolderForm.parent().before(itemFolderElement(context));
+                }
+            });
+        }
+        e.preventDefault();
+    });
+
+    addFolderDeleteConfirmation($folderList.find("a.delete"));
+    addItemFolderDeleteConfirmation($("article ul.folder-list li a.delete"));
+
+    $itemFolderInput.autocomplete({
+        source: getFolders
+    });
 
     var onFolderCreation = function(response) {
         if (response["status"] === "success") {
             response["number"] = 0;
-            var $item = $.tmpl("folder", response);
-
+            var $item = folderElement(response);
             $item.hide();
             $item.insertBefore($folderLast);
-            addConfirmation();
             $item.fadeIn();
         }
     };
@@ -126,11 +186,15 @@ oer.myitems.init_folder_form = function() {
         $button.hide();
         e.preventDefault();
     });
-    $submit.click(function(e) {
+    $form.submit(function(e) {
         $.post($form.attr("action"), $form.serialize(), onFolderCreation);
         $folderInput.fadeOut();
         $submit.hide();
         $button.show();
+        e.preventDefault();
+    });
+    $submit.click(function(e) {
+        $form.submit();
         e.preventDefault();
     });
 };

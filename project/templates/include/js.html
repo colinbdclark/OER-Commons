@@ -37,7 +37,10 @@
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/newsletter.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/evaluation-tool.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/global-init.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}django_js_utils/django_js_utils.js"></script>
 {% endcompress %}
+
+<script type="text/javascript" src="{% url jsurls %}"></script>
 
 <!--[if lt IE 9]>
   {% compress js %}

@@ -40,3 +40,9 @@
 .evaluation-results .comment {
   top: -2px;
 }
+
+.portlet.myitems h1 .rocon-bl,
+.portlet.myitems h1 .rocon-br,
+{
+  display: none;
+}

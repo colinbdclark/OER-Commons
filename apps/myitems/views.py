@@ -4,7 +4,6 @@ from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
 from django.views.generic import View
 from django.utils.decorators import method_decorator
-from core.search import reindex
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 
@@ -14,6 +13,7 @@ from materials.views.index import IndexParams, populate_item_from_search_result,
 from savedsearches.models import SavedSearch
 from utils.decorators import login_required
 from annoying.decorators import ajax_request
+from core.search import reindex
 
 from myitems.models import Folder, FolderItem
 
@@ -38,14 +38,26 @@ def myitems_index(request, view_name, page_title, no_items_message,
         query = query
 
     results = query[index_params.batch_start:batch_end]
-    items = [populate_item_from_search_result(result) for result in results]
+    user_id = request.user.id
+    def add_relation(items):
+        for item in items:
+            if item["creator"] == user_id:
+                item["relation_to_user"] = 'created'
+            elif user_id in item["saved_by"]:
+                item["relation_to_user"] = 'saved'
+        return items
+    items = add_relation([populate_item_from_search_result(result) for result in results])
 
     pagination = Pagination(request.path, query_string_params,
                             index_params.batch_start,
                             index_params.batch_size,
                             len(query))
 
-    return direct_to_template(request, template, locals())
+    return direct_to_template(request, template, {
+        'pagination': pagination,
+        'items': items,
+        'index_params': index_params,
+    })
 
 
 @login_required
@@ -150,7 +162,11 @@ class FolderDelete(View):
         except Folder.DoesNotExist:
             pass
         else:
+            items = set(x.content_object for x in folder.folderitem_set.all())
             folder.delete()
+            for item in items:
+                reindex(item)
+
         return { "status": "success" }
 
 
@@ -204,6 +220,29 @@ class FolderAddItem(View):
         if created:
             to_return["folder_id"] = folder.id
             to_return["folder_slug"] = folder.slug
+        return to_return
+
+
+
+class FolderDeleteItem(View):
+    @method_decorator(login_required)
+    @method_decorator(ajax_request)
+    def post(self, request, *args, **kwargs):
+        try:
+            folder_id = request.REQUEST["folder_id"]
+            item_id = request.REQUEST["item_id"]
+        except KeyError:
+            return { "status": "error"}
+
+        folder = Folder.objects.get(
+            user=request.user,
+            id=folder_id
+        )
+        material = get_material_object_or_404(*item_id.split('.'))
+        #FolderItem.objects.get(folder=folder, content_object=material).delete()
+        material.folders.filter(folder=folder).delete()
+        reindex(material)
+        to_return = { "status": "success" }
         return to_return
 
 
