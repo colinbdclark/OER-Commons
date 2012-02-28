@@ -71,11 +71,11 @@ oer.myitems.init = function() {
     };
 
     var getFolders = function(request, callback) {
-        var term = $.trim(request.term);
+        var term = $.trim(request.term).toLowerCase();
         var folders = [];
         $("#folder-create-form li.folder span.name").each(function() {
             var folder = $.trim($(this).text());
-            if (folder.substring(0, term.length) === term) {
+            if (folder.substring(0, term.length).toLowerCase() === term) {
                 folders.push(folder);
             }
         });
