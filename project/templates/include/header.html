@@ -55,7 +55,6 @@
   </div>
 </header>
 
-{% if not hide_global_tabs %}
 <div class="global-tabs fixed-width">
   <div id="global-search-box">
     <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
@@ -66,4 +65,3 @@
   </div>
   {% navigation %}
 </div>
-{% endif %}

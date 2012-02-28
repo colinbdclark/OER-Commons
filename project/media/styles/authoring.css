@@ -54,9 +54,53 @@
   font-family: Myriad, Helvetica, sans-serif; }
 
 .authoring-head {
-  font-family: "Myriad Pro", Helvetica, sans-serif;
+  padding: 10px 30px;
   background-color: #fff;
-  padding: 10px 30px; }
+  font-family: "Myriad Pro", Helvetica, sans-serif; }
+  .authoring-head .logo {
+    display: block;
+    width: 124px;
+    height: 20px;
+    float: left;
+    background: url(../images/authoring/logo.png) no-repeat;
+    text-indent: -9999px;
+    margin-bottom: 10px; }
+  .authoring-head #user-menu {
+    position: relative;
+    float: right;
+    margin-bottom: 10px; }
+    .authoring-head #user-menu a {
+      text-decoration: none; }
+    .authoring-head #user-menu .toggle {
+      display: block;
+      margin: 5px 0;
+      padding-right: 16px;
+      background: url(../images/authoring/icon-user-menu-dropdown.png) 100% 4px no-repeat; }
+    .authoring-head #user-menu ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin: 0;
+      border: 1px solid #CCC;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      -ms-border-radius: 3px;
+      border-radius: 3px;
+      padding: 0;
+      float: right;
+      list-style-type: none;
+      background: #FFF; }
+    .authoring-head #user-menu.opened ul {
+      display: block; }
+    .authoring-head #user-menu li {
+      padding: 7px 15px; }
+      .authoring-head #user-menu li:hover {
+        background-color: #eee; }
+      .authoring-head #user-menu li a {
+        color: #616161; }
+  .authoring-head h1 {
+    clear: left; }
   .authoring-head .actions {
     padding: 0;
     float: left; }
@@ -82,7 +126,8 @@
         background: #989898; }
 
 .step-icons {
-  float: right; }
+  float: right;
+  clear: right; }
   .step-icons a {
     display: inline-block;
     margin-left: 5px;
