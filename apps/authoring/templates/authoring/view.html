@@ -1,10 +1,9 @@
 {% extends "base.html" %}
-{% load scss %}
 
 {% block bodyclass %}authoring view-material{% endblock %}
 
 {% block extra-css %}
-  <link rel="stylesheet" href="{{ STATIC_URL}}{% scss "styles/authoring.scss" %}">
+  <link rel="stylesheet" href="{{ STATIC_URL}}styles/authoring.css">
 {% endblock %}
 
 {% block layout %}
