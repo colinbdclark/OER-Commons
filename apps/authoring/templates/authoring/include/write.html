@@ -75,8 +75,8 @@
             </div>
           </div>
           <div class="right">
-            <label for="id_url">Grab a video, image, audio, or document from the web</label>
-            <input placeholder="http://" type="text" name="url" id="id_url">
+            <label for="id_media_url">Grab a video, image, audio, or document from the web</label>
+            <input placeholder="http://" type="text" name="media_url" id="id_media_url">
             <a href="#submit" class="submit">submit</a>
           </div>
         </div>
@@ -103,8 +103,8 @@
           <div class="left">
           </div>
           <div class="right">
-            <input type="text" placeholder="Image title">
-            <textarea placeholder="What's in this image? Describe it with a few words."></textarea>
+            <input type="text" name="image_title" placeholder="Image title">
+            <textarea name="image_description" placeholder="What's in this image? Describe it with a few words."></textarea>
             <a href="#submit" class="submit">submit</a>
           </div>
         </div>
@@ -116,7 +116,7 @@
 
           </div>
           <div class="right">
-            <input type="text" placeholder="Give this attachment/document a name">
+            <input type="text" name="document_name" placeholder="Give this attachment/document a name">
             <a href="#submit" class="submit">submit</a>
           </div>
         </div>
@@ -127,21 +127,20 @@
           <div class="left">
           </div>
           <div class="right">
-            <input type="text" placeholder="What's in this video? Describe it with a few words.">
+            <input type="text" name="video_description" placeholder="What's in this video? Describe it with a few words.">
             <a href="#submit" class="submit">submit</a>
           </div>
         </div>
       </div>
     </div>
 
-    <form id="write-form" action="{% url authoring:write pk=object.material.pk %}" method="post" class="authoring-form">
-      <div id="editor-area" class="authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
-        {{ object.text|safe }}
-      </div>
-      <div class="preview authored-content hidden"></div>
-      <div id="footnotes"></div>
-      {{ form.text }}
-    </form>
+    <div id="editor-area" class="authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
+      {{ object.text|safe }}
+    </div>
+    <div class="preview authored-content hidden"></div>
+    <div id="footnotes"></div>
+    {{ form.text }}
+
   </div>
 
   {% spaceless %}

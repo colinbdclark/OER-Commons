@@ -71,7 +71,6 @@ var WriteStep = function (tool) {
   this.CTRL = 17;
   this.CMD = 91;
 
-  this.$form = $("#write-form");
   this.$toolbar = $("#write-toolbar");
   this.$toolbarButtons = this.$toolbar.find("a.button");
   this.$area = $("#editor-area");
@@ -239,66 +238,10 @@ var WriteStep = function (tool) {
     });
   })();
 
-  // Save, Cancel actions
-  (function () {
-    var $titleInput = $("#id_title");
-    var $textInput = $("#id_text");
-    var $preview = editor.$form.find("div.preview");
-    var $actions = $("div.authoring-head div.actions a");
-    $actions.click(function (e) {
-      e.preventDefault();
-      var $this = $(this);
-      var href = $this.attr("href");
-      switch (href) {
-        case "#save":
-          editor.cleanHTML();
-          var html = editor.cleanHtmlPreSave(editor.$area.html());
-          $textInput.val(html);
-          oer.status_message.clear();
-          var data = {
-            title: $titleInput.val(),
-            text: $textInput.val()
-          };
-          $.post(editor.$form.attr("action"), data, function (response) {
-            if (response.status === "success") {
-              oer.status_message.success(response.message, true);
-            } else {
-              oer.status_message.error(response.message, false);
-            }
-          });
-          break;
-        case "#preview":
-          // TODO: disable table of contents
-          $preview.html(editor.$area.html());
-          editor.$toolbar.hide();
-          editor.$area.hide();
-          $preview.show();
-          $actions.filter(".edit").removeClass("hidden");
-          $this.addClass("hidden");
-          break;
-        case "#edit":
-          // TODO: re-enable table of contents
-          $preview.hide();
-          editor.$toolbar.show();
-          editor.$area.show();
-          $actions.filter(".preview").removeClass("hidden");
-          $this.addClass("hidden");
-          break;
-        default:
-          break;
-      }
-    });
-  })();
-
   var $step = $("#step-write");
   $step.find("div.buttons a").click(function(e) {
     e.preventDefault();
     tool.slider.slideTo($(this).attr("href"));
-  });
-
-  // TODO: this should be done when publish button is pressed on the last step
-  this.$form.submit(function() {
-    $("#id_text").val(editor.cleanHtmlPreSave(editor.$area.html()));
   });
 
 };
@@ -400,6 +343,11 @@ WriteStep.prototype.cleanHtmlPreSave = function (html) {
   var $document = $("<div></div>").html(html);
   $document.find("[contenteditable]").removeAttr("contenteditable");
   return $document.html();
+};
+
+WriteStep.prototype.preSave = function() {
+  this.cleanHTML();
+  $("#id_text").val(this.cleanHtmlPreSave(this.$area.html()));
 };
 
 // Ensure that we always have a text block at the end of editor area

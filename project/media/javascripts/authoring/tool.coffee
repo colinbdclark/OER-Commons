@@ -59,7 +59,7 @@ class Slider
     )
     return
 
-  slideTo: (to) ->
+  slideTo: (to, animate=true) ->
     slide = @slides.filter(to)
     if not slide.length
       return
@@ -75,13 +75,19 @@ class Slider
 
 
     button = @buttons.filter("[href='#{to}']")
-    button.addClass("active")
-    @slider.animate(
-      left: prefix + (delta * @width)
-    =>
-      @buttons.not(button).removeClass("active")
-    )
-
+    if animate
+      button.addClass("active")
+      @slider.animate(
+        left: prefix + (delta * @width)
+      =>
+        @buttons.not(button).removeClass("active")
+      )
+    else
+      @buttons.removeClass("active")
+      button.addClass("active")
+      @slider.css(
+        left: prefix + (delta * @width)
+      )
     @current = index
 
   viewport: ->
@@ -115,11 +121,45 @@ class UserMenu
 
 class Tool
   constructor:->
+    @form = $("form.authoring-form")
     @slider = new Slider()
     @userMenu = new UserMenu()
     @writeStep = new WriteStep(@)
     @describeStep = new DescribeStep(@)
     @submitStep = new SubmitStep(@)
+
+    saveBtn = $("div.authoring-head div.actions a.save")
+    saveBtn.click((e)=>
+      e.preventDefault()
+      @.save()
+    )
+
+    publishBtn = $("#step-submit div.buttons a.next")
+    publishBtn.click((e)=>
+      e.preventDefault()
+      @.publish()
+    )
+
+    errors =  $("label.error")
+    if errors.length
+      errorSlide = errors.first().closest("div.slide")
+      @slider.slideTo("#" + errorSlide.attr("id"), false)
+
+  save:->
+    @writeStep.preSave()
+    oer.status_message.clear()
+    $.post(@form.attr("action"), @form.serialize(), (response)=>
+      if response.status == "success"
+        oer.status_message.success(response.message, true)
+      else
+        oer.status_message.error(response.message, false)
+    )
+    return
+
+  publish:->
+    @writeStep.preSave()
+    @form.submit()
+    return
 
 
 window.AuthoringTool = Tool

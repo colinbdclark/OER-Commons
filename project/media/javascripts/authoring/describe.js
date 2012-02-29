@@ -1,13 +1,13 @@
 var DescribeStep = function (tool) {
   this.tool = tool;
-  this.$form = $("#describe-form");
+  this.$step = $("#step-describe");
 
-  this.$form.find("#id_learning_goals").tagit({
+  this.$step.find("#id_learning_goals").tagit({
     allowSpaces: true,
     placeholderText: "Enter new learning goal"
   });
 
-  this.$form.find("#id_keywords").tagit({
+  this.$step.find("#id_keywords").tagit({
     allowSpaces: true,
     placeholderText: "Enter new keyword"
   });

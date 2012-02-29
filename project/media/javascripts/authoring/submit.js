@@ -1,9 +1,9 @@
 var SubmitStep = function (tool) {
 
-  this.$form = $("#submit-form");
+  this.$step = $("#step-submit");
 
   var $currentLicense = $("div.current-license");
-  var $licenseWidget = this.$form.find("div.license-widget");
+  var $licenseWidget = this.$step.find("div.license-widget");
 
   var currentURL = $licenseWidget.find(":hidden[name$='_url']").val();
   var currentName = $licenseWidget.find(":hidden[name$='_name']").val();
