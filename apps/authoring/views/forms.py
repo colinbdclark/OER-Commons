@@ -119,11 +119,11 @@ class LicenseField(forms.Field):
         return dict(url=value, name=name)
 
     def to_python(self, value):
-        if value:
-            if not CC_LICENSE_URL_RE.match(value):
-                raise forms.ValidationError(self.default_error_messages["invalid"])
-            value = dict(url=value, name=License.objects.get_cc_license_name_from_url(value))
-        return value
+        if not value:
+            return None
+        if not CC_LICENSE_URL_RE.match(value):
+            raise forms.ValidationError(self.default_error_messages["invalid"])
+        return dict(url=value, name=License.objects.get_cc_license_name_from_url(value))
 
 
 class EditForm(forms.ModelForm):
