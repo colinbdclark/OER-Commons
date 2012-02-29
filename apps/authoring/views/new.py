@@ -13,4 +13,4 @@ class New(View):
             author=request.user,
             is_new=True
         )
-        return redirect("authoring:write", pk=material.pk)
+        return redirect("authoring:edit", pk=material.pk)
