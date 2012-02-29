@@ -74,6 +74,10 @@ class AuthoredMaterial(AbstractAuthoredMaterial):
         draft.delete()
         return material
 
+    @models.permalink
+    def get_absolute_url(self):
+        return "authoring:view", [], dict(pk=self.pk)
+
 
 def upload_to(prefix):
     def func(instance, filename):

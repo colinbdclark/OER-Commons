@@ -66,9 +66,10 @@
       });
     };
 
-    Slider.prototype.slideTo = function(to) {
+    Slider.prototype.slideTo = function(to, animate) {
       var button, delta, index, prefix, slide,
         _this = this;
+      if (animate == null) animate = true;
       slide = this.slides.filter(to);
       if (!slide.length) return;
       index = this.slides.index(slide);
@@ -81,12 +82,20 @@
         prefix = "-=";
       }
       button = this.buttons.filter("[href='" + to + "']");
-      button.addClass("active");
-      this.slider.animate({
-        left: prefix + (delta * this.width)
-      }, function() {
-        return _this.buttons.not(button).removeClass("active");
-      });
+      if (animate) {
+        button.addClass("active");
+        this.slider.animate({
+          left: prefix + (delta * this.width)
+        }, function() {
+          return _this.buttons.not(button).removeClass("active");
+        });
+      } else {
+        this.buttons.removeClass("active");
+        button.addClass("active");
+        this.slider.css({
+          left: prefix + (delta * this.width)
+        });
+      }
       return this.current = index;
     };
 
@@ -133,12 +142,48 @@
   Tool = (function() {
 
     function Tool() {
+      var errorSlide, errors, publishBtn, saveBtn,
+        _this = this;
+      this.form = $("form.authoring-form");
       this.slider = new Slider();
       this.userMenu = new UserMenu();
       this.writeStep = new WriteStep(this);
       this.describeStep = new DescribeStep(this);
       this.submitStep = new SubmitStep(this);
+      saveBtn = $("div.authoring-head div.actions a.save");
+      saveBtn.click(function(e) {
+        e.preventDefault();
+        return _this.save();
+      });
+      publishBtn = $("#step-submit div.buttons a.next");
+      publishBtn.click(function(e) {
+        e.preventDefault();
+        return _this.publish();
+      });
+      errors = $("label.error");
+      if (errors.length) {
+        errorSlide = errors.first().closest("div.slide");
+        this.slider.slideTo("#" + errorSlide.attr("id"), false);
+      }
     }
+
+    Tool.prototype.save = function() {
+      var _this = this;
+      this.writeStep.preSave();
+      oer.status_message.clear();
+      $.post(this.form.attr("action"), this.form.serialize(), function(response) {
+        if (response.status === "success") {
+          return oer.status_message.success(response.message, true);
+        } else {
+          return oer.status_message.error(response.message, false);
+        }
+      });
+    };
+
+    Tool.prototype.publish = function() {
+      this.writeStep.preSave();
+      this.form.submit();
+    };
 
     return Tool;
 

@@ -1,21 +1,45 @@
+from annoying.decorators import JsonResponse
+from authoring.models import AuthoredMaterial
 from authoring.views import EditMaterialViewMixin
-from authoring.views.describe import DescribeForm
-from authoring.views.submit import SubmitForm
-from authoring.views.write import WriteForm
-from django.views.generic import TemplateView
+from authoring.views.forms import EditForm
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.views.generic import UpdateView
 
 
-class Edit(EditMaterialViewMixin, TemplateView):
+class Edit(EditMaterialViewMixin, UpdateView):
 
+    form_class = EditForm
     template_name = "authoring/edit.html"
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(Edit, self).get(request, *args, **kwargs)
+    def get_form_kwargs(self):
+        kwargs = super(Edit, self).get_form_kwargs()
+        if self.request.is_ajax():
+            kwargs["not_required"] = True
+        return kwargs
 
-    def get_context_data(self, **kwargs):
-        data = super(Edit, self).get_context_data(**kwargs)
-        data["write_form"] = WriteForm(instance=self.object)
-        data["describe_form"] = DescribeForm(instance=self.object)
-        data["submit_form"] = SubmitForm(instance=self.object)
-        return data
+    def form_valid(self, form):
+        self.object = form.save()
+        if self.request.is_ajax():
+            return JsonResponse(dict(
+                status="success",
+                message=u"Saved."
+            ))
+        material = AuthoredMaterial.publish_draft(self.object)
+        return redirect(material.get_absolute_url())
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            errors = {}
+            for field, errors_list in form.errors.items():
+                errors[field] = u"<br>".join(errors_list)
+            return JsonResponse(dict(
+                status="error",
+                message=u"Please correct the indicated errors.",
+                errors=errors,
+            ))
+        if "title" in form.errors:
+            messages.error(self.request, u"Please enter a title.")
+        else:
+            messages.error(self.request, u"Please correct the indicated errors.",)
+        return super(Edit, self).form_invalid(form)
