@@ -34,7 +34,7 @@ class AuthoredMaterialAdmin(admin.ModelAdmin):
 
     def editor(self):
         #noinspection PyUnresolvedReferences
-        return """<a href="%s" target="_blank">Open in editor</a>""" % reverse("authoring:write", kwargs=dict(pk=self.pk))
+        return """<a href="%s" target="_blank">Open in editor</a>""" % reverse("authoring:edit", kwargs=dict(pk=self.pk))
     editor.allow_tags = True
 
     def view_on_site(self):
