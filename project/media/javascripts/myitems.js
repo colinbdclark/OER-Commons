@@ -40,18 +40,25 @@ oer.myitems.init = function() {
             confirmCallback: function(action) {
                 var $itemFolder = action.parent();
                 var folderId = $itemFolder.data("folder-id");
-                var itemId = $itemFolder.closest("article").data("identifier");
+                var $article = $itemFolder.closest("article");
+                var itemId = $article.data("identifier");
                 var request = { folder_id: folderId, item_id: itemId };
-                var $number = getFolderById(folderId).find("span.number");
+                var $folder = getFolderById(folderId);
+                var $number = $folder.find("span.number");
+
+                var $elementsToDelete = $itemFolder;
+                if ($folder.filter(".selected").length) {
+                    $elementsToDelete = $elementsToDelete.add($article);
+                }
                 $.post(deleteItemFolderUrl, request, function(response) {
                     if (response.status === "success") {
-                        $itemFolder.remove();
+                        $elementsToDelete.remove();
                     } else {
-                        $itemFolder.show();
+                        $elementsToDelete.show();
                         $number.text($number.text()-0+1);
                     }
                 });
-                $itemFolder.fadeOut();
+                $elementsToDelete.fadeOut();
                 $number.text($number.text()-0-1);
             }
         });
@@ -63,7 +70,6 @@ oer.myitems.init = function() {
         $item.hide();
         $item.insertBefore($folderLast);
         $item.fadeIn();
-        addFolderDeleteConfirmation();
         return $item;
     };
 
@@ -161,7 +167,6 @@ oer.myitems.init = function() {
                         $number.text($number.text()-0+1);
                     }
                     $itemFolderForm.parent().before(itemFolderElement(context));
-                    addItemFolderDeleteConfirmation();
                 }
             });
         }

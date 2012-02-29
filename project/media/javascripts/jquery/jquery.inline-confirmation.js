@@ -56,9 +56,8 @@
       cancelCallback: function() { return true; }
     };
 
-    var original_action;
     var timeout_id;
-    var all_actions     = $(this);
+    var $original_action;
     var options         = $.extend(defaults, options);
     var block_class     = "inline-confirmation-block";
     var confirm_class   = "inline-confirmation-confirm";
@@ -71,49 +70,42 @@
     var action_set = options.reverse === false
       ? options.confirm + options.separator + options.cancel
       : options.cancel + options.separator + options.confirm;
+    var $action_set = $("<span class='" + block_class + "'>" + action_set + "</span>");
 
-    $(this).live(options.bindsOnEvent, function(e) {
-      original_action = $(this);
-
-      all_actions.show();
-      $("span." + block_class).hide();
-
-      if (options.hideOriginalAction === true) {
-        $(this).trigger("update").hide();
-      }
-
-      var active_action_set = $("span." + block_class, $(this).parent());
-
-      if (active_action_set.length > 0) {
-        active_action_set.show();
-      } else {
-        $(this).after("<span class='" + block_class + "'>" + action_set + "</span>");
-      }
-
-      if (options.expiresIn > 0) {
-        timeout_id = setTimeout(function() {
-          $("span." + block_class, original_action.parent()).hide();
-          original_action.show();
-        }, options.expiresIn * 1000);
-      }
-
-      e.preventDefault();
-    });
-
-    $(this).parent().delegate("span." + action_class, "click", function() {
+    $action_set.children().click(function(e) {
       clearTimeout(timeout_id);
-      $(this).parent().hide();
-      original_action.show();
+      $action_set.detach();
+      $original_action.show();
 
       var args = new Array();
-      args[0]  = original_action;
+      args[0]  = $original_action;
 
       if ($(this).hasClass(confirm_class)) {
         options.confirmCallback.apply(this, args);
       } else {
         options.cancelCallback.apply(this, args);
       }
-      return false;
+      e.preventDefault();
+    });
+
+    $(this).live(options.bindsOnEvent, function(e) {
+      $action_set.detach();
+      if ($original_action) {
+        $original_action.show();
+      }
+      $original_action = $(this);
+      if (options.hideOriginalAction === true) {
+        $original_action.trigger("update").hide();
+      }
+
+      $original_action.after($action_set);
+      if (options.expiresIn > 0) {
+        timeout_id = setTimeout(function() {
+          $action_set.detach();
+          $original_action.show();
+        }, options.expiresIn * 1000);
+      }
+      e.preventDefault();
     });
   };
 
