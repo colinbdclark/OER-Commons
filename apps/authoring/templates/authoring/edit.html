@@ -1,9 +1,12 @@
 {% extends "base.html" %}
+{% load compress %}
 
 {% block bodyclass %}authoring{% endblock %}
 
 {% block extra-css %}
-  <link rel="stylesheet" href="{{ STATIC_URL}}styles/authoring.css">
+  {% compress css %}
+    <link rel="stylesheet" href="{{ STATIC_URL}}styles/authoring.css">
+  {% endcompress %}
 {% endblock %}
 
 {% block extra-head %}
