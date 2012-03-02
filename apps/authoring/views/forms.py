@@ -11,6 +11,23 @@ from django.forms.widgets import CheckboxInput
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from materials.models import GeneralSubject, Language
+import string
+
+
+class LearningGoalsWidget(forms.Widget):
+
+    def render(self, name, value, attrs=None):
+        if not value: value = []
+        existing = []
+        for v in value:
+            existing.append((v, forms.TextInput().render(name, v, attrs)))
+        return render_to_string("authoring/forms/learning-goals-widget.html", dict(
+            existing=existing,
+            new=forms.TextInput().render(name, u"", attrs)
+        ))
+
+    def value_from_datadict(self, data, files, name):
+        return filter(bool, map(string.strip, data.getlist(name)))
 
 
 class SubjectsWidget(forms.CheckboxSelectMultiple):
@@ -81,7 +98,7 @@ class LicenseWidget(forms.Widget):
             license_name = u""
 
         return mark_safe(render_to_string(
-            "authoring/include/license-widget.html",
+            "authoring/forms/license-widget.html",
             dict(
                 name=name,
                 name_widget=forms.HiddenInput().render("%s_name" % name, license_name),
@@ -132,7 +149,7 @@ class EditForm(forms.ModelForm):
     # using lxml clean. Remove all styles, Keep only allowed classes,
     # remove scripts, styles, forms, iframes, objects, embeds
 
-    learning_goals = MultipleAutoCreateField("title")
+    learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
     keywords = MultipleAutoCreateField("name", required=False)
     subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
     language = forms.ModelChoiceField(queryset=Language.objects.all(), required=False)

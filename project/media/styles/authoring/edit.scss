@@ -1,40 +1,11 @@
+@import "_layout.scss";
+@import "_authored-content.scss";
+@import "_learning-goals-widget.scss";
+@import "_outline.scss";
+
 .authoring {
   #slider {
     background-color: #F2F2F2;
-  }
-  .layout-columns {
-    width: auto;
-    margin: 0;
-    padding: 30px;
-    background: none;
-    line-height: 1.4;
-    font-family: "Myriad Pro", Helvetica, sans-serif;
-    a {
-      text-decoration: none;
-    }
-  }
-  .column-left {
-    font-size: 15px;
-    section {
-      margin-bottom: 20px;
-      h2 {
-        font-size: 15px;
-        font-weight: bold;
-        text-transform: uppercase;
-        text-shadow: 1px 1px 1px #fff;
-        color: #989898;
-        margin-bottom: 10px;
-      }
-    }
-    li {
-      padding: 5px 0;
-    }
-    ul {
-      margin-left: 1.5em;
-    }
-    a {
-      text-decoration: none;
-    }
   }
 }
 
@@ -55,7 +26,7 @@
     margin-bottom: 3px;
   }
   .required .label label {
-    background: url(../images/authoring/asterisk.png) 100% 0 no-repeat;
+    background: url(../../images/authoring/asterisk.png) 100% 0 no-repeat;
     padding-right: 13px;
   }
   .field {
@@ -70,6 +41,7 @@
   input[type='text'], textarea {
     color: #333;
     font-size: 16px;
+    line-height: 20px;
     font-family: Myriad, Helvetica, sans-serif;
   }
 }
@@ -84,7 +56,7 @@
     width: 124px;
     height: 20px;
     float: left;
-    background: url(../images/authoring/logo.png) no-repeat;
+    background: url(../../images/authoring/logo.png) no-repeat;
     text-indent: -9999px;
     margin-bottom: 10px;
   }
@@ -100,7 +72,7 @@
       display: block;
       margin: 5px 0;
       padding-right: 16px;
-      background: url(../images/authoring/icon-user-menu-dropdown.png) 100% 4px no-repeat;
+      background: url(../../images/authoring/icon-user-menu-dropdown.png) 100% 4px no-repeat;
     }
     ul {
       display: none;
@@ -173,7 +145,7 @@
     margin-left: 5px;
     width: 70px;
     height: 70px;
-    background-image: url(../images/authoring/steps.png);
+    background-image: url(../../images/authoring/steps.png);
     background-repeat: no-repeat;
     &.active {
       cursor: default;
@@ -260,7 +232,7 @@
   }
 }
 
-.buttons {
+.authoring .slide .buttons {
   clear: both;
   position: relative;
   height: 50px;
@@ -305,7 +277,7 @@
         width: 40px;
         border-left: 1px solid #ccc;
         margin-left: 10px;
-        background: url(../images/authoring/icon-next.png) 14px 50% no-repeat;
+        background: url(../../images/authoring/icon-next.png) 14px 50% no-repeat;
       }
     }
 
@@ -316,7 +288,7 @@
         display: inline-block;
         height: 30px;
         width: 40px;
-        background: url(../images/authoring/icon-prev.png) 13px 50% no-repeat;
+        background: url(../../images/authoring/icon-prev.png) 13px 50% no-repeat;
       }
     }
 
@@ -365,244 +337,244 @@
     }
 
     &.undo {
-      background: url(../images/authoring/toolbar.png) 0px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) 0px 0px no-repeat;
     }
 
     &.undo:hover {
-      background: url(../images/authoring/toolbar.png) 0px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) 0px -42px no-repeat;
     }
 
     &.undo.active {
-      background: url(../images/authoring/toolbar.png) 0px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) 0px -84px no-repeat;
     }
 
     &.undo.disabled {
-      background: url(../images/authoring/toolbar.png) 0px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) 0px -126px no-repeat;
     }
 
     &.redo {
-      background: url(../images/authoring/toolbar.png) -42px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -42px 0px no-repeat;
     }
 
     &.redo:hover {
-      background: url(../images/authoring/toolbar.png) -42px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -42px -42px no-repeat;
     }
 
     &.redo.active {
-      background: url(../images/authoring/toolbar.png) -42px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -42px -84px no-repeat;
     }
 
     &.redo.disabled {
-      background: url(../images/authoring/toolbar.png) -42px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -42px -126px no-repeat;
     }
 
     &.bullet-list {
-      background: url(../images/authoring/toolbar.png) -84px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -84px 0px no-repeat;
     }
 
     &.bullet-list:hover {
-      background: url(../images/authoring/toolbar.png) -84px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -84px -42px no-repeat;
     }
 
     &.bullet-list.active {
-      background: url(../images/authoring/toolbar.png) -84px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -84px -84px no-repeat;
     }
 
     &.bullet-list.disabled {
-      background: url(../images/authoring/toolbar.png) -84px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -84px -126px no-repeat;
     }
 
     &.number-list {
-      background: url(../images/authoring/toolbar.png) -126px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -126px 0px no-repeat;
     }
 
     &.number-list:hover {
-      background: url(../images/authoring/toolbar.png) -126px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -126px -42px no-repeat;
     }
 
     &.number-list.active {
-      background: url(../images/authoring/toolbar.png) -126px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -126px -84px no-repeat;
     }
 
     &.number-list.disabled {
-      background: url(../images/authoring/toolbar.png) -126px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -126px -126px no-repeat;
     }
 
     &.indent {
-      background: url(../images/authoring/toolbar.png) -168px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -168px 0px no-repeat;
     }
 
     &.indent:hover {
-      background: url(../images/authoring/toolbar.png) -168px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -168px -42px no-repeat;
     }
 
     &.indent.active {
-      background: url(../images/authoring/toolbar.png) -168px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -168px -84px no-repeat;
     }
 
     &.indent.disabled {
-      background: url(../images/authoring/toolbar.png) -168px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -168px -126px no-repeat;
     }
 
     &.outdent {
-      background: url(../images/authoring/toolbar.png) -210px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -210px 0px no-repeat;
     }
 
     &.outdent:hover {
-      background: url(../images/authoring/toolbar.png) -210px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -210px -42px no-repeat;
     }
 
     &.outdent.active {
-      background: url(../images/authoring/toolbar.png) -210px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -210px -84px no-repeat;
     }
 
     &.outdent.disabled {
-      background: url(../images/authoring/toolbar.png) -210px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -210px -126px no-repeat;
     }
 
     &.table {
-      background: url(../images/authoring/toolbar.png) -252px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -252px 0px no-repeat;
     }
 
     &.table:hover {
-      background: url(../images/authoring/toolbar.png) -252px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -252px -42px no-repeat;
     }
 
     &.table.active {
-      background: url(../images/authoring/toolbar.png) -252px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -252px -84px no-repeat;
     }
 
     &.table.disabled {
-      background: url(../images/authoring/toolbar.png) -252px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -252px -126px no-repeat;
     }
 
     &.bold {
-      background: url(../images/authoring/toolbar.png) -294px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -294px 0px no-repeat;
     }
 
     &.bold:hover {
-      background: url(../images/authoring/toolbar.png) -294px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -294px -42px no-repeat;
     }
 
     &.bold.active {
-      background: url(../images/authoring/toolbar.png) -294px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -294px -84px no-repeat;
     }
 
     &.bold.disabled {
-      background: url(../images/authoring/toolbar.png) -294px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -294px -126px no-repeat;
     }
 
     &.italic {
-      background: url(../images/authoring/toolbar.png) -336px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -336px 0px no-repeat;
     }
 
     &.italic:hover {
-      background: url(../images/authoring/toolbar.png) -336px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -336px -42px no-repeat;
     }
 
     &.italic.active {
-      background: url(../images/authoring/toolbar.png) -336px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -336px -84px no-repeat;
     }
 
     &.italic.disabled {
-      background: url(../images/authoring/toolbar.png) -336px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -336px -126px no-repeat;
     }
 
     &.underline {
-      background: url(../images/authoring/toolbar.png) -378px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -378px 0px no-repeat;
     }
 
     &.underline:hover {
-      background: url(../images/authoring/toolbar.png) -378px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -378px -42px no-repeat;
     }
 
     &.underline.active {
-      background: url(../images/authoring/toolbar.png) -378px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -378px -84px no-repeat;
     }
 
     &.underline.disabled {
-      background: url(../images/authoring/toolbar.png) -378px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -378px -126px no-repeat;
     }
 
     &.text-color {
-      background: url(../images/authoring/toolbar.png) -420px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -420px 0px no-repeat;
     }
 
     &.text-color:hover {
-      background: url(../images/authoring/toolbar.png) -420px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -420px -42px no-repeat;
     }
 
     &.text-color.active {
-      background: url(../images/authoring/toolbar.png) -420px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -420px -84px no-repeat;
     }
 
     &.text-color.disabled {
-      background: url(../images/authoring/toolbar.png) -420px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -420px -126px no-repeat;
     }
 
     &.bg-color {
-      background: url(../images/authoring/toolbar.png) -461px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -461px 0px no-repeat;
     }
 
     &.bg-color:hover {
-      background: url(../images/authoring/toolbar.png) -462px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -462px -42px no-repeat;
     }
 
     &.bg-color.active {
-      background: url(../images/authoring/toolbar.png) -462px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -462px -84px no-repeat;
     }
 
     &.bg-color.disabled {
-      background: url(../images/authoring/toolbar.png) -462px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -462px -126px no-repeat;
     }
 
     &.link {
-      background: url(../images/authoring/toolbar.png) -503px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -503px 0px no-repeat;
     }
 
     &.link:hover {
-      background: url(../images/authoring/toolbar.png) -504px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -504px -42px no-repeat;
     }
 
     &.link.active {
-      background: url(../images/authoring/toolbar.png) -504px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -504px -84px no-repeat;
     }
 
     &.link.disabled {
-      background: url(../images/authoring/toolbar.png) -504px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -504px -126px no-repeat;
     }
 
     &.media {
-      background: url(../images/authoring/toolbar.png) -546px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -546px 0px no-repeat;
       width: 81px;
     }
 
     &.media:hover {
-      background: url(../images/authoring/toolbar.png) -546px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -546px -42px no-repeat;
     }
 
     &.media.active {
-      background: url(../images/authoring/toolbar.png) -546px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -546px -84px no-repeat;
     }
 
     &.media.disabled {
-      background: url(../images/authoring/toolbar.png) -546px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -546px -126px no-repeat;
     }
 
     &.reference {
-      background: url(../images/authoring/toolbar.png) -631px 0px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -631px 0px no-repeat;
     }
 
     &.reference:hover {
-      background: url(../images/authoring/toolbar.png) -631px -42px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -631px -42px no-repeat;
     }
 
     &.reference.active {
-      background: url(../images/authoring/toolbar.png) -631px -84px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -631px -84px no-repeat;
     }
 
     &.reference.disabled {
-      background: url(../images/authoring/toolbar.png) -631px -126px no-repeat;
+      background: url(../../images/authoring/toolbar.png) -631px -126px no-repeat;
     }
 
   }
@@ -614,7 +586,7 @@
       display: block;
       margin-right: 5px;
       color: #333;
-      background: url(../images/authoring/icon-dropdown-closed.png) 100% 50% no-repeat;
+      background: url(../../images/authoring/icon-dropdown-closed.png) 100% 50% no-repeat;
       padding-right: 20px;
       span {
         display: block;
@@ -728,19 +700,19 @@
         display: block;
       }
       .text-color {
-        background: url(../images/authoring/toolbar.png) -420px -84px no-repeat;
+        background: url(../../images/authoring/toolbar.png) -420px -84px no-repeat;
       }
 
       .bg-color {
-        background: url(../images/authoring/toolbar.png) -462px -84px no-repeat;
+        background: url(../../images/authoring/toolbar.png) -462px -84px no-repeat;
       }
     }
 
     ul.text li.selected {
-      background-image: url(../images/authoring/selected-color-light.png);
+      background-image: url(../../images/authoring/selected-color-light.png);
     }
     ul.bg li.selected {
-      background-image: url(../images/authoring/selected-color-dark.png);
+      background-image: url(../../images/authoring/selected-color-dark.png);
     }
 
     .text-color-1 {
@@ -830,7 +802,7 @@
       top: -17px;
       width: 32px;
       height: 17px;
-      background: url(../images/authoring/popup-dialog-triangle.png) no-repeat;
+      background: url(../../images/authoring/popup-dialog-triangle.png) no-repeat;
     }
   }
 
@@ -893,7 +865,7 @@
     text-transform: lowercase;
     font-size: 15px;
     padding-left: 16px;
-    background: url(../images/authoring/icon-remove-link.png) 0 50% no-repeat;
+    background: url(../../images/authoring/icon-remove-link.png) 0 50% no-repeat;
   }
 }
 
@@ -976,7 +948,7 @@
     right: 0;
     text-indent: -9999px;
     text-transform: lowercase;
-    background: url(../images/authoring/icon-submit.png) 100% 50% no-repeat;
+    background: url(../../images/authoring/icon-submit.png) 100% 50% no-repeat;
     color: #9aca41;
     &:hover {
       width: auto;
@@ -1008,7 +980,7 @@
         display: block;
         color: #0B7BA9;
         padding-left: 15px;
-        background: url(../images/authoring/icon-search.png) 0 50% no-repeat;
+        background: url(../../images/authoring/icon-search.png) 0 50% no-repeat;
         text-transform: lowercase;
         font-size: 15px;
         input {
@@ -1044,11 +1016,11 @@
       -moz-border-radius: 5px;
       -ms-border-radius: 5px;
       border-radius: 5px;
-      background: url(../images/authoring/progress-bg.png) repeat-x;
+      background: url(../../images/authoring/progress-bg.png) repeat-x;
     }
     .fill {
       width: 50%;
-      background: url(../images/authoring/progress-fill.png) repeat-x;
+      background: url(../../images/authoring/progress-fill.png) repeat-x;
       height: 29px;
       text-align: right;
       border: solid #fee1a2;
@@ -1072,9 +1044,9 @@
       a {
         display: inline-block;
         padding-right: 20px;
-        background: url(../images/authoring/icon-dropdown-closed.png) 100% 50% no-repeat;
+        background: url(../../images/authoring/icon-dropdown-closed.png) 100% 50% no-repeat;
         &.opened {
-          background-image: url(../images/authoring/icon-dropdown-opened.png);
+          background-image: url(../../images/authoring/icon-dropdown-opened.png);
         }
       }
       ul {
@@ -1098,7 +1070,7 @@
             background-color: #f5f5f5;
           }
           &.selected {
-            background-image: url(../images/authoring/icon-checked.png);
+            background-image: url(../../images/authoring/icon-checked.png);
             background-repeat: no-repeat;
             background-position: 6px 9px;
           }
@@ -1140,41 +1112,6 @@
   }
 }
 
-#outline {
-  ul {
-    color: #069;
-    margin-left: 0;
-    list-style-type: none;
-    font-weight: bold;
-  }
-  & > ul a {
-    color: #069;
-    text-decoration: none;
-  }
-  ul > ul {
-    margin-left: 1.5em;
-    list-style-type: circle;
-    font-weight: normal;
-    color: #39c;
-  }
-  .new {
-    span {
-      font-size: 13px;
-      border-bottom: 1px dashed;
-      cursor: pointer;
-    }
-    input {
-      background-color: #fff;
-      border: none;
-      padding: 0 3px;
-      height: 20px;
-      font-size: 15px;
-      margin: -4px;
-      width: 100%;
-    }
-  }
-}
-
 #step-describe {
   .layout-columns {
     padding-top: 30px;
@@ -1190,6 +1127,9 @@
   textarea, input[type='text'], .tagit.ui-widget-content {
     box-sizing: border-box;
     width: 100%;
+  }
+  .learning-goals-widget input[type='text'] {
+    width: 90%;
   }
   #id_summary {
     height: 20em;
@@ -1267,43 +1207,6 @@
   }
 }
 
-.authoring.view-material {
-  #toolbar {
-    background-color: #3399cc;
-    border: none;
-    padding-left: 30px;
-    a {
-      color: #fff;
-      text-transform: uppercase;
-      font-size: 20px;
-      line-height: 39px;
-    }
-  }
-  .column-left {
-    padding-top: 10px;
-    width: 250px;
-  }
-  .column-main {
-    float: none;
-    width: auto;
-    margin-left: 270px;
-  }
-  .authored-content {
-    padding: 30px;
-    header {
-      background-color: #f5f5f5;
-      font-size: 18px;
-      color: #666;
-      padding: 15px 20px;
-      margin: -20px -20px 20px -20px;
-      h1 {
-        font-size: 30px;
-        margin-bottom: 10px;
-      }
-    }
-  }
-}
-
 #footnotes {
   background-color: #fff;
   padding: 1px;
@@ -1319,150 +1222,4 @@
       margin-left: 20px;
     }
   }
-}
-
-.authored-content {
-  padding: 20px;
-  background-color: #fff;
-  font-size: 16px;
-  font-family: "Times New Roman", serif;
-
-  div, h1, h2, h3, h4, h5, h6, p, blockquote, pre, dl, ol, ul, table, figure {
-    margin-bottom: 1em;
-  }
-
-  ul, ol {
-    list-style-position: inside;
-  }
-
-  ul > ul, ol > ol, ul > ol, ul > ol {
-    margin-left: 2em;
-    margin-bottom: 0;
-  }
-
-  h2 {
-    color: #690;
-    border-bottom: 1px solid;
-    font-size: 25px;
-  }
-
-  h3 {
-    color: #9c3;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  blockquote {
-    padding-left: 7px;
-    border-left: 3px solid #fc3;
-    font-style: italic;
-  }
-
-  blockquote.l1 {
-    margin-left: 2em;
-  }
-
-  blockquote.l2 {
-    margin-left: 4em;
-  }
-
-  blockquote.l3 {
-    margin-left: 6em;
-  }
-
-  blockquote.l4 {
-    margin-left: 8em;
-  }
-
-  blockquote.l5 {
-    margin-left: 10em;
-  }
-
-  a.download {
-    display: inline-block;
-    padding-left: 20px;
-    background: url(../images/authoring/icon-download.png) 0% 50% no-repeat;
-    font-style: normal;
-  }
-
-  figcaption {
-    font-family: "Myriad Pro", Helvetica, sans-serif;
-  }
-
-  figure.image {
-    text-align: center;
-    &.left {
-      float: left;
-      margin-right: 10px;
-    }
-    &.right {
-      float: right;
-      margin-left: 10px;
-    }
-    figcaption {
-      font-style: italic;
-      strong {
-        font-style: normal;
-        color: #666;
-      }
-    }
-  }
-
-  figure.download {
-    font-size: 110%;
-    padding: 3px 0 3px 22px;
-    background: url(../images/authoring/download_icon&16.png) 0% 50% no-repeat;
-  }
-
-  figure.video {
-    text-align: center;
-    iframe, object, embed {
-      margin: 0 auto;
-    }
-    figcaption {
-      font-style: italic;
-    }
-    .unisubs-widget {
-      margin: 0 auto;
-    }
-  }
-
-  .text-color-1 {
-    color: #940163;
-  }
-  .text-color-2 {
-    color: #970000;
-  }
-  .text-color-3 {
-    color: #663300;
-  }
-  .text-color-4 {
-    color: #336600;
-  }
-  .text-color-5 {
-    color: #003366;
-  }
-  .bg-color-1 {
-    background-color: #f7c5c5;
-  }
-  .bg-color-2 {
-    background-color: #f4ce73;
-  }
-  .bg-color-3 {
-    background-color: #fceb4f;
-  }
-  .bg-color-4 {
-    background-color: #d1e588;
-  }
-  .bg-color-5 {
-    background-color: #bde8f2;
-  }
-
-  a.reference {
-    font-size: 13px;
-    margin: 0 3px;
-    vertical-align: super;
-  }
-
 }

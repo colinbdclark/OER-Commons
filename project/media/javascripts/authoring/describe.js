@@ -2,10 +2,7 @@ var DescribeStep = function (tool) {
   this.tool = tool;
   this.$step = $("#step-describe");
 
-  this.$step.find("#id_learning_goals").tagit({
-    allowSpaces: true,
-    placeholderText: "Enter new learning goal"
-  });
+  this.$step.find("ul.learning-goals-widget").learningGoalsWidget();
 
   this.$step.find("#id_keywords").tagit({
     allowSpaces: true,
