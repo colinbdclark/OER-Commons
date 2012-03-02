@@ -342,6 +342,12 @@ WriteStep.prototype.cleanHtmlPreSave = function (html) {
   // TODO: remove interface elements here
   var $document = $("<div></div>").html(html);
   $document.find("[contenteditable]").removeAttr("contenteditable");
+  $document.find("p,div").each(function() {
+    var $this = $(this);
+    if ($.trim($this.text()) === "") {
+      $this.remove();
+    }
+  });
   return $document.html();
 };
 
