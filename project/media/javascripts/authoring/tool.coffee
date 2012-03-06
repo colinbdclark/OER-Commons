@@ -128,6 +128,21 @@ class Tool
     @describeStep = new DescribeStep(@)
     @submitStep = new SubmitStep(@)
 
+    @title = $("#material-title")
+    @titleInput = $("#id_title")
+
+    @title.editable(
+      (value)=>
+        @titleInput.val(value)
+        return value
+      cssclass: "title-input",
+      width: "none",
+      height: "none",
+      onblur: "submit",
+      tooltip: "Click to edit title...",
+      placeholder: "Click to edit title..."
+    )
+
     saveBtn = $("div.authoring-head div.actions a.save")
     saveBtn.click((e)=>
       e.preventDefault()

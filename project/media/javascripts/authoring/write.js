@@ -295,24 +295,6 @@ var WriteStep = function (tool) {
     }
   });
 
-  // TODO: move this to separate init... methods
-  // Material title
-  (function () {
-    var $title = $("#material-title");
-    var $titleInput = $("#id_title");
-
-    $title.editable(function (value) {
-      $titleInput.val(value);
-      return value;
-    }, {
-      cssclass: "title-input",
-      width: "none",
-      height: "none",
-      onblur: "submit",
-      tooltip: "Click to edit..."
-    });
-  })();
-
   var $step = $("#step-write");
   $step.find("div.buttons a").click(function (e) {
     e.preventDefault();
