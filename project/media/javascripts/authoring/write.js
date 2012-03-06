@@ -68,6 +68,7 @@ var WriteStep = function (tool) {
     39, // right arrow
     40  // down arrow
   ];
+  this.SHIFT = 16;
   this.CTRL = 17;
   this.CMD = 91;
 
@@ -92,30 +93,44 @@ var WriteStep = function (tool) {
   this.cleanHTML();
   this.ensureTextInput();
 
-  // Track when user presses and releases Ctrl or Cmd keys
+  // Track when user presses and releases Ctrl or Cmd or Shift keys
+  this.shiftKey = true;
   this.ctrlKey = false;
   this.cmdKey = false;
-  $(document).keydown(
-          function (e) {
-            if (e.which == editor.CTRL) {
-              editor.ctrlKey = true;
-            }
-            if (e.which == editor.CMD) {
-              editor.cmdKey = true;
-            }
-            if ((editor.ctrlKey || editor.cmdKey) && e.which == 90) {
-              editor.undo();
-              e.preventDefault();
-            }
-          }).keyup(function (e) {
-            // Track Ctrl+Z / Cmd+Z
-            if (e.which == editor.CTRL) {
-              editor.ctrlKey = false;
-            }
-            if (e.which == editor.CMD) {
-              editor.cmdKey = false;
-            }
-          });
+  var $document = $(document);
+  $document.keydown(function (e) {
+    console.log(e.which);
+    if (e.which == editor.CTRL) {
+      editor.ctrlKey = true;
+    } else if (e.which == editor.CMD) {
+      editor.cmdKey = true;
+    } else if (e.which == editor.SHIFT) {
+      editor.shiftKey = true;
+    } else if ((editor.ctrlKey || editor.cmdKey)) {
+      if (e.which == 90) {
+        // Ctrl/Cmd + Z: Undo
+        editor.undo();
+        e.preventDefault();
+      } else if (e.which == 89) {
+        // Ctrl/Cmd + Y: Redo
+        editor.redo();
+        e.preventDefault();
+      } else if (e.which == 83) {
+        // Ctrl/Cmd + S: Save
+        editor.tool.save();
+        e.preventDefault();
+      }
+    }
+  });
+  $document.keyup(function (e) {
+    if (e.which == editor.CTRL) {
+      editor.ctrlKey = false;
+    } else if (e.which == editor.CMD) {
+      editor.cmdKey = false;
+    } else if (e.which == editor.SHIFT) {
+      editor.shiftKey = false;
+    }
+  });
 
   this.undoHistory = [];
   this.lastState = null;
@@ -196,12 +211,72 @@ var WriteStep = function (tool) {
   });
 
   var keydownTimeout = null;
-  // User is about to type something. Save current state.
   editor.$area.keydown(function (e) {
+    var $button;
+    if (editor.ctrlKey || editor.cmdKey) {
+      if (editor.shiftKey) {
+        if (e.which == 49) {
+          // Ctrl/Cmd + Shift + 1: Heading
+          editor.changeBlockType("h2");
+        } else if (e.which == 50) {
+          // Ctrl/Cmd + Shift + 2: Sub-Heading
+          editor.changeBlockType("h3");
+        } else if (e.which == 51) {
+          // Ctrl/Cmd + Shift + 3: Paragraph
+          editor.changeBlockType("p");
+        } else if (e.which == 52) {
+          // Ctrl/Cmd + Shift + 4: Bullet list
+          editor.insertList("ul");
+        } else if (e.which == 53) {
+          // Ctrl/Cmd + Shift + 5: Number list
+          editor.insertList("ol");
+        }
+      } else if (e.which == 66) { // bold
+        $button = editor.$toolbarButtons.filter(".bold");
+        if (!$button.hasClass("disabled")) {
+          $button.click();
+          e.preventDefault();
+        }
+      } else if (e.which == 73) { // italic
+        $button = editor.$toolbarButtons.filter(".italic");
+        if (!$button.hasClass("disabled")) {
+          $button.click();
+          e.preventDefault();
+        }
+      } else if (e.which == 85) { // underline
+        $button = editor.$toolbarButtons.filter(".underline");
+        if (!$button.hasClass("disabled")) {
+          $button.click();
+          e.preventDefault();
+        }
+      } else if (e.which == 75) {
+        // Ctrl/Cmd + K: Link
+        $button = editor.$toolbarButtons.filter(".link");
+        if (!$button.hasClass("disabled")) {
+          $button.click();
+          e.preventDefault();
+        }
+      } else if (e.which == 219) {
+        // Ctrl/Cmd + [: Decrease indent
+        $button = editor.$toolbarButtons.filter(".outdent");
+        if (!$button.hasClass("disabled")) {
+          $button.click();
+          e.preventDefault();
+        }
+      } else if (e.which == 221) {
+        // Ctrl/Cmd + ]: Increase indent
+        $button = editor.$toolbarButtons.filter(".indent");
+        if (!$button.hasClass("disabled")) {
+          $button.click();
+          e.preventDefault();
+        }
+      }
+    }
 
-    if (editor.ctrlKey || editor.cmdKey || $.inArray(e.which, editor.SPECIAL_KEY_CODES) != -1 || $.inArray(e.which, editor.NAVIGATION_KEYS) != -1) {
+    if ($.inArray(e.which, editor.SPECIAL_KEY_CODES) != -1 || $.inArray(e.which, editor.NAVIGATION_KEYS) != -1) {
       return;
     }
+    // User is about to type something. Save current state.
 
     editor.saveState();
     editor.shouldSaveState = false;
@@ -239,7 +314,7 @@ var WriteStep = function (tool) {
   })();
 
   var $step = $("#step-write");
-  $step.find("div.buttons a").click(function(e) {
+  $step.find("div.buttons a").click(function (e) {
     e.preventDefault();
     tool.slider.slideTo($(this).attr("href"));
   });
@@ -342,7 +417,7 @@ WriteStep.prototype.cleanHtmlPreSave = function (html) {
   // TODO: remove interface elements here
   var $document = $("<div></div>").html(html);
   $document.find("[contenteditable]").removeAttr("contenteditable");
-  $document.find("p,div").each(function() {
+  $document.find("p,div").each(function () {
     var $this = $(this);
     if ($.trim($this.text()) === "") {
       $this.remove();
@@ -351,7 +426,7 @@ WriteStep.prototype.cleanHtmlPreSave = function (html) {
   return $document.html();
 };
 
-WriteStep.prototype.preSave = function() {
+WriteStep.prototype.preSave = function () {
   this.cleanHTML();
   $("#id_text").val(this.cleanHtmlPreSave(this.$area.html()));
 };
@@ -366,7 +441,7 @@ WriteStep.prototype.ensureTextInput = function () {
       this.focusOnNode($p);
     }
   }
-  $area.find("figure:not(.inline)").each(function() {
+  $area.find("figure:not(.inline)").each(function () {
     var $figure = $(this);
     if (!$figure.prev().is("p,div")) {
       $("<p><br></p>").data("auto", true).insertBefore($figure);
@@ -376,7 +451,7 @@ WriteStep.prototype.ensureTextInput = function () {
     }
   });
   // Remove duplicate empty paragraphs
-  $area.find("p + p").each(function() {
+  $area.find("p + p").each(function () {
     var $p = $(this);
     if ($p.data("auto") && $.trim($p.text()) === "") {
       $p.remove();
@@ -634,44 +709,23 @@ WriteStep.prototype.initTextStyleMenu = function () {
 
 WriteStep.prototype.initFormattingButtons = function () {
   var editor = this;
-  var $bold = this.$toolbar.find("a.button.bold").click(function (e) {
+  this.$toolbar.find("a.button.bold").click(function (e) {
     e.preventDefault();
     editor.saveState();
     editor.execCommand("bold");
     editor.trackSelection();
   });
-  var $italic = this.$toolbar.find("a.button.italic").click(function (e) {
+  this.$toolbar.find("a.button.italic").click(function (e) {
     e.preventDefault();
     editor.saveState();
     editor.execCommand("italic");
     editor.trackSelection();
   });
-  var $underline = this.$toolbar.find("a.button.underline").click(function (e) {
+  this.$toolbar.find("a.button.underline").click(function (e) {
     e.preventDefault();
     editor.saveState();
     editor.execCommand("underline");
     editor.trackSelection();
-  });
-
-  editor.$area.keydown(function(e) {
-    if (editor.cmdKey || editor.ctrlKey) {
-      if (e.which == 66) { // bold
-        if (!$bold.hasClass("disabled")) {
-          $bold.click();
-          e.preventDefault();
-        }
-      } else if (e.which == 73) { // italic
-        if (!$italic.hasClass("disabled")) {
-          $italic.click();
-          e.preventDefault();
-        }
-      } else if (e.which == 85) { // underline
-        if (!$underline.hasClass("disabled")) {
-          $underline.click();
-          e.preventDefault();
-        }
-      }
-    }
   });
 };
 
@@ -990,7 +1044,7 @@ WriteStep.prototype.initFigure = function ($figure) {
   $figure.attr("contenteditable", "false");
 };
 
-WriteStep.prototype.initDND = function() {
+WriteStep.prototype.initDND = function () {
   var editor = this;
   this.$area.sortable({
     handle: this.$area.find("figure:not(.inline)"),
@@ -1000,14 +1054,13 @@ WriteStep.prototype.initDND = function() {
     axis: "y",
     tolerance: "pointer",
     delay: 300,
-    update: function() {
+    update: function () {
       editor.ensureTextInput();
     }
   });
 };
 
-
-WriteStep.prototype.updateDND = function() {
+WriteStep.prototype.updateDND = function () {
   this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline)"));
 };
 
@@ -1252,7 +1305,7 @@ WriteStep.prototype.initReferences = function () {
     $dialog.show();
   });
 
-  this.$footnotes.delegate("a.ref", "click", function(e) {
+  this.$footnotes.delegate("a.ref", "click", function (e) {
     e.preventDefault();
     var $this = $(this);
     var $reference = $this.parent().data("reference");
@@ -1266,7 +1319,6 @@ WriteStep.prototype.initReferences = function () {
     $dialog.show();
   });
 
-
   function trackChanges() {
     // Update only if the number of references has changed
     if (editor.$area.find("a.reference").length !== editor.$footnotes.children("div.footnote").length) {
@@ -1274,6 +1326,7 @@ WriteStep.prototype.initReferences = function () {
     }
     setTimeout(trackChanges, 1000);
   }
+
   setTimeout(trackChanges, 1000);
 
 };
@@ -1473,7 +1526,7 @@ MediaDialog.UploadProgressStep = function (dialog) {
   this.$legend = this.$step.find(".legend");
   this.xhr = null;
   var step = this;
-  this.$step.find("a.cancel").click(function(e) {
+  this.$step.find("a.cancel").click(function (e) {
     e.preventDefault();
     if (step.xhr) {
       step.xhr.abort();
@@ -1503,7 +1556,7 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
   var $input = this.$input = $step.find("input:text");
   this.uploadProgress = uploadProgress;
 
-  $step.find("a.hide").click(function(e) {
+  $step.find("a.hide").click(function (e) {
     e.preventDefault();
     dialog.hide();
   });
@@ -1538,8 +1591,6 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
     dialog.handleUploadResponse(data.result);
     uploadProgress.xhr = null;
   });
-
-
 
 };
 //noinspection JSCheckFunctionSignatures
