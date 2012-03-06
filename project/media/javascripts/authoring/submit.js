@@ -33,15 +33,4 @@ var SubmitStep = function (tool) {
       });
     }
   });
-
-  var $step = $("#step-submit");
-  $step.find("div.buttons a").click(function(e) {
-    e.preventDefault();
-    var $this = $(this);
-    if ($this.hasClass("next")) {
-      return;
-    }
-    tool.slider.slideTo($this.attr("href"));
-  });
-
 };

@@ -32,7 +32,11 @@
   {% spaceless %}
   <div class="buttons">
     <a href="#step-write" class="prev"><span class="icon"></span></a>
-    <a href="#step-submit" class="next"><span class="wrap">Next Step: <strong>Submit</strong></span><span class="icon"></span></a>
+    {% if update_published %}
+      <a href="#" class="next publish"><span class="wrap"><strong>Publish</strong></span><span class="icon"></span></a>
+    {% else %}
+      <a href="#step-submit" class="next"><span class="wrap">Next Step: <strong>Submit</strong></span><span class="icon"></span></a>
+    {% endif %}
   </div>
   {% endspaceless %}
 </div>
