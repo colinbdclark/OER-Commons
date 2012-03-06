@@ -30,9 +30,11 @@
     <div class="step-icons">
       <a href="#step-write" class="write active"></a>
       <a href="#step-describe" class="describe"></a>
-      <a href="#step-submit" class="submit"></a>
+      {% if not update_published %}
+        <a href="#step-submit" class="submit"></a>
+      {% endif %}
     </div>
-    <h1 id="material-title"></h1>
+    <h1 id="material-title">{% if form.title.value %}{{ form.title.value }}{% endif %}</h1>
     {{ form.title }}
     <div class="actions">
       <a href="#save" class="save">Save</a>
@@ -48,9 +50,11 @@
     <div class="slide" id="step-describe">
       {% include "authoring/include/describe.html" %}
     </div>
-    <div class="slide" id="step-submit">
-      {% include "authoring/include/submit.html" %}
-    </div>
+    {% if not update_published %}
+      <div class="slide" id="step-submit">
+        {% include "authoring/include/submit.html" %}
+      </div>
+    {% endif %}
   </div>
 
   </form>
@@ -103,7 +107,7 @@
   <script src="{{ STATIC_URL }}javascripts/authoring/tool.js"></script>
   <script>
     $(function(e) {
-      new AuthoringTool();
+      new AuthoringTool({% if update_published %}true{% else %}false{% endif %});
     });
   </script>
 {% endblock %}

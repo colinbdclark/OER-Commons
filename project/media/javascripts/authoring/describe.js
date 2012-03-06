@@ -9,10 +9,4 @@ var DescribeStep = function (tool) {
     placeholderText: "Enter new keyword"
   });
 
-  var $step = $("#step-describe");
-  $step.find("div.buttons a").click(function(e) {
-    e.preventDefault();
-    tool.slider.slideTo($(this).attr("href"));
-  });
-
 };

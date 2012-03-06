@@ -120,13 +120,14 @@ class UserMenu
 
 
 class Tool
-  constructor:->
+  constructor: (@updatePublished)->
     @form = $("form.authoring-form")
     @slider = new Slider()
     @userMenu = new UserMenu()
     @writeStep = new WriteStep(@)
     @describeStep = new DescribeStep(@)
-    @submitStep = new SubmitStep(@)
+    if not @updatePublished
+      @submitStep = new SubmitStep(@)
 
     @title = $("#material-title")
     @titleInput = $("#id_title")
@@ -149,10 +150,15 @@ class Tool
       @.save()
     )
 
-    publishBtn = $("#step-submit div.buttons a.next")
-    publishBtn.click((e)=>
+    @form.find("div.slide div.buttons a").click((e)=>
       e.preventDefault()
-      @.publish()
+      btn = $(e.currentTarget)
+      console.log(btn)
+      if btn.hasClass("publish")
+        @.publish()
+      else
+        @slider.slideTo(btn.attr("href"))
+      return
     )
 
     errors =  $("label.error")

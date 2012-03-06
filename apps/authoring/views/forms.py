@@ -157,10 +157,17 @@ class EditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         not_required = kwargs.pop("not_required", False)
+        update_published = kwargs.pop("update_published", False)
         super(EditForm, self).__init__(*args, **kwargs)
         if not_required:
             for field in self.fields.values():
                 field.required = False
+
+        if update_published:
+            # We don't allows to change the license after the material was published
+            del self.fields["license"]
+            #noinspection PyUnresolvedReferences
+            self._meta.fields = [f for f in self._meta.fields if f != "license"]
 
     class Meta:
         model = AuthoredMaterialDraft
@@ -172,5 +179,3 @@ class EditForm(forms.ModelForm):
                 placeholder=u"Please give a short summary of your resource. This will appear as the preview in search results."
             ))
         )
-
-

@@ -16,7 +16,13 @@ class Edit(EditMaterialViewMixin, UpdateView):
         kwargs = super(Edit, self).get_form_kwargs()
         if self.request.is_ajax():
             kwargs["not_required"] = True
+        kwargs["update_published"] = self.object.material.published
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        data = super(Edit, self).get_context_data(**kwargs)
+        data["update_published"] = self.object.material.published
+        return data
 
     def form_valid(self, form):
         self.object = form.save()

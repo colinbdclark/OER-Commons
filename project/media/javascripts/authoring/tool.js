@@ -141,15 +141,16 @@
 
   Tool = (function() {
 
-    function Tool() {
-      var errorSlide, errors, publishBtn, saveBtn,
+    function Tool(updatePublished) {
+      var errorSlide, errors, saveBtn,
         _this = this;
+      this.updatePublished = updatePublished;
       this.form = $("form.authoring-form");
       this.slider = new Slider();
       this.userMenu = new UserMenu();
       this.writeStep = new WriteStep(this);
       this.describeStep = new DescribeStep(this);
-      this.submitStep = new SubmitStep(this);
+      if (!this.updatePublished) this.submitStep = new SubmitStep(this);
       this.title = $("#material-title");
       this.titleInput = $("#id_title");
       this.title.editable(function(value) {
@@ -168,10 +169,16 @@
         e.preventDefault();
         return _this.save();
       });
-      publishBtn = $("#step-submit div.buttons a.next");
-      publishBtn.click(function(e) {
+      this.form.find("div.slide div.buttons a").click(function(e) {
+        var btn;
         e.preventDefault();
-        return _this.publish();
+        btn = $(e.currentTarget);
+        console.log(btn);
+        if (btn.hasClass("publish")) {
+          _this.publish();
+        } else {
+          _this.slider.slideTo(btn.attr("href"));
+        }
       });
       errors = $("label.error");
       if (errors.length) {

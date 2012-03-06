@@ -99,7 +99,6 @@ var WriteStep = function (tool) {
   this.cmdKey = false;
   var $document = $(document);
   $document.keydown(function (e) {
-    console.log(e.which);
     if (e.which == editor.CTRL) {
       editor.ctrlKey = true;
     } else if (e.which == editor.CMD) {
@@ -293,12 +292,6 @@ var WriteStep = function (tool) {
     if (e.which == editor.DELETE || e.which == editor.BACKSPACE) {
       editor.ensureTextInput();
     }
-  });
-
-  var $step = $("#step-write");
-  $step.find("div.buttons a").click(function (e) {
-    e.preventDefault();
-    tool.slider.slideTo($(this).attr("href"));
   });
 
 };
