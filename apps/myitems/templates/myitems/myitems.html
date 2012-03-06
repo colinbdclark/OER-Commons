@@ -22,9 +22,7 @@
 
             {% for item in items %}
                 <article class="item clearfix{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
-                    <div class="right">
-                        {{ item.relation_to_user|upper }}
-                    </div>
+                    <div class="right relation">{{ item.relation_to_user|upper }}</div>
                     <div class="details">
                         <h1>
                             <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
@@ -38,6 +36,7 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="delete"><a href="#" class="delete">Delete</a></div>
                 </article>
             {% endfor %}
 

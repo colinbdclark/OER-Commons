@@ -12,6 +12,7 @@ oer.myitems.init = function() {
     var addItemUrl = django_js_utils.urls.resolve('myitems:folder_add_item');
     var deleteUrl = django_js_utils.urls.resolve('myitems:folder_delete');
     var deleteItemFolderUrl = django_js_utils.urls.resolve('myitems:folder_delete_item');
+    var deleteItemUrl = django_js_utils.urls.resolve('myitems:delete_item');
 
     var addFolderDeleteConfirmation = function () {
         $folderList.find("a.delete").inlineConfirmation({
@@ -64,6 +65,52 @@ oer.myitems.init = function() {
         });
     };
 
+
+    var changeNumber = function($elements, delta) {
+        for (var i = 0; i < $elements.length; i++) {
+            var $element = $elements.eq(i);
+            $element.text($element.text()-0+delta);
+        }
+    };
+
+
+    var addItemDeleteConfirmation = function () {
+        $("article a.delete").inlineConfirmation({
+            confirmCallback: function(action) {
+                var $article = action.closest("article");
+                var $itemFolders = $article.find("ul.folder-list li");
+                var itemId = $article.data("identifier");
+                var $numbers = $folderList.find("li.view.myitems span.number");
+
+                if ($article.find("div.right.relation").text() === "CREATED") {
+                    $numbers = $numbers.add($folderList.find("li.view.submitted span.number"));
+                }
+
+                var $folders = $folderList.children("li.folder");
+                for (var i = 0; i < $itemFolders.length-1; i++) {
+                    var itemFolderId = $itemFolders.eq(i).data("folder-id");
+                    for (var j = 0; j < $folders.length; j++) {
+                        var $folder = $folders.eq(j);
+                        if ($folder.data("folder-id") === itemFolderId) {
+                            $numbers = $numbers.add($folder.find("span.number"));
+                            break;
+                        }
+                    }
+                }
+                $.post(deleteItemUrl, {item_id: itemId}, function(response) {
+                    if (response.status === "success") {
+                        $article.remove();
+                    } else {
+                        $article.show();
+                        changeNumber($numbers, 1);
+                    }
+                });
+                $article.fadeOut();
+                changeNumber($numbers, -1);
+            }
+        });
+    };
+
     var addFolderElement = function(params) {
         params.url = django_js_utils.urls.resolve('myitems:folder', {slug: params.slug});
         var $item = $.tmpl("myitems:folder", params);
@@ -81,12 +128,13 @@ oer.myitems.init = function() {
     var getFolders = function(request, callback) {
         var term = $.trim(request.term).toLowerCase();
         var folders = [];
-        $("#folder-create-form li.folder span.name").each(function() {
-            var folder = $.trim($(this).text());
+        var $names = $("#folder-create-form li.folder span.name");
+        for (var i = 0; i < $names.length; i++) {
+            var folder = $.trim($names.eq(i).text());
             if (folder.substring(0, term.length).toLowerCase() === term) {
                 folders.push(folder);
             }
-        });
+        }
         callback(folders);
     };
 
@@ -175,6 +223,7 @@ oer.myitems.init = function() {
 
     addFolderDeleteConfirmation();
     addItemFolderDeleteConfirmation();
+    addItemDeleteConfirmation();
 
     $itemFolderInput.autocomplete({
         source: getFolders

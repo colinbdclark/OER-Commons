@@ -4,8 +4,11 @@
   <form id="folder-create-form" method="post" action="{% url myitems:folder_create %}">
       <ul>
         {% for view in views %}
-          <li class="view{% if view.selected %} selected{% endif %}">
-              <a href="{{ view.url }}"><em>{{ view.title }} ({{ view.count }})</em></a>
+          <li class="view {{ view.name }}{% if view.selected %} selected{% endif %}">
+              <a href="{{ view.url }}">
+                  <span class="name">{{ view.title }}</span>
+                  (<span class="number">{{ view.count }}</span>)
+              </a>
           </li>
         {% endfor %}
         {% for f in folders %}
