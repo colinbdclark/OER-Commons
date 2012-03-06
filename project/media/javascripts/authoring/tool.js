@@ -150,6 +150,19 @@
       this.writeStep = new WriteStep(this);
       this.describeStep = new DescribeStep(this);
       this.submitStep = new SubmitStep(this);
+      this.title = $("#material-title");
+      this.titleInput = $("#id_title");
+      this.title.editable(function(value) {
+        _this.titleInput.val(value);
+        return value;
+      }, {
+        cssclass: "title-input",
+        width: "none",
+        height: "none",
+        onblur: "submit",
+        tooltip: "Click to edit title...",
+        placeholder: "Click to edit title..."
+      });
       saveBtn = $("div.authoring-head div.actions a.save");
       saveBtn.click(function(e) {
         e.preventDefault();
