@@ -1,11 +1,11 @@
-from common.models import GradeLevel, GradeSubLevel, Grade
+from common.models import GradeLevel, GradeSubLevel, Grade, MediaFormat
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django import forms
 from geo.models import Country
 from materials.models import GeneralSubject, CourseMaterialType,\
-    MediaFormat, Language, GeographicRelevance, LibraryMaterialType, Course,\
+    Language, GeographicRelevance, LibraryMaterialType, Course,\
     Library
 from materials.models.course import COURSE_OR_MODULE
 from project.utils import slugify

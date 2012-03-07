@@ -7,7 +7,7 @@ from materials.admin.course import CourseAdmin
 from materials.admin.library import LibraryAdmin
 from materials.models import Course, Library, CommunityItem
 from materials.models.common import GeneralSubject,\
-    Language, MediaFormat, GeographicRelevance, Keyword, Author, Collection
+    Language, GeographicRelevance, Keyword, Author, Collection
 from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import CourseMaterialType
 from materials.models.library import LibraryMaterialType
@@ -18,7 +18,6 @@ site.register(GeneralSubject, ModelAdmin)
 site.register(Language, ModelAdmin)
 site.register(CourseMaterialType, ModelAdmin)
 site.register(LibraryMaterialType, ModelAdmin)
-site.register(MediaFormat, ModelAdmin)
 site.register(CommunityType, ModelAdmin)
 site.register(CommunityTopic, ModelAdmin)
 site.register(GeographicRelevance, ModelAdmin)

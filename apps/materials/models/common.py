@@ -1,5 +1,6 @@
-from autoslug.fields import AutoSlugField
+#noinspection PyUnresolvedReferences
 from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
+from autoslug.fields import AutoSlugField
 from cache_utils.decorators import cached
 from django.db import models
 from django.db.models import permalink
@@ -310,24 +311,6 @@ class Institution(models.Model):
         verbose_name = _(u"Institution")
         verbose_name_plural = _(u"Institutions")
         ordering = ("name",)
-
-
-class MediaFormat(models.Model):
-
-    name = models.CharField(unique=True, max_length=100,
-                            verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
-                         verbose_name=_(u"Slug"),
-                         db_index=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = "materials"
-        verbose_name = _(u"Media format")
-        verbose_name_plural = _(u"Media formats")
-        ordering = ("id",)
 
 
 class GeographicRelevance(models.Model):

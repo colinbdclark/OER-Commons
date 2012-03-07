@@ -1,6 +1,125 @@
 [
   {
     "pk": 1, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "Pre-K (age 4 or younger)"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "Kindergarten (ages 4-5)"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "1st Grade (ages 5-6)"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "2nd Grade (ages 6-7)"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "3rd Grade (ages 7-8)"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "4th Grade (ages 8-9)"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "5th Grade (ages 9-10)"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "6th Grade (ages 10-11)"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "7th Grade (ages 11-12)"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "8th Grade (ages 12-13)"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "9th Grade (ages 13-14)"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "10th Grade (ages 14-15)"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "11th Grade (ages 15-16)"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "12th Grade (ages 16-17)"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "College, Undergraduate"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "College, Graduate"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "common.studentlevel", 
+    "fields": {
+      "title": "Career Training / Vocational Education"
+    }
+  }, 
+  {
+    "pk": 1, 
     "model": "common.gradelevel", 
     "fields": {
       "description": "includes Pre-K - Grade 6; Elementary; Lower Elementary; Upper Elementary", 
@@ -249,121 +368,66 @@
   }, 
   {
     "pk": 1, 
-    "model": "common.studentlevel", 
+    "model": "common.mediaformat", 
     "fields": {
-      "title": "Pre-K (age 4 or younger)"
+      "name": "Audio", 
+      "slug": "audio"
     }
   }, 
   {
     "pk": 2, 
-    "model": "common.studentlevel", 
+    "model": "common.mediaformat", 
     "fields": {
-      "title": "Kindergarten (ages 4-5)"
+      "name": "Graphics/Photos", 
+      "slug": "graphics-photos"
     }
   }, 
   {
     "pk": 3, 
-    "model": "common.studentlevel", 
+    "model": "common.mediaformat", 
     "fields": {
-      "title": "1st Grade (ages 5-6)"
+      "name": "Mobile", 
+      "slug": "mobile"
     }
   }, 
   {
     "pk": 4, 
-    "model": "common.studentlevel", 
+    "model": "common.mediaformat", 
     "fields": {
-      "title": "2nd Grade (ages 6-7)"
+      "name": "Other", 
+      "slug": "other"
     }
   }, 
   {
     "pk": 5, 
-    "model": "common.studentlevel", 
+    "model": "common.mediaformat", 
     "fields": {
-      "title": "3rd Grade (ages 7-8)"
+      "name": "Text/HTML", 
+      "slug": "text-html"
     }
   }, 
   {
     "pk": 6, 
-    "model": "common.studentlevel", 
+    "model": "common.mediaformat", 
     "fields": {
-      "title": "4th Grade (ages 8-9)"
+      "name": "Downloadable docs", 
+      "slug": "downloadable-docs"
     }
   }, 
   {
     "pk": 7, 
-    "model": "common.studentlevel", 
+    "model": "common.mediaformat", 
     "fields": {
-      "title": "5th Grade (ages 9-10)"
+      "name": "Video", 
+      "slug": "video"
     }
   }, 
   {
     "pk": 8, 
-    "model": "common.studentlevel", 
+    "model": "common.mediaformat", 
     "fields": {
-      "title": "6th Grade (ages 10-11)"
-    }
-  }, 
-  {
-    "pk": 9, 
-    "model": "common.studentlevel", 
-    "fields": {
-      "title": "7th Grade (ages 11-12)"
-    }
-  }, 
-  {
-    "pk": 10, 
-    "model": "common.studentlevel", 
-    "fields": {
-      "title": "8th Grade (ages 12-13)"
-    }
-  }, 
-  {
-    "pk": 11, 
-    "model": "common.studentlevel", 
-    "fields": {
-      "title": "9th Grade (ages 13-14)"
-    }
-  }, 
-  {
-    "pk": 12, 
-    "model": "common.studentlevel", 
-    "fields": {
-      "title": "10th Grade (ages 14-15)"
-    }
-  }, 
-  {
-    "pk": 13, 
-    "model": "common.studentlevel", 
-    "fields": {
-      "title": "11th Grade (ages 15-16)"
-    }
-  }, 
-  {
-    "pk": 14, 
-    "model": "common.studentlevel", 
-    "fields": {
-      "title": "12th Grade (ages 16-17)"
-    }
-  }, 
-  {
-    "pk": 15, 
-    "model": "common.studentlevel", 
-    "fields": {
-      "title": "College, Undergraduate"
-    }
-  }, 
-  {
-    "pk": 16, 
-    "model": "common.studentlevel", 
-    "fields": {
-      "title": "College, Graduate"
-    }
-  }, 
-  {
-    "pk": 17, 
-    "model": "common.studentlevel", 
-    "fields": {
-      "title": "Career Training / Vocational Education"
+      "name": "Interactive", 
+      "slug": "interactive"
     }
   }
 ]

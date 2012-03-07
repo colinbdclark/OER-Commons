@@ -1,10 +1,11 @@
+from common.models import MediaFormat
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags
 from django.utils.text import unescape_entities, truncate_words
 from django.views.generic.simple import direct_to_template
-from materials.models.common import MediaFormat, CC_LICENSE_URL_RE
+from materials.models.common import  CC_LICENSE_URL_RE
 from materials.models.course import Course
 from materials.views.forms import CC_OLD_LICENSES
 from materials.views.iframe_submission.pyreadability import Readability, \

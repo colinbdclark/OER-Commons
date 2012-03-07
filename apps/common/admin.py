@@ -39,3 +39,4 @@ class GradeAdmin(admin.ModelAdmin):
 admin.site.register(models.GradeLevel, GradeLevelAdmin)
 admin.site.register(models.GradeSubLevel, GradeSubLevelAdmin)
 admin.site.register(models.Grade, GradeAdmin)
+admin.site.register(models.MediaFormat, admin.ModelAdmin)

@@ -1,4 +1,4 @@
-from common.models import GradeLevel
+from common.models import GradeLevel, MediaFormat
 from core.forms import AutoCreateField, MultipleAutoCreateInput, \
     MultipleAutoCreateField, AutocompleteListWidget
 from django import forms
@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
-from materials.models.common import GeneralSubject, MediaFormat, \
+from materials.models.common import GeneralSubject,\
     Language, GeographicRelevance, Keyword
 from materials.models.course import Course, CourseMaterialType, COURSE_OR_MODULE
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
