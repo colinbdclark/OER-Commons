@@ -1,11 +1,12 @@
 from annoying.functions import get_object_or_None
-from common.models import GradeLevel
+from common.models import GradeLevel, MediaFormat
 from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from materials.models import  Keyword, \
     GeneralSubject, License
+from pyquery import PyQuery as pq
 import embedly
 import os
 
@@ -50,6 +51,8 @@ class AuthoredMaterial(AbstractAuthoredMaterial):
     created_timestamp = models.DateTimeField(auto_now_add=True)
     modified_timestamp = models.DateTimeField(auto_now=True)
 
+    media_formats = models.ManyToManyField(MediaFormat)
+
     def get_draft(self):
         draft = get_object_or_None(AuthoredMaterialDraft, material=self)
         if not draft:
@@ -70,6 +73,19 @@ class AuthoredMaterial(AbstractAuthoredMaterial):
             setattr(material, m2m.name, getattr(draft, m2m.name).all())
         material.published = True
         material.is_new = False
+
+        # Update media formats based on different media types included into material text.
+        media_formats = [MediaFormat.objects.get(slug="text-html")]
+        document = pq(material.text)
+        if document.find("figure.image").length:
+            media_formats.append(MediaFormat.objects.get(slug="graphics-photos"))
+        if document.find("figure.video").length:
+            media_formats.append(MediaFormat.objects.get(slug="video"))
+        if document.find("figure.audio").length:
+            media_formats.append(MediaFormat.objects.get(slug="audio"))
+        if document.find("figure.download").length:
+            media_formats.append(MediaFormat.objects.get(slug="downloadable-docs"))
+        material.media_formats = media_formats
         material.save()
         draft.delete()
         return material
