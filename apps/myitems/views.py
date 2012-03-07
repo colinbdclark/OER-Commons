@@ -57,6 +57,7 @@ def myitems_index(request, view_name, page_title, no_items_message,
         'pagination': pagination,
         'items': items,
         'index_params': index_params,
+        'hide_global_notifications': True,
     })
 
 
