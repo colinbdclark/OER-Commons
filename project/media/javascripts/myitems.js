@@ -75,7 +75,7 @@ oer.myitems.init = function() {
 
 
     var addItemDeleteConfirmation = function () {
-        $("article a.delete").inlineConfirmation({
+        $("article div.delete a.delete").inlineConfirmation({
             confirmCallback: function(action) {
                 var $article = action.closest("article");
                 var $itemFolders = $article.find("ul.folder-list li");
