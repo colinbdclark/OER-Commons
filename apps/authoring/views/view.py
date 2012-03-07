@@ -69,5 +69,5 @@ class ViewAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
 
     def get_context_data(self, **kwargs):
         data = super(ViewAuthoredMaterial, self).get_context_data(**kwargs)
-        data["text"], data["outline"] = ViewAuthoredMaterial.prepare_content(data["object"].text)
+        data["text"], data["outline"] = ViewAuthoredMaterial.prepare_content(self.object.text)
         return data
