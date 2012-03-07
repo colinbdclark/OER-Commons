@@ -57,6 +57,7 @@ def myitems_index(request, view_name, page_title, no_items_message,
         'pagination': pagination,
         'items': items,
         'index_params': index_params,
+        'hide_global_notifications': True,
     })
 
 
@@ -224,7 +225,7 @@ class FolderAddItem(View):
 
 
 
-class FolderDeleteItem(View):
+class FolderItemDelete(View):
     @method_decorator(login_required)
     @method_decorator(ajax_request)
     def post(self, request, *args, **kwargs):
@@ -239,9 +240,29 @@ class FolderDeleteItem(View):
             id=folder_id
         )
         material = get_material_object_or_404(*item_id.split('.'))
-        #FolderItem.objects.get(folder=folder, content_object=material).delete()
         material.folders.filter(folder=folder).delete()
         reindex(material)
+        to_return = { "status": "success" }
+        return to_return
+
+
+
+class ItemDelete(View):
+    @method_decorator(login_required)
+    @method_decorator(ajax_request)
+    def post(self, request, *args, **kwargs):
+        try:
+            item_id = request.REQUEST["item_id"]
+        except KeyError:
+            return { "status": "error"}
+
+        material = get_material_object_or_404(*item_id.split('.'))
+        if material.creator == request.user:
+            material.delete()
+        else:
+            material.saved_items.filter(user=request.user).delete()
+            material.folders.filter(folder__user=request.user).delete()
+            reindex(material)
         to_return = { "status": "success" }
         return to_return
 

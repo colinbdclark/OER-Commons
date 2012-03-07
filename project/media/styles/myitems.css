@@ -102,4 +102,25 @@ section.my-items-views li {
 article ul.folder-list li {
   display: inline-block;
   list-style-type: none;
+  vertical-align: bottom;
 }
+
+article {
+  position: relative;
+}
+
+article div.delete {
+  position: absolute;
+  top: -2px;
+  right: 2px;
+}
+
+article div.relation {
+  margin-top: 20px;
+}
+
+
+section.portlet.my-items-views ul li.view {
+  font-style: italic;
+}
+

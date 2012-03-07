@@ -44,6 +44,7 @@ def myitems_views_portlet(context):
             "url": reverse("myitems:%s" % view_name),
             "title": view_title,
             "count": query.filter(filter(request.user.id)).count(),
+            "name": view_name,
         }
         for view_name, view_title, filter in VIEWS
     ]
