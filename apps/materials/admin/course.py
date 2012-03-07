@@ -1,4 +1,4 @@
-from common.models import GradeLevel, GradeSubLevel, Grade
+from common.models import GradeLevel, GradeSubLevel, Grade, MediaFormat
 from core.forms import AutoCreateField, MultipleAutoCreateField, \
     AutocompleteListWidget
 from curriculum.models import AlignmentTag
@@ -18,7 +18,7 @@ from django.views.generic.simple import redirect_to
 from material import MaterialAdmin
 from materials.admin.fields import LicenseFields
 from materials.models.common import Author, GeneralSubject,\
-    MediaFormat, Language, GeographicRelevance, Keyword
+    Language, GeographicRelevance, Keyword
 from materials.models.course import Course, CourseMaterialType
 from materials.views.forms import RSSFields
 from materials.views.forms.course import DerivedFields, PrePostRequisitesFields
