@@ -14,6 +14,7 @@ from materials.models import  Keyword, \
 from materials.models.common import Language
 from materials.models.material import TAGGED, REVIEWED, RATED, PUBLISHED_STATE
 from materials.models.microsite import Microsite, Topic
+from myitems.models import FolderItem
 from pyquery import PyQuery as pq
 from rating.models import Rating
 from reviews.models import Review
@@ -87,6 +88,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
     alignment_tags = generic.GenericRelation(TaggedMaterial)
+    folders = generic.GenericRelation(FolderItem)
 
     def get_draft(self):
         draft = get_object_or_None(AuthoredMaterialDraft, material=self)
@@ -249,6 +251,10 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     @property
     def alignment_categories(self):
         return self.alignment_tags.values_list("tag__category__id", flat=True).order_by().distinct()
+
+    @property
+    def saved_in_folders(self):
+        return self.folders.values_list("folder__id", flat=True)
 
 
 def upload_to(prefix):
