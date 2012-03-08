@@ -45,6 +45,9 @@ def myitems_index(request, view_name, page_title, no_items_message,
                 item["relation_to_user"] = 'created'
             elif user_id in item["saved_by"]:
                 item["relation_to_user"] = 'saved'
+
+            folders = Folder.objects.filter(pk__in=item["folders"], user=request.user)
+            item["folders"] = folders.values('id', 'name')
         return items
     items = add_relation([populate_item_from_search_result(result) for result in results])
 

@@ -300,10 +300,7 @@ def populate_item_from_search_result(result):
         item["topics"] = topics
 
 
-    item["folders"] = [
-        { "id": fid, "name": get_name_from_id(Folder, fid) }
-        for fid in item.get("saved_in_folders") or []
-    ]
+    item["folders"] = item.get("saved_in_folders") or []
 
     item["is_evaluated"] = bool(result.evaluated_rubrics)
 
