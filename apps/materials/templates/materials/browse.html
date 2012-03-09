@@ -79,35 +79,5 @@
       </td>
     </tr></tbody>
   </table>
-  <table cellspacing="0" border="0" width="100%">
-    <thead><tr>
-      <th width="50%">Course Related Materials (26230)</th>
-      <th class="sep"><div></div></th>
-      <th width="50%">Libraries and Collections (2532)</th>
-    </tr></thead>
-    <tbody><tr>
-      <td>
-        <ul>
-          {% for item in course_or_module %}
-          <li>
-            <span>({{ item.count }})</span>
-            <a href="{% url materials:courses:course_or_module_index course_or_module=item.slug %}">{{ item.name|shrink:100 }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </td>
-      <td class="sep"> </td>
-      <td>
-        <ul>
-          {% for item in library_material_types %}
-          <li>
-            <span>({{ item.count }})</span>
-            <a href="{% url materials:libraries:material_type_index library_material_types=item.slug %}">{{ item.name|shrink:100 }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </td>
-    </tr></tbody>
-  </table>
 </div>
 {% endblock %}

@@ -31,16 +31,6 @@ def browse(request, microsite=None):
         else:
             course_material_types_col2.append(o)
 
-    library_material_types_facets = dict(get_facets_for_field("library_material_types"))
-    library_material_types = list(LibraryMaterialType.objects.values("id", "slug", "name"))
-    for o in library_material_types:
-        o["count"] = library_material_types_facets.get(unicode(o["id"]), 0)
-
-    course_or_module_facets = dict(get_facets_for_field("course_or_module"))
-    course_or_module = [dict(slug=slug, name=name) for slug, name in COURSE_OR_MODULE]
-    for o in course_or_module:
-        o["count"] = course_or_module_facets.get(unicode(o["slug"]), 0)
-
     page_title = u"Browse OER Materials"
     breadcrumbs = [{"url": reverse("materials:browse"), "title": u"OER Materials"}]
 
