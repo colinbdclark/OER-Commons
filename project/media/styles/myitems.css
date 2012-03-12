@@ -103,6 +103,27 @@ article ul.folder-list li {
   display: inline-block;
   list-style-type: none;
   vertical-align: bottom;
+  margin-left: 5px;
+}
+
+article ul.widgets {
+  margin-top: 5px;
+}
+
+article ul.widgets > li {
+  display: inline-block;
+  list-style-type: none;
+  vertical-align: bottom;
+  margin-left: 10px;
+}
+
+article ul.widgets li {
+  margin-bottom: 0;
+}
+
+article ul.widgets div.stars {
+  margin-top: -2px;
+  margin-bottom: 0px;
 }
 
 article {
