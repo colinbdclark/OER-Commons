@@ -88,7 +88,7 @@ var WriteStep = function (tool) {
 
   this.shouldSaveState = true; // Flag to define if we should save current state in undo history
 
-  this.$area.find("figure,a").attr("contenteditable", "false");
+  this.$area.find("figure").attr("contenteditable", "false");
 
   this.cleanHTML();
   this.ensureTextInput();
@@ -191,6 +191,15 @@ var WriteStep = function (tool) {
     // Update the focused nodes if user moves the caret.
     if ($.inArray(e.which, editor.NAVIGATION_KEYS) != -1 || $.inArray(e.which, [editor.ENTER, editor.BACKSPACE, editor.DELETE]) != -1) {
       editor.trackSelection();
+      if (e.which == editor.ENTER) {
+        // If user presses Enter when he's inside a paragraph with styled text,
+        // it adds a new paragraph with the same styling. This is not desired, so
+        // we have to remove the formatting tags from new paragraph.
+        if (editor.$focusBlock.is("p,div") && $.trim(editor.$focusBlock.text()) === "" && !editor.$focusNode.is(editor.$focusBlock)) {
+          editor.$focusBlock.html("<br>");
+          editor.focusOnNode(editor.$focusBlock);
+        }
+      }
       if ($.inArray(e.which, [editor.BACKSPACE, editor.DELETE]) == -1) {
         return;
       }
@@ -868,7 +877,6 @@ WriteStep.prototype.insertLink = function () {
     $link.data("new", true);
     $link.click();
   }
-  $link.attr("contenteditable", "false");
   this.trackSelection();
 };
 
