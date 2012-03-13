@@ -13,18 +13,17 @@ dl.user-info dt {
 }
 
 
-a.delete {
+.myitems a.delete {
   position: relative;
-  top: 2px;
   display: inline-block;
-  height: 16px;
-  width: 16px;
-  text-indent: -9999px;
-  background: url(../images/icon-delete-gray.png) 50% 50% no-repeat;
+  color: #707070;
+  font-weight: bolder;
+  font-size: 20px;
+  line-height: 16px;
 }
 
 
-.portlet.my-items-views.myitems ul {
+.myitems .portlet.my-items-views ul {
   margin: 0 3px 0 0;
   padding: 0;
   list-style-type: none;
@@ -49,8 +48,12 @@ a.delete {
   text-decoration: none;
 }
 
+.portlet.my-items-views a.delete {
+  top: 3px;
+}
 
-.portlet.myitems h1 {
+
+.myitems .portlet h1 {
   color: #FFFFFF;
   background-color: #1F4D64;
   border-top-left-radius: 6px 6px;
@@ -99,34 +102,37 @@ section.my-items-views li {
   display: none;
 }
 
-article ul.folder-list li {
+.myitems article .folder-list li {
   display: inline-block;
   list-style-type: none;
-  vertical-align: bottom;
   margin-left: 5px;
 }
 
-article ul.widgets {
+.myitems article .folder-list a.delete {
+  top: 3px;
+}
+
+.myitems article .widgets {
   margin-top: 5px;
 }
 
-article ul.widgets > li {
+.myitems article .widgets > li {
   display: inline-block;
   list-style-type: none;
   vertical-align: bottom;
   margin-left: 10px;
 }
 
-article ul.widgets li {
+.myitems article .widgets li {
   margin-bottom: 0;
 }
 
-article ul.widgets div.stars {
+.myitems article .widgets .stars {
   margin-top: -2px;
   margin-bottom: 0px;
 }
 
-article {
+.myitems article {
   position: relative;
 }
 

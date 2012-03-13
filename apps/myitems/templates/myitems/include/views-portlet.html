@@ -1,4 +1,4 @@
-<section class="portlet my-items-views myitems">
+<section class="portlet my-items-views">
   <h1 class="rc6">Folders</h1>
   {% if views %}
   <form id="folder-create-form" method="post" action="{% url myitems:folder_create %}">
@@ -17,7 +17,7 @@
                   <span class="name">{{ f.title }}</span>
                   (<span class="number">{{ f.count }}</span>)
               </a>
-              <a href="#" class="delete">Delete</a>
+              <a href="#" class="delete">×</a>
           </li>
         {% endfor %}
           <li class="last">

@@ -7,7 +7,7 @@
     {% my_tags_portlet %}
 {% endblock %}
 
-{% block bodyclass %}no-right-column{% endblock %}
+{% block bodyclass %}no-right-column myitems{% endblock %}
 
 {% block column-right %}{% endblock %}
 
@@ -33,7 +33,7 @@
                             <li>
                                 <ul class="folder-list">
                                     {% for folder in item.folders %}
-                                        <li data-folder-id="{{ folder.id }}">{{ folder.name }} <a href="#" class="delete">Delete</a></li>
+                                        <li data-folder-id="{{ folder.id }}">{{ folder.name }} <a href="#" class="delete">×</a></li>
                                     {% endfor %}
                                     <li class="last">
                                         <a class="dashed" href="#">Add</a>
