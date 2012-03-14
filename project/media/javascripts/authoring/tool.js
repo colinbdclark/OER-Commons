@@ -169,7 +169,7 @@
         e.preventDefault();
         return _this.save();
       });
-      this.form.find("div.slide div.buttons a").click(function(e) {
+      this.form.find("div.slide div.slider-buttons a").click(function(e) {
         var btn;
         e.preventDefault();
         btn = $(e.currentTarget);

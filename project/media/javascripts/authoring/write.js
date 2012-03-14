@@ -15,7 +15,7 @@ var WriteStep = function (tool) {
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
-  this.ALLOWED_CLASSES = ["embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5"];
+  this.ALLOWED_CLASSES = ["embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "rangySelectionBoundary"];
   for (var i = 1; i < 6; i++) {
     this.ALLOWED_CLASSES.push("text-color-" + i);
     this.ALLOWED_CLASSES.push("bg-color-" + i);
@@ -73,7 +73,7 @@ var WriteStep = function (tool) {
   this.CMD = 91;
 
   this.$toolbar = $("#write-toolbar");
-  this.$toolbarButtons = this.$toolbar.find("a.button");
+  this.$toolbarButtons = this.$toolbar.find("a.toolbar-button");
   this.$area = $("#editor-area");
   this.$outline = $("#outline");
   this.$textStyleIndicator = this.$toolbar.find(".text-style > a span");
@@ -152,6 +152,7 @@ var WriteStep = function (tool) {
   this.initIndentButtons();
   this.initListButtons();
   this.initLinks();
+  this.initTableButton();
   this.initColorButtons();
   this.initOutline();
   this.initReferences();
@@ -165,6 +166,9 @@ var WriteStep = function (tool) {
   });
   this.$area.find("figure.embed").each(function () {
     editor.loadEmbed($(this));
+  });
+  this.$area.find("table").each(function() {
+    editor.initTable($(this));
   });
 
   // Clean up HTML on paste and check for changes
@@ -195,7 +199,7 @@ var WriteStep = function (tool) {
         // If user presses Enter when he's inside a paragraph with styled text,
         // it adds a new paragraph with the same styling. This is not desired, so
         // we have to remove the formatting tags from new paragraph.
-        if (editor.$focusBlock.is("p,div") && $.trim(editor.$focusBlock.text()) === "" && !editor.$focusNode.is(editor.$focusBlock)) {
+        if (editor.$focusBlock && editor.$focusBlock.is("p,div") && $.trim(editor.$focusBlock.text()) === "" && !editor.$focusNode.is(editor.$focusBlock)) {
           editor.$focusBlock.html("<br>");
           editor.focusOnNode(editor.$focusBlock);
         }
@@ -279,6 +283,7 @@ var WriteStep = function (tool) {
           e.preventDefault();
         }
       }
+      return;
     }
 
     if ($.inArray(e.which, editor.SPECIAL_KEY_CODES) != -1 || $.inArray(e.which, editor.NAVIGATION_KEYS) != -1) {
@@ -334,16 +339,23 @@ WriteStep.prototype.cleanHTML = function () {
   $area.find("[style]").removeAttr("style");
 
   // Remove not allowed classes
-  $area.find("[class]").removeClass(function (i, oldClasses) {
-    oldClasses = oldClasses.split(" ");
-    oldClasses.sort();
-    var remove = [];
-    for (i = 0; i < oldClasses.length; i++) {
-      if ($.inArray(oldClasses[i], editor.ALLOWED_CLASSES) === -1) {
-        remove.push(oldClasses[i]);
-      }
+  $area.find("[class]").each(function() {
+    var $this = $(this);
+    if ($this.closest("[class^='ui-']").length) {
+      return;
     }
-    return remove.join(" ");
+    $this.removeClass(function (i, oldClasses) {
+      oldClasses = oldClasses.split(" ");
+      oldClasses.sort();
+      var remove = [];
+      for (i = 0; i < oldClasses.length; i++) {
+        var cls = oldClasses[i];
+        if ($.inArray(cls, editor.ALLOWED_CLASSES) === -1) {
+          remove.push(cls);
+        }
+      }
+      return remove.join(" ");
+    });
   });
 
   // Remove class attribute from elements with empty class
@@ -398,8 +410,9 @@ WriteStep.prototype.cleanHTML = function () {
 };
 
 WriteStep.prototype.cleanHtmlPreSave = function (html) {
-  // TODO: remove interface elements here
   var $document = $("<div></div>").html(html);
+  // TODO: remove interface elements here
+  $document.find("[class^='ui-']").remove();
   $document.find("[contenteditable]").removeAttr("contenteditable");
   $document.find("p,div").each(function () {
     var $this = $(this);
@@ -647,11 +660,11 @@ WriteStep.prototype.insertList = function (listType) {
 
 WriteStep.prototype.initUndoButtons = function () {
   var editor = this;
-  this.$toolbar.find("a.button.undo").click(function (e) {
+  this.$toolbarButtons.filter(".undo").click(function (e) {
     e.preventDefault();
     editor.undo();
   });
-  this.$toolbar.find("a.button.redo").click(function (e) {
+  this.$toolbarButtons.filter(".redo").click(function (e) {
     e.preventDefault();
     editor.redo();
   });
@@ -693,19 +706,19 @@ WriteStep.prototype.initTextStyleMenu = function () {
 
 WriteStep.prototype.initFormattingButtons = function () {
   var editor = this;
-  this.$toolbar.find("a.button.bold").click(function (e) {
+  this.$toolbarButtons.filter(".bold").click(function (e) {
     e.preventDefault();
     editor.saveState();
     editor.execCommand("bold");
     editor.trackSelection();
   });
-  this.$toolbar.find("a.button.italic").click(function (e) {
+  this.$toolbarButtons.filter(".italic").click(function (e) {
     e.preventDefault();
     editor.saveState();
     editor.execCommand("italic");
     editor.trackSelection();
   });
-  this.$toolbar.find("a.button.underline").click(function (e) {
+  this.$toolbarButtons.filter(".underline").click(function (e) {
     e.preventDefault();
     editor.saveState();
     editor.execCommand("underline");
@@ -715,11 +728,11 @@ WriteStep.prototype.initFormattingButtons = function () {
 
 WriteStep.prototype.initListButtons = function () {
   var editor = this;
-  this.$toolbar.find("a.button.bullet-list").click(function (e) {
+  this.$toolbarButtons.filter(".bullet-list").click(function (e) {
     e.preventDefault();
     editor.insertList("ul");
   });
-  this.$toolbar.find("a.button.number-list").click(function (e) {
+  this.$toolbarButtons.filter(".number-list").click(function (e) {
     e.preventDefault();
     editor.insertList("ol");
   });
@@ -746,7 +759,7 @@ WriteStep.prototype.getQuoteLevel = function ($quote) {
 WriteStep.prototype.initIndentButtons = function () {
   var editor = this;
 
-  this.$toolbar.find("a.button.indent").click(function (e) {
+  this.$toolbarButtons.filter(".indent").click(function (e) {
     e.preventDefault();
     var $anchorNode = editor.$anchorNode;
     var $anchorBlock = editor.$anchorBlock;
@@ -789,7 +802,7 @@ WriteStep.prototype.initIndentButtons = function () {
     }
   });
 
-  this.$toolbar.find("a.button.outdent").click(function (e) {
+  this.$toolbarButtons.filter(".outdent").click(function (e) {
     e.preventDefault();
     var $anchorNode = editor.$anchorNode;
     var $anchorBlock = editor.$anchorBlock;
@@ -938,8 +951,11 @@ WriteStep.prototype.initLinks = function () {
   });
 
   this.$area.delegate("a", "click", function (e) {
-    e.preventDefault();
     var $link = $(this);
+    if ($link.closest("tr.ui-column-controls,td.ui-row-controls").length) {
+      return;
+    }
+    e.preventDefault();
     if ($link.is(".download,.reference")) {
       return;
     }
@@ -961,7 +977,7 @@ WriteStep.prototype.initColorButtons = function () {
   var editor = this;
   var $toolbar = this.$toolbar;
   var $selectors = $toolbar.find("div.color-selector");
-  $selectors.find("a.button").click(function (e) {
+  $selectors.find("a.toolbar-button").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
     var $this = $(this);
@@ -970,15 +986,17 @@ WriteStep.prototype.initColorButtons = function () {
       $selector.removeClass("active");
     } else {
       var $lis = $selector.find("li").removeClass("selected");
-      $lis.slice(0, 5).each(function () {
-        var $li = $(this);
-        var applier = rangy.createCssClassApplier($li.attr("class"));
-        if (applier.isAppliedToSelection()) {
-          $li.addClass("selected");
+      if (editor.$focusNode) {
+        $lis.slice(0, 5).each(function () {
+          var $li = $(this);
+          var applier = rangy.createCssClassApplier($li.attr("class"));
+          if (applier.isAppliedToSelection()) {
+            $li.addClass("selected");
+          }
+        });
+        if (!$lis.filter(".selected").length) {
+          $lis.slice(-1).addClass("selected");
         }
-      });
-      if (!$lis.filter(".selected").length) {
-        $lis.slice(-1).addClass("selected");
       }
       $selector.addClass("active");
     }
@@ -1348,6 +1366,7 @@ WriteStep.prototype.saveState = function () {
 };
 
 WriteStep.prototype.undo = function () {
+  console.log(this.undoHistory);
   var historyLength = this.undoHistory.length;
   if (this.undoDisabled || this.undoDepth >= historyLength) {
     return;
@@ -1432,6 +1451,200 @@ WriteStep.prototype.disableButton = function (button) {
 
 WriteStep.prototype.enableButton = function (button) {
   this.$toolbar.find("." + button).removeClass("disabled");
+};
+
+WriteStep.prototype.initTableButton = function() {
+  var editor = this;
+  var $tableTool = this.$toolbar.find("div.table-tool");
+  var $rows = $tableTool.find("tr");
+  var $cells = $tableTool.find("table a");
+  var $rowInput = $tableTool.find("input.rows");
+  var $colInput = $tableTool.find("input.cols");
+  $tableTool.click(function(e) {
+    e.stopPropagation();
+  });
+  $tableTool.find("a.toolbar-button").click(function(e) {
+    e.preventDefault();
+    if ($tableTool.hasClass("active")) {
+      $tableTool.removeClass("active");
+    } else {
+      $cells.removeClass("active").removeClass("hover");
+      $rowInput.val("");
+      $colInput.val("");
+      $tableTool.addClass("active");
+    }
+  });
+  function applyClassToCells(cls, row, col) {
+    $rows.slice(0, row).each(function() {
+      var $row = $(this);
+      $row.find("a").slice(0, col).addClass(cls);
+      $row.find("a").slice(col).removeClass(cls);
+    });
+    $rows.slice(row).find("a").removeClass(cls);
+  }
+  $cells.mouseover(function() {
+    var $cell = $(this);
+    applyClassToCells("hover", $cell.data("row"), $cell.data("col"));
+  });
+  $cells.click(function(e) {
+    e.preventDefault();
+    var $cell = $(this);
+    $rowInput.val($cell.data("row"));
+    $colInput.val($cell.data("col"));
+    applyClassToCells("active", $cell.data("row"), $cell.data("col"));
+  });
+  $tableTool.find("table").mouseout(function() {
+    $cells.removeClass("hover");
+  });
+  function getRowsAndCols() {
+    var rows = parseInt($rowInput.val());
+    var cols = parseInt($colInput.val());
+    if (!isNaN(rows) && !isNaN(cols)) {
+      return {rows:rows, cols:cols};
+    }
+    return null;
+  }
+  $rowInput.add($colInput).keyup(function() {
+    var rowsCols = getRowsAndCols();
+    if (rowsCols) {
+      applyClassToCells("active", rowsCols.rows, rowsCols.cols);
+    }
+  });
+  $(document).click(function() {
+    $tableTool.removeClass("active");
+  });
+  $tableTool.find("div.buttons a.cancel").click(function(e) {
+    e.preventDefault();
+    $tableTool.removeClass("active");
+  });
+  $tableTool.find("div.buttons a.add").click(function(e) {
+    e.preventDefault();
+    var rowsCols = getRowsAndCols();
+    if (!rowsCols) {
+      return;
+    }
+    var html = "<table>\n";
+    for (var i = 0; i < rowsCols.rows; i++) {
+      html += "<tr>\n";
+      for (var j = 0; j < rowsCols.cols; j++) {
+        html += "<td>&nbsp;\n</td>\n"
+      }
+      html += "</tr>\n";
+    }
+    html += "</table>";
+    var $table = editor.initTable($(html));
+    editor.saveState();
+    if (editor.$focusBlock) {
+      if (editor.$focusBlock.is("p,div") && $.trim(editor.$focusBlock.text()) === "") {
+        editor.$focusBlock.replaceWith($table);
+      } else {
+        $table.insertAfter(editor.$focusBlock);
+      }
+    } else {
+      $table.appendTo(editor.$area);
+    }
+    editor.focusOnNode($table.find("td").first());
+    $tableTool.removeClass("active");
+
+  });
+
+  editor.$area.delegate("table a.remove", "click", function(e) {
+    e.preventDefault();
+    var $btn = $(e.currentTarget);
+    var $table = $btn.closest("table");
+    editor.saveState();
+    if ($btn.hasClass("remove-column")) {
+      var $cells = $btn.closest("tr").find("td");
+      var colIdx = $cells.index($btn.parent());
+      $table.find("tr").each(function() {
+        $(this).find("td").eq(colIdx).remove();
+      });
+    } else if ($btn.hasClass("remove-row")) {
+      $btn.closest("tr").remove();
+    }
+    // Remove table if it's empty
+    if ($table.find("tr").length < 2 || $table.find("tr").first().find("td").length < 2) {
+      $table.remove();
+      editor.ensureTextInput();
+    }
+  });
+
+  editor.$area.delegate("table a.remove", "click", function(e) {
+    e.preventDefault();
+    var $btn = $(e.currentTarget);
+    var $table = $btn.closest("table");
+    editor.saveState();
+    if ($btn.hasClass("remove-column")) {
+      var $cells = $btn.closest("tr").find("td");
+      var colIdx = $cells.index($btn.parent());
+      $table.find("tr").each(function() {
+        $(this).find("td").eq(colIdx).remove();
+      });
+    } else if ($btn.hasClass("remove-row")) {
+      $btn.closest("tr").remove();
+    }
+    // Remove table if it's empty
+    if ($table.find("tr").length < 2 || $table.find("tr").first().find("td").length < 2) {
+      $table.remove();
+      editor.ensureTextInput();
+    }
+  });
+
+  editor.$area.delegate("table a.add", "click", function(e) {
+    e.preventDefault();
+    var $btn = $(e.currentTarget);
+    var $table = $btn.closest("table");
+    editor.saveState();
+    if ($btn.hasClass("add-column")) {
+      var $cells = $btn.closest("tr").find("td");
+      var colIdx = $cells.index($btn.parent());
+      $table.find("tr").each(function(i, row) {
+        var $row = $(row);
+        var $cell = $row.find("td").eq(1).clone();
+        if (i > 0) {
+          $cell.html("&nbsp;");
+        }
+        $cell.insertAfter($row.find("td").eq(colIdx));
+      });
+    } else if ($btn.hasClass("add-row")) {
+      var $row = $table.find("tr").eq(1).clone();
+      $row.find("td").slice(1).html("&nbsp;");
+      $row.insertAfter($btn.closest("tr"));
+    }
+  });
+
+};
+
+WriteStep.prototype.initTable = function($table) {
+  var i;
+  var $firstRow = $table.find("tr").first();
+  if (!$firstRow.hasClass("ui-column-controls")) {
+    var $controls = $("<tr></tr>").addClass("ui-column-controls");
+    var numCols = $firstRow.find("td").length;
+    for (i = 0; i < numCols + 1; i++) {
+      var $cell = $('<td contenteditable="false"></td>');
+      if (i == 0) {
+        $cell.addClass("first");
+        $cell.append($('<a href="#" class="add add-row"></a>'));
+      } else {
+        $cell.append($('<a href="#" class="remove remove-column">&times;</a>'));
+      }
+      $cell.append($('<a href="#" class="add add-column"></a>'));
+      $controls.append($cell);
+    }
+    $controls.insertBefore($firstRow);
+  }
+  $table.find("tr").slice(1).each(function() {
+    var $row = $(this);
+    var $firstCell = $row.find("td").first();
+    if (!$firstCell.hasClass("ui-row-controls")) {
+      var $cell = $('<td contenteditable="false"></td>').addClass("ui-row-controls");
+      $cell.append($('<a href="#" class="remove remove-row">&times;</a>'));
+      $cell.append($('<a href="#" class="add add-row"></a>'));
+      $cell.insertBefore($firstCell);
+    }
+  });
+  return $table;
 };
 
 function MediaDialog(editor) {

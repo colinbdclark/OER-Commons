@@ -2,7 +2,7 @@
 @import "_authored-content.scss";
 @import "_outline.scss";
 
-.authoring.view-material {
+.authoring-view {
   #toolbar {
     background-color: #3399cc;
     border: none;
@@ -35,6 +35,10 @@
         font-size: 30px;
         margin-bottom: 10px;
       }
+    }
+    table {
+      border: solid #ccc;
+      border-width: 1px 0 0 1px;
     }
   }
 }

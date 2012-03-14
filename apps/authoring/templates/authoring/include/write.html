@@ -1,7 +1,7 @@
 {% spaceless %}
   <div class="toolbar" id="write-toolbar">
-    <a class="button undo disabled" href="#undo">Undo</a>
-    <a class="button redo disabled" href="#redo">Redo</a>
+    <a class="toolbar-button undo disabled" href="#undo">Undo</a>
+    <a class="toolbar-button redo disabled" href="#redo">Redo</a>
     <span class="sep"></span>
     <div class="text-style">
       <a href="#" class="select"><span>Text style...</span></a>
@@ -12,19 +12,42 @@
         <li><a href="#quote" class="quote"><span>Long Quote</span></a></li>
       </ul>
     </div>
-    <a class="button bullet-list" href="#bullet-list">Bullet list</a>
-    <a class="button number-list" href="#number-list">Number list</a>
-    <a class="button indent" href="#indent">Increase indent</a>
-    <a class="button outdent" href="#outdent">Decrease indent</a>
+    <a class="toolbar-button bullet-list" href="#bullet-list">Bullet list</a>
+    <a class="toolbar-button number-list" href="#number-list">Number list</a>
+    <a class="toolbar-button indent" href="#indent">Increase indent</a>
+    <a class="toolbar-button outdent" href="#outdent">Decrease indent</a>
     <span class="sep"></span>
-    <a class="button table" href="#table">Insert table</a>
+    <div class="table-tool">
+      <a class="toolbar-button table" href="#table">Insert table</a>
+      <div class="grid">
+        <table>
+          <tbody>
+          {% for row_number in 12345|make_list %}
+            <tr>
+              {% for col_number in 123456|make_list %}
+                <td><a href="#" data-row="{{ row_number }}" data-col="{{ col_number }}"></a></td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        <div class="inputs">
+          <input size="2" maxlength="2" class="rows"> rows&nbsp;&nbsp;
+          <input size="2" maxlength="2" class="cols"> columns
+        </div>
+        <div class="buttons">
+          <a href="#" class="button primary add">Create</a>&nbsp;
+          <a href="#" class="button cancel">Cancel</a>
+        </div>
+      </div>
+    </div>
     <span class="sep"></span>
-    <a class="button bold" href="#bold">Bold</a>
-    <a class="button italic" href="#italic">Italic</a>
-    <a class="button underline" href="#underline">Underline</a>
+    <a class="toolbar-button bold" href="#bold">Bold</a>
+    <a class="toolbar-button italic" href="#italic">Italic</a>
+    <a class="toolbar-button underline" href="#underline">Underline</a>
     <span class="sep"></span>
     <div class="color-selector">
-      <a class="button text-color" href="#text-color">Change text color</a>
+      <a class="toolbar-button text-color" href="#text-color">Change text color</a>
       <ul class="text">
         {% for i in 12345|make_list %}
           <li class="text-color-{{ i }}"></li>
@@ -33,7 +56,7 @@
       </ul>
     </div>
     <div class="color-selector">
-      <a class="button bg-color" href="#bg-color">Change background color</a>
+      <a class="toolbar-button bg-color" href="#bg-color">Change background color</a>
       <ul class="bg">
         {% for i in 12345|make_list %}
           <li class="bg-color-{{ i }}"></li>
@@ -42,11 +65,11 @@
       </ul>
     </div>
     <span class="sep"></span>
-    <a class="button link" href="#link">Insert link</a>
+    <a class="toolbar-button link" href="#link">Insert link</a>
     <span class="sep"></span>
-    <a class="button media" href="#media">Media</a>
+    <a class="toolbar-button media" href="#media">Media</a>
     <span class="sep"></span>
-    <a class="button reference" href="#reference">Insert reference</a>
+    <a class="toolbar-button reference" href="#reference">Insert reference</a>
     <div class="clear"></div>
 
   </div>
@@ -144,7 +167,7 @@
   </div>
 
   {% spaceless %}
-  <div class="buttons">
+  <div class="slider-buttons">
     <a href="#step-describe" class="next"><span class="wrap">Next Step: <strong>Describe</strong></span><span class="icon"></span></a>
   </div>
   {% endspaceless %}
