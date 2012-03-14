@@ -150,7 +150,7 @@ class Tool
       @.save()
     )
 
-    @form.find("div.slide div.buttons a").click((e)=>
+    @form.find("div.slide div.slider-buttons a").click((e)=>
       e.preventDefault()
       btn = $(e.currentTarget)
       console.log(btn)
