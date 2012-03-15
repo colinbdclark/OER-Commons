@@ -159,8 +159,6 @@ var WriteStep = function (tool) {
 
   new MediaDialog(this);
 
-  this.initDND();
-
   this.$area.find("figure").each(function () {
     editor.initFigure($(this));
   });
@@ -170,6 +168,8 @@ var WriteStep = function (tool) {
   this.$area.find("table").each(function() {
     editor.initTable($(this));
   });
+
+  this.initDND();
 
   // Clean up HTML on paste and check for changes
   this.$area.bind("paste", function () {
@@ -283,6 +283,25 @@ var WriteStep = function (tool) {
           e.preventDefault();
         }
       }
+      return;
+    }
+
+    // TAB key inside table cell move the focus the the next cell
+    if (e.which === 9 && editor.$focusBlock && editor.$focusBlock.is("table")) {
+      var $table = editor.$focusBlock;
+      var $current = editor.$focusNode.closest("td", $table);
+      if ($current.length) {
+        var $cells = $table.find("tr").not(".ui-column-controls").find("td").not(".ui-row-controls");
+        var idx = $cells.index($current);
+        if (idx !== -1) {
+          if (idx + 1 < $cells.length - 1) {
+            editor.focusOnNode($cells.eq(idx + 1));
+          } else if ($table.next().length) {
+            editor.focusOnNode($table.next());
+          }
+        }
+      }
+      e.preventDefault();
       return;
     }
 
@@ -1048,7 +1067,7 @@ WriteStep.prototype.initFigure = function ($figure) {
 WriteStep.prototype.initDND = function () {
   var editor = this;
   this.$area.sortable({
-    handle: this.$area.find("figure:not(.inline)"),
+    handle: this.$area.find("figure:not(.inline),table span.move"),
     distance: 15,
     containment: this.$area,
     cursor: "move",
@@ -1062,7 +1081,7 @@ WriteStep.prototype.initDND = function () {
 };
 
 WriteStep.prototype.updateDND = function () {
-  this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline)"));
+  this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline),table span.move"));
 };
 
 //WriteStep.prototype.initImageResize = function($img) {
@@ -1617,6 +1636,9 @@ WriteStep.prototype.initTableButton = function() {
 
 WriteStep.prototype.initTable = function($table) {
   var i;
+  if (!$table.parent().is("figure")) {
+    $table.wrap($('<figure class="table"></figure>'));
+  }
   var $firstRow = $table.find("tr").first();
   if (!$firstRow.hasClass("ui-column-controls")) {
     var $controls = $("<tr></tr>").addClass("ui-column-controls");
@@ -1625,6 +1647,7 @@ WriteStep.prototype.initTable = function($table) {
       var $cell = $('<td contenteditable="false"></td>');
       if (i == 0) {
         $cell.addClass("first");
+        $cell.append($('<span class="move"></span>'));
         $cell.append($('<a href="#" class="add add-row"></a>'));
       } else {
         $cell.append($('<a href="#" class="remove remove-column">&times;</a>'));
