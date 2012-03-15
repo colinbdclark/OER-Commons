@@ -1067,7 +1067,7 @@ WriteStep.prototype.initFigure = function ($figure) {
 WriteStep.prototype.initDND = function () {
   var editor = this;
   this.$area.sortable({
-    handle: this.$area.find("figure:not(.inline),table span.move"),
+    handle: this.$area.find("figure:not(.inline):not(.table),table span.move"),
     distance: 15,
     containment: this.$area,
     cursor: "move",
@@ -1081,7 +1081,7 @@ WriteStep.prototype.initDND = function () {
 };
 
 WriteStep.prototype.updateDND = function () {
-  this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline),table span.move"));
+  this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline):not(.table),table span.move"));
 };
 
 //WriteStep.prototype.initImageResize = function($img) {
@@ -1584,28 +1584,11 @@ WriteStep.prototype.initTableButton = function() {
     }
     // Remove table if it's empty
     if ($table.find("tr").length < 2 || $table.find("tr").first().find("td").length < 2) {
-      $table.remove();
-      editor.ensureTextInput();
-    }
-  });
-
-  editor.$area.delegate("table a.remove", "click", function(e) {
-    e.preventDefault();
-    var $btn = $(e.currentTarget);
-    var $table = $btn.closest("table");
-    editor.saveState();
-    if ($btn.hasClass("remove-column")) {
-      var $cells = $btn.closest("tr").find("td");
-      var colIdx = $cells.index($btn.parent());
-      $table.find("tr").each(function() {
-        $(this).find("td").eq(colIdx).remove();
-      });
-    } else if ($btn.hasClass("remove-row")) {
-      $btn.closest("tr").remove();
-    }
-    // Remove table if it's empty
-    if ($table.find("tr").length < 2 || $table.find("tr").first().find("td").length < 2) {
-      $table.remove();
+      if ($table.parent().is("figure")) {
+        $table.parent().remove();
+      } else {
+        $table.remove();
+      }
       editor.ensureTextInput();
     }
   });
