@@ -15,7 +15,7 @@ var WriteStep = function (tool) {
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
-  this.ALLOWED_CLASSES = ["embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "rangySelectionBoundary"];
+  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "rangySelectionBoundary"];
   for (var i = 1; i < 6; i++) {
     this.ALLOWED_CLASSES.push("text-color-" + i);
     this.ALLOWED_CLASSES.push("bg-color-" + i);
@@ -88,8 +88,6 @@ var WriteStep = function (tool) {
 
   this.shouldSaveState = true; // Flag to define if we should save current state in undo history
 
-  this.$area.find("figure").attr("contenteditable", "false");
-
   this.cleanHTML();
   this.ensureTextInput();
 
@@ -159,14 +157,14 @@ var WriteStep = function (tool) {
 
   new MediaDialog(this);
 
-  this.$area.find("figure").each(function () {
+  this.$area.find("table").each(function() {
+    editor.initTable($(this));
+  });
+  this.$area.find("figure:not(.table)").each(function () {
     editor.initFigure($(this));
   });
   this.$area.find("figure.embed").each(function () {
     editor.loadEmbed($(this));
-  });
-  this.$area.find("table").each(function() {
-    editor.initTable($(this));
   });
 
   this.initDND();
@@ -1621,8 +1619,9 @@ WriteStep.prototype.initTableButton = function() {
 WriteStep.prototype.initTable = function($table) {
   var i;
   if (!$table.parent().is("figure")) {
-    $table.wrap($('<figure class="table"></figure>'));
+    $table.wrap($('<figure></figure>'));
   }
+  $table.parent().addClass("table");
   var $firstRow = $table.find("tr").first();
   if (!$firstRow.hasClass("ui-column-controls")) {
     var $controls = $("<tr></tr>").addClass("ui-column-controls");
