@@ -1551,7 +1551,7 @@ WriteStep.prototype.initTableButton = function() {
       html += "</tr>\n";
     }
     html += "</table>";
-    var $table = editor.initTable($(html));
+    var $table = $(html);
     editor.saveState();
     if (editor.$focusBlock) {
       if (editor.$focusBlock.is("p,div") && $.trim(editor.$focusBlock.text()) === "") {
@@ -1562,9 +1562,10 @@ WriteStep.prototype.initTableButton = function() {
     } else {
       $table.appendTo(editor.$area);
     }
+    editor.initTable($table);
+    editor.updateDND();
     editor.focusOnNode($table.find("td").first());
     $tableTool.removeClass("active");
-
   });
 
   editor.$area.delegate("table a.remove", "click", function(e) {
