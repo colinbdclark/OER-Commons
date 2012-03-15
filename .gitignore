@@ -38,3 +38,5 @@ apps/cssreload
 project/media/cssreload/
 project/media/SCSS_CACHE/
 django.log
+src/
+.mr.developer.cfg

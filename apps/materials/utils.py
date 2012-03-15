@@ -95,7 +95,7 @@ def get_name_from_slug(model, slug):
     return None
 
 
-def get_facets_for_field(field, model=None, facet_limit=None):
+def get_facets_for_field(field, model=None, facet_limit=None, facet_mincount=None):
 
     query = SearchQuerySet()
     if model is not None:
@@ -104,6 +104,8 @@ def get_facets_for_field(field, model=None, facet_limit=None):
     query = query.facet(field)
     if facet_limit:
         query = query.facet_limit(facet_limit)
+    if facet_mincount:
+        query = query.facet_mincount(facet_mincount)
     return query.facet_counts().get("fields", {}).get(field, [])
 
 
