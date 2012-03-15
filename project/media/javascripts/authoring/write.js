@@ -286,6 +286,25 @@ var WriteStep = function (tool) {
       return;
     }
 
+    // TAB key inside table cell move the focus the the next cell
+    if (e.which === 9 && editor.$focusBlock && editor.$focusBlock.is("table")) {
+      var $table = editor.$focusBlock;
+      var $current = editor.$focusNode.closest("td", $table);
+      if ($current.length) {
+        var $cells = $table.find("tr").not(".ui-column-controls").find("td").not(".ui-row-controls");
+        var idx = $cells.index($current);
+        if (idx !== -1) {
+          if (idx + 1 < $cells.length - 1) {
+            editor.focusOnNode($cells.eq(idx + 1));
+          } else if ($table.next().length) {
+            editor.focusOnNode($table.next());
+          }
+        }
+      }
+      e.preventDefault();
+      return;
+    }
+
     if ($.inArray(e.which, editor.SPECIAL_KEY_CODES) != -1 || $.inArray(e.which, editor.NAVIGATION_KEYS) != -1) {
       return;
     }
