@@ -856,6 +856,7 @@
   overflow-y: auto;
 
   table {
+    background-color: #fff;
     .ui-column-controls td {
       position: relative;
       height: 16px;
@@ -871,6 +872,16 @@
     }
     .ui-column-controls td.first {
       border-bottom: none;
+      .move {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 17px;
+        height: 17px;
+        background: url(../../images/authoring/icon-table-move.png) no-repeat;
+        cursor: move;
+      }
     }
     .ui-row-controls {
       position: relative;

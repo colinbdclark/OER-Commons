@@ -768,50 +768,61 @@
   overflow-y: auto; }
   #editor-area:focus {
     outline-width: 0; }
-  #editor-area table .ui-column-controls td {
-    position: relative;
-    height: 16px;
-    min-height: 16px;
-    padding: 0 0 8px 0;
-    border-right: none;
-    text-align: center;
-    vertical-align: top; }
-    #editor-area table .ui-column-controls td a.remove {
+  #editor-area table {
+    background-color: #fff; }
+    #editor-area table .ui-column-controls td {
       position: relative;
-      top: 6px; }
-  #editor-area table .ui-column-controls td.first {
-    border-bottom: none; }
-  #editor-area table .ui-row-controls {
-    position: relative;
-    width: 16px;
-    min-width: 16px;
-    padding: 0 8px 0 0;
-    border-bottom: none;
-    text-align: right;
-    vertical-align: middle; }
-  #editor-area table a.remove {
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 16px;
-    text-decoration: none;
-    color: #b6b6b6; }
-    #editor-area table a.remove:hover {
-      color: #ffc24a; }
-  #editor-area table a.add {
-    display: block;
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background: url(../../images/authoring/icon-table-add.png) -16px 0 no-repeat;
-    z-index: 2; }
-    #editor-area table a.add:hover {
-      background-position: 0 0; }
-  #editor-area table a.add-column {
-    bottom: 7px;
-    right: -8px; }
-  #editor-area table a.add-row {
-    bottom: -8px;
-    right: 7px; }
+      height: 16px;
+      min-height: 16px;
+      padding: 0 0 8px 0;
+      border-right: none;
+      text-align: center;
+      vertical-align: top; }
+      #editor-area table .ui-column-controls td a.remove {
+        position: relative;
+        top: 6px; }
+    #editor-area table .ui-column-controls td.first {
+      border-bottom: none; }
+      #editor-area table .ui-column-controls td.first .move {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 17px;
+        height: 17px;
+        background: url(../../images/authoring/icon-table-move.png) no-repeat;
+        cursor: move; }
+    #editor-area table .ui-row-controls {
+      position: relative;
+      width: 16px;
+      min-width: 16px;
+      padding: 0 8px 0 0;
+      border-bottom: none;
+      text-align: right;
+      vertical-align: middle; }
+    #editor-area table a.remove {
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 16px;
+      text-decoration: none;
+      color: #b6b6b6; }
+      #editor-area table a.remove:hover {
+        color: #ffc24a; }
+    #editor-area table a.add {
+      display: block;
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: url(../../images/authoring/icon-table-add.png) -16px 0 no-repeat;
+      z-index: 2; }
+      #editor-area table a.add:hover {
+        background-position: 0 0; }
+    #editor-area table a.add-column {
+      bottom: 7px;
+      right: -8px; }
+    #editor-area table a.add-row {
+      bottom: -8px;
+      right: 7px; }
 
 .popup-dialog {
   position: absolute;
