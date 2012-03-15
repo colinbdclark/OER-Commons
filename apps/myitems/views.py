@@ -106,13 +106,18 @@ def myitems(request):
 
 @login_required
 def searches(request):
-    page_title = u"My Saved Searches"
-
     items = list(SavedSearch.objects.filter(user=request.user))
     for item in items:
         item.unsave_item_url = reverse("savedsearches:unsave", kwargs=dict(id=item.id))
 
-    return direct_to_template(request, "myitems/searches.html", locals())
+
+    return direct_to_template(request, "myitems/searches.html",
+        {
+            'items': items,
+            'saved_search': True,
+            'hide_global_notifications': True,
+        }
+    )
 
 
 
