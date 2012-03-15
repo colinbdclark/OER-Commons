@@ -6,8 +6,8 @@ oer.myitems.init = function() {
 
 
     $.template("myitems:folder",
-        '<li class="folder" data-folder-id="${id}"><a href="${url}"><span class="name">${name}</span> (<span class="number">${number}</span>)</a> <a href="#" class="delete">Delete</a></li>');
-    $.template("myitems:item-folder", '<li data-folder-id="${id}">${name} <a href="#" class="delete">Delete</a></li>');
+        '<li class="folder" data-folder-id="${id}"><a href="${url}"><span class="name">${name}</span> (<span class="number">${number}</span>)</a> <a href="#" class="delete">×</a></li>');
+    $.template("myitems:item-folder", '<li data-folder-id="${id}"><div class="folder-deco"></div>${name} <a href="#" class="delete">×</a></li>');
 
     var addItemUrl = django_js_utils.urls.resolve('myitems:folder_add_item');
     var deleteUrl = django_js_utils.urls.resolve('myitems:folder_delete');
@@ -147,7 +147,7 @@ oer.myitems.init = function() {
     var $folderLast = $folderList.find("li.last");
     var $itemFolderLists = $("article ul.folder-list");
     var $itemFolderAddButton = $itemFolderLists.find("li.last a");
-    var $itemFolderForm = $("#folder-item-form");
+    var $itemFolderForm = $('<li id="folder-item-form" class="hidden"><form><input type="text" /><a class="dashed" href="#">Submit</a></form></li>');
     var $itemFolderInput = $itemFolderForm.find("input");
 
     var getFolderByName = function(name) {
@@ -168,8 +168,8 @@ oer.myitems.init = function() {
         $itemFolderInput.autocomplete("enable");
         $itemFolderForm.next().fadeIn();
         $itemFolderForm.detach();
-        $(e.target).hide();
-        $itemFolderForm.insertBefore(e.target);
+        $($(e.target).parent()).hide();
+        $itemFolderForm.insertBefore($(e.target).parent());
         $itemFolderForm.fadeIn();
         $itemFolderInput.focus();
         e.preventDefault();
@@ -214,7 +214,7 @@ oer.myitems.init = function() {
                         var $number = $folder.find("span.number");
                         $number.text($number.text()-0+1);
                     }
-                    $itemFolderForm.parent().before(itemFolderElement(context));
+                    $itemFolderForm.closest("#folder-item-form").before(itemFolderElement(context));
                 }
             });
         }

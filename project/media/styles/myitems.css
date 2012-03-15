@@ -12,14 +12,15 @@ dl.user-info dt {
   font-weight: bold;
 }
 
-
+.myitems a.add,
 .myitems a.delete {
-  position: relative;
   display: inline-block;
   color: #707070;
   font-weight: bolder;
+  line-height: 12px;
   font-size: 20px;
-  line-height: 16px;
+  height: 12px;
+  overflow: hidden;
 }
 
 
@@ -40,16 +41,12 @@ dl.user-info dt {
 }
 
 .portlet.my-items-views li.selected a {
-    color: #1F4D64;
+  color: #1F4D64;
 }
 
 .portlet.my-items-views a {
   color: #707070;
   text-decoration: none;
-}
-
-.portlet.my-items-views a.delete {
-  top: 3px;
 }
 
 
@@ -94,22 +91,68 @@ dl.user-info dt {
 }
 
 section.my-items-views li {
-    overflow: auto;
-    width: 100%;
+  overflow: auto;
+  width: 100%;
 }
 
 #folder-create-form input {
   display: none;
 }
 
+
 .myitems article .folder-list li {
   display: inline-block;
   list-style-type: none;
   margin-left: 5px;
+  padding: 0px 4px;
+  margin-top: 6px;
+  border-top-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  background-color: #85BDD4;
+  color: #FFFFFF;
+  border: solid;
+  border-color: #85BDD4;
+  border-width: 1px;
+  line-height: 24px;
+  height: 24px;
+  vertical-align: bottom;
 }
 
-.myitems article .folder-list a.delete {
-  top: 3px;
+.myitems article .folder-list .folder-deco {
+  vertical-align: top;
+  display: inline-block;
+  height: 2px;
+  width: 10px;
+  margin-top: -4px;
+  margin-left: -5px;
+  margin-right: -6px;
+  background-color: #85BDD4;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border: solid;
+  border-color: #85BDD4;
+  border-width: 1px;
+}
+
+
+.myitems article .folder-list li.last, 
+.myitems article .folder-list li.last .folder-deco {
+  border: dashed;
+  border-color: #85BDD4;
+  border-width: 1px;
+  background-color: #FFFFFF;
+}
+
+.myitems article .folder-list li.last .folder-deco {
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 2px;
+}
+
+.myitems article .folder-list li#folder-item-form {
+  padding: 0;
+  background: none;
+  border: none;
 }
 
 .myitems article .widgets {
@@ -127,27 +170,22 @@ section.my-items-views li {
   margin-bottom: 0;
 }
 
-.myitems article .widgets .stars {
-  margin-top: -2px;
-  margin-bottom: 0px;
-}
-
 .myitems article {
   position: relative;
 }
 
-article div.delete {
+.myitems article div.delete {
   position: absolute;
   top: -2px;
   right: 2px;
 }
 
-article div.relation {
+.myitems article div.relation {
   margin-top: 20px;
 }
 
 
-section.portlet.my-items-views ul li.view {
+.myitems .portlet.my-items-views ul li.view {
   font-style: italic;
 }
 

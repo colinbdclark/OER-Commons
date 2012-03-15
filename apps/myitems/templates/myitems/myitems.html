@@ -16,11 +16,6 @@
 
     {% if items %}
         <div class="materials-index">
-            <form id="folder-item-form" class="hidden">
-                <input type="text" />
-                <a class="dashed" href="#">Submit</a>
-            </form>
-
             {% for item in items %}
                 <article class="item clearfix{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
                     <div class="right relation">{{ item.relation_to_user|upper }}</div>
@@ -33,10 +28,13 @@
                             <li>
                                 <ul class="folder-list">
                                     {% for folder in item.folders %}
-                                        <li data-folder-id="{{ folder.id }}">{{ folder.name }} <a href="#" class="delete">×</a></li>
+                                        <li class="rc2" data-folder-id="{{ folder.id }}">
+                                            <div class="folder-deco"></div>
+                                            {{ folder.name }} <a href="#" class="delete">×</a>
+                                        </li>
                                     {% endfor %}
-                                    <li class="last">
-                                        <a class="dashed" href="#">Add</a>
+                                    <li class="rc2 last">
+                                        <div class="folder-deco"></div><a class="add" href="#">+</a>
                                     </li>
                                 </ul>
                             </li>
