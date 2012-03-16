@@ -1,3 +1,7 @@
+from collections import defaultdict
+from operator import itemgetter
+import datetime
+
 from django import forms
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -8,21 +12,80 @@ from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 
 from haystack.query import SearchQuerySet, SQ
-from materials.views.index import IndexParams, populate_item_from_search_result, \
-    Pagination
+from materials.views.index import IndexParams, Pagination
 from savedsearches.models import SavedSearch
 from utils.decorators import login_required
 from annoying.decorators import ajax_request
 from core.search import reindex
+from saveditems.models import SavedItem
 
 from myitems.models import Folder, FolderItem
+
+
+class IndexParamsWithSaveDateSort(IndexParams):
+    SORT_BY_OPTIONS = (
+        IndexParams.SORT_BY_OPTIONS+
+        ({"value": u"save_date", "title": u"Save Date"},)
+    )
+
+
+
+def items_from_results(results, user):
+    items = []
+    for result in results:
+        item = result.get_stored_fields()
+
+        item["identifier"] = "%s.%s.%s" % (result.app_label,
+                                           result.model_name,
+                                           result.pk)
+
+        folders = Folder.objects.filter(pk__in=item.get("saved_in_folders") or [],
+                                            user=user)
+        item["folders"] = folders.values('id', 'name')
+        if item["creator"] == user.id:
+            item["relation_to_user"] = 'created'
+        elif user.id in item["saved_by"]:
+            item["relation_to_user"] = 'saved'
+
+        model = result.model
+        namespace = getattr(model, "namespace", None)
+        if namespace:
+            item["get_absolute_url"] = reverse(
+                                   "materials:%s:view_item" % namespace,
+                                   kwargs=dict(slug=item["slug"]))
+        else:
+            item["get_absolute_url"] = result.object.get_absolute_url()
+        items.append(item)
+    return items
+
+
+
+def sort_by_save_date(query, user):
+    mindatetime = datetime.datetime(datetime.MINYEAR, 1, 1)
+    items_dict = defaultdict(list)
+    for item in query:
+        items_dict[item.model_name].append(item)
+
+    timestamp_items = []
+    for model_name, items in items_dict.iteritems():
+        content_type = ContentType.objects.get(
+            app_label='materials',
+            model=model_name
+        )
+        d = dict(SavedItem.objects.filter(user=user, content_type=content_type,
+            object_id__in=[item.pk for item in items]).values_list('object_id', 'timestamp'))
+        timestamp_items.extend((item, d.get(int(item.pk), mindatetime)) for item in items)
+
+    return [x[0] for x in
+                sorted(timestamp_items, key=itemgetter(1), reverse=True)]
+
 
 
 def myitems_index(request, view_name, page_title, no_items_message,
                   filter, only_published=True,
                   template="myitems/saved.html", reverse_params=None):
 
-    index_params = IndexParams(request)
+    index_params = IndexParamsWithSaveDateSort(request)
     query_string_params = index_params.update_query_string_params({})
 
     batch_end = index_params.batch_start + index_params.batch_size
@@ -32,24 +95,14 @@ def myitems_index(request, view_name, page_title, no_items_message,
         query = query.narrow("is_displayed:true")
     query = query.filter(filter)
 
-    if index_params.query_order_by is not None:
+
+    if index_params.sort_by == "save_date":
+        query = sort_by_save_date(query, request.user)
+    elif index_params.query_order_by is not None:
         query = query.order_by(index_params.query_order_by)
-    else:
-        query = query
 
     results = query[index_params.batch_start:batch_end]
-    user_id = request.user.id
-    def add_relation(items):
-        for item in items:
-            if item["creator"] == user_id:
-                item["relation_to_user"] = 'created'
-            elif user_id in item["saved_by"]:
-                item["relation_to_user"] = 'saved'
-
-            folders = Folder.objects.filter(pk__in=item["folders"], user=request.user)
-            item["folders"] = folders.values('id', 'name')
-        return items
-    items = add_relation([populate_item_from_search_result(result) for result in results])
+    items = items_from_results(results, request.user)
 
     pagination = Pagination(request.path, query_string_params,
                             index_params.batch_start,
@@ -241,7 +294,7 @@ class FolderItemDelete(View):
             folder_id = request.REQUEST["folder_id"]
             item_id = request.REQUEST["item_id"]
         except KeyError:
-            return { "status": "error"}
+            return { "status": "error" }
 
         folder = Folder.objects.get(
             user=request.user,
