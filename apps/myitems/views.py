@@ -23,23 +23,10 @@ from myitems.models import Folder, FolderItem
 
 
 class IndexParamsWithSaveDateSort(IndexParams):
-    SORT_BY_OPTIONS = tuple(
-        list(IndexParams.SORT_BY_OPTIONS)+
-        [{"value": u"save_date", "title": u"Save Date"}]
+    SORT_BY_OPTIONS = (
+        IndexParams.SORT_BY_OPTIONS+
+        ({"value": u"save_date", "title": u"Save Date"},)
     )
-
-
-    def __init__(self, request, *args, **kwargs):
-        IndexParams.__init__(self, request, *args, **kwargs)
-        if request.REQUEST.get("sort_by") == "save_date":
-            self.sort_by = "save_date"
-
-
-    def update_query_string_params(self, query_string_params):
-        if self.sort_by == "save_date":
-            return query_string_params
-        else:
-            return IndexParams.update_query_string_params(self, query_string_params)
 
 
 
@@ -73,7 +60,7 @@ def items_from_results(results, user):
 
 
 
-def get_results_save_date(query, start, end, user):
+def sort_by_save_date(query, user):
     mindatetime = datetime.datetime(datetime.MINYEAR, 1, 1)
     items_dict = defaultdict(list)
     for item in query:
@@ -90,7 +77,7 @@ def get_results_save_date(query, start, end, user):
         timestamp_items.extend((item, d.get(int(item.pk), mindatetime)) for item in items)
 
     return [x[0] for x in
-                sorted(timestamp_items, key=itemgetter(1), reverse=True)[start:end]]
+                sorted(timestamp_items, key=itemgetter(1), reverse=True)]
 
 
 
@@ -108,15 +95,13 @@ def myitems_index(request, view_name, page_title, no_items_message,
         query = query.narrow("is_displayed:true")
     query = query.filter(filter)
 
-    if index_params.query_order_by is not None:
-        query = query.order_by(index_params.query_order_by)
 
     if index_params.sort_by == "save_date":
-        results = get_results_save_date(query, index_params.batch_start,
-                                            batch_end, request.user)
-    else:
-        results = query[index_params.batch_start:batch_end]
+        query = sort_by_save_date(query, request.user)
+    elif index_params.query_order_by is not None:
+        query = query.order_by(index_params.query_order_by)
 
+    results = query[index_params.batch_start:batch_end]
     items = items_from_results(results, request.user)
 
     pagination = Pagination(request.path, query_string_params,
