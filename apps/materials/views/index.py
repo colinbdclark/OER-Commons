@@ -15,7 +15,6 @@ from materials.utils import get_name_from_id, get_slug_from_id, \
     first_neighbours_last, get_name_from_slug, get_object
 from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
-from myitems.models import Folder
 from rubrics.models import Rubric
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
@@ -298,9 +297,6 @@ def populate_item_from_search_result(result):
                 continue
             topics.append(topic)
         item["topics"] = topics
-
-
-    item["folders"] = item.get("saved_in_folders") or []
 
     item["is_evaluated"] = bool(result.evaluated_rubrics)
 
