@@ -14,7 +14,7 @@ class Edit(EditMaterialViewMixin, UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(Edit, self).get_form_kwargs()
-        if self.request.is_ajax():
+        if self.request.is_ajax() or "preview" in self.request.GET:
             kwargs["not_required"] = True
         kwargs["update_published"] = self.object.material.published
         return kwargs
@@ -26,6 +26,8 @@ class Edit(EditMaterialViewMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
+        if "preview" in self.request.GET:
+            return redirect(self.object.get_absolute_url())
         if self.request.is_ajax():
             return JsonResponse(dict(
                 status="success",

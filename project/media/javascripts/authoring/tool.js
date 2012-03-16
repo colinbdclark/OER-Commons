@@ -142,7 +142,7 @@
   Tool = (function() {
 
     function Tool(updatePublished) {
-      var errorSlide, errors, saveBtn,
+      var actions, errorSlide, errors, previewBtn, saveBtn,
         _this = this;
       this.updatePublished = updatePublished;
       this.form = $("form.authoring-form");
@@ -164,16 +164,23 @@
         tooltip: "Click to edit title...",
         placeholder: "Click to edit title..."
       });
-      saveBtn = $("div.authoring-head div.actions a.save");
+      actions = $("div.authoring-head div.actions a");
+      saveBtn = actions.filter(".save");
       saveBtn.click(function(e) {
         e.preventDefault();
-        return _this.save();
+        _this.save();
+      });
+      previewBtn = actions.filter(".preview");
+      previewBtn.click(function(e) {
+        e.preventDefault();
+        _this.writeStep.preSave();
+        _this.form.attr("action", _this.form.attr("action") + "?preview");
+        _this.form.submit();
       });
       this.form.find("div.slide div.slider-buttons a").click(function(e) {
         var btn;
         e.preventDefault();
         btn = $(e.currentTarget);
-        console.log(btn);
         if (btn.hasClass("publish")) {
           _this.publish();
         } else {

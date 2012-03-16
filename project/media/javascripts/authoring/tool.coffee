@@ -144,16 +144,26 @@ class Tool
       placeholder: "Click to edit title..."
     )
 
-    saveBtn = $("div.authoring-head div.actions a.save")
+    actions = $("div.authoring-head div.actions a")
+    saveBtn = actions.filter(".save")
     saveBtn.click((e)=>
       e.preventDefault()
       @.save()
+      return
+    )
+
+    previewBtn = actions.filter(".preview")
+    previewBtn.click((e)=>
+      e.preventDefault()
+      @writeStep.preSave()
+      @form.attr("action", @form.attr("action") + "?preview")
+      @form.submit()
+      return
     )
 
     @form.find("div.slide div.slider-buttons a").click((e)=>
       e.preventDefault()
       btn = $(e.currentTarget)
-      console.log(btn)
       if btn.hasClass("publish")
         @.publish()
       else
