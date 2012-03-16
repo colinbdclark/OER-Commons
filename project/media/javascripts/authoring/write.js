@@ -285,22 +285,20 @@ var WriteStep = function (tool) {
     }
 
     // TAB key inside table cell move the focus the the next cell
-    if (e.which === 9 && editor.$focusBlock && editor.$focusBlock.is("table")) {
-      var $table = editor.$focusBlock;
-      var $current = editor.$focusNode.closest("td", $table);
-      if ($current.length) {
+    if (e.which === 9) {
+      var $cell = editor.$focusNode.closest("td", editor.$area);
+      if ($cell.length) {
+        var $table = $cell.closest("table", editor.$area);
         var $cells = $table.find("tr").not(".ui-column-controls").find("td").not(".ui-row-controls");
-        var idx = $cells.index($current);
+        var idx = $cells.index($cell);
         if (idx !== -1) {
-          if (idx + 1 < $cells.length - 1) {
+          if (idx < $cells.length - 1) {
             editor.focusOnNode($cells.eq(idx + 1));
-          } else if ($table.next().length) {
-            editor.focusOnNode($table.next());
+            e.preventDefault();
+            return;
           }
         }
       }
-      e.preventDefault();
-      return;
     }
 
     if ($.inArray(e.which, editor.SPECIAL_KEY_CODES) != -1 || $.inArray(e.which, editor.NAVIGATION_KEYS) != -1) {

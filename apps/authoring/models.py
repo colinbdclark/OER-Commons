@@ -65,6 +65,10 @@ class AuthoredMaterialDraft(AbstractAuthoredMaterial):
 
     material = models.OneToOneField("authoring.AuthoredMaterial", related_name="draft")
 
+    @models.permalink
+    def get_absolute_url(self):
+        return "authoring:preview", [], dict(pk=self.material.pk)
+
 
 class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
 

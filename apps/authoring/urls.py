@@ -11,4 +11,5 @@ urlpatterns = patterns("",
     url(r"edit/(?P<pk>\d+)/upload$", MediaUpload.as_view(), name="upload"),
     url(r"load-embed$", LoadEmbed.as_view(), name="load-embed"),
     url(r"(?P<pk>\d+)$", ViewAuthoredMaterial.as_view(), name="view"),
+    url(r"(?P<pk>\d+)/preview$", ViewAuthoredMaterial.as_view(preview=True), name="preview"),
 )
