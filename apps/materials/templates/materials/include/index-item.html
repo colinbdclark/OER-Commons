@@ -4,13 +4,9 @@
   {% include "materials/include/index-item-right.html" %}
   <div class="details">
     <h1>
-      <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
-      {% if item.url or item.toolbar_view_url %}
-        {% if request.preferences.show_toolbar %}
-          <a href="{{ item.toolbar_view_url }}">
-        {% else %}
-          <a href="{{ item.url }}" target="_blank">
-        {% endif %}
+      <a class="item-link" href="{{ item.view_url }}">{{ item.title|safe }}</a>
+      {% if item.view_full_url %}
+        <a {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ item.view_full_url }}"{% endif %}>
           <img alt="{{ item.title }}" src="{{ STATIC_URL }}images/external-link-icon.gif" />
         </a>
       {% endif %}

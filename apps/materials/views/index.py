@@ -313,9 +313,9 @@ def populate_item_from_search_result(result):
 
     namespace = getattr(model, "namespace", None)
     if namespace:
-        item["get_absolute_url"] = reverse(
-                               "materials:%s:view_item" % namespace,
-                               kwargs=dict(slug=item["slug"]))
+        item["view_url"] = reverse(
+                           "materials:%s:view_item" % namespace,
+                           kwargs=dict(slug=item["slug"]))
         item["save_item_url"] = reverse(
                                "materials:%s:save_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
@@ -327,7 +327,7 @@ def populate_item_from_search_result(result):
                                     result.model_name,
                                     result.pk,
                                 ))
-        item["toolbar_view_url"] = reverse(
+        item["view_full_url"] = reverse(
                                "materials:%s:toolbar_view_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
         item["align_url"] = reverse("curriculum:align", args=(
@@ -336,7 +336,10 @@ def populate_item_from_search_result(result):
                                     result.pk,
                                 ))
     else:
-        item["get_absolute_url"] = result.object.get_absolute_url()
+        object = result.object
+        item["view_url"] = object.get_absolute_url()
+        if hasattr(object, "get_view_full_url"):
+            item["view_full_url"] = object.get_view_full_url()
     return item
 
 
@@ -424,7 +427,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
     visible_filters = ["search", "general_subjects", "grade_levels",
                        "course_material_types", "media_formats",
-                       "cou_bucket"]
+                       "cou_bucket", "authored_content"]
 
     if microsite:
         microsite = Microsite.objects.get(slug=microsite)

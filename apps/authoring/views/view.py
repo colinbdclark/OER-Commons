@@ -1,23 +1,30 @@
 from authoring.views import MaterialViewMixin
+from django.shortcuts import redirect
 from django.utils.safestring import mark_safe
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import BaseDetailView
 from pyquery import PyQuery as pq
 
 
-class ViewAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
+class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
 
-    template_name = "authoring/view.html"
+    template_name = "authoring/view-full.html"
     preview = False
 
+    def get(self, request, **kwargs):
+        object = self.get_object()
+        if object.slug != self.kwargs["slug"]:
+            return redirect(object, permanent=True)
+        return super(ViewFullAuthoredMaterial, self).get(request, **kwargs)
+
     def get_object(self, queryset=None):
-        object = super(ViewAuthoredMaterial, self).get_object(queryset)
+        object = super(ViewFullAuthoredMaterial, self).get_object(queryset)
         if self.preview:
             return object.get_draft()
         return object
 
     def get_queryset(self):
-        qs = super(ViewAuthoredMaterial, self).get_queryset()
+        qs = super(ViewFullAuthoredMaterial, self).get_queryset()
         if not self.preview:
             qs = qs.filter(published=True)
         return qs
@@ -80,8 +87,9 @@ class ViewAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
         return mark_safe(document.outerHtml()), mark_safe(outline.outerHtml())
 
     def get_context_data(self, **kwargs):
-        data = super(ViewAuthoredMaterial, self).get_context_data(**kwargs)
-        data["text"], data["outline"] = ViewAuthoredMaterial.prepare_content(self.object.text)
+        data = super(ViewFullAuthoredMaterial, self).get_context_data(**kwargs)
+        data["text"], data["outline"] = ViewFullAuthoredMaterial.prepare_content(self.object.text)
         data["preview"] = self.preview
         data["material"] = self.object.material if self.preview else self.object
         return data
+

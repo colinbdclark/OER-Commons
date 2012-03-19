@@ -41,21 +41,26 @@ class AbstractAuthoredMaterial(models.Model):
     text = models.TextField(default=u"")
 
     summary = models.TextField(default=u"")
+    abstract = models.TextField(default=u"")
 
     learning_goals = AutoCreateManyToManyField(LearningGoal)
     keywords = AutoCreateManyToManyField(Keyword)
-    subjects = models.ManyToManyField(GeneralSubject)
+    general_subjects = models.ManyToManyField(GeneralSubject)
     grade_level = models.ForeignKey(GradeLevel, null=True)
     language = models.ForeignKey(Language, null=True)
     license = AutoCreateForeignKey(License, null=True, respect_all_fields=True)
 
     @property
     def grade_levels(self):
-        return [self.grade_level] if self.grade_level else []
+        if self.grade_level:
+            return GradeLevel.objects.filter(pk=self.grade_level.pk)
+        return GradeLevel.objects.none()
 
     @property
     def languages(self):
-        return [self.language] if self.language else []
+        if self.language:
+            return Language.objects.filter(pk=self.grade_level.pk)
+        return Language.objects.none()
 
     class Meta:
         abstract = True
@@ -144,7 +149,24 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
 
     @models.permalink
     def get_absolute_url(self):
-        return "authoring:view", [], dict(pk=self.pk)
+        kwargs = dict(pk=self.pk)
+        if self.slug: kwargs["slug"] = self.slug
+        return "authoring:view", [], kwargs
+
+    @models.permalink
+    def get_view_full_url(self):
+        kwargs = dict(pk=self.pk)
+        if self.slug: kwargs["slug"] = self.slug
+        return "authoring:view_full", [], kwargs
+
+    @models.permalink
+    def get_edit_url(self):
+        kwargs = dict(pk=self.pk)
+        return "authoring:edit", [], kwargs
+
+    @property
+    def creator(self):
+        return self.author
 
     @property
     def authors(self):
