@@ -317,9 +317,16 @@
   margin-left: 16px;
 }
 
-.index-filters .filter dt label, .advanced-search .filter dt label {
+.index-filters .filter dt label,
+.index-filters div.filter label,
+.advanced-search .filter dt label {
   color: #666;
   font-weight: bold;
+}
+
+.index-filters div.filter label input {
+  float: none;
+  display: inline-block;
 }
 
 .index-filters .filter dt label span {
