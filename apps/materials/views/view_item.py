@@ -132,7 +132,7 @@ class BaseViewItemMixin(object):
                     if filter_name == "search":
                         search_query = value
 
-            index_params = IndexParams(request, search_query=search_query)
+            index_params = IndexParams(dummy_request, search_query=search_query)
             query_string_params = index_params.update_query_string_params(query_string_params)
 
             if index_params.query_order_by is not None:
@@ -149,7 +149,7 @@ class BaseViewItemMixin(object):
                             prev_item_url = reverse("materials:%s:%s" % (namespace, self.view_item_name),
                                                     kwargs=dict(slug=prev_item.get_stored_fields()["slug"]))
                         else:
-                            prev_item_url = result.object.get_absolute_url()
+                            prev_item_url = prev_item.object.get_absolute_url()
 
                     if current_item_idx < (len(query) - 1):
                         next_item = query[current_item_idx + 1]
@@ -158,7 +158,7 @@ class BaseViewItemMixin(object):
                             next_item_url = reverse("materials:%s:%s" % (namespace, self.view_item_name),
                                                     kwargs=dict(slug=next_item.get_stored_fields()["slug"]))
                         else:
-                            next_item_url = result.object.get_absolute_url()
+                            next_item_url = next_item.object.get_absolute_url()
                     item_found = True
                     break
                 current_item_idx += 1
