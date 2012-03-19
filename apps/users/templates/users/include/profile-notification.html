@@ -1,7 +1,9 @@
-<div class="status-message" id="profile-notification" data-total-fields="{{ total_fields }}" data-cookie-name="{{ cookie_name }}">
-  Your profile completeness is {{ completeness }}%. <a href="{% url users:profile_edit %}?unfilled=true">Complete your
-  profile now.</a>
-  <div class="close">
-      <a href="#" class="dashed">close this message</a>
+{% if completeness == 0 or completeness %}
+  <div class="status-message" id="profile-notification" data-total-fields="{{ total_fields }}" data-cookie-name="{{ cookie_name }}">
+    Your profile completeness is {{ completeness }}%. <a href="{% url users:profile_edit %}?unfilled=true">Complete your
+    profile now.</a>
+    <div class="close">
+        <a href="#" class="dashed">close this message</a>
+    </div>
   </div>
-</div>
+{% endif %}
