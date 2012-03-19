@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
+from materials.models import Course, Library
 from materials.models.common import GeneralSubject, Collection, \
     Keyword, GeographicRelevance, Institution
 from materials.models.community import CommunityItem
@@ -183,6 +184,13 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
         if len(filter_data["options"]) == len(values):
             filter_data["all_checked"] = True
         filters[filter_name] = filter_data
+
+    filter = FILTERS["authored_content"]
+    filters["authored_content"] = dict(
+        title=filter.title,
+        request_name=filter.request_name,
+        checked=filter_values.get("authored_content", False),
+    )
 
     return filters
 
@@ -395,8 +403,8 @@ def index(request, general_subjects=None, grade_levels=None,
 
     query = SearchQuerySet().narrow("is_displayed:true")
 
-    if model:
-        query = query.models(model)
+    models = [model] if model else [Course, Library, CommunityItem]
+    query = query.models(*models)
 
     path_filter = None
 
@@ -437,7 +445,6 @@ def index(request, general_subjects=None, grade_levels=None,
                 hidden_filters[filter_.request_name] = value
             if filter_name == "search":
                 search_query = value
-
 
     if search:
         if not search_query:
@@ -490,6 +497,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
     elif "evaluated_rubrics" in filter_values:
         rubric_id = filter_values["evaluated_rubrics"][0]
+        #noinspection PySimplifyBooleanCheck
         if rubric_id == 0:
             rubric_name = u"Degree of Alignment"
         else:

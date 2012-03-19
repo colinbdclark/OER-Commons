@@ -1,3 +1,4 @@
+from authoring.models import AuthoredMaterial
 from common.models import Grade, GradeLevel, MediaFormat
 from curriculum.models import TaggedMaterial, AlignmentTag, Standard,\
     LearningObjectiveCategory
@@ -482,6 +483,14 @@ class RubricFilter(ChoicesFilter):
         return value
 
 
+class AuthoredContentFilter(BooleanFilter):
+
+    def update_query(self, query, value):
+        if value:
+            query = query.models(AuthoredMaterial)
+        return query
+
+
 FILTERS = OrderedDict([
     ("general_subjects", VocabularyFilter("general_subjects", "f.general_subject", GeneralSubject, u"Subject Area")),
     ("grade_levels", VocabularyFilter("grade_levels", "f.edu_level", GradeLevel, u"Grade Level")),
@@ -507,6 +516,6 @@ FILTERS = OrderedDict([
     ("alignment_categories", AlignmentCategoryFilter("alignment_categories", "f.alignment_category")),
     ("alignment_cluster", AlignmentClusterFilter("alignment_tags", "f.cluster")),
     ("evaluated_rubrics", RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric")),
+    ("authored_content", AuthoredContentFilter(None, "authored", u"OER Creator Resources")),
     ("search", SearchFilter()),
 ])
-
