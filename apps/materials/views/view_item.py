@@ -8,6 +8,9 @@ from django.shortcuts import get_object_or_404
 from django.utils.datastructures import MultiValueDict
 from django.views.generic.base import TemplateView
 from haystack.query import SearchQuerySet
+from materials.models.community import CommunityItem
+from materials.models.course import Course
+from materials.models.library import Library
 from materials.models.material import WORKFLOW_TRANSITIONS, PUBLISHED_STATE
 from materials.models.microsite import Microsite
 from materials.views.filters import FILTERS
@@ -32,12 +35,13 @@ class DummyRequest(HttpRequest):
         super(DummyRequest, self).__init__()
 
 
-#noinspection PyUnresolvedReferences
 class BaseViewItemMixin(object):
+
+    model = None
 
     def get(self, request, *args, **kwargs):
         self.slug = kwargs["slug"]
-        self.model = kwargs["model"]
+        self.model = self.model or kwargs.get("model")
         if not self.slug or not self.model:
             raise Http404()
         self.item = get_object_or_404(self.model, slug=self.slug)
@@ -57,13 +61,16 @@ class BaseViewItemMixin(object):
 
         Visit.objects.count(request, self.item)
 
+        #noinspection PyUnresolvedReferences
         return super(BaseViewItemMixin, self).get(request, *args, **kwargs)
 
 
     def get_context_data(self, **kwargs):
+        #noinspection PyUnresolvedReferences
         data = super(BaseViewItemMixin, self).get_context_data(**kwargs)
 
         item = self.item
+        #noinspection PyUnresolvedReferences
         request = self.request
         model = self.model
         content_type = self.content_type
@@ -105,8 +112,8 @@ class BaseViewItemMixin(object):
             if microsite:
                 microsite = Microsite.objects.get(slug=microsite)
 
-            if index_model:
-                query = query.models(index_model)
+            models = [index_model] if index_model else [Course, Library, CommunityItem]
+            query = query.models(*models)
 
             path_filter = None
 
@@ -132,7 +139,7 @@ class BaseViewItemMixin(object):
                     if filter_name == "search":
                         search_query = value
 
-            index_params = IndexParams(request, search_query=search_query)
+            index_params = IndexParams(dummy_request, search_query=search_query)
             query_string_params = index_params.update_query_string_params(query_string_params)
 
             if index_params.query_order_by is not None:
@@ -146,19 +153,21 @@ class BaseViewItemMixin(object):
                         prev_item = query[current_item_idx - 1]
                         namespace = getattr(prev_item.model, "namespace", None)
                         if namespace:
+                            #noinspection PyUnresolvedReferences
                             prev_item_url = reverse("materials:%s:%s" % (namespace, self.view_item_name),
                                                     kwargs=dict(slug=prev_item.get_stored_fields()["slug"]))
                         else:
-                            prev_item_url = result.object.get_absolute_url()
+                            prev_item_url = prev_item.object.get_absolute_url()
 
                     if current_item_idx < (len(query) - 1):
                         next_item = query[current_item_idx + 1]
                         namespace = getattr(next_item.model, "namespace", None)
                         if namespace:
+                            #noinspection PyUnresolvedReferences
                             next_item_url = reverse("materials:%s:%s" % (namespace, self.view_item_name),
                                                     kwargs=dict(slug=next_item.get_stored_fields()["slug"]))
                         else:
-                            next_item_url = result.object.get_absolute_url()
+                            next_item_url = next_item.object.get_absolute_url()
                     item_found = True
                     break
                 current_item_idx += 1
@@ -186,10 +195,11 @@ class BaseViewItemMixin(object):
                 user=request.user
             ).exists()
 
-        data["save_url"] = reverse("materials:%s:save_item" % item.namespace,
-                       kwargs=dict(slug=item.slug))
-        data["unsave_url"] = reverse("materials:%s:unsave_item" % item.namespace,
-                       kwargs=dict(slug=item.slug))
+        if hasattr(item, "namespace"):
+            data["save_url"] = reverse("materials:%s:save_item" % item.namespace,
+                           kwargs=dict(slug=item.slug))
+            data["unsave_url"] = reverse("materials:%s:unsave_item" % item.namespace,
+                           kwargs=dict(slug=item.slug))
 
         data["comment_url"] = reverse(
             "reviews:review",
@@ -221,17 +231,18 @@ class ViewItem(BaseViewItemMixin, TemplateView):
         if request.user.is_authenticated():
             content_actions = []
             if item.creator == request.user or request.user.is_staff:
-                content_actions += [
-                    {"url": reverse("materials:%s:edit" % item.namespace,
-                                    kwargs=dict(slug=item.slug)),
-                     "title": u"Edit",
-                     "class": "edit"},
-
-                    {"url": reverse("materials:%s:delete" % item.namespace,
-                                    kwargs=dict(slug=item.slug)),
-                     "title": u"Delete",
-                     "class": "delete"},
-                ]
+                if hasattr(item, "get_edit_url"):
+                    content_actions.append({
+                        "url": item.get_edit_url(),
+                        "title": u"Edit",
+                        "class": "edit",
+                    })
+                if hasattr(item, "get_delete_url"):
+                    content_actions.append({
+                        "url": item.get_delete_url(),
+                        "title": u"Delete",
+                        "class": "delete",
+                    })
             if request.user.is_staff:
                 content_actions.append({
                     "url": reverse("admin:%s_%s_change" % (self.content_type.app_label,
@@ -242,14 +253,15 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 })
 
             workflow_actions = []
-            for transition in WORKFLOW_TRANSITIONS:
-                if item.workflow_state in transition["from"] and transition["condition"](request.user, item):
-                    workflow_actions.append({
-                        "url": reverse("materials:%s:transition" % item.namespace,
-                                       kwargs=dict(slug=item.slug,
-                                                   transition_id=transition["id"])),
-                        "title": transition["title"],
-                    })
+            if hasattr(item, "namespace"):
+                for transition in WORKFLOW_TRANSITIONS:
+                    if item.workflow_state in transition["from"] and transition["condition"](request.user, item):
+                        workflow_actions.append({
+                            "url": reverse("materials:%s:transition" % item.namespace,
+                                           kwargs=dict(slug=item.slug,
+                                                       transition_id=transition["id"])),
+                            "title": transition["title"],
+                        })
 
             data["content_actions"] = content_actions
             data["workflow_actions"] = workflow_actions
@@ -338,8 +350,8 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 ).distinct().count()
             ))
 
-        data["toolbar_view_url"] = reverse("materials:%s:toolbar_view_item" % item.namespace,
-                                       kwargs=dict(slug=item.slug))
+        if hasattr(item, "get_view_full_url"):
+            data["view_full_url"] = item.get_view_full_url()
 
 
         comments = []
@@ -360,6 +372,7 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                 else:
                     title = score.rubric.name
 
+                #noinspection PyUnresolvedReferences
                 comment["title"] = u"%s: %s (%s)" % (
                     title,
                     get_verbose_score_name(score.score.value),

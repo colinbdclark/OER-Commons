@@ -98,13 +98,13 @@
 
   <div class="details">
     <h1 itemprop="name">
-      {% if request.preferences.show_toolbar %}
-        <a href="{{ toolbar_view_url }}">
+      {% if view_full_url %}
+        <a {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}>
+          <img src="{{ STATIC_URL }}images/item-title-icon.png" alt="{{ item.title }}" /> {{ item.title|safe }}
+        </a>
       {% else %}
-        <a href="{{ item.url }}" target="_blank">
+        <img src="{{ STATIC_URL }}images/item-title-icon.png" alt="{{ item.title }}" /> {{ item.title|safe }}
       {% endif %}
-        <img src="{{ STATIC_URL }}images/item-title-icon.png" alt="{{ item.title }}" />{{ item.title|safe }}
-      </a>
     </h1>
 
     <meta itemprop="url" content="{{ item.url }}" />
@@ -220,10 +220,12 @@
     </dl>
   </div>
 
-  <div class="align-right">
-    <a id="goto" {% if request.preferences.show_toolbar %}href="{{ toolbar_view_url }}"{% else %}href="{{ item.url }}" target="_blank"{% endif %}
-       class="button-blue-big rc5">Go to OER Item</a>
-  </div>
+  {% if view_full_url %}
+    <div class="align-right">
+      <a id="goto" {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}
+         class="button-blue-big rc5">Go to OER Item</a>
+    </div>
+  {% endif %}
 
 </article>
 

@@ -152,6 +152,18 @@ class Material(models.Model, EvaluatedItemMixin):
     def get_absolute_url(self):
         return "materials:%s:view_item" % self.namespace, [], {"slug": self.slug}
 
+    @permalink
+    def get_view_full_url(self):
+        return "materials:%s:toolbar_view_item" % self.namespace, [], {"slug": self.slug}
+
+    @permalink
+    def get_edit_url(self):
+        return "materials:%s:edit" % self.namespace, [], {"slug": self.slug}
+
+    @permalink
+    def get_delete_url(self):
+        return "materials:%s:delete" % self.namespace, [], {"slug": self.slug}
+
     @classmethod
     @permalink
     def get_parent_url(cls):
