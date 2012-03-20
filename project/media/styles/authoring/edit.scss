@@ -1298,21 +1298,22 @@
     padding-top: 30px;
   }
   .column-left {
-    width: 30%;
+    width: 300px;
   }
   .column-main {
-    width: 60%;
-    margin-left: 20px;
+    float: none;
+    width: auto;
+    margin-left: 320px;
+    padding-right: 0;
   }
   .current-license {
     background-color: #fff;
     height: 200px;
-    width: 300px;
     padding: 30px;
     text-align: center;
     margin-bottom: 30px;
     h3 {
-      text-transform: lowercase;
+      text-transform: uppercase;
       color: #9aca41;
       font-size: 16px;
       font-weight: bold;
@@ -1321,7 +1322,31 @@
     a {
       margin-top: 30px;
       text-decoration: none;
-      font-size: 16px;
+      font-size: 13px;
+    }
+    .images {
+      margin-bottom: 20px;
+      .license {
+        display: inline-block;
+        &.hidden {
+          display: none;
+        }
+        .image {
+          width: 61px;
+          height: 61px;
+          margin: 0 20px 10px 20px;
+        }
+      }
+      .license-by .image {
+        background: url(../../images/authoring/license-images.png) 0px 0px no-repeat;
+      }
+
+      .license-nc .image {
+        background: url(../../images/authoring/license-images.png) -63px 0px no-repeat;
+      }
+      .license-sa .image {
+        background: url(../../images/authoring/license-images.png) 0px -63px no-repeat;
+      }
     }
   }
   .license-widget ul {

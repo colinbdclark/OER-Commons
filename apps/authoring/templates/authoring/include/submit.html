@@ -3,12 +3,6 @@
 <div class="layout-columns">
 
     <div class="column-left">
-      <div class="current-license">
-        <h3>Current License</h3>
-        <a href="#" target="_blank" style="display: none;">Not selected</a>
-      </div>
-    </div>
-    <div class="column-main">
       {% with form.license as field %}
         {% if field.errors %}
           <div class="field">
@@ -21,6 +15,26 @@
         {% endif %}
         {{ field }}
       {% endwith %}
+    </div>
+    <div class="column-main">
+      <div class="current-license">
+        <h3>Current License</h3>
+        <div class="images">
+          <div class="license license-by hidden">
+            <div class="image"></div>
+            Attribution
+          </div>
+          <div class="license license-nc hidden">
+            <div class="image"></div>
+            Non-Commercial
+          </div>
+          <div class="license license-sa hidden">
+            <div class="image"></div>
+            Share-Alike
+          </div>
+        </div>
+        <a href="#" target="_blank" style="display: none;">Not selected</a>
+      </div>
     </div>
 
   {% spaceless %}

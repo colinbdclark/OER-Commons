@@ -94,6 +94,7 @@ class LicenseWidget(forms.Widget):
                 derivatives = "y"
             commercial = "n" if "nc" in cc_type else "y"
         else:
+            cc_type = ""
             license_url = u""
             license_name = u""
 
@@ -101,6 +102,7 @@ class LicenseWidget(forms.Widget):
             "authoring/forms/license-widget.html",
             dict(
                 name=name,
+                cc_type=cc_type,
                 name_widget=forms.HiddenInput().render("%s_name" % name, license_name),
                 url_widget=forms.HiddenInput().render("%s_url" % name, license_url),
                 derivatives_widget=forms.RadioSelect().render(
