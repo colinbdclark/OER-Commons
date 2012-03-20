@@ -13,7 +13,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
 
     def get(self, request, **kwargs):
         object = self.get_object()
-        if object.slug != self.kwargs["slug"]:
+        if not self.preview and object.slug != self.kwargs["slug"]:
             return redirect(object, permanent=True)
         return super(ViewFullAuthoredMaterial, self).get(request, **kwargs)
 
