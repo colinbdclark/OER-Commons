@@ -619,19 +619,26 @@ WriteStep.prototype.updateToolbarState = function () {
     }
   }
 
+  var indentLevel = this.getIndentLevel($focusBlock);
   if ($focusBlock.is("h2")) {
     this.$textStyleIndicator.text("Header");
   } else if ($focusBlock.is("h3")) {
     this.$textStyleIndicator.text("Sub-Header");
   } else if ($focusBlock.is("blockquote")) {
     this.$textStyleIndicator.text("Long Quote");
-    if (this.getQuoteLevel($focusBlock) < 5) {
+    if (indentLevel < 5) {
       this.enableButton("indent");
     }
     this.enableButton("outdent");
   } else if ($focusBlock.is("p,div")) {
     this.$textStyleIndicator.text("Paragraph");
-    this.enableButton("indent");
+    var level = this.getIndentLevel($focusBlock);
+    if (indentLevel < 5) {
+      this.enableButton("indent");
+    }
+    if (indentLevel) {
+      this.enableButton("outdent");
+    }
   } else {
     this.$textStyleIndicator.text("Text style...");
   }
@@ -753,9 +760,9 @@ WriteStep.prototype.initListButtons = function () {
   });
 };
 
-WriteStep.prototype.getQuoteLevel = function ($quote) {
+WriteStep.prototype.getIndentLevel = function ($block) {
   var classes = {};
-  var classNames = $quote.attr("class");
+  var classNames = $block.attr("class");
   if (!classNames) {
     return 0;
   }
@@ -784,10 +791,8 @@ WriteStep.prototype.initIndentButtons = function () {
       return;
     }
 
-    if ($focusBlock.is("p,div")) {
-      editor.changeBlockType("blockquote");
-    } else if ($focusBlock.is("blockquote")) {
-      var level = editor.getQuoteLevel($focusBlock);
+    if ($focusBlock.is("p,div,blockquote")) {
+      var level = editor.getIndentLevel($focusBlock);
       if (level < 5) {
         editor.saveState();
         $focusBlock.removeClass().addClass("l" + (level + 1));
@@ -826,10 +831,17 @@ WriteStep.prototype.initIndentButtons = function () {
     if (!$focusBlock) {
       return;
     }
-    if ($focusBlock.is("blockquote")) {
-      var level = editor.getQuoteLevel($focusBlock);
-      if (level === 0) {
+    if ($focusBlock.is("p,div,blockquote")) {
+      var level = editor.getIndentLevel($focusBlock);
+      console.log(level);
+      if (!level && $focusBlock.is("blockquote")) {
+        editor.saveState();
         editor.changeBlockType("p");
+        $focusBlock.removeClass();
+      } else if (level < 2) {
+        editor.saveState();
+        $focusBlock.removeClass();
+        editor.trackSelection();
       } else {
         editor.saveState();
         $focusBlock.removeClass().addClass("l" + (level - 1));

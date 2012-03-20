@@ -51,15 +51,15 @@
     padding-left: 7px;
     border-left: 3px solid #fc3;
     font-style: italic; }
-  .authored-content blockquote.l1 {
+  .authored-content .l1 {
     margin-left: 2em; }
-  .authored-content blockquote.l2 {
+  .authored-content .l2 {
     margin-left: 4em; }
-  .authored-content blockquote.l3 {
+  .authored-content .l3 {
     margin-left: 6em; }
-  .authored-content blockquote.l4 {
+  .authored-content .l4 {
     margin-left: 8em; }
-  .authored-content blockquote.l5 {
+  .authored-content .l5 {
     margin-left: 10em; }
   .authored-content a.download {
     display: inline-block;
