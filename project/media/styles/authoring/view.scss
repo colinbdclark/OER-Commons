@@ -41,5 +41,14 @@
       border-width: 1px 0 0 1px;
     }
   }
+  #footnotes {
+    margin: 0 -20px;
+    .footnote {
+      margin: 10px 0;
+      div {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 

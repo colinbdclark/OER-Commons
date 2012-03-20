@@ -128,6 +128,20 @@
       min-width: 30px;
       min-height: 20px; }
 
+#footnotes {
+  padding: 1px;
+  background-color: #fff;
+  font-family: "Myriad Pro", Helvetica, sans-serif;
+  font-size: 13px; }
+  #footnotes div.footnote {
+    margin: 10px;
+    padding: 10px;
+    background-color: #f2f2f2; }
+    #footnotes div.footnote a.ref {
+      float: left; }
+    #footnotes div.footnote div {
+      margin-left: 25px; }
+
 .learning-goals-widget {
   list-style-position: inside; }
   .learning-goals-widget li {
@@ -1130,16 +1144,3 @@
     font-size: 16px; }
 #step-submit .license-widget ul {
   list-style-type: none; }
-
-#footnotes {
-  background-color: #fff;
-  padding: 1px; }
-  #footnotes div.footnote {
-    margin: 10px;
-    padding: 10px;
-    background-color: #f2f2f2; }
-    #footnotes div.footnote a.ref {
-      float: left;
-      clear: both; }
-    #footnotes div.footnote div {
-      margin-left: 20px; }
