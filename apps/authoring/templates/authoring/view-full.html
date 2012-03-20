@@ -10,7 +10,7 @@
 
   {% include "include/header.html" %}
 
-  {% if request.user == material.author %}
+  {% if request.user.is_staff or request.user == material.author %}
     <div id="toolbar">
       <a href="{% url authoring:edit pk=material.pk %}">Back to edit mode</a>
     </div>

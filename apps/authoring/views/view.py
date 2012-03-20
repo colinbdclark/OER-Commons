@@ -1,4 +1,5 @@
 from authoring.views import MaterialViewMixin
+from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.safestring import mark_safe
 from django.views.generic.base import TemplateView
@@ -13,7 +14,10 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
 
     def get(self, request, **kwargs):
         object = self.get_object()
-        if not self.preview and object.slug != self.kwargs["slug"]:
+        if self.preview:
+            if not (request.user == object.material.author or request.user.is_staff):
+                raise Http404()
+        elif object.slug != self.kwargs["slug"]:
             return redirect(object, permanent=True)
         return super(ViewFullAuthoredMaterial, self).get(request, **kwargs)
 
