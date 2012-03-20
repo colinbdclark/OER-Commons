@@ -1,6 +1,7 @@
 from authoring.views import MaterialViewMixin
 from django.http import Http404
 from django.shortcuts import redirect
+from django.utils.html import urlize
 from django.utils.safestring import mark_safe
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import BaseDetailView
@@ -55,6 +56,19 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
                 """ % url
                 embed.html(content + caption)
 
+        # Build references
+        footnotes = pq("""<div id="footnotes"></div>""")
+        for ref in document.find("a.reference"):
+            ref = pq(ref)
+            text = ref.attr("data-text")
+            footnote = pq("""<div class="footnote"><a class="ref" href="%s" id="%s">%s</a> <div>%s</div><div>""" % (
+                "#" + ref.attr("id") if ref.attr("id") else "",
+                ref.attr("href")[1:],
+                ref.text(),
+                urlize(text),
+            ))
+            footnotes.append(footnote)
+
         # Build table of contents
         prevLevel = 0
         outline = pq("<ul></ul>")
@@ -88,11 +102,11 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
         for i in xrange(prevLevel):
             outline = outline.parent()
 
-        return mark_safe(document.outerHtml()), mark_safe(outline.outerHtml())
+        return tuple(mark_safe(el.outerHtml()) for el in (document, footnotes, outline))
 
     def get_context_data(self, **kwargs):
         data = super(ViewFullAuthoredMaterial, self).get_context_data(**kwargs)
-        data["text"], data["outline"] = ViewFullAuthoredMaterial.prepare_content(self.object.text)
+        data["text"], data["footnotes"], data["outline"] = ViewFullAuthoredMaterial.prepare_content(self.object.text)
         data["preview"] = self.preview
         data["material"] = self.object.material if self.preview else self.object
         return data

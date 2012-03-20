@@ -1328,20 +1328,3 @@
     list-style-type: none;
   }
 }
-
-#footnotes {
-  background-color: #fff;
-  padding: 1px;
-  div.footnote {
-    margin: 10px;
-    padding: 10px;
-    background-color: #f2f2f2;
-    a.ref {
-      float: left;
-      clear: both;
-    }
-    div {
-      margin-left: 20px;
-    }
-  }
-}

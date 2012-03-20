@@ -128,6 +128,20 @@
       min-width: 30px;
       min-height: 20px; }
 
+#footnotes {
+  padding: 1px;
+  background-color: #fff;
+  font-family: "Myriad Pro", Helvetica, sans-serif;
+  font-size: 13px; }
+  #footnotes div.footnote {
+    margin: 10px;
+    padding: 10px;
+    background-color: #f2f2f2; }
+    #footnotes div.footnote a.ref {
+      float: left; }
+    #footnotes div.footnote div {
+      margin-left: 25px; }
+
 #outline ul {
   color: #069;
   margin-left: 0;
@@ -184,3 +198,9 @@
   .authoring-view .authored-content table {
     border: solid #ccc;
     border-width: 1px 0 0 1px; }
+.authoring-view #footnotes {
+  margin: 0 -20px; }
+  .authoring-view #footnotes .footnote {
+    margin: 10px 0; }
+    .authoring-view #footnotes .footnote div {
+      margin-bottom: 0; }

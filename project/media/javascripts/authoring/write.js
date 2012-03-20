@@ -1363,10 +1363,12 @@ WriteStep.prototype.updateReferences = function () {
   var $footnotes = this.$footnotes.empty();
   this.$area.find("a.reference").each(function (i) {
     var $this = $(this);
-    var name = "[" + (i + 1) + "]";
+    var refCount = i + 1;
+    var name = "[" + refCount + "]";
     $this.text(name);
-    $this.attr("href", "#ref-" + (i + 1));
-    var $footnote = $("<div></div>").addClass("footnote").
+    $this.attr("href", "#footnote-" + refCount);
+    $this.attr("id", "ref-" + refCount);
+    var $footnote = $("<div></div>").attr("id", "footnote" + refCount).addClass("footnote").
             append($("<a></a>").addClass("ref").attr("href", "#").text(name)).
             append($("<div></div>").text($this.data("text")).linkify());
     $footnote.data("reference", $this);
