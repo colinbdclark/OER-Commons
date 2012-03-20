@@ -4,11 +4,17 @@ var SubmitStep = function (tool) {
 
   var $currentLicense = $("div.current-license");
   var $licenseWidget = this.$step.find("div.license-widget");
+  var $licenseImages = $currentLicense.find("div.images .license");
 
   var currentURL = $licenseWidget.find(":hidden[name$='_url']").val();
   var currentName = $licenseWidget.find(":hidden[name$='_name']").val();
   if (currentURL !== "" && currentName !== "") {
     $currentLicense.find("a").attr("href", currentURL).text(currentName).show();
+    var license_classes = $licenseWidget.data("license-type").split("-");
+    $licenseImages.addClass("hidden");
+    $.each(license_classes, function(i, cls) {
+      $licenseImages.filter(".license-" + cls).removeClass("hidden");
+    });
   }
 
   $licenseWidget.find(":radio").change(function() {
@@ -25,6 +31,10 @@ var SubmitStep = function (tool) {
         if (response.status === "success") {
           var url = response["url"];
           var name = response["name"];
+          $licenseImages.addClass("hidden");
+          $.each(response["license_classes"], function(i, cls) {
+            $licenseImages.filter(".license-" + cls).removeClass("hidden");
+          });
           $currentLicense.find("a").attr("href", url).text(name).show();
           $licenseWidget.find(":hidden[name$='_url']").val(url);
           $licenseWidget.find(":hidden[name$='_name']").val(name);
