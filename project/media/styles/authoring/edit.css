@@ -30,7 +30,8 @@
   padding: 20px;
   background-color: #fff;
   font-size: 16px;
-  font-family: "Times New Roman", serif; }
+  font-family: "Times New Roman", serif;
+  word-wrap: break-word; }
   .authored-content div, .authored-content h1, .authored-content h2, .authored-content h3, .authored-content h4, .authored-content h5, .authored-content h6, .authored-content p, .authored-content blockquote, .authored-content pre, .authored-content dl, .authored-content ol, .authored-content ul, .authored-content table, .authored-content figure {
     margin-bottom: 1em; }
   .authored-content ul, .authored-content ol {
