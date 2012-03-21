@@ -1681,10 +1681,13 @@ function MediaDialog(editor) {
 
   var dialog = this;
   editor.$toolbar.find("a.media").click(function (e) {
+    var $button = $(e.target);
     e.preventDefault();
     if (dialog.displayed) {
+      $button.removeClass("active");
       dialog.hide();
     } else {
+      $button.addClass("active");
       dialog.show();
     }
   });
