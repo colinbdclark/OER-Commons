@@ -22,7 +22,7 @@ def cleanup_keywords(keywords):
             continue
 
         # If the keyword contains commas or semicolons we split it and
-        # re-process 
+        # re-process
         if u";" in kw:
             cleaned_keywords.update(cleanup_keywords(kw.split(u";")))
             continue
@@ -95,13 +95,17 @@ def get_name_from_slug(model, slug):
     return None
 
 
-def get_facets_for_field(field, model=None):
+def get_facets_for_field(field, model=None, facet_limit=None, facet_mincount=None):
 
     query = SearchQuerySet()
     if model is not None:
         query = query.models(model)
     query = query.narrow("is_displayed:true")
     query = query.facet(field)
+    if facet_limit:
+        query = query.facet_limit(facet_limit)
+    if facet_mincount:
+        query = query.facet_mincount(facet_mincount)
     return query.facet_counts().get("fields", {}).get(field, [])
 
 
