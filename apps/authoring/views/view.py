@@ -1,6 +1,6 @@
 from authoring.views import MaterialViewMixin
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.utils.html import urlize
 from django.utils.safestring import mark_safe
 from django.views.generic.base import TemplateView
@@ -23,7 +23,9 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
         return super(ViewFullAuthoredMaterial, self).get(request, **kwargs)
 
     def get_object(self, queryset=None):
-        object = super(ViewFullAuthoredMaterial, self).get_object(queryset)
+        if queryset is None:
+            queryset = self.get_queryset()
+        object = get_object_or_404(queryset, pk=self.kwargs["pk"])
         if self.preview:
             return object.get_draft()
         return object
