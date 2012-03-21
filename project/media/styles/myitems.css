@@ -191,8 +191,41 @@ section.my-items-views li {
   margin-top: 20px;
 }
 
+.myitems .pics article .details {
+  margin-left: 170px;
+}
 
-.myitems .portlet.my-items-views ul li.view {
+
+.myitems article .screenshot {
+  border: solid;
+  border-width: 1px;
+}
+
+.myitems .left {
+  float: left;
+}
+
+
+.myitems .portlet.my-items-views ul .view {
   font-style: italic;
 }
+
+.myitems .action-panel {
+  margin-top: 0;
+  background: none;
+  padding: 0;
+}
+
+.myitems .action-panel ul.left {
+  margin: 0;
+}
+
+.myitems .action-panel ul.right {
+  margin: 0;
+}
+
+.myitems .materials-index {
+  margin-top: 10px;
+}
+
 

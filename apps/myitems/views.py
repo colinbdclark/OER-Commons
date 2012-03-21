@@ -1,6 +1,7 @@
 from collections import defaultdict
 from operator import itemgetter
 import datetime
+import urllib
 
 from django import forms
 from django.shortcuts import get_object_or_404
@@ -55,6 +56,7 @@ def items_from_results(results, user):
                                    kwargs=dict(slug=item["slug"]))
         else:
             item["get_absolute_url"] = result.object.get_absolute_url()
+        item["object"] = result.object
         items.append(item)
     return items
 
@@ -84,6 +86,14 @@ def sort_by_save_date(query, user):
 def myitems_index(request, view_name, page_title, no_items_message,
                   filter, only_published=True,
                   template="myitems/saved.html", reverse_params=None):
+    index_types = {
+        "compact": {"name": "Compact"},
+        "pics": {"name": "Screenshots"},
+    }
+    index_type = request.GET.get("index_type") or request.COOKIES.get("index_type")
+    if index_type not in index_types:
+        index_type = "compact"
+    index_types[index_type]["selected"] = True
 
     index_params = IndexParamsWithSaveDateSort(request)
     query_string_params = index_params.update_query_string_params({})
@@ -109,12 +119,22 @@ def myitems_index(request, view_name, page_title, no_items_message,
                             index_params.batch_size,
                             len(query))
 
-    return direct_to_template(request, template, {
+    current_query_string_params = request.GET.copy()
+    for index_type_name, index_type_dict in index_types.iteritems():
+        current_query_string_params["index_type"] = index_type_name
+        index_type_dict['url'] = '?'.join(
+            (request.path, urllib.urlencode(current_query_string_params)))
+
+    response = direct_to_template(request, template, {
         'pagination': pagination,
         'items': items,
         'index_params': index_params,
         'hide_global_notifications': True,
+        'index_types': index_types.values(),
+        'index_type': index_type,
     })
+    response.set_cookie("index_type", index_type)
+    return response
 
 
 @login_required

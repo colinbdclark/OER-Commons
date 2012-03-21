@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load myitems_tags %}
 {% load rating_tags %}
+{% load thumbnail %}
 
 {% block column-left %}
     {% myitems_views_portlet %}
@@ -15,12 +16,17 @@
 {% block column-right %}{% endblock %}
 
 {% block content %}
-    {% include "myitems/include/user-info.html" %}
+    {% include "myitems/include/index-action-panel.html" %}
 
     {% if items %}
-        <div class="materials-index">
+        <div class="materials-index {{ index_type }}">
             {% for item in items %}
                 <article class="item clearfix{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
+                    {% if index_type == "pics" %}
+                    {% thumbnail item.screenshot "160x90" crop="0px 0px" as im %}
+                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                    {% endthumbnail %}
+                    {% endif %}
                     <div class="right relation">{{ item.relation_to_user|upper }}</div>
                     <div class="details">
                         <h1>

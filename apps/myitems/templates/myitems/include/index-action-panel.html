@@ -1,4 +1,4 @@
-<div class="action-panel materials fixed-width">
+<div class="action-panel materials">
   
     <form method="get" action="{{ request.path }}">   
     <ul class="left">
@@ -27,5 +27,16 @@
       </li>
     </ul>
     </form>
-
+    
+    <ul class="right">
+      {% for index_type in index_types %}
+      <li{% if forloop.last %} class="last"{% endif %}>
+        {% if index_type.selected %}
+          {{ index_type.name }}
+        {% else %}
+          <a href="{{ index_type.url }}">{{ index_type.name }}</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
 </div>
