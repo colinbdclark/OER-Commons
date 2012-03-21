@@ -101,8 +101,8 @@ INSTALLED_APPS = (
     'tags',
     'geo',
     'curriculum',
-    'materials',
     'users',
+    'materials',
     'rating',
     'reviews',
     'saveditems',
@@ -246,3 +246,5 @@ LOGGING = {
 }
 
 LR_COMMAND = "%s -m LRSignature.cmd sign" % os.path.join(os.path.dirname(__file__), "..", "bin", "python-lr")
+
+PROFILING = False
