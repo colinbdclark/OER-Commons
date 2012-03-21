@@ -8,14 +8,20 @@ form.formatted .field .autocomplete-list-widget ul, .autocomplete-list-widget ul
   list-style-type: none;
 }
 
-form.formatted .field .autocomplete-list-widget ul li, .autocomplete-list-widget ul li {
+form.formatted .field .autocomplete-list-widget ul li,
+.autocomplete-list-widget ul li {
+  position: relative;
   float: left;
   margin-right: 5px;
+  margin-bottom: 5px;
   padding: 3px 5px;
+  background-color: #CED9DD;
+  color: #1E4E62;
 }
 
-.autocomplete-list-widget ul li:hover {
-  background: #DDF0F6;
+form.formatted .field .autocomplete-list-widget ul li span,
+.autocomplete-list-widget ul li  span {
+  margin-right: 16px;
 }
 
 .autocomplete-list-widget ul:after {
@@ -27,7 +33,9 @@ form.formatted .field .autocomplete-list-widget ul li, .autocomplete-list-widget
 }
 
 .autocomplete-list-widget a.delete {
-  float: right;
+  position: absolute;
+  top: 4px;
+  right: 3px;
   display: block;
   margin-left: 3px;
   width: 15px;

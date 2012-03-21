@@ -1291,6 +1291,11 @@
       }
     }
   }
+  #keywords-widget {
+    input[type='text'] {
+      width: 180px;
+    }
+  }
 }
 
 #step-submit {
