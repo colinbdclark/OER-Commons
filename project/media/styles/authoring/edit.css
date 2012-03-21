@@ -1118,6 +1118,8 @@
       left: 3px; }
   #step-describe .field.learning-goals ul.tagit input[type='text'] {
     width: 90%; }
+#step-describe #keywords-widget input[type='text'] {
+  width: 180px; }
 
 #step-submit .layout-columns {
   padding-top: 30px; }

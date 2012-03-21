@@ -4,9 +4,6 @@ var DescribeStep = function (tool) {
 
   this.$step.find("ul.learning-goals-widget").learningGoalsWidget();
 
-  this.$step.find("#id_keywords").tagit({
-    allowSpaces: true,
-    placeholderText: "Enter new keyword"
-  });
+  oer.autocomplete_list_widget.init();
 
 };

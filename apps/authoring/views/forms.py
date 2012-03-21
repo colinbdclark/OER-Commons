@@ -3,9 +3,9 @@ from django import forms
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from materials.models.common import CC_LICENSE_URL_RE, License
+from materials.models.common import CC_LICENSE_URL_RE, License, Keyword
 from itertools import chain
-from core.forms import MultipleAutoCreateField
+from core.forms import MultipleAutoCreateField, AutocompleteListWidget
 from django.forms import ModelMultipleChoiceField
 from django.forms.widgets import CheckboxInput
 from django.utils.encoding import force_unicode
@@ -152,7 +152,7 @@ class EditForm(forms.ModelForm):
     # remove scripts, styles, forms, iframes, objects, embeds
 
     learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
-    keywords = MultipleAutoCreateField("name", required=False)
+    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), required=False)
     subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
     language = forms.ModelChoiceField(queryset=Language.objects.all(), required=False)
     license = LicenseField()
