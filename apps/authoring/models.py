@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from materials.models import  Keyword, \
     GeneralSubject, License
 from materials.models.common import Language
-from materials.models.material import TAGGED, REVIEWED, RATED, PUBLISHED_STATE
+from materials.models.material import TAGGED, REVIEWED, RATED, PUBLISHED_STATE, WORKFLOW_STATES, PRIVATE_STATE
 from materials.models.microsite import Microsite, Topic
 from pyquery import PyQuery as pq
 from rating.models import Rating
@@ -84,7 +84,6 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     media_formats = models.ManyToManyField(MediaFormat)
 
     is_new = models.BooleanField(default=True)
-    published = models.BooleanField(default=False)
     created_timestamp = models.DateTimeField(auto_now_add=True)
     modified_timestamp = models.DateTimeField(auto_now=True)
     published_on = models.DateTimeField(null=True, blank=True)
@@ -96,6 +95,9 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
     alignment_tags = generic.GenericRelation(TaggedMaterial)
+
+    workflow_state = models.CharField(max_length=50, default=PRIVATE_STATE,
+                                      choices=WORKFLOW_STATES)
 
     def get_draft(self):
         draft = get_object_or_None(AuthoredMaterialDraft, material=self)
@@ -115,7 +117,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
             setattr(material, field.name, getattr(draft, field.name))
         for m2m in AbstractAuthoredMaterial._meta.many_to_many:
             setattr(material, m2m.name, getattr(draft, m2m.name).all())
-        material.published = True
+        material.workflow_state = PUBLISHED_STATE
         material.is_new = False
 
         # Update media formats based on different media types included into material text.
@@ -136,7 +138,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
         return material
 
     def save(self, *args, **kwargs):
-        if self.published and not self.published_on:
+        if self.workflow_state == PUBLISHED_STATE and not self.published_on:
             self.published_on = datetime.datetime.now()
         if self.featured and not self.featured_on:
             self.featured_on = datetime.datetime.now()
@@ -169,10 +171,6 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     @property
     def authors(self):
         return [self.author.get_full_name()]
-
-    @property
-    def workflow_state(self):
-        return PUBLISHED_STATE if self.published else None
 
     # TODO: move all method below to mixin class
     @property
@@ -251,7 +249,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
 
     @property
     def is_displayed(self):
-        return self.published
+        return self.workflow_state == PUBLISHED_STATE
 
     @property
     def is_evaluated(self):

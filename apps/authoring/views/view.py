@@ -5,6 +5,7 @@ from django.utils.html import urlize
 from django.utils.safestring import mark_safe
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import BaseDetailView
+from materials.models.material import PUBLISHED_STATE
 from pyquery import PyQuery as pq
 
 
@@ -33,7 +34,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
     def get_queryset(self):
         qs = super(ViewFullAuthoredMaterial, self).get_queryset()
         if not self.preview:
-            qs = qs.filter(published=True)
+            qs = qs.filter(workflow_state=PUBLISHED_STATE)
         return qs
 
     @classmethod

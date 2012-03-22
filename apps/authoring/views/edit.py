@@ -5,6 +5,7 @@ from authoring.views.forms import EditForm
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic import UpdateView
+from materials.models.material import PUBLISHED_STATE
 
 
 class Edit(EditMaterialViewMixin, UpdateView):
@@ -16,12 +17,12 @@ class Edit(EditMaterialViewMixin, UpdateView):
         kwargs = super(Edit, self).get_form_kwargs()
         if self.request.is_ajax() or "preview" in self.request.GET:
             kwargs["not_required"] = True
-        kwargs["hide_submit_step"] = self.object.material.published and self.object.material.license
+        kwargs["hide_submit_step"] = self.object.material.workflow_state == PUBLISHED_STATE and self.object.material.license
         return kwargs
 
     def get_context_data(self, **kwargs):
         data = super(Edit, self).get_context_data(**kwargs)
-        data["hide_submit_step"] = self.object.material.published and self.object.material.license
+        data["hide_submit_step"] = self.object.material.workflow_state == PUBLISHED_STATE and self.object.material.license
         return data
 
     def form_valid(self, form):
