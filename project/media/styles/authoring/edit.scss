@@ -1333,6 +1333,9 @@
       margin-bottom: 20px;
       .license {
         display: inline-block;
+        vertical-align: top;
+        text-transform: lowercase;
+        color: #989696;
         &.hidden {
           display: none;
         }
@@ -1351,6 +1354,9 @@
       }
       .license-sa .image {
         background: url(../../images/authoring/license-images.png) 0px -63px no-repeat;
+      }
+      .license-nd .image {
+        background: url(../../images/authoring/license-images.png) -63px -63px no-repeat;
       }
     }
   }
