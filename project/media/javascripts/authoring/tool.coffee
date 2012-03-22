@@ -120,13 +120,13 @@ class UserMenu
 
 
 class Tool
-  constructor: (@updatePublished)->
+  constructor: (@hideSubmitStep)->
     @form = $("form.authoring-form")
     @slider = new Slider()
     @userMenu = new UserMenu()
     @writeStep = new WriteStep(@)
     @describeStep = new DescribeStep(@)
-    if not @updatePublished
+    if not @hideSubmitStep
       @submitStep = new SubmitStep(@)
 
     @title = $("#material-title")

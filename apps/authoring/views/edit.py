@@ -16,12 +16,12 @@ class Edit(EditMaterialViewMixin, UpdateView):
         kwargs = super(Edit, self).get_form_kwargs()
         if self.request.is_ajax() or "preview" in self.request.GET:
             kwargs["not_required"] = True
-        kwargs["update_published"] = self.object.material.published
+        kwargs["hide_submit_step"] = self.object.material.published and self.object.material.license
         return kwargs
 
     def get_context_data(self, **kwargs):
         data = super(Edit, self).get_context_data(**kwargs)
-        data["update_published"] = self.object.material.published
+        data["hide_submit_step"] = self.object.material.published and self.object.material.license
         return data
 
     def form_valid(self, form):
