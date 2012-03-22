@@ -39,19 +39,19 @@ class AuthoredMaterialAdmin(admin.ModelAdmin):
     editor.allow_tags = True
 
     def view_on_site(self):
-        if self.published():
-            return """<a href="%s" target="_blank">View on site</a>""" % reverse("authoring:view", kwargs=dict(pk=self.pk))
+        if self.workflow_state == PUBLISHED_STATE:
+            kwargs=dict(pk=self.pk)
+            if self.slug:
+                kwargs["slug"] = self.slug
+            return """<a href="%s" target="_blank">View on site</a>""" % reverse("authoring:view_full", kwargs=kwargs)
         return u""
     view_on_site.allow_tags = True
-
 
     def author(self):
         return self.author.get_full_name() or self.author.email or unicode(self.author)
 
-    def published(self):
-        return self.workflow_state == PUBLISHED_STATE
-
-    list_display = [title, editor, view_on_site, author, published]
+    list_display = [title, editor, view_on_site, author, "workflow_state"]
+    list_filter = ["workflow_state"]
 
 
 admin.site.register(AuthoredMaterial, AuthoredMaterialAdmin)
