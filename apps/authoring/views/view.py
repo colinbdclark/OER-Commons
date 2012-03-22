@@ -70,6 +70,8 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
                 ref.text(),
                 urlize(text),
             ))
+            for a in footnote.find("div a"):
+                pq(a).attr("target", "_blank")
             footnotes.append(footnote)
 
         # Build table of contents

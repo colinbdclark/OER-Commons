@@ -1354,9 +1354,7 @@ WriteStep.prototype.initReferences = function () {
     }
     setTimeout(trackChanges, 1000);
   }
-
   setTimeout(trackChanges, 1000);
-
 };
 
 WriteStep.prototype.updateReferences = function () {
@@ -1371,6 +1369,9 @@ WriteStep.prototype.updateReferences = function () {
     var $footnote = $("<div></div>").attr("id", "footnote" + refCount).addClass("footnote").
             append($("<a></a>").addClass("ref").attr("href", "#").text(name)).
             append($("<div></div>").text($this.data("text")).linkify());
+    $footnote.find("div a").each(function(i, el) {
+      $(el).attr("target", "_blank");
+    });
     $footnote.data("reference", $this);
     $footnotes.append($footnote);
   });
