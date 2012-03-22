@@ -176,6 +176,8 @@ class Tool
       errorSlide = errors.first().closest("div.slide")
       @slider.slideTo("#" + errorSlide.attr("id"), false)
 
+    @autosave()
+
   save:->
     @writeStep.preSave()
     oer.status_message.clear()
@@ -186,6 +188,12 @@ class Tool
         oer.status_message.error(response.message, false)
     )
     return
+
+  autosave:->
+    setTimeout(=>
+      @save()
+      @autosave()
+    , 30 * 1000) # 30 seconds
 
   publish:->
     @writeStep.preSave()
