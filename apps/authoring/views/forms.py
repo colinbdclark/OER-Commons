@@ -165,7 +165,7 @@ class EditForm(forms.ModelForm):
             for field in self.fields.values():
                 field.required = False
 
-        if update_published:
+        if update_published and self.instance.license:
             # We don't allows to change the license after the material was published
             del self.fields["license"]
             #noinspection PyUnresolvedReferences
