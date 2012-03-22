@@ -192,6 +192,7 @@
         errorSlide = errors.first().closest("div.slide");
         this.slider.slideTo("#" + errorSlide.attr("id"), false);
       }
+      this.autosave();
     }
 
     Tool.prototype.save = function() {
@@ -205,6 +206,14 @@
           return oer.status_message.error(response.message, false);
         }
       });
+    };
+
+    Tool.prototype.autosave = function() {
+      var _this = this;
+      return setTimeout(function() {
+        _this.save();
+        return _this.autosave();
+      }, 30 * 1000);
     };
 
     Tool.prototype.publish = function() {
