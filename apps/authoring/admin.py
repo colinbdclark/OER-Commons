@@ -1,6 +1,7 @@
 from authoring.models import AuthoredMaterial, AuthoredMaterialDraft
 from django.contrib import admin
 from django.core.urlresolvers import reverse
+from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
 
 
 class AuthoredMaterialAdmin(admin.ModelAdmin):
@@ -15,8 +16,8 @@ class AuthoredMaterialAdmin(admin.ModelAdmin):
     publish.short_description = "Publish selected materials"
 
     def unpublish(self, request, queryset):
-        for material in queryset.filter(published=True):
-            material.published = False
+        for material in queryset.filter(workflow_state=PUBLISHED_STATE):
+            material.workflow_state = PRIVATE_STATE
             material.save()
     unpublish.short_description = "Unpublish selected materials"
 
@@ -38,16 +39,19 @@ class AuthoredMaterialAdmin(admin.ModelAdmin):
     editor.allow_tags = True
 
     def view_on_site(self):
-        if not self.published:
-            return u""
-        return """<a href="%s" target="_blank">View on site</a>""" % reverse("authoring:view", kwargs=dict(pk=self.pk))
+        if self.published():
+            return """<a href="%s" target="_blank">View on site</a>""" % reverse("authoring:view", kwargs=dict(pk=self.pk))
+        return u""
     view_on_site.allow_tags = True
 
 
     def author(self):
         return self.author.get_full_name() or self.author.email or unicode(self.author)
 
-    list_display = [title, editor, view_on_site, author, "published"]
+    def published(self):
+        return self.workflow_state == PUBLISHED_STATE
+
+    list_display = [title, editor, view_on_site, author, published]
 
 
 admin.site.register(AuthoredMaterial, AuthoredMaterialAdmin)
