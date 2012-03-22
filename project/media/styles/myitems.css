@@ -216,16 +216,21 @@ section.my-items-views li {
   padding: 0;
 }
 
-.myitems .action-panel ul.left {
+.myitems .action-panel .view-selector {
+  float: right;
   margin: 0;
 }
 
-.myitems .action-panel ul.right {
+.myitems .action-panel .view-selector li {
+  background: none;
+  padding: 0;
+}
+
+.myitems .action-panel ul.left {
   margin: 0;
 }
 
 .myitems .materials-index {
   margin-top: 10px;
 }
-
 

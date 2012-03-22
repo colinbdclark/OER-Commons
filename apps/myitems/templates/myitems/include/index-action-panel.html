@@ -28,14 +28,13 @@
     </ul>
     </form>
     
-    <ul class="right">
+    <ul class="view-selector">
       {% for index_type in index_types %}
-      <li{% if forloop.last %} class="last"{% endif %}>
-        {% if index_type.selected %}
-          {{ index_type.name }}
-        {% else %}
-          <a href="{{ index_type.url }}">{{ index_type.name }}</a>
-        {% endif %}
+      <li class="{{ index_type.name }}{% if forloop.last %} last{% endif %}">
+        <a{% if not index_type.selected %} href="{{ index_type.url }}"{% endif %}>
+          <img alt="{{ index_type.human_name }}" 
+            src="{{ STATIC_URL }}images/{% if index_type.selected %}{{ index_type.icon_selected }}{% else %}{{ index_type.icon }}{% endif %}">
+        </a>
       </li>
       {% endfor %}
     </ul>

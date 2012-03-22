@@ -87,8 +87,16 @@ def myitems_index(request, view_name, page_title, no_items_message,
                   filter, only_published=True,
                   template="myitems/saved.html", reverse_params=None):
     index_types = {
-        "compact": {"name": "Compact"},
-        "pics": {"name": "Screenshots"},
+        "compact": {
+            "human_name": "Compact",
+            "icon": "myitems-view-compact.png",
+            "icon_selected": "myitems-view-compact-selected.png"
+        },
+        "pics": {
+            "human_name": "Thumbnails",
+            "icon": "myitems-view-thumbnail.png",
+            "icon_selected": "myitems-view-thumbnail-selected.png"
+        },
     }
     index_type = request.GET.get("index_type") or request.COOKIES.get("index_type")
     if index_type not in index_types:
@@ -124,6 +132,7 @@ def myitems_index(request, view_name, page_title, no_items_message,
         current_query_string_params["index_type"] = index_type_name
         index_type_dict['url'] = '?'.join(
             (request.path, urllib.urlencode(current_query_string_params)))
+        index_type_dict['name'] = index_type_name
 
     response = direct_to_template(request, template, {
         'pagination': pagination,
