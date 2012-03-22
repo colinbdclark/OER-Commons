@@ -141,16 +141,16 @@
 
   Tool = (function() {
 
-    function Tool(updatePublished) {
+    function Tool(hideSubmitStep) {
       var actions, errorSlide, errors, previewBtn, saveBtn,
         _this = this;
-      this.updatePublished = updatePublished;
+      this.hideSubmitStep = hideSubmitStep;
       this.form = $("form.authoring-form");
       this.slider = new Slider();
       this.userMenu = new UserMenu();
       this.writeStep = new WriteStep(this);
       this.describeStep = new DescribeStep(this);
-      if (!this.updatePublished) this.submitStep = new SubmitStep(this);
+      if (!this.hideSubmitStep) this.submitStep = new SubmitStep(this);
       this.title = $("#material-title");
       this.titleInput = $("#id_title");
       this.title.editable(function(value) {

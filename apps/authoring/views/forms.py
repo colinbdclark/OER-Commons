@@ -159,13 +159,13 @@ class EditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         not_required = kwargs.pop("not_required", False)
-        update_published = kwargs.pop("update_published", False)
+        hide_submit_step = kwargs.pop("hide_submit_step", False)
         super(EditForm, self).__init__(*args, **kwargs)
         if not_required:
             for field in self.fields.values():
                 field.required = False
 
-        if update_published and self.instance.license:
+        if hide_submit_step:
             # We don't allows to change the license after the material was published
             del self.fields["license"]
             #noinspection PyUnresolvedReferences

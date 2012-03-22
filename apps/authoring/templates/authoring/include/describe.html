@@ -32,7 +32,7 @@
   {% spaceless %}
   <div class="slider-buttons">
     <a href="#step-write" class="prev"><span class="icon"></span></a>
-    {% if update_published %}
+    {% if hide_submit_step %}
       <a href="#" class="next publish"><span class="wrap"><strong>Publish</strong></span><span class="icon"></span></a>
     {% else %}
       <a href="#step-submit" class="next"><span class="wrap">Next Step: <strong>Submit</strong></span><span class="icon"></span></a>
