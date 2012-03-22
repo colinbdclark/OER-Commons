@@ -30,7 +30,7 @@
     <div class="step-icons">
       <a href="#step-write" class="write active"></a>
       <a href="#step-describe" class="describe"></a>
-      {% if not update_published %}
+      {% if not update_published or not object.material.license %}
         <a href="#step-submit" class="submit"></a>
       {% endif %}
     </div>
@@ -51,7 +51,7 @@
     <div class="slide" id="step-describe">
       {% include "authoring/include/describe.html" %}
     </div>
-    {% if not update_published %}
+    {% if not update_published or not object.material.license %}
       <div class="slide" id="step-submit">
         {% include "authoring/include/submit.html" %}
       </div>
