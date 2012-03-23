@@ -5,7 +5,6 @@
 
 {% block column-left %}
     {% myitems_views_portlet %}
-    {% my_tags_portlet %}
     <section class="portlet saved-searches">
         <a href="{% url myitems:searches %}"{% if saved_search %} class="selected"{% endif %}>Saved Searches</a>
     </section>
