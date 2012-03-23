@@ -107,7 +107,7 @@ header.global nav a.button-contribute {
   text-decoration: none;
   line-height: 40px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.875em;
 }
 
 .global-tabs nav li.selected a {
