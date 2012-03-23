@@ -241,6 +241,7 @@ section.my-items-views li {
   width: 21px;
   height: 16px;
   background-repeat: no-repeat;
+  vertical-align: text-bottom;
 }
 
 .myitems .my-items-views .view .folder-icon {
