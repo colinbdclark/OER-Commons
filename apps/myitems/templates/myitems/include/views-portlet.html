@@ -1,3 +1,5 @@
+{% load static %}
+
 <section class="portlet my-items-views">
   <h1 class="rc6">Folders</h1>
   {% if views %}
@@ -5,6 +7,7 @@
       <ul>
         {% for view in views %}
           <li class="view {{ view.name }}{% if view.selected %} selected{% endif %}">
+              {% if not forloop.first %}<i class="folder-icon"></i>{% endif %}
               <a href="{{ view.url }}">
                   <span class="name">{{ view.title }}</span>
                   (<span class="number">{{ view.count }}</span>)
@@ -13,6 +16,7 @@
         {% endfor %}
         {% for f in folders %}
           <li class="folder{% if f.selected %} selected{% endif %}" data-folder-id="{{ f.id }}">
+              <i class="folder-icon"></i>
               <a href="{{ f.url }}">
                   <span class="name">{{ f.title }}</span>
                   (<span class="number">{{ f.count }}</span>)
@@ -21,6 +25,7 @@
           </li>
         {% endfor %}
           <li class="last">
+              <i class="folder-icon"></i>
               {{ folder_create_form.name }}
               <a id="folder-create-button" class="dashed" href="#">Create a New Folder</a>
               <a id="folder-create-submit" class="dashed hidden" href="#">Create</a>
