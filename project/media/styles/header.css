@@ -2,11 +2,20 @@ header.global {
   height: 110px;
   background: url(../images/header-bg.png) no-repeat 50% 50%;
 }
-
 header.global.fixed-width {
   width: 965px;
 }
-
+header .fixed-width {
+    position: relative;
+  height: inherit;
+}
+header nav {
+    float: right;
+    max-width: 80%;
+    position: absolute;
+    right: 0;
+    bottom: 85px;
+}
 #logo {
   float: left;
   display: block;
@@ -20,7 +29,6 @@ header.global.fixed-width {
 header.global nav ul {
   position: relative;
   top: 80px;
-  float: right;
   list-style-type: none;
   text-align: right;
 }
@@ -75,6 +83,7 @@ header.global nav a.button-contribute {
 .global-tabs nav {
   margin-bottom: 10px;
   height: 40px;
+  max-width: 40%;
 }
 
 .global-tabs nav ul {
@@ -107,7 +116,7 @@ header.global nav a.button-contribute {
   text-decoration: none;
   line-height: 40px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.875em;
 }
 
 .global-tabs nav li.selected a {
