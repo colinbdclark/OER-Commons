@@ -20,7 +20,7 @@
   <div class="authoring-head">
     <a href="{% url frontpage %}" class="logo">OER Commons</a>
     <div id="user-menu">
-      <a href="#" class="toggle">{{ request.user.get_full_name }}</a>
+      <a href="#" class="toggle">{{ request.user.get_full_name|default:request.user.email|default:request.user }}</a>
       <ul>
         <li><a href="{% url myitems:myitems %}">My Items</a></li>
         <li><a href="{% url authoring:new %}">New OER</a></li>

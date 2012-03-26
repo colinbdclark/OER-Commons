@@ -88,7 +88,7 @@ var WriteStep = function (tool) {
 
   this.shouldSaveState = true; // Flag to define if we should save current state in undo history
 
-  this.cleanHTML();
+  this.$area.html(editor.cleanHTML(false));
   this.ensureTextInput();
 
   // Track when user presses and releases Ctrl or Cmd or Shift keys
@@ -169,11 +169,22 @@ var WriteStep = function (tool) {
 
   this.initDND();
 
-  // Clean up HTML on paste and check for changes
+  // Clean up HTML on paste
   this.$area.bind("paste", function () {
     editor.saveState();
     setTimeout(function () {
-      editor.cleanHTML();
+      var selection = null;
+      if ("saveSelection" in rangy) {
+        editor.removeSelectionMarkers();
+        selection = rangy.saveSelection();
+      }
+      editor.$area.html(editor.cleanHTML(false));
+      if (selection) {
+        rangy.restoreSelection(selection);
+        rangy.removeMarkers(selection);
+      }
+      // Re-init DND
+      editor.updateDND();
     }, 200);
   });
 
@@ -325,38 +336,28 @@ var WriteStep = function (tool) {
 
 };
 
-WriteStep.prototype.cleanHTML = function () {
+WriteStep.prototype.cleanHTML = function (preSave) {
   var editor = this;
   var $area = this.$area;
 
-  var selection = null;
-  if ("saveSelection" in rangy) {
-    this.removeSelectionMarkers();
-    selection = rangy.saveSelection();
-  }
-
-  // Clear HTML comments
-  $area.html($area.html().replace(/<!--[\s\S]*?-->/g, ""));
+  // Create a document and clear HTML comments
+  var $document = $("<div></div>").html($area.html().replace(/<!--[\s\S]*?-->/g, ""));
 
   // Remove non-safe elements (scripts, styles, forms, inputs)
-  $area.find("script,style,form,input,textarea,button").remove();
+  $document.find("script,style,form,input,textarea,button").remove();
 
-  // Unwrap <span style="">, <font>, <o:p> (comes from MS Word) and other crap
-  $area.find("font,span[style],p[class^='Mso'],o\\:p").not("span.rangySelectionBoundary").replaceWith(function () {
+  // Unwrap <font>, <o:p> (comes from MS Word) and other crap
+  $document.find("font,p[class^='Mso'],o\\:p").replaceWith(function () {
     return $(this).contents();
   });
 
-  // TODO: remove crap <span>s. Note that we'll use <span class="..."> for text color and selection markers
-
-  // And we also use <span>s inside figures (although we might get rid of them).
-
   // Remove all 'styles' attributes
-  $area.find("[style]").removeAttr("style");
+  $document.find("[style]").removeAttr("style");
 
   // Remove not allowed classes
-  $area.find("[class]").each(function() {
+  $document.find("[class]").each(function() {
     var $this = $(this);
-    if ($this.closest("[class^='ui-']").length) {
+    if ($this.closest("[class^='ui-']", $area).length) {
       return;
     }
     $this.removeClass(function (i, oldClasses) {
@@ -374,10 +375,15 @@ WriteStep.prototype.cleanHTML = function () {
   });
 
   // Remove class attribute from elements with empty class
-  $area.find("[class='']").removeAttr("class");
+  $document.find("[class='']").removeAttr("class");
+
+  // Unwrap <span> without class
+  $document.find("span:not([class])").replaceWith(function () {
+    return $(this).contents();
+  });
 
   // Remove all iframes, objects, embeds which are not inside <figure class="embed">
-  $area.find("iframe,object,embed,param").each(function () {
+  $document.find("iframe,object,embed,param").each(function () {
     var $this = $(this);
     if ($this.closest("figure.embed", $area).length === 0) {
       $this.remove();
@@ -385,12 +391,12 @@ WriteStep.prototype.cleanHTML = function () {
   });
 
   // Replace all <div>s with <p>s
-  $area.find("div").replaceWith(function () {
+  $document.find("div").replaceWith(function () {
     return $("<p></p>").html($(this).html());
   });
 
   // Unwrap nested <p>s
-  $area.find("p > p").each(function () {
+  $document.find("p > p").each(function () {
     var $parent = $(this).parent("p", $area);
     $parent.replaceWith(function () {
       return $(this).contents();
@@ -398,7 +404,7 @@ WriteStep.prototype.cleanHTML = function () {
   });
 
   // Wrap all top-level non-block elements in <p>s (including non-empty text nodes)
-  $area.contents().not(this.ALLOWED_TOP_LEVEL_TAGS).filter(
+  $document.contents().not(this.ALLOWED_TOP_LEVEL_TAGS).filter(
           function () {
             if (this.nodeType === 3 && $.trim(this.text) !== "") {
               // Non-empty text node
@@ -408,39 +414,29 @@ WriteStep.prototype.cleanHTML = function () {
           }).wrap("<p></p>");
 
   // Remove empty paragraphs
-  $area.html($area.html().replace(/<p[^>]*?>\s*?<\/\s*p>/gi, ""));
+  $document.html($document.html().replace(/<p[^>]*?>\s*?<\/\s*p>/gi, ""));
 
   // Replace <h1> with <h2> since this should be a top level header
-  $area.find("h1").replaceWith(function () {
+  $document.find("h1").replaceWith(function () {
     return $("<h2></h2>").html($(this).html());
   });
 
-  if (selection) {
-    rangy.restoreSelection(selection);
-    rangy.removeMarkers(selection);
+  if (preSave) {
+    // TODO: remove interface elements here
+    $document.find("[class^='ui-']").remove();
+    $document.find("[contenteditable]").removeAttr("contenteditable");
+    $document.find("p,div").each(function () {
+      var $this = $(this);
+      if ($.trim($this.text()) === "") {
+        $this.remove();
+      }
+    });
   }
-
-  // Re-init DND
-  editor.updateDND();
-};
-
-WriteStep.prototype.cleanHtmlPreSave = function (html) {
-  var $document = $("<div></div>").html(html);
-  // TODO: remove interface elements here
-  $document.find("[class^='ui-']").remove();
-  $document.find("[contenteditable]").removeAttr("contenteditable");
-  $document.find("p,div").each(function () {
-    var $this = $(this);
-    if ($.trim($this.text()) === "") {
-      $this.remove();
-    }
-  });
   return $document.html();
 };
 
 WriteStep.prototype.preSave = function () {
-  this.cleanHTML();
-  $("#id_text").val(this.cleanHtmlPreSave(this.$area.html()));
+  $("#id_text").val(this.cleanHTML(true));
 };
 
 // Ensure that we always have a text block at the end of editor area
@@ -632,7 +628,6 @@ WriteStep.prototype.updateToolbarState = function () {
     this.enableButton("outdent");
   } else if ($focusBlock.is("p,div")) {
     this.$textStyleIndicator.text("Paragraph");
-    var level = this.getIndentLevel($focusBlock);
     if (indentLevel < 5) {
       this.enableButton("indent");
     }
@@ -833,7 +828,6 @@ WriteStep.prototype.initIndentButtons = function () {
     }
     if ($focusBlock.is("p,div,blockquote")) {
       var level = editor.getIndentLevel($focusBlock);
-      console.log(level);
       if (!level && $focusBlock.is("blockquote")) {
         editor.saveState();
         editor.changeBlockType("p");
@@ -1396,7 +1390,6 @@ WriteStep.prototype.saveState = function () {
 };
 
 WriteStep.prototype.undo = function () {
-  console.log(this.undoHistory);
   var historyLength = this.undoHistory.length;
   if (this.undoDisabled || this.undoDepth >= historyLength) {
     return;
@@ -1881,7 +1874,7 @@ MediaDialog.ImageStep = function (dialog) {
       if (title) {
         $caption.prepend($("<strong></strong>").text(title));
       }
-      $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL)).append($caption);
+      $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL).attr("alt", description)).append($caption);
     }
 
     editor.saveState();
