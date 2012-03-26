@@ -6,7 +6,7 @@ oer.myitems.init = function() {
 
 
     $.template("myitems:folder",
-        '<li class="folder" data-folder-id="${id}"><a href="${url}"><span class="name">${name}</span> (<span class="number">${number}</span>)</a> <a href="#" class="delete">×</a></li>');
+        '<li class="folder" data-folder-id="${id}"><i class="folder-icon"></i> <a href="${url}"><span class="name">${name}</span> (<span class="number">${number}</span>)</a> <a href="#" class="delete">×</a></li>');
     $.template("myitems:item-folder", '<li data-folder-id="${id}"><div class="folder-deco"></div>${name} <a href="#" class="delete">×</a></li>');
 
     var addItemUrl = django_js_utils.urls.resolve('myitems:folder_add_item');
@@ -82,7 +82,7 @@ oer.myitems.init = function() {
                 var itemId = $article.data("identifier");
                 var $numbers = $folderList.find("li.view.myitems span.number");
 
-                if ($article.find("div.right.relation").text() === "CREATED") {
+                if ($article.find("div.right.relation").text() === "SUBMITTED") {
                     $numbers = $numbers.add($folderList.find("li.view.submitted span.number"));
                 }
 

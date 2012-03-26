@@ -1,6 +1,7 @@
 from collections import defaultdict
 from operator import itemgetter
 import datetime
+import urllib
 
 from django import forms
 from django.shortcuts import get_object_or_404
@@ -10,6 +11,7 @@ from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
+from django.utils.datastructures import SortedDict
 
 from haystack.query import SearchQuerySet, SQ
 from materials.views.index import IndexParams, Pagination
@@ -18,6 +20,7 @@ from utils.decorators import login_required
 from annoying.decorators import ajax_request
 from core.search import reindex
 from saveditems.models import SavedItem
+from rubrics.models import Evaluation
 
 from myitems.models import Folder, FolderItem
 
@@ -43,9 +46,20 @@ def items_from_results(results, user):
                                             user=user)
         item["folders"] = folders.values('id', 'name')
         if item["creator"] == user.id:
-            item["relation_to_user"] = 'created'
+            if result.model_name in ('communityitem', 'course', 'library'):
+                item["relation_to_user"] = 'submitted'
+            else:
+                item["relation_to_user"] = 'created'
         elif user.id in item["saved_by"]:
             item["relation_to_user"] = 'saved'
+
+        if item.get("relation_to_user") in ('saved', 'submitted'):
+            if Evaluation.objects.filter(user=user,
+                content_type=ContentType.objects.get(app_label=result.app_label,
+                                                        model=result.model_name),
+                object_id=result.pk,
+                confirmed=True).exists():
+                item["relation_to_user"] = 'evaluated'
 
         model = result.model
         namespace = getattr(model, "namespace", None)
@@ -55,6 +69,7 @@ def items_from_results(results, user):
                                    kwargs=dict(slug=item["slug"]))
         else:
             item["get_absolute_url"] = result.object.get_absolute_url()
+        item["object"] = result.object
         items.append(item)
     return items
 
@@ -84,6 +99,22 @@ def sort_by_save_date(query, user):
 def myitems_index(request, view_name, page_title, no_items_message,
                   filter, only_published=True,
                   template="myitems/saved.html", reverse_params=None):
+    index_types = SortedDict([
+        ("pics", {
+            "human_name": "Thumbnails",
+            "icon": "myitems-view-thumbnail.png",
+            "icon_selected": "myitems-view-thumbnail-selected.png"
+        }),
+        ("compact", {
+            "human_name": "Compact",
+            "icon": "myitems-view-compact.png",
+            "icon_selected": "myitems-view-compact-selected.png"
+        }),
+    ])
+    index_type = request.GET.get("index_type") or request.COOKIES.get("index_type")
+    if index_type not in index_types:
+        index_type = "pics"
+    index_types[index_type]["selected"] = True
 
     index_params = IndexParamsWithSaveDateSort(request)
     query_string_params = index_params.update_query_string_params({})
@@ -109,12 +140,23 @@ def myitems_index(request, view_name, page_title, no_items_message,
                             index_params.batch_size,
                             len(query))
 
-    return direct_to_template(request, template, {
+    current_query_string_params = request.GET.copy()
+    for index_type_name, index_type_dict in index_types.iteritems():
+        current_query_string_params["index_type"] = index_type_name
+        index_type_dict['url'] = '?'.join(
+            (request.path, urllib.urlencode(current_query_string_params)))
+        index_type_dict['name'] = index_type_name
+
+    response = direct_to_template(request, template, {
         'pagination': pagination,
         'items': items,
         'index_params': index_params,
         'hide_global_notifications': True,
+        'index_types': index_types.values(),
+        'index_type': index_type,
     })
+    response.set_cookie("index_type", index_type)
+    return response
 
 
 @login_required

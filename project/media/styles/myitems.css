@@ -93,8 +93,8 @@ dl.user-info dt {
 }
 
 #folder-create-button, #folder-create-submit {
-  float: right;
   color: #1F4D64;
+  font-style: italic;
 }
 
 section.my-items-views li {
@@ -151,6 +151,10 @@ section.my-items-views li {
   background-color: #FFFFFF;
 }
 
+.myitems article .folder-list li.last .add {
+  margin: 0 3px;
+}
+
 .myitems article .folder-list li.last .folder-deco {
   border-bottom-color: #FFFFFF;
   border-bottom-width: 2px;
@@ -191,8 +195,64 @@ section.my-items-views li {
   margin-top: 20px;
 }
 
+.myitems .pics article .details {
+  margin-left: 170px;
+}
 
-.myitems .portlet.my-items-views ul li.view {
-  font-style: italic;
+.myitems .left {
+  float: left;
+}
+
+
+.myitems .action-panel {
+  margin-top: 0;
+  background: none;
+  padding: 0;
+}
+
+.myitems .action-panel .view-selector {
+  float: right;
+  margin: 0;
+}
+
+.myitems .action-panel .view-selector li {
+  margin-right: 5px;
+}
+
+.myitems .action-panel .view-selector li.last {
+  margin-right: 0;
+}
+
+.myitems .action-panel li {
+  background: none;
+  padding: 0;
+}
+
+.myitems .action-panel ul.left {
+  margin: 0;
+}
+
+.myitems .materials-index {
+  margin-top: 10px;
+}
+
+.myitems .folder-icon {
+  display: inline-block;
+  width: 21px;
+  height: 16px;
+  background-repeat: no-repeat;
+  vertical-align: text-bottom;
+}
+
+.myitems .my-items-views .view .folder-icon {
+  background-image: url('/media/images/myitems-folder-auto.png');
+}
+
+.myitems .my-items-views .folder .folder-icon {
+  background-image: url('/media/images/myitems-folder-user.png');
+}
+
+.myitems .my-items-views .last .folder-icon {
+  background-image: url('/media/images/myitems-folder-new.png');
 }
 

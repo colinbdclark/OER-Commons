@@ -1,4 +1,4 @@
-<div class="action-panel materials fixed-width">
+<div class="action-panel materials">
   
     <form method="get" action="{{ request.path }}">   
     <ul class="left">
@@ -27,5 +27,15 @@
       </li>
     </ul>
     </form>
-
+    
+    <ul class="view-selector">
+      {% for index_type in index_types %}
+      <li class="{{ index_type.name }}{% if forloop.last %} last{% endif %}">
+        <a{% if not index_type.selected %} href="{{ index_type.url }}"{% endif %}>
+          <img alt="{{ index_type.human_name }}" 
+            src="{{ STATIC_URL }}images/{% if index_type.selected %}{{ index_type.icon_selected }}{% else %}{{ index_type.icon }}{% endif %}">
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
 </div>

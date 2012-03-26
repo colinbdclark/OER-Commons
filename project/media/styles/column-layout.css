@@ -53,8 +53,8 @@ body.wide-right-column .column-right {
 
 
 body.no-right-column .column-left {
-    float: left;
-    width: 210px;
+  float: left;
+  width: 210px;
 }
 
 body.no-right-column .layout-columns {
@@ -66,8 +66,8 @@ body.no-right-column .column-right {
 }
 
 body.no-right-column .column-main {
-    float: right;
-    padding: 0 0 20px 0;
-    width: 730px;
+  float: right;
+  padding: 0;
+  width: 730px;
 }
 
