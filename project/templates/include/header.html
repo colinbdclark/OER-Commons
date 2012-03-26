@@ -1,7 +1,6 @@
 {% load navigation %}
-<div class="banner">   <!-- banner, full width, circles background -->
-    <header class="fixed-width">
-        <!-- make sure #logo is floated left -->
+<header class="global">
+    <div class="fixed-width">
         {% if microsite and microsite.slug == "green" %}
           <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
           <a id="logo-green" title="Green OER" href="{% url materials:microsite microsite=microsite.slug %}"></a>
@@ -9,7 +8,6 @@
           <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
         {% endif %}
 
-        <!-- make sure this is floated right -->
         <nav>
           {% spaceless %}
           <ul>
@@ -47,12 +45,11 @@
           </ul>
           {% endspaceless %}
         </nav>
-    </header>
-</div>
+    </div>
+</header>
 
-<div class="fl-clearfix global-tabs">   <!-- (toolbar, full width, graduated background) -->
+<div class="fl-clearfix global-tabs">
     <div class="fixed-width">
-        <!-- make sure this is floated right -->
       <div id="global-search-box">
         <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
           <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" placeholder="{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}" />
@@ -61,7 +58,6 @@
         </form>
       </div>
 
-        <!-- make sure navigation is floated left -->
       {% navigation %}
     </div>
 </div>
