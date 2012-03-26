@@ -20,6 +20,7 @@ from utils.decorators import login_required
 from annoying.decorators import ajax_request
 from core.search import reindex
 from saveditems.models import SavedItem
+from rubrics.models import Evaluation
 
 from myitems.models import Folder, FolderItem
 
@@ -45,9 +46,19 @@ def items_from_results(results, user):
                                             user=user)
         item["folders"] = folders.values('id', 'name')
         if item["creator"] == user.id:
-            item["relation_to_user"] = 'created'
+            if result.model_name in ('communityitem', 'course', 'library'):
+                item["relation_to_user"] = 'submitted'
+            else:
+                item["relation_to_user"] = 'created'
         elif user.id in item["saved_by"]:
             item["relation_to_user"] = 'saved'
+
+        if item.get("relation_to_user") in ('saved', 'submitted'):
+            if Evaluation.objects.filter(user=user,
+                content_type=ContentType.objects.get(app_label=result.app_label,
+                                                        model=result.model_name),
+                object_id=result.pk).exists():
+                item["relation_to_user"] = 'evaluated'
 
         model = result.model
         namespace = getattr(model, "namespace", None)

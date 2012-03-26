@@ -82,7 +82,7 @@ oer.myitems.init = function() {
                 var itemId = $article.data("identifier");
                 var $numbers = $folderList.find("li.view.myitems span.number");
 
-                if ($article.find("div.right.relation").text() === "CREATED") {
+                if ($article.find("div.right.relation").text() === "SUBMITTED") {
                     $numbers = $numbers.add($folderList.find("li.view.submitted span.number"));
                 }
 
