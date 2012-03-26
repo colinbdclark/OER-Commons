@@ -57,7 +57,8 @@ def items_from_results(results, user):
             if Evaluation.objects.filter(user=user,
                 content_type=ContentType.objects.get(app_label=result.app_label,
                                                         model=result.model_name),
-                object_id=result.pk).exists():
+                object_id=result.pk,
+                confirmed=True).exists():
                 item["relation_to_user"] = 'evaluated'
 
         model = result.model
