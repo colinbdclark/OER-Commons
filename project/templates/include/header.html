@@ -36,8 +36,10 @@
               <a href="{% url information %}">Help</a>
             </li>
             <li>
-              <a href="{% url preferences:preferences %}"><img src="{{ STATIC_URL }}images/preferences-icon.png" alt="Preferences" /></a>
+              <a title="Preferences" class="button-preferences"
+                 href=" "{% url preferences:preferences %}"> </a>
             </li>
+
             <li class="last">
               <a title="Contribute Content" class="button-contribute"
                  href="{% url contribute %}">Contribute Content</a>

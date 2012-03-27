@@ -65,6 +65,13 @@ header.global nav a img {
   vertical-align: middle;
 }
 
+header.global nav a.button-preferences {
+  display: block;
+  padding: 0;
+  width: 16px;  /* can we do this without pixels? */
+  height: 22px;
+  background: url(../images/preferences-icon-black.png) no-repeat center center;
+}
 header.global nav a.button-contribute {
   display: block;
   overflow: hidden;
@@ -138,5 +145,66 @@ header.global nav a.button-contribute {
 #global-search-box input.text {
   width: 300px;
   height: 18px;
+}
+
+/* Styles to respond to UIO colour theme changes */
+.fl-theme-uio-yb header.global nav a.button-preferences {
+  background-image: url(../images/preferences-icon-yellow.png);
+}
+.fl-theme-uio-wb header.global nav a.button-preferences {
+  background-image: url(../images/preferences-icon-white.png);
+}
+
+.fl-theme-uio-bw header, .fl-theme-uio-wb header,
+.fl-theme-uio-by header, .fl-theme-uio-yb header,
+.fl-theme-uio-yb div, .fl-theme-uio-by div,
+.fl-theme-uio-bw div, .fl-theme-uio-wb div,
+.fl-theme-uio-yb input, .fl-theme-uio-by input,
+.fl-theme-uio-bw input, .fl-theme-uio-wb input,
+.fl-theme-uio-yb a.button-contribute, .fl-theme-uio-by a.button-contribute,
+.fl-theme-uio-bw a.button-contribute, .fl-theme-uio-wb a.button-contribute {
+    background-image: none !important;
+}
+
+.fl-theme-uio-yb a.button-contribute, .fl-theme-uio-by a.button-contribute,
+.fl-theme-uio-bw a.button-contribute, .fl-theme-uio-wb a.button-contribute {
+    text-indent: 0 !important;
+    width: auto !important;
+}
+
+.fl-theme-uio-bw h2, .fl-theme-uio-wb h2,
+.fl-theme-uio-by h2, .fl-theme-uio-yb h2 {
+    text-shadow: none !important;
+}
+
+.fl-theme-uio-yb .global-tabs nav li.selected span,
+.fl-theme-uio-by .global-tabs nav li.selected span,
+.fl-theme-uio-wb .global-tabs nav li.selected span,
+.fl-theme-uio-bw .global-tabs nav li.selected span {
+    background-image: none !important;
+}
+.fl-theme-uio-by .global-tabs nav li.selected span,
+.fl-theme-uio-bw .global-tabs nav li.selected span,
+.fl-theme-uio-bw .global-tabs nav li.selected a,
+.fl-theme-uio-by .global-tabs nav li.selected a {
+    background-color: #000000 !important;
+}
+.fl-theme-uio-wb .global-tabs nav li.selected span,
+.fl-theme-uio-wb .global-tabs nav li.selected a {
+    background-color: #FFFFFF !important;
+}
+.fl-theme-uio-yb .global-tabs nav li.selected span,
+.fl-theme-uio-yb .global-tabs nav li.selected a {
+    background-color: #FFFF00 !important;
+}
+.fl-theme-uio-yb .global-tabs nav li.selected a,
+.fl-theme-uio-wb .global-tabs nav li.selected a {
+    color: #000000 !important;
+}
+.fl-theme-uio-by .global-tabs nav li.selected a {
+    color: #FFFF00 !important;
+}
+.fl-theme-uio-bw .global-tabs nav li.selected a {
+    color: #FFFFFF !important;
 }
 
