@@ -20,10 +20,6 @@ var WriteStep = function (tool) {
     this.ALLOWED_CLASSES.push("text-color-" + i);
     this.ALLOWED_CLASSES.push("bg-color-" + i);
   }
-  this.HEADER_LEVELS = {
-    h2: 0,
-    h3: 1
-  };
 
   // Key codes for keys which don't cause the change of editor contents
   this.SPECIAL_KEY_CODES = [
@@ -75,7 +71,6 @@ var WriteStep = function (tool) {
   this.$toolbar = $("#write-toolbar");
   this.$toolbarButtons = this.$toolbar.find("a.toolbar-button");
   this.$area = $("#editor-area");
-  this.$outline = $("#outline");
   this.$textStyleIndicator = this.$toolbar.find(".text-style > a span");
   this.$footnotes = $("#footnotes");
 
@@ -152,10 +147,11 @@ var WriteStep = function (tool) {
   this.initLinks();
   this.initTableButton();
   this.initColorButtons();
-  this.initOutline();
   this.initReferences();
 
+  this.toc = new TableOfContents(this);
   new MediaDialog(this);
+
 
   this.$area.find("table").each(function() {
     editor.initTable($(this));
@@ -218,15 +214,15 @@ var WriteStep = function (tool) {
       }
     }
 
-    // Update the outline if current block is a header
+    // Update the table of contents if current block is a header
     if (editor.$focusBlock && editor.$focusBlock.is("h1,h2,h3")) {
       var $header = editor.$focusBlock;
-      var $li = $header.data("outline");
-      if (!$li) {
-        editor.updateOutline();
-        $li = $header.data("outline");
+      var $tocHeader = $header.data("toc");
+      if (!$tocHeader) {
+        editor.toc.update();
+        $tocHeader = $header.data("toc");
       }
-      $li.text($header.text());
+      $tocHeader.find("div.text").text($header.text());
     }
 
   });
@@ -1114,142 +1110,6 @@ WriteStep.prototype.loadEmbed = function ($figure) {
   }
 };
 
-WriteStep.prototype.newOutlineItemMessage = function (level) {
-  var text = "click to add new ";
-  if (level === 0) {
-    text += "header";
-  } else if (level === 1) {
-    text += "sub-header";
-  }
-  return "<span>" + text + "</span>";
-};
-
-WriteStep.prototype.updateOutline = function () {
-  var editor = this;
-  var prevLevel = 0;
-  var $list = $("<ul></ul>").data("level", 0);
-  var levels = [];
-  this.$area.find("h2,h3").each(function () {
-    var level = editor.HEADER_LEVELS[this.tagName.toLowerCase()];
-    var i;
-    if (level > prevLevel) {
-      for (i = 0; i < (level - prevLevel); i++) {
-        $list = $("<ul></ul>").data("level", level).appendTo($list);
-      }
-    } else if (level < prevLevel) {
-      for (i = 0; i < (prevLevel - level); i++) {
-        $list = $list.parent();
-      }
-    }
-    var $header = $(this);
-    var $li = $("<li></li>").text($header.text()).data("header", $header);
-    $header.data("outline", $li);
-    $list.append($li);
-    levels.push(level);
-    prevLevel = level;
-  });
-  while ($list.parent().length) {
-    $list = $list.parent();
-  }
-
-  $list.find("ul").andSelf().each(function () {
-    var $this = $(this);
-    $this.append($("<li></li>").addClass("new").html(editor.newOutlineItemMessage($this.data("level"))));
-  });
-
-  $list.children("li:not(.new)").filter(function () {
-    return $(this).next("ul").length === 0;
-  });
-  $list.after(function () {
-    var level = $(this).parent().data("level") + 1;
-    return $("<ul></ul>").data("level", level).append($("<li></li>").addClass("new").html(editor.newOutlineItemMessage(level)));
-  });
-
-  this.$outline.data("levels", levels);
-  this.$outline.children("ul").remove();
-  this.$outline.append($list);
-};
-
-WriteStep.prototype.initOutline = function () {
-  var editor = this;
-  this.updateOutline();
-
-  function trackChanges() {
-    // Update only if the structure of headers has changed
-    var areaLevels = [];
-    editor.$area.find("h2,h3").each(function () {
-      areaLevels.push(editor.HEADER_LEVELS[this.tagName.toLowerCase()]);
-    });
-    var outlineLevels = editor.$outline.data("levels");
-    if (areaLevels.length != outlineLevels.length) {
-      editor.updateOutline();
-    } else {
-      for (var i = 0; i < areaLevels.length; i++) {
-        if (areaLevels[i] != outlineLevels[i]) {
-          editor.updateOutline();
-          break;
-        }
-      }
-    }
-    setTimeout(trackChanges, 1000);
-  }
-
-  setTimeout(trackChanges, 1000);
-
-  editor.$outline.delegate("li.new span", "click", function () {
-    var $li = $(this).parent();
-    $li.empty();
-
-    function reset() {
-      $li.html(editor.newOutlineItemMessage($li.parent().data("level")));
-    }
-
-    var $input = $('<input type="text" value="">').appendTo($li);
-    $input.keydown(function (e) {
-      var text;
-      if (e.which === editor.BACKSPACE) {
-        text = $input.val();
-        if (text === "") {
-          e.preventDefault();
-          reset();
-        }
-      } else if (e.which === editor.ENTER) {
-        e.preventDefault();
-        var level = $li.parent().data("level");
-        text = $.trim($input.val());
-        reset();
-        if (text === "") {
-          return;
-        }
-        var $newLi = $("<li></li>").text(text).insertBefore($li);
-        if (level === 0) {
-          $newLi.after($("<ul></ul>").data("level", level).append($("<li></li>").addClass("new").html(editor.newOutlineItemMessage(level + 1))));
-        }
-        var headerType;
-        for (var t in editor.HEADER_LEVELS) {
-          if (editor.HEADER_LEVELS[t] === level) {
-            headerType = t;
-            break;
-          }
-        }
-        editor.saveState();
-        var $header = $("<" + headerType + ">").text(text).data("outline", $newLi);
-        $newLi.data("header", $header);
-        var $lis = editor.$outline.find("li:not(.new)");
-        var nextHeaderIndex = $lis.index($newLi[0]) + 1;
-        if (nextHeaderIndex < $lis.length) {
-          $header.insertBefore($($lis[nextHeaderIndex]).data("header"));
-        } else {
-          editor.$area.append($header);
-        }
-        $header.after($("<p><br/></p>"));
-      }
-    });
-    $input.blur(reset).focus();
-  });
-
-};
-
 WriteStep.prototype.initReferences = function () {
   this.updateReferences();
 
@@ -1409,7 +1269,7 @@ WriteStep.prototype.undo = function () {
     this.disableUndo();
   }
   this.enableRedo();
-  this.updateOutline();
+  this.toc.update();
   this.updateReferences();
   this.trackSelection();
 
@@ -1440,7 +1300,7 @@ WriteStep.prototype.redo = function () {
     this.disableRedo();
   }
   this.enableUndo();
-  this.updateOutline();
+  this.toc.update();
   this.updateReferences();
   this.trackSelection();
 
@@ -2013,4 +1873,191 @@ MediaDialog.DocumentStep.prototype.prepare = function (data) {
   this.$selector.val("button");
   this.$input.val(data.name);
   this.$step.data("url", data.url);
+};
+
+
+function TableOfContents(editor) {
+  var $toc = this.$toc = $("#toc > div");
+  this.editor = editor;
+  this.update();
+  var toc = this;
+
+  function trackChanges() {
+    // Update only if the structure of headers has changed
+    var areaLevels = [];
+    editor.$area.find("h2,h3").each(function () {
+      var $header = $(this);
+      if ($header.is("h2")) {
+        areaLevels.push(0);
+      } else {
+        areaLevels.push(1);
+      }
+    });
+    var tocLevels = $toc.data("levels");
+    if (areaLevels.length != tocLevels.length) {
+      toc.update();
+    } else {
+      for (var i = 0; i < areaLevels.length; i++) {
+        if (areaLevels[i] != tocLevels[i]) {
+          toc.update();
+          break;
+        }
+      }
+    }
+    setTimeout(trackChanges, 1000);
+  }
+  setTimeout(trackChanges, 1000);
+
+  $toc.delegate("div.new a", "click", function(e) {
+    e.preventDefault();
+    editor.saveState();
+    var $new = $(e.currentTarget).parent();
+    var $areaHeader;
+    if ($new.hasClass("level-0")) {
+      $areaHeader = $("<h2></h2>");
+    } else {
+      $areaHeader = $("<h3></h3>");
+    }
+    var $next = $new.next("div.header");
+    if ($next.length) {
+      $areaHeader.insertBefore($next.data("header"));
+    } else {
+      $areaHeader.appendTo(editor.$area);
+    }
+    var $header = toc.createHeader($areaHeader);
+    $header.insertBefore($new);
+    $header.find("div.text").focus();
+    toc.updateLevels();
+  });
+
+  $toc.delegate("div.header a.delete", "click", function(e) {
+    e.preventDefault();
+    editor.saveState();
+    var $header = $(e.currentTarget).parent();
+    $header.data("header").remove();
+    $header.remove();
+    toc.updateLevels();
+    toc.updateNewLinks();
+  });
+  $toc.delegate("div.header a.delete", "mouseover", function(e) {
+    $(e.currentTarget).parent().addClass("highlight");
+  });
+  $toc.delegate("div.header a.delete", "mouseout", function(e) {
+    $(e.currentTarget).parent().removeClass("highlight");
+  });
+}
+
+TableOfContents.prototype.createHeader = function($areaHeader) {
+  var text = $.trim($areaHeader.text());
+  var $header = $("<div></div>").addClass("header");
+  $header.append($("<div></div>").addClass("handle"));
+  $header.append($('<a href="#" class="delete">&times;</a>'));
+  var $text = $("<div></div>").addClass("text").text(text).attr("contenteditable", "true");
+  $text.keyup(function(e) {
+    var $t = $(e.target);
+    $t.parent().data("header").text($t.text());
+  });
+  $header.append($text);
+  if ($areaHeader.is("h2")) {
+    $header.addClass("level-0");
+  } else {
+    $header.addClass("level-1");
+  }
+  $header.data("header", $areaHeader);
+  $areaHeader.data("toc", $header);
+  return $header;
+};
+
+TableOfContents.prototype.updateLevels = function() {
+  var levels = [];
+  this.$toc.find("div.header").each(function() {
+    if ($(this).hasClass("level-0")) {
+      levels.push(0);
+    } else {
+      levels.push(1);
+    }
+  });
+  this.$toc.data("levels", levels);
+};
+
+TableOfContents.prototype.updateNewLinks = function() {
+  var $toc = this.$toc;
+  var $new;
+  $toc.find("div.new").remove();
+  $toc.find("div.header").filter(function() {
+    return !$(this).next().is("div.header.level-1");
+  }).each(function() {
+    var $header = $(this);
+    $new = $("<div></div>").addClass("new level-1");
+    $new.append($('<a href="#">Add Subheading</a>'));
+    $new.insertAfter($header);
+  });
+  $new = $("<div></div>").addClass("new level-0");
+  $new.append($('<a href="#">Add Heading</a>'));
+  $new.appendTo($toc);
+};
+
+TableOfContents.prototype.update = function() {
+  var editor = this.editor;
+  var $toc = this.$toc;
+  var toc = this;
+
+  $toc.sortable("destroy");
+  $toc.find("div.header").remove();
+
+  editor.$area.find("h2,h3").each(function () {
+    $toc.append(toc.createHeader($(this)));
+  });
+
+  this.updateLevels();
+  this.updateNewLinks();
+
+  $toc.sortable({
+    items: "div.header",
+    handle: "div.handle",
+    containment: "parent",
+    placeholder: "ui-state-highlight",
+    start: function(e, ui) {
+      ui.item.addClass("highlight");
+    },
+    over: function(e, ui) {
+      var offset = e.pageX - ui.offset.left;
+      if (offset > 50) {
+        $toc.addClass("subheader-drop");
+      } else {
+        $toc.removeClass("subheader-drop");
+      }
+    },
+    stop: function(e, ui) {
+      var item = ui.item;
+      item.removeClass("highlight");
+      editor.saveState();
+      if ($toc.hasClass("subheader-drop")) {
+        $toc.removeClass("subheader-drop");
+        item.removeClass("level-0").addClass("level-1");
+      } else {
+        item.removeClass("level-1").addClass("level-0");
+      }
+      var $header = item.data("header");
+      if (item.hasClass("level-0") && $header.is("h3")) {
+        $header = $("<h2></h2>").html($header.html()).insertAfter($header);
+        $header.prev().remove();
+        item.data("header", $header);
+      } else if (ui.item.hasClass("level-1") && $header.is("h2")) {
+        $header = $("<h3></h3>").html($header.html()).insertAfter($header);
+        $header.prev().remove();
+        item.data("header", $header);
+      }
+      var $section = $header.add($header.nextUntil("h2,h3"));
+      var $next = item.nextAll("div.header").first();
+      if ($next.length) {
+        $section.detach().insertBefore($next.data("header"));
+      } else {
+        $section.detach().appendTo(editor.$area);
+      }
+      toc.updateLevels();
+      toc.updateNewLinks();
+      editor.updateReferences();
+    }
+  });
 };

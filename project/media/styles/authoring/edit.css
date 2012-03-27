@@ -164,31 +164,18 @@
     position: relative;
     top: -1px; }
 
-#outline ul {
+#toc .header {
+  margin-bottom: 0.5em;
   color: #069;
-  margin-left: 0;
-  list-style-type: none;
   font-weight: bold; }
-#outline > ul a {
-  color: #069;
-  text-decoration: none; }
-#outline ul > ul {
-  margin-left: 1.5em;
-  list-style-type: circle;
-  font-weight: normal;
-  color: #39c; }
-#outline .new span {
-  font-size: 13px;
-  border-bottom: 1px dashed;
-  cursor: pointer; }
-#outline .new input {
-  background-color: #fff;
-  border: none;
-  padding: 0 3px;
-  height: 20px;
-  font-size: 15px;
-  margin: -4px;
-  width: 100%; }
+  #toc .header a {
+    color: #069; }
+  #toc .header.level-1 {
+    margin-left: 20px;
+    color: #39c;
+    font-weight: normal; }
+    #toc .header.level-1 a {
+      color: #39c; }
 
 .authoring-edit #slider {
   background-color: #F2F2F2; }
@@ -367,7 +354,7 @@
     -ms-box-shadow: none;
     box-shadow: none; }
     .title-input input:focus {
-      outline-width: 0; }
+      outline: none; }
 
 #status-messages {
   float: left;
@@ -784,7 +771,7 @@
 #editor-area {
   overflow-y: auto; }
   #editor-area:focus {
-    outline-width: 0; }
+    outline: none; }
   #editor-area table {
     background-color: #fff; }
     #editor-area table .ui-column-controls td {
@@ -807,7 +794,7 @@
         left: 0;
         width: 17px;
         height: 17px;
-        background: url(../../images/authoring/icon-table-move.png) no-repeat;
+        background: url(../../images/authoring/icon-move-blue.png) no-repeat;
         cursor: move; }
     #editor-area table .ui-row-controls {
       position: relative;
@@ -1171,3 +1158,59 @@
       background: url(../../images/authoring/license-images.png) -63px -63px no-repeat; }
 #step-submit .license-widget ul {
   list-style-type: none; }
+
+#toc > div {
+  margin-left: -20px; }
+#toc .header .handle {
+  float: left;
+  position: relative;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  background: url(../../images/authoring/icon-move-gray.png) no-repeat;
+  visibility: hidden; }
+#toc .header:hover .handle {
+  visibility: visible; }
+#toc .header:hover .delete {
+  visibility: visible; }
+#toc .header.highlight {
+  background-color: transparent;
+  color: #ffcc33; }
+  #toc .header.highlight .handle {
+    background-image: url(../../images/authoring/icon-move-highlight.png); }
+  #toc .header.highlight .delete, #toc .header.highlight.level-1 .delete {
+    color: #ffcc33; }
+#toc .header .text {
+  margin-left: 20px;
+  margin-right: 20px; }
+  #toc .header .text:focus {
+    background-color: #fff;
+    outline: none; }
+#toc .header .delete {
+  visibility: hidden;
+  float: right;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px #fff;
+  color: #989898;
+  text-decoration: none; }
+#toc .header.level-1 .delete {
+  color: #989898; }
+#toc .ui-state-highlight {
+  border: solid #fff;
+  border-width: 0 1px 1px 0;
+  height: 3px;
+  background-color: #ffcc33;
+  margin-left: 20px; }
+#toc .subheader-drop .ui-state-highlight {
+  margin-left: 20px; }
+#toc .new {
+  margin-bottom: 0.5em;
+  margin-left: 20px;
+  font-style: italic;
+  font-weight: bold; }
+  #toc .new a {
+    color: #989898;
+    border-bottom: 1px dotted #ffcc33; }
+  #toc .new.level-1 {
+    margin-left: 40px;
+    font-weight: normal; }
