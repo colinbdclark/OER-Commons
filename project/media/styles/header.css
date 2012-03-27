@@ -1,5 +1,4 @@
 header.global {
-  height: 110px;
   background: url(../images/header-bg.png) no-repeat 50% 50%;
 }
 
@@ -16,13 +15,14 @@ header.global div.fixed-width {
   width: 130px;
   height: 83px;
   background: url(../images/logo.png) no-repeat;
+  padding-bottom: 16px;
 }
 
 header.global nav {
     max-width: 80%;
     position: absolute;
     right: 0;
-     bottom: 0.5em; 
+    bottom: -100px;
 }
 header.global nav ul {
   position: relative;
