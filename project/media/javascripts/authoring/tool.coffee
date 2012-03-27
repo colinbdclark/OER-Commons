@@ -176,7 +176,7 @@ class Tool
       errorSlide = errors.first().closest("div.slide")
       @slider.slideTo("#" + errorSlide.attr("id"), false)
 
-#    @autosave()
+    @autosave()
 
   save:->
     @writeStep.preSave()
