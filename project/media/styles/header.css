@@ -74,13 +74,7 @@ header.global nav a.button-preferences {
 }
 header.global nav a.button-contribute {
   display: block;
-  overflow: hidden;
   margin-left: 10px;
-  padding: 0;
-  width: 145px;
-  height: 22px;
-  background: url(../images/contribute-btn.gif) no-repeat;
-  text-indent: 9999px;
 }
 
 .global-tabs {
