@@ -142,6 +142,19 @@ header.global nav a.button-contribute {
 }
 
 /* Styles to respond to UIO colour theme changes */
+.fl-theme-uio-yb #logo {
+  background: url(../images/oerlogo-yellow.png) no-repeat;
+}
+.fl-theme-uio-by #logo {
+  background: url(../images/oerlogo-blackonyellow.png) no-repeat;
+}
+.fl-theme-uio-wb #logo {
+  background: url(../images/oerlogo-white.png) no-repeat;
+}
+.fl-theme-uio-bw #logo {
+  background: url(../images/oerlogo-black.png) no-repeat;
+}
+
 .fl-theme-uio-yb header.global nav a.button-preferences {
   background-image: url(../images/preferences-icon-yellow.png);
 }
