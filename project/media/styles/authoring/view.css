@@ -143,31 +143,18 @@
     #footnotes div.footnote div {
       margin-left: 25px; }
 
-#outline ul {
+#toc .header {
+  margin-bottom: 0.5em;
   color: #069;
-  margin-left: 0;
-  list-style-type: none;
   font-weight: bold; }
-#outline > ul a {
-  color: #069;
-  text-decoration: none; }
-#outline ul > ul {
-  margin-left: 1.5em;
-  list-style-type: circle;
-  font-weight: normal;
-  color: #39c; }
-#outline .new span {
-  font-size: 13px;
-  border-bottom: 1px dashed;
-  cursor: pointer; }
-#outline .new input {
-  background-color: #fff;
-  border: none;
-  padding: 0 3px;
-  height: 20px;
-  font-size: 15px;
-  margin: -4px;
-  width: 100%; }
+  #toc .header a {
+    color: #069; }
+  #toc .header.level-1 {
+    margin-left: 20px;
+    color: #39c;
+    font-weight: normal; }
+    #toc .header.level-1 a {
+      color: #39c; }
 
 .authoring-view #toolbar {
   background-color: #3399cc;

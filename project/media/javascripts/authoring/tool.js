@@ -192,7 +192,6 @@
         errorSlide = errors.first().closest("div.slide");
         this.slider.slideTo("#" + errorSlide.attr("id"), false);
       }
-      this.autosave();
     }
 
     Tool.prototype.save = function() {
