@@ -13,7 +13,15 @@
         });
 
         fluid.uiOptions.fatPanel(".flc-uiOptions", {
-            prefix: static_url + "javascripts/infusion/components/uiOptions/html/"
+            prefix: static_url + "javascripts/infusion/components/uiOptions/html/",
+            slidingPanel: {
+                options: {
+                    strings: {
+                        showText: "+ Learner Options",
+                        hideText: "- Learner Options"
+                    }
+                }
+            }
         });
         
     });
