@@ -68,7 +68,7 @@ header.global nav a img {
 header.global nav a.button-preferences {
   display: block;
   padding: 0;
-  width: 16px;  /* can we do this without pixels? */
+  width: 16px;
   height: 22px;
   background: url(../images/preferences-icon-black.png) no-repeat center center;
 }
