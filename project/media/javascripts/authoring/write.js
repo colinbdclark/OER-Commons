@@ -365,6 +365,40 @@ WriteStep.prototype.cleanHTML = function (preSave) {
     }
   });
 
+  // Remove/unwrap empty figures
+  $document.find("figure").each(function() {
+    var $figure = $(this);
+    // Skip valid figures
+    if ($figure.hasClass("table") && $figure.find("table").length) {
+      return;
+    }
+    if ($figure.hasClass("embed") && $figure.data("url")) {
+      return;
+    }
+    if ($figure.hasClass("image") && $figure.find("img")) {
+      return;
+    }
+    if ($figure.hasClass("download") && $figure.find("a")) {
+      return;
+    }
+    // TODO: skip audio figures when they're available
+
+    if ($.trim($figure.text()) === "") {
+      // Remove empty figure
+      $figure.remove();
+    } else if ($figure.hasClass("inline")) {
+      // Unwrap inlive figure
+      $figure.replaceWith(function() {
+        return $(this).contents();
+      })
+    } else {
+      // Replace block figure with <p>
+      $figure.replaceWith(function() {
+        return $("<p></p>").html($(this).html());
+      })
+    }
+  });
+
   // Replace all <div>s with <p>s
   $document.find("div").replaceWith(function () {
     return $("<p></p>").html($(this).html());
