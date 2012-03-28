@@ -469,7 +469,7 @@
   #write-toolbar .toolbar-button.disabled {
     cursor: default; }
 #write-toolbar .undo {
-  background: url(../../images/authoring/toolbar.png) 0px 0px no-repeat; }
+  background: url(../../images/authoring/674) 0px 0px no-repeat; }
 #write-toolbar .undo:hover {
   background: url(../../images/authoring/toolbar.png) 0px -42px no-repeat; }
 #write-toolbar .undo.active {
@@ -1170,3 +1170,88 @@
       background: url(../../images/authoring/license-images.png) -63px -63px no-repeat; }
 #step-submit .license-widget ul {
   list-style-type: none; }
+
+/* High-contrast toolbar images */
+.fl-theme-uio-by #write-toolbar .undo,
+.fl-theme-uio-by #write-toolbar .redo,
+.fl-theme-uio-by #write-toolbar .bullet-list,
+.fl-theme-uio-by #write-toolbar .number-list,
+.fl-theme-uio-by #write-toolbar .indent,
+.fl-theme-uio-by #write-toolbar .outdent,
+.fl-theme-uio-by #write-toolbar .table,
+.fl-theme-uio-by #write-toolbar .bold,
+.fl-theme-uio-by #write-toolbar .italic,
+.fl-theme-uio-by #write-toolbar .underline,
+.fl-theme-uio-by #write-toolbar .text-color,
+.fl-theme-uio-by #write-toolbar .bg-color,
+.fl-theme-uio-by #write-toolbar .link,
+.fl-theme-uio-by #write-toolbar .media,
+.fl-theme-uio-by #write-toolbar .reference,
+.fl-theme-uio-by #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-by #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-by #write-toolbar .color-selector.active .bg-color {
+    background-image: url(../../images/authoring/toolbar-blackonyellow.png) !important;
+}
+
+.fl-theme-uio-yb #write-toolbar .undo,
+.fl-theme-uio-yb #write-toolbar .redo,
+.fl-theme-uio-yb #write-toolbar .bullet-list,
+.fl-theme-uio-yb #write-toolbar .number-list,
+.fl-theme-uio-yb #write-toolbar .indent,
+.fl-theme-uio-yb #write-toolbar .outdent,
+.fl-theme-uio-yb #write-toolbar .table,
+.fl-theme-uio-yb #write-toolbar .bold,
+.fl-theme-uio-yb #write-toolbar .italic,
+.fl-theme-uio-yb #write-toolbar .underline,
+.fl-theme-uio-yb #write-toolbar .text-color,
+.fl-theme-uio-yb #write-toolbar .bg-color,
+.fl-theme-uio-yb #write-toolbar .link,
+.fl-theme-uio-yb #write-toolbar .media,
+.fl-theme-uio-yb #write-toolbar .reference,
+.fl-theme-uio-yb #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-yb #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-yb #write-toolbar .color-selector.active .bg-color {
+    background-image: url(../../images/authoring/toolbar-yellowonblack.png) !important;
+}
+
+.fl-theme-uio-bw #write-toolbar .undo,
+.fl-theme-uio-bw #write-toolbar .redo,
+.fl-theme-uio-bw #write-toolbar .bullet-list,
+.fl-theme-uio-bw #write-toolbar .number-list,
+.fl-theme-uio-bw #write-toolbar .indent,
+.fl-theme-uio-bw #write-toolbar .outdent,
+.fl-theme-uio-bw #write-toolbar .table,
+.fl-theme-uio-bw #write-toolbar .bold,
+.fl-theme-uio-bw #write-toolbar .italic,
+.fl-theme-uio-bw #write-toolbar .underline,
+.fl-theme-uio-bw #write-toolbar .text-color,
+.fl-theme-uio-bw #write-toolbar .bg-color,
+.fl-theme-uio-bw #write-toolbar .link,
+.fl-theme-uio-bw #write-toolbar .media,
+.fl-theme-uio-bw #write-toolbar .reference,
+.fl-theme-uio-bw #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-bw #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-bw #write-toolbar .color-selector.active .bg-color {
+    background-image: url(../../images/authoring/toolbar-blackonwhite.png) !important;
+}
+
+.fl-theme-uio-wb #write-toolbar .undo,
+.fl-theme-uio-wb #write-toolbar .redo,
+.fl-theme-uio-wb #write-toolbar .bullet-list,
+.fl-theme-uio-wb #write-toolbar .number-list,
+.fl-theme-uio-wb #write-toolbar .indent,
+.fl-theme-uio-wb #write-toolbar .outdent,
+.fl-theme-uio-wb #write-toolbar .table,
+.fl-theme-uio-wb #write-toolbar .bold,
+.fl-theme-uio-wb #write-toolbar .italic,
+.fl-theme-uio-wb #write-toolbar .underline,
+.fl-theme-uio-wb #write-toolbar .text-color,
+.fl-theme-uio-wb #write-toolbar .bg-color,
+.fl-theme-uio-wb #write-toolbar .link,
+.fl-theme-uio-wb #write-toolbar .media,
+.fl-theme-uio-wb #write-toolbar .reference,
+.fl-theme-uio-wb #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-wb #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-wb #write-toolbar .color-selector.active .bg-color {
+    background-image: url(../../images/authoring/toolbar-whiteonblack.png) !important;
+}
