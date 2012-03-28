@@ -381,6 +381,7 @@ WriteStep.prototype.cleanHTML = function (preSave) {
     if ($figure.hasClass("download") && $figure.find("a")) {
       return;
     }
+    // TODO: skip audio figures when they're available
 
     if ($.trim($figure.text()) === "") {
       // Remove empty figure
