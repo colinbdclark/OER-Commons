@@ -25,12 +25,7 @@ def my_tags_portlet(context):
 
 VIEWS = [
     ("myitems", u"All", lambda user_id: SQ(saved_by=user_id) | SQ(creator=user_id)),
-#    ("myitems", u"My Saved Items"),
-#    ("rated", u"My Rated Items"),
-#    ("tagged", u"My Tagged Items"),
-#    ("commented", u"My Commented Items"),
     ("submitted", u"My Submitted Items", lambda user_id: SQ(creator=user_id)),
-#    ("searches", u"My Saved Searches"),
 ]
 
 
@@ -48,7 +43,6 @@ def myitems_views_portlet(context):
         }
         for view_name, view_title, filter in VIEWS
     ]
-
 
     folders = [
         {
