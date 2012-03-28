@@ -2,22 +2,7 @@
   
     <form method="get" action="{{ request.path }}">   
     <ul class="left">
-      <li>
-         {% if pagination.total_items %}
-           Displaying <strong>{{ pagination.first_item_number }} - {{ pagination.last_item_number }}</strong> of <strong>{{ pagination.total_items }}</strong> results
-         {% else %}
-           No results
-         {% endif %}
-      </li>
-      <li>
-        <select name="batch_size">
-          {% for option in index_params.BATCH_SIZE_OPTIONS %}
-            <option value="{{ option }}"{% if option == index_params.batch_size %} selected="selected"{% endif %}>{{ option }}</option>
-          {% endfor %}
-        </select>
-        results per page
-      </li>
-      <li class="last">
+      <li class="first">
         Sort by:
         <select name="sort_by">
           {% for option in index_params.SORT_BY_OPTIONS %}
@@ -25,10 +10,20 @@
           {% endfor %}
         </select>
       </li>
+      <li>
+        Show me:
+        <select name="batch_size">
+          {% for option in index_params.BATCH_SIZE_OPTIONS %}
+            <option value="{{ option }}"{% if option == index_params.batch_size %} selected="selected"{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+        results per page
+      </li>
     </ul>
     </form>
     
     <ul class="view-selector">
+      <li>View:</li>
       {% for index_type in index_types %}
       <li class="{{ index_type.name }}{% if forloop.last %} last{% endif %}">
         <a{% if not index_type.selected %} href="{{ index_type.url }}"{% endif %}>
