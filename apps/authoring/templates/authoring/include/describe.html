@@ -18,7 +18,7 @@
   </div>
 
   <div class="column-right">
-    {% with form.subjects as field %}{% with "subjects" as field_class %}
+    {% with form.general_subjects as field %}{% with "subjects" as field_class %}
       {% include "include/form-field.html" %}
     {% endwith %}{% endwith %}
     {% with form.grade_level as field %}
