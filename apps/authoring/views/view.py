@@ -39,7 +39,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
 
     @classmethod
     def prepare_content(cls, text):
-        document = pq(text)
+        document = pq("<div></div>").html(text)
         for embed in document.find("figure.embed"):
             embed = pq(embed)
             #noinspection PyCallingNonCallable
@@ -91,7 +91,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
             header.append(pq("<a></a>").attr("href", "#%s" % id).text(h.text()))
             toc.append(header)
 
-        return tuple(mark_safe(el) for el in (document.outerHtml(), footnotes.outerHtml(), toc.html()))
+        return tuple(mark_safe(el) for el in (document.html(), footnotes.outerHtml(), toc.html()))
 
     def get_context_data(self, **kwargs):
         data = super(ViewFullAuthoredMaterial, self).get_context_data(**kwargs)
