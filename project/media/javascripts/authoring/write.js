@@ -64,9 +64,6 @@ var WriteStep = function (tool) {
     39, // right arrow
     40  // down arrow
   ];
-  this.SHIFT = 16;
-  this.CTRL = 17;
-  this.CMD = 91;
 
   this.$toolbar = $("#write-toolbar");
   this.$toolbarButtons = this.$toolbar.find("a.toolbar-button");
@@ -87,18 +84,9 @@ var WriteStep = function (tool) {
   this.ensureTextInput();
 
   // Track when user presses and releases Ctrl or Cmd or Shift keys
-  this.shiftKey = true;
-  this.ctrlKey = false;
-  this.cmdKey = false;
   var $document = $(document);
   $document.keydown(function (e) {
-    if (e.which == editor.CTRL) {
-      editor.ctrlKey = true;
-    } else if (e.which == editor.CMD) {
-      editor.cmdKey = true;
-    } else if (e.which == editor.SHIFT) {
-      editor.shiftKey = true;
-    } else if ((editor.ctrlKey || editor.cmdKey)) {
+    if ((e.ctrlKey || e.metaKey)) {
       if (e.which == 90) {
         // Ctrl/Cmd + Z: Undo
         editor.undo();
@@ -112,15 +100,6 @@ var WriteStep = function (tool) {
         editor.tool.save();
         e.preventDefault();
       }
-    }
-  });
-  $document.keyup(function (e) {
-    if (e.which == editor.CTRL) {
-      editor.ctrlKey = false;
-    } else if (e.which == editor.CMD) {
-      editor.cmdKey = false;
-    } else if (e.which == editor.SHIFT) {
-      editor.shiftKey = false;
     }
   });
 
@@ -230,8 +209,8 @@ var WriteStep = function (tool) {
   var keydownTimeout = null;
   editor.$area.keydown(function (e) {
     var $button;
-    if (editor.ctrlKey || editor.cmdKey) {
-      if (editor.shiftKey) {
+    if (e.ctrlKey || e.metaKey) {
+      if (e.shiftKey) {
         if (e.which == 49) {
           // Ctrl/Cmd + Shift + 1: Heading
           editor.changeBlockType("h2");
