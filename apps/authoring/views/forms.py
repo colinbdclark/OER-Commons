@@ -153,7 +153,7 @@ class EditForm(forms.ModelForm):
 
     learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
     keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), required=False)
-    subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
+    general_subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
     language = forms.ModelChoiceField(queryset=Language.objects.all(), required=False)
     license = LicenseField()
 
@@ -173,7 +173,7 @@ class EditForm(forms.ModelForm):
 
     class Meta:
         model = AuthoredMaterialDraft
-        fields = ["title", "text", "summary", "learning_goals", "keywords", "subjects", "grade_level", "language", "license"]
+        fields = ["title", "text", "summary", "learning_goals", "keywords", "general_subjects", "grade_level", "language", "license"]
         widgets = dict(
             title=forms.HiddenInput(),
             text=forms.HiddenInput(),
