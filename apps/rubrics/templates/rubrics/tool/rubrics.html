@@ -1,5 +1,6 @@
 {% extends "rubrics/tool/base.html" %}
 {% load markup %}
+{% load utils %}
 
 {% block content %}
   <div class="rubrics" data-evaluate-url="{% url rubrics:evaluate_rubrics content_type_id=content_type.id,object_id=object.id %}">
@@ -35,6 +36,7 @@
                 expectations are considered. If appropriate, you may use the
                 rubric to rate any of the standards that have been aligned to the
                 object you are rating or align additional standards.</p>
+                <a href="http://www.youtube.com/watch?v=TKsLSBpKQx8" class="video-link">Rubric I</a>
             </div>
             <p><a class="dashed add-standard" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">Add an additional standard</a></p>
           {% endif %}
@@ -105,6 +107,9 @@
         <div class="body">
           <div class="description">
             {{ rubric.description|markdown|safe }}
+            {% if rubric.video_link %}
+              <a href="{{ rubric.video_link }}" class="video-link">Rubric {{ forloop.counter|add:1|romanize:"upper" }}</a>
+            {% endif %}
           </div>
 
           <div class="scores" data-rubric-id="{{ rubric.id }}">
