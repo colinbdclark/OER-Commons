@@ -16,6 +16,11 @@ class SearchIndex(CelerySearchIndex):
         signals.post_save.disconnect(self.enqueue_save, sender=model)
         signals.m2m_changed.disconnect(self.enqueue_save, sender=model)
 
+    def enqueue(self, action, instance):
+        if getattr(instance, "skip_indexing", False):
+            return
+        super(SearchIndex, self).enqueue(action, instance)
+
 
 def reindex(instance):
     try:
