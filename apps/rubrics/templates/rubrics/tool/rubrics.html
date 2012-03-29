@@ -36,7 +36,7 @@
                 expectations are considered. If appropriate, you may use the
                 rubric to rate any of the standards that have been aligned to the
                 object you are rating or align additional standards.</p>
-                <a href="http://www.youtube.com/watch?v=TKsLSBpKQx8" class="video-link">Rubric I</a>
+                <a href="http://www.youtube.com/watch?v=TKsLSBpKQx8" target="_blank" class="video-link">Rubric I</a>
             </div>
             <p><a class="dashed add-standard" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">Add an additional standard</a></p>
           {% endif %}
@@ -108,7 +108,7 @@
           <div class="description">
             {{ rubric.description|markdown|safe }}
             {% if rubric.video_link %}
-              <a href="{{ rubric.video_link }}" class="video-link">Rubric {{ forloop.counter|add:1|romanize:"upper" }}</a>
+              <a href="{{ rubric.video_link }}" target="_blank" class="video-link">Rubric {{ forloop.counter|add:1|romanize:"upper" }}</a>
             {% endif %}
           </div>
 
