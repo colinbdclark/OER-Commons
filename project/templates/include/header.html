@@ -1,67 +1,65 @@
 {% load navigation %}
 <header class="global fl-clearfix">
-    <div class="fixed-width">
-        {% if microsite and microsite.slug == "green" %}
-          <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
-          <a id="logo-green" title="Green OER" href="{% url materials:microsite microsite=microsite.slug %}"></a>
-        {% else %}
-          <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
+  <div class="fixed-width">
+    {% if microsite and microsite.slug == "green" %}
+      <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
+      <a id="logo-green" title="Green OER" href="{% url materials:microsite microsite=microsite.slug %}"></a>
+    {% else %}
+      <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
+    {% endif %}
+    <nav>
+      {% spaceless %}
+      <ul>
+        <li class="anon">
+          <a rel="nofollow" href="{% url users:registration %}">Register Now!</a>
+        </li>
+        {% url users:login as login_url %}
+        {% if request.path != login_url %}
+          <li class="anon">
+            <a rel="nofollow" class="login" href="{{ login_url }}">Log In</a>
+          </li>
         {% endif %}
-
-        <nav>
-          {% spaceless %}
-          <ul>
-            <li class="anon">
-              <a rel="nofollow" href="{% url users:registration %}">Register Now!</a>
-            </li>
-            {% url users:login as login_url %}
-            {% if request.path != login_url %}
-              <li class="anon">
-                <a rel="nofollow" class="login" href="{{ login_url }}">Log In</a>
-              </li>
-            {% endif %}
-            <li class="auth">
-              <span class="user-name">{% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name }}{% endif %}</span>
-            </li>
-            <li class="auth">
-              <a rel="nofollow" href="{% url users:profile %}">My Profile</a>
-            </li>
-            <li class="auth">
-              <a rel="nofollow" href="{% url users:logout %}">Logout</a>
-            </li>
-            <li>
-              <a href="{% url feedback %}">Feedback</a>
-            </li>
-            <li>
-              <a href="{% url information %}">Help</a>
-            </li>
-            <li>
-              <a title="Preferences" class="button-preferences"
-                 href="{% url preferences:preferences %}"> </a>
-            </li>
-
-            <li class="last">
-              <a title="Contribute Content" class="button-contribute"
-                 href="{% url contribute %}">Contribute Content</a>
-            </li>
-          </ul>
-          {% endspaceless %}
-        </nav>
-    </div>
+        <li class="auth">
+          <span class="user-name">{% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name }}{% endif %}</span>
+        </li>
+        <li class="auth">
+          <a rel="nofollow" href="{% url users:profile %}">My Profile</a>
+        </li>
+        <li class="auth">
+          <a rel="nofollow" href="{% url users:logout %}">Logout</a>
+        </li>
+        <li>
+          <a href="{% url feedback %}">Feedback</a>
+        </li>
+        <li>
+          <a href="{% url information %}">Help</a>
+        </li>
+        <li>
+          <a title="Preferences" class="button-preferences"
+             href="{% url preferences:preferences %}"> </a>
+        </li>
+        <li class="last">
+          <a title="Contribute Content" class="button-contribute"
+             href="{% url contribute %}">Contribute Content</a>
+        </li>
+      </ul>
+      {% endspaceless %}
+    </nav>
+  </div>
 </header>
 
 <div class="fl-clearfix global-tabs">
-    <div class="fixed-width">
-      <div id="global-search-box">
-        <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
-          <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" placeholder="{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}" />
-          <input type="submit" value="Search" class="button" />
-          <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" />
-        </form>
-      </div>
-
-      {% navigation %}
+  <div class="fixed-width">
+    <div id="global-search-box">
+      <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
+        <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" placeholder="{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}" />
+        <input type="submit" value="Search" class="button" />
+        <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" />
+      </form>
     </div>
+
+    {% navigation %}
+  </div>
 </div>
 
     <div class="flc-toc-tocContainer"> </div>
