@@ -14,7 +14,7 @@
     color: #fff;
     text-decoration: none;
     text-transform: lowercase;
-    font-size: 15px;
+    font-size: 0.9375em;
     &:hover,&.primary:hover {
       background-color: #92c33a;
     }
@@ -39,7 +39,7 @@
     text-transform: uppercase;
     color: #979797;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 1em;
   }
   .errors {
     color: #f00;
@@ -61,7 +61,7 @@
   }
   input[type='text'], textarea {
     color: #333;
-    font-size: 16px;
+    font-size: 1em;
     line-height: 20px;
     font-family: Myriad, Helvetica, sans-serif;
   }
@@ -140,7 +140,7 @@
       text-transform: uppercase;
       text-decoration: none;
       color: #fff;
-      font-size: 16px;
+      font-size: 1em;
       background-color: #ccc;
       padding: 0 10px;
       min-width: 75px;
@@ -204,12 +204,12 @@
 }
 
 #material-title {
-  font-size: 30px;
+  font-size: 1.875em;
   margin-bottom: 10px;
   cursor: pointer;
   padding: 0;
   color: #333;
-  max-width: 500px;
+  max-width: 25em;
   &:hover {
      background-color: #eee;
   }
@@ -219,8 +219,7 @@
   margin: 0 -3px;
   input {
     font-family: "Myriad Pro", Helvetica, sans-serif;
-    font-size: 30px;
-    height: 33px;
+    font-size: 1.875em;
     margin: 0;
     padding: 0 1px;
     border: 1px solid #ccc;
@@ -263,7 +262,7 @@
     display: inline-block;
     line-height: 30px;
     height: 30px;
-    font-size: 16px;
+    font-size: 1em;
     padding: 0 10px;
     border: 1px solid #ccc;
     background-color: #fdfdfd;
@@ -324,7 +323,7 @@
   height: 38px;
   border-bottom: 1px solid #ccc;
   &.help {
-    font-size: 18px;
+    font-size: 1.125em;
     line-height: 39px;
     padding-left: 20px;
     color: #777;
@@ -616,8 +615,8 @@
         line-height: 26px;
         margin-top: 6px;
         font-family: "Times New Roman", serif;
-        font-size: 16px;
-        width: 100px;
+        font-size: 1em;
+        width: 5em;
         border: 1px solid #ccc;
         background-color: #fff;
         padding: 0 4px;
@@ -637,7 +636,7 @@
       border: 1px solid #ccc;
       border-bottom: none;
       background: #fff;
-      width: 150px;
+      width: 9em;
       display: none;
     }
     li {
@@ -653,18 +652,18 @@
         }
         span {
           font-family: "Times New Roman", serif;
-          font-size: 15px;
+          font-size: 0.9375em;
           line-height: 25px;
         }
         &.header span {
           color: #690;
-          font-size: 25px;
+          font-size: 1.5625em;
         }
         &.sub-header span {
           color: #9c3;
           text-transform: uppercase;
           font-weight: bold;
-          font-size: 18px;
+          font-size: 1.125em;
           margin-left: 5px;
         }
         &.paragraph span {
@@ -730,7 +729,7 @@
     input {
       width: 20px;
       border: 1px solid #ccc;
-      font-size: 13px;
+      font-size: 0.8125em;
       text-align: right;
     }
   }
@@ -896,7 +895,7 @@
     }
     a.remove {
       font-weight: bold;
-      font-size: 16px;
+      font-size: 1em;
       line-height: 16px;
       text-decoration: none;
       color: #b6b6b6;
@@ -936,7 +935,7 @@
   .head {
     position: relative;
     padding: 5px 10px;
-    font-size: 15px;
+    font-size: 0.9375em;
     color: #777;
     text-shadow: 1px 1px 0 #fff;
     background-color: #e6e6e6;
@@ -961,7 +960,7 @@
   }
   input[type='text'], textarea {
     color: #333;
-    font-size: 13px;
+    font-size: 0.8125em;
     font-family: Myriad, Helvetica, sans-serif;
   }
   label {
@@ -986,7 +985,7 @@
     color: #88b7db;
     text-shadow: 1px 1px 0 #fff;
     text-transform: lowercase;
-    font-size: 15px;
+    font-size: 0.9375em;
     padding-left: 16px;
     background: url(../../images/authoring/icon-remove-link.png) 0 50% no-repeat;
   }
@@ -1006,7 +1005,7 @@
 
 #media-dialog {
   display: none;
-  font-size: 17px;
+  font-size: 1.0625em;
   color: #666;
   margin-top: -20px;
   margin-bottom: -184px;
@@ -1021,7 +1020,7 @@
 
   .head {
     padding: 5px 10px;
-    font-size: 15px;
+    font-size: 0.9375em;
     color: #777;
     text-shadow: 1px 1px 0 #fff;
     background-color: #e6e6e6;
@@ -1048,7 +1047,7 @@
   }
 
   input[type='text'], textarea {
-    font-size: 17px;
+    font-size: 1.0625em;
     background-color: #fff;
     border: 1px solid #ccc;
     width: 100%;
@@ -1106,7 +1105,7 @@
         padding-left: 15px;
         background: url(../../images/authoring/icon-search.png) 0 50% no-repeat;
         text-transform: lowercase;
-        font-size: 15px;
+        font-size: 0.9375em;
         input {
           position: absolute;
           top: 0;
@@ -1277,7 +1276,7 @@
         display: list-item;
         margin-right: 0;
         padding: 3px 0;
-        font-size: 14px;
+        font-size: 0.875em;
         &.tagit-new {
           padding: 0;
         }
@@ -1322,14 +1321,14 @@
     h3 {
       text-transform: uppercase;
       color: #9aca41;
-      font-size: 16px;
+      font-size: 1em;
       font-weight: bold;
       margin-bottom: 30px;
     }
     a {
       margin-top: 30px;
       text-decoration: none;
-      font-size: 13px;
+      font-size: 0.8125em;
     }
     .images {
       margin-bottom: 20px;
@@ -1365,4 +1364,89 @@
   .license-widget ul {
     list-style-type: none;
   }
+}
+
+/* High-contrast toolbar images */
+.fl-theme-uio-by #write-toolbar .undo,
+.fl-theme-uio-by #write-toolbar .redo,
+.fl-theme-uio-by #write-toolbar .bullet-list,
+.fl-theme-uio-by #write-toolbar .number-list,
+.fl-theme-uio-by #write-toolbar .indent,
+.fl-theme-uio-by #write-toolbar .outdent,
+.fl-theme-uio-by #write-toolbar .table,
+.fl-theme-uio-by #write-toolbar .bold,
+.fl-theme-uio-by #write-toolbar .italic,
+.fl-theme-uio-by #write-toolbar .underline,
+.fl-theme-uio-by #write-toolbar .text-color,
+.fl-theme-uio-by #write-toolbar .bg-color,
+.fl-theme-uio-by #write-toolbar .link,
+.fl-theme-uio-by #write-toolbar .media,
+.fl-theme-uio-by #write-toolbar .reference,
+.fl-theme-uio-by #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-by #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-by #write-toolbar .color-selector.active .bg-color {
+    background-image: url(../../images/authoring/toolbar-blackonyellow.png) !important;
+}
+
+.fl-theme-uio-yb #write-toolbar .undo,
+.fl-theme-uio-yb #write-toolbar .redo,
+.fl-theme-uio-yb #write-toolbar .bullet-list,
+.fl-theme-uio-yb #write-toolbar .number-list,
+.fl-theme-uio-yb #write-toolbar .indent,
+.fl-theme-uio-yb #write-toolbar .outdent,
+.fl-theme-uio-yb #write-toolbar .table,
+.fl-theme-uio-yb #write-toolbar .bold,
+.fl-theme-uio-yb #write-toolbar .italic,
+.fl-theme-uio-yb #write-toolbar .underline,
+.fl-theme-uio-yb #write-toolbar .text-color,
+.fl-theme-uio-yb #write-toolbar .bg-color,
+.fl-theme-uio-yb #write-toolbar .link,
+.fl-theme-uio-yb #write-toolbar .media,
+.fl-theme-uio-yb #write-toolbar .reference,
+.fl-theme-uio-yb #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-yb #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-yb #write-toolbar .color-selector.active .bg-color {
+    background-image: url(../../images/authoring/toolbar-yellowonblack.png) !important;
+}
+
+.fl-theme-uio-bw #write-toolbar .undo,
+.fl-theme-uio-bw #write-toolbar .redo,
+.fl-theme-uio-bw #write-toolbar .bullet-list,
+.fl-theme-uio-bw #write-toolbar .number-list,
+.fl-theme-uio-bw #write-toolbar .indent,
+.fl-theme-uio-bw #write-toolbar .outdent,
+.fl-theme-uio-bw #write-toolbar .table,
+.fl-theme-uio-bw #write-toolbar .bold,
+.fl-theme-uio-bw #write-toolbar .italic,
+.fl-theme-uio-bw #write-toolbar .underline,
+.fl-theme-uio-bw #write-toolbar .text-color,
+.fl-theme-uio-bw #write-toolbar .bg-color,
+.fl-theme-uio-bw #write-toolbar .link,
+.fl-theme-uio-bw #write-toolbar .media,
+.fl-theme-uio-bw #write-toolbar .reference,
+.fl-theme-uio-bw #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-bw #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-bw #write-toolbar .color-selector.active .bg-color {
+    background-image: url(../../images/authoring/toolbar-blackonwhite.png) !important;
+}
+
+.fl-theme-uio-wb #write-toolbar .undo,
+.fl-theme-uio-wb #write-toolbar .redo,
+.fl-theme-uio-wb #write-toolbar .bullet-list,
+.fl-theme-uio-wb #write-toolbar .number-list,
+.fl-theme-uio-wb #write-toolbar .indent,
+.fl-theme-uio-wb #write-toolbar .outdent,
+.fl-theme-uio-wb #write-toolbar .table,
+.fl-theme-uio-wb #write-toolbar .bold,
+.fl-theme-uio-wb #write-toolbar .italic,
+.fl-theme-uio-wb #write-toolbar .underline,
+.fl-theme-uio-wb #write-toolbar .text-color,
+.fl-theme-uio-wb #write-toolbar .bg-color,
+.fl-theme-uio-wb #write-toolbar .link,
+.fl-theme-uio-wb #write-toolbar .media,
+.fl-theme-uio-wb #write-toolbar .reference,
+.fl-theme-uio-wb #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-wb #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-wb #write-toolbar .color-selector.active .bg-color {
+    background-image: url(../../images/authoring/toolbar-whiteonblack.png) !important;
 }

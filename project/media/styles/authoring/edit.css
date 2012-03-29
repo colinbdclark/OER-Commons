@@ -355,7 +355,6 @@
   .title-input input {
     font-family: "Myriad Pro", Helvetica, sans-serif;
     font-size: 1.875em;
-    height: 33px;
     margin: 0;
     padding: 0 1px;
     border: 1px solid #ccc;
@@ -469,7 +468,7 @@
   #write-toolbar .toolbar-button.disabled {
     cursor: default; }
 #write-toolbar .undo {
-  background: url(../../images/authoring/674) 0px 0px no-repeat; }
+  background: url(../../images/authoring/toolbar.png) 0px 0px no-repeat; }
 #write-toolbar .undo:hover {
   background: url(../../images/authoring/toolbar.png) 0px -42px no-repeat; }
 #write-toolbar .undo.active {
@@ -623,7 +622,7 @@
     border: 1px solid #ccc;
     border-bottom: none;
     background: #fff;
-    width: 9em  ;
+    width: 9em;
     display: none; }
   #write-toolbar .text-style li {
     padding: 0;
@@ -1190,8 +1189,7 @@
 .fl-theme-uio-by #write-toolbar .table-tool.active a.table,
 .fl-theme-uio-by #write-toolbar .color-selector.active .text-color,
 .fl-theme-uio-by #write-toolbar .color-selector.active .bg-color {
-    background-image: url(../../images/authoring/toolbar-blackonyellow.png) !important;
-}
+  background-image: url(../../images/authoring/toolbar-blackonyellow.png) !important; }
 
 .fl-theme-uio-yb #write-toolbar .undo,
 .fl-theme-uio-yb #write-toolbar .redo,
@@ -1211,8 +1209,7 @@
 .fl-theme-uio-yb #write-toolbar .table-tool.active a.table,
 .fl-theme-uio-yb #write-toolbar .color-selector.active .text-color,
 .fl-theme-uio-yb #write-toolbar .color-selector.active .bg-color {
-    background-image: url(../../images/authoring/toolbar-yellowonblack.png) !important;
-}
+  background-image: url(../../images/authoring/toolbar-yellowonblack.png) !important; }
 
 .fl-theme-uio-bw #write-toolbar .undo,
 .fl-theme-uio-bw #write-toolbar .redo,
@@ -1232,8 +1229,7 @@
 .fl-theme-uio-bw #write-toolbar .table-tool.active a.table,
 .fl-theme-uio-bw #write-toolbar .color-selector.active .text-color,
 .fl-theme-uio-bw #write-toolbar .color-selector.active .bg-color {
-    background-image: url(../../images/authoring/toolbar-blackonwhite.png) !important;
-}
+  background-image: url(../../images/authoring/toolbar-blackonwhite.png) !important; }
 
 .fl-theme-uio-wb #write-toolbar .undo,
 .fl-theme-uio-wb #write-toolbar .redo,
@@ -1253,5 +1249,4 @@
 .fl-theme-uio-wb #write-toolbar .table-tool.active a.table,
 .fl-theme-uio-wb #write-toolbar .color-selector.active .text-color,
 .fl-theme-uio-wb #write-toolbar .color-selector.active .bg-color {
-    background-image: url(../../images/authoring/toolbar-whiteonblack.png) !important;
-}
+  background-image: url(../../images/authoring/toolbar-whiteonblack.png) !important; }
