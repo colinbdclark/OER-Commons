@@ -74,7 +74,7 @@ class MaterialSearchIndex(SearchIndex, EvaluatedItemIndex):
 
     creator = IntegerField(model_attr="creator__id")
 
-    license = CharField(model_attr="license__type")
+    license = CharField(model_attr="license__type", null=True)
     cou_bucket = CharField(model_attr="license__bucket")
 
     microsites = VocabularyMultiValueField(model_attr="microsites")

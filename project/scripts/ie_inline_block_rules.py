@@ -13,22 +13,22 @@ def run():
 
     styles_dir = os.path.join(os.path.dirname(__file__), "../media/styles/")
 
-    for filename in os.listdir(styles_dir):
-        if not filename.endswith(".css"):
-            continue
-        if filename.startswith("ie"):
-            continue
-
-        print >> sys.stderr, "Processing", filename
-
-        filename = os.path.join(styles_dir, filename)
-        sheet = cssutils.parseFile(filename)
-
-        for rule in sheet:
-            if not isinstance(rule, cssutils.css.CSSStyleRule):
+    for dirpath, dirnames, filenames in os.walk(styles_dir):
+        for filename in filenames:
+            if not filename.endswith(".css") or filename.startswith("ie") or filename.startswith("_"):
                 continue
-            if rule.style.getPropertyValue("display") == "inline-block":
-                selectors.append(rule.selectorText)
+
+            filename = os.path.join(dirpath, filename)
+
+            print >> sys.stderr, "Processing", os.path.relpath(filename, styles_dir)
+
+            sheet = cssutils.parseFile(filename)
+
+            for rule in sheet:
+                if not isinstance(rule, cssutils.css.CSSStyleRule):
+                    continue
+                if rule.style.getPropertyValue("display") == "inline-block":
+                    selectors.append(rule.selectorText)
 
     selectors.sort()
     print """%s {

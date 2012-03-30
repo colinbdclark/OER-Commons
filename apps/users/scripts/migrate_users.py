@@ -1,8 +1,8 @@
 from autoslug.settings import slugify
+from common.models import GradeLevel
 from django.contrib.auth.models import User
 from django.db import connections
 from django.db.utils import DatabaseError
-from materials.models.common import GradeLevel
 from users.models import Profile
 from users.backend import BCRYPT_PREFIX
 

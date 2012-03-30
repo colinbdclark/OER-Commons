@@ -1,9 +1,10 @@
+from common.models import GradeLevel
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models import Microsite
-from materials.models.common import Keyword, GradeLevel
+from materials.models.common import Keyword
 from materials.models.course import CourseMaterialType
 from materials.models.material import PUBLISHED_STATE
 from materials.utils import get_name_from_slug

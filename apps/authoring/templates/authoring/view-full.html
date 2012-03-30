@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block bodyclass %}authoring-view{% endblock %}
+
+{% block extra-css %}
+  <link rel="stylesheet" href="{{ STATIC_URL}}styles/authoring/view.css">
+{% endblock %}
+
+{% block layout %}
+
+  {% include "include/header.html" %}
+
+  {% if request.user.is_staff or request.user == material.author %}
+    <div id="toolbar">
+      <a href="{% url authoring:edit pk=material.pk %}">Back to edit mode</a>
+    </div>
+  {% endif %}
+
+  <div class="layout-columns">
+
+    <div class="column-left">
+      <section id="toc">
+        <h2>Table of Contents</h2>
+        {{ toc }}
+      </section>
+
+      <section>
+        <h2>Summary</h2>
+        {{ object.summary }}
+      </section>
+
+      <section>
+        <h2>Learning Goals</h2>
+        <ul>
+          {% for goal in object.learning_goals.all %}
+            <li>{{ goal }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section>
+        <a href="{{ object.get_absolute_url }}"><strong>"{{ object.title }}"</strong></a>
+        {{ object.modified_timestamp|date:"Y" }}
+        by <a href="#">{{ material.author }}</a>
+        <br/>under <a href="{{ object.license.url }}">{{ object.license.name }}</a>
+      </section>
+
+    </div>
+
+    <div class="column-main clearfix">
+      <article class="authored-content">
+        <header>
+          <h1>{{ object.title }}</h1>
+          Created <strong>{{ object.modified_timestamp|date }}</strong> by <a href="#">{{ material.author }}</a>
+        </header>
+        {{ text }}
+        <footer>
+          {{ footnotes }}
+        </footer>
+      </article>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

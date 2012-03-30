@@ -15,24 +15,22 @@
     {% if not debug %}
       {% flatblock "chartbeat-head" %}
     {% endif %}
+    {% block extra-head %}{% endblock %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
-    
+
     {% block global-notification %}
-      {% if not hide_global_notifications %}
-        {% if request.abtesting == "a" %}
-          {% profile_notification "global-notification" %}
-          {% confirmation_notification "global-notification" %}
-        {% endif %}
-      {% endif %}
     {% endblock %}
 
     <div class="page">
+
+    {% block layout %}
+
     {% include "include/header.html" %}
 
     {% block promo %}
     {% endblock %}
-    
+
     {% if breadcrumbs %}
       <div class="breadcrumbs fixed-width">
         <a href="{% url frontpage %}">Home</a> &rarr;
@@ -53,7 +51,7 @@
     {% block above-content %}
       <div class="action-panel empty fixed-width"></div>
     {% endblock %}
-    
+
     <div class="layout-columns fixed-width clearfix" {% block content-itemscope-attrs %}{# this is a placeholder to insert microdata itemscope attribute on resource page #}{% endblock %}>
 
       <div class="column-left">
@@ -63,14 +61,14 @@
       </div>
 
       <div class="column-main">
-        {% include "include/status-messages.html" %}
+        {% block status-messages %}
+          {% include "include/status-messages.html" %}
+        {% endblock %}
         {% if not hide_global_notifications %}
-          {% if request.abtesting == "b" %}
-            {% profile_notification "status-message" %}
-            {% confirmation_notification "status-message" %}
-          {% endif %}
+          {% profile_notification %}
+          {% confirmation_notification %}
         {% endif %}
-  
+
         <div id="content" class="content {% block contentclass %}{% endblock %}">
           {% block content %}
           {% endblock %}
@@ -84,12 +82,16 @@
       </div>
 
     </div>
-    
+
     <form name="next-url" action="/" method="get">
       <input type="hidden" name="next" value="{{ request.get_full_path }}" />
     </form>
-    
-    {% include "include/footer.html" %}
+
+    {% endblock layout %}
+
+    {% block footer %}
+      {% include "include/footer.html" %}
+    {% endblock %}
 
     </div>
 
@@ -104,7 +106,7 @@
     {% endif %}
 
     {% block extra-footer %}
-    {% endblock %} 
+    {% endblock %}
 
   </body>
 </html>

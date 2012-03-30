@@ -1,6 +1,6 @@
 from annoying.decorators import ajax_request
 from django.http import Http404
-from materials.models.common import License
+from materials.models.common import License, CC_LICENSE_URL_RE
 from utils.decorators import login_required
 
 
@@ -20,6 +20,8 @@ def issue(request):
     if result:
         response["status"] = "success"
         response.update(result)
+        license_type = CC_LICENSE_URL_RE.search(result["url"]).groupdict()["cc_type"]
+        response["license_classes"] = license_type.split("-")
     else:
         response["status"] = "error"
         response["message"] = u"Unable to get license information from CreativeCommons.org. Try again later."

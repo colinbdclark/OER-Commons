@@ -1,0 +1,42 @@
+<div class="toolbar help">Enter descriptions to help others discover your work:</div>
+
+<div class="layout-columns">
+
+  <div class="column-left">
+    {% with form.summary as field %}
+      {% include "include/form-field.html" %}
+    {% endwith %}
+  </div>
+
+  <div class="column-main">
+    {% with form.learning_goals as field %}{% with "learning-goals" as field_class %}
+      {% include "include/form-field.html" %}
+    {% endwith %}{% endwith %}
+    {% with form.keywords as field %}
+      {% include "include/form-field.html" %}
+    {% endwith %}
+  </div>
+
+  <div class="column-right">
+    {% with form.general_subjects as field %}{% with "subjects" as field_class %}
+      {% include "include/form-field.html" %}
+    {% endwith %}{% endwith %}
+    {% with form.grade_level as field %}
+      {% include "include/form-field.html" %}
+    {% endwith %}
+    {% with form.language as field %}
+      {% include "include/form-field.html" %}
+    {% endwith %}
+  </div>
+
+  {% spaceless %}
+  <div class="slider-buttons">
+    <a href="#step-write" class="prev"><span class="icon"></span></a>
+    {% if hide_submit_step %}
+      <a href="#" class="next publish"><span class="wrap"><strong>Publish</strong></span><span class="icon"></span></a>
+    {% else %}
+      <a href="#step-submit" class="next"><span class="wrap">Next Step: <strong>Submit</strong></span><span class="icon"></span></a>
+    {% endif %}
+  </div>
+  {% endspaceless %}
+</div>

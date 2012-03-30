@@ -541,33 +541,6 @@
   },
   {
     "pk": 1,
-    "model": "materials.gradelevel",
-    "fields": {
-      "description": "includes Pre-K - Grade 6; Elementary; Lower Elementary; Upper Elementary",
-      "name": "Primary",
-      "slug": "primary"
-    }
-  },
-  {
-    "pk": 2,
-    "model": "materials.gradelevel",
-    "fields": {
-      "description": "includes Grades 7 - 12; High School; Middle School; Jr. High School",
-      "name": "Secondary",
-      "slug": "secondary"
-    }
-  },
-  {
-    "pk": 3,
-    "model": "materials.gradelevel",
-    "fields": {
-      "description": "includes all Higher Education; College, University, Graduate Levels; Professional Development; Training",
-      "name": "Post-secondary",
-      "slug": "post-secondary"
-    }
-  },
-  {
-    "pk": 1,
     "model": "materials.language",
     "fields": {
       "name": "Abkhazian",
@@ -1717,70 +1690,6 @@
     "fields": {
       "name": "Zulu",
       "slug": "zu"
-    }
-  },
-  {
-    "pk": 1,
-    "model": "materials.mediaformat",
-    "fields": {
-      "name": "Audio",
-      "slug": "audio"
-    }
-  },
-  {
-    "pk": 2,
-    "model": "materials.mediaformat",
-    "fields": {
-      "name": "Graphics/Photos",
-      "slug": "graphics-photos"
-    }
-  },
-  {
-    "pk": 3,
-    "model": "materials.mediaformat",
-    "fields": {
-      "name": "Mobile",
-      "slug": "mobile"
-    }
-  },
-  {
-    "pk": 4,
-    "model": "materials.mediaformat",
-    "fields": {
-      "name": "Other",
-      "slug": "other"
-    }
-  },
-  {
-    "pk": 5,
-    "model": "materials.mediaformat",
-    "fields": {
-      "name": "Text/HTML",
-      "slug": "text-html"
-    }
-  },
-  {
-    "pk": 6,
-    "model": "materials.mediaformat",
-    "fields": {
-      "name": "Downloadable docs",
-      "slug": "downloadable-docs"
-    }
-  },
-  {
-    "pk": 7,
-    "model": "materials.mediaformat",
-    "fields": {
-      "name": "Video",
-      "slug": "video"
-    }
-  },
-  {
-    "pk": 8,
-    "model": "materials.mediaformat",
-    "fields": {
-      "name": "Interactive",
-      "slug": "interactive"
     }
   },
   {

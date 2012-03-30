@@ -1,0 +1,50 @@
+<div class="toolbar help">Select a copyright license to define how others can use your work:</div>
+
+<div class="layout-columns">
+
+    <div class="column-left">
+      {% with form.license as field %}
+        {% if field.errors %}
+          <div class="field">
+            <div class="errors">
+              {% for error in field.errors %}
+                <label class="error">{{ error|safe }}</label>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+        {{ field }}
+      {% endwith %}
+    </div>
+    <div class="column-main">
+      <div class="current-license">
+        <h3>Current License</h3>
+        <div class="images">
+          <div class="license license-by hidden">
+            <div class="image"></div>
+            Attribution
+          </div>
+          <div class="license license-nc hidden">
+            <div class="image"></div>
+            Non-Commercial
+          </div>
+          <div class="license license-sa hidden">
+            <div class="image"></div>
+            Share-Alike
+          </div>
+          <div class="license license-nd hidden">
+            <div class="image"></div>
+            No Derivative<br>Works
+          </div>
+        </div>
+        <a href="#" target="_blank" style="display: none;">Not selected</a>
+      </div>
+    </div>
+
+  {% spaceless %}
+  <div class="slider-buttons">
+    <a href="#step-describe" class="prev"><span class="icon"></span></a>
+    <a href="#" class="next publish"><span class="wrap"><strong>Publish</strong></span><span class="icon"></span></a>
+  </div>
+  {% endspaceless %}
+</div>

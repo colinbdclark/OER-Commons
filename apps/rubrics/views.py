@@ -83,7 +83,7 @@ class Rubrics(EvaluateViewMixin, TemplateView):
         data["content_type"] = self.content_type
         data["object"] = self.object
         data["enable_alignment_scores"] = self.enable_alignment_scores
-        if isinstance(self.object, (Course, Library, CommunityItem)):
+        if hasattr(self.object, "namespace"):
             data["toolbar_view_url"] = reverse(
                 "materials:%s:toolbar_view_item" % self.object.namespace,
                 kwargs=dict(slug=self.object.slug),

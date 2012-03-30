@@ -1,3 +1,5 @@
+from common.models import GradeLevel
+from core.forms import MultipleAutoCreateField, AutocompleteListWidget
 from curriculum.models import AlignmentTag
 from django import forms
 from django.conf import settings
@@ -14,12 +16,11 @@ from django.views.generic.simple import redirect_to
 from material import MaterialAdmin
 from materials.admin.course import AuthorsFormSet
 from materials.admin.fields import LicenseFields
-from materials.models.common import Author, GeneralSubject, GradeLevel, Language, \
+from materials.models.common import Author, GeneralSubject, Language, \
     GeographicRelevance, Keyword
 from materials.models.community import CommunityType, CommunityTopic, \
     CommunityItem
 from materials.views.forms import RSSFields
-from utils.forms import AutocompleteListField
 
 
 COMMUNITY_ITEM_ADD_FIELDS = ["creator", "title", "url", "abstract", "workflow_state",
@@ -76,7 +77,7 @@ class CommunityItemAddForm(forms.ModelForm, LicenseFields, RSSFields):
                                 CommunityTopic.objects.all(),
                                 widget=forms.CheckboxSelectMultiple())
 
-    keywords = AutocompleteListField(model=Keyword)
+    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"))
 
     featured = forms.BooleanField(required=False, initial=False,
                          label=u"Marked as Featured",

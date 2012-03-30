@@ -1,58 +1,14 @@
+#noinspection PyUnresolvedReferences
+from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 from autoslug.fields import AutoSlugField
 from cache_utils.decorators import cached
 from django.db import models
 from django.db.models import permalink
-from django.db.models.fields import NOT_PROVIDED
 from django.utils.translation import ugettext_lazy as _
 from geo.models import Country
 from materials.ccrest import CcRest
-from south.modelsinspector import add_introspection_rules
 from urllib2 import HTTPError
 import re
-
-
-class AutoCreateForeignKey(models.ForeignKey):
-
-    def __init__(self, *args, **kwargs):
-        self.respect_all_fields = kwargs.pop("respect_all_fields", False)
-        super(AutoCreateForeignKey, self).__init__(*args, **kwargs)
-
-    def save_form_data(self, instance, data):
-        if isinstance(data, dict):
-            to = self.rel.to
-            if self.respect_all_fields:
-                for field in to._meta.fields:
-                    if field.name not in data:
-                        if field.default == NOT_PROVIDED:
-                            data[field.name] = None
-                        else:
-                            data[field.name] = field.default
-            data = to.objects.get_or_create(**data)[0]
-        super(AutoCreateForeignKey, self).save_form_data(instance, data)
-add_introspection_rules([], ["^materials\.models\.common\.AutoCreateForeignKey"])
-
-
-class AutoCreateManyToManyField(models.ManyToManyField):
-
-    def __init__(self, *args, **kwargs):
-        self.respect_all_fields = kwargs.pop("respect_all_fields", False)
-        super(AutoCreateManyToManyField, self).__init__(*args, **kwargs)
-
-    def save_form_data(self, instance, data):
-        if isinstance(data, list):
-            to = self.rel.to
-            for i, value in enumerate(data):
-                if isinstance(value, dict):
-                    if self.respect_all_fields:
-                        for field in to._meta.fields:
-                            if field.name not in value:
-                                if field.default == NOT_PROVIDED:
-                                    value[field.name] = None
-                                else:
-                                    value[field.name] = field.default
-                    data[i] = to.objects.get_or_create(**value)[0]
-        super(AutoCreateManyToManyField, self).save_form_data(instance, data)
-add_introspection_rules([], ["^materials\.models\.common\.AutoCreateManyToManyField"])
 
 
 NO_STRING_ATTACHED = "no-strings-attached"
@@ -299,30 +255,6 @@ class GeneralSubject(models.Model):
         return "materials:general_subject_index", [], {"general_subjects": self.slug}
 
 
-class GradeLevel(models.Model):
-
-    name = models.CharField(unique=True, max_length=100,
-                            verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
-                         verbose_name=_(u"Slug"),
-                         db_index=True)
-    description = models.TextField(default=u"", blank=True,
-                                   verbose_name=_(u"Description"))
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = "materials"
-        verbose_name = _(u"Grade level")
-        verbose_name_plural = _(u"Grade levels")
-        ordering = ("id",)
-
-    @permalink
-    def get_absolute_url(self):
-        return "materials:grade_level_index", [], {"grade_levels": self.slug}
-
-
 class Language(models.Model):
 
     name = models.CharField(unique=True, max_length=100,
@@ -379,24 +311,6 @@ class Institution(models.Model):
         verbose_name = _(u"Institution")
         verbose_name_plural = _(u"Institutions")
         ordering = ("name",)
-
-
-class MediaFormat(models.Model):
-
-    name = models.CharField(unique=True, max_length=100,
-                            verbose_name=_(u"Name"))
-    slug = AutoSlugField(unique=True, max_length=100, populate_from="name",
-                         verbose_name=_(u"Slug"),
-                         db_index=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = "materials"
-        verbose_name = _(u"Media format")
-        verbose_name_plural = _(u"Media formats")
-        ordering = ("id",)
 
 
 class GeographicRelevance(models.Model):

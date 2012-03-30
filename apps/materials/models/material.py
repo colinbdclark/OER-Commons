@@ -2,6 +2,7 @@ from __future__ import absolute_import
 import datetime
 
 from autoslug.fields import AutoSlugField
+from core.fields import AutoCreateForeignKey
 from curriculum.models import TaggedMaterial
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -11,7 +12,6 @@ from django.db.models import permalink
 from django.db.models.aggregates import Avg
 from django.utils.translation import ugettext_lazy as _
 from materials.models import License
-from materials.models.common import AutoCreateForeignKey
 from materials.models.microsite import Microsite, Topic
 from rating.models import Rating
 from reviews.models import Review
@@ -159,6 +159,18 @@ class Material(models.Model, EvaluatedItemMixin):
     def get_absolute_url(self):
         return "materials:%s:view_item" % self.namespace, [], {"slug": self.slug}
 
+    @permalink
+    def get_view_full_url(self):
+        return "materials:%s:toolbar_view_item" % self.namespace, [], {"slug": self.slug}
+
+    @permalink
+    def get_edit_url(self):
+        return "materials:%s:edit" % self.namespace, [], {"slug": self.slug}
+
+    @permalink
+    def get_delete_url(self):
+        return "materials:%s:delete" % self.namespace, [], {"slug": self.slug}
+
     @classmethod
     @permalink
     def get_parent_url(cls):
@@ -267,7 +279,10 @@ class Material(models.Model, EvaluatedItemMixin):
 
     @property
     def alignment_grades(self):
-        return self.alignment_tags.values_list("tag__grade__id", flat=True).order_by().distinct()
+        grades = []
+        for grade, end_grade in self.alignment_tags.values_list("tag__grade__code", "tag__end_grade__code").order_by().distinct():
+            grades.append("%s-%s" % (grade, end_grade) if grade else grade)
+        return grades
 
     @property
     def alignment_categories(self):

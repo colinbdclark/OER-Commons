@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load compress %}
+
+{% block bodyclass %}authoring authoring-edit{% endblock %}
+
+{% block extra-css %}
+  {% compress css %}
+    <link rel="stylesheet" href="{{ STATIC_URL}}styles/authoring/edit.css">
+  {% endcompress %}
+{% endblock %}
+
+{% block extra-head %}
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-core.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-selectionsaverestore.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/lib/rangy/rangy-cssclassapplier.js"></script>
+{% endblock %}
+
+{% block layout %}
+  <form action="{% url authoring:edit pk=object.material.pk %}" method="post" class="authoring-form">
+  <div class="authoring-head">
+    <a href="{% url frontpage %}" class="logo">OER Commons</a>
+    <div id="user-menu">
+      <a href="#" class="toggle">{{ request.user.get_full_name|default:request.user.email|default:request.user }}</a>
+      <ul>
+        <li><a href="{% url myitems:myitems %}">My Items</a></li>
+        <li><a href="{% url authoring:new %}">New OER</a></li>
+        <li><a href="{% url users:logout %}">Log Out</a></li>
+      </ul>
+    </div>
+    <div class="step-icons">
+      <a href="#step-write" class="write active"></a>
+      <a href="#step-describe" class="describe"></a>
+      {% if not hide_submit_step %}
+        <a href="#step-submit" class="submit"></a>
+      {% endif %}
+    </div>
+    <h1 id="material-title">{% if form.title.value %}{{ form.title.value }}{% endif %}</h1>
+    {{ form.title }}
+    <div class="actions">
+      <a href="#save" class="save">Save</a>
+      <a href="#preview" class="preview">Preview</a>
+    </div>
+    {% include "include/status-messages.html" %}
+    <div class="clear"></div>
+  </div>
+
+  <div id="slider">
+    <div class="slide" id="step-write">
+      {% include "authoring/include/write.html" %}
+    </div>
+    <div class="slide" id="step-describe">
+      {% include "authoring/include/describe.html" %}
+    </div>
+    {% if not hide_submit_step %}
+      <div class="slide" id="step-submit">
+        {% include "authoring/include/submit.html" %}
+      </div>
+    {% endif %}
+  </div>
+
+  </form>
+
+  <div id="link-dialog" class="popup-dialog">
+    <div class="head">Link <span class="triangle"></span></div>
+    <div class="body">
+      <div class="field">
+        <label for="id_link_text">Displayed text</label>
+        <input type="text" id="id_link_text" name="link_text" placeholder="Enter text link will appear as">
+      </div>
+      <div class="field">
+        <label for="id_link_url">Website, email</label>
+        <input type="text" id="id_link_url" name="link_url" placeholder="Enter link here">
+      </div>
+    </div>
+    <div class="actions">
+      <a href="#remove" class="remove">clear link</a>
+      <a href="#save" class="button primary">Save</a>
+      <a href="#cancel" class="button">Cancel</a>
+    </div>
+  </div>
+
+  <div id="reference-dialog" class="popup-dialog">
+    <div class="head">Reference <span class="triangle"></span></div>
+    <div class="body">
+      <textarea name="reference_text" placeholder="Enter the source of this content through author, title of work, url, date, etc."></textarea>
+    </div>
+    <div class="actions">
+      <a href="#remove" class="remove">Clear reference</a>
+      <a href="#save" class="button primary">Save</a>
+      <a href="#cancel" class="button">Cancel</a>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.blockUI.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.jeditable.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jquery.linkify.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/learning-goals-widget.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/write.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/describe.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/submit.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/tool.js"></script>
+  <script>
+    $(function(e) {
+      new AuthoringTool({% if hide_submit_step %}true{% else %}false{% endif %});
+    });
+  </script>
+{% endblock %}

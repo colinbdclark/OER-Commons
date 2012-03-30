@@ -37,4 +37,8 @@ project/test_settings.py
 apps/cssreload
 project/media/cssreload/
 project/media/SCSS_CACHE/
+project/media/authoring/
+project/media/cache/
+.mr.developer.cfg
+src/
 django.log

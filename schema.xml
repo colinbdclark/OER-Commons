@@ -100,7 +100,7 @@
     <field name="member_activities" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="rating" type="sfloat" indexed="true" stored="true" multiValued="false" />
     <field name="alignment_standards" type="sint" indexed="true" stored="true" multiValued="true" />
-    <field name="alignment_grades" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="alignment_grades" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="alignment_categories" type="sint" indexed="true" stored="true" multiValued="true" />
     <field name="alignment_tags" type="sint" indexed="true" stored="true" multiValued="true" />
 

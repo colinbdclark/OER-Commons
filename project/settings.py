@@ -95,14 +95,15 @@ INSTALLED_APPS = (
     'django_coverage',
     'oembed',
     'gunicorn',
+    'core',
     'utils',
     'abtesting',
     'common',
     'tags',
     'geo',
     'curriculum',
-    'materials',
     'users',
+    'materials',
     'rating',
     'reviews',
     'saveditems',
@@ -122,6 +123,7 @@ INSTALLED_APPS = (
     'preferences',
     'rubrics',
     'rubrics.manage',
+    'authoring',
     'project',
     'django_js_utils',
 )
@@ -244,3 +246,5 @@ LOGGING = {
 }
 
 LR_COMMAND = "%s -m LRSignature.cmd sign" % os.path.join(os.path.dirname(__file__), "..", "bin", "python-lr")
+
+PROFILING = False

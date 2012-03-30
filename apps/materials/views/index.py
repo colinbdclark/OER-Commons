@@ -1,5 +1,6 @@
 from annoying.decorators import JsonResponse
 from autoslug.settings import slugify
+from common.models import GradeLevel
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponsePermanentRedirect
@@ -7,7 +8,8 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
-from materials.models.common import GeneralSubject, GradeLevel, Collection, \
+from materials.models import Course, Library
+from materials.models.common import GeneralSubject, Collection, \
     Keyword, GeographicRelevance, Institution
 from materials.models.community import CommunityItem
 from materials.models.microsite import Microsite, Topic
@@ -183,6 +185,13 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
             filter_data["all_checked"] = True
         filters[filter_name] = filter_data
 
+    filter = FILTERS["authored_content"]
+    filters["authored_content"] = dict(
+        title=filter.title,
+        request_name=filter.request_name,
+        checked=filter_values.get("authored_content", False),
+    )
+
     return filters
 
 
@@ -304,9 +313,9 @@ def populate_item_from_search_result(result):
 
     namespace = getattr(model, "namespace", None)
     if namespace:
-        item["get_absolute_url"] = reverse(
-                               "materials:%s:view_item" % namespace,
-                               kwargs=dict(slug=item["slug"]))
+        item["view_url"] = reverse(
+                           "materials:%s:view_item" % namespace,
+                           kwargs=dict(slug=item["slug"]))
         item["save_item_url"] = reverse(
                                "materials:%s:save_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
@@ -318,7 +327,7 @@ def populate_item_from_search_result(result):
                                     result.model_name,
                                     result.pk,
                                 ))
-        item["toolbar_view_url"] = reverse(
+        item["view_full_url"] = reverse(
                                "materials:%s:toolbar_view_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
         item["align_url"] = reverse("curriculum:align", args=(
@@ -327,7 +336,10 @@ def populate_item_from_search_result(result):
                                     result.pk,
                                 ))
     else:
-        item["get_absolute_url"] = result.object.get_absolute_url()
+        object = result.object
+        item["view_url"] = object.get_absolute_url()
+        if hasattr(object, "get_view_full_url"):
+            item["view_full_url"] = object.get_view_full_url()
     return item
 
 
@@ -394,8 +406,8 @@ def index(request, general_subjects=None, grade_levels=None,
 
     query = SearchQuerySet().narrow("is_displayed:true")
 
-    if model:
-        query = query.models(model)
+    models = [model] if model else [Course, Library, CommunityItem]
+    query = query.models(*models)
 
     path_filter = None
 
@@ -415,7 +427,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
     visible_filters = ["search", "general_subjects", "grade_levels",
                        "course_material_types", "media_formats",
-                       "cou_bucket"]
+                       "cou_bucket", "authored_content"]
 
     if microsite:
         microsite = Microsite.objects.get(slug=microsite)
@@ -436,7 +448,6 @@ def index(request, general_subjects=None, grade_levels=None,
                 hidden_filters[filter_.request_name] = value
             if filter_name == "search":
                 search_query = value
-
 
     if search:
         if not search_query:
@@ -489,6 +500,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
     elif "evaluated_rubrics" in filter_values:
         rubric_id = filter_values["evaluated_rubrics"][0]
+        #noinspection PySimplifyBooleanCheck
         if rubric_id == 0:
             rubric_name = u"Degree of Alignment"
         else:
@@ -548,7 +560,7 @@ def index(request, general_subjects=None, grade_levels=None,
                                             path_filter,
                                             microsite)
 
-        all_keywords = query.count() and facets.get("keywords", []) or []
+        all_keywords = filter(lambda kw: kw[1], facets.get("keywords", [])) if query.count() else []
         if len(all_keywords) > MAX_TOP_KEYWORDS:
             top_keywords = get_tag_cloud(dict(all_keywords[:MAX_TOP_KEYWORDS]),
                                               3, 0, 0)
