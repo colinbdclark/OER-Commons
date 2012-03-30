@@ -3,17 +3,16 @@
   margin: 0;
   padding: 30px;
   background: none;
-  line-height: 1.4;
   font-family: "Myriad Pro", Helvetica, sans-serif; }
   .layout-columns a {
     text-decoration: none; }
 
 .column-left {
-  font-size: 15px; }
+  font-size: 0.9375em; }
   .column-left section {
     margin-bottom: 20px; }
     .column-left section h2 {
-      font-size: 15px;
+      font-size: 0.9375em;
       font-weight: bold;
       text-transform: uppercase;
       text-shadow: 1px 1px 1px #fff;
@@ -29,7 +28,7 @@
 .authored-content {
   padding: 20px;
   background-color: #fff;
-  font-size: 16px;
+  font-size: 1em;
   font-family: "Times New Roman", serif;
   word-wrap: break-word; }
   .authored-content div, .authored-content h1, .authored-content h2, .authored-content h3, .authored-content h4, .authored-content h5, .authored-content h6, .authored-content p, .authored-content blockquote, .authored-content pre, .authored-content dl, .authored-content ol, .authored-content ul, .authored-content table, .authored-content figure {
@@ -42,12 +41,12 @@
   .authored-content h2 {
     color: #690;
     border-bottom: 1px solid;
-    font-size: 25px; }
+    font-size: 1.5625em; }
   .authored-content h3 {
     color: #9c3;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 18px; }
+    font-size: 1.125em; }
   .authored-content blockquote {
     padding-left: 7px;
     border-left: 3px solid #fc3;
@@ -115,7 +114,7 @@
   .authored-content .bg-color-5 {
     background-color: #bde8f2; }
   .authored-content a.reference {
-    font-size: 13px;
+    font-size: 0.8125em;
     margin: 0 3px;
     vertical-align: super; }
   .authored-content table {
@@ -133,7 +132,7 @@
   padding: 1px;
   background-color: #fff;
   font-family: "Myriad Pro", Helvetica, sans-serif;
-  font-size: 13px; }
+  font-size: 0.8125em; }
   #footnotes div.footnote {
     margin: 10px;
     padding: 10px;
@@ -149,7 +148,7 @@
     padding: 4px 0; }
   .learning-goals-widget span {
     display: none;
-    font-size: 16px;
+    font-size: 1em;
     cursor: pointer; }
   .learning-goals-widget input[type='text'] {
     width: 90%; }
@@ -178,7 +177,7 @@
   font-weight: normal;
   color: #39c; }
 #outline .new span {
-  font-size: 13px;
+  font-size: 0.8125em;
   border-bottom: 1px dashed;
   cursor: pointer; }
 #outline .new input {
@@ -186,7 +185,7 @@
   border: none;
   padding: 0 3px;
   height: 20px;
-  font-size: 15px;
+  font-size: 0.9375em;
   margin: -4px;
   width: 100%; }
 
@@ -199,7 +198,7 @@
   color: #fff;
   text-decoration: none;
   text-transform: lowercase;
-  font-size: 15px; }
+  font-size: 0.9375em; }
   .authoring-edit a.button:hover, .authoring-edit a.button.primary:hover {
     background-color: #92c33a; }
   .authoring-edit a.button.disabled {
@@ -216,7 +215,7 @@
   text-transform: uppercase;
   color: #979797;
   font-weight: bold;
-  font-size: 16px; }
+  font-size: 1em; }
 .authoring-form .errors {
   color: #f00;
   margin-top: -3px;
@@ -232,7 +231,7 @@
   font-style: italic; }
 .authoring-form input[type='text'], .authoring-form textarea {
   color: #333;
-  font-size: 16px;
+  font-size: 1em;
   line-height: 20px;
   font-family: Myriad, Helvetica, sans-serif; }
 
@@ -295,7 +294,7 @@
       text-transform: uppercase;
       text-decoration: none;
       color: #fff;
-      font-size: 16px;
+      font-size: 1em;
       background-color: #ccc;
       padding: 0 10px;
       min-width: 75px;
@@ -342,12 +341,12 @@
       background-position: -144px -144px; }
 
 #material-title {
-  font-size: 30px;
+  font-size: 1.875em;
   margin-bottom: 10px;
   cursor: pointer;
   padding: 0;
   color: #333;
-  max-width: 500px; }
+  max-width: 25em; }
   #material-title:hover {
     background-color: #eee; }
 
@@ -355,8 +354,7 @@
   margin: 0 -3px; }
   .title-input input {
     font-family: "Myriad Pro", Helvetica, sans-serif;
-    font-size: 30px;
-    height: 33px;
+    font-size: 1.875em;
     margin: 0;
     padding: 0 1px;
     border: 1px solid #ccc;
@@ -392,7 +390,7 @@
     display: inline-block;
     line-height: 30px;
     height: 30px;
-    font-size: 16px;
+    font-size: 1em;
     padding: 0 10px;
     border: 1px solid #ccc;
     background-color: #fdfdfd;
@@ -442,7 +440,7 @@
   height: 38px;
   border-bottom: 1px solid #ccc; }
   .toolbar.help {
-    font-size: 18px;
+    font-size: 1.125em;
     line-height: 39px;
     padding-left: 20px;
     color: #777;
@@ -605,8 +603,8 @@
       line-height: 26px;
       margin-top: 6px;
       font-family: "Times New Roman", serif;
-      font-size: 16px;
-      width: 100px;
+      font-size: 1em;
+      width: 5em;
       border: 1px solid #ccc;
       background-color: #fff;
       padding: 0 4px;
@@ -624,7 +622,7 @@
     border: 1px solid #ccc;
     border-bottom: none;
     background: #fff;
-    width: 150px;
+    width: 9em;
     display: none; }
   #write-toolbar .text-style li {
     padding: 0;
@@ -638,16 +636,16 @@
         background: #eee; }
       #write-toolbar .text-style li a span {
         font-family: "Times New Roman", serif;
-        font-size: 15px;
+        font-size: 0.9375em;
         line-height: 25px; }
       #write-toolbar .text-style li a.header span {
         color: #690;
-        font-size: 25px; }
+        font-size: 1.5625em; }
       #write-toolbar .text-style li a.sub-header span {
         color: #9c3;
         text-transform: uppercase;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 1.125em;
         margin-left: 5px; }
       #write-toolbar .text-style li a.paragraph span {
         margin-left: 15px; }
@@ -695,7 +693,7 @@
   #write-toolbar .table-tool input {
     width: 20px;
     border: 1px solid #ccc;
-    font-size: 13px;
+    font-size: 0.8125em;
     text-align: right; }
 #write-toolbar .color-selector {
   position: relative;
@@ -819,7 +817,7 @@
       vertical-align: middle; }
     #editor-area table a.remove {
       font-weight: bold;
-      font-size: 16px;
+      font-size: 1em;
       line-height: 16px;
       text-decoration: none;
       color: #b6b6b6; }
@@ -850,7 +848,7 @@
   .popup-dialog .head {
     position: relative;
     padding: 5px 10px;
-    font-size: 15px;
+    font-size: 0.9375em;
     color: #777;
     text-shadow: 1px 1px 0 #fff;
     background-color: #e6e6e6; }
@@ -869,7 +867,7 @@
     font-style: italic; }
   .popup-dialog input[type='text'], .popup-dialog textarea {
     color: #333;
-    font-size: 13px;
+    font-size: 0.8125em;
     font-family: Myriad, Helvetica, sans-serif; }
   .popup-dialog label {
     display: block;
@@ -890,7 +888,7 @@
     color: #88b7db;
     text-shadow: 1px 1px 0 #fff;
     text-transform: lowercase;
-    font-size: 15px;
+    font-size: 0.9375em;
     padding-left: 16px;
     background: url(../../images/authoring/icon-remove-link.png) 0 50% no-repeat; }
 
@@ -902,7 +900,7 @@
 
 #media-dialog {
   display: none;
-  font-size: 17px;
+  font-size: 1.0625em;
   color: #666;
   margin-top: -20px;
   margin-bottom: -184px; }
@@ -915,7 +913,7 @@
     display: none; }
   #media-dialog .head {
     padding: 5px 10px;
-    font-size: 15px;
+    font-size: 0.9375em;
     color: #777;
     text-shadow: 1px 1px 0 #fff;
     background-color: #e6e6e6;
@@ -933,7 +931,7 @@
     position: relative;
     height: 112px; }
   #media-dialog input[type='text'], #media-dialog textarea {
-    font-size: 17px;
+    font-size: 1.0625em;
     background-color: #fff;
     border: 1px solid #ccc;
     width: 100%;
@@ -981,7 +979,7 @@
       padding-left: 15px;
       background: url(../../images/authoring/icon-search.png) 0 50% no-repeat;
       text-transform: lowercase;
-      font-size: 15px; }
+      font-size: 0.9375em; }
       #media-dialog .step.upload .drop-zone span.find input {
         position: absolute;
         top: 0;
@@ -1110,7 +1108,7 @@
     display: list-item;
     margin-right: 0;
     padding: 3px 0;
-    font-size: 14px; }
+    font-size: 0.875em; }
     #step-describe .field.learning-goals ul.tagit li.tagit-new {
       padding: 0; }
     #step-describe .field.learning-goals ul.tagit li .tagit-close {
@@ -1141,13 +1139,13 @@
   #step-submit .current-license h3 {
     text-transform: uppercase;
     color: #9aca41;
-    font-size: 16px;
+    font-size: 1em;
     font-weight: bold;
     margin-bottom: 30px; }
   #step-submit .current-license a {
     margin-top: 30px;
     text-decoration: none;
-    font-size: 13px; }
+    font-size: 0.8125em; }
   #step-submit .current-license .images {
     margin-bottom: 20px; }
     #step-submit .current-license .images .license {
@@ -1171,3 +1169,84 @@
       background: url(../../images/authoring/license-images.png) -63px -63px no-repeat; }
 #step-submit .license-widget ul {
   list-style-type: none; }
+
+/* High-contrast toolbar images */
+.fl-theme-uio-by #write-toolbar .undo,
+.fl-theme-uio-by #write-toolbar .redo,
+.fl-theme-uio-by #write-toolbar .bullet-list,
+.fl-theme-uio-by #write-toolbar .number-list,
+.fl-theme-uio-by #write-toolbar .indent,
+.fl-theme-uio-by #write-toolbar .outdent,
+.fl-theme-uio-by #write-toolbar .table,
+.fl-theme-uio-by #write-toolbar .bold,
+.fl-theme-uio-by #write-toolbar .italic,
+.fl-theme-uio-by #write-toolbar .underline,
+.fl-theme-uio-by #write-toolbar .text-color,
+.fl-theme-uio-by #write-toolbar .bg-color,
+.fl-theme-uio-by #write-toolbar .link,
+.fl-theme-uio-by #write-toolbar .media,
+.fl-theme-uio-by #write-toolbar .reference,
+.fl-theme-uio-by #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-by #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-by #write-toolbar .color-selector.active .bg-color {
+  background-image: url(../../images/authoring/toolbar-blackonyellow.png) !important; }
+
+.fl-theme-uio-yb #write-toolbar .undo,
+.fl-theme-uio-yb #write-toolbar .redo,
+.fl-theme-uio-yb #write-toolbar .bullet-list,
+.fl-theme-uio-yb #write-toolbar .number-list,
+.fl-theme-uio-yb #write-toolbar .indent,
+.fl-theme-uio-yb #write-toolbar .outdent,
+.fl-theme-uio-yb #write-toolbar .table,
+.fl-theme-uio-yb #write-toolbar .bold,
+.fl-theme-uio-yb #write-toolbar .italic,
+.fl-theme-uio-yb #write-toolbar .underline,
+.fl-theme-uio-yb #write-toolbar .text-color,
+.fl-theme-uio-yb #write-toolbar .bg-color,
+.fl-theme-uio-yb #write-toolbar .link,
+.fl-theme-uio-yb #write-toolbar .media,
+.fl-theme-uio-yb #write-toolbar .reference,
+.fl-theme-uio-yb #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-yb #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-yb #write-toolbar .color-selector.active .bg-color {
+  background-image: url(../../images/authoring/toolbar-yellowonblack.png) !important; }
+
+.fl-theme-uio-bw #write-toolbar .undo,
+.fl-theme-uio-bw #write-toolbar .redo,
+.fl-theme-uio-bw #write-toolbar .bullet-list,
+.fl-theme-uio-bw #write-toolbar .number-list,
+.fl-theme-uio-bw #write-toolbar .indent,
+.fl-theme-uio-bw #write-toolbar .outdent,
+.fl-theme-uio-bw #write-toolbar .table,
+.fl-theme-uio-bw #write-toolbar .bold,
+.fl-theme-uio-bw #write-toolbar .italic,
+.fl-theme-uio-bw #write-toolbar .underline,
+.fl-theme-uio-bw #write-toolbar .text-color,
+.fl-theme-uio-bw #write-toolbar .bg-color,
+.fl-theme-uio-bw #write-toolbar .link,
+.fl-theme-uio-bw #write-toolbar .media,
+.fl-theme-uio-bw #write-toolbar .reference,
+.fl-theme-uio-bw #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-bw #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-bw #write-toolbar .color-selector.active .bg-color {
+  background-image: url(../../images/authoring/toolbar-blackonwhite.png) !important; }
+
+.fl-theme-uio-wb #write-toolbar .undo,
+.fl-theme-uio-wb #write-toolbar .redo,
+.fl-theme-uio-wb #write-toolbar .bullet-list,
+.fl-theme-uio-wb #write-toolbar .number-list,
+.fl-theme-uio-wb #write-toolbar .indent,
+.fl-theme-uio-wb #write-toolbar .outdent,
+.fl-theme-uio-wb #write-toolbar .table,
+.fl-theme-uio-wb #write-toolbar .bold,
+.fl-theme-uio-wb #write-toolbar .italic,
+.fl-theme-uio-wb #write-toolbar .underline,
+.fl-theme-uio-wb #write-toolbar .text-color,
+.fl-theme-uio-wb #write-toolbar .bg-color,
+.fl-theme-uio-wb #write-toolbar .link,
+.fl-theme-uio-wb #write-toolbar .media,
+.fl-theme-uio-wb #write-toolbar .reference,
+.fl-theme-uio-wb #write-toolbar .table-tool.active a.table,
+.fl-theme-uio-wb #write-toolbar .color-selector.active .text-color,
+.fl-theme-uio-wb #write-toolbar .color-selector.active .bg-color {
+  background-image: url(../../images/authoring/toolbar-whiteonblack.png) !important; }

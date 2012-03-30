@@ -1,7 +1,7 @@
 .authored-content {
   padding: 20px;
   background-color: #fff;
-  font-size: 16px;
+  font-size: 1em;
   font-family: "Times New Roman", serif;
   word-wrap:break-word;
 
@@ -21,14 +21,14 @@
   h2 {
     color: #690;
     border-bottom: 1px solid;
-    font-size: 25px;
+    font-size: 1.5625em;
   }
 
   h3 {
     color: #9c3;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 1.125em;
   }
 
   blockquote {
@@ -138,7 +138,7 @@
   }
 
   a.reference {
-    font-size: 13px;
+    font-size: 0.8125em;
     margin: 0 3px;
     vertical-align: super;
   }
@@ -160,7 +160,7 @@
   padding: 1px;
   background-color: #fff;
   font-family: "Myriad Pro", Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 0.8125em;
   div.footnote {
     margin: 10px;
     padding: 10px;
