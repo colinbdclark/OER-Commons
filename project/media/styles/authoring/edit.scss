@@ -1,7 +1,7 @@
 @import "_layout.scss";
 @import "_authored-content.scss";
 @import "_learning-goals-widget.scss";
-@import "_outline.scss";
+@import "_toc.scss";
 
 .authoring-edit {
   #slider {
@@ -230,7 +230,7 @@
     -ms-box-shadow: none;
     box-shadow: none;
     &:focus {
-      outline-width: 0;
+      outline: none;
     }
   }
 }
@@ -852,7 +852,7 @@
 
 #editor-area {
   &:focus {
-    outline-width: 0;
+    outline: none;
   }
   overflow-y: auto;
 
@@ -880,7 +880,7 @@
         left: 0;
         width: 17px;
         height: 17px;
-        background: url(../../images/authoring/icon-table-move.png) no-repeat;
+        background: url(../../images/authoring/icon-move-blue.png) no-repeat;
         cursor: move;
       }
     }
@@ -1449,4 +1449,83 @@
 .fl-theme-uio-wb #write-toolbar .color-selector.active .text-color,
 .fl-theme-uio-wb #write-toolbar .color-selector.active .bg-color {
     background-image: url(../../images/authoring/toolbar-whiteonblack.png) !important;
+}
+#toc {
+  & > div {
+    margin-left: -20px;
+  }
+  .header {
+    .handle {
+      float: left;
+      position: relative;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      background: url(../../images/authoring/icon-move-gray.png) no-repeat;
+      visibility: hidden;
+    }
+    &:hover {
+      .handle {
+        visibility: visible;
+      }
+      .delete {
+        visibility: visible;
+      }
+    }
+    &.highlight {
+      background-color: transparent;
+      color: #ffcc33;
+      .handle {
+        background-image: url(../../images/authoring/icon-move-highlight.png);
+      }
+      .delete, &.level-1 .delete {
+        color: #ffcc33;
+      }
+    }
+    .text {
+      margin-left: 20px;
+      margin-right: 20px;
+      &:focus {
+        background-color: #fff;
+        outline: none;
+      }
+    }
+    .delete {
+      visibility: hidden;
+      float: right;
+      font-weight: bold;
+      text-shadow: 1px 1px 1px #fff;
+      color: #989898;
+      text-decoration: none;
+    }
+    &.level-1 .delete {
+      color: #989898;
+    }
+  }
+  .ui-state-highlight {
+    border: solid #fff;
+    border-width: 0 1px 1px 0;
+    height: 3px;
+    background-color: #ffcc33;
+    margin-left: 20px;
+  }
+  .subheader-drop {
+    .ui-state-highlight {
+      margin-left: 20px;
+    }
+  }
+  .new {
+    margin-bottom: 0.5em;
+    margin-left: 20px;
+    font-style: italic;
+    font-weight: bold;
+    a {
+      color: #989898;
+      border-bottom: 1px dotted #ffcc33;
+    }
+    &.level-1 {
+      margin-left: 40px;
+      font-weight: normal;
+    }
+  }
 }

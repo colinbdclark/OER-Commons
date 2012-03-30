@@ -153,27 +153,50 @@ class EditForm(forms.ModelForm):
 
     learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
     keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), required=False)
-    subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
+    general_subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
     language = forms.ModelChoiceField(queryset=Language.objects.all(), required=False)
     license = LicenseField()
 
     def __init__(self, *args, **kwargs):
         not_required = kwargs.pop("not_required", False)
-        hide_submit_step = kwargs.pop("hide_submit_step", False)
         super(EditForm, self).__init__(*args, **kwargs)
         if not_required:
             for field in self.fields.values():
                 field.required = False
 
-        if hide_submit_step:
-            # We don't allows to change the license after the material was published
-            del self.fields["license"]
-            #noinspection PyUnresolvedReferences
-            self._meta.fields = [f for f in self._meta.fields if f != "license"]
+    class Meta:
+        model = AuthoredMaterialDraft
+        fields = ["title", "text", "summary", "learning_goals", "keywords", "general_subjects", "grade_level", "language", "license"]
+        widgets = dict(
+            title=forms.HiddenInput(),
+            text=forms.HiddenInput(),
+            summary=forms.Textarea(attrs=dict(
+                placeholder=u"Please give a short summary of your resource. This will appear as the preview in search results."
+            ))
+        )
+
+
+class EditFormNoLicense(forms.ModelForm):
+
+    # TODO: clean up HTML from `text` field.
+    # using lxml clean. Remove all styles, Keep only allowed classes,
+    # remove scripts, styles, forms, iframes, objects, embeds
+
+    learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
+    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), required=False)
+    general_subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
+    language = forms.ModelChoiceField(queryset=Language.objects.all(), required=False)
+
+    def __init__(self, *args, **kwargs):
+        not_required = kwargs.pop("not_required", False)
+        super(EditFormNoLicense, self).__init__(*args, **kwargs)
+        if not_required:
+            for field in self.fields.values():
+                field.required = False
 
     class Meta:
         model = AuthoredMaterialDraft
-        fields = ["title", "text", "summary", "learning_goals", "keywords", "subjects", "grade_level", "language", "license"]
+        fields = ["title", "text", "summary", "learning_goals", "keywords", "general_subjects", "grade_level", "language"]
         widgets = dict(
             title=forms.HiddenInput(),
             text=forms.HiddenInput(),

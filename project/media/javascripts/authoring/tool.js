@@ -141,6 +141,8 @@
 
   Tool = (function() {
 
+    Tool.prototype.AUTOSAVE_INTERVAL = 30;
+
     function Tool(hideSubmitStep) {
       var actions, errorSlide, errors, previewBtn, saveBtn,
         _this = this;
@@ -213,7 +215,7 @@
       return setTimeout(function() {
         _this.save();
         return _this.autosave();
-      }, 30 * 1000);
+      }, this.AUTOSAVE_INTERVAL * 1000);
     };
 
     Tool.prototype.publish = function() {
