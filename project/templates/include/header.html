@@ -1,5 +1,5 @@
 {% load navigation %}
-<header class="global">
+<header class="global fl-clearfix">
   <div class="fixed-width">
     {% if microsite and microsite.slug == "green" %}
       <a id="logo" title="OER Commons" href="{% url frontpage %}"></a>
@@ -43,7 +43,8 @@
           <a href="{% url information %}">Help</a>
         </li>
         <li>
-          <a href="{% url preferences:preferences %}"><img src="{{ STATIC_URL }}images/preferences-icon.png" alt="Preferences" /></a>
+          <a title="Preferences" class="button-preferences"
+             href="{% url preferences:preferences %}"> </a>
         </li>
         <li class="last">
           <a title="Contribute Content" class="button-contribute"
@@ -55,13 +56,18 @@
   </div>
 </header>
 
-<div class="global-tabs fixed-width">
-  <div id="global-search-box">
-    <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
-      <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" placeholder="{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}" />
-      <input type="submit" value="Search" class="button" />
-      <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" />
-    </form>
+<div class="fl-clearfix global-tabs">
+  <div class="fixed-width">
+    <div id="global-search-box">
+      <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
+        <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" placeholder="{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}" />
+        <input type="submit" value="Search" class="button" />
+        <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" />
+      </form>
+    </div>
+
+    {% navigation %}
   </div>
-  {% navigation %}
 </div>
+
+    <div class="flc-toc-tocContainer"> </div>

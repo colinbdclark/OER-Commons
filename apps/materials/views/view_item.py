@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, resolve
 from django.db.models import Avg
 from django.http import Http404, QueryDict, HttpRequest
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.datastructures import MultiValueDict
 from django.views.generic.base import TemplateView
 from haystack.query import SearchQuerySet
@@ -40,11 +40,19 @@ class BaseViewItemMixin(object):
     model = None
 
     def get(self, request, *args, **kwargs):
+        self.pk = kwargs.get("pk")
         self.slug = kwargs["slug"]
         self.model = self.model or kwargs.get("model")
-        if not self.slug or not self.model:
+        if not self.model:
             raise Http404()
-        self.item = get_object_or_404(self.model, slug=self.slug)
+        if self.pk:
+            self.item = get_object_or_404(self.model, pk=self.pk)
+            if self.item.slug != self.slug:
+                return redirect(self.item, permanent=True)
+        elif self.slug:
+            self.item = get_object_or_404(self.model, slug=self.slug)
+        else:
+            raise Http404()
 
         # Not published item is shown only to staff users or to the user that added it.
         if self.item.workflow_state != PUBLISHED_STATE:

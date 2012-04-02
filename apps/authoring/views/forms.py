@@ -1,6 +1,8 @@
 from authoring.models import AuthoredMaterialDraft
+from common.models import GradeLevel
 from django import forms
 from django.template.loader import render_to_string
+from django.utils.datastructures import MultiValueDict, MergeDict
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import CC_LICENSE_URL_RE, License, Keyword
@@ -145,35 +147,13 @@ class LicenseField(forms.Field):
         return dict(url=value, name=License.objects.get_cc_license_name_from_url(value))
 
 
-class EditForm(forms.ModelForm):
+# Single value select that returns data as a list
+class SelectMultiple(forms.Select):
 
-    # TODO: clean up HTML from `text` field.
-    # using lxml clean. Remove all styles, Keep only allowed classes,
-    # remove scripts, styles, forms, iframes, objects, embeds
-
-    learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
-    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), required=False)
-    general_subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
-    language = forms.ModelChoiceField(queryset=Language.objects.all(), required=False)
-    license = LicenseField()
-
-    def __init__(self, *args, **kwargs):
-        not_required = kwargs.pop("not_required", False)
-        super(EditForm, self).__init__(*args, **kwargs)
-        if not_required:
-            for field in self.fields.values():
-                field.required = False
-
-    class Meta:
-        model = AuthoredMaterialDraft
-        fields = ["title", "text", "summary", "learning_goals", "keywords", "general_subjects", "grade_level", "language", "license"]
-        widgets = dict(
-            title=forms.HiddenInput(),
-            text=forms.HiddenInput(),
-            summary=forms.Textarea(attrs=dict(
-                placeholder=u"Please give a short summary of your resource. This will appear as the preview in search results."
-            ))
-        )
+    def value_from_datadict(self, data, files, name):
+        if isinstance(data, (MultiValueDict, MergeDict)):
+            return data.getlist(name)
+        return data.get(name, None)
 
 
 class EditFormNoLicense(forms.ModelForm):
@@ -185,7 +165,8 @@ class EditFormNoLicense(forms.ModelForm):
     learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
     keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), required=False)
     general_subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
-    language = forms.ModelChoiceField(queryset=Language.objects.all(), required=False)
+    grade_levels = forms.ModelMultipleChoiceField(queryset=GradeLevel.objects.all(), widget=SelectMultiple())
+    languages = forms.ModelMultipleChoiceField(queryset=Language.objects.all(), widget=SelectMultiple())
 
     def __init__(self, *args, **kwargs):
         not_required = kwargs.pop("not_required", False)
@@ -196,11 +177,19 @@ class EditFormNoLicense(forms.ModelForm):
 
     class Meta:
         model = AuthoredMaterialDraft
-        fields = ["title", "text", "summary", "learning_goals", "keywords", "general_subjects", "grade_level", "language"]
+        fields = ["title", "text", "abstract", "learning_goals", "keywords", "general_subjects", "grade_levels", "languages"]
         widgets = dict(
             title=forms.HiddenInput(),
             text=forms.HiddenInput(),
-            summary=forms.Textarea(attrs=dict(
+            abstract=forms.Textarea(attrs=dict(
                 placeholder=u"Please give a short summary of your resource. This will appear as the preview in search results."
             ))
         )
+
+
+class EditForm(EditFormNoLicense):
+
+    license = LicenseField()
+
+    class Meta(EditFormNoLicense.Meta):
+        fields = EditFormNoLicense.Meta.fields +  ["license"]

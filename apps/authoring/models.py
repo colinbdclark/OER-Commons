@@ -8,13 +8,13 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from annoying.functions import get_object_or_None
 from autoslug import AutoSlugField
 from common.models import GradeLevel, MediaFormat
 from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 from curriculum.models import TaggedMaterial
-from materials.models import  Keyword, GeneralSubject, License
+from materials.models import  Keyword, \
+    GeneralSubject, License, CourseMaterialType
 from materials.models.common import Language
 from materials.models.material import TAGGED, REVIEWED, RATED, PUBLISHED_STATE, WORKFLOW_STATES, PRIVATE_STATE
 from materials.models.microsite import Microsite, Topic
@@ -42,27 +42,15 @@ class AbstractAuthoredMaterial(models.Model):
     title = models.CharField(max_length=200, default=u"")
     text = models.TextField(default=u"")
 
-    summary = models.TextField(default=u"")
     abstract = models.TextField(default=u"")
 
     learning_goals = AutoCreateManyToManyField(LearningGoal)
     keywords = AutoCreateManyToManyField(Keyword)
     general_subjects = models.ManyToManyField(GeneralSubject)
-    grade_level = models.ForeignKey(GradeLevel, null=True)
-    language = models.ForeignKey(Language, null=True)
+    grade_levels = models.ManyToManyField(GradeLevel)
+    languages = models.ManyToManyField(Language)
+    material_types = models.ManyToManyField(CourseMaterialType)
     license = AutoCreateForeignKey(License, null=True, respect_all_fields=True)
-
-    @property
-    def grade_levels(self):
-        if self.grade_level:
-            return GradeLevel.objects.filter(pk=self.grade_level.pk)
-        return GradeLevel.objects.none()
-
-    @property
-    def languages(self):
-        if self.language:
-            return Language.objects.filter(pk=self.grade_level.pk)
-        return Language.objects.none()
 
     class Meta:
         abstract = True
