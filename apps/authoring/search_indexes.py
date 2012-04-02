@@ -18,6 +18,7 @@ class AuthoredMaterialSearchIndex(MaterialSearchIndex):
     grade_levels = VocabularyMultiValueField(model_attr="grade_levels")
     media_formats = VocabularyMultiValueField(model_attr="media_formats")
     languages = VocabularyMultiValueField(model_attr="languages")
+    material_types = VocabularyMultiValueField(model_attr="material_types")
 
 
 site.register(AuthoredMaterial, AuthoredMaterialSearchIndex)

@@ -3,7 +3,7 @@
 <div class="layout-columns">
 
   <div class="column-left">
-    {% with form.summary as field %}
+    {% with form.abstract as field %}
       {% include "include/form-field.html" %}
     {% endwith %}
   </div>
@@ -21,10 +21,10 @@
     {% with form.general_subjects as field %}{% with "subjects" as field_class %}
       {% include "include/form-field.html" %}
     {% endwith %}{% endwith %}
-    {% with form.grade_level as field %}
+    {% with form.grade_levels as field %}
       {% include "include/form-field.html" %}
     {% endwith %}
-    {% with form.language as field %}
+    {% with form.languages as field %}
       {% include "include/form-field.html" %}
     {% endwith %}
   </div>
