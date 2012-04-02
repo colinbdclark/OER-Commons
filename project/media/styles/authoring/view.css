@@ -3,17 +3,16 @@
   margin: 0;
   padding: 30px;
   background: none;
-  line-height: 1.4;
   font-family: "Myriad Pro", Helvetica, sans-serif; }
   .layout-columns a {
     text-decoration: none; }
 
 .column-left {
-  font-size: 15px; }
+  font-size: 0.9375em; }
   .column-left section {
     margin-bottom: 20px; }
     .column-left section h2 {
-      font-size: 15px;
+      font-size: 0.9375em;
       font-weight: bold;
       text-transform: uppercase;
       text-shadow: 1px 1px 1px #fff;
@@ -29,7 +28,7 @@
 .authored-content {
   padding: 20px;
   background-color: #fff;
-  font-size: 16px;
+  font-size: 1em;
   font-family: "Times New Roman", serif;
   word-wrap: break-word; }
   .authored-content div, .authored-content h1, .authored-content h2, .authored-content h3, .authored-content h4, .authored-content h5, .authored-content h6, .authored-content p, .authored-content blockquote, .authored-content pre, .authored-content dl, .authored-content ol, .authored-content ul, .authored-content table, .authored-content figure {
@@ -42,11 +41,11 @@
   .authored-content h2 {
     color: #690;
     border-bottom: 1px solid;
-    font-size: 25px; }
+    font-size: 1.5625em; }
   .authored-content h3 {
     color: #9c3;
     font-weight: bold;
-    font-size: 18px; }
+    font-size: 1.125em; }
   .authored-content blockquote {
     padding-left: 7px;
     border-left: 3px solid #fc3;
@@ -114,7 +113,7 @@
   .authored-content .bg-color-5 {
     background-color: #bde8f2; }
   .authored-content a.reference {
-    font-size: 13px;
+    font-size: 0.8125em;
     margin: 0 3px;
     vertical-align: super; }
   .authored-content table {
@@ -132,7 +131,7 @@
   padding: 1px;
   background-color: #fff;
   font-family: "Myriad Pro", Helvetica, sans-serif;
-  font-size: 13px; }
+  font-size: 0.8125em; }
   #footnotes div.footnote {
     margin: 10px;
     padding: 10px;
@@ -162,7 +161,7 @@
   .authoring-view #toolbar a {
     color: #fff;
     text-transform: uppercase;
-    font-size: 20px;
+    font-size: 1.25em;
     line-height: 39px; }
 .authoring-view .column-left {
   padding-top: 10px;
@@ -175,12 +174,12 @@
   padding: 30px; }
   .authoring-view .authored-content header {
     background-color: #f5f5f5;
-    font-size: 18px;
+    font-size: 1.125em;
     color: #666;
     padding: 15px 20px;
     margin: -20px -20px 20px -20px; }
     .authoring-view .authored-content header h1 {
-      font-size: 30px;
+      font-size: 1.875em;
       margin-bottom: 10px; }
   .authoring-view .authored-content table {
     border: solid #ccc;
