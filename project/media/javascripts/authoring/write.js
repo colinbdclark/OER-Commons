@@ -1747,7 +1747,7 @@ MediaDialog.ImageStep = function (dialog) {
       if (title) {
         $caption.prepend($("<strong></strong>").text(title));
       }
-      $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL)).append($caption);
+      $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL).attr("alt", description)).append($caption);
     }
 
     editor.saveState();
