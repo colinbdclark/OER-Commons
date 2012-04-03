@@ -21,6 +21,7 @@ class Edit(EditMaterialViewMixin, UpdateView):
         kwargs = super(Edit, self).get_form_kwargs()
         if self.request.is_ajax() or "preview" in self.request.GET:
             kwargs["not_required"] = True
+        kwargs["user"] = self.request.user
         return kwargs
 
     def get_context_data(self, **kwargs):
