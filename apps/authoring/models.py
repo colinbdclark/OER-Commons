@@ -295,6 +295,13 @@ class Document(models.Model):
     file = models.ImageField(upload_to=upload_to("documents"))
 
 
+class Video(models.Model):
+
+    material = models.ForeignKey(AuthoredMaterial)
+
+    video = models.ImageField(upload_to=upload_to("videos"))
+
+
 class Embed(models.Model):
 
     url = models.URLField(unique=True, db_index=True, max_length=200)

@@ -19,6 +19,7 @@ import requests
 import string
 import urlparse
 
+import pdb
 
 IMAGE_CONTENT_TYPE_RE = re.compile(r"^image/(png|p?jpeg|gif)", re.I)
 MAX_IMAGE_SIZE = 10485760   # 10 MB
@@ -146,6 +147,20 @@ class MediaUpload(SingleObjectMixin, FormMixin, ProcessFormView):
                 url=video.url,
                 title=video.title or u"",
                 thumbnail=video.thumbnail or u""
+            )
+        elif "video" in form.cleaned_data["file"].content_type :
+#            Use the "Video" class rather than "Document" after finding a way to migrate the db for "Video"
+#            video = Video(material=object, video=form.cleaned_data["file"])
+            video = Document(material=object, file=form.cleaned_data["file"])
+#            pdb.set_trace()
+#            document.save()
+            response = dict(
+                source="local",
+                type="video",
+#                url=request.build_absolute_url(video.file.url),
+                url=video.file.url,
+                title=video.file.name.split(os.path.sep)[-1],
+                thumbnail="/media/images/default-video-thumbnail.jpg" or u""
             )
         else:
             if form.cleaned_data["file"]:

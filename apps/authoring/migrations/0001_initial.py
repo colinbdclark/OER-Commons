@@ -143,6 +143,17 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('authoring', ['Embed'])
 
+        # Adding model 'Video'
+        db.create_table('authoring_video', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('url', self.gf('django.db.models.fields.URLField')(unique=True, max_length=200, db_index=True)),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=20, db_index=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
+            ('thumbnail', self.gf('django.db.models.fields.URLField')(db_index=True, max_length=200, null=True, blank=True)),
+            ('html', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+        ))
+        db.send_create_signal('authoring', ['Video'])
+
 
     def backwards(self, orm):
         
@@ -187,6 +198,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Embed'
         db.delete_table('authoring_embed')
+
+        # Deleting model 'Video'
+        db.delete_table('authoring_video')
 
 
     models = {
@@ -268,6 +282,15 @@ class Migration(SchemaMigration):
         'authoring.embed': {
             'Meta': {'object_name': 'Embed'},
             'embed_url': ('django.db.models.fields.URLField', [], {'db_index': 'True', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'html': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'thumbnail': ('django.db.models.fields.URLField', [], {'db_index': 'True', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '20', 'db_index': 'True'}),
+            'url': ('django.db.models.fields.URLField', [], {'unique': 'True', 'max_length': '200', 'db_index': 'True'})
+        },
+        'authoring.video': {
+            'Meta': {'object_name': 'Video'},
             'html': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'thumbnail': ('django.db.models.fields.URLField', [], {'db_index': 'True', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
