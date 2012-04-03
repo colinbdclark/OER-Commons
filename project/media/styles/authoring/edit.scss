@@ -1450,6 +1450,33 @@
 .fl-theme-uio-wb #write-toolbar .color-selector.active .bg-color {
     background-image: url(../../images/authoring/toolbar-whiteonblack.png) !important;
 }
+
+.fl-theme-uio-wb .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-whiteonblack.png)
+}
+.fl-theme-uio-bw .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-blackonwhite.png)
+}
+.fl-theme-uio-yb .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-yellowonblack.png)
+}
+.fl-theme-uio-by .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-blackonyellow.png)
+}
+
+.fl-theme-uio-wb .step-icons a {
+  background-image: url("../../images/authoring/steps-whiteonblack.png");
+}
+.fl-theme-uio-bw .step-icons a {
+  background-image: url("../../images/authoring/steps-blackonwhite.png");
+}
+.fl-theme-uio-yb .step-icons a {
+  background-image: url("../../images/authoring/steps-yellowonblack.png");
+}
+.fl-theme-uio-by .step-icons a {
+  background-image: url("../../images/authoring/steps-blackonyellow.png");
+}
+
 #toc {
   & > div {
     margin-left: -20px;
