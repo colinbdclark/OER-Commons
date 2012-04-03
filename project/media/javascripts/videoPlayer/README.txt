@@ -1,13 +1,7 @@
-An HTML5 video player built as an Infusion component. 
 
-Planned features include:
-    * keyboard accessibility
-    * captions support
-    * described video support
-    * responsive to user needs and preferences
-    * fully configurable by integrators 
-    
-    
-To use the video player, please see the documentation: http://github.com/fluid-project/videoPlayer/blob/master/docs/index.html
+This version of Infusion was created from 
 
-To can find the Fluid Infusion project here: http://github.com/fluid-project/infusion
+    https://github.com/amb26/videoPlayer/tree/demo-integration-sketch
+    commit 0e0f140eba3327c74db2ead3ba08540ba37630b5
+
+Any unnecessary files have been removed from this folder.
