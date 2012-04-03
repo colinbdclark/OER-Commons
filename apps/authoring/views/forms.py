@@ -1,6 +1,8 @@
 from authoring.models import AuthoredMaterialDraft
 from common.models import GradeLevel
+from curriculum.models import AlignmentTag, TaggedMaterial
 from django import forms
+from django.contrib.contenttypes.models import ContentType
 from django.template.loader import render_to_string
 from django.utils.datastructures import MultiValueDict, MergeDict
 from django.utils.safestring import mark_safe
@@ -12,7 +14,7 @@ from django.forms import ModelMultipleChoiceField
 from django.forms.widgets import CheckboxInput
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
-from materials.models import GeneralSubject, Language
+from materials.models import GeneralSubject, Language, CourseMaterialType
 import string
 
 
@@ -150,10 +152,37 @@ class LicenseField(forms.Field):
 # Single value select that returns data as a list
 class SelectMultiple(forms.Select):
 
+    def render(self, name, value, attrs=None, choices=()):
+        if not value:
+            value = None
+        else:
+            value = value[0]
+        return super(SelectMultiple, self).render(name, value, attrs, choices)
+
     def value_from_datadict(self, data, files, name):
         if isinstance(data, (MultiValueDict, MergeDict)):
             return data.getlist(name)
         return data.get(name, None)
+
+
+class AlignmentTagsWidget(forms.SelectMultiple):
+
+    def render_tag(self, tag, name):
+        return u"""<li data-id="%(id)i" class="user-tag rc3">
+          <a href="#">%(code)s</a> <a class="delete">x</a>
+          <input type="hidden" name="%(name)s" value="%(id)i">
+          </li>""" % dict(
+            id=tag.id,
+            code=tag.full_code,
+            name=name
+        )
+
+    def render(self, name, value, attrs=None, choices=()):
+        output = []
+        if value:
+            for tag in AlignmentTag.objects.filter(id__in=value):
+                output.append(self.render_tag(tag, name))
+        return mark_safe(u"\n".join(output))
 
 
 class EditFormNoLicense(forms.ModelForm):
@@ -165,19 +194,32 @@ class EditFormNoLicense(forms.ModelForm):
     learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
     keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), required=False)
     general_subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
-    grade_levels = forms.ModelMultipleChoiceField(queryset=GradeLevel.objects.all(), widget=SelectMultiple())
-    languages = forms.ModelMultipleChoiceField(queryset=Language.objects.all(), widget=SelectMultiple())
+    grade_levels = forms.ModelMultipleChoiceField(label=u"Grade Level", queryset=GradeLevel.objects.all(), widget=SelectMultiple())
+    languages = forms.ModelMultipleChoiceField(label=u"Language", queryset=Language.objects.all(), widget=SelectMultiple())
+    material_types = forms.ModelMultipleChoiceField(label=u"Material Type", queryset=CourseMaterialType.objects.all(), widget=SelectMultiple())
+    alignment_tags = forms.ModelMultipleChoiceField(
+        AlignmentTag.objects.all(),
+        widget=AlignmentTagsWidget(),
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         not_required = kwargs.pop("not_required", False)
+        self.user = kwargs.pop("user")
         super(EditFormNoLicense, self).__init__(*args, **kwargs)
+        self.content_type = ContentType.objects.get_for_model(self.instance)
+        self.initial["alignment_tags"] = list(tagged.tag for tagged in TaggedMaterial.objects.filter(
+            content_type=self.content_type,
+            object_id=self.instance.id,
+            user=self.user,
+        ))
         if not_required:
             for field in self.fields.values():
                 field.required = False
 
     class Meta:
         model = AuthoredMaterialDraft
-        fields = ["title", "text", "abstract", "learning_goals", "keywords", "general_subjects", "grade_levels", "languages"]
+        fields = ["title", "text", "abstract", "learning_goals", "keywords", "general_subjects", "grade_levels", "languages", "material_types"]
         widgets = dict(
             title=forms.HiddenInput(),
             text=forms.HiddenInput(),
@@ -185,6 +227,30 @@ class EditFormNoLicense(forms.ModelForm):
                 placeholder=u"Please give a short summary of your resource. This will appear as the preview in search results."
             ))
         )
+
+    def save(self, commit=True):
+        instance = super(EditFormNoLicense, self).save(commit)
+        existing = set(tagged.tag for tagged in TaggedMaterial.objects.filter(
+            content_type=self.content_type,
+            object_id=instance.id,
+            user=self.user,
+        ))
+        tags = set(self.cleaned_data.get("alignment_tags", []))
+        for tag in existing - tags:
+            TaggedMaterial.objects.filter(
+                content_type=self.content_type,
+                object_id=instance.id,
+                user=self.user,
+                tag=tag
+            ).delete()
+        for tag in tags - existing:
+            TaggedMaterial.objects.create(
+                content_type=self.content_type,
+                object_id=instance.id,
+                user=self.user,
+                tag=tag
+            )
+        return instance
 
 
 class EditForm(EditFormNoLicense):
