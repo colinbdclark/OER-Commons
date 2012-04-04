@@ -4,6 +4,12 @@ var afa = afa || {};
 
   // Proposed structure for property names; not yet used
   var AfAProperties = {
+      mouseAccess: {
+          name: "is-mouse-accessible",
+          type: "boolean",
+          selector: ".mouse-access",
+          summaryfunc: "fluid.identity"
+      },
       altText: {
           name: "has-alt-text",
           type: "boolean",
@@ -79,6 +85,9 @@ var afa = afa || {};
     };
   };
   
+  /**
+   * Check on "display-transformable"
+   */
   afa.checkDispTrans = function (itemName, itemProperty) {
     var counterAllDispTrans = 4, tooltipText;
     
@@ -109,7 +118,9 @@ var afa = afa || {};
     
     fluid.each(AfAProperties, function(itemProperty, itemName) {
       var result = fluid.invokeGlobalFunction(itemProperty.summaryfunc, [itemName, itemProperty]);
-      afa.updateUI(itemProperty.selector, result["description"], result["tooltipText"]);
+      if (itemProperty.selector && result) {
+          afa.updateUI(itemProperty.selector, result["description"], result["tooltipText"]);
+      }
     });
   };
   
