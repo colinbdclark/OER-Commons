@@ -1119,6 +1119,14 @@ WriteStep.prototype.loadEmbed = function ($figure) {
     $.post(this.$area.data("load-embed-url"), {url: url}, function (response) {
       var $caption = $figure.find("figcaption").detach();
       $figure.html(response.html).append($caption).fadeIn();
+
+      // Add AfA metadata for embedded videos
+      // NOTE: These values are valid for currently-supported embedded youtube videos only
+      // TODO: These itemprop names should not be hard-coded
+      $figure.attr("itemscope", "");
+      $figure.prepend('<meta itemprop="is-mouse-accessible" content="true"/>');
+      $figure.prepend('<meta itemprop="has-transcript" content="false"/>');
+      $figure.prepend('<meta itemprop="is-display-transformable" content=""/>');
     });
   }
 };

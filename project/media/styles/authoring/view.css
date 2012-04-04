@@ -157,6 +157,20 @@
     #toc .header.level-1 a {
       color: #39c; }
 
+.afa-summary .afa-icon {
+  width: 48px;
+  height: 48px;
+  text-indent: -9999px;
+  display: inline-block; }
+.afa-summary .mouse-access {
+  background: url(../../images/authoring/afa-base.gif) 100% 0 no-repeat; }
+.afa-summary .disp-trans {
+  background: url(../../images/authoring/afa-base.gif) 100% 0 no-repeat; }
+.afa-summary .excellent {
+  background-image: url(../../images/authoring/afa-excellent.gif); }
+.afa-summary .notbest {
+  background-image: url(../../images/authoring/afa-notbest.gif); }
+
 .authoring-view #toolbar {
   background-color: #3399cc;
   border: none;

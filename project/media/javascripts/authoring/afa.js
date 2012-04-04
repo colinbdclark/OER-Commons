@@ -41,10 +41,10 @@
     }
   };
 
-  var updateUI = function (itemTagName, description, tooltipText) {
-    $(".afa-summary " + itemTagName).text(description);
+  var updateUI = function (selector, description, tooltipText) {
+    $(".afa-summary "+selector).addClass("excellent");
   
-    fluid.tooltip(".afa-summary " + itemTagName, {
+    fluid.tooltip(".afa-summary " + selector, {
       content: tooltipText
     });
   
@@ -140,3 +140,4 @@
   addAfAToBody();
   summerizeAfA();
 })();
+
