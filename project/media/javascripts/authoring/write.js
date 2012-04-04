@@ -1057,6 +1057,7 @@ WriteStep.prototype.initColorButtons = function () {
   });
   $selectors.delegate("li", "mousedown", function (e) {
     e.stopPropagation();
+    e.preventDefault();
     var $this = $(this);
     var i, applier;
     editor.saveState();
@@ -1079,6 +1080,8 @@ WriteStep.prototype.initColorButtons = function () {
 
     // TODO: initialize and save CssclassAppliers on editor initialization and re-use them here
 
+    var selection = rangy.saveSelection();
+
     // Remove existing colors
     for (i = 1; i < 6; i++) {
       applier = rangy.createCssClassApplier(prefix + "-color-" + i);
@@ -1088,6 +1091,10 @@ WriteStep.prototype.initColorButtons = function () {
       applier = rangy.createCssClassApplier(class_);
       applier.applyToSelection();
     }
+
+    rangy.restoreSelection(selection);
+    editor.trackSelection();
+
   });
 
   $(document).click(function () {
