@@ -3,13 +3,12 @@ from itertools import chain
 from django.core.urlresolvers import reverse
 from django.db.models.aggregates import Count
 from django.template import Library
-from haystack.query import SQ, SearchQuerySet
 from materials.utils import get_name_from_slug
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 
 from myitems.models import Folder
-from myitems.views import FolderForm
+from myitems.views import FolderForm, AllItems, SubmittedItems, PublishedItems, DraftItems
 
 register = Library()
 
@@ -24,24 +23,25 @@ def my_tags_portlet(context):
 
 
 VIEWS = [
-    ("myitems", u"All", lambda user_id: SQ(saved_by=user_id) | SQ(creator=user_id)),
-    ("submitted", u"My Submitted Items", lambda user_id: SQ(creator=user_id)),
+    AllItems,
+    SubmittedItems,
+    PublishedItems,
+    DraftItems,
 ]
 
 
 @register.inclusion_tag("myitems/include/views-portlet.html", takes_context=True)
 def myitems_views_portlet(context):
     request = context["request"]
-    query = SearchQuerySet()
     current_path = request.path
     views = [
         {
-            "url": reverse("myitems:%s" % view_name),
-            "title": view_title,
-            "count": query.filter(filter(request.user.id)).count(),
-            "name": view_name,
+            "url": reverse("myitems:%s" % view.slug),
+            "title": view.name,
+            "count": view.get_count(request.user),
+            "name": view.slug,
         }
-        for view_name, view_title, filter in VIEWS
+        for view in VIEWS
     ]
 
     folders = [
