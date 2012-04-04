@@ -943,6 +943,32 @@ WriteStep.prototype.initLinks = function () {
   });
 
   var $dialog = $("#link-dialog");
+  var $form = $dialog.find("form");
+  $form.validate({
+    rules: {
+      "link_text": "required",
+      "link_url": {
+        required: true,
+        url: true
+      }
+    },
+    submitHandler: function() {
+      var $link = $dialog.data("link");
+      if (!$link.data("new")) {
+        editor.saveState();
+      }
+      $link.text($textInput.val());
+      $link.attr("href", $urlInput.val());
+      $dialog.hide();
+    }
+  });
+  $form.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      e.preventDefault();
+      $form.submit();
+    }
+  });
+
   var $urlInput = $dialog.find("input[name='link_url']");
   var $textInput = $dialog.find("input[name='link_text']");
 
@@ -960,13 +986,7 @@ WriteStep.prototype.initLinks = function () {
 
   $dialog.find("a.button[href='#save']").click(function (e) {
     e.preventDefault();
-    var $link = $dialog.data("link");
-    if (!$link.data("new")) {
-      editor.saveState();
-    }
-    $link.text($textInput.val());
-    $link.attr("href", $urlInput.val());
-    $dialog.hide();
+    $form.submit();
   });
 
   $dialog.find("a.remove").click(function (e) {
@@ -998,7 +1018,11 @@ WriteStep.prototype.initLinks = function () {
       top: offset.top + 35 + "px"
     });
     $dialog.show();
-    $urlInput.focus();
+    if ($textInput.val() === "") {
+      $textInput.focus();
+    } else {
+      $urlInput.focus();
+    }
   });
 
 };
@@ -1151,6 +1175,28 @@ WriteStep.prototype.initReferences = function () {
   });
 
   var $dialog = $("#reference-dialog");
+
+  var $form = $dialog.find("form");
+  $form.validate({
+    rules: {
+      "reference_text": "required"
+    },
+    submitHandler: function() {
+      var $reference = $dialog.data("reference");
+      var text = $.trim($dialog.find("textarea").val());
+      if (text !== $reference.data("text")) {
+        if (!$reference.data("new")) {
+          editor.saveState();
+        }
+        $reference.attr("data-text", text);
+        $reference.data("text", text);
+        editor.updateReferences();
+      }
+      $reference.data("new", false);
+      $dialog.hide();
+    }
+  });
+
   $dialog.find("a.button[href='#cancel']").click(function (e) {
     e.preventDefault();
     var $reference = $dialog.data("reference");
@@ -1162,18 +1208,7 @@ WriteStep.prototype.initReferences = function () {
 
   $dialog.find("a.button[href='#save']").click(function (e) {
     e.preventDefault();
-    var $reference = $dialog.data("reference");
-    var text = $.trim($dialog.find("textarea").val());
-    if (text !== $reference.data("text")) {
-      if (!$reference.data("new")) {
-        editor.saveState();
-      }
-      $reference.attr("data-text", text);
-      $reference.data("text", text);
-      editor.updateReferences();
-    }
-    $reference.data("new", false);
-    $dialog.hide();
+    $form.submit();
   });
 
   $dialog.find("a.remove").click(function () {
@@ -1597,6 +1632,7 @@ MediaDialog.Step.prototype.open = function (data) {
   this.prepare(data);
   this.dialog.$steps.not(this.$step).hide();
   this.$step.show();
+  this.$step.find("input[type='text'],textarea").first().focus();
 };
 //noinspection JSUnusedLocalSymbols
 MediaDialog.Step.prototype.prepare = function (data) {
@@ -1636,6 +1672,7 @@ MediaDialog.UploadProgressStep.prototype.displayProgress = function (percent) {
 
 MediaDialog.UploadStep = function (dialog, uploadProgress) {
   MediaDialog.Step.call(this, dialog);
+  var editor = this.dialog.editor;
   var $step = this.$step = this.dialog.$steps.filter(".upload");
   var $input = this.$input = $step.find("input:text");
   this.uploadProgress = uploadProgress;
@@ -1653,6 +1690,12 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
       dialog.handleUploadResponse(response);
       $step.unblock();
     }, "text");
+  });
+
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
   });
 
   var $dropZone = $step.find("div.drop-zone");
@@ -1762,6 +1805,12 @@ MediaDialog.ImageStep = function (dialog) {
     dialog.hide();
   });
 
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
+  });
+
 };
 //noinspection JSCheckFunctionSignatures
 MediaDialog.ImageStep.prototype = new MediaDialog.Step();
@@ -1818,7 +1867,14 @@ MediaDialog.VideoStep = function (dialog) {
     editor.updateDND();
     dialog.hide();
   });
+
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
+  });
 };
+
 //noinspection JSCheckFunctionSignatures
 MediaDialog.VideoStep.prototype = new MediaDialog.Step();
 MediaDialog.VideoStep.prototype.constructor = MediaDialog.VideoStep;
@@ -1878,7 +1934,14 @@ MediaDialog.DocumentStep = function (dialog) {
     editor.updateDND();
     dialog.hide();
   });
+
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
+  });
 };
+
 //noinspection JSCheckFunctionSignatures
 MediaDialog.DocumentStep.prototype = new MediaDialog.Step();
 MediaDialog.DocumentStep.prototype.constructor = MediaDialog.DocumentStep;
