@@ -1,4 +1,19 @@
 (function() {
+
+  // Proposed structure for property names; not yet used
+  var AfAProperties = {
+      alttext: {
+          name: "has-alt-text",
+          type: "boolean",
+          selector: ".img-alt"
+      },
+      hazard: {
+          name: "hazard",
+          type: "vocabulary",
+          values: ["flashing", "olfactory", "motion"]
+      }
+  };
+
   var summerizeAfA = function () {
     // image alt text
     var counterAllImg = $(".oer-container img").length;
@@ -29,8 +44,15 @@
   };
   
   var addAfAToBody = function () {
-    $(".oer-container").attr("itemscope", "");
-    $(".oer-container").prepend('<meta itemprop="is-display-transformable" content="font-size font-face foreground-colour background-colour"/>');
+    var container = $(".oer-container");
+    container.attr("itemscope", "");
+
+    // TODO: These itemprop strings should not be hard-coded
+    container.prepend('<meta itemprop="is-mouse-accessible" content="true"/>');
+    container.prepend('<meta itemprop="is-mouse-accessible" content="false"/>');
+    container.prepend('<meta itemprop="is-display-transformable" content="font-size font-face foreground-colour background-colour"/>');
+    container.prepend('<meta itemprop="has-ebook" content="false"/>');
+    container.prepend('<meta itemprop="hazard" content=""/>');
   }
   
   addAfAToBody();
