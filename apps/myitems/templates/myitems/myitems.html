@@ -3,6 +3,20 @@
 {% load rating_tags %}
 {% load thumbnail %}
 
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.myitems.init();
+      oer.myitems.index.init();
+      oer.rating.init();
+      oer.myitems.index.init_saved_items();
+    });
+  </script>
+{% endblock %}
+
+{% block page-title %}{% endblock %}
+{% block above-content %}{% endblock %}
+
 {% block column-left %}
     {% myitems_views_portlet %}
     <section class="portlet saved-searches">
@@ -22,7 +36,7 @@
             {% for item in items %}
                 <article class="item clearfix{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
                     {% if index_type == "pics" %}
-                    {% thumbnail item.object.screenshot "180x120" crop="0px 0px" as im %}
+                    {% thumbnail item.screenshot "180x120" crop="0px 0px" as im %}
                         <img class="left" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                     {% endthumbnail %}
                     {% endif %}
@@ -32,7 +46,9 @@
                             <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
                         </h1>
                         <ul class="widgets">
-                            <li>{% stars item.identifier item.rating %}</li>
+                            {% if item.rating != None %}
+                                <li>{% stars item.identifier item.rating %}</li>
+                            {% endif %}
                             <li>
                                 <ul class="folder-list">
                                     {% for folder in item.folders %}

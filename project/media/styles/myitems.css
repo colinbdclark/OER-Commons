@@ -31,24 +31,22 @@ dl.user-info dt {
   font-size: 14px;
 }
 
+.portlet.my-items-views a {
+  text-decoration: none;
+}
+
 .portlet.my-items-views li {
   padding: 2px 0 2px 3px;
 }
 
-.portlet.my-items-views li.selected {
-  font-weight: bold;
-  background-color: #D5D5FF;
-}
-
-.portlet.my-items-views li.selected a {
+.portlet.my-items-views .view a.folder-text {
   color: #1F4D64;
 }
 
-.portlet.my-items-views a {
-  color: #707070;
-  text-decoration: none;
-}
 
+.portlet.my-items-views li.selected {
+  background-color: #D5D5FF;
+}
 
 .myitems .portlet h1 {
   color: #FFFFFF;
@@ -93,7 +91,6 @@ dl.user-info dt {
 }
 
 #folder-create-button, #folder-create-submit {
-  color: #1F4D64;
   font-style: italic;
 }
 
@@ -174,7 +171,8 @@ section.my-items-views li {
   display: inline-block;
   list-style-type: none;
   vertical-align: bottom;
-  margin-left: 10px;
+  margin-left: 0;
+  margin-right: 5px;
 }
 
 .myitems article .widgets li {
@@ -216,6 +214,7 @@ section.my-items-views li {
 }
 
 .myitems .action-panel .view-selector li {
+  margin-left: 0;
   margin-right: 5px;
 }
 
@@ -230,6 +229,10 @@ section.my-items-views li {
 
 .myitems .action-panel ul.left {
   margin: 0;
+}
+
+.myitems .action-panel ul.left .first {
+  margin-left: 0;
 }
 
 .myitems .materials-index {

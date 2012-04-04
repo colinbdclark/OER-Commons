@@ -1,14 +1,18 @@
-from annoying.functions import get_object_or_None
-from autoslug import AutoSlugField
-from common.models import GradeLevel, MediaFormat
-from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
-from curriculum.models import TaggedMaterial
+import datetime
+import embedly
+import os
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from annoying.functions import get_object_or_None
+from autoslug import AutoSlugField
+from common.models import GradeLevel, MediaFormat
+from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
+from curriculum.models import TaggedMaterial
 from materials.models import  Keyword, \
     GeneralSubject, License, CourseMaterialType
 from materials.models.common import Language
@@ -20,11 +24,10 @@ from rating.models import Rating
 from reviews.models import Review
 from rubrics.models import Evaluation, EvaluatedItemMixin
 from saveditems.models import SavedItem
+from myitems.models import FolderItem
 from tags.models import Tag
 from visitcounts.models import Visit
-import datetime
-import embedly
-import os
+
 
 
 class LearningGoal(models.Model):
@@ -88,6 +91,12 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
 
     workflow_state = models.CharField(max_length=50, default=PRIVATE_STATE,
                                       choices=WORKFLOW_STATES)
+
+    folders = generic.GenericRelation(FolderItem)
+
+    @property
+    def saved_in_folders(self):
+        return self.folders.values_list("folder__id", flat=True)
 
     def get_draft(self):
         draft = get_object_or_None(AuthoredMaterialDraft, material=self)

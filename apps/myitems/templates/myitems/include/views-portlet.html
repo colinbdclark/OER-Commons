@@ -8,7 +8,7 @@
         {% for view in views %}
           <li class="view {{ view.name }}{% if view.selected %} selected{% endif %}">
               {% if not forloop.first %}<i class="folder-icon"></i>{% endif %}
-              <a href="{{ view.url }}">
+              <a class="folder-text" href="{{ view.url }}">
                   <span class="name">{{ view.title }}</span>
                   (<span class="number">{{ view.count }}</span>)
               </a>
@@ -17,7 +17,7 @@
         {% for f in folders %}
           <li class="folder{% if f.selected %} selected{% endif %}" data-folder-id="{{ f.id }}">
               <i class="folder-icon"></i>
-              <a href="{{ f.url }}">
+              <a class="folder-text" href="{{ f.url }}">
                   <span class="name">{{ f.title }}</span>
                   (<span class="number">{{ f.count }}</span>)
               </a>
