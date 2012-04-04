@@ -436,7 +436,7 @@ WriteStep.prototype.cleanHTML = function (preSave) {
     $document.find("[contenteditable]").removeAttr("contenteditable");
     $document.find("p,div").each(function () {
       var $this = $(this);
-      if ($.trim($this.text()) === "") {
+      if ($.trim($this.text()) === "" && $this.html().indexOf("<img") === -1) {
         $this.remove();
       }
     });
@@ -1747,7 +1747,16 @@ MediaDialog.ImageStep = function (dialog) {
       if (title) {
         $caption.prepend($("<strong></strong>").text(title));
       }
-      $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL).attr("alt", description)).append($caption);
+      $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL)).append($caption);
+
+      // Add AfA wrapper container
+      $("img", $figure).wrap('<p itemscope />');
+      if (description != "") {
+        $("img", $figure).attr("alt", description);
+        $("img", $figure).after('<meta itemprop="has-alt-text" content="true"/>');
+      } else {
+        $("img", $figure).after('<meta itemprop="has-alt-text" content="false"/>');
+      }
     }
 
     editor.saveState();

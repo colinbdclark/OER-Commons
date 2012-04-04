@@ -16,12 +16,16 @@
     </div>
   {% endif %}
 
-  <div class="layout-columns">
+  <div class="oer-container layout-columns">
 
     <div class="column-left">
       <section id="toc">
         <h2>Table of Contents</h2>
         {{ toc }}
+      </section>
+
+      <section id="afa">
+        {% include "authoring/include/afa.html" %}
       </section>
 
       <section>
@@ -64,3 +68,7 @@
 {% endblock %}
 
 {% block footer %}{% endblock %}
+
+{% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/authoring/afa.js"></script>
+{% endblock %}

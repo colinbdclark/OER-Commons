@@ -16313,3 +16313,259 @@ var fluid_1_5 = fluid_1_5 || {};
     };    
 
 })(jQuery, fluid_1_5);
+/*
+ * jQuery UI Tooltip @VERSION
+ *
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Tooltip
+ *
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
+ *	jquery.ui.position.js
+ */
+(function($) {
+
+var increments = 0;
+
+$.widget("ui.tooltip", {
+	options: {
+		items: "[title]",
+		content: function() {
+			return $(this).attr("title");
+		},
+		position: {
+			my: "left center",
+			at: "right center",
+			offset: "15 0"
+		}
+	},
+	_create: function() {
+		var self = this;
+		this.tooltip = $("<div></div>")
+			.attr("id", "ui-tooltip-" + increments++)
+			.attr("role", "tooltip")
+			.attr("aria-hidden", "true")
+			.addClass("ui-tooltip ui-widget ui-corner-all ui-widget-content")
+			.appendTo(document.body)
+			.hide();
+		this.tooltipContent = $("<div></div>")
+			.addClass("ui-tooltip-content")
+			.appendTo(this.tooltip);
+		this.opacity = this.tooltip.css("opacity");
+		this.element
+			.bind("focus.tooltip mouseover.tooltip", function(event) {
+				self.open( event );
+			})
+			.bind("blur.tooltip mouseout.tooltip", function(event) {
+				self.close( event );
+			});
+	},
+	
+	enable: function() {
+		this.options.disabled = false;
+	},
+	
+	disable: function() {
+		this.options.disabled = true;
+	},
+	
+	destroy: function() {
+		this.tooltip.remove();
+		$.Widget.prototype.destroy.apply(this, arguments);
+	},
+	
+	widget: function() {
+		return this.element.pushStack(this.tooltip.get());
+	},
+	
+	open: function(event) {
+		var target = $(event && event.target || this.element).closest(this.options.items);
+		// already visible? possible when both focus and mouseover events occur
+		if (this.current && this.current[0] == target[0])
+			return;
+		var self = this;
+		this.current = target;
+		this.currentTitle = target.attr("title");
+		var content = this.options.content.call(target[0], function(response) {
+			// IE may instantly serve a cached response, need to give it a chance to finish with _show before that
+			setTimeout(function() {
+				// ignore async responses that come in after the tooltip is already hidden
+				if (self.current == target)
+					self._show(event, target, response);
+			}, 13);
+		});
+		if (content) {
+			self._show(event, target, content);
+		}
+	},
+	
+	_show: function(event, target, content) {
+		if (!content)
+			return;
+		
+		target.attr("title", "");
+		
+		if (this.options.disabled)
+			return;
+			
+		this.tooltipContent.html(content);
+		this.tooltip.css({
+			top: 0,
+			left: 0
+		}).show().position( $.extend({
+			of: target
+		}, this.options.position )).hide();
+		
+		this.tooltip.attr("aria-hidden", "false");
+		target.attr("aria-describedby", this.tooltip.attr("id"));
+
+		this.tooltip.stop(false, true).fadeIn();
+
+		this._trigger( "open", event );
+	},
+	
+	close: function(event) {
+		if (!this.current)
+			return;
+		
+		var current = this.current;
+		this.current = null;
+		current.attr("title", this.currentTitle);
+		
+		if (this.options.disabled)
+			return;
+		
+		current.removeAttr("aria-describedby");
+		this.tooltip.attr("aria-hidden", "true");
+		
+		this.tooltip.stop(false, true).fadeOut();
+		
+		this._trigger( "close", event );
+	}
+	
+});
+
+})(jQuery);
+/*
+Copyright 2010 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+    
+    var createContentFunc = function (content) {
+        return typeof content === "function" ? content : function () {
+            return content;
+        };
+    };
+
+    var setup = function (that) {
+        that.container.tooltip({
+            content: createContentFunc(that.options.content),
+            position: that.options.position,
+            items: that.options.items,
+            open: function (event) {
+                var tt = $(event.target).tooltip("widget");
+                tt.stop(false, true);
+                tt.hide();
+                if (that.options.delay) {
+                    tt.delay(that.options.delay).fadeIn("default", that.events.afterOpen.fire());
+                } else {
+                    tt.show();
+                    that.events.afterOpen.fire();
+                }
+            },
+            close: function (event) {
+                var tt = $(event.target).tooltip("widget");
+                tt.stop(false, true);
+                tt.hide();
+                tt.clearQueue();
+                that.events.afterClose.fire();
+            } 
+        });
+        
+        that.elm = that.container.tooltip("widget");
+        
+        that.elm.addClass(that.options.styles.tooltip);
+    };
+
+    fluid.tooltip = function (container, options) {
+        var that = fluid.initView("fluid.tooltip", container, options);
+        
+        /**
+         * Updates the contents displayed in the tooltip
+         * 
+         * @param {Object} content, the content to be displayed in the tooltip
+         */
+        that.updateContent = function (content) {
+            that.container.tooltip("option", "content", createContentFunc(content));
+        };
+        
+        /**
+         * Destroys the underlying jquery ui tooltip
+         */
+        that.destroy = function () {
+            that.container.tooltip("destroy");
+        };
+        
+        /**
+         * Manually displays the tooltip
+         */
+        that.open = function () {
+            that.container.tooltip("open");
+        };
+        
+        /**
+         * Manually hides the tooltip
+         */
+        that.close = function () {
+            that.container.tooltip("close");
+        };
+        
+        setup(that);
+        
+        return that;
+    };
+    
+    fluid.defaults("fluid.tooltip", {
+        styles: {
+            tooltip: ""
+        },
+        
+        events: {
+            afterOpen: null,
+            afterClose: null  
+        },
+        
+        content: "",
+        
+        position: {
+            my: "left top",
+            at: "left bottom",
+            offset: "0 5"
+        },
+        
+        items: "*",
+        
+        delay: 300
+    });
+
+})(jQuery, fluid_1_5);
