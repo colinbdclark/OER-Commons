@@ -1,0 +1,20 @@
+.afa-summary {
+  .afa-icon {
+    width: 48px;
+    height: 48px;
+    text-indent: -9999px;
+    display: inline-block;
+  }
+  .mouse-access {
+    background: url(../../images/authoring/afa-base.gif) 100% 0 no-repeat;
+  }
+  .disp-trans {
+    background: url(../../images/authoring/afa-base.gif) 100% 0 no-repeat;
+  }
+  .excellent {
+    background-image: url(../../images/authoring/afa-excellent.gif);
+  }
+  .notbest {
+    background-image: url(../../images/authoring/afa-notbest.gif);
+  }
+}

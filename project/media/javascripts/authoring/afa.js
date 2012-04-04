@@ -22,8 +22,8 @@
     
     var description = "all: " + counterAllImg + "; has alt: " + counterImgWithAlt + "; no alt: " + counterImgWithoutAlt;
     
-    $(".afa-summary .img-alt").text(description);
-    
+    $(".afa-summary .img-alt").addClass("notbest");
+
     fluid.tooltip(".afa-summary .img-alt", {
       content: description
     });
@@ -35,7 +35,7 @@
 
     description = counterDispTrans + " out of " + counterAllDispTrans + " are available.";
 
-    $(".afa-summary .disp-trans").text(description);
+    $(".afa-summary .disp-trans").addClass("excellent");
 
     fluid.tooltip(".afa-summary .disp-trans", {
         content: description
