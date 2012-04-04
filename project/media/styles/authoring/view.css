@@ -18,6 +18,9 @@
       text-shadow: 1px 1px 1px #fff;
       color: #989898;
       margin-bottom: 10px; }
+    .column-left section h3 {
+      color: #989898;
+      margin-bottom: 5px; }
   .column-left li {
     padding: 5px 0; }
   .column-left ul {
