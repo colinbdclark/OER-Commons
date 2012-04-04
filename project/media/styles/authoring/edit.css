@@ -188,11 +188,18 @@
   .authoring-edit a.button:hover, .authoring-edit a.button.primary:hover {
     background-color: #92c33a; }
   .authoring-edit a.button.disabled {
+    background-color: #b6b8ba;
     cursor: default; }
   .authoring-edit a.button.primary {
     background-color: #79bcde; }
   .authoring-edit a.button.primary.disabled {
     background-color: #b7daed; }
+  .authoring-edit a.button.hidden {
+    display: none; }
+.authoring-edit .errors label {
+  color: #f00;
+  font-size: 0.9em;
+  text-transform: none; }
 
 .authoring-form .label {
   margin-bottom: 5px; }
@@ -1064,6 +1071,8 @@
 
 #step-describe .layout-columns {
   padding-top: 30px; }
+#step-describe .columns-wrapper {
+  position: relative; }
 #step-describe .column-left, #step-describe .column-main, #step-describe .column-right {
   float: left;
   width: 30%;
@@ -1075,8 +1084,8 @@
   width: 100%; }
 #step-describe .learning-goals-widget input[type='text'] {
   width: 90%; }
-#step-describe #id_summary {
-  height: 20em; }
+#step-describe #id_abstract {
+  height: 11em; }
 #step-describe .field.subjects ul {
   list-style-type: none;
   display: inline-block;
@@ -1106,6 +1115,29 @@
     width: 90%; }
 #step-describe #keywords-widget input[type='text'] {
   width: 180px; }
+#step-describe #align-tag-description-ct {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 30%; }
+#step-describe #align-tag-description {
+  float: none;
+  margin-left: 0;
+  margin-bottom: 0;
+  width: auto; }
+#step-describe .alignment-tags-ct {
+  margin-left: 30%;
+  margin-bottom: 1em;
+  padding-left: 40px; }
+#step-describe #align-form-buttons {
+  float: left; }
+  #step-describe #align-form-buttons a.button {
+    margin-right: 0.5em; }
+#step-describe ul.align-tags {
+  margin-left: 10em; }
+  #step-describe ul.align-tags li {
+    margin-top: 0;
+    margin-bottom: 3px; }
 
 #step-submit .layout-columns {
   padding-top: 30px; }
@@ -1236,6 +1268,30 @@
 .fl-theme-uio-wb #write-toolbar .color-selector.active .text-color,
 .fl-theme-uio-wb #write-toolbar .color-selector.active .bg-color {
   background-image: url(../../images/authoring/toolbar-whiteonblack.png) !important; }
+
+.fl-theme-uio-wb .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-whiteonblack.png); }
+
+.fl-theme-uio-bw .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-blackonwhite.png); }
+
+.fl-theme-uio-yb .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-yellowonblack.png); }
+
+.fl-theme-uio-by .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-blackonyellow.png); }
+
+.fl-theme-uio-wb .step-icons a {
+  background-image: url("../../images/authoring/steps-whiteonblack.png"); }
+
+.fl-theme-uio-bw .step-icons a {
+  background-image: url("../../images/authoring/steps-blackonwhite.png"); }
+
+.fl-theme-uio-yb .step-icons a {
+  background-image: url("../../images/authoring/steps-yellowonblack.png"); }
+
+.fl-theme-uio-by .step-icons a {
+  background-image: url("../../images/authoring/steps-blackonyellow.png"); }
 
 #toc > div {
   margin-left: -20px; }

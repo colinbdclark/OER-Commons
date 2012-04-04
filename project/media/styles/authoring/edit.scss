@@ -19,6 +19,7 @@
       background-color: #92c33a;
     }
     &.disabled {
+      background-color: #b6b8ba;
       cursor: default;
     }
     &.primary {
@@ -27,6 +28,14 @@
     &.primary.disabled {
       background-color: #b7daed;
     }
+    &.hidden {
+      display: none;
+    }
+  }
+  .errors label {
+    color: #f00;
+    font-size: 0.9em;
+    text-transform: none;
   }
 }
 
@@ -1239,6 +1248,9 @@
   .layout-columns {
     padding-top: 30px;
   }
+  .columns-wrapper {
+    position: relative;
+  }
   .column-left, .column-main, .column-right {
     float: left;
     width: 30%;
@@ -1254,8 +1266,8 @@
   .learning-goals-widget input[type='text'] {
     width: 90%;
   }
-  #id_summary {
-    height: 20em;
+  #id_abstract {
+    height: 11em;
   }
   .field.subjects ul {
     list-style-type: none;
@@ -1295,6 +1307,36 @@
   #keywords-widget {
     input[type='text'] {
       width: 180px;
+    }
+  }
+  #align-tag-description-ct {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 30%;
+  }
+  #align-tag-description {
+    float: none;
+    margin-left: 0;
+    margin-bottom: 0;
+    width: auto;
+  }
+  .alignment-tags-ct {
+    margin-left: 30%;
+    margin-bottom: 1em;
+    padding-left: 40px;
+  }
+  #align-form-buttons {
+    float: left;
+    a.button {
+      margin-right: 0.5em;
+    }
+  }
+  ul.align-tags {
+    margin-left: 10em;
+    li {
+      margin-top: 0;
+      margin-bottom: 3px;
     }
   }
 }
@@ -1450,6 +1492,33 @@
 .fl-theme-uio-wb #write-toolbar .color-selector.active .bg-color {
     background-image: url(../../images/authoring/toolbar-whiteonblack.png) !important;
 }
+
+.fl-theme-uio-wb .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-whiteonblack.png)
+}
+.fl-theme-uio-bw .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-blackonwhite.png)
+}
+.fl-theme-uio-yb .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-yellowonblack.png)
+}
+.fl-theme-uio-by .authoring-head .logo {
+  background-image: url(../../images/authoring/logo-blackonyellow.png)
+}
+
+.fl-theme-uio-wb .step-icons a {
+  background-image: url("../../images/authoring/steps-whiteonblack.png");
+}
+.fl-theme-uio-bw .step-icons a {
+  background-image: url("../../images/authoring/steps-blackonwhite.png");
+}
+.fl-theme-uio-yb .step-icons a {
+  background-image: url("../../images/authoring/steps-yellowonblack.png");
+}
+.fl-theme-uio-by .step-icons a {
+  background-image: url("../../images/authoring/steps-blackonyellow.png");
+}
+
 #toc {
   & > div {
     margin-left: -20px;

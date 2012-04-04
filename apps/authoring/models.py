@@ -105,6 +105,19 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
             draft.save()
             for m2m in AbstractAuthoredMaterial._meta.many_to_many:
                 setattr(draft, m2m.name, getattr(self, m2m.name).all())
+            draft_content_type = ContentType.objects.get_for_model(draft)
+            material_content_type = ContentType.objects.get_for_model(self)
+            for tagged in TaggedMaterial.objects.filter(
+                content_type=material_content_type,
+                object_id=self.id,
+                user=self.author,
+            ):
+                TaggedMaterial.objects.create(
+                    content_type=draft_content_type,
+                    object_id=draft.id,
+                    user=self.author,
+                    tag=tagged.tag,
+                )
         return draft
 
     @classmethod
@@ -116,6 +129,22 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
             setattr(material, m2m.name, getattr(draft, m2m.name).all())
         material.workflow_state = PUBLISHED_STATE
         material.is_new = False
+
+        # Update alignment tags
+        draft_content_type = ContentType.objects.get_for_model(draft)
+        material_content_type = ContentType.objects.get_for_model(material)
+        TaggedMaterial.objects.filter(
+            content_type=material_content_type,
+            object_id=material.id,
+            user=material.author,
+        ).delete()
+        for tagged in TaggedMaterial.objects.filter(
+            content_type=draft_content_type,
+            object_id=draft.id,
+        ):
+            tagged.content_type = material_content_type
+            tagged.object_id = material.id
+            tagged.save()
 
         # Update media formats based on different media types included into material text.
         media_formats = [MediaFormat.objects.get(slug="text-html")]
