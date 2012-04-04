@@ -32,6 +32,11 @@
       display: none;
     }
   }
+  .errors label {
+    color: #f00;
+    font-size: 0.9em;
+    text-transform: none;
+  }
 }
 
 .authoring-form {
