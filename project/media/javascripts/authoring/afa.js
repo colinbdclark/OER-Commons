@@ -2,10 +2,16 @@
 
   // Proposed structure for property names; not yet used
   var AfAProperties = {
-      alttext: {
+      altText: {
           name: "has-alt-text",
           type: "boolean",
           selector: ".img-alt"
+      },
+      dispTrans: {
+          name: "is-display-transformable",
+          type: "vocabulary",
+          values: ["font-size", "font-face", "foreground-colour", "background-colour"],
+          selector: ".disp-trans"
       },
       hazard: {
           name: "hazard",
@@ -14,33 +20,98 @@
       }
   };
 
-  var summerizeAfA = function () {
-    // image alt text
-    var counterAllImg = $(".oer-container img").length;
-    var counterImgWithAlt = $(".oer-container img").parent().children("meta[itemprop='has-alt-text'][content='true']").length;
-    var counterImgWithoutAlt = $(".oer-container img").parent().children("meta[itemprop='has-alt-text'][content='false']").length;
-    
-    var description = "all: " + counterAllImg + "; has alt: " + counterImgWithAlt + "; no alt: " + counterImgWithoutAlt;
-    
-    $(".afa-summary .img-alt").addClass("notbest");
+  // Propsed structure for the mapping btw each AfA property status and its tooltip text
+  var tooltipTextMapping = {
+    "altText": {
+      "green": "green text for img-alt %s",
+      "yellow": "yellow text for img-alt",
+      "red": "red text for img-alt",
+      "grey": "grey text for img-alt"
+    },
+    "dispTrans": {
+      "green": "green text for disp-trans",
+      "yellow": "yellow text for disp-trans",
+      "red": "red text for disp-trans",
+      "grey": "grey text for disp-trans"
+    }
+  };
 
-    fluid.tooltip(".afa-summary .img-alt", {
-      content: description
+  var updateUI = function (selector, description, tooltipText) {
+    $(".afa-summary "+selector).addClass("excellent");
+  
+    fluid.tooltip(".afa-summary " + selector, {
+      content: tooltipText
     });
+  
+  }
+
+  /**
+   * Each of these functions below check on one AfA property
+   * @param itemName: the defined name to identify having alt text on the OER content
+   *        itemProperty: the properties, including the used terminology or css selector, that 
+   *                      associate with the AfA item
+   * @returns A json string in the structure of 
+   *          {
+   *            "description": [string],
+   *            "tooltipText": [string]
+   *          }
+   */
+  
+  /**
+   * Check on the resources that require and have alt text, such as <img>
+   */
+  var checkAltText = function (itemName, itemProperty) {
+    var counterAllImg = $(".oer-container img").length;
+    var counterImgWithAlt = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
+    var counterImgWithoutAlt = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
+      
+    var description = "all: " + counterAllImg + "; has alt: " + counterImgWithAlt + "; no alt: " + counterImgWithoutAlt;
+    var tooltipText = tooltipTextMapping[itemName]["green"];
     
-    // body display transformable
-    var counterAllDispTrans = 4;
-    var dispTransValue = $(".oer-container meta[itemprop='is-display-transformable']").attr("content");
+    return {
+      "description": description,
+      "tooltipText": tooltipText
+    };
+  };
+  
+  var checkDispTrans = function (itemName, itemProperty) {
+    var counterAllDispTrans = 4, tooltipText;
+    
+    var dispTransValue = $(".oer-container meta[itemprop='" + itemProperty.name + "']").attr("content");
     var counterDispTrans = dispTransValue.split(" ").length;
 
-    description = counterDispTrans + " out of " + counterAllDispTrans + " are available.";
+    var description = counterDispTrans + " out of " + counterAllDispTrans + " are available.";
 
-    $(".afa-summary .disp-trans").addClass("excellent");
-
-    fluid.tooltip(".afa-summary .disp-trans", {
-        content: description
-      });
+    if (counterDispTrans === counterAllDispTrans) {
+      tooltipText = tooltipTextMapping[itemName]["green"];
+    } else {
+      tooltipText = tooltipTextMapping[itemName]["grey"];
+    }
+  
+    return {
+      "description": description,
+      "tooltipText": tooltipText
+    };
+  };
+  
+  // End of the functions that check on AfA properties
+  
+  /**
+   * Loop thru all AfA items to check on grade.
+   */
+  var summerizeAfA = function () {
+    var tooltipText, itemTagName;
+    
+    fluid.each(AfAProperties, function(itemProperty, itemName) {
+      var result;
       
+      if (itemName === "altText") {
+        result = checkAltText(itemName, itemProperty);
+      } else if (itemName === "dispTrans") {
+        result = checkDispTrans(itemName, itemProperty);
+      }
+      updateUI(itemProperty.selector, result["description"], result["tooltipText"]);
+    });
   };
   
   var addAfAToBody = function () {
@@ -58,3 +129,4 @@
   addAfAToBody();
   summerizeAfA();
 })();
+
