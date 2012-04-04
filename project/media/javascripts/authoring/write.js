@@ -511,7 +511,7 @@ WriteStep.prototype.focusOnNode = function ($node) {
 WriteStep.prototype.trackSelection = function () {
 
   // Rangy is not initialized?
-  if (!"getSelection" in rangy) {
+  if (!("getSelection" in rangy)) {
     return;
   }
 
@@ -1002,7 +1002,10 @@ WriteStep.prototype.initLinks = function () {
 
   this.$area.delegate("a", "click", function (e) {
     var $link = $(this);
-    if ($link.closest("tr.ui-column-controls,td.ui-row-controls").length) {
+    if ($link.closest("figure.download", editor.$area)) {
+      return;
+    }
+    if ($link.closest("tr.ui-column-controls,td.ui-row-controls", editor.$area).length) {
       return;
     }
     e.preventDefault();
