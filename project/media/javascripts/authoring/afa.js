@@ -2,6 +2,11 @@
 
   // Proposed structure for property names; not yet used
   var AfAProperties = {
+      mouseAccess: {
+          name: "is-mouse-accessible",
+          type: "boolean",
+          selector: ".mouse-access"
+      },
       altText: {
           name: "has-alt-text",
           type: "boolean",
@@ -74,6 +79,9 @@
     };
   };
   
+  /**
+   * Check on "display-transformable"
+   */
   var checkDispTrans = function (itemName, itemProperty) {
     var counterAllDispTrans = 4, tooltipText;
     
@@ -110,7 +118,10 @@
       } else if (itemName === "dispTrans") {
         result = checkDispTrans(itemName, itemProperty);
       }
-      updateUI(itemProperty.selector, result["description"], result["tooltipText"]);
+      
+      if (itemProperty.selector && result) {
+        updateUI(itemProperty.selector, result["description"], result["tooltipText"]);
+      }
     });
   };
   
