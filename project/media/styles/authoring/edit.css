@@ -184,13 +184,21 @@
   text-indent: -9999px;
   display: inline-block; }
 .afa-summary .mouse-access {
-  background: url(../../images/authoring/afa-base.gif) 100% 0 no-repeat; }
+  background: url(../../images/authoring/afa-grey.gif) 100% 0 no-repeat; }
 .afa-summary .disp-trans {
-  background: url(../../images/authoring/afa-base.gif) 100% 0 no-repeat; }
-.afa-summary .excellent {
-  background-image: url(../../images/authoring/afa-excellent.gif); }
-.afa-summary .notbest {
-  background-image: url(../../images/authoring/afa-notbest.gif); }
+  background: url(../../images/authoring/afa-grey.gif) 100% 0 no-repeat; }
+.afa-summary .green {
+  background-image: url(../../images/authoring/afa-green.gif); }
+.afa-summary .yellow {
+  background-image: url(../../images/authoring/afa-yellow.gif); }
+.afa-summary .red {
+  background-image: url(../../images/authoring/afa-red.gif); }
+
+.ui-tooltip {
+  padding: 5px; }
+  .ui-tooltip .ui-tooltip-content {
+    border: none;
+    padding-left: 13px; }
 
 .authoring-edit #slider {
   background-color: #F2F2F2; }

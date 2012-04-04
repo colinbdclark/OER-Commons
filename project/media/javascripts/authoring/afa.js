@@ -2,8 +2,7 @@ var afa = afa || {};
 
 (function() {
 
-  // Proposed structure for property names; not yet used
-  var AfAProperties = {
+  afa.AfAProperties = {
       mouseAccess: {
           name: "is-mouse-accessible",
           type: "boolean",
@@ -27,6 +26,7 @@ var afa = afa || {};
           name: "hazard",
           type: "vocabulary",
           values: ["flashing", "olfactory", "motion"],
+          selector: ".hazard",
           summaryfunc: "fluid.identity"
       }
   };
@@ -47,11 +47,19 @@ var afa = afa || {};
     }
   };
 
-  afa.updateUI = function (selector, description, tooltipText) {
-    $(".afa-summary "+selector).addClass("excellent");
+  afa.buildTooltipContent = function (string) {
+      return "<ul><li>"+string+"</li></ul>"
+  };
+
+  afa.updateUI = function (selector, level, tooltipText) {
+    $(".afa-summary "+selector).addClass(level);
   
     fluid.tooltip(".afa-summary " + selector, {
-      content: tooltipText
+      content: function () {
+          // TODO: The construction of the tooltip html will have to move earlier, since it
+          //       will be more specific to the different properties
+          return afa.buildTooltipContent(tooltipText);
+      }
     });
   
   }
@@ -76,12 +84,13 @@ var afa = afa || {};
     var counterImgWithAlt = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
     var counterImgWithoutAlt = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
       
-    var description = "all: " + counterAllImg + "; has alt: " + counterImgWithAlt + "; no alt: " + counterImgWithoutAlt;
+    var level = (counterImgWithAlt == counterAllImg ? "green" :
+                (counterImgWithAlt == 0 ? "red" : "yellow"));
     var tooltipText = tooltipTextMapping[itemName]["green"];
     
     return {
-      "description": description,
-      "tooltipText": tooltipText
+      level: level,
+      tooltipText: tooltipText
     };
   };
   
@@ -89,12 +98,13 @@ var afa = afa || {};
    * Check on "display-transformable"
    */
   afa.checkDispTrans = function (itemName, itemProperty) {
-    var counterAllDispTrans = 4, tooltipText;
+    var counterAllDispTrans = afa.AfAProperties.dispTrans.values.length, tooltipText;
     
     var dispTransValue = $(".oer-container meta[itemprop='" + itemProperty.name + "']").attr("content");
     var counterDispTrans = dispTransValue.split(" ").length;
 
-    var description = counterDispTrans + " out of " + counterAllDispTrans + " are available.";
+    var level = (counterDispTrans == counterAllDispTrans ? "green" :
+                (counterDispTrans == 0 ? "red" : "yellow"));
 
     if (counterDispTrans === counterAllDispTrans) {
       tooltipText = tooltipTextMapping[itemName]["green"];
@@ -103,8 +113,8 @@ var afa = afa || {};
     }
   
     return {
-      "description": description,
-      "tooltipText": tooltipText
+      level: level,
+      tooltipText: tooltipText
     };
   };
   
@@ -116,10 +126,11 @@ var afa = afa || {};
   afa.summerizeAfA = function () {
     var tooltipText, itemTagName;
     
-    fluid.each(AfAProperties, function(itemProperty, itemName) {
+    fluid.each(afa.AfAProperties, function(itemProperty, itemName) {
       var result = fluid.invokeGlobalFunction(itemProperty.summaryfunc, [itemName, itemProperty]);
-      if (itemProperty.selector && result) {
-          afa.updateUI(itemProperty.selector, result["description"], result["tooltipText"]);
+      // TODO: This if is only because fluid.identity returns the first argument
+      if (result !== itemName) {
+          afa.updateUI(itemProperty.selector, result["level"], result["tooltipText"]);
       }
     });
   };
@@ -131,7 +142,7 @@ var afa = afa || {};
     // TODO: These itemprop strings should not be hard-coded
     container.prepend('<meta itemprop="is-mouse-accessible" content="true"/>');
     container.prepend('<meta itemprop="is-mouse-accessible" content="false"/>');
-    container.prepend('<meta itemprop="is-display-transformable" content="font-size font-face foreground-colour background-colour"/>');
+    container.prepend('<meta itemprop="is-display-transformable" content="' + afa.AfAProperties.dispTrans.values.join(" ") + '"/>');
     container.prepend('<meta itemprop="has-ebook" content="false"/>');
     container.prepend('<meta itemprop="hazard" content=""/>');
   }

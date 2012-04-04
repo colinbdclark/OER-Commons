@@ -6,15 +6,26 @@
     display: inline-block;
   }
   .mouse-access {
-    background: url(../../images/authoring/afa-base.gif) 100% 0 no-repeat;
+    background: url(../../images/authoring/afa-grey.gif) 100% 0 no-repeat;
   }
   .disp-trans {
-    background: url(../../images/authoring/afa-base.gif) 100% 0 no-repeat;
+    background: url(../../images/authoring/afa-grey.gif) 100% 0 no-repeat;
   }
-  .excellent {
-    background-image: url(../../images/authoring/afa-excellent.gif);
+  .green {
+    background-image: url(../../images/authoring/afa-green.gif);
   }
-  .notbest {
-    background-image: url(../../images/authoring/afa-notbest.gif);
+  .yellow {
+    background-image: url(../../images/authoring/afa-yellow.gif);
+  }
+  .red {
+    background-image: url(../../images/authoring/afa-red.gif);
+  }
+}
+
+.ui-tooltip {
+  padding: 5px;
+  .ui-tooltip-content {
+      border: none;
+      padding-left: 13px;
   }
 }
