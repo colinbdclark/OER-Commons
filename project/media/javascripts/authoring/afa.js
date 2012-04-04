@@ -1,3 +1,5 @@
+var afa = afa || {};
+
 (function() {
 
   // Proposed structure for property names; not yet used
@@ -5,18 +7,21 @@
       altText: {
           name: "has-alt-text",
           type: "boolean",
-          selector: ".img-alt"
+          selector: ".img-alt",
+          summaryfunc: "afa.checkAltText"
       },
       dispTrans: {
           name: "is-display-transformable",
           type: "vocabulary",
           values: ["font-size", "font-face", "foreground-colour", "background-colour"],
-          selector: ".disp-trans"
+          selector: ".disp-trans",
+          summaryfunc: "afa.checkDispTrans"
       },
       hazard: {
           name: "hazard",
           type: "vocabulary",
-          values: ["flashing", "olfactory", "motion"]
+          values: ["flashing", "olfactory", "motion"],
+          summaryfunc: "fluid.identity"
       }
   };
 
@@ -36,7 +41,7 @@
     }
   };
 
-  var updateUI = function (selector, description, tooltipText) {
+  afa.updateUI = function (selector, description, tooltipText) {
     $(".afa-summary "+selector).addClass("excellent");
   
     fluid.tooltip(".afa-summary " + selector, {
@@ -60,7 +65,7 @@
   /**
    * Check on the resources that require and have alt text, such as <img>
    */
-  var checkAltText = function (itemName, itemProperty) {
+  afa.checkAltText = function (itemName, itemProperty) {
     var counterAllImg = $(".oer-container img").length;
     var counterImgWithAlt = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
     var counterImgWithoutAlt = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
@@ -74,7 +79,7 @@
     };
   };
   
-  var checkDispTrans = function (itemName, itemProperty) {
+  afa.checkDispTrans = function (itemName, itemProperty) {
     var counterAllDispTrans = 4, tooltipText;
     
     var dispTransValue = $(".oer-container meta[itemprop='" + itemProperty.name + "']").attr("content");
@@ -99,22 +104,16 @@
   /**
    * Loop thru all AfA items to check on grade.
    */
-  var summerizeAfA = function () {
+  afa.summerizeAfA = function () {
     var tooltipText, itemTagName;
     
     fluid.each(AfAProperties, function(itemProperty, itemName) {
-      var result;
-      
-      if (itemName === "altText") {
-        result = checkAltText(itemName, itemProperty);
-      } else if (itemName === "dispTrans") {
-        result = checkDispTrans(itemName, itemProperty);
-      }
-      updateUI(itemProperty.selector, result["description"], result["tooltipText"]);
+      var result = fluid.invokeGlobalFunction(itemProperty.summaryfunc, [itemName, itemProperty]);
+      afa.updateUI(itemProperty.selector, result["description"], result["tooltipText"]);
     });
   };
   
-  var addAfAToBody = function () {
+  afa.addAfAToBody = function () {
     var container = $(".oer-container");
     container.attr("itemscope", "");
 
@@ -126,7 +125,7 @@
     container.prepend('<meta itemprop="hazard" content=""/>');
   }
   
-  addAfAToBody();
-  summerizeAfA();
+  afa.addAfAToBody();
+  afa.summerizeAfA();
 })();
 
