@@ -24,10 +24,6 @@
         {{ toc }}
       </section>
 
-      <section id="afa">
-        {% include "authoring/include/afa.html" %}
-      </section>
-
       <section>
         <h2>Summary</h2>
         {{ object.summary }}
@@ -40,6 +36,10 @@
             <li>{{ goal }}</li>
           {% endfor %}
         </ul>
+      </section>
+
+      <section id="afa">
+        {% include "authoring/include/afa.html" %}
       </section>
 
       <section>
