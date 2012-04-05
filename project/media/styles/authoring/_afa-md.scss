@@ -1,27 +1,85 @@
 .afa-summary {
   .afa-icon {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
     text-indent: -9999px;
     display: inline-block;
+    background-position: 98% 0;
+    background-repeat: no-repeat;
   }
-  .mouse-access {
-    background: url(../../images/authoring/afa-grey.gif) 100% 0 no-repeat;
-  }
-  .disp-trans {
-    background: url(../../images/authoring/afa-grey.gif) 100% 0 no-repeat;
-  }
-  .green {
-    background-image: url(../../images/authoring/afa-green.gif);
-  }
-  .yellow {
-    background-image: url(../../images/authoring/afa-yellow.gif);
-  }
-  .red {
-    background-image: url(../../images/authoring/afa-red.gif);
-  }
+
+  /* General */
+  .mouse-access {background-image: url(../../images/icons-A4A/mouseaccess.png);}
+  .kbd-access {background-image: url(../../images/icons-A4A/keyboardaccess.png);}
+  .disp-trans {background-image: url(../../images/icons-A4A/displaytransformation.png);}
+  .colour-coding {background-image: url(../../images/icons-A4A/colorcoding.png);}
+  .ebook {background-image: url(../../images/icons-A4A/ebook.png);}
+  .hazard {background-image: url(../../images/icons-A4A/hazard.png);}
+  .translation {background-image: url(../../images/icons-A4A/translation.png);}
+  .audio-adapt {background-image: url(../../images/icons-A4A/audio.png);}
+  .visual-adapt {background-image: url(../../images/icons-A4A/visual.png);}
+
+  /* Images, Videos */
+  .alt-text,
+  .text-alt,
+  .captions {background-image: url(../../images/icons-A4A/textalternative.png);}
+  .img-long-desc {background-image: url(../../images/icons-A4A/longdescription.png);}
+  .sign-lang {background-image: url(../../images/icons-A4A/sign.png);}
+
+  /* Levels */
+  .green {background-position: 0 0;}
+  .yellow {background-position: 33% 0;}
+  .red {background-position: 66% 0;}
 }
 
+/* High Contrast */
+.fl-theme-uio-bw .afa-summary,
+.fl-theme-uio-by .afa-summary {
+  .mouse-access {background-image: url(../../images/icons-A4A/mouseaccess-black.png);}
+  .disp-trans {background-image: url(../../images/icons-A4A/displaytransformation-black.png);}
+  .kbd-access {background-image: url(../../images/icons-A4A/keyboardaccess-black.png);}
+  .colour-coding {background-image: url(../../images/icons-A4A/colorcoding-black.png);}
+  .ebook {background-image: url(../../images/icons-A4A/ebook-black.png);}
+  .hazard {background-image: url(../../images/icons-A4A/hazard-black.png);}
+  .translation {background-image: url(../../images/icons-A4A/translation-black.png);}
+  .audio-adapt {background-image: url(../../images/icons-A4A/audio-black.png);}
+  .visual-adapt {background-image: url(../../images/icons-A4A/visual-black.png);}
+  .alt-text, .text-alt, .captions {background-image: url(../../images/icons-A4A/textalternative-black.png);}
+  .img-long-desc {background-image: url(../../images/icons-A4A/longdescription-black.png);}
+  .sign-lang {background-image: url(../../images/icons-A4A/sign-black.png);}
+}
+
+.fl-theme-uio-wb .afa-summary {
+  .mouse-access {background-image: url(../../images/icons-A4A/mouseaccess-white.png);}
+  .disp-trans {background-image: url(../../images/icons-A4A/displaytransformation-white.png);}
+  .kbd-access {background-image: url(../../images/icons-A4A/keyboardaccess-white.png);}
+  .colour-coding {background-image: url(../../images/icons-A4A/colorcoding-white.png);}
+  .ebook {background-image: url(../../images/icons-A4A/ebook-white.png);}
+  .hazard {background-image: url(../../images/icons-A4A/hazard-white.png);}
+  .translation {background-image: url(../../images/icons-A4A/translation-white.png);}
+  .audio-adapt {background-image: url(../../images/icons-A4A/audio-white.png);}
+  .visual-adapt {background-image: url(../../images/icons-A4A/visual-white.png);}
+  .alt-text, .text-alt, .captions {background-image: url(../../images/icons-A4A/textalternative-white.png);}
+  .img-long-desc {background-image: url(../../images/icons-A4A/longdescription-white.png);}
+  .sign-lang {background-image: url(../../images/icons-A4A/sign-white.png);}
+}
+
+.fl-theme-uio-yb .afa-summary {
+  .mouse-access {background-image: url(../../images/icons-A4A/mouseaccess-yellow.png);}
+  .disp-trans {background-image: url(../../images/icons-A4A/displaytransformation-yellow.png);}
+  .kbd-access {background-image: url(../../images/icons-A4A/keyboardaccess-yellow.png);}
+  .colour-coding {background-image: url(../../images/icons-A4A/colorcoding-yellow.png);}
+  .ebook {background-image: url(../../images/icons-A4A/ebook-yellow.png);}
+  .hazard {background-image: url(../../images/icons-A4A/hazard-yellow.png);}
+  .translation {background-image: url(../../images/icons-A4A/translation-yellow.png);}
+  .audio-adapt {background-image: url(../../images/icons-A4A/audio-yellow.png);}
+  .visual-adapt {background-image: url(../../images/icons-A4A/visual-yellow.png);}
+  .alt-text, .text-alt, .captions {background-image: url(../../images/icons-A4A/textalternative-yellow.png);}
+  .img-long-desc {background-image: url(../../images/icons-A4A/longdescription-yellow.png);}
+  .sign-lang {background-image: url(../../images/icons-A4A/sign-yellow.png);}
+}
+
+/* Tooltip */
 .ui-tooltip {
   padding: 5px;
   .ui-tooltip-content {

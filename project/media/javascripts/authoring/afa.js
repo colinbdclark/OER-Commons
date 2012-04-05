@@ -15,12 +15,6 @@ var afa = afa || {};
           selector: ".kbd-access",
           summaryfunc: "afa.checkA11y"
       },
-      altText: {
-          name: "has-alt-text",
-          type: "boolean",
-          selector: ".img-alt",
-          summaryfunc: "afa.checkAltText"
-      },
       dispTrans: {
           name: "is-display-transformable",
           type: "vocabulary",
@@ -34,12 +28,35 @@ var afa = afa || {};
           selector: ".ebook",
           summaryfunc: "afa.checkEbook"
       },
+      colourCode: {
+          name: "uses-colour-coding ",
+          type: "unknown",
+          selector: ".colour-coding",
+          summaryfunc: "afa.unknown"
+      },
       hazard: {
-          name: "hazard",
-          type: "vocabulary",
-          values: ["flashing", "olfactory", "motion"],
+          name: "has-hazard ",
+          type: "unknown",
           selector: ".hazard",
-          summaryfunc: "fluid.identity"
+          summaryfunc: "afa.unknown"
+      },
+      altText: {
+        name: "has-alt-text",
+        type: "boolean",
+        selector: ".alt-text",
+        summaryfunc: "afa.checkImgProp"
+      },
+      audioAdapt: {
+        name: "has-audio-representation",
+        type: "boolean",
+        selector: ".audio-adapt",
+        summaryfunc: "afa.checkImgProp"
+      },
+      imgLongDesc: {
+        name: "has-long-description",
+        type: "boolean",
+        selector: ".img-long-desc",
+        summaryfunc: "afa.checkImgProp"
       }
   };
 
@@ -57,12 +74,6 @@ var afa = afa || {};
       red: "It is not possible to operate the resource using the keyboard only",
       grey: "Cannot determine whether it is possible to operate the resource using the keyboard only"
     },
-    altText: {
-      green: "green text for img-alt %s",
-      yellow: "yellow text for img-alt",
-      red: "red text for img-alt",
-      grey: "grey text for img-alt"
-    },
     dispTrans: {
       green: "green text for disp-trans",
       yellow: "yellow text for disp-trans",
@@ -74,6 +85,30 @@ var afa = afa || {};
       yellow: "yellow text for ebook",
       red: "red text for ebook",
       grey: "grey text for ebook"
+    },
+    colourCode: {
+      grey: "grey text for colourCode"
+    },
+    hazard: {
+      grey: "grey text for hazard"
+    },
+    altText: {
+      green: "green text for img-alt",
+      yellow: "yellow text for img-alt",
+      red: "red text for img-alt",
+      grey: "grey text for img-alt"
+    },
+    audioAdapt: {
+      green: "green text for audioAdapt",
+      yellow: "yellow text for audioAdapt",
+      red: "red text for audioAdapt",
+      grey: "grey text for audioAdapt"
+    },
+    imgLongDesc: {
+      green: "green text for imgLongDesc",
+      yellow: "yellow text for imgLongDesc",
+      red: "red text for imgLongDesc",
+      grey: "grey text for imgLongDesc"
     }
   };
 
@@ -107,20 +142,19 @@ var afa = afa || {};
    */
   
   /**
-   * Check on the resources that require and have alt text, such as <img>
+   * Check on AfA properties specifically used by <img>, for example, has-alt-text
    */
-  afa.checkAltText = function (itemName, itemProperty) {
-    var counterAllImg = $(".oer-container img").length;
-    var counterImgWithAlt = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
-    var counterImgWithoutAlt = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
+  afa.checkImgProp = function (itemName, itemProperty) {
+    var total = $(".oer-container img").length;
+    var yes = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
+    var no = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
       
-    var level = (counterImgWithAlt == counterAllImg ? "green" :
-                (counterImgWithAlt == 0 ? "red" : "yellow"));
+    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total && total === 0 ? "green" : (no === total ? "red" : "yellow")));
     
     return {
       level: level,
       // TODO: Constructing tooltip text will become more complex, as we will combine multiple strings
-      tooltipText: tooltipTextMapping[itemName][level]
+      tooltipText: tooltipTextMapping[itemName][level] + "; " + level
     };
   };
   
@@ -133,24 +167,23 @@ var afa = afa || {};
     
     // Get expected number of dispTrans values
     var totalNumOfVideos = $(".oer-container figure.embed.video").length;
-    var expectedDispTransVals = (totalNumOfVideos + 1) * numOfValsForEachDispTrans; // includes <body> + all videos
+    var total = (totalNumOfVideos + 1) * numOfValsForEachDispTrans; // includes <body> + all videos
 
     // find number of display-transformable values on <body>
     var dispTransValue = $(".oer-container meta[itemprop='" + itemProperty.name + "']").attr("content");
-    var counterDispTrans = dispTransValue.split(" ").length;
+    var yes = dispTransValue.split(" ").length;
 
     // find number of display-transformable values on videos
     $(".oer-container figure.embed.video meta[itemprop='" + itemProperty.name + "']").each(function (index){
       var attrValue = $(this).attr("content");
       if (attrValue) {
-        counterDispTrans += attrValue.split(" ").length;
+        yes += attrValue.split(" ").length;
       } else {
-          counterDispTrans += 0;
+          yes += 0;
       }
     });
 
-    var level = (counterDispTrans == expectedDispTransVals ? "green" :
-                (counterDispTrans == 0 ? "red" : "yellow"));
+    var level = (yes === total ? "green" : (yes === 0 ? "red" : "yellow"));
 
     return {
       level: level,
@@ -172,7 +205,7 @@ var afa = afa || {};
     var no = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
     var dunno = itemsThatQualify.length - haveProp;
 
-    var level = (total == 0 ? "grey" : (yes == total ? "green" : (no == total ? "red" : "yellow")));
+    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total && total === 0 ? "green" : (no === total ? "red" : "yellow")));
 
     return {
       level: level,
@@ -189,11 +222,21 @@ var afa = afa || {};
     var yes = $(".oer-container meta[itemprop='" + itemProperty.name + "'][content='true']").length;
     var no = $(".oer-container meta[itemprop='" + itemProperty.name + "'][content='false']").length;
 
-    var level = (yes === 0 && no === 0 ? "grey" : (yes == total ? "green" : (no == total ? "red" : "yellow")));
+    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total && total === 0 ? "green" : (no === total ? "red" : "yellow")));
 
     return {
       level: level,
       tooltipText: tooltipTextMapping[itemName][level]
+    };
+  };
+  
+  /**
+   * Check on "unknown" type
+   */
+  afa.unknown = function (itemName, itemProperty) {
+    return {
+      level: "grey",
+      tooltipText: tooltipTextMapping[itemName]["grey"]
     };
   };
   
