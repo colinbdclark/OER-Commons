@@ -24,27 +24,27 @@ dl.user-info dt {
 }
 
 
-.myitems .portlet.my-items-views ul {
+.myitems .my-items-views {
   margin: 0 3px 0 0;
   padding: 0;
   list-style-type: none;
   font-size: 14px;
 }
 
-.portlet.my-items-views a {
+.my-items-views a {
   text-decoration: none;
 }
 
-.portlet.my-items-views li {
+.my-items-views li {
   padding: 2px 0 2px 3px;
 }
 
-.portlet.my-items-views .view a.folder-text {
+.my-items-views .view a.folder-text {
   color: #1F4D64;
 }
 
 
-.portlet.my-items-views li.selected {
+.my-items-views li.selected {
   background-color: #D5D5FF;
 }
 
@@ -54,6 +54,7 @@ dl.user-info dt {
   border-top-left-radius: 6px 6px;
   border-top-right-radius: 6px 6px;
   padding: 2px 6px 0 6px;
+  margin-bottom: 0;
   font-weight: bold;
 }
 
@@ -99,7 +100,7 @@ section.my-items-views li {
   width: 100%;
 }
 
-#folder-create-form input {
+.folder-create-form input {
   display: none;
 }
 
@@ -283,7 +284,6 @@ section.my-items-views li {
 .myitems .my-items-views .folder.to-delete .confirm {
   border: solid;
   border-width: 1px;
-  border-radius: 3px;
   padding: 1px 3px;
   margin-left: 35px;
 }
