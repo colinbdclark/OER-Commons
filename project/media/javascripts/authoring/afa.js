@@ -302,6 +302,17 @@ var afa = afa || {};
   // TODO: Should this call be somewhere else? in the save process, maybe?
   afa.addAfAToBody();
 
+  afa.addAfAToImage = function (img, hasAlt) {
+      // TODO: These itemprop names should not be hard-coded
+      img.wrap('<p itemscope />');
+      if (hasAlt) {
+        img.after('<meta itemprop="has-alt-text" content="true"/>');
+      } else {
+        img.after('<meta itemprop="has-alt-text" content="false"/>');
+      }
+      img.after('<meta itemprop="has-audio-representation" content="false"/>');
+      img.after('<meta itemprop="has-long-description" content="false"/>');
+  };
 
   afa.summerizeAfA();
 })();
