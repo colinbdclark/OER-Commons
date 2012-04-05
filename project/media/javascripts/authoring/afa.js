@@ -253,7 +253,19 @@ var afa = afa || {};
     container.prepend('<meta itemprop="hazard" content=""/>');
   }
   
+  afa.addAfAToEmbeddedVideo = function (figure) {
+      // NOTE: These values are valid for currently-supported embedded youtube videos only
+      // TODO: These itemprop names should not be hard-coded
+      figure.attr("itemscope", "");
+      figure.prepend('<meta itemprop="is-mouse-accessible" content="true"/>');
+      figure.prepend('<meta itemprop="has-transcript" content="false"/>');
+      figure.prepend('<meta itemprop="is-display-transformable" content=""/>');
+  };
+
+  // TODO: Should this call be somewhere else? in the save process, maybe?
   afa.addAfAToBody();
+
+
   afa.summerizeAfA();
 })();
 
