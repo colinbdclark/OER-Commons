@@ -69,6 +69,18 @@ var afa = afa || {};
         type: "boolean",
         selector: ".audio-visual-adapt",
         summaryfunc: "afa.alwaysFalse"  // ToDo: needs an actual summary function eventually
+      },
+      videoAudioAdapt: {
+        name: "has-audio-description",
+        type: "boolean",
+        selector: ".video-audio-adapt",
+        summaryfunc: "afa.unknown"  // ToDo: needs an actual summary function eventually
+      },
+      videoVisualAdapt: {
+        name: "has-visual-representation",
+        type: "boolean",
+        selector: ".video-visual-adapt",
+        summaryfunc: "afa.unknown"  // ToDo: needs an actual summary function eventually
       }
   };
 
@@ -141,6 +153,18 @@ var afa = afa || {};
       yellow: "yellow text for audioVisualAdapt",
       red: "red text for audioVisualAdapt",
       grey: "grey text for audioVisualAdapt"
+    },
+    videoAudioAdapt: {
+      green: "green text for videoAudioAdapt",
+      yellow: "yellow text for videoAudioAdapt",
+      red: "red text for videoAudioAdapt",
+      grey: "grey text for videoAudioAdapt"
+    },
+    videoVisualAdapt: {
+      green: "green text for videoVisualAdapt",
+      yellow: "yellow text for videoVisualAdapt",
+      red: "red text for videoVisualAdapt",
+      grey: "grey text for videoVisualAdapt"
     }
   };
 
