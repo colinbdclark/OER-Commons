@@ -18,9 +18,6 @@
       text-shadow: 1px 1px 1px #fff;
       color: #989898;
       margin-bottom: 10px; }
-    .column-left section h3 {
-      color: #989898;
-      margin-bottom: 5px; }
   .column-left li {
     padding: 5px 0; }
   .column-left ul {
@@ -158,16 +155,30 @@
       color: #39c; }
 
 .afa-summary {
+  background-color: #f2f2f2;
+  padding: 0.5em;
   /* General */
   /* Images, Videos */
   /* Levels */ }
+  .afa-summary h3 {
+    color: #666666;
+    margin-bottom: 5px;
+    font-style: italic;
+    font-size: 1.2em; }
+  .afa-summary h4 {
+    color: #666666;
+    text-transform: uppercase; }
   .afa-summary .afa-icon {
-    width: 50px;
-    height: 50px;
+    width: 25px;
+    height: 25px;
     text-indent: -9999px;
     display: inline-block;
     background-position: 98% 0;
-    background-repeat: no-repeat; }
+    background-repeat: no-repeat;
+    background-size: cover; }
+  .afa-summary .afa-track-right {
+    border-left: 1px solid black;
+    padding-left: 0.5em; }
   .afa-summary .mouse-access {
     background-image: url(../../images/icons-A4A/mouseaccess.png); }
   .afa-summary .kbd-access {
@@ -202,94 +213,101 @@
     background-position: 66% 0; }
 
 /* High Contrast */
-.fl-theme-uio-bw .afa-summary .mouse-access,
-.fl-theme-uio-by .afa-summary .mouse-access {
-  background-image: url(../../images/icons-A4A/mouseaccess-black.png); }
-.fl-theme-uio-bw .afa-summary .disp-trans,
-.fl-theme-uio-by .afa-summary .disp-trans {
-  background-image: url(../../images/icons-A4A/displaytransformation-black.png); }
-.fl-theme-uio-bw .afa-summary .kbd-access,
-.fl-theme-uio-by .afa-summary .kbd-access {
-  background-image: url(../../images/icons-A4A/keyboardaccess-black.png); }
-.fl-theme-uio-bw .afa-summary .colour-coding,
-.fl-theme-uio-by .afa-summary .colour-coding {
-  background-image: url(../../images/icons-A4A/colorcoding-black.png); }
-.fl-theme-uio-bw .afa-summary .ebook,
-.fl-theme-uio-by .afa-summary .ebook {
-  background-image: url(../../images/icons-A4A/ebook-black.png); }
-.fl-theme-uio-bw .afa-summary .hazard,
-.fl-theme-uio-by .afa-summary .hazard {
-  background-image: url(../../images/icons-A4A/hazard-black.png); }
-.fl-theme-uio-bw .afa-summary .translation,
-.fl-theme-uio-by .afa-summary .translation {
-  background-image: url(../../images/icons-A4A/translation-black.png); }
-.fl-theme-uio-bw .afa-summary .audio-adapt,
-.fl-theme-uio-by .afa-summary .audio-adapt {
-  background-image: url(../../images/icons-A4A/audio-black.png); }
-.fl-theme-uio-bw .afa-summary .visual-adapt,
-.fl-theme-uio-by .afa-summary .visual-adapt {
-  background-image: url(../../images/icons-A4A/visual-black.png); }
-.fl-theme-uio-bw .afa-summary .alt-text, .fl-theme-uio-bw .afa-summary .text-alt, .fl-theme-uio-bw .afa-summary .captions,
-.fl-theme-uio-by .afa-summary .alt-text,
-.fl-theme-uio-by .afa-summary .text-alt,
-.fl-theme-uio-by .afa-summary .captions {
-  background-image: url(../../images/icons-A4A/textalternative-black.png); }
-.fl-theme-uio-bw .afa-summary .img-long-desc,
-.fl-theme-uio-by .afa-summary .img-long-desc {
-  background-image: url(../../images/icons-A4A/longdescription-black.png); }
-.fl-theme-uio-bw .afa-summary .sign-lang,
-.fl-theme-uio-by .afa-summary .sign-lang {
-  background-image: url(../../images/icons-A4A/sign-black.png); }
+.fl-theme-uio-bw .afa-summary,
+.fl-theme-uio-by .afa-summary {
+  border: 1px solid #000000; }
+  .fl-theme-uio-bw .afa-summary .mouse-access,
+  .fl-theme-uio-by .afa-summary .mouse-access {
+    background-image: url(../../images/icons-A4A/mouseaccess-black.png); }
+  .fl-theme-uio-bw .afa-summary .disp-trans,
+  .fl-theme-uio-by .afa-summary .disp-trans {
+    background-image: url(../../images/icons-A4A/displaytransformation-black.png); }
+  .fl-theme-uio-bw .afa-summary .kbd-access,
+  .fl-theme-uio-by .afa-summary .kbd-access {
+    background-image: url(../../images/icons-A4A/keyboardaccess-black.png); }
+  .fl-theme-uio-bw .afa-summary .colour-coding,
+  .fl-theme-uio-by .afa-summary .colour-coding {
+    background-image: url(../../images/icons-A4A/colorcoding-black.png); }
+  .fl-theme-uio-bw .afa-summary .ebook,
+  .fl-theme-uio-by .afa-summary .ebook {
+    background-image: url(../../images/icons-A4A/ebook-black.png); }
+  .fl-theme-uio-bw .afa-summary .hazard,
+  .fl-theme-uio-by .afa-summary .hazard {
+    background-image: url(../../images/icons-A4A/hazard-black.png); }
+  .fl-theme-uio-bw .afa-summary .translation,
+  .fl-theme-uio-by .afa-summary .translation {
+    background-image: url(../../images/icons-A4A/translation-black.png); }
+  .fl-theme-uio-bw .afa-summary .audio-adapt,
+  .fl-theme-uio-by .afa-summary .audio-adapt {
+    background-image: url(../../images/icons-A4A/audio-black.png); }
+  .fl-theme-uio-bw .afa-summary .visual-adapt,
+  .fl-theme-uio-by .afa-summary .visual-adapt {
+    background-image: url(../../images/icons-A4A/visual-black.png); }
+  .fl-theme-uio-bw .afa-summary .alt-text, .fl-theme-uio-bw .afa-summary .text-alt, .fl-theme-uio-bw .afa-summary .captions,
+  .fl-theme-uio-by .afa-summary .alt-text,
+  .fl-theme-uio-by .afa-summary .text-alt,
+  .fl-theme-uio-by .afa-summary .captions {
+    background-image: url(../../images/icons-A4A/textalternative-black.png); }
+  .fl-theme-uio-bw .afa-summary .img-long-desc,
+  .fl-theme-uio-by .afa-summary .img-long-desc {
+    background-image: url(../../images/icons-A4A/longdescription-black.png); }
+  .fl-theme-uio-bw .afa-summary .sign-lang,
+  .fl-theme-uio-by .afa-summary .sign-lang {
+    background-image: url(../../images/icons-A4A/sign-black.png); }
 
-.fl-theme-uio-wb .afa-summary .mouse-access {
-  background-image: url(../../images/icons-A4A/mouseaccess-white.png); }
-.fl-theme-uio-wb .afa-summary .disp-trans {
-  background-image: url(../../images/icons-A4A/displaytransformation-white.png); }
-.fl-theme-uio-wb .afa-summary .kbd-access {
-  background-image: url(../../images/icons-A4A/keyboardaccess-white.png); }
-.fl-theme-uio-wb .afa-summary .colour-coding {
-  background-image: url(../../images/icons-A4A/colorcoding-white.png); }
-.fl-theme-uio-wb .afa-summary .ebook {
-  background-image: url(../../images/icons-A4A/ebook-white.png); }
-.fl-theme-uio-wb .afa-summary .hazard {
-  background-image: url(../../images/icons-A4A/hazard-white.png); }
-.fl-theme-uio-wb .afa-summary .translation {
-  background-image: url(../../images/icons-A4A/translation-white.png); }
-.fl-theme-uio-wb .afa-summary .audio-adapt {
-  background-image: url(../../images/icons-A4A/audio-white.png); }
-.fl-theme-uio-wb .afa-summary .visual-adapt {
-  background-image: url(../../images/icons-A4A/visual-white.png); }
-.fl-theme-uio-wb .afa-summary .alt-text, .fl-theme-uio-wb .afa-summary .text-alt, .fl-theme-uio-wb .afa-summary .captions {
-  background-image: url(../../images/icons-A4A/textalternative-white.png); }
-.fl-theme-uio-wb .afa-summary .img-long-desc {
-  background-image: url(../../images/icons-A4A/longdescription-white.png); }
-.fl-theme-uio-wb .afa-summary .sign-lang {
-  background-image: url(../../images/icons-A4A/sign-white.png); }
+.fl-theme-uio-wb .afa-summary {
+  border: 1px solid #FFFFFF; }
+  .fl-theme-uio-wb .afa-summary .mouse-access {
+    background-image: url(../../images/icons-A4A/mouseaccess-white.png); }
+  .fl-theme-uio-wb .afa-summary .disp-trans {
+    background-image: url(../../images/icons-A4A/displaytransformation-white.png); }
+  .fl-theme-uio-wb .afa-summary .kbd-access {
+    background-image: url(../../images/icons-A4A/keyboardaccess-white.png); }
+  .fl-theme-uio-wb .afa-summary .colour-coding {
+    background-image: url(../../images/icons-A4A/colorcoding-white.png); }
+  .fl-theme-uio-wb .afa-summary .ebook {
+    background-image: url(../../images/icons-A4A/ebook-white.png); }
+  .fl-theme-uio-wb .afa-summary .hazard {
+    background-image: url(../../images/icons-A4A/hazard-white.png); }
+  .fl-theme-uio-wb .afa-summary .translation {
+    background-image: url(../../images/icons-A4A/translation-white.png); }
+  .fl-theme-uio-wb .afa-summary .audio-adapt {
+    background-image: url(../../images/icons-A4A/audio-white.png); }
+  .fl-theme-uio-wb .afa-summary .visual-adapt {
+    background-image: url(../../images/icons-A4A/visual-white.png); }
+  .fl-theme-uio-wb .afa-summary .alt-text, .fl-theme-uio-wb .afa-summary .text-alt, .fl-theme-uio-wb .afa-summary .captions {
+    background-image: url(../../images/icons-A4A/textalternative-white.png); }
+  .fl-theme-uio-wb .afa-summary .img-long-desc {
+    background-image: url(../../images/icons-A4A/longdescription-white.png); }
+  .fl-theme-uio-wb .afa-summary .sign-lang {
+    background-image: url(../../images/icons-A4A/sign-white.png); }
 
-.fl-theme-uio-yb .afa-summary .mouse-access {
-  background-image: url(../../images/icons-A4A/mouseaccess-yellow.png); }
-.fl-theme-uio-yb .afa-summary .disp-trans {
-  background-image: url(../../images/icons-A4A/displaytransformation-yellow.png); }
-.fl-theme-uio-yb .afa-summary .kbd-access {
-  background-image: url(../../images/icons-A4A/keyboardaccess-yellow.png); }
-.fl-theme-uio-yb .afa-summary .colour-coding {
-  background-image: url(../../images/icons-A4A/colorcoding-yellow.png); }
-.fl-theme-uio-yb .afa-summary .ebook {
-  background-image: url(../../images/icons-A4A/ebook-yellow.png); }
-.fl-theme-uio-yb .afa-summary .hazard {
-  background-image: url(../../images/icons-A4A/hazard-yellow.png); }
-.fl-theme-uio-yb .afa-summary .translation {
-  background-image: url(../../images/icons-A4A/translation-yellow.png); }
-.fl-theme-uio-yb .afa-summary .audio-adapt {
-  background-image: url(../../images/icons-A4A/audio-yellow.png); }
-.fl-theme-uio-yb .afa-summary .visual-adapt {
-  background-image: url(../../images/icons-A4A/visual-yellow.png); }
-.fl-theme-uio-yb .afa-summary .alt-text, .fl-theme-uio-yb .afa-summary .text-alt, .fl-theme-uio-yb .afa-summary .captions {
-  background-image: url(../../images/icons-A4A/textalternative-yellow.png); }
-.fl-theme-uio-yb .afa-summary .img-long-desc {
-  background-image: url(../../images/icons-A4A/longdescription-yellow.png); }
-.fl-theme-uio-yb .afa-summary .sign-lang {
-  background-image: url(../../images/icons-A4A/sign-yellow.png); }
+.fl-theme-uio-yb .afa-summary {
+  border: 1px solid #FFFF00; }
+  .fl-theme-uio-yb .afa-summary .mouse-access {
+    background-image: url(../../images/icons-A4A/mouseaccess-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .disp-trans {
+    background-image: url(../../images/icons-A4A/displaytransformation-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .kbd-access {
+    background-image: url(../../images/icons-A4A/keyboardaccess-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .colour-coding {
+    background-image: url(../../images/icons-A4A/colorcoding-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .ebook {
+    background-image: url(../../images/icons-A4A/ebook-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .hazard {
+    background-image: url(../../images/icons-A4A/hazard-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .translation {
+    background-image: url(../../images/icons-A4A/translation-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .audio-adapt {
+    background-image: url(../../images/icons-A4A/audio-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .visual-adapt {
+    background-image: url(../../images/icons-A4A/visual-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .alt-text, .fl-theme-uio-yb .afa-summary .text-alt, .fl-theme-uio-yb .afa-summary .captions {
+    background-image: url(../../images/icons-A4A/textalternative-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .img-long-desc {
+    background-image: url(../../images/icons-A4A/longdescription-yellow.png); }
+  .fl-theme-uio-yb .afa-summary .sign-lang {
+    background-image: url(../../images/icons-A4A/sign-yellow.png); }
 
 /* Tooltip */
 .ui-tooltip {

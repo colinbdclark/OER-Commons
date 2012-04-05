@@ -1,11 +1,28 @@
 .afa-summary {
+  background-color: #f2f2f2;
+  padding: 0.5em;
+  h3 {
+    color: #666666;
+    margin-bottom: 5px;
+    font-style: italic;
+    font-size: 1.2em;
+  }
+  h4 {
+    color: #666666;
+    text-transform: uppercase;
+  }
   .afa-icon {
-    width: 50px;
-    height: 50px;
+    width: 25px;
+    height: 25px;
     text-indent: -9999px;
     display: inline-block;
     background-position: 98% 0;
     background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .afa-track-right {
+    border-left: 1px solid black;
+    padding-left: 0.5em;
   }
 
   /* General */
@@ -35,6 +52,7 @@
 /* High Contrast */
 .fl-theme-uio-bw .afa-summary,
 .fl-theme-uio-by .afa-summary {
+  border: 1px solid #000000;
   .mouse-access {background-image: url(../../images/icons-A4A/mouseaccess-black.png);}
   .disp-trans {background-image: url(../../images/icons-A4A/displaytransformation-black.png);}
   .kbd-access {background-image: url(../../images/icons-A4A/keyboardaccess-black.png);}
@@ -50,6 +68,7 @@
 }
 
 .fl-theme-uio-wb .afa-summary {
+  border: 1px solid #FFFFFF;
   .mouse-access {background-image: url(../../images/icons-A4A/mouseaccess-white.png);}
   .disp-trans {background-image: url(../../images/icons-A4A/displaytransformation-white.png);}
   .kbd-access {background-image: url(../../images/icons-A4A/keyboardaccess-white.png);}
@@ -65,6 +84,7 @@
 }
 
 .fl-theme-uio-yb .afa-summary {
+  border: 1px solid #FFFF00;
   .mouse-access {background-image: url(../../images/icons-A4A/mouseaccess-yellow.png);}
   .disp-trans {background-image: url(../../images/icons-A4A/displaytransformation-yellow.png);}
   .kbd-access {background-image: url(../../images/icons-A4A/keyboardaccess-yellow.png);}

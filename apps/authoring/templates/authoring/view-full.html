@@ -38,15 +38,15 @@
         </ul>
       </section>
 
-      <section id="afa">
-        {% include "authoring/include/afa.html" %}
-      </section>
-
       <section>
         <a href="{{ object.get_absolute_url }}"><strong>"{{ object.title }}"</strong></a>
         {{ object.modified_timestamp|date:"Y" }}
         by <a href="#">{{ material.author }}</a>
         <br/>under <a href="{{ object.license.url }}">{{ object.license.name }}</a>
+      </section>
+
+      <section id="afa">
+        {% include "authoring/include/afa.html" %}
       </section>
 
     </div>
