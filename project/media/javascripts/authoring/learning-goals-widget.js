@@ -13,7 +13,7 @@
         label = $(this);
         input = label.next();
         label.hide();
-        input.show();
+        input.show().focus();
       });
       this.widget.delegate("a.delete", "click", function(e) {
         var parent;
@@ -37,10 +37,12 @@
         parent.next().find("input").focus();
       });
       this.widget.delegate("li:not(.new) input", "keyup", function(e) {
-        var input;
+        var input, parent;
         input = $(e.target);
         if (e.which !== 13) return;
-        input.parent().next().find("input").focus();
+        parent = input.parent();
+        parent.find("span").text(input.val()).show();
+        input.hide();
       });
     }
 

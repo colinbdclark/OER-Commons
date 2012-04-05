@@ -21,6 +21,8 @@ import string
 class LearningGoalsWidget(forms.Widget):
 
     def render(self, name, value, attrs=None):
+        attrs = attrs or {}
+        attrs["autocomplete"] = "off"
         if not value: value = []
         existing = []
         for v in value:
