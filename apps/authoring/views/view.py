@@ -47,7 +47,11 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
             embed.removeAttr("data-url")
             caption = embed.find("figcaption").outerHtml()
             if embed.hasClass("video"):
+                embed.attr("itemscope", "")
                 content = u"""
+                    <meta itemprop="is-mouse-accessible" content="true"/>
+                    <meta itemprop="has-transcript" content="false"/>
+                    <meta itemprop="is-display-transformable" content=""/>
                     <script type="text/javascript" src="http://s3.www.universalsubtitles.org/embed.js">
                       ({
                            video_url: "%s",

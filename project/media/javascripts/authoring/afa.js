@@ -86,7 +86,7 @@ var afa = afa || {};
       
     var level = (counterImgWithAlt == counterAllImg ? "green" :
                 (counterImgWithAlt == 0 ? "red" : "yellow"));
-    var tooltipText = tooltipTextMapping[itemName]["green"];
+    var tooltipText = tooltipTextMapping[itemName][level];
     
     return {
       level: level,
@@ -98,19 +98,31 @@ var afa = afa || {};
    * Check on "display-transformable"
    */
   afa.checkDispTrans = function (itemName, itemProperty) {
-    var counterAllDispTrans = afa.AfAProperties.dispTrans.values.length, tooltipText;
+    var numOfValsForEachDispTrans = afa.AfAProperties.dispTrans.values.length;
+    var tooltipText;
     
+    // Get expected number of dispTrans values
+    var totalNumOfVideos = $(".oer-container figure.embed.video").length;
+    var expectedDispTransVals = (totalNumOfVideos + 1) * numOfValsForEachDispTrans; // includes <body> + all videos
+
+    // find number of display-transformable values on <body>
     var dispTransValue = $(".oer-container meta[itemprop='" + itemProperty.name + "']").attr("content");
     var counterDispTrans = dispTransValue.split(" ").length;
 
-    var level = (counterDispTrans == counterAllDispTrans ? "green" :
+    // find number of display-transformable values on videos
+    $(".oer-container figure.embed.video meta[itemprop='" + itemProperty.name + "']").each(function (index){
+      var attrValue = $(this).attr("content");
+      if (attrValue) {
+        counterDispTrans += attrValue.split(" ").length;
+      } else {
+          counterDispTrans += 0;
+      }
+    });
+
+    var level = (counterDispTrans == expectedDispTransVals ? "green" :
                 (counterDispTrans == 0 ? "red" : "yellow"));
 
-    if (counterDispTrans === counterAllDispTrans) {
-      tooltipText = tooltipTextMapping[itemName]["green"];
-    } else {
-      tooltipText = tooltipTextMapping[itemName]["grey"];
-    }
+    tooltipText = tooltipTextMapping[itemName][level];
   
     return {
       level: level,
