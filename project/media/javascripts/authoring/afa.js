@@ -32,13 +32,13 @@ var afa = afa || {};
           name: "uses-colour-coding ",
           type: "unknown",
           selector: ".colour-coding",
-          summaryfunc: "afa.unknown"
+          summaryfunc: "afa.unknown"  // ToDo: needs an actual summary function eventually
       },
       hazard: {
           name: "has-hazard ",
           type: "unknown",
           selector: ".hazard",
-          summaryfunc: "afa.unknown"
+          summaryfunc: "afa.unknown"  // ToDo: needs an actual summary function eventually
       },
       altText: {
         name: "has-alt-text",
@@ -46,7 +46,7 @@ var afa = afa || {};
         selector: ".alt-text",
         summaryfunc: "afa.checkImgProp"
       },
-      audioAdapt: {
+      imgAudioAdapt: {
         name: "has-audio-representation",
         type: "boolean",
         selector: ".img-audio-adapt",
@@ -57,6 +57,18 @@ var afa = afa || {};
         type: "boolean",
         selector: ".img-long-desc",
         summaryfunc: "afa.checkImgProp"
+      },
+      audioTrans: {
+        name: "has-transcript",
+        type: "boolean",
+        selector: ".text-alt",
+        summaryfunc: "afa.alwaysFalse"  // ToDo: needs an actual summary function eventually
+      },
+      audioVisualAdapt: {
+        name: "has-visual-representation",
+        type: "boolean",
+        selector: ".audio-visual-adapt",
+        summaryfunc: "afa.alwaysFalse"  // ToDo: needs an actual summary function eventually
       }
   };
 
@@ -106,7 +118,7 @@ var afa = afa || {};
       red: "red text for img-alt",
       grey: "grey text for img-alt"
     },
-    audioAdapt: {
+    imgAudioAdapt: {
       green: "green text for audioAdapt",
       yellow: "yellow text for audioAdapt",
       red: "red text for audioAdapt",
@@ -117,6 +129,18 @@ var afa = afa || {};
       yellow: "yellow text for imgLongDesc",
       red: "red text for imgLongDesc",
       grey: "grey text for imgLongDesc"
+    },
+    audioTrans: {
+      green: "green text for audioTrans",
+      yellow: "yellow text for audioTrans",
+      red: "red text for audioTrans",
+      grey: "grey text for audioTrans"
+    },
+    audioVisualAdapt: {
+      green: "green text for audioVisualAdapt",
+      yellow: "yellow text for audioVisualAdapt",
+      red: "red text for audioVisualAdapt",
+      grey: "grey text for audioVisualAdapt"
     }
   };
 
@@ -253,11 +277,25 @@ var afa = afa || {};
   
   /**
    * Check on "unknown" type
+   * ToDo: This funciton is temporarily used for the AfA properties that the way to detect cannot be determined.
+   * This function should be removed eventually.
    */
   afa.unknown = function (itemName, itemProperty) {
     return {
       level: "grey",
       tooltipText: tooltipTextMapping[itemName]["grey"]
+    };
+  };
+  
+  /**
+   * Always return false state
+   * ToDo: This funciton is temporarily used for the AfA properties that are assumed always return false.
+   * This function should be removed eventually.
+   */
+  afa.alwaysFalse = function (itemName, itemProperty) {
+    return {
+      level: "red",
+      tooltipText: tooltipTextMapping[itemName]["red"]
     };
   };
   
