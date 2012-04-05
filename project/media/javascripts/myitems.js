@@ -20,7 +20,7 @@ oer.myitems.init = function() {
         });
     
         $folderList.find("a.delete").inlineConfirmation({
-            confirm: "<br /><a class='confirm rc3' href='#'>Confirm</a>",
+            confirm: "<a class='confirm rc3' href='#'>Confirm</a>",
             cancel: "<a class='cancel' href='#'>Cancel</a>",
             confirmCallback: function(action) {
                 var $folder = action.parent();

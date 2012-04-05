@@ -266,6 +266,11 @@ section.my-items-views li {
   color: #616161;
 }
 
+.myitems .my-items-views .folder.to-delete .inline-confirmation-block {
+  display: inline-block;
+  margin-top: 3px;
+}
+
 .myitems .my-items-views .folder.to-delete .confirm:focus,
 .myitems .my-items-views .folder.to-delete .cancel:focus {
     outline: none; 
