@@ -163,9 +163,8 @@ var WriteStep = function (tool) {
     }, 200);
   });
 
-  // Update selected nodes when user click on editor area or select text with mouse
-  // and save selection.
-  this.$area.mouseup(function () {
+  // Track selection when user releases the mouse button.
+  $document.mouseup(function () {
     editor.trackSelection();
   });
 
@@ -511,7 +510,7 @@ WriteStep.prototype.focusOnNode = function ($node) {
 WriteStep.prototype.trackSelection = function () {
 
   // Rangy is not initialized?
-  if (!("getSelection" in rangy)) {
+  if (!rangy.initialized) {
     return;
   }
 
