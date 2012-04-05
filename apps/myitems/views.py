@@ -1,5 +1,5 @@
 from collections import defaultdict
-from operator import itemgetter, attrgetter
+from operator import attrgetter
 import datetime
 import urllib
 
@@ -9,9 +9,10 @@ from django.core.urlresolvers import reverse
 from django.views.generic import View, TemplateView
 from django.views.generic.simple import direct_to_template
 from django.utils.decorators import method_decorator
+from django.utils.formats import localize
+from django.utils.datastructures import SortedDict
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
-from django.utils.datastructures import SortedDict
 from django.db.models import Q
 
 from materials.views.index import IndexParams, Pagination
@@ -264,6 +265,27 @@ class CreatedUserItem(UserItem):
 
 
 
+class DraftUserItem(CreatedUserItem):
+    @property
+    def title(self):
+        title = []
+        title_first = self.item.title or self.item.material.title
+        if title_first:
+            title.append(title_first)
+        title.append(
+            "Unpublished Changes"
+            if self.item.material.workflow_state == PUBLISHED_STATE
+            else "Draft"
+        )
+        title.append(localize(self.item.modified_timestamp or self.item.created_timestamp))
+        return " - ".join(title)
+
+
+    def get_absolute_url(self):
+        return reverse("authoring:edit", kwargs=dict(pk=self.material.pk))
+
+
+
 class MyItemsView(TemplateView):
     template_name = 'myitems/myitems.html'
 
@@ -487,7 +509,7 @@ class DraftItems(MyItemsView):
             content_type = ContentType.objects.get_for_model(model)
             querysets.append((
                 model.objects.filter(material__author=user),
-                content_type, CreatedUserItem
+                content_type, DraftUserItem
             ))
 
         return querysets

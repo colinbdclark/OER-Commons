@@ -157,10 +157,14 @@ section.my-items-views li {
   border-bottom-width: 2px;
 }
 
-.myitems article .folder-list li#folder-item-form {
+.myitems .folder-list li#folder-item-form {
   padding: 0;
   background: none;
   border: none;
+}
+
+.myitems .folder-list li#folder-item-form input {
+  margin-right: 5px;
 }
 
 .myitems article .widgets {
