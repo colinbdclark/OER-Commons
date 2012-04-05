@@ -40,6 +40,12 @@ var afa = afa || {};
           selector: ".hazard",
           summaryfunc: "afa.unknown"  // ToDo: needs an actual summary function eventually
       },
+      translations: {
+          name: "has-translations ",
+          type: "unknown",
+          selector: ".translations",
+          summaryfunc: "afa.unknown"  // ToDo: needs an actual summary function eventually
+      },
       altText: {
         name: "has-alt-text",
         type: "boolean",
@@ -58,6 +64,7 @@ var afa = afa || {};
         selector: ".img-long-desc",
         summaryfunc: "afa.unknown"
       },
+      /* audio resource not yet supported, so these icons will not be used */
       audioTrans: {
         name: "has-transcript",
         type: "boolean",
@@ -69,6 +76,12 @@ var afa = afa || {};
         type: "boolean",
         selector: ".audio-visual-adapt",
         summaryfunc: "afa.alwaysFalse"  // ToDo: needs an actual summary function eventually
+      },
+      captions: {
+        name: "has-captions",
+        type: "boolean",
+        selector: ".captions",
+        summaryfunc: "afa.unknown"  // ToDo: needs an actual summary function eventually
       },
       videoAudioAdapt: {
         name: "has-audio-description",
@@ -118,8 +131,8 @@ var afa = afa || {};
     },
     ebook: {
       heading: "eBook Export",
-      green: "?green?",
-      yellow: "?yellow?",
+      green: "",
+      yellow: "",
       red: "Cannot download this learning resource as an eBook.",
       grey: "Cannot determine if this learning resource can be downloaded as an eBook."
     },
@@ -130,6 +143,10 @@ var afa = afa || {};
     hazard: {
       heading: "Hazards",
       grey: "Cannot determine if this learning resource triggers any known hazards (e.g., seizures, nausea, etc.)."
+    },
+    translations: {
+      heading: "Translations",
+      grey: "Cannot determine if this learning resource is linked to any translations."
     },
     altText: {
       heading: "Alt Text",
@@ -143,14 +160,14 @@ var afa = afa || {};
     },
     imgAudioAdapt: {
       heading: "Audio Adaptations",
-      green: "?green?",
-      yellow: "?yellow?",
+      green: "",
+      yellow: "",
       red: "No images in this learning resource are associated with audio descriptions.",
       grey: "Cannot determine if any images in this learning resource are associated with audio descriptions."
     },
     imgLongDesc: {
       heading: "Long Descriptions",
-      green: "?green?",
+      green: "",
       yellow: {
           no: "Some images in this learning resource have no long descriptions.",
           dontknow: "It is possible that some images in this learning resource have no alternative text."
@@ -158,18 +175,24 @@ var afa = afa || {};
       red: "No images in this learning resource are associated with long descriptions.",
       grey: "Cannot determine if the images in this learning resource have extended descriptions."
     },
+    /* audio resource not yet supported, so these string will not be used */
     audioTrans: {
-      green: "green text for audioTrans",
-      yellow: "yellow text for audioTrans",
-      red: "red text for audioTrans",
-      grey: "grey text for audioTrans"
+      heading: "Transcripts",
+      green: "",
+      yellow: "",
+      red: "",
+      grey: ""
     },
     audioVisualAdapt: {
       heading: "Visual Adaptations",
-      green: "green text for audioVisualAdapt",
-      yellow: "yellow text for audioVisualAdapt",
+      green: "",
+      yellow: "",
       red: "No videos in this learning resource have visual adaptations for the audio track.",
       grey: "Cannot determine if the audio tracks for videos in this learning resource have visual adaptations."
+    },
+    captions: {
+      heading: "Translations",
+      grey: "Cannot determine if the videos in this learning resource have captions."
     },
     videoAudioAdapt: {
       heading: "Audio Adaptations",
@@ -183,7 +206,7 @@ var afa = afa || {};
       green: "green text for videoVisualAdapt",
       yellow: "yellow text for videoVisualAdapt",
       red: "red text for videoVisualAdapt",
-      grey: "grey text for videoVisualAdapt"
+      grey: "Cannot determine if the audio tracks for videos in this learning resource have visual adaptations."
     }
   };
 
