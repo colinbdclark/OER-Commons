@@ -49,7 +49,7 @@ var afa = afa || {};
       audioAdapt: {
         name: "has-audio-representation",
         type: "boolean",
-        selector: ".audio-adapt",
+        selector: ".img-audio-adapt",
         summaryfunc: "afa.checkImgProp"
       },
       imgLongDesc: {
@@ -164,17 +164,14 @@ var afa = afa || {};
   afa.checkDispTrans = function (itemName, itemProperty) {
     var numOfValsForEachDispTrans = afa.AfAProperties.dispTrans.values.length;
     var tooltipText;
+    var total = yes = no = 0;
     
     // Get expected number of dispTrans values
     var totalNumOfVideos = $(".oer-container figure.embed.video").length;
-    var total = (totalNumOfVideos + 1) * numOfValsForEachDispTrans; // includes <body> + all videos
+    var total = (totalNumOfVideos + 1) * numOfValsForEachDispTrans; // includes oer container + all videos
 
-    // find number of display-transformable values on <body>
-    var dispTransValue = $(".oer-container meta[itemprop='" + itemProperty.name + "']").attr("content");
-    var yes = dispTransValue.split(" ").length;
-
-    // find number of display-transformable values on videos
-    $(".oer-container figure.embed.video meta[itemprop='" + itemProperty.name + "']").each(function (index){
+    // find number of display-transformable values on videos and oer container
+    $(".oer-container, figure.embed.video").find("meta[itemprop='" + itemProperty.name + "']").each(function (index){
       var attrValue = $(this).attr("content");
       if (attrValue) {
         yes += attrValue.split(" ").length;
@@ -187,7 +184,7 @@ var afa = afa || {};
 
     return {
       level: level,
-      tooltipText: tooltipTextMapping[itemName][level]
+      tooltipText: tooltipTextMapping[itemName][level] + "; " + yes + " out of " + total
     };
   };
   
@@ -217,7 +214,7 @@ var afa = afa || {};
    * Check on "has-ebook"
    */
   afa.checkEbook = function (itemName, itemProperty) {
-    // "has-ebook" only applies on <body>
+    // "has-ebook" only applies on oer container
     var total = 1;
     var yes = $(".oer-container meta[itemprop='" + itemProperty.name + "'][content='true']").length;
     var no = $(".oer-container meta[itemprop='" + itemProperty.name + "'][content='false']").length;
