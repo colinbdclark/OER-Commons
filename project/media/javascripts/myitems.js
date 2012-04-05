@@ -15,9 +15,16 @@ oer.myitems.init = function() {
     var deleteItemUrl = django_js_utils.urls.resolve('myitems:delete_item');
 
     var addFolderDeleteConfirmation = function () {
+        $folderList.delegate("a.delete", "click", function(action) {
+            $(action.target).parent().addClass("to-delete");
+        });
+    
         $folderList.find("a.delete").inlineConfirmation({
+            confirm: "<br /><a class='confirm rc3' href='#'>Confirm</a>",
+            cancel: "<a class='cancel' href='#'>Cancel</a>",
             confirmCallback: function(action) {
                 var $folder = action.parent();
+
                 var folderId = $folder.data("folder-id");
                 var $itemFolders = $itemFolderLists.find("li[data-folder-id='"+folderId+"']");
                 $.post(deleteUrl, {id: folderId}, function(response) {
@@ -27,10 +34,15 @@ oer.myitems.init = function() {
                     } else {
                         $folder.show();
                         $itemFolders.show();
+                        $folder.removeClass("to-delete");
                     }
                 });
                 $folder.fadeOut();
                 $itemFolders.fadeOut();
+            },
+            cancelCallback: function(action) {
+                var $folder = action.parent();
+                $folder.removeClass("to-delete");
             }
         });
     };

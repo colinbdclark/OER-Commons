@@ -259,3 +259,31 @@ section.my-items-views li {
   background-image: url('/media/images/myitems-folder-new.png');
 }
 
+
+.myitems .my-items-views .folder.to-delete .confirm,
+.myitems .my-items-views .folder.to-delete .cancel,
+.myitems .my-items-views .folder.to-delete .folder-text {
+  color: #616161;
+}
+
+.myitems .my-items-views .folder.to-delete .confirm:focus,
+.myitems .my-items-views .folder.to-delete .cancel:focus {
+    outline: none; 
+}
+
+.myitems .my-items-views .folder.to-delete .confirm {
+  border: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  padding: 1px 3px;
+  margin-left: 35px;
+}
+
+.myitems .my-items-views .folder.to-delete .confirm:hover {
+  color: #FAAF3B;
+}
+
+.myitems .my-items-views .folder.to-delete .cancel {
+  margin-left: 10px;
+  font-size: 11px;
+}
