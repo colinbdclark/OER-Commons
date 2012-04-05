@@ -26,6 +26,7 @@ from rubrics.models import Evaluation, EvaluatedItemMixin
 from saveditems.models import SavedItem
 from myitems.models import FolderItem
 from tags.models import Tag
+from utils.templatetags.utils import full_url
 from visitcounts.models import Visit
 
 
@@ -94,11 +95,13 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     workflow_state = models.CharField(max_length=50, default=PRIVATE_STATE,
                                       choices=WORKFLOW_STATES)
 
-    folders = generic.GenericRelation(FolderItem)
+    screenshot = models.ImageField(null=True, blank=True, upload_to="upload/materials/screenshots")
+
+    http_status = 200
 
     @property
-    def saved_in_folders(self):
-        return self.folders.values_list("folder__id", flat=True)
+    def url(self):
+        return full_url(self.get_view_full_url())
 
     def get_draft(self):
         draft = get_object_or_None(AuthoredMaterialDraft, material=self)
