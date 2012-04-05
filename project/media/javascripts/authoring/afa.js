@@ -223,7 +223,10 @@ var afa = afa || {};
   };
 
   afa.updateUI = function (selector, level, tooltipText) {
-    $(".afa-summary "+selector).addClass(level);
+    var $selector = $(".afa-summary "+selector);
+    // remove the old level classes to have the new one in effect.
+    $selector.removeClass("green yellow red grey");
+    $selector.addClass(level);
   
     fluid.tooltip(".afa-summary " + selector, {
       content: function () {
@@ -254,9 +257,12 @@ var afa = afa || {};
    * Check on AfA properties specifically used by <img>, for example, has-alt-text
    */
   afa.checkImgProp = function (itemName, itemProperty) {
-    var total = $(".oer-container img").length;
-    var yes = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
-    var no = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
+    // only looks up on the visible images as the media upload dialog uses some images that are hidden.
+    var $images = $(".oer-container img:visible");
+    
+    var total = $images.length;
+    var yes = $images.parent().children("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
+    var no = $images.parent().children("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
       
     var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total || total === 0 ? "green" : (no === total ? "red" : "yellow")));
     
