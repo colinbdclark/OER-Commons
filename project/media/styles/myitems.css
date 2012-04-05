@@ -157,10 +157,14 @@ section.my-items-views li {
   border-bottom-width: 2px;
 }
 
-.myitems article .folder-list li#folder-item-form {
+.myitems .folder-list li#folder-item-form {
   padding: 0;
   background: none;
   border: none;
+}
+
+.myitems .folder-list li#folder-item-form input {
+  margin-right: 5px;
 }
 
 .myitems article .widgets {
@@ -259,3 +263,36 @@ section.my-items-views li {
   background-image: url('/media/images/myitems-folder-new.png');
 }
 
+
+.myitems .my-items-views .folder.to-delete .confirm,
+.myitems .my-items-views .folder.to-delete .cancel,
+.myitems .my-items-views .folder.to-delete .folder-text {
+  color: #616161;
+}
+
+.myitems .my-items-views .folder.to-delete .inline-confirmation-block {
+  display: inline-block;
+  margin-top: 3px;
+}
+
+.myitems .my-items-views .folder.to-delete .confirm:focus,
+.myitems .my-items-views .folder.to-delete .cancel:focus {
+    outline: none; 
+}
+
+.myitems .my-items-views .folder.to-delete .confirm {
+  border: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  padding: 1px 3px;
+  margin-left: 35px;
+}
+
+.myitems .my-items-views .folder.to-delete .confirm:hover {
+  color: #FAAF3B;
+}
+
+.myitems .my-items-views .folder.to-delete .cancel {
+  margin-left: 10px;
+  font-size: 11px;
+}
