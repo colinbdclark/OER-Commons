@@ -20,6 +20,7 @@ from reviews.models import Review
 from rubrics.models import Evaluation, EvaluatedItemMixin
 from saveditems.models import SavedItem
 from tags.models import Tag
+from utils.templatetags.utils import full_url
 from visitcounts.models import Visit
 import datetime
 import embedly
@@ -88,6 +89,14 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
 
     workflow_state = models.CharField(max_length=50, default=PRIVATE_STATE,
                                       choices=WORKFLOW_STATES)
+
+    screenshot = models.ImageField(null=True, blank=True, upload_to="upload/materials/screenshots")
+
+    http_status = 200
+
+    @property
+    def url(self):
+        return full_url(self.get_view_full_url())
 
     def get_draft(self):
         draft = get_object_or_None(AuthoredMaterialDraft, material=self)
