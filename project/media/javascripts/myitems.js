@@ -36,32 +36,31 @@ oer.myitems.init = function() {
     };
 
 
-    var addItemFolderDeleteConfirmation = function () {
-        $itemFolderLists.find("li a.delete").inlineConfirmation({
-            confirmCallback: function(action) {
-                var $itemFolder = action.parent();
-                var folderId = $itemFolder.data("folder-id");
-                var $article = $itemFolder.closest("article");
-                var itemId = $article.data("identifier");
-                var request = { folder_id: folderId, item_id: itemId };
-                var $folder = getFolderById(folderId);
-                var $number = $folder.find("span.number");
+    var addItemFolderDelete = function () {
+        $(".materials-index").delegate("article .folder-list .delete", "click", function(action) {
+            action.preventDefault();
+            var $itemFolder = $(action.target).parent();
+            var folderId = $itemFolder.data("folder-id");
+            var $article = $itemFolder.closest("article");
+            var itemId = $article.data("identifier");
+            var request = { folder_id: folderId, item_id: itemId };
+            var $folder = getFolderById(folderId);
+            var $number = $folder.find("span.number");
 
-                var $elementsToDelete = $itemFolder;
-                if ($folder.filter(".selected").length) {
-                    $elementsToDelete = $elementsToDelete.add($article);
-                }
-                $.post(deleteItemFolderUrl, request, function(response) {
-                    if (response.status === "success") {
-                        $elementsToDelete.remove();
-                    } else {
-                        $elementsToDelete.show();
-                        $number.text($number.text()-0+1);
-                    }
-                });
-                $elementsToDelete.fadeOut();
-                $number.text($number.text()-0-1);
+            var $elementsToDelete = $itemFolder;
+            if ($folder.filter(".selected").length) {
+                $elementsToDelete = $elementsToDelete.add($article);
             }
+            $.post(deleteItemFolderUrl, request, function(response) {
+                if (response.status === "success") {
+                    $elementsToDelete.remove();
+                } else {
+                    $elementsToDelete.show();
+                    $number.text($number.text()-0+1);
+                }
+            });
+            $elementsToDelete.fadeOut();
+            $number.text($number.text()-0-1);
         });
     };
 
@@ -222,7 +221,7 @@ oer.myitems.init = function() {
     });
 
     addFolderDeleteConfirmation();
-    addItemFolderDeleteConfirmation();
+    addItemFolderDelete();
     addItemDeleteConfirmation();
 
     $itemFolderInput.autocomplete({
