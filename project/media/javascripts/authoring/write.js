@@ -190,6 +190,9 @@ var WriteStep = function (tool) {
       }
       if ($.inArray(e.which, [editor.BACKSPACE, editor.DELETE]) == -1) {
         return;
+      } else {
+        // dynamically update the AfA section at the content delete.
+        afa.summerizeAfA();
       }
     }
 
@@ -1756,8 +1759,9 @@ MediaDialog.ImageStep = function (dialog) {
       if (description != "") {
         $img.attr("alt", description);
       }
-      // Add AfA wrapper container
+      // Add AfA wrapper container. Note that the dynamical update on the AfA section is performed at the end of this function.
       afa.addAfAToImage($img, description != "");
+      
    }
 
     editor.saveState();
@@ -1770,6 +1774,9 @@ MediaDialog.ImageStep = function (dialog) {
     editor.ensureTextInput();
     editor.updateDND();
     dialog.hide();
+    
+    // Dynamically re-summerize on AfA properties
+    afa.summerizeAfA();
   });
 
 };
@@ -1822,11 +1829,14 @@ MediaDialog.VideoStep = function (dialog) {
     } else {
       editor.$area.append($figure);
     }
-    editor.loadEmbed($figure);
+    editor.loadEmbed($figure);  // AfA meta data is added
     editor.initFigure($figure);
     editor.ensureTextInput();
     editor.updateDND();
     dialog.hide();
+    
+    // Dynamically update the AfA section as meta data is added in loadEmbed()
+    afa.summerizeAfA();
   });
 };
 //noinspection JSCheckFunctionSignatures
