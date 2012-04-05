@@ -90,7 +90,6 @@ var afa = afa || {};
       heading: "Mouse Access",
       green: "It is possible to use this learning resource using the mouse only.",
       yellow: {
-          yes: "<don't know what to say about mouse-accessible stuff>",
           no: "The following parts cannot be used with the mouse only: some of the video players.",
           dontknow: "It may not be possible to use parts of this learning resource using the mouse only."
       },
@@ -101,7 +100,6 @@ var afa = afa || {};
       heading: "Keyboard Access",
       green: "It is possible to use this learning resource using the keyboard only.",
       yellow: {
-          yes: "<don't know what to say about keyboard-accessible stuff>",
           no: "The following parts cannot be used with the keyboard only: some of the video players.",
           dontknow: "It may not be possible to use parts of this learning resource using the keyboard only."
       },
@@ -112,7 +110,6 @@ var afa = afa || {};
       heading: "Display Transformability",
       green: "It is possible to transform the presentation and interface of this learning resource.",
       yellow: {
-          yes: "?yes?",
           no: "The display of some of the video players in this resource cannot be transformed.",
           dontknow: "It may not be possible to transform the presentation and interface of parts of this learning resource."
       },
@@ -138,7 +135,6 @@ var afa = afa || {};
       heading: "Alt Text",
       green: "All images in this learning resource have alternative text.",
       yellow: {
-          yes: "?yes?",
           no: "Some images in this learning resource have no alternative text.",
           dontknow: "It is possible that some images in this learning resource have no alternative text."
       },
@@ -156,7 +152,6 @@ var afa = afa || {};
       heading: "Long Descriptions",
       green: "?green?",
       yellow: {
-          yes: "?yes?",
           no: "Some images in this learning resource have no long descriptions.",
           dontknow: "It is possible that some images in this learning resource have no alternative text."
       },
@@ -195,11 +190,10 @@ var afa = afa || {};
   /**
    * Build an HTML string suitable for display in the tooltip. Currently, this builds a bulleted list.
    * @param lines   either a single string or an object containing three strings
-   * @param yes (optional) The number of resources positively identified for this property
    * @param no (optional) The number of resources negatively identified for this property
    * @param dontknow (optional) The number of resources undetermined for this property
    */
-  afa.buildTooltipContent = function (strings, level, yes, no, dontknow) {
+  afa.buildTooltipContent = function (strings, level, no, dontknow) {
       // TODO: This is entirely not configurable
       var string = "<h1>" + strings.heading + "</h1>";
       var lines = strings[level];
@@ -207,11 +201,6 @@ var afa = afa || {};
           return string + "<ul><li>"+lines+"</li></ul>"
       }
       string += "<ul>";
-/*
-      if (yes > 0) {
-          string += "<li>" + lines.yes + "</li>";
-      }
-*/
       if (no > 0) {
           string += "<li>" + lines.no + "</li>";
       }
@@ -268,37 +257,29 @@ var afa = afa || {};
     
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, yes, no)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, no)
     };
   };
   
   /**
    * Check on "display-transformable"
+   * Currently, this is only present on the "body" and on videos
+   * For now, this function treats the presence of any of the possible disp-trans values as "true"
+   * and the absense (i.e. an empty string) as "false." Eventually, we should look at individual values
    */
   afa.checkDispTrans = function (itemName, itemProperty) {
-    var numOfValsForEachDispTrans = afa.AfAProperties.dispTrans.values.length;
-    var tooltipText;
-    var total = 0, yes = 0, no = 0;
-    
-    // Get expected number of dispTrans values
-    var totalNumOfVideos = $(".oer-container figure.embed.video").length;
-    var total = (totalNumOfVideos + 1) * numOfValsForEachDispTrans; // includes oer container + all videos
+    var itemsThatQualify = $(".oer-container, figure.embed.video");
+    var total = itemsThatQualify.length;
+    var haveProp = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "']").length;
+    var yes = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
+    var no = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
+    var dontknow = total - haveProp;
 
-    // find number of display-transformable values on videos and oer container
-    $(".oer-container, figure.embed.video").find("meta[itemprop='" + itemProperty.name + "']").each(function (index){
-      var attrValue = $(this).attr("content");
-      if (attrValue) {
-        yes += attrValue.split(" ").length;
-      } else {
-          yes += 0;
-      }
-    });
-
-    var level = (yes === total ? "green" : (yes === 0 ? "red" : "yellow"));
+    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total || total === 0 ? "green" : (no === total ? "red" : "yellow")));
 
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, yes)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, no, dontknow)
     };
   };
   
@@ -317,7 +298,7 @@ var afa = afa || {};
 
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, yes, no, dontknow)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, no, dontknow)
     };
   };
   
@@ -334,7 +315,7 @@ var afa = afa || {};
 
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, yes, no)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, no)
     };
   };
   
@@ -364,10 +345,10 @@ var afa = afa || {};
   
   // End of the functions that check on AfA properties
   
-  afa.showMediaIcons = function (mediaSelector) {
-      $(mediaSelector + " .afa-no-media").hide();
-      $(mediaSelector + " .afa-media-icons").show();
-  };
+  afa.updateMediaIconDisplay = function (mediaSelector, show) {
+      $(mediaSelector + " .afa-no-media").toggle(!show);
+      $(mediaSelector + " .afa-media-icons").toggle(show);
+  }
 
   /**
    * Loop thru all AfA items to check on grade.
@@ -375,13 +356,6 @@ var afa = afa || {};
   afa.summerizeAfA = function () {
     var tooltipText, itemTagName;
     
-    if ($(".oer-container img").length !== 0) {
-        afa.showMediaIcons(".afa-images");
-    }
-    if ($(".oer-container figure.embed.video").length !== 0) {
-        afa.showMediaIcons(".afa-video");
-    }
-
     fluid.each(afa.AfAProperties, function(itemProperty, itemName) {
       var result = fluid.invokeGlobalFunction(itemProperty.summaryfunc, [itemName, itemProperty]);
       // TODO: This if is only because fluid.identity returns the first argument
@@ -389,6 +363,9 @@ var afa = afa || {};
           afa.updateUI(itemProperty.selector, result["level"], result["tooltipText"]);
       }
     });
+
+    afa.updateMediaIconDisplay(".afa-images", $(".oer-container img:visible").length !== 0);
+    afa.updateMediaIconDisplay(".afa-video", $(".oer-container figure.embed.video").length !== 0);
   };
   
   afa.addAfAToBody = function () {
@@ -398,7 +375,9 @@ var afa = afa || {};
     // TODO: These itemprop strings should not be hard-coded
     container.prepend('<meta itemprop="is-mouse-accessible" content="true"/>');
     container.prepend('<meta itemprop="is-keyboard-accessible" content="true"/>');
-    container.prepend('<meta itemprop="is-display-transformable" content="' + afa.AfAProperties.dispTrans.values.join(" ") + '"/>');
+    // TODO: The value of "is-display-transformable" should be a list of relevant strings, but in
+    // this iteration, we're treating it as a boolean
+    container.prepend('<meta itemprop="is-display-transformable" content="true"/>');
     container.prepend('<meta itemprop="has-ebook" content="false"/>');
     container.prepend('<meta itemprop="hazard" content=""/>');
   }
@@ -409,7 +388,9 @@ var afa = afa || {};
       figure.attr("itemscope", "");
       figure.prepend('<meta itemprop="is-mouse-accessible" content="true"/>');
       figure.prepend('<meta itemprop="has-transcript" content="false"/>');
-      figure.prepend('<meta itemprop="is-display-transformable" content=""/>');
+    // TODO: The value of "is-display-transformable" should be an empty string for something that is
+    // known to be non-tranformable, but in this iteration, we're treating it as a boolean
+      figure.prepend('<meta itemprop="is-display-transformable" content="false"/>');
   };
 
   // TODO: Should this call be somewhere else? in the save process, maybe?
