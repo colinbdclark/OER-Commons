@@ -168,6 +168,11 @@
   .afa-summary h4 {
     color: #666666;
     text-transform: uppercase; }
+  .afa-summary .afa-media-icons {
+    display: none; }
+  .afa-summary .afa-icons,
+  .afa-summary .afa-no-media {
+    height: 45px; }
   .afa-summary .afa-icon {
     width: 25px;
     height: 25px;

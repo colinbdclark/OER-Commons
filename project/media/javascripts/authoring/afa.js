@@ -50,13 +50,13 @@ var afa = afa || {};
         name: "has-audio-representation",
         type: "boolean",
         selector: ".img-audio-adapt",
-        summaryfunc: "afa.checkImgProp"
+        summaryfunc: "afa.unknown"
       },
       imgLongDesc: {
         name: "has-long-description",
         type: "boolean",
         selector: ".img-long-desc",
-        summaryfunc: "afa.checkImgProp"
+        summaryfunc: "afa.unknown"
       },
       audioTrans: {
         name: "has-transcript",
@@ -88,68 +88,80 @@ var afa = afa || {};
   var tooltipTextMapping = {
     mouseA11y: {
       heading: "Mouse Access",
-      green: "It is possible to operate the resource using the mouse only",
+      green: "It is possible to use this learning resource using the mouse only.",
       yellow: {
-          yes: "It is possible to operate some parts of the resource using the mouse only",
-          no: "It is not possible to operate some parts of the resource using the mouse only",
-          dontknow: "For some parts of the resource, we cannot determine whether it is possible to operate it using the mouse only"
+          yes: "<don't know what to say about mouse-accessible stuff>",
+          no: "The following parts cannot be used with the mouse only: some of the video players.",
+          dontknow: "It may not be possible to use parts of this learning resource using the mouse only."
       },
-      red: "It is not possible to operate the resource using the mouse only",
-      grey: "Cannot determine whether it is possible to operate the resource using the mouse only"
+      red: "It is not possible to use this learning resource using the mouse only.",
+      grey: "Cannot determine if using this learning resource needs the mouse."
     },
     kbdA11y: {
       heading: "Keyboard Access",
-      green: "It is possible to operate the resource using the keyboard only",
+      green: "It is possible to use this learning resource using the keyboard only.",
       yellow: {
-          yes: "It is possible to operate some parts of the resource using the keyboard only",
-          no: "It is not possible to operate some parts of the resource using the keyboard only",
-          dontknow: "For some parts of the resource, we cannot determine whether it is possible to operate it using the keyboard only"
+          yes: "<don't know what to say about keyboard-accessible stuff>",
+          no: "The following parts cannot be used with the keyboard only: some of the video players.",
+          dontknow: "It may not be possible to use parts of this learning resource using the keyboard only."
       },
-      red: "It is not possible to operate the resource using the keyboard only",
-      grey: "Cannot determine whether it is possible to operate the resource using the keyboard only"
+      red: "It is not possible to use this learning resource using the keyboard only.",
+      grey: "Cannot determine if using this learning resource needs the keyboard."
     },
     dispTrans: {
       heading: "Display Transformability",
-      green: "green text for disp-trans",
-      yellow: "yellow text for disp-trans",
-      red: "red text for disp-trans",
-      grey: "grey text for disp-trans"
+      green: "It is possible to transform the presentation and interface of this learning resource.",
+      yellow: {
+          yes: "?yes?",
+          no: "The display of some of the video players in this resource cannot be transformed.",
+          dontknow: "It may not be possible to transform the presentation and interface of parts of this learning resource."
+      },
+      red: "It is not possible to transform the presentation and interface of this learning resource.",
+      grey: "Cannot determine if this learning resource's presentation and interface can be transformed."
     },
     ebook: {
       heading: "eBook Export",
-      green: "green text for ebook",
-      yellow: "yellow text for ebook",
-      red: "red text for ebook",
-      grey: "grey text for ebook"
+      green: "?green?",
+      yellow: "?yellow?",
+      red: "Cannot download this learning resource as an eBook.",
+      grey: "Cannot determine if this learning resource can be downloaded as an eBook."
     },
     colourCode: {
       heading: "Colour Coding",
-      grey: "grey text for colourCode"
+      grey: "Cannot determine if this learning resource uses colour to convey information."
     },
     hazard: {
       heading: "Hazards",
-      grey: "grey text for hazard"
+      grey: "Cannot determine if this learning resource triggers any known hazards (e.g., seizures, nausea, etc.)."
     },
     altText: {
       heading: "Alt Text",
-      green: "green text for img-alt",
-      yellow: "yellow text for img-alt",
-      red: "red text for img-alt",
-      grey: "grey text for img-alt"
+      green: "All images in this learning resource have alternative text.",
+      yellow: {
+          yes: "?yes?",
+          no: "Some images in this learning resource have no alternative text.",
+          dontknow: "It is possible that some images in this learning resource have no alternative text."
+      },
+      red: "No images in this learning resource have alternative text.",
+      grey: "Cannot determine if the images in this learning resource have alternative text."
     },
     imgAudioAdapt: {
       heading: "Audio Adaptations",
-      green: "green text for audioAdapt",
-      yellow: "yellow text for audioAdapt",
-      red: "red text for audioAdapt",
-      grey: "grey text for audioAdapt"
+      green: "?green?",
+      yellow: "?yellow?",
+      red: "No images in this learning resource are associated with audio descriptions.",
+      grey: "Cannot determine if any images in this learning resource are associated with audio descriptions."
     },
     imgLongDesc: {
       heading: "Long Descriptions",
-      green: "green text for imgLongDesc",
-      yellow: "yellow text for imgLongDesc",
-      red: "red text for imgLongDesc",
-      grey: "grey text for imgLongDesc"
+      green: "?green?",
+      yellow: {
+          yes: "?yes?",
+          no: "Some images in this learning resource have no long descriptions.",
+          dontknow: "It is possible that some images in this learning resource have no alternative text."
+      },
+      red: "No images in this learning resource are associated with long descriptions.",
+      grey: "Cannot determine if the images in this learning resource have extended descriptions."
     },
     audioTrans: {
       green: "green text for audioTrans",
@@ -158,18 +170,21 @@ var afa = afa || {};
       grey: "grey text for audioTrans"
     },
     audioVisualAdapt: {
+      heading: "Visual Adaptations",
       green: "green text for audioVisualAdapt",
       yellow: "yellow text for audioVisualAdapt",
-      red: "red text for audioVisualAdapt",
-      grey: "grey text for audioVisualAdapt"
+      red: "No videos in this learning resource have visual adaptations for the audio track.",
+      grey: "Cannot determine if the audio tracks for videos in this learning resource have visual adaptations."
     },
     videoAudioAdapt: {
+      heading: "Audio Adaptations",
       green: "green text for videoAudioAdapt",
       yellow: "yellow text for videoAudioAdapt",
       red: "red text for videoAudioAdapt",
-      grey: "grey text for videoAudioAdapt"
+      grey: "Cannot determine if the videos in this learning resource have aural descriptions for the video track."
     },
     videoVisualAdapt: {
+      heading: "Visual Adaptations",
       green: "green text for videoVisualAdapt",
       yellow: "yellow text for videoVisualAdapt",
       red: "red text for videoVisualAdapt",
@@ -192,9 +207,11 @@ var afa = afa || {};
           return string + "<ul><li>"+lines+"</li></ul>"
       }
       string += "<ul>";
+/*
       if (yes > 0) {
           string += "<li>" + lines.yes + "</li>";
       }
+*/
       if (no > 0) {
           string += "<li>" + lines.no + "</li>";
       }
@@ -255,7 +272,7 @@ var afa = afa || {};
   afa.checkDispTrans = function (itemName, itemProperty) {
     var numOfValsForEachDispTrans = afa.AfAProperties.dispTrans.values.length;
     var tooltipText;
-    var total = yes = no = 0;
+    var total = 0, yes = 0, no = 0;
     
     // Get expected number of dispTrans values
     var totalNumOfVideos = $(".oer-container figure.embed.video").length;
@@ -323,7 +340,7 @@ var afa = afa || {};
   afa.unknown = function (itemName, itemProperty) {
     return {
       level: "grey",
-      tooltipText: tooltipTextMapping[itemName]["grey"]
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], "grey")
     };
   };
   
@@ -335,18 +352,30 @@ var afa = afa || {};
   afa.alwaysFalse = function (itemName, itemProperty) {
     return {
       level: "red",
-      tooltipText: tooltipTextMapping[itemName]["red"]
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], "red")
     };
   };
   
   // End of the functions that check on AfA properties
   
+  afa.showMediaIcons = function (mediaSelector) {
+      $(mediaSelector + " .afa-no-media").hide();
+      $(mediaSelector + " .afa-media-icons").show();
+  };
+
   /**
    * Loop thru all AfA items to check on grade.
    */
   afa.summerizeAfA = function () {
     var tooltipText, itemTagName;
     
+    if ($(".oer-container img").length !== 0) {
+        afa.showMediaIcons(".afa-images");
+    }
+    if ($(".oer-container figure.embed.video").length !== 0) {
+        afa.showMediaIcons(".afa-video");
+    }
+
     fluid.each(afa.AfAProperties, function(itemProperty, itemName) {
       var result = fluid.invokeGlobalFunction(itemProperty.summaryfunc, [itemName, itemProperty]);
       // TODO: This if is only because fluid.identity returns the first argument
