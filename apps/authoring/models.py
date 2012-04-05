@@ -59,6 +59,8 @@ class AbstractAuthoredMaterial(models.Model):
 class AuthoredMaterialDraft(AbstractAuthoredMaterial):
 
     material = models.OneToOneField("authoring.AuthoredMaterial", related_name="draft")
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+    modified_timestamp = models.DateTimeField(auto_now=True)
 
     @models.permalink
     def get_absolute_url(self):
@@ -311,14 +313,14 @@ class Image(models.Model):
 
     material = models.ForeignKey(AuthoredMaterial)
 
-    image = models.ImageField(upload_to=upload_to("images"))
+    image = models.ImageField(upload_to=upload_to("images"), max_length=500)
 
 
 class Document(models.Model):
 
     material = models.ForeignKey(AuthoredMaterial)
 
-    file = models.ImageField(upload_to=upload_to("documents"))
+    file = models.FileField(upload_to=upload_to("documents"), max_length=500)
 
 
 class Embed(models.Model):
