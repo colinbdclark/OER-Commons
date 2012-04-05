@@ -1753,17 +1753,11 @@ MediaDialog.ImageStep = function (dialog) {
       $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL)).append($caption);
       $img = $("img", $figure);
 
-      // Add AfA wrapper container
-      // TODO: These itemprop names should not be hard-coded
-      $img.wrap('<p itemscope />');
       if (description != "") {
         $img.attr("alt", description);
-        $img.after('<meta itemprop="has-alt-text" content="true"/>');
-      } else {
-        $img.after('<meta itemprop="has-alt-text" content="false"/>');
       }
-      $img.after('<meta itemprop="has-audio-representation" content="false"/>');
-      $img.after('<meta itemprop="has-long-description" content="false"/>');
+      // Add AfA wrapper container
+      afa.addAfAToImage($img, description != "");
    }
 
     editor.saveState();
