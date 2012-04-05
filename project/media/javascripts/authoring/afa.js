@@ -3,11 +3,17 @@ var afa = afa || {};
 (function() {
 
   afa.AfAProperties = {
-      mouseAccess: {
+      mouseA11y: {
           name: "is-mouse-accessible",
           type: "boolean",
           selector: ".mouse-access",
-          summaryfunc: "fluid.identity"
+          summaryfunc: "afa.checkA11y"
+      },
+      kbdA11y: {
+          name: "is-keyboard-accessible",
+          type: "boolean",
+          selector: ".kbd-access",
+          summaryfunc: "afa.checkA11y"
       },
       altText: {
           name: "has-alt-text",
@@ -33,17 +39,29 @@ var afa = afa || {};
 
   // Propsed structure for the mapping btw each AfA property status and its tooltip text
   var tooltipTextMapping = {
-    "altText": {
-      "green": "green text for img-alt %s",
-      "yellow": "yellow text for img-alt",
-      "red": "red text for img-alt",
-      "grey": "grey text for img-alt"
+    mouseA11y: {
+      green: "It is possible to operate the resource using the mouse only",
+      yellow: "It may or may not be possible to operate parts of the resource using the mouse only",
+      red: "It is not possible to operate the resource using the mouse only",
+      grey: "Cannot determine whether it is possible to operate the resource using the mouse only"
     },
-    "dispTrans": {
-      "green": "green text for disp-trans",
-      "yellow": "yellow text for disp-trans",
-      "red": "red text for disp-trans",
-      "grey": "grey text for disp-trans"
+    kbdA11y: {
+      green: "It is possible to operate the resource using the keyboard only",
+      yellow: "It may or may not be possible to operate parts of the resource using the keyboard only",
+      red: "It is not possible to operate the resource using the keyboard only",
+      grey: "Cannot determine whether it is possible to operate the resource using the keyboard only"
+    },
+    altText: {
+      green: "green text for img-alt %s",
+      yellow: "yellow text for img-alt",
+      red: "red text for img-alt",
+      grey: "grey text for img-alt"
+    },
+    dispTrans: {
+      green: "green text for disp-trans",
+      yellow: "yellow text for disp-trans",
+      red: "red text for disp-trans",
+      grey: "grey text for disp-trans"
     }
   };
 
@@ -86,11 +104,11 @@ var afa = afa || {};
       
     var level = (counterImgWithAlt == counterAllImg ? "green" :
                 (counterImgWithAlt == 0 ? "red" : "yellow"));
-    var tooltipText = tooltipTextMapping[itemName][level];
     
     return {
       level: level,
-      tooltipText: tooltipText
+      // TODO: Constructing tooltip text will become more complex, as we will combine multiple strings
+      tooltipText: tooltipTextMapping[itemName][level]
     };
   };
   
@@ -122,11 +140,31 @@ var afa = afa || {};
     var level = (counterDispTrans == expectedDispTransVals ? "green" :
                 (counterDispTrans == 0 ? "red" : "yellow"));
 
-    tooltipText = tooltipTextMapping[itemName][level];
-  
     return {
       level: level,
-      tooltipText: tooltipText
+      tooltipText: tooltipTextMapping[itemName][level]
+    };
+  };
+  
+  /**
+   * Check on "display-transformable"
+   */
+  afa.checkA11y = function (itemName, itemProperty) {
+    var allItems = $(".oer-container meta[itemprop='" + itemProperty.name + "']");
+    var accessbleItems = $("[content='true']", allItems);
+
+    var itemsThatQualify = $(".oer-container, figure.embed.video");
+    var total = itemsThatQualify.length;
+    var haveProp = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "']").length;
+    var yes = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
+    var no = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
+    var dunno = itemsThatQualify.length - haveProp;
+
+    var level = (total == 0 ? "grey" : (yes == total ? "green" : (no == total ? "red" : "yellow")));
+
+    return {
+      level: level,
+      tooltipText: tooltipTextMapping[itemName][level]
     };
   };
   
@@ -153,7 +191,7 @@ var afa = afa || {};
 
     // TODO: These itemprop strings should not be hard-coded
     container.prepend('<meta itemprop="is-mouse-accessible" content="true"/>');
-    container.prepend('<meta itemprop="is-mouse-accessible" content="false"/>');
+    container.prepend('<meta itemprop="is-keyboard-accessible" content="true"/>');
     container.prepend('<meta itemprop="is-display-transformable" content="' + afa.AfAProperties.dispTrans.values.join(" ") + '"/>');
     container.prepend('<meta itemprop="has-ebook" content="false"/>');
     container.prepend('<meta itemprop="hazard" content=""/>');
