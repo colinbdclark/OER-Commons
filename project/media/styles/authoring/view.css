@@ -193,9 +193,9 @@
     background-image: url(../../images/icons-A4A/hazard.png); }
   .afa-summary .translation {
     background-image: url(../../images/icons-A4A/translation.png); }
-  .afa-summary .audio-adapt {
+  .afa-summary .img-audio-adapt, .afa-summary .video-audio-adapt {
     background-image: url(../../images/icons-A4A/audio.png); }
-  .afa-summary .visual-adapt {
+  .afa-summary .audio-visual-adapt, .afa-summary .video-visual-adapt {
     background-image: url(../../images/icons-A4A/visual.png); }
   .afa-summary .alt-text,
   .afa-summary .text-alt,
@@ -237,11 +237,13 @@
   .fl-theme-uio-bw .afa-summary .translation,
   .fl-theme-uio-by .afa-summary .translation {
     background-image: url(../../images/icons-A4A/translation-black.png); }
-  .fl-theme-uio-bw .afa-summary .audio-adapt,
-  .fl-theme-uio-by .afa-summary .audio-adapt {
+  .fl-theme-uio-bw .afa-summary .img-audio-adapt, .fl-theme-uio-bw .afa-summary .video-audio-adapt,
+  .fl-theme-uio-by .afa-summary .img-audio-adapt,
+  .fl-theme-uio-by .afa-summary .video-audio-adapt {
     background-image: url(../../images/icons-A4A/audio-black.png); }
-  .fl-theme-uio-bw .afa-summary .visual-adapt,
-  .fl-theme-uio-by .afa-summary .visual-adapt {
+  .fl-theme-uio-bw .afa-summary .audio-visual-adapt, .fl-theme-uio-bw .afa-summary .video-visual-adapt,
+  .fl-theme-uio-by .afa-summary .audio-visual-adapt,
+  .fl-theme-uio-by .afa-summary .video-visual-adapt {
     background-image: url(../../images/icons-A4A/visual-black.png); }
   .fl-theme-uio-bw .afa-summary .alt-text, .fl-theme-uio-bw .afa-summary .text-alt, .fl-theme-uio-bw .afa-summary .captions,
   .fl-theme-uio-by .afa-summary .alt-text,
@@ -271,9 +273,9 @@
     background-image: url(../../images/icons-A4A/hazard-white.png); }
   .fl-theme-uio-wb .afa-summary .translation {
     background-image: url(../../images/icons-A4A/translation-white.png); }
-  .fl-theme-uio-wb .afa-summary .audio-adapt {
+  .fl-theme-uio-wb .afa-summary .img-audio-adapt, .fl-theme-uio-wb .afa-summary .video-audio-adapt {
     background-image: url(../../images/icons-A4A/audio-white.png); }
-  .fl-theme-uio-wb .afa-summary .visual-adapt {
+  .fl-theme-uio-wb .afa-summary .audio-visual-adapt, .fl-theme-uio-wb .afa-summary .video-visual-adapt {
     background-image: url(../../images/icons-A4A/visual-white.png); }
   .fl-theme-uio-wb .afa-summary .alt-text, .fl-theme-uio-wb .afa-summary .text-alt, .fl-theme-uio-wb .afa-summary .captions {
     background-image: url(../../images/icons-A4A/textalternative-white.png); }
@@ -298,9 +300,9 @@
     background-image: url(../../images/icons-A4A/hazard-yellow.png); }
   .fl-theme-uio-yb .afa-summary .translation {
     background-image: url(../../images/icons-A4A/translation-yellow.png); }
-  .fl-theme-uio-yb .afa-summary .audio-adapt {
+  .fl-theme-uio-yb .afa-summary .img-audio-adapt, .fl-theme-uio-yb .afa-summary .video-audio-adapt {
     background-image: url(../../images/icons-A4A/audio-yellow.png); }
-  .fl-theme-uio-yb .afa-summary .visual-adapt {
+  .fl-theme-uio-yb .afa-summary .audio-visual-adapt, .fl-theme-uio-yb .afa-summary .video-visual-adapt {
     background-image: url(../../images/icons-A4A/visual-yellow.png); }
   .fl-theme-uio-yb .afa-summary .alt-text, .fl-theme-uio-yb .afa-summary .text-alt, .fl-theme-uio-yb .afa-summary .captions {
     background-image: url(../../images/icons-A4A/textalternative-yellow.png); }
