@@ -47,13 +47,21 @@ var afa = afa || {};
   var tooltipTextMapping = {
     mouseA11y: {
       green: "It is possible to operate the resource using the mouse only",
-      yellow: "It may or may not be possible to operate parts of the resource using the mouse only",
+      yellow: {
+          yes: "It is possible to operate some parts of the resource using the mouse only",
+          no: "It is not possible to operate some parts of the resource using the mouse only",
+          dontknow: "For some parts of the resource, we cannot determine whether it is possible to operate it using the mouse only"
+      },
       red: "It is not possible to operate the resource using the mouse only",
       grey: "Cannot determine whether it is possible to operate the resource using the mouse only"
     },
     kbdA11y: {
       green: "It is possible to operate the resource using the keyboard only",
-      yellow: "It may or may not be possible to operate parts of the resource using the keyboard only",
+      yellow: {
+          yes: "It is possible to operate some parts of the resource using the keyboard only",
+          no: "It is not possible to operate some parts of the resource using the keyboard only",
+          dontknow: "For some parts of the resource, we cannot determine whether it is possible to operate it using the keyboard only"
+      },
       red: "It is not possible to operate the resource using the keyboard only",
       grey: "Cannot determine whether it is possible to operate the resource using the keyboard only"
     },
@@ -77,8 +85,30 @@ var afa = afa || {};
     }
   };
 
-  afa.buildTooltipContent = function (string) {
-      return "<ul><li>"+string+"</li></ul>"
+  /**
+   * Build an HTML string suitable for display in the tooltip. Currently, this builds a bulleted list.
+   * @param lines   either a single string or an object containing three strings
+   * @param yes (optional) The number of resources positively identified for this property
+   * @param no (optional) The number of resources negatively identified for this property
+   * @param dontknow (optional) The number of resources undetermined for this property
+   */
+  afa.buildTooltipContent = function (lines, yes, no, dontknow) {
+      // TODO: This is entirely not configurable
+      if ((typeof lines) === 'string') {
+          return "<ul><li>"+lines+"</li></ul>"
+      }
+      var string = "<ul>";
+      if (yes > 0) {
+          string += "<li>" + lines.yes + "</li>";
+      }
+      if (no > 0) {
+          string += "<li>" + lines.no + "</li>";
+      }
+      if (dontknow > 0) {
+          string += "<li>" + lines.dontknow + "</li>";
+      }
+      string += "</ul>";
+      return string;
   };
 
   afa.updateUI = function (selector, level, tooltipText) {
@@ -86,9 +116,7 @@ var afa = afa || {};
   
     fluid.tooltip(".afa-summary " + selector, {
       content: function () {
-          // TODO: The construction of the tooltip html will have to move earlier, since it
-          //       will be more specific to the different properties
-          return afa.buildTooltipContent(tooltipText);
+          return tooltipText;
       }
     });
   
@@ -119,8 +147,7 @@ var afa = afa || {};
     
     return {
       level: level,
-      // TODO: Constructing tooltip text will become more complex, as we will combine multiple strings
-      tooltipText: tooltipTextMapping[itemName][level]
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], counterImgWithAlt, counterImgWithoutAlt)
     };
   };
   
@@ -154,7 +181,7 @@ var afa = afa || {};
 
     return {
       level: level,
-      tooltipText: tooltipTextMapping[itemName][level]
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], counterDispTrans)
     };
   };
   
@@ -170,13 +197,13 @@ var afa = afa || {};
     var haveProp = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "']").length;
     var yes = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
     var no = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
-    var dunno = itemsThatQualify.length - haveProp;
+    var dontknow = total - haveProp;
 
     var level = (total == 0 ? "grey" : (yes == total ? "green" : (no == total ? "red" : "yellow")));
 
     return {
       level: level,
-      tooltipText: tooltipTextMapping[itemName][level]
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], yes, no, dontknow)
     };
   };
   
@@ -193,7 +220,7 @@ var afa = afa || {};
 
     return {
       level: level,
-      tooltipText: tooltipTextMapping[itemName][level]
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], yes, no)
     };
   };
   
