@@ -63,6 +63,7 @@ var afa = afa || {};
   // Propsed structure for the mapping btw each AfA property status and its tooltip text
   var tooltipTextMapping = {
     mouseA11y: {
+      heading: "Mouse Access",
       green: "It is possible to operate the resource using the mouse only",
       yellow: {
           yes: "It is possible to operate some parts of the resource using the mouse only",
@@ -73,6 +74,7 @@ var afa = afa || {};
       grey: "Cannot determine whether it is possible to operate the resource using the mouse only"
     },
     kbdA11y: {
+      heading: "Keyboard Access",
       green: "It is possible to operate the resource using the keyboard only",
       yellow: {
           yes: "It is possible to operate some parts of the resource using the keyboard only",
@@ -83,36 +85,43 @@ var afa = afa || {};
       grey: "Cannot determine whether it is possible to operate the resource using the keyboard only"
     },
     dispTrans: {
+      heading: "Display Transformability",
       green: "green text for disp-trans",
       yellow: "yellow text for disp-trans",
       red: "red text for disp-trans",
       grey: "grey text for disp-trans"
     },
     ebook: {
+      heading: "eBook Export",
       green: "green text for ebook",
       yellow: "yellow text for ebook",
       red: "red text for ebook",
       grey: "grey text for ebook"
     },
     colourCode: {
+      heading: "Colour Coding",
       grey: "grey text for colourCode"
     },
     hazard: {
+      heading: "Hazards",
       grey: "grey text for hazard"
     },
     altText: {
+      heading: "Alt Text",
       green: "green text for img-alt",
       yellow: "yellow text for img-alt",
       red: "red text for img-alt",
       grey: "grey text for img-alt"
     },
     audioAdapt: {
+      heading: "Audio Adaptations",
       green: "green text for audioAdapt",
       yellow: "yellow text for audioAdapt",
       red: "red text for audioAdapt",
       grey: "grey text for audioAdapt"
     },
     imgLongDesc: {
+      heading: "Long Descriptions",
       green: "green text for imgLongDesc",
       yellow: "yellow text for imgLongDesc",
       red: "red text for imgLongDesc",
@@ -127,12 +136,14 @@ var afa = afa || {};
    * @param no (optional) The number of resources negatively identified for this property
    * @param dontknow (optional) The number of resources undetermined for this property
    */
-  afa.buildTooltipContent = function (lines, yes, no, dontknow) {
+  afa.buildTooltipContent = function (strings, level, yes, no, dontknow) {
       // TODO: This is entirely not configurable
+      var string = "<h1>" + strings.heading + "</h1>";
+      var lines = strings[level];
       if ((typeof lines) === 'string') {
-          return "<ul><li>"+lines+"</li></ul>"
+          return string + "<ul><li>"+lines+"</li></ul>"
       }
-      var string = "<ul>";
+      string += "<ul>";
       if (yes > 0) {
           string += "<li>" + lines.yes + "</li>";
       }
@@ -152,6 +163,11 @@ var afa = afa || {};
     fluid.tooltip(".afa-summary " + selector, {
       content: function () {
           return tooltipText;
+      },
+      position: {
+          my: "right center",
+          at: "left center",
+          offset: "0 0"
       }
     });
   
@@ -181,7 +197,7 @@ var afa = afa || {};
     
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], yes, no)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, yes, no)
     };
   };
   
@@ -211,7 +227,7 @@ var afa = afa || {};
 
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], yes)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, yes)
     };
   };
   
@@ -230,7 +246,7 @@ var afa = afa || {};
 
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], yes, no, dontknow)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, yes, no, dontknow)
     };
   };
   
@@ -247,7 +263,7 @@ var afa = afa || {};
 
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], yes, no)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, yes, no)
     };
   };
   
