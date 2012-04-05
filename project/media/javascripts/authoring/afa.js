@@ -18,7 +18,7 @@ var afa = afa || {};
       altText: {
           name: "has-alt-text",
           type: "boolean",
-          selector: ".img-alt",
+          selector: ".alt-text",
           summaryfunc: "afa.checkAltText"
       },
       dispTrans: {
