@@ -177,11 +177,11 @@ var afa = afa || {};
     var yes = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
     var no = $(".oer-container img").parent().children("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
       
-    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total && total === 0 ? "green" : (no === total ? "red" : "yellow")));
+    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total || total === 0 ? "green" : (no === total ? "red" : "yellow")));
     
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], counterImgWithAlt, counterImgWithoutAlt)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], yes, no)
     };
   };
   
@@ -211,17 +211,14 @@ var afa = afa || {};
 
     return {
       level: level,
-      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], counterDispTrans)
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName][level], yes)
     };
   };
   
   /**
-   * Check on "display-transformable"
+   * Check on "mouse-access" and "kbd-access"
    */
   afa.checkA11y = function (itemName, itemProperty) {
-    var allItems = $(".oer-container meta[itemprop='" + itemProperty.name + "']");
-    var accessbleItems = $("[content='true']", allItems);
-
     var itemsThatQualify = $(".oer-container, figure.embed.video");
     var total = itemsThatQualify.length;
     var haveProp = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "']").length;
@@ -229,7 +226,7 @@ var afa = afa || {};
     var no = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
     var dontknow = total - haveProp;
 
-    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total && total === 0 ? "green" : (no === total ? "red" : "yellow")));
+    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total || total === 0 ? "green" : (no === total ? "red" : "yellow")));
 
     return {
       level: level,
@@ -246,7 +243,7 @@ var afa = afa || {};
     var yes = $(".oer-container meta[itemprop='" + itemProperty.name + "'][content='true']").length;
     var no = $(".oer-container meta[itemprop='" + itemProperty.name + "'][content='false']").length;
 
-    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total && total === 0 ? "green" : (no === total ? "red" : "yellow")));
+    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total || total === 0 ? "green" : (no === total ? "red" : "yellow")));
 
     return {
       level: level,
