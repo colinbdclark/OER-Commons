@@ -28,6 +28,12 @@ var afa = afa || {};
           selector: ".disp-trans",
           summaryfunc: "afa.checkDispTrans"
       },
+      ebook: {
+          name: "has-ebook",
+          type: "boolean",
+          selector: ".ebook",
+          summaryfunc: "afa.checkEbook"
+      },
       hazard: {
           name: "hazard",
           type: "vocabulary",
@@ -62,6 +68,12 @@ var afa = afa || {};
       yellow: "yellow text for disp-trans",
       red: "red text for disp-trans",
       grey: "grey text for disp-trans"
+    },
+    ebook: {
+      green: "green text for ebook",
+      yellow: "yellow text for ebook",
+      red: "red text for ebook",
+      grey: "grey text for ebook"
     }
   };
 
@@ -161,6 +173,23 @@ var afa = afa || {};
     var dunno = itemsThatQualify.length - haveProp;
 
     var level = (total == 0 ? "grey" : (yes == total ? "green" : (no == total ? "red" : "yellow")));
+
+    return {
+      level: level,
+      tooltipText: tooltipTextMapping[itemName][level]
+    };
+  };
+  
+  /**
+   * Check on "has-ebook"
+   */
+  afa.checkEbook = function (itemName, itemProperty) {
+    // "has-ebook" only applies on <body>
+    var total = 1;
+    var yes = $(".oer-container meta[itemprop='" + itemProperty.name + "'][content='true']").length;
+    var no = $(".oer-container meta[itemprop='" + itemProperty.name + "'][content='false']").length;
+
+    var level = (yes === 0 && no === 0 ? "grey" : (yes == total ? "green" : (no == total ? "red" : "yellow")));
 
     return {
       level: level,
