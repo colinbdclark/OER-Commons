@@ -7,9 +7,10 @@ from utils.decorators import login_required
 
 class New(View):
 
+    #noinspection PyUnusedLocal
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        material, created = AuthoredMaterial.objects.get_or_create(
+        material = AuthoredMaterial.objects.create(
             author=request.user,
             is_new=True
         )

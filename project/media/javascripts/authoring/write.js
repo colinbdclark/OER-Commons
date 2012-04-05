@@ -510,7 +510,7 @@ WriteStep.prototype.focusOnNode = function ($node) {
 WriteStep.prototype.trackSelection = function () {
 
   // Rangy is not initialized?
-  if (!rangy.initialized) {
+  if (!("getSelection" in rangy)) {
     return;
   }
 

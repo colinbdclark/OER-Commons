@@ -60,6 +60,8 @@ class AbstractAuthoredMaterial(models.Model):
 class AuthoredMaterialDraft(AbstractAuthoredMaterial):
 
     material = models.OneToOneField("authoring.AuthoredMaterial", related_name="draft")
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+    modified_timestamp = models.DateTimeField(auto_now=True)
 
     @models.permalink
     def get_absolute_url(self):
