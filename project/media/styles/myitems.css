@@ -24,7 +24,7 @@ dl.user-info dt {
 }
 
 
-.myitems .my-items-views {
+.my-items-views {
   margin: 0 3px 0 0;
   padding: 0;
   list-style-type: none;
@@ -37,6 +37,8 @@ dl.user-info dt {
 
 .my-items-views li {
   padding: 2px 0 2px 3px;
+  overflow: auto;
+  width: 100%;
 }
 
 .my-items-views .view a.folder-text {
@@ -95,10 +97,6 @@ dl.user-info dt {
   font-style: italic;
 }
 
-section.my-items-views li {
-  overflow: auto;
-  width: 100%;
-}
 
 .folder-create-form input {
   display: none;
@@ -198,12 +196,12 @@ section.my-items-views li {
   margin-top: 20px;
 }
 
-.myitems .pics article .details {
-  margin-left: 195px;
+.myitems article .thumb {
+  float: left;
 }
 
-.myitems .left {
-  float: left;
+.myitems .pics article .details {
+  margin-left: 195px;
 }
 
 
@@ -244,7 +242,7 @@ section.my-items-views li {
   margin-top: 10px;
 }
 
-.myitems .folder-icon {
+.my-items-views .folder-icon {
   display: inline-block;
   width: 21px;
   height: 16px;
@@ -252,47 +250,51 @@ section.my-items-views li {
   vertical-align: text-bottom;
 }
 
-.myitems .my-items-views .view .folder-icon {
+.my-items-views .view .folder-icon {
   background-image: url('/media/images/myitems-folder-auto.png');
 }
 
-.myitems .my-items-views .folder .folder-icon {
+.my-items-views .folder .folder-icon {
   background-image: url('/media/images/myitems-folder-user.png');
 }
 
-.myitems .my-items-views .last .folder-icon {
+.my-items-views .last .folder-icon {
   background-image: url('/media/images/myitems-folder-new.png');
 }
 
 
-.myitems .my-items-views .folder.to-delete .confirm,
-.myitems .my-items-views .folder.to-delete .cancel,
-.myitems .my-items-views .folder.to-delete .folder-text {
+.my-items-views .folder.to-delete .confirm,
+.my-items-views .folder.to-delete .cancel,
+.my-items-views .folder.to-delete .folder-text {
   color: #616161;
 }
 
-.myitems .my-items-views .folder.to-delete .inline-confirmation-block {
+.my-items-views .folder.to-delete .inline-confirmation-block {
   display: inline-block;
   margin-top: 3px;
 }
 
-.myitems .my-items-views .folder.to-delete .confirm:focus,
-.myitems .my-items-views .folder.to-delete .cancel:focus {
+.my-items-views .folder.to-delete .confirm:focus,
+.my-items-views .folder.to-delete .cancel:focus {
     outline: none; 
 }
 
-.myitems .my-items-views .folder.to-delete .confirm {
+.my-items-views .folder.to-delete .confirm {
   border: solid;
   border-width: 1px;
   padding: 1px 3px;
   margin-left: 35px;
 }
 
-.myitems .my-items-views .folder.to-delete .confirm:hover {
+.my-items-views .folder.to-delete .confirm:hover {
   color: #FAAF3B;
 }
 
-.myitems .my-items-views .folder.to-delete .cancel {
+.my-items-views .folder.to-delete .cancel {
   margin-left: 10px;
   font-size: 11px;
+}
+
+.my-items-views a.hidden {
+  display: none;
 }

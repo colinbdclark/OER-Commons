@@ -219,7 +219,6 @@ class UserItem(object):
         self.item = item
         self.content_type = content_type
         self.user = user
-        self.identifier = '%s.%s' % (content_type.id, item.id)
 
 
     def folders(self):
@@ -229,6 +228,15 @@ class UserItem(object):
                 folder__user=self.user,
             )
         )
+
+
+    def identifier(self):
+        return '%s.%s' % (self.content_type.id, self.item.id)
+
+
+    def identifier_string(self):
+        content_type = self.content_type
+        return '%s.%s.%s' % (content_type.app_label, content_type.model, self.item.id)
 
 
     def __getattr__(self, name):
