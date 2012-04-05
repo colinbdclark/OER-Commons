@@ -435,7 +435,7 @@ class AllItems(MyItemsView):
 
 class SubmittedItems(MyItemsView):
     slug = "submitted"
-    name = "My Submitted Items"
+    name = "Submitted Items"
     no_items_message = "You have not submitted any item yet."
 
     @classmethod
@@ -452,7 +452,7 @@ class SubmittedItems(MyItemsView):
 
 class PublishedItems(MyItemsView):
     slug = "published"
-    name = "My Published Items"
+    name = "Published Items"
     no_items_message = "You have not published any item yet."
 
     @classmethod
@@ -472,7 +472,7 @@ class PublishedItems(MyItemsView):
 
 class DraftItems(MyItemsView):
     slug = "draft"
-    name = "My Draft Items"
+    name = "Draft Items"
     no_items_message = "You have no draft items yet."
 
     SORT_BY_OPTIONS = (
