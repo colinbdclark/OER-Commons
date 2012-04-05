@@ -176,6 +176,9 @@
     background-position: 98% 0;
     background-repeat: no-repeat;
     background-size: cover; }
+  .afa-summary .afa-icon:hover {
+    width: 40px;
+    height: 40px; }
   .afa-summary .afa-track-right {
     border-left: 1px solid black;
     padding-left: 0.5em; }
@@ -313,10 +316,22 @@
 
 /* Tooltip */
 .ui-tooltip {
-  padding: 5px; }
+  padding: 5px;
+  border: none;
+  -moz-box-shadow: 0 0 5px 3px #CCCCCC;
+  -webkit-box-shadow: 0 0 5px 3px #CCCCCC;
+  box-shadow: 0 0 5px 3px #CCCCCC; }
   .ui-tooltip .ui-tooltip-content {
     border: none;
     padding-left: 13px; }
+    .ui-tooltip .ui-tooltip-content h1 {
+      text-transform: uppercase;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-left: -0.8em;
+      padding-bottom: 0.5em; }
+    .ui-tooltip .ui-tooltip-content li {
+      margin-bottom: 0.5em; }
 
 .authoring-view #toolbar {
   background-color: #3399cc;
