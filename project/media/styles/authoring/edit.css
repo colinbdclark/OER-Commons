@@ -81,9 +81,12 @@
         font-style: normal;
         color: #666; }
   .authored-content figure.download {
+    color: #0B7BA9;
     font-size: 110%;
     padding: 3px 0 3px 22px;
-    background: url(../images/authoring/download_icon&16.png) 0% 50% no-repeat; }
+    background: url(../../images/authoring/icon-download.png) 0% 50% no-repeat; }
+    .authored-content figure.download a {
+      font-weight: bold; }
   .authored-content figure.video {
     text-align: center; }
     .authored-content figure.video iframe, .authored-content figure.video object, .authored-content figure.video embed {
