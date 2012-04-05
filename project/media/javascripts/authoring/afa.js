@@ -3,17 +3,17 @@ var afa = afa || {};
 (function() {
 
   afa.AfAProperties = {
-      mouseAccess: {
+      mouseA11y: {
           name: "is-mouse-accessible",
           type: "boolean",
           selector: ".mouse-access",
-          summaryfunc: "fluid.identity"
+          summaryfunc: "afa.checkA11y"
       },
       kbdA11y: {
           name: "is-keyboard-accessible",
           type: "boolean",
           selector: ".kbd-access",
-          summaryfunc: "afa.checkKbdA11y"
+          summaryfunc: "afa.checkA11y"
       },
       altText: {
           name: "has-alt-text",
@@ -39,6 +39,18 @@ var afa = afa || {};
 
   // Propsed structure for the mapping btw each AfA property status and its tooltip text
   var tooltipTextMapping = {
+    mouseA11y: {
+      green: "It is possible to operate the resource using the mouse only",
+      yellow: "It may or may not be possible to operate parts of the resource using the mouse only",
+      red: "It is not possible to operate the resource using the mouse only",
+      grey: "Cannot determine whether it is possible to operate the resource using the mouse only"
+    },
+    kbdA11y: {
+      green: "It is possible to operate the resource using the keyboard only",
+      yellow: "It may or may not be possible to operate parts of the resource using the keyboard only",
+      red: "It is not possible to operate the resource using the keyboard only",
+      grey: "Cannot determine whether it is possible to operate the resource using the keyboard only"
+    },
     altText: {
       green: "green text for img-alt %s",
       yellow: "yellow text for img-alt",
@@ -50,12 +62,6 @@ var afa = afa || {};
       yellow: "yellow text for disp-trans",
       red: "red text for disp-trans",
       grey: "grey text for disp-trans"
-    },
-    kbdA11y: {
-        green: "It is possible to operate the resource using the keyboard only",
-        yellow: "It may or may not be possible to operate parts of the resource using the keyboard only",
-        red: "It is not possible to operate the resource using the keyboard only",
-        grey: "Cannot determine whether it is possible to operate the resource using the keyboard only"
     }
   };
 
@@ -110,12 +116,28 @@ var afa = afa || {};
    * Check on "display-transformable"
    */
   afa.checkDispTrans = function (itemName, itemProperty) {
-    var counterAllDispTrans = afa.AfAProperties.dispTrans.values.length, tooltipText;
+    var numOfValsForEachDispTrans = afa.AfAProperties.dispTrans.values.length;
+    var tooltipText;
     
+    // Get expected number of dispTrans values
+    var totalNumOfVideos = $(".oer-container figure.embed.video").length;
+    var expectedDispTransVals = (totalNumOfVideos + 1) * numOfValsForEachDispTrans; // includes <body> + all videos
+
+    // find number of display-transformable values on <body>
     var dispTransValue = $(".oer-container meta[itemprop='" + itemProperty.name + "']").attr("content");
     var counterDispTrans = dispTransValue.split(" ").length;
 
-    var level = (counterDispTrans == counterAllDispTrans ? "green" :
+    // find number of display-transformable values on videos
+    $(".oer-container figure.embed.video meta[itemprop='" + itemProperty.name + "']").each(function (index){
+      var attrValue = $(this).attr("content");
+      if (attrValue) {
+        counterDispTrans += attrValue.split(" ").length;
+      } else {
+          counterDispTrans += 0;
+      }
+    });
+
+    var level = (counterDispTrans == expectedDispTransVals ? "green" :
                 (counterDispTrans == 0 ? "red" : "yellow"));
 
     return {
@@ -127,7 +149,7 @@ var afa = afa || {};
   /**
    * Check on "display-transformable"
    */
-  afa.checkKbdA11y = function (itemName, itemProperty) {
+  afa.checkA11y = function (itemName, itemProperty) {
     var allItems = $(".oer-container meta[itemprop='" + itemProperty.name + "']");
     var accessbleItems = $("[content='true']", allItems);
 
