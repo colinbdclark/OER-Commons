@@ -25,6 +25,7 @@
       });
       this.current = 0;
       this.editorArea = $("#editor-area");
+      this.desribeArea = $("#step-describe div.columns-wrapper");
       this.updateSizes();
       $(window).resize(function() {
         return _this.updateSizes();
@@ -63,6 +64,9 @@
       });
       this.editorArea.css({
         height: this.height - 180 + "px"
+      });
+      this.desribeArea.css({
+        height: this.height - 125 + "px"
       });
     };
 

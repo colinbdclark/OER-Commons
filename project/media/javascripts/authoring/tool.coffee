@@ -3,10 +3,10 @@ class Slider
   constructor: ->
     @slider = $("#slider")
     @slides = @slider.children(".slide")
-    @slides.css({
+    @slides.css(
       float: "left",
       overflow: "hidden"
-    })
+    )
     @slider.wrap($("<div></div>"))
     @wrapper = @slider.parent()
     @wrapper.css(
@@ -20,6 +20,7 @@ class Slider
     )
     @current = 0
     @editorArea = $("#editor-area")
+    @desribeArea = $("#step-describe div.columns-wrapper")
     @.updateSizes()
     $(window).resize(=>
       @.updateSizes()
@@ -56,6 +57,9 @@ class Slider
     )
     @editorArea.css(
       height: @height - 180 + "px"
+    )
+    @desribeArea.css(
+      height: @height - 125 + "px"
     )
     return
 
