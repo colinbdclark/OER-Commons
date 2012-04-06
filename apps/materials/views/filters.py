@@ -516,6 +516,6 @@ FILTERS = OrderedDict([
     ("alignment_categories", AlignmentCategoryFilter("alignment_categories", "f.alignment_category")),
     ("alignment_cluster", AlignmentClusterFilter("alignment_tags", "f.cluster")),
     ("evaluated_rubrics", RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric")),
-    ("authored_content", AuthoredContentFilter(None, "authored", u"OER Author Resources")),
+    ("authored_content", AuthoredContentFilter(None, "authored", u"Open Author Resources")),
     ("search", SearchFilter()),
 ])
