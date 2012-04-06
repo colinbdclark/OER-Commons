@@ -26,19 +26,19 @@
              <option value="-">Select a standard</option>
            </select>
         </div>
-        <div class="field grade">
+        <div class="field grade hidden">
            <div class="label"><label for="id_curriculum_grade">Grade Level</label></div>
            <select disabled="disabled" name="grade" id="id_curriculum_grade" data-source="{% url curriculum:list_grades %}">
              <option value="-">Select a grade level</option>
            </select>
         </div>
-        <div class="field category">
-           <div class="label"><label for="id_curriculum_category">Learning Objective</label></div>
+        <div class="field category hidden">
+           <div class="label"><label for="id_curriculum_category">Learning Domain</label></div>
            <select disabled="disabled" name="category" id="id_curriculum_category" data-source="{% url curriculum:list_categories %}">
-             <option value="-">Select a learning objective</option>
+             <option value="-">Select a learning domain</option>
            </select>
         </div>
-        <div class="field tag">
+        <div class="field tag hidden">
            <div class="label"><label for="id_curriculum_tag">Alignment Tag</label></div>
            <select disabled="disabled" name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_tags %}">
              <option value="-">Select an alignment tag</option>
@@ -64,9 +64,7 @@
 
     <div class="clear"></div>
 
-  </div>
-
-  <div class="alignment-tags-ct">
+    <div class="alignment-tags-ct">
     <div class="buttons" id="align-form-buttons">
       <a href="#" class="button primary align disabled">Align</a>
       <a href="#" class="button clear disabled">Clear</a>
@@ -75,6 +73,8 @@
       {{ form.alignment_tags }}
     </ul>
     <div class="clear"></div>
+  </div>
+
   </div>
 
   {% spaceless %}

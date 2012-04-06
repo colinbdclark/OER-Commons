@@ -1075,7 +1075,8 @@
 #step-describe .layout-columns {
   padding-top: 30px; }
 #step-describe .columns-wrapper {
-  position: relative; }
+  position: relative;
+  overflow-y: auto; }
 #step-describe .column-left, #step-describe .column-main, #step-describe .column-right {
   float: left;
   width: 30%;

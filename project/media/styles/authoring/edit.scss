@@ -1250,6 +1250,7 @@
   }
   .columns-wrapper {
     position: relative;
+    overflow-y: auto;
   }
   .column-left, .column-main, .column-right {
     float: left;
