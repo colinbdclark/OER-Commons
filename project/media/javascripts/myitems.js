@@ -139,7 +139,7 @@ oer.myitems.init = function() {
     var getFolders = function(request, callback) {
         var term = $.trim(request.term).toLowerCase();
         var folders = [];
-        var $names = $("#folder-create-form li.folder span.name");
+        var $names = $folderList.find("li.folder span.name");
         for (var i = 0; i < $names.length; i++) {
             var folder = $.trim($names.eq(i).text());
             if (folder.substring(0, term.length).toLowerCase() === term) {
@@ -149,13 +149,12 @@ oer.myitems.init = function() {
         callback(folders);
     };
 
-
-    var $form = $("#folder-create-form");
-    var $button = $("#folder-create-button");
-    var $submit = $("#folder-create-submit");
-    var $folderInput= $form.find("input");
-    var $folderList = $form.find("ul");
+    var $folderList = $(".my-items-views");
     var $folderLast = $folderList.find("li.last");
+    var $form = $folderLast.find(".folder-create-form");
+    var $button = $form.find("#folder-create-button");
+    var $submit = $form.find("#folder-create-submit");
+    var $folderInput= $form.find("input");
     var $itemFolderLists = $("article ul.folder-list");
     var $itemFolderAddButton = $itemFolderLists.find("li.last a");
     var $itemFolderForm = $('<li id="folder-item-form" class="hidden"><form><input type="text" /><a class="dashed" href="#">Submit</a></form></li>');
@@ -283,34 +282,4 @@ oer.myitems.index.init = function() {
     oer.myitems.index.init_action_panel();
     oer.materials.index.init_actions_menus();
 
-    oer.collapsibles.init($("#content"));
-
 };
-
-oer.myitems.index.init_saved_items = function() {
-    var $confirmation = $("div.unsave-confirmation");
-
-    $confirmation.find("a.cancel").click(function(e) {
-        e.preventDefault();
-        $confirmation.hide();
-    });
-
-    $confirmation.find("a.unsave").click(function(e) {
-        e.preventDefault();
-        var $item = $confirmation.closest("article.item");
-        $confirmation.hide().detach();
-        var url = $item.find("a.unsave-item").attr("href");
-        $.post(url,
-            function() {
-                $item.fadeOut(500);
-            });
-    });
-
-    $("#content").delegate("a.unsave-item", "click", function(e) {
-        e.preventDefault();
-        var $this = $(this);
-        var $details = $this.closest("article.item").find("div.details");
-        $confirmation.detach().appendTo($details).fadeIn(300);
-    });
-};
-

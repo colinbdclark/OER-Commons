@@ -114,19 +114,16 @@ class FolderDelete(View):
 
 
 
-def get_content_object_factory(app_label_ext, models):
-    content_types = (
-        ContentType.objects.get(app_label=app_label_ext, model=model)
-        for model in models
-    )
-
-    name_to_model = dict(
-        (content_type.id, content_type.model_class())
-        for content_type in content_types
+def get_content_object_factory(models):
+    content_type_to_model = dict(
+        zip(
+            [ContentType.objects.get_for_model(model).id for model in models],
+            models
+        )
     )
     def f(content_type, object_id):
         try:
-            model = name_to_model[int(content_type)]
+            model = content_type_to_model[int(content_type)]
         except KeyError, ValueError:
             raise Http404()
         try:
@@ -139,10 +136,13 @@ def get_content_object_factory(app_label_ext, models):
     return f
 
 
-
-get_material_object_or_404 = get_content_object_factory(
-    "materials", ["course", "library", "communityitem"])
-
+get_material_object_or_404 = get_content_object_factory([
+    Course,
+    CommunityItem,
+    Library,
+    AuthoredMaterial,
+    AuthoredMaterialDraft,
+])
 
 
 class FolderAddItem(View):
@@ -155,11 +155,12 @@ class FolderAddItem(View):
         except KeyError:
             return { "status": "error"}
 
+        material = get_material_object_or_404(*item_id.split('.'))
         folder, created = Folder.objects.get_or_create(
             user=request.user,
             name=folder_name
         )
-        material = get_material_object_or_404(*item_id.split('.'))
+
         FolderItem.objects.create(folder=folder, content_object=material)
         reindex(material)
         to_return = { "status": "success" }
@@ -218,7 +219,6 @@ class UserItem(object):
         self.item = item
         self.content_type = content_type
         self.user = user
-        self.identifier = '%s.%s' % (content_type.id, item.id)
 
 
     def folders(self):
@@ -228,6 +228,15 @@ class UserItem(object):
                 folder__user=self.user,
             )
         )
+
+
+    def identifier(self):
+        return '%s.%s' % (self.content_type.id, self.item.id)
+
+
+    def identifier_string(self):
+        content_type = self.content_type
+        return '%s.%s.%s' % (content_type.app_label, content_type.model, self.item.id)
 
 
     def __getattr__(self, name):
@@ -363,7 +372,6 @@ class MyItemsView(TemplateView):
         return response
 
 
-
     def get_context_data(self, *args, **kwargs):
         index_types = SortedDict([
             ("pics", {
@@ -398,7 +406,6 @@ class MyItemsView(TemplateView):
             index_type_dict['name'] = index_type_name
 
         self.index_type = index_type
-
 
         items = []
         user = self.request.user
@@ -519,7 +526,6 @@ class DraftItems(MyItemsView):
 class FolderItems(MyItemsView):
     no_items_message = u"You have not saved any item in this folder yet."
 
-
     def get_querysets(self, user):
         querysets = []
         type_to_pks = defaultdict(list)
@@ -545,5 +551,3 @@ class FolderItems(MyItemsView):
         self.folder = get_object_or_404(Folder, user=self.request.user, slug=self.slug)
         self.name = self.folder.name
         return super(FolderItems, self).get_context_data(*args, **kwargs)
-
-
