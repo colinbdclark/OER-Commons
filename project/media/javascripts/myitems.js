@@ -10,7 +10,6 @@ oer.myitems._addFolderElement = function($folderLast, template, params) {
         }
         if (params.id) {
             $item.data("folder-id", params.id);
-            console.log($item.data("folder-id"));
         }
     }
     $item.hide();
@@ -341,8 +340,6 @@ oer.myitems.init_save_button = function() {
         $other = $this.siblings(".save-unsave-button.hidden");
         $this.addClass("hidden");
         $other.removeClass("hidden");
-        console.log($this);
-        console.log($other);
         $.post($this.attr("href"), function(response) {
             if (response.status === "success") {
                 if ($this.hasClass("unsave")) {
