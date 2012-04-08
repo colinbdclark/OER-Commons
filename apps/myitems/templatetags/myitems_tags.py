@@ -7,7 +7,7 @@ from materials.utils import get_name_from_slug
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 
-from myitems.models import Folder
+from myitems.models import Folder, FolderItem
 from myitems.views import FolderForm, AllItems, SubmittedItems, PublishedItems, DraftItems
 
 register = Library()
@@ -43,7 +43,6 @@ def myitems_views_portlet(context):
         }
         for view in VIEWS
     ]
-
     folders = [
         {
             "url": f.get_absolute_url(),
@@ -59,4 +58,37 @@ def myitems_views_portlet(context):
             item["selected"] = True
             break
 
-    return dict(views=views, folders=folders, folder_create_form=FolderForm())
+    return {
+        'views': views,
+        'folders': folders,
+        'folder_create_form': FolderForm(),
+    }
+
+
+@register.inclusion_tag("myitems/include/save-button.html", takes_context=True)
+def myitems_save_button(context):
+    request = context["request"]
+    item = context["item"]
+    content_type = context["content_type"]
+    folders = ((
+            {
+                "url": f.get_absolute_url(),
+                "title": f.name,
+                "id": f.id,
+                "count": f.folderitem__count,
+                "saved": FolderItem.objects.filter(
+                    folder=f, content_type=content_type, object_id=item.id).exists()
+            }
+            for f in Folder.objects.filter(user=request.user).annotate(Count('folderitem'))
+        ) if request.user.is_authenticated()
+        else []
+    )
+    return {
+        'folders': folders,
+        'folder_create_form': FolderForm(),
+        'saved': context["saved"],
+        'save_url': context["save_url"],
+        'unsave_url': context["unsave_url"],
+        'content_type': content_type.id,
+        'object_id': item.id,
+    }

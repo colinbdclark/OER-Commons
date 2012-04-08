@@ -2,9 +2,12 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from autoslug.fields import AutoSlugField
+from saveditems.models import SavedItem
 
 
 class Folder(models.Model):
@@ -45,3 +48,9 @@ class FolderItem(models.Model):
 
     def __unicode__(self):
         return u"%s stored in %s" % (self.content_object, self.folder)
+
+
+@receiver(pre_delete, sender=SavedItem, dispatch_uid="saveditem_pre_delete_delete_folders")
+def saveditem_pre_delete_delete_folders(sender, instance=None, **kwargs):
+    FolderItem.objects.filter(content_type=instance.content_type,
+        object_id=instance.object_id).delete()

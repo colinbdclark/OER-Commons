@@ -3,17 +3,24 @@ import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
+from django.db.models import Count
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+        SavedItem = orm["saveditems.SavedItem"]
+        for x in SavedItem.objects.values('user__id', 'content_type__id', 'object_id').annotate(num=Count('id')).filter(num__gt=1):
+            del x['num']
+            for i in SavedItem.objects.filter(**x)[1:]:
+                i.delete()
+
+
         # Adding unique constraint on 'SavedItem', fields ['user', 'content_type', 'object_id']
         db.create_unique('saveditems_saveditem', ['user_id', 'content_type_id', 'object_id'])
 
 
     def backwards(self, orm):
-        
+
         # Removing unique constraint on 'SavedItem', fields ['user', 'content_type', 'object_id']
         db.delete_unique('saveditems_saveditem', ['user_id', 'content_type_id', 'object_id'])
 

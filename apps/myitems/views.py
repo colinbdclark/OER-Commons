@@ -16,7 +16,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
 from materials.views.index import IndexParams, Pagination
-from materials.models import CommunityItem, Course, Library, PUBLISHED_STATE
+from materials.models import CommunityItem, Course, Library, PUBLISHED_STATE, Material
 from authoring.models import AuthoredMaterial, AuthoredMaterialDraft
 from savedsearches.models import SavedSearch
 from utils.decorators import login_required
@@ -85,7 +85,6 @@ class FolderCreate(View):
             return {
                 "status": "success",
                 "slug": folder.slug,
-                "name": folder.name,
                 "id": folder.id
             }
         else:
@@ -155,18 +154,34 @@ class FolderAddItem(View):
         except KeyError:
             return { "status": "error"}
 
-        material = get_material_object_or_404(*item_id.split('.'))
+        content_type, object_id = item_id.split('.')
+        material = get_material_object_or_404(content_type, object_id)
         folder, created = Folder.objects.get_or_create(
             user=request.user,
             name=folder_name
         )
+        if isinstance(material, Material):
+            creator = material.creator
+        elif isinstance(material, AuthoredMaterial):
+            creator = material.author
+        elif  isinstance(material, AuthoredMaterialDraft):
+            creator = material.material.author
+        else:
+            assert False, type(material)
+
+        if creator != request.user:
+            SavedItem.objects.get_or_create(
+                user=request.user,
+                content_type=ContentType.objects.get(id=content_type),
+                object_id=object_id
+            )
 
         FolderItem.objects.create(folder=folder, content_object=material)
         reindex(material)
         to_return = { "status": "success" }
         if created:
-            to_return["folder_id"] = folder.id
-            to_return["folder_slug"] = folder.slug
+            to_return["id"] = folder.id
+            to_return["slug"] = folder.slug
         return to_return
 
 
