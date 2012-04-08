@@ -435,13 +435,22 @@
 
 .portlet.save a {
   display: inline-block;
-  line-height: 27px;
+  line-height: 35px;
   font-size: 18px;
 }
 
-.portlet.save a.save {
-  padding-left: 35px;
-  background: url(../images/icon-save.png) no-repeat 0 50%;
+.portlet.save .myitems-save-button .save-unsave-button {
+  width: 200px;
+}
+.portlet.save .myitems-save-button .folder-list-button {
+  width: 40px;
+}
+.portlet.save .myitems-save-button .my-items-views {
+  top: 35px;
+  width: 248px;
+}
+.portlet.save .my-items-views .folder {
+  width: 245px;
 }
 
 /* Browse All */

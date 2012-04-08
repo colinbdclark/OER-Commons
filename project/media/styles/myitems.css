@@ -270,7 +270,7 @@ dl.user-info dt {
 }
 
 .my-items-views .folder.to-delete .inline-confirmation-block {
-  display: inline-block;
+  display: block;
   margin-top: 3px;
 }
 
@@ -297,4 +297,47 @@ dl.user-info dt {
 
 .my-items-views a.hidden {
   display: none;
+}
+
+.myitems-save-button {
+  position: relative;
+}
+
+.myitems-save-button .save-unsave-button,
+.myitems-save-button .folder-list-button {
+  color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+.myitems-save-button .save-unsave-button {
+  background-color: #8CC63F;
+  float: left;
+  padding-left: 10px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.myitems-save-button .folder-list-button {
+  background-color: #679801;
+  float: right;
+  text-align: center;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.myitems-save-button .my-items-views {
+  display: none;
+  position: absolute;
+  background-color: #FFF;
+  border: solid;
+  border-top: none;
+  border-width: 1px;
+}
+
+.myitems-save-button .save-unsave-button.hidden {
+  display: none;
+}
+
+.myitems-save-button .my-items-views .folder .save-indicator {
+  float: right;
 }
