@@ -1,0 +1,27 @@
+<div class="myitems-save-button">
+    {% if folders %}
+        <ul class="my-items-views">
+            {% for f in folders %}
+              <li class="folder{% if f.saved %} selected{% endif %}" data-folder-id="{{ f.id }}">
+                  <i class="folder-icon"></i>
+                  <a class="folder-text" href="{{ f.url }}">
+                      <span class="name">{{ f.title }}</span>
+                      (<span class="number">{{ f.count }}</span>)
+                  </a>
+              </li>
+            {% endfor %}
+            <li class="last">
+                <form class="folder-create-form" method="post" action="{% url myitems:folder_add_item %}"
+                    data-identifier="{{ content_type }}.{{ object_id }}">
+                    <i class="folder-icon"></i>
+                    {{ folder_create_form.name }}
+                    <a id="folder-create-button" class="dashed" href="#">Create a New Folder</a>
+                    <a id="folder-create-submit" class="dashed hidden" href="#">Create</a>
+                </form>
+            </li>
+        </ul>
+    {% endif %}
+    <a href="{{ unsave_url }}" class="require-login unsave save-unsave-button rc3{% if not saved %} hidden{% endif %}">Remove from My Items</a>
+    <a href="{{ save_url }}" class="require-login save save-unsave-button rc3{% if saved %} hidden{% endif %}">Save to My Items</a>
+    <a href="#" class="require-login folder-list-button rc3">▼</a>
+</div>
