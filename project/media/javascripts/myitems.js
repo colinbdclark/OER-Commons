@@ -18,7 +18,7 @@ oer.myitems._addFolderElement = function($folderLast, template, params) {
     return {
         element: $item,
         setParams: setParams,
-        remove: function() { $item.remove; },
+        remove: function() { $item.remove(); },
     }
 };
 
@@ -323,7 +323,7 @@ oer.myitems.init_save_button = function() {
         
     var getRequestParams = function($form) {
         return {
-            folder_name: $form.find("input").val(),
+            name: $form.find("input").val(),
             item_id: $form.attr("data-identifier"),
         };
     };
