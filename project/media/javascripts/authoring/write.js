@@ -1119,6 +1119,9 @@ WriteStep.prototype.loadEmbed = function ($figure) {
     $.post(this.$area.data("load-embed-url"), {url: url}, function (response) {
       var $caption = $figure.find("figcaption").detach();
       $figure.html(response.html).append($caption).fadeIn();
+      fluid.subtitleWidget($figure, {
+        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html"
+      });
     });
   }
 };
