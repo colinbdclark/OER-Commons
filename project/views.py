@@ -1,11 +1,13 @@
 from annoying.decorators import ajax_request
 from cache_utils.decorators import cached
 from common.models import GradeLevel
+from core.views import OERViewMixin
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.utils.html import escape
+from django.views.generic.base import TemplateView
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
 from materials.models.common import Keyword, GeneralSubject
@@ -106,12 +108,6 @@ def frontpage(request):
                                ))
 
 
-def contribute(request):
-    page_title = u"Contribute Your Content to OER Commons"
-    breadcrumbs = [{"url": reverse("contribute"), "title": page_title}]
-    return direct_to_template(request, "contribute.html", locals())
-
-
 @login_required
 def oauth_authorize(request, token, callback, params):
 
@@ -136,3 +132,9 @@ def honeypot(request):
     if callable(value):
         value = value()
     return dict(value=value)
+
+
+class Contribute(OERViewMixin, TemplateView):
+
+    page_title = u"Contribute Resource to OER Commons"
+    template_name = "contribute.html"
