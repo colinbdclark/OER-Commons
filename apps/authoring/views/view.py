@@ -37,8 +37,15 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
             qs = qs.filter(workflow_state=PUBLISHED_STATE)
         return qs
 
+    def add_afa(self, content):
+        return u"""
+                    <meta itemprop="is-mouse-accessible" content="true"/>
+                    <meta itemprop="has-transcript" content="false"/>
+                    <meta itemprop="is-display-transformable" content=""/> %s
+                """ % content
+
     @classmethod
-    def prepare_content(cls, text):
+    def prepare_content(cls, self, text):
         document = pq("<div></div>").html(text)
         for embed in document.find("figure.embed"):
             embed = pq(embed)
@@ -47,6 +54,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
             embed.removeAttr("data-url")
             caption = embed.find("figcaption").outerHtml()
             if embed.hasClass("video"):
+                embed.attr("itemscope", "")
                 content = u"""
                     <script type="text/javascript" src="http://s3.www.universalsubtitles.org/embed.js">
                       ({
@@ -57,7 +65,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
                       })
                     </script>
                 """ % url
-                embed.html(content + caption)
+                embed.html(self.add_afa(content) + caption)
 
         # Build references
         footnotes = pq("""<div id="footnotes"></div>""")
@@ -95,7 +103,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
 
     def get_context_data(self, **kwargs):
         data = super(ViewFullAuthoredMaterial, self).get_context_data(**kwargs)
-        data["text"], data["footnotes"], data["toc"] = ViewFullAuthoredMaterial.prepare_content(self.object.text)
+        data["text"], data["footnotes"], data["toc"] = ViewFullAuthoredMaterial.prepare_content(self, self.object.text)
         data["preview"] = self.preview
         data["material"] = self.object.material if self.preview else self.object
         return data
