@@ -37,6 +37,13 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
             qs = qs.filter(workflow_state=PUBLISHED_STATE)
         return qs
 
+    def add_afa(content):
+        return u"""
+                    <meta itemprop="is-mouse-accessible" content="true"/>
+                    <meta itemprop="has-transcript" content="false"/>
+                    <meta itemprop="is-display-transformable" content=""/> %s
+                """ % content
+
     @classmethod
     def prepare_content(cls, text):
         document = pq("<div></div>").html(text)
@@ -61,7 +68,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
                       })
                     </script>
                 """ % url
-                embed.html(content + caption)
+                embed.html(add_afa(content) + caption)
 
         # Build references
         footnotes = pq("""<div id="footnotes"></div>""")
