@@ -14,22 +14,22 @@
     font-family: "Myriad Pro",Helvetica,sans-serif;
 }
 div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div.fl-subtitle-panel div.fl-subtitle-panel-menu, div.fl-subtitle-panel .fl-subtitle-panel-languages {
-    margin-bottom: 0;
+    margin-bottom: 0em;
 }
 .fl-subtitle-panel-menu {
     background-color: #E6E6E6;
-    padding: 8px;
+    padding: 0.5em;
     color: #A7A7A7;
     border-color: #E0E0E0;
-    border-width: 2px;
-    width: 200px;
-    text-shadow: #ffffff 1px 1px 1px;
+    border-width: 0.125em;
+    width: 12.5em;
+    text-shadow: #ffffff 0.063em 0.063em 0.063em;
 }
 .fl-subtitle-panel-languages {
     list-style-type: none;
-    margin: 0px;
-    padding: 0px;
-    max-height: 281px;
+    margin: 0em;
+    padding: 0em;
+    max-height: 17.563em;
     overflow-y: scroll;
 }
 .fl-subtitle-panel-languages li a {
@@ -38,16 +38,16 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     background-color: #E6E6E6;
     background-image: url(../images/pencil-default.png);
     background-repeat: no-repeat;
-    background-position: 10.5px center;
-    padding: 8px 8px 8px 30px;
+    background-position: 0.656em center;
+    padding: 0.5em 0.5em 0.5em 1.875em;
     color: #4091C4;
     border-color: #E0E0E0;
-    border-width: 2px;
+    border-width: 0.125em;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 163px;
-    min-height: 19px;
-    border-top: #E0E0E0 2px solid;
+    width: 10.188em;
+    min-height: 1.188em;
+    border-top: #E0E0E0 0.125em solid;
 }
 .fl-subtitle-panel-languages li a:hover {
     color: #9BCB37;
@@ -63,8 +63,8 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     text-decoration: none;
     background-image: url(../images/arrow-default.png);
     background-repeat: no-repeat;
-    background-position: 8px center;
-    padding: 8px 8px 8px 30px;
+    background-position: 0.5em center;
+    padding: 0.5em 0.5em 0.5em 1.875em;
     color: #4091C4;
 }
 .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
@@ -73,9 +73,9 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
 }
 .fl-subtitle-panel-tooltip {
     position    : absolute;
-    padding     : 3px 5px;
+    padding     : 0.188em 0.313em;
     background-color: #FFCB33;
     color: black;
     font-family: "Myriad Pro",Helvetica,sans-serif;
-    border: #F6E8C4 1px solid; 
+    border: #F6E8C4 0.063em solid; 
 }
