@@ -1,17 +1,13 @@
 {% extends "myitems/myitems.html" %}
-{% load rating_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
       oer.myitems.init();
-      oer.myitems.index.init_saved_items();
     });
   </script>
 {% endblock %}
 
-{% block above-content %}
-{% endblock %}
 
 {% block content %}
   {% include "myitems/include/user-info.html" %}

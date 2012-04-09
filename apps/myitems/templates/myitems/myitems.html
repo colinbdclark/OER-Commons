@@ -13,7 +13,9 @@
 {% endblock %}
 
 {% block page-title %}{% endblock %}
-{% block above-content %}{% endblock %}
+{% block above-content %}
+    {% profile_tabs %}
+{% endblock %}
 
 {% block column-left %}
     {% myitems_views_portlet %}
@@ -22,7 +24,7 @@
     </section>
 {% endblock %}
 
-{% block bodyclass %}no-right-column myitems{% endblock %}
+{% block bodyclass %}no-right-column myitems with-profile-tabs{% endblock %}
 
 {% block column-right %}{% endblock %}
 
