@@ -55,4 +55,17 @@
   .button-green {
     margin: 1em 0;
   }
+  .share-buttons {
+    padding: 2em 0 1em 0;
+    clear: both;
+    text-align: right;
+    span {
+      color: #1a4d63;
+      font-weight: bold;
+    }
+    .addthis_toolbox {
+      margin-left: 0.5em;
+      display: inline-block;
+    }
+  }
 }

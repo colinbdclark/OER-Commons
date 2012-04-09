@@ -45,3 +45,13 @@
     text-align: left; }
   #content.contribute .button-green {
     margin: 1em 0; }
+  #content.contribute .share-buttons {
+    padding: 2em 0 1em 0;
+    clear: both;
+    text-align: right; }
+    #content.contribute .share-buttons span {
+      color: #1a4d63;
+      font-weight: bold; }
+    #content.contribute .share-buttons .addthis_toolbox {
+      margin-left: 0.5em;
+      display: inline-block; }
