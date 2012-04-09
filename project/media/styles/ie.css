@@ -45,3 +45,8 @@
 .myitems .portlet h1 .rocon-br {
   display: none;
 }
+
+#content.contribute .sheet {
+  width: 37% !important;
+}
+

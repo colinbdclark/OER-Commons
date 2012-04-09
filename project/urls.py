@@ -6,6 +6,7 @@ from oai.oer.oai_oer2 import OAIOER2
 from oai.oer.oer_recommender import OERRecommender
 from oai.oer.oer_submissions import OERSubmissions
 from oai.oer.repository import OERRepository
+from project.views import Contribute
 from sitemap import sitemaps
 
 
@@ -25,7 +26,7 @@ repository = OERRepository(u"OER Commons Repository", "oercommons.org", oai_meta
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', "project.views.frontpage", name="frontpage"),
-    url(r'^contribute$', "project.views.contribute", name="contribute"),
+    url(r'^contribute$', Contribute.as_view(), name="contribute"),
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.index', {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     url(r'^robots.txt$', 'django.views.generic.simple.direct_to_template', {'template': "robots.txt", "mimetype": "text/plain"}),

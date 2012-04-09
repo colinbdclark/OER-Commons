@@ -193,10 +193,6 @@ div.box h3 {
   font-size: 16px;
 }
 
-#content.contribute a {
-  text-decoration: none;
-}
-
 .accordion .accordion-header {
   margin-top: 0;
 }
@@ -351,3 +347,42 @@ ul.tagit li {
   z-index: 9999;
   border: 1px solid #333;
 }
+
+.sheet {
+  -webkit-box-shadow: 0 0 15px #bbb;
+  -moz-box-shadow: 0 0 15px #bbb;
+  -ms-box-shadow: 0 0 15px #bbb;
+  box-shadow: 0 0 15px #bbb;
+  border: 1px solid #eee;
+  padding: 2em;
+}
+
+.button-green {
+  display: inline-block;
+  border: 1px solid #679801;
+  padding: 0.3em 1.5em;
+  background-color: #85c334;
+  background-image: #6ab617;
+  background-image: -webkit-linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+  background-image: -moz-linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+  background-image: -o-linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+  background-image: -ms-linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+  background-image: linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+  color: #ffffff;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1.1em;
+  text-align: center;
+}
+
+.button-orange {
+  display: inline-block;
+  padding: 0.3em 1em;
+  border: 1px solid #F5A456;
+  background-color: #FFCA74;
+  color: #1E4E62;
+  text-decoration: none;
+  font-size: 1.1em;
+  text-align: center;
+}
+
