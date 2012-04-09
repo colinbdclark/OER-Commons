@@ -42,7 +42,7 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             }
         },
         styles: {
-            mainWrap: "fl-subtitle-mainWrap",
+            mainWrap: "flc-subtitle-mainWrap fl-subtitle-mainWrap",
             videoWrap: "fl-subtitle-videoWrap",
             widgetWrap: "fl-subtitle-widgetWrap"
         },
@@ -111,9 +111,9 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         var container = that.container;
         
         // First create a markup for the video where we want to attach our widget
-        var mainWrap = $("<div />").addClass(styles.mainWrap);
-        var widgetWrap = $("<div />").addClass(styles.widgetWrap);
-        var videoWrap = $("<div/>").addClass(styles.videoWrap);
+        var mainWrap = $("<div />").addClass(styles.mainWrap).attr("contenteditable", "false");
+        var widgetWrap = $("<div />").addClass(styles.widgetWrap).attr("contenteditable", "false");
+        var videoWrap = $("<div/>").addClass(styles.videoWrap).attr("contenteditable", "false");
         
         mainWrap.append(widgetWrap);
         mainWrap.append(videoWrap);
