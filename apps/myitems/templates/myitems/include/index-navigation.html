@@ -1,18 +1,17 @@
 {% if pagination.pages|length > 1 %}
-<div class="index-navigation clearfix {{ class }}">
-  <ul class="pagination">
-    <li>
-      {% if pagination.first_page_url %}
-      <a title="First page" href="{{ pagination.first_page_url }}">|&lt;</a>
-      {% else %}|&lt;{% endif %}
-    </li>
-    <li>
-      {% if pagination.prev_page_url %}
-      <a title="Previous page" rel="prev" href="{{ pagination.prev_page_url }}">&lt;&lt;</a>
-      {% else %}&lt;&lt;{% endif %}
-    </li>
+<div class="pagination">
+    <div class="previous">
+      <a rel="prev"{% if pagination.prev_page_url %} href="{{ pagination.prev_page_url }}"{% else %} class="disabled"{% endif %}>
+        <span class="arrow">&lt;</span> <span class="text">Previous</span>
+      </a>
+    </div>
 
-    <li>
+    <div class="next">
+      <a rel="next"{% if pagination.next_page_url %} href="{{ pagination.next_page_url }}"{% else %} class="disabled"{% endif %}>
+        <span class="text">Next</span> <span class="arrow">&gt;</span>
+    </div>
+    
+    <div class="pages">
       {% for page in pagination.pages %}
         {% if page %}
           {% if page.url %}
@@ -24,18 +23,6 @@
           …
         {% endif %}
       {% endfor %}
-    </li>
-
-    <li>
-      {% if pagination.next_page_url %}
-      <a title="Next page" rel="next" href="{{ pagination.next_page_url }}">&gt;&gt;</a>
-      {% else %}&gt;&gt;{% endif %}
-    </li>
-    <li class="last">
-      {% if pagination.last_page_url %}
-      <a title="Last page" href="{{ pagination.last_page_url }}">&gt;|</a>
-      {% else %}&gt;|{% endif %}
-    </li>
-  </ul>
+    </div>
 </div>
 {% endif %}

@@ -71,24 +71,14 @@ class FolderItemForm(forms.ModelForm):
 
 
 class FolderCreate(View):
-    form_class = FolderForm
-
     @method_decorator(login_required)
     @method_decorator(ajax_request)
     def post(self, request, *args, **kwargs):
-        form = self.form_class(
-            instance=Folder(user=request.user),
-            data=request.POST
+        _, created = Folder.objects.get_or_create(
+            user=request.user,
+            name=request.POST["name"]
         )
-        if form.is_valid():
-            folder = form.save()
-            return {
-                "status": "success",
-                "slug": folder.slug,
-                "id": folder.id
-            }
-        else:
-            return { "status": "error" }
+        return { "status": "success" if created else "error" }
 
 
 
@@ -169,15 +159,23 @@ class FolderAddItem(View):
         else:
             assert False, type(material)
 
+        content_type = ContentType.objects.get(id=content_type)
+
         if creator != request.user:
             SavedItem.objects.get_or_create(
                 user=request.user,
-                content_type=ContentType.objects.get(id=content_type),
+                content_type=content_type,
                 object_id=object_id
             )
 
-        FolderItem.objects.create(folder=folder, content_object=material)
+        _, created_fi = FolderItem.objects.get_or_create(
+            folder=folder,
+            content_type=content_type,
+            object_id=object_id
+        )
         reindex(material)
+        if not created_fi:
+            return { "status": "error" }
         to_return = { "status": "success" }
         if created:
             to_return["id"] = folder.id
