@@ -341,3 +341,47 @@ dl.user-info dt {
 .myitems-save-button .my-items-views .folder .save-indicator {
   float: right;
 }
+
+.myitems .pagination {
+  border-top: solid;
+  border-width: 2px;
+  border-color: #3F6B82;
+  padding-top: 5px;
+}
+
+.myitems .pagination .previous {
+  float: left;
+}
+
+.myitems .pagination .next {
+  float: right;
+}
+
+.myitems .pagination .pages {
+  width: 100%;
+  text-align: center;
+}
+
+.myitems .pagination .pages a {
+  color: #616161;
+}
+
+.myitems .pagination .pages strong {
+  color: #8CC63F;
+  font-size: 110%;
+}
+
+.myitems .pagination .text {
+  color: #616161;
+  text-decoration: underline;
+}
+
+.myitems .pagination .arrow {
+  font-weight: bolder;
+  color: #000;
+}
+
+.myitems .pagination .disabled .arrow, 
+.myitems .pagination .disabled .text { 
+  color: #DFDFDF;
+}
