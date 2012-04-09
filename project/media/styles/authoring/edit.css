@@ -1075,8 +1075,9 @@
 #step-describe .layout-columns {
   padding-top: 30px; }
 #step-describe .columns-wrapper {
-  position: relative;
   overflow-y: auto; }
+  #step-describe .columns-wrapper .inner-wrapper {
+    position: relative; }
 #step-describe .column-left, #step-describe .column-main, #step-describe .column-right {
   float: left;
   width: 30%;
@@ -1121,7 +1122,7 @@
   width: 180px; }
 #step-describe #align-tag-description-ct {
   position: absolute;
-  bottom: 20px;
+  bottom: 45px;
   left: 0;
   width: 30%; }
 #step-describe #align-tag-description {
@@ -1142,6 +1143,8 @@
   #step-describe ul.align-tags li {
     margin-top: 0;
     margin-bottom: 3px; }
+#step-describe .field.grade, #step-describe .field.category, #step-describe .field.tag {
+  margin-left: 2em; }
 
 #step-submit .layout-columns {
   padding-top: 30px; }
