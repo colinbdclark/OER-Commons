@@ -20,6 +20,7 @@ class SavedItem(models.Model):
         return u"'%s' saved by %s" % (self.content_object, self.user)
 
     class Meta:
+        unique_together = (("user", "content_type", "object_id"),)
         verbose_name = _(u"Saved Item")
         verbose_name_plural = _(u"Saved Items")
 

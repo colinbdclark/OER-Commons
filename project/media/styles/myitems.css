@@ -24,27 +24,29 @@ dl.user-info dt {
 }
 
 
-.myitems .portlet.my-items-views ul {
+.my-items-views {
   margin: 0 3px 0 0;
   padding: 0;
   list-style-type: none;
   font-size: 14px;
 }
 
-.portlet.my-items-views a {
+.my-items-views a {
   text-decoration: none;
 }
 
-.portlet.my-items-views li {
+.my-items-views li {
   padding: 2px 0 2px 3px;
+  overflow: auto;
+  width: 100%;
 }
 
-.portlet.my-items-views .view a.folder-text {
+.my-items-views .view a.folder-text {
   color: #1F4D64;
 }
 
 
-.portlet.my-items-views li.selected {
+.my-items-views li.selected {
   background-color: #D5D5FF;
 }
 
@@ -54,6 +56,7 @@ dl.user-info dt {
   border-top-left-radius: 6px 6px;
   border-top-right-radius: 6px 6px;
   padding: 2px 6px 0 6px;
+  margin-bottom: 0;
   font-weight: bold;
 }
 
@@ -94,12 +97,8 @@ dl.user-info dt {
   font-style: italic;
 }
 
-section.my-items-views li {
-  overflow: auto;
-  width: 100%;
-}
 
-#folder-create-form input {
+.folder-create-form input {
   display: none;
 }
 
@@ -197,12 +196,12 @@ section.my-items-views li {
   margin-top: 20px;
 }
 
-.myitems .pics article .details {
-  margin-left: 195px;
+.myitems article .thumb {
+  float: left;
 }
 
-.myitems .left {
-  float: left;
+.myitems .pics article .details {
+  margin-left: 195px;
 }
 
 
@@ -243,7 +242,7 @@ section.my-items-views li {
   margin-top: 10px;
 }
 
-.myitems .folder-icon {
+.my-items-views .folder-icon {
   display: inline-block;
   width: 21px;
   height: 16px;
@@ -251,48 +250,94 @@ section.my-items-views li {
   vertical-align: text-bottom;
 }
 
-.myitems .my-items-views .view .folder-icon {
+.my-items-views .view .folder-icon {
   background-image: url('/media/images/myitems-folder-auto.png');
 }
 
-.myitems .my-items-views .folder .folder-icon {
+.my-items-views .folder .folder-icon {
   background-image: url('/media/images/myitems-folder-user.png');
 }
 
-.myitems .my-items-views .last .folder-icon {
+.my-items-views .last .folder-icon {
   background-image: url('/media/images/myitems-folder-new.png');
 }
 
 
-.myitems .my-items-views .folder.to-delete .confirm,
-.myitems .my-items-views .folder.to-delete .cancel,
-.myitems .my-items-views .folder.to-delete .folder-text {
+.my-items-views .folder.to-delete .confirm,
+.my-items-views .folder.to-delete .cancel,
+.my-items-views .folder.to-delete .folder-text {
   color: #616161;
 }
 
-.myitems .my-items-views .folder.to-delete .inline-confirmation-block {
-  display: inline-block;
+.my-items-views .folder.to-delete .inline-confirmation-block {
+  display: block;
   margin-top: 3px;
 }
 
-.myitems .my-items-views .folder.to-delete .confirm:focus,
-.myitems .my-items-views .folder.to-delete .cancel:focus {
+.my-items-views .folder.to-delete .confirm:focus,
+.my-items-views .folder.to-delete .cancel:focus {
     outline: none; 
 }
 
-.myitems .my-items-views .folder.to-delete .confirm {
+.my-items-views .folder.to-delete .confirm {
   border: solid;
   border-width: 1px;
-  border-radius: 3px;
   padding: 1px 3px;
   margin-left: 35px;
 }
 
-.myitems .my-items-views .folder.to-delete .confirm:hover {
+.my-items-views .folder.to-delete .confirm:hover {
   color: #FAAF3B;
 }
 
-.myitems .my-items-views .folder.to-delete .cancel {
+.my-items-views .folder.to-delete .cancel {
   margin-left: 10px;
   font-size: 11px;
+}
+
+.my-items-views a.hidden {
+  display: none;
+}
+
+.myitems-save-button {
+  position: relative;
+}
+
+.myitems-save-button .save-unsave-button,
+.myitems-save-button .folder-list-button {
+  color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+.myitems-save-button .save-unsave-button {
+  background-color: #8CC63F;
+  float: left;
+  padding-left: 10px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.myitems-save-button .folder-list-button {
+  background-color: #679801;
+  float: right;
+  text-align: center;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.myitems-save-button .my-items-views {
+  display: none;
+  position: absolute;
+  background-color: #FFF;
+  border: solid;
+  border-top: none;
+  border-width: 1px;
+}
+
+.myitems-save-button .save-unsave-button.hidden {
+  display: none;
+}
+
+.myitems-save-button .my-items-views .folder .save-indicator {
+  float: right;
 }
