@@ -1249,8 +1249,10 @@
     padding-top: 30px;
   }
   .columns-wrapper {
-    position: relative;
     overflow-y: auto;
+    .inner-wrapper {
+      position: relative;
+    }
   }
   .column-left, .column-main, .column-right {
     float: left;
@@ -1312,7 +1314,7 @@
   }
   #align-tag-description-ct {
     position: absolute;
-    bottom: 20px;
+    bottom: 45px;
     left: 0;
     width: 30%;
   }
@@ -1339,6 +1341,9 @@
       margin-top: 0;
       margin-bottom: 3px;
     }
+  }
+  .field.grade, .field.category, .field.tag {
+    margin-left: 2em;
   }
 }
 
