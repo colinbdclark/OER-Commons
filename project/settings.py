@@ -222,47 +222,29 @@ elif sys.platform == "linux2":
 
 COVERAGE_REPORT_HTML_OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'coverage')
 
-VENV_ROOT = os.path.join('/','vagrant', 'oercommons', 'logs')
-
 LOGGING = {
-   'version': 1,
-   'disable_existing_loggers': False,
-   'formatters': {
-       'verbose': {
-           'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-       },
-       'simple': {
-           'format': '%(levelname)s %(message)s'
-       },
-   },
-   'handlers': {
-       'testing_logging': {                # define and name a handler
-           'level': 'DEBUG',
-           'class': 'logging.FileHandler', # set the logging class to log to a file
-           'formatter': 'verbose',         # define the formatter to associate
-           'filename': os.path.join(VENV_ROOT, 'testing.log') # log file
-       },
-       'mail_admins': {
-           'level': 'ERROR',
-           'class': 'django.utils.log.AdminEmailHandler'
-       }
-   },
-   'loggers': {
-       'django': {
-           'handlers': ['testing_logging'],
-           'level': 'DEBUG',
-           'propagate': True,
-       },
-       'rubrics.publish_evaluations_to_lr': {
-           'handlers': ['mail_admins'],
-           'level': 'ERROR',
-           'propagate': True,
-       }
-   }
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'rubrics.publish_evaluations_to_lr': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        }
+    }
 }
 
 LR_COMMAND = "%s -m LRSignature.cmd sign" % os.path.join(os.path.dirname(__file__), "..", "bin", "python-lr")
 
 PROFILING = False
-
-EMBEDLY_KEY = "9a0be126777f11e191004040d3dc5c07"
