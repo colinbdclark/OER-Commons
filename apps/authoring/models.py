@@ -1,18 +1,14 @@
-import datetime
-import embedly
-import os
-
+from annoying.functions import get_object_or_None
+from autoslug import AutoSlugField
+from common.models import GradeLevel, MediaFormat
+from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
+from curriculum.models import TaggedMaterial
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from annoying.functions import get_object_or_None
-from autoslug import AutoSlugField
-from common.models import GradeLevel, MediaFormat
-from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
-from curriculum.models import TaggedMaterial
 from materials.models import  Keyword, \
     GeneralSubject, License, CourseMaterialType
 from materials.models.common import Language
@@ -24,11 +20,15 @@ from rating.models import Rating
 from reviews.models import Review
 from rubrics.models import Evaluation, EvaluatedItemMixin
 from saveditems.models import SavedItem
-from myitems.models import FolderItem
 from tags.models import Tag
 from utils.templatetags.utils import full_url
 from visitcounts.models import Visit
 
+import gdata.youtube
+import gdata.youtube.service
+import datetime
+import embedly
+import os
 
 
 class LearningGoal(models.Model):
@@ -367,3 +367,62 @@ class Embed(models.Model):
             )
 
         return None
+
+
+class UploadedVideo(models.Model):
+
+    SUPPORTED_CONTENT_TYPES = (
+        "video/mpeg",
+        "video/quicktime",
+        "video/x-msvideo",
+        "video/mp4",
+        "video/x-flv",
+    )
+
+    material = models.ForeignKey(AuthoredMaterial)
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+    youtube_id = models.CharField(max_length=100)
+    url = models.URLField(db_index=True, max_length=200, null=True, blank=True)
+    html = models.TextField(null=True, blank=True)
+
+    @classmethod
+    def get_yt_service(cls):
+        yt_service = gdata.youtube.service.YouTubeService()
+        yt_service.email = settings.YOUTUBE_EMAIL
+        yt_service.password = settings.YOUTUBE_PASSWORD
+        yt_service.source = settings.YOUTUBE_SOURCE
+        yt_service.developer_key = settings.YOUTUBE_DEV_KEY
+        yt_service.client_id = settings.YOUTUBE_CLIENT_ID
+        yt_service.ProgrammaticLogin()
+        return yt_service
+
+    @classmethod
+    def upload(cls, uploaded_file, material):
+
+        yt_service = cls.get_yt_service()
+
+        media_group = gdata.media.Group(
+            title=gdata.media.Title(text=uploaded_file.name),
+            description=gdata.media.Description(
+                description_type='plain',
+                text=u""),
+            category=[gdata.media.Category(
+                 text='Education',
+                 scheme='http://gdata.youtube.com/schemas/2007/categories.cat',
+                 label='Education')],
+        )
+
+        video_entry = gdata.youtube.YouTubeVideoEntry(media=media_group)
+        new_entry = yt_service.InsertVideoEntry(
+            video_entry,
+            uploaded_file.temporary_file_path(),
+            content_type=uploaded_file.content_type
+        )
+        youtube_id = new_entry.id.text.split("/")[-1]
+        url = "http://www.youtube.com/watch?v=%s" % youtube_id
+        uploaded_video = UploadedVideo.objects.create(
+            material=material,
+            url=url,
+            youtube_id=youtube_id,
+        )
+        return uploaded_video.id, url, new_entry.media.thumbnail[1].url
