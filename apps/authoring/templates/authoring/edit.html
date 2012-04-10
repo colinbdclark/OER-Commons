@@ -5,6 +5,10 @@
 
 {% block extra-css %}
   {% compress css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}javascripts/videoPlayer/css/UIOptions-media.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}javascripts/videoPlayer/css/VideoPlayer.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}javascripts/videoPlayer/lib/jquery-ui/css/ui-lightness/jquery-ui-1.8.14.custom.css" />
+    
     <link rel="stylesheet" href="{{ STATIC_URL}}styles/authoring/edit.css">
   {% endcompress %}
 {% endblock %}

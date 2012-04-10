@@ -1659,6 +1659,36 @@ WriteStep.prototype.initTable = function($table) {
   return $table;
 };
 
+WriteStep.prototype.initVideoPlayer = function (container, videoURL, timeout) {
+    timeout = timeout || 0;
+    
+    // The mapping btw the video extension and type
+    var videoType = {
+      "mp4": "video/mp4",
+      "webm": "video/webm"
+    };
+    
+    var instance = [{
+      container: container,
+      options: {
+        video: {
+          src: videoURL,
+          type: "video/mp4"   // ToDo: get video type from the mapping object "videoType"
+        },
+        templates: {
+            videoPlayer: {
+                forceCache: true,
+                href: "../..//videoPlayer/html/videoPlayer_template.html"
+            }
+        }
+      }
+    }];
+
+//    setTimeout(function() {
+        fluid.videoPlayer.makeEnhancedInstances(instance, uiOptions.relay);
+//    }, timeout);
+};
+
 function MediaDialog(editor) {
   this.editor = editor;
   this.displayed = false;
@@ -1907,7 +1937,7 @@ MediaDialog.ImageStep.prototype.prepare = function (data) {
   this.$selectorOptions.first().click();
 };
 
-var numOfLocalVideos = 0;
+var numOfLocalVideos = numOfLocalVideos || 0;
 var timeInterval = 500;
 
 MediaDialog.VideoStep = function (dialog) {
@@ -1925,19 +1955,6 @@ MediaDialog.VideoStep = function (dialog) {
     oer.status_message.clear();
     editor.saveState();
 
-    var initInfusionVideoPlayer = function (container, videoURL) {
-      var instance = [{
-            container: container,
-            options: {
-              video: {
-                src: videoURL,
-                type: "video/mp4"
-              }
-            }
-          }];
-      fluid.videoPlayer.makeEnhancedInstances(instance, uiOptions.relay);
-    };
-    
     var description = $.trim($textarea.val());
     var title = $.trim($input.val());
     if (description !== "") {
@@ -1946,11 +1963,7 @@ MediaDialog.VideoStep = function (dialog) {
     
     if ($step.data("source") === "local") {  // upload a local video
       var selector = "localVideo-" + numOfLocalVideos;
-      var videoContainer = $('<div class="embed ' + selector + '"></div>').attr("contenteditable", "false");
-      
-      // Use infusion video player
-      
-      // ToDo: add video caption
+      var $figure = $('<figure class="embed ' + selector + '"></figure>');
       
       numOfLocalVideos++;
     } else {  // upload a youtube video
@@ -1962,15 +1975,21 @@ MediaDialog.VideoStep = function (dialog) {
       var $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
     }
 
+    editor.initFigure($figure);
+
     if (editor.$focusBlock) {
       $figure.insertAfter(editor.$focusBlock);
     } else {
       editor.$area.append($figure);
     }
 
-    if ($step.data("source") !== "local") {  // upload a youtube video
+    if ($step.data("source") === "local") {  // upload a local video
+      // Use infusion video player
+      editor.initVideoPlayer("." + selector, $step.data("url"), numOfLocalVideos * timeInterval);
+
+      // ToDo: add video caption
+    } else {  // upload a youtube video
       editor.loadEmbed($figure);
-      editor.initFigure($figure);
     }
 
     editor.ensureTextInput();
