@@ -1864,6 +1864,9 @@ MediaDialog.VideoStep = function (dialog) {
     }
 
     var $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
+    if ($step.data("uploaded-video-id")) {
+      $figure.attr("data-uploaded-video-id", $step.data("uploaded-video-id"));
+    }
 
     if (editor.$focusBlock) {
       $figure.insertAfter(editor.$focusBlock);
@@ -1889,6 +1892,11 @@ MediaDialog.VideoStep.prototype = new MediaDialog.Step();
 MediaDialog.VideoStep.prototype.constructor = MediaDialog.VideoStep;
 MediaDialog.VideoStep.prototype.prepare = function (data) {
   this.$step.data("url", data.url);
+  if ("uploaded_video_id" in data) {
+    this.$step.data("uploaded-video-id", data["uploaded_video_id"]);
+  } else {
+    this.$step.data("uploaded-video-id", null);
+  }
   this.$imageCt.empty();
   //noinspection JSUnresolvedVariable
   var $image = $("<img>").attr("src", data.thumbnail);
