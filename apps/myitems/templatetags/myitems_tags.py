@@ -3,8 +3,11 @@ from itertools import chain
 from django.core.urlresolvers import reverse, resolve
 from django.db.models.aggregates import Count
 from django.template import Library
+from django.contrib.contenttypes.models import ContentType
 
 from materials.utils import get_name_from_slug
+from materials.models import Material
+from authoring.models import AuthoredMaterial, AuthoredMaterialDraft
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
 from saveditems.models import SavedItem
@@ -70,12 +73,27 @@ def myitems_views_portlet(context):
 def myitems_save_button(context):
     request = context["request"]
     item = context["item"]
-    content_type = context["content_type"]
-    saved = SavedItem.objects.filter(
-        content_type=content_type,
-        object_id=item.id,
-        user=request.user
-    ).exists()
+    content_type = ContentType.objects.get_for_model(item)
+
+    if isinstance(item, Material):
+        creator = item.creator
+    elif isinstance(item, AuthoredMaterial):
+        creator = item.author
+    elif isinstance(item, AuthoredMaterialDraft):
+        creator = item.material.author
+    else:
+        assert False, type(item)
+
+
+    saved = (
+        creator == request.user
+        or SavedItem.objects.filter(
+            user=request.user,
+            content_type=content_type,
+            object_id=item.id
+        ).exists()
+    )
+
     folders = ((
             {
                 "url": f.get_absolute_url(),
