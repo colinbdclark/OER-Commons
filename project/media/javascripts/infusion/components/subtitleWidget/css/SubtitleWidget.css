@@ -18,13 +18,19 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
 }
 .fl-subtitle-panel-menu {
     background-color: #E6E6E6;
-    padding: 0.5em;
     color: #A7A7A7;
     border-color: #E0E0E0;
     border-width: 0.125em;
     border-style: solid;
     width: 12.5em;
     text-shadow: #ffffff 0.063em 0.063em 0.063em;
+}
+.fl-subtitle-panel-menu span {
+    padding: 0.5em;
+    display: block;
+}
+.fl-subtitle-panel-menu span:hover {
+    color: #9BCB37;
 }
 .fl-subtitle-panel-languages {
     list-style-type: none;
@@ -48,7 +54,7 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     border-style: solid;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 10.188em;
+    width: 9.375em;
     min-height: 1.188em;
 }
 .fl-subtitle-panel-languages li a:hover {
@@ -71,6 +77,9 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     background-position: 0.5em center;
     padding: 0.5em 0.5em 0.5em 1.875em;
     color: #4091C4;
+    width: 10.188em;
+    min-height: 1.188em;
+    display: block;
 }
 .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
     background-image: url(../images/arrow-hover.png);
@@ -108,6 +117,9 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     color: white !important;
     background-color: black !important;
 }
+.fl-theme-uio-bw .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-black.png);
+}
 .fl-theme-uio-bw .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
     background-image: url(../images/arrow-white.png);
     color: white !important;
@@ -122,6 +134,9 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     background-image: url(../images/arrow-yellow.png);
     color: yellow !important;
     background-color: black !important;
+}
+.fl-theme-uio-by .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-black.png);
 }
 .fl-theme-uio-by .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
     background-image: url(../images/arrow-yellow.png);
@@ -147,6 +162,9 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     background-image: url(../images/arrow-black.png);
     color: black !important;
     background-color: white !important;
+}
+.fl-theme-uio-wb .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-white.png);
 }
 .fl-theme-uio-wb .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
     background-image: url(../images/arrow-black.png);
@@ -177,6 +195,9 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     background-image: url(../images/arrow-black.png);
     color: black !important;
     background-color: yellow !important;
+}
+.fl-theme-uio-yb .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-yellow.png);
 }
 .fl-theme-uio-yb .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
     background-image: url(../images/arrow-black.png);
