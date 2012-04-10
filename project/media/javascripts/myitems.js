@@ -411,7 +411,7 @@ oer.myitems.init_save_button = function() {
         });
     });
     $folderList.delegate(".folder a", "click", function(e) {
-        e.stopPropagation();
+        e.preventDefault();
     });
     $myitemsSaveButton.find(".folder-list-button").click(function(e) {
         e.preventDefault();

@@ -96,7 +96,6 @@ def myitems_save_button(context):
 
     folders = ((
             {
-                "url": f.get_absolute_url(),
                 "title": f.name,
                 "id": f.id,
                 "count": f.folderitem__count,

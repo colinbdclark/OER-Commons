@@ -335,8 +335,8 @@ dl.user-info dt {
   display: none;
 }
 
-.myitems-save-button .my-items-views .folder .save-indicator {
-  float: right;
+.myitems-save-button .folder {
+  cursor: pointer;
 }
 
 .myitems .pagination {

@@ -4,7 +4,7 @@
             {% for f in folders %}
               <li class="folder{% if f.saved %} selected{% endif %}" data-folder-id="{{ f.id }}">
                   <i class="folder-icon"></i>
-                  <a class="folder-text" href="{{ f.url }}">
+                  <a class="folder-text" href="#">
                       <span class="name">{{ f.title }}</span>
                       (<span class="number">{{ f.count }}</span>)
                   </a>
