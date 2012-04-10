@@ -1,0 +1,11 @@
+<div class="profile-tabs">
+    <div class="fixed-width">
+        <nav>
+            <ul>
+                {% for tab in tabs %}
+                    <li{% if tab.classes %} class="{{ tab.classes }}"{% endif %}><a href="{{ tab.url }}">{{ tab.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+</div>
