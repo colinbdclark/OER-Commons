@@ -321,6 +321,11 @@ WriteStep.prototype.cleanHTML = function (preSave) {
   // Create a document and clear HTML comments
   var $document = $("<div></div>").html($area.html().replace(/<!--[\s\S]*?-->/g, ""));
 
+  // Remove the subtitle widget panel
+  $document.find(".flc-subtitle-mainWrap").replaceWith(function () {
+    return $(this).find("figure.embed")[0];
+  });
+  
   // Remove non-safe elements (scripts, styles, forms, inputs)
   $document.find("script,style,form,input,textarea,button").remove();
 
@@ -984,6 +989,9 @@ WriteStep.prototype.initLinks = function () {
   });
 
   this.$area.delegate("a", "click", function (e) {
+    if ($(this).is(".flc-subtitle-panel-language-link, .flc-subtitle-panel-menu-addSubtitle")) {
+        return;
+    }
     var $link = $(this);
     if ($link.closest("tr.ui-column-controls,td.ui-row-controls").length) {
       return;
@@ -1125,6 +1133,10 @@ WriteStep.prototype.loadEmbed = function ($figure) {
 
       // Add AfA metadata for embedded videos
       afa.addAfAToEmbeddedVideo($figure);
+
+      fluid.subtitleWidget($figure, {
+        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html"
+      });
     });
   }
 };
