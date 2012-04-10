@@ -379,6 +379,9 @@ var afa = afa || {};
   afa.summerizeAfA = function () {
     var tooltipText, itemTagName;
     
+    // ensure icons are tabbable, for keyboard access
+    $(".afa-icon").fluid("tabbable");
+
     fluid.each(afa.AfAProperties, function(itemProperty, itemName) {
       var result = fluid.invokeGlobalFunction(itemProperty.summaryfunc, [itemName, itemProperty]);
       // TODO: This if is only because fluid.identity returns the first argument
