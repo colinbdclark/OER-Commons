@@ -27,8 +27,8 @@ class Widget
       clone = parent.clone()
       clone.find("input").val("")
       clone.insertAfter(parent)
-      input.show()
-      input.prev().hide()
+      input.hide()
+      input.prev().text(input.val()).show()
       parent.removeClass("new")
       parent.next().find("input").focus()
       return

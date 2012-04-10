@@ -120,6 +120,9 @@ class UserMenu
 
 
 class Tool
+
+  AUTOSAVE_INTERVAL: 30 # 30 seconds
+
   constructor: (@hideSubmitStep)->
     @form = $("form.authoring-form")
     @slider = new Slider()
@@ -193,7 +196,7 @@ class Tool
     setTimeout(=>
       @save()
       @autosave()
-    , 30 * 1000) # 30 seconds
+    , @AUTOSAVE_INTERVAL * 1000)
 
   publish:->
     @writeStep.preSave()

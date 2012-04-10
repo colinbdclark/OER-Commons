@@ -9,6 +9,3 @@ using the following custom build command:
     ant customBuild -Dinclude="uiOptions, uploader, tooltip" -lib lib/rhino -Dexclude="jQuery" -DnoMinify="true"
 
 "uploader" and "tooltip" components are added for the proper functioning of the video player.
-
-Any unnecessary files have been removed from this folder.
-

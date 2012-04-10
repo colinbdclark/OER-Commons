@@ -37,9 +37,16 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
             qs = qs.filter(workflow_state=PUBLISHED_STATE)
         return qs
 
+    def add_afa(self, content):
+        return u"""
+                    <meta itemprop="is-mouse-accessible" content="true"/>
+                    <meta itemprop="has-transcript" content="false"/>
+                    <meta itemprop="is-display-transformable" content=""/> %s
+                """ % content
+
     @classmethod
-    def prepare_content(cls, text):
-        document = pq(text)
+    def prepare_content(cls, self, text):
+        document = pq("<div></div>").html(text)
         for embed in document.find("figure.embed"):
             embed = pq(embed)
             #noinspection PyCallingNonCallable
@@ -47,6 +54,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
             embed.removeAttr("data-url")
             caption = embed.find("figcaption").outerHtml()
             if embed.hasClass("video"):
+                embed.attr("itemscope", "")
                 content = u"""
                     <script type="text/javascript" src="http://s3.www.universalsubtitles.org/embed.js">
                       ({
@@ -57,7 +65,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
                       })
                     </script>
                 """ % url
-                embed.html(content + caption)
+                embed.html(self.add_afa(content) + caption)
 
         # Build references
         footnotes = pq("""<div id="footnotes"></div>""")
@@ -75,8 +83,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
             footnotes.append(footnote)
 
         # Build table of contents
-        prevLevel = 0
-        outline = pq("<ul></ul>")
+        toc = pq("<div></div>")
 
         for i, h in enumerate(document.find("h2,h3")):
             h = pq(h)
@@ -84,34 +91,19 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
             #noinspection PyCallingNonCallable
             h.attr("id", id)
             if h.is_("h2"):
-                level = 0
+                class_ = "level-0"
             else:
-                level = 1
-
-            if level > prevLevel:
-                for j in xrange(level - prevLevel):
-                    outline = pq("<ul></ul>").appendTo(outline)
-            elif level < prevLevel:
-                for j in xrange(prevLevel - level):
-                  outline = outline.parent()
-
+                class_ = "level-1"
+            header = pq("<div></div>").addClass("header").addClass(class_)
             #noinspection PyCallingNonCallable
-            outline.append(
-                pq("<li></li>").append(
-                    pq("<a></a>").attr("href", "#%s" % id).text(h.text())
-                )
-            )
+            header.append(pq("<a></a>").attr("href", "#%s" % id).text(h.text()))
+            toc.append(header)
 
-            prevLevel = level
-
-        for i in xrange(prevLevel):
-            outline = outline.parent()
-
-        return tuple(mark_safe(el.outerHtml()) for el in (document, footnotes, outline))
+        return tuple(mark_safe(el) for el in (document.html(), footnotes.outerHtml(), toc.html()))
 
     def get_context_data(self, **kwargs):
         data = super(ViewFullAuthoredMaterial, self).get_context_data(**kwargs)
-        data["text"], data["footnotes"], data["outline"] = ViewFullAuthoredMaterial.prepare_content(self.object.text)
+        data["text"], data["footnotes"], data["toc"] = ViewFullAuthoredMaterial.prepare_content(self, self.object.text)
         data["preview"] = self.preview
         data["material"] = self.object.material if self.preview else self.object
         return data

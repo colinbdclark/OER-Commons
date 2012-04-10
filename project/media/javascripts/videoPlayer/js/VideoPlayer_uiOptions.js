@@ -217,7 +217,11 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             // awful workaround for FLUID-4192, "broken trees"
             setTimeout(listener, 1);
         }
-        
+
+        // A work-around to a bug in VideoPlayer_uiOptions.js that there must be a video player
+        // instantiated at {fatPanel}.events.onReady
+        relay.options.bindingTriggered = true;
+
         if (relay.events.bindingTrigger && !relay.options.bindingTriggered) {
             console.log("Late binding instances " + instances.length);
             relay.events.bindingTrigger.addListener(lateListener);
