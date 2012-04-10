@@ -468,11 +468,15 @@ WriteStep.prototype.ensureTextInput = function () {
   }
   $area.find("figure:not(.inline)").each(function () {
     var $figure = $(this);
-    if (!$figure.prev().is("p,div")) {
-      $("<p><br></p>").data("auto", true).insertBefore($figure);
-    }
-    if (!$figure.next().is("p,div")) {
-      $("<p><br></p>").text(" ").data("auto", true).insertBefore($figure);
+
+    // If the figure is wrapped with universalSubtitle widget then we do not want to add any <p><br><p/>
+    if (!$figure.parent().is(".fl-subtitle-videoWrap")) {
+        if (!$figure.prev().is("p,div")) {
+          $("<p><br></p>").data("auto", true).insertBefore($figure);
+        }
+        if (!$figure.next().is("p,div")) {
+          $("<p><br></p>").text(" ").data("auto", true).insertBefore($figure);
+        }
     }
   });
   // Remove duplicate empty paragraphs
