@@ -60,16 +60,6 @@ oer.autocomplete_list_widget.init = function() {
       }
     });
 
-    $add_input.focusout(function() {
-      var value = $.trim($add_input.val());
-      if (value !== "") {
-        $.each(get_values($add_input), function(i, v) {
-          add_value(v);
-        });
-      }
-      $add_input.autocomplete("close");
-    });
-
     $items.delegate("a.delete", "click", function(e) {
       e.preventDefault();
       var $this = $(this);

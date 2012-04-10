@@ -1,0 +1,57 @@
+#content.contribute {
+  font-size: 1.1em; }
+  #content.contribute .sheet {
+    box-sizing: border-box;
+    margin-left: 5%;
+    width: 42.5%;
+    float: left;
+    text-align: center; }
+  #content.contribute h1 {
+    margin-bottom: 0.4em;
+    font-weight: bold;
+    font-size: 1.3em;
+    color: #1a4d63; }
+  #content.contribute h2 {
+    margin-bottom: 0.3em;
+    font-size: 1em;
+    color: #666666; }
+  #content.contribute header {
+    margin-bottom: 1em; }
+    #content.contribute header hr {
+      width: 60%;
+      margin: 0 auto;
+      border: none;
+      border-bottom: 1px dotted #85bdd4; }
+  #content.contribute h3 {
+    margin-bottom: 1em;
+    color: #1f4d64;
+    font-size: 1em;
+    font-weight: bold;
+    letter-spacing: 0.1em; }
+  #content.contribute img {
+    -webkit-box-shadow: 0 0 10px #bbb;
+    -moz-box-shadow: 0 0 10px #bbb;
+    -ms-box-shadow: 0 0 10px #bbb;
+    box-shadow: 0 0 10px #bbb;
+    border: 1px solid #eee; }
+  #content.contribute .bookmarklet {
+    margin: 0 auto 1em auto;
+    padding: 1em 1em 0 1em;
+    width: 65%;
+    border: 1px solid #567a8b;
+    color: #666; }
+  #content.contribute .help {
+    font-style: italic;
+    text-align: left; }
+  #content.contribute .button-green {
+    margin: 1em 0; }
+  #content.contribute .share-buttons {
+    padding: 2em 0 1em 0;
+    clear: both;
+    text-align: right; }
+    #content.contribute .share-buttons span {
+      color: #1a4d63;
+      font-weight: bold; }
+    #content.contribute .share-buttons .addthis_toolbox {
+      margin-left: 0.5em;
+      display: inline-block; }

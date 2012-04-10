@@ -16,6 +16,7 @@ var DescribeStep = function (tool) {
   var initDropdown = function ($dropdown) {
     var $field = $dropdown.closest("div.field");
     var $nextFields = $field.nextAll("div.field");
+    var $nextField = $nextFields.first();
     var $nextDropdowns = $nextFields.find("select");
     var $prevFields = $field.prevAll("div.field");
     var $prevDropdowns = $prevFields.find("select");
@@ -27,6 +28,7 @@ var DescribeStep = function (tool) {
       $nextDropdowns.each(function() {
         $(this).attr("disabled", "disabled").find("option").slice(1).remove();
       });
+      $nextFields.hide();
       if (value !== "-") {
         var data = {};
         data[$dropdown.attr("name")] = value;
@@ -41,6 +43,7 @@ var DescribeStep = function (tool) {
           oer.align_form.load_options($nextDropdown, data);
           $nextDropdown.find("option").first().text(firstOptionText);
           $nextDropdown.removeAttr("disabled");
+          $nextField.show();
           $document.trigger(oer.align_form.LOADED_EVENT);
           $nextDropdown.focus();
         });

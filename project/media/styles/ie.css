@@ -52,3 +52,7 @@
 .portlet.save .folder-list-button .rocon-bl {
   display: none;
 }
+
+#content.contribute .sheet {
+  width: 37% !important;
+}

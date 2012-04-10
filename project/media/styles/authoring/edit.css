@@ -81,9 +81,12 @@
         font-style: normal;
         color: #666; }
   .authored-content figure.download {
+    color: #0B7BA9;
     font-size: 110%;
     padding: 3px 0 3px 22px;
-    background: url(../images/authoring/download_icon&16.png) 0% 50% no-repeat; }
+    background: url(../../images/authoring/icon-download.png) 0% 50% no-repeat; }
+    .authored-content figure.download a {
+      font-weight: bold; }
   .authored-content figure.video {
     text-align: center; }
     .authored-content figure.video iframe, .authored-content figure.video object, .authored-content figure.video embed {
@@ -1072,7 +1075,9 @@
 #step-describe .layout-columns {
   padding-top: 30px; }
 #step-describe .columns-wrapper {
-  position: relative; }
+  overflow-y: auto; }
+  #step-describe .columns-wrapper .inner-wrapper {
+    position: relative; }
 #step-describe .column-left, #step-describe .column-main, #step-describe .column-right {
   float: left;
   width: 30%;
@@ -1117,7 +1122,7 @@
   width: 180px; }
 #step-describe #align-tag-description-ct {
   position: absolute;
-  bottom: 20px;
+  bottom: 45px;
   left: 0;
   width: 30%; }
 #step-describe #align-tag-description {
@@ -1138,6 +1143,8 @@
   #step-describe ul.align-tags li {
     margin-top: 0;
     margin-bottom: 3px; }
+#step-describe .field.grade, #step-describe .field.category, #step-describe .field.tag {
+  margin-left: 2em; }
 
 #step-submit .layout-columns {
   padding-top: 30px; }
