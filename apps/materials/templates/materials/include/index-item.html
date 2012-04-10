@@ -1,5 +1,5 @@
 {% load materials_tags %}
-<article class="item clearfix collapsible{% if forloop.last %} last{% endif %}">
+<article class="item clearfix collapsible{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
   <a class="expand-button collapsed" href="#"></a>
   {% include "materials/include/index-item-right.html" %}
   <div class="details">

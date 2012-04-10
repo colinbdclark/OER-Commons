@@ -247,11 +247,6 @@ class UserItem(object):
         return '%s.%s' % (self.content_type.id, self.item.id)
 
 
-    def identifier_string(self):
-        content_type = self.content_type
-        return '%s.%s.%s' % (content_type.app_label, content_type.model, self.item.id)
-
-
     def __getattr__(self, name):
         return getattr(self.item, name)
 
