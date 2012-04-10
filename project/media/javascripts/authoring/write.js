@@ -986,7 +986,7 @@ WriteStep.prototype.initLinks = function () {
   });
 
   this.$area.delegate("a", "click", function (e) {
-    if ($(this).is(".flc-subtitle-panel-language-link, .flc-subtitle-panel-addSubtitle")) {
+    if ($(this).is(".flc-subtitle-panel-language-link, .flc-subtitle-panel-menu-addSubtitle")) {
         return;
     }
     var $link = $(this);
