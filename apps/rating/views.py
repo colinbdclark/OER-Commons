@@ -20,8 +20,13 @@ class RatingForm(forms.Form):
     def clean_identifier(self):
         identifier = self.cleaned_data["identifier"]
         try:
-            app_label, model, object_id = identifier.split(".")
-            content_type = ContentType.objects.get(app_label=app_label, model=model)
+            identifier_split = identifier.split(".")
+            if len(identifier_split) == 2:
+                content_type_id, object_id = identifier_split
+                content_type = ContentType.objects.get(id=content_type_id)
+            else:
+                app_label, model, object_id = identifier_split
+                content_type = ContentType.objects.get(app_label=app_label, model=model)
             model = content_type.model_class()
             self.instance = model.objects.get(id=int(object_id))
         except:
