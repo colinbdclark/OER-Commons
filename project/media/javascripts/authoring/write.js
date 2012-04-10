@@ -1131,11 +1131,15 @@ WriteStep.prototype.loadEmbed = function ($figure) {
       var $caption = $figure.find("figcaption").detach();
       $figure.html(response.html).append($caption).fadeIn();
 
-      // Add AfA metadata for embedded videos
-      afa.addAfAToEmbeddedVideo($figure);
-
       fluid.subtitleWidget($figure, {
-        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html"
+        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html",
+        listeners: {
+            onReady: {
+                // Add AfA metadata for embedded videos
+                listener: "afa.addAfAToEmbeddedVideo",
+                args: [$figure, "{subtitleWidget}"]
+            }
+        }
       });
     });
   }
@@ -1846,9 +1850,6 @@ MediaDialog.VideoStep = function (dialog) {
     editor.ensureTextInput();
     editor.updateDND();
     dialog.hide();
-    
-    // Dynamically update the AfA section as meta data is added in loadEmbed()
-    afa.summerizeAfA();
   });
 };
 //noinspection JSCheckFunctionSignatures
