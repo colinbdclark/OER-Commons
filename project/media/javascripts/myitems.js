@@ -327,7 +327,7 @@ oer.myitems.init_save_button = function() {
     oer.myitems.init_folder_form($folderList, "myitems:button-folder", { item_id: identifier });
 
     var saveUrl = django_js_utils.urls.resolve('saveditems:save_item');
-    var unsaveUrl = django_js_utils.urls.resolve('saveditems:unsave_item');
+    var unsaveUrl = django_js_utils.urls.resolve('myitems:delete_item');
 
     var $saveUnsaveButton = $myitemsSaveButton.find(".save-unsave-button");
     var $saveButton = $saveUnsaveButton.filter(".save");
@@ -338,7 +338,7 @@ oer.myitems.init_save_button = function() {
 
         $saveButton.addClass("hidden");
         $unsaveButton.removeClass("hidden");
-        $.post(saveUrl, { identifier: identifier }, function(response) {
+        $.post(saveUrl, { item_id: identifier }, function(response) {
             if (response.status !== "success") {
                 $unsaveButton.addClass("hidden");
                 $saveButton.removeClass("hidden");
@@ -409,6 +409,9 @@ oer.myitems.init_save_button = function() {
                 modifyFolder(action_dicts[!action]);
             }
         });
+    });
+    $folderList.delegate(".folder a", "click", function(e) {
+        e.stopPropagation();
     });
     $myitemsSaveButton.find(".folder-list-button").click(function(e) {
         e.preventDefault();

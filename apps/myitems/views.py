@@ -154,7 +154,7 @@ class FolderAddItem(View):
             creator = material.creator
         elif isinstance(material, AuthoredMaterial):
             creator = material.author
-        elif  isinstance(material, AuthoredMaterialDraft):
+        elif isinstance(material, AuthoredMaterialDraft):
             creator = material.material.author
         else:
             assert False, type(material)
@@ -216,11 +216,19 @@ class ItemDelete(View):
             return { "status": "error"}
 
         material = get_material_object_or_404(*item_id.split('.'))
-        if material.creator == request.user:
+        if isinstance(material, Material):
+            creator = material.creator
+        elif isinstance(material, AuthoredMaterial):
+            creator = material.author
+        elif isinstance(material, AuthoredMaterialDraft):
+            creator = material.material.author
+        else:
+            assert False, type(material)
+
+        if creator == request.user:
             material.delete()
         else:
             material.saved_items.filter(user=request.user).delete()
-            material.folders.filter(folder__user=request.user).delete()
             reindex(material)
         to_return = { "status": "success" }
         return to_return
