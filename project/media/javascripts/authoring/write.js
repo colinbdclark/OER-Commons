@@ -1907,6 +1907,9 @@ MediaDialog.ImageStep.prototype.prepare = function (data) {
   this.$selectorOptions.first().click();
 };
 
+var numOfLocalVideos = 0;
+var timeInterval = 500;
+
 MediaDialog.VideoStep = function (dialog) {
   MediaDialog.Step.call(this, dialog);
 
@@ -1922,25 +1925,54 @@ MediaDialog.VideoStep = function (dialog) {
     oer.status_message.clear();
     editor.saveState();
 
+    var initInfusionVideoPlayer = function (container, videoURL) {
+      var instance = [{
+            container: container,
+            options: {
+              video: {
+                src: videoURL,
+                type: "video/mp4"
+              }
+            }
+          }];
+      fluid.videoPlayer.makeEnhancedInstances(instance, uiOptions.relay);
+    };
+    
     var description = $.trim($textarea.val());
     var title = $.trim($input.val());
     if (description !== "") {
       title += ": ";
     }
-    var $caption = $("<figcaption></figcaption>").text(description);
-    if (title) {
-      $caption.prepend($("<strong></strong>").text(title));
-    }
+    
+    if ($step.data("source") === "local") {  // upload a local video
+      var selector = "localVideo-" + numOfLocalVideos;
+      var videoContainer = $('<div class="embed ' + selector + '"></div>').attr("contenteditable", "false");
+      
+      // Use infusion video player
+      
+      // ToDo: add video caption
+      
+      numOfLocalVideos++;
+    } else {  // upload a youtube video
+      var $caption = $("<figcaption></figcaption>").text(description);
+      if (title) {
+        $caption.prepend($("<strong></strong>").text(title));
+      }
 
-    var $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
+      var $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
+    }
 
     if (editor.$focusBlock) {
       $figure.insertAfter(editor.$focusBlock);
     } else {
       editor.$area.append($figure);
     }
-    editor.loadEmbed($figure);
-    editor.initFigure($figure);
+
+    if ($step.data("source") !== "local") {  // upload a youtube video
+      editor.loadEmbed($figure);
+      editor.initFigure($figure);
+    }
+
     editor.ensureTextInput();
     editor.updateDND();
     dialog.hide();
@@ -1951,6 +1983,7 @@ MediaDialog.VideoStep.prototype = new MediaDialog.Step();
 MediaDialog.VideoStep.prototype.constructor = MediaDialog.VideoStep;
 MediaDialog.VideoStep.prototype.prepare = function (data) {
   this.$step.data("url", data.url);
+  this.$step.data("source", data.source);
   this.$imageCt.empty();
   //noinspection JSUnresolvedVariable
   var $image = $("<img>").attr("src", data.thumbnail);

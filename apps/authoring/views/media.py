@@ -152,8 +152,6 @@ class MediaUpload(SingleObjectMixin, FormMixin, ProcessFormView):
 #            Use the "Video" class rather than "Document" after finding a way to migrate the db for "Video"
 #            video = Video(material=object, video=form.cleaned_data["file"])
             video = Document(material=object, file=form.cleaned_data["file"])
-#            pdb.set_trace()
-#            document.save()
             response = dict(
                 source="local",
                 type="video",

@@ -1,4 +1,8940 @@
 /*!
+ * jQuery JavaScript Library v1.6.1
+ * http://jquery.com/
+ *
+ * Copyright 2011, John Resig
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * Includes Sizzle.js
+ * http://sizzlejs.com/
+ * Copyright 2011, The Dojo Foundation
+ * Released under the MIT, BSD, and GPL Licenses.
+ *
+ * Date: Thu May 12 15:04:36 2011 -0400
+ */
+(function( window, undefined ) {
+
+// Use the correct document accordingly with window argument (sandbox)
+var document = window.document,
+	navigator = window.navigator,
+	location = window.location;
+var jQuery = (function() {
+
+// Define a local copy of jQuery
+var jQuery = function( selector, context ) {
+		// The jQuery object is actually just the init constructor 'enhanced'
+		return new jQuery.fn.init( selector, context, rootjQuery );
+	},
+
+	// Map over jQuery in case of overwrite
+	_jQuery = window.jQuery,
+
+	// Map over the $ in case of overwrite
+	_$ = window.$,
+
+	// A central reference to the root jQuery(document)
+	rootjQuery,
+
+	// A simple way to check for HTML strings or ID strings
+	// (both of which we optimize for)
+	quickExpr = /^(?:[^<]*(<[\w\W]+>)[^>]*$|#([\w\-]*)$)/,
+
+	// Check if a string has a non-whitespace character in it
+	rnotwhite = /\S/,
+
+	// Used for trimming whitespace
+	trimLeft = /^\s+/,
+	trimRight = /\s+$/,
+
+	// Check for digits
+	rdigit = /\d/,
+
+	// Match a standalone tag
+	rsingleTag = /^<(\w+)\s*\/?>(?:<\/\1>)?$/,
+
+	// JSON RegExp
+	rvalidchars = /^[\],:{}\s]*$/,
+	rvalidescape = /\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,
+	rvalidtokens = /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
+	rvalidbraces = /(?:^|:|,)(?:\s*\[)+/g,
+
+	// Useragent RegExp
+	rwebkit = /(webkit)[ \/]([\w.]+)/,
+	ropera = /(opera)(?:.*version)?[ \/]([\w.]+)/,
+	rmsie = /(msie) ([\w.]+)/,
+	rmozilla = /(mozilla)(?:.*? rv:([\w.]+))?/,
+
+	// Keep a UserAgent string for use with jQuery.browser
+	userAgent = navigator.userAgent,
+
+	// For matching the engine and version of the browser
+	browserMatch,
+
+	// The deferred used on DOM ready
+	readyList,
+
+	// The ready event handler
+	DOMContentLoaded,
+
+	// Save a reference to some core methods
+	toString = Object.prototype.toString,
+	hasOwn = Object.prototype.hasOwnProperty,
+	push = Array.prototype.push,
+	slice = Array.prototype.slice,
+	trim = String.prototype.trim,
+	indexOf = Array.prototype.indexOf,
+
+	// [[Class]] -> type pairs
+	class2type = {};
+
+jQuery.fn = jQuery.prototype = {
+	constructor: jQuery,
+	init: function( selector, context, rootjQuery ) {
+		var match, elem, ret, doc;
+
+		// Handle $(""), $(null), or $(undefined)
+		if ( !selector ) {
+			return this;
+		}
+
+		// Handle $(DOMElement)
+		if ( selector.nodeType ) {
+			this.context = this[0] = selector;
+			this.length = 1;
+			return this;
+		}
+
+		// The body element only exists once, optimize finding it
+		if ( selector === "body" && !context && document.body ) {
+			this.context = document;
+			this[0] = document.body;
+			this.selector = selector;
+			this.length = 1;
+			return this;
+		}
+
+		// Handle HTML strings
+		if ( typeof selector === "string" ) {
+			// Are we dealing with HTML string or an ID?
+			if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
+				// Assume that strings that start and end with <> are HTML and skip the regex check
+				match = [ null, selector, null ];
+
+			} else {
+				match = quickExpr.exec( selector );
+			}
+
+			// Verify a match, and that no context was specified for #id
+			if ( match && (match[1] || !context) ) {
+
+				// HANDLE: $(html) -> $(array)
+				if ( match[1] ) {
+					context = context instanceof jQuery ? context[0] : context;
+					doc = (context ? context.ownerDocument || context : document);
+
+					// If a single string is passed in and it's a single tag
+					// just do a createElement and skip the rest
+					ret = rsingleTag.exec( selector );
+
+					if ( ret ) {
+						if ( jQuery.isPlainObject( context ) ) {
+							selector = [ document.createElement( ret[1] ) ];
+							jQuery.fn.attr.call( selector, context, true );
+
+						} else {
+							selector = [ doc.createElement( ret[1] ) ];
+						}
+
+					} else {
+						ret = jQuery.buildFragment( [ match[1] ], [ doc ] );
+						selector = (ret.cacheable ? jQuery.clone(ret.fragment) : ret.fragment).childNodes;
+					}
+
+					return jQuery.merge( this, selector );
+
+				// HANDLE: $("#id")
+				} else {
+					elem = document.getElementById( match[2] );
+
+					// Check parentNode to catch when Blackberry 4.6 returns
+					// nodes that are no longer in the document #6963
+					if ( elem && elem.parentNode ) {
+						// Handle the case where IE and Opera return items
+						// by name instead of ID
+						if ( elem.id !== match[2] ) {
+							return rootjQuery.find( selector );
+						}
+
+						// Otherwise, we inject the element directly into the jQuery object
+						this.length = 1;
+						this[0] = elem;
+					}
+
+					this.context = document;
+					this.selector = selector;
+					return this;
+				}
+
+			// HANDLE: $(expr, $(...))
+			} else if ( !context || context.jquery ) {
+				return (context || rootjQuery).find( selector );
+
+			// HANDLE: $(expr, context)
+			// (which is just equivalent to: $(context).find(expr)
+			} else {
+				return this.constructor( context ).find( selector );
+			}
+
+		// HANDLE: $(function)
+		// Shortcut for document ready
+		} else if ( jQuery.isFunction( selector ) ) {
+			return rootjQuery.ready( selector );
+		}
+
+		if (selector.selector !== undefined) {
+			this.selector = selector.selector;
+			this.context = selector.context;
+		}
+
+		return jQuery.makeArray( selector, this );
+	},
+
+	// Start with an empty selector
+	selector: "",
+
+	// The current version of jQuery being used
+	jquery: "1.6.1",
+
+	// The default length of a jQuery object is 0
+	length: 0,
+
+	// The number of elements contained in the matched element set
+	size: function() {
+		return this.length;
+	},
+
+	toArray: function() {
+		return slice.call( this, 0 );
+	},
+
+	// Get the Nth element in the matched element set OR
+	// Get the whole matched element set as a clean array
+	get: function( num ) {
+		return num == null ?
+
+			// Return a 'clean' array
+			this.toArray() :
+
+			// Return just the object
+			( num < 0 ? this[ this.length + num ] : this[ num ] );
+	},
+
+	// Take an array of elements and push it onto the stack
+	// (returning the new matched element set)
+	pushStack: function( elems, name, selector ) {
+		// Build a new jQuery matched element set
+		var ret = this.constructor();
+
+		if ( jQuery.isArray( elems ) ) {
+			push.apply( ret, elems );
+
+		} else {
+			jQuery.merge( ret, elems );
+		}
+
+		// Add the old object onto the stack (as a reference)
+		ret.prevObject = this;
+
+		ret.context = this.context;
+
+		if ( name === "find" ) {
+			ret.selector = this.selector + (this.selector ? " " : "") + selector;
+		} else if ( name ) {
+			ret.selector = this.selector + "." + name + "(" + selector + ")";
+		}
+
+		// Return the newly-formed element set
+		return ret;
+	},
+
+	// Execute a callback for every element in the matched set.
+	// (You can seed the arguments with an array of args, but this is
+	// only used internally.)
+	each: function( callback, args ) {
+		return jQuery.each( this, callback, args );
+	},
+
+	ready: function( fn ) {
+		// Attach the listeners
+		jQuery.bindReady();
+
+		// Add the callback
+		readyList.done( fn );
+
+		return this;
+	},
+
+	eq: function( i ) {
+		return i === -1 ?
+			this.slice( i ) :
+			this.slice( i, +i + 1 );
+	},
+
+	first: function() {
+		return this.eq( 0 );
+	},
+
+	last: function() {
+		return this.eq( -1 );
+	},
+
+	slice: function() {
+		return this.pushStack( slice.apply( this, arguments ),
+			"slice", slice.call(arguments).join(",") );
+	},
+
+	map: function( callback ) {
+		return this.pushStack( jQuery.map(this, function( elem, i ) {
+			return callback.call( elem, i, elem );
+		}));
+	},
+
+	end: function() {
+		return this.prevObject || this.constructor(null);
+	},
+
+	// For internal use only.
+	// Behaves like an Array's method, not like a jQuery method.
+	push: push,
+	sort: [].sort,
+	splice: [].splice
+};
+
+// Give the init function the jQuery prototype for later instantiation
+jQuery.fn.init.prototype = jQuery.fn;
+
+jQuery.extend = jQuery.fn.extend = function() {
+	var options, name, src, copy, copyIsArray, clone,
+		target = arguments[0] || {},
+		i = 1,
+		length = arguments.length,
+		deep = false;
+
+	// Handle a deep copy situation
+	if ( typeof target === "boolean" ) {
+		deep = target;
+		target = arguments[1] || {};
+		// skip the boolean and the target
+		i = 2;
+	}
+
+	// Handle case when target is a string or something (possible in deep copy)
+	if ( typeof target !== "object" && !jQuery.isFunction(target) ) {
+		target = {};
+	}
+
+	// extend jQuery itself if only one argument is passed
+	if ( length === i ) {
+		target = this;
+		--i;
+	}
+
+	for ( ; i < length; i++ ) {
+		// Only deal with non-null/undefined values
+		if ( (options = arguments[ i ]) != null ) {
+			// Extend the base object
+			for ( name in options ) {
+				src = target[ name ];
+				copy = options[ name ];
+
+				// Prevent never-ending loop
+				if ( target === copy ) {
+					continue;
+				}
+
+				// Recurse if we're merging plain objects or arrays
+				if ( deep && copy && ( jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy)) ) ) {
+					if ( copyIsArray ) {
+						copyIsArray = false;
+						clone = src && jQuery.isArray(src) ? src : [];
+
+					} else {
+						clone = src && jQuery.isPlainObject(src) ? src : {};
+					}
+
+					// Never move original objects, clone them
+					target[ name ] = jQuery.extend( deep, clone, copy );
+
+				// Don't bring in undefined values
+				} else if ( copy !== undefined ) {
+					target[ name ] = copy;
+				}
+			}
+		}
+	}
+
+	// Return the modified object
+	return target;
+};
+
+jQuery.extend({
+	noConflict: function( deep ) {
+		if ( window.$ === jQuery ) {
+			window.$ = _$;
+		}
+
+		if ( deep && window.jQuery === jQuery ) {
+			window.jQuery = _jQuery;
+		}
+
+		return jQuery;
+	},
+
+	// Is the DOM ready to be used? Set to true once it occurs.
+	isReady: false,
+
+	// A counter to track how many items to wait for before
+	// the ready event fires. See #6781
+	readyWait: 1,
+
+	// Hold (or release) the ready event
+	holdReady: function( hold ) {
+		if ( hold ) {
+			jQuery.readyWait++;
+		} else {
+			jQuery.ready( true );
+		}
+	},
+
+	// Handle when the DOM is ready
+	ready: function( wait ) {
+		// Either a released hold or an DOMready/load event and not yet ready
+		if ( (wait === true && !--jQuery.readyWait) || (wait !== true && !jQuery.isReady) ) {
+			// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
+			if ( !document.body ) {
+				return setTimeout( jQuery.ready, 1 );
+			}
+
+			// Remember that the DOM is ready
+			jQuery.isReady = true;
+
+			// If a normal DOM Ready event fired, decrement, and wait if need be
+			if ( wait !== true && --jQuery.readyWait > 0 ) {
+				return;
+			}
+
+			// If there are functions bound, to execute
+			readyList.resolveWith( document, [ jQuery ] );
+
+			// Trigger any bound ready events
+			if ( jQuery.fn.trigger ) {
+				jQuery( document ).trigger( "ready" ).unbind( "ready" );
+			}
+		}
+	},
+
+	bindReady: function() {
+		if ( readyList ) {
+			return;
+		}
+
+		readyList = jQuery._Deferred();
+
+		// Catch cases where $(document).ready() is called after the
+		// browser event has already occurred.
+		if ( document.readyState === "complete" ) {
+			// Handle it asynchronously to allow scripts the opportunity to delay ready
+			return setTimeout( jQuery.ready, 1 );
+		}
+
+		// Mozilla, Opera and webkit nightlies currently support this event
+		if ( document.addEventListener ) {
+			// Use the handy event callback
+			document.addEventListener( "DOMContentLoaded", DOMContentLoaded, false );
+
+			// A fallback to window.onload, that will always work
+			window.addEventListener( "load", jQuery.ready, false );
+
+		// If IE event model is used
+		} else if ( document.attachEvent ) {
+			// ensure firing before onload,
+			// maybe late but safe also for iframes
+			document.attachEvent( "onreadystatechange", DOMContentLoaded );
+
+			// A fallback to window.onload, that will always work
+			window.attachEvent( "onload", jQuery.ready );
+
+			// If IE and not a frame
+			// continually check to see if the document is ready
+			var toplevel = false;
+
+			try {
+				toplevel = window.frameElement == null;
+			} catch(e) {}
+
+			if ( document.documentElement.doScroll && toplevel ) {
+				doScrollCheck();
+			}
+		}
+	},
+
+	// See test/unit/core.js for details concerning isFunction.
+	// Since version 1.3, DOM methods and functions like alert
+	// aren't supported. They return false on IE (#2968).
+	isFunction: function( obj ) {
+		return jQuery.type(obj) === "function";
+	},
+
+	isArray: Array.isArray || function( obj ) {
+		return jQuery.type(obj) === "array";
+	},
+
+	// A crude way of determining if an object is a window
+	isWindow: function( obj ) {
+		return obj && typeof obj === "object" && "setInterval" in obj;
+	},
+
+	isNaN: function( obj ) {
+		return obj == null || !rdigit.test( obj ) || isNaN( obj );
+	},
+
+	type: function( obj ) {
+		return obj == null ?
+			String( obj ) :
+			class2type[ toString.call(obj) ] || "object";
+	},
+
+	isPlainObject: function( obj ) {
+		// Must be an Object.
+		// Because of IE, we also have to check the presence of the constructor property.
+		// Make sure that DOM nodes and window objects don't pass through, as well
+		if ( !obj || jQuery.type(obj) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {
+			return false;
+		}
+
+		// Not own constructor property must be Object
+		if ( obj.constructor &&
+			!hasOwn.call(obj, "constructor") &&
+			!hasOwn.call(obj.constructor.prototype, "isPrototypeOf") ) {
+			return false;
+		}
+
+		// Own properties are enumerated firstly, so to speed up,
+		// if last one is own, then all properties are own.
+
+		var key;
+		for ( key in obj ) {}
+
+		return key === undefined || hasOwn.call( obj, key );
+	},
+
+	isEmptyObject: function( obj ) {
+		for ( var name in obj ) {
+			return false;
+		}
+		return true;
+	},
+
+	error: function( msg ) {
+		throw msg;
+	},
+
+	parseJSON: function( data ) {
+		if ( typeof data !== "string" || !data ) {
+			return null;
+		}
+
+		// Make sure leading/trailing whitespace is removed (IE can't handle it)
+		data = jQuery.trim( data );
+
+		// Attempt to parse using the native JSON parser first
+		if ( window.JSON && window.JSON.parse ) {
+			return window.JSON.parse( data );
+		}
+
+		// Make sure the incoming data is actual JSON
+		// Logic borrowed from http://json.org/json2.js
+		if ( rvalidchars.test( data.replace( rvalidescape, "@" )
+			.replace( rvalidtokens, "]" )
+			.replace( rvalidbraces, "")) ) {
+
+			return (new Function( "return " + data ))();
+
+		}
+		jQuery.error( "Invalid JSON: " + data );
+	},
+
+	// Cross-browser xml parsing
+	// (xml & tmp used internally)
+	parseXML: function( data , xml , tmp ) {
+
+		if ( window.DOMParser ) { // Standard
+			tmp = new DOMParser();
+			xml = tmp.parseFromString( data , "text/xml" );
+		} else { // IE
+			xml = new ActiveXObject( "Microsoft.XMLDOM" );
+			xml.async = "false";
+			xml.loadXML( data );
+		}
+
+		tmp = xml.documentElement;
+
+		if ( ! tmp || ! tmp.nodeName || tmp.nodeName === "parsererror" ) {
+			jQuery.error( "Invalid XML: " + data );
+		}
+
+		return xml;
+	},
+
+	noop: function() {},
+
+	// Evaluates a script in a global context
+	// Workarounds based on findings by Jim Driscoll
+	// http://weblogs.java.net/blog/driscoll/archive/2009/09/08/eval-javascript-global-context
+	globalEval: function( data ) {
+		if ( data && rnotwhite.test( data ) ) {
+			// We use execScript on Internet Explorer
+			// We use an anonymous function so that context is window
+			// rather than jQuery in Firefox
+			( window.execScript || function( data ) {
+				window[ "eval" ].call( window, data );
+			} )( data );
+		}
+	},
+
+	nodeName: function( elem, name ) {
+		return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
+	},
+
+	// args is for internal usage only
+	each: function( object, callback, args ) {
+		var name, i = 0,
+			length = object.length,
+			isObj = length === undefined || jQuery.isFunction( object );
+
+		if ( args ) {
+			if ( isObj ) {
+				for ( name in object ) {
+					if ( callback.apply( object[ name ], args ) === false ) {
+						break;
+					}
+				}
+			} else {
+				for ( ; i < length; ) {
+					if ( callback.apply( object[ i++ ], args ) === false ) {
+						break;
+					}
+				}
+			}
+
+		// A special, fast, case for the most common use of each
+		} else {
+			if ( isObj ) {
+				for ( name in object ) {
+					if ( callback.call( object[ name ], name, object[ name ] ) === false ) {
+						break;
+					}
+				}
+			} else {
+				for ( ; i < length; ) {
+					if ( callback.call( object[ i ], i, object[ i++ ] ) === false ) {
+						break;
+					}
+				}
+			}
+		}
+
+		return object;
+	},
+
+	// Use native String.trim function wherever possible
+	trim: trim ?
+		function( text ) {
+			return text == null ?
+				"" :
+				trim.call( text );
+		} :
+
+		// Otherwise use our own trimming functionality
+		function( text ) {
+			return text == null ?
+				"" :
+				text.toString().replace( trimLeft, "" ).replace( trimRight, "" );
+		},
+
+	// results is for internal usage only
+	makeArray: function( array, results ) {
+		var ret = results || [];
+
+		if ( array != null ) {
+			// The window, strings (and functions) also have 'length'
+			// The extra typeof function check is to prevent crashes
+			// in Safari 2 (See: #3039)
+			// Tweaked logic slightly to handle Blackberry 4.7 RegExp issues #6930
+			var type = jQuery.type( array );
+
+			if ( array.length == null || type === "string" || type === "function" || type === "regexp" || jQuery.isWindow( array ) ) {
+				push.call( ret, array );
+			} else {
+				jQuery.merge( ret, array );
+			}
+		}
+
+		return ret;
+	},
+
+	inArray: function( elem, array ) {
+
+		if ( indexOf ) {
+			return indexOf.call( array, elem );
+		}
+
+		for ( var i = 0, length = array.length; i < length; i++ ) {
+			if ( array[ i ] === elem ) {
+				return i;
+			}
+		}
+
+		return -1;
+	},
+
+	merge: function( first, second ) {
+		var i = first.length,
+			j = 0;
+
+		if ( typeof second.length === "number" ) {
+			for ( var l = second.length; j < l; j++ ) {
+				first[ i++ ] = second[ j ];
+			}
+
+		} else {
+			while ( second[j] !== undefined ) {
+				first[ i++ ] = second[ j++ ];
+			}
+		}
+
+		first.length = i;
+
+		return first;
+	},
+
+	grep: function( elems, callback, inv ) {
+		var ret = [], retVal;
+		inv = !!inv;
+
+		// Go through the array, only saving the items
+		// that pass the validator function
+		for ( var i = 0, length = elems.length; i < length; i++ ) {
+			retVal = !!callback( elems[ i ], i );
+			if ( inv !== retVal ) {
+				ret.push( elems[ i ] );
+			}
+		}
+
+		return ret;
+	},
+
+	// arg is for internal usage only
+	map: function( elems, callback, arg ) {
+		var value, key, ret = [],
+			i = 0,
+			length = elems.length,
+			// jquery objects are treated as arrays
+			isArray = elems instanceof jQuery || length !== undefined && typeof length === "number" && ( ( length > 0 && elems[ 0 ] && elems[ length -1 ] ) || length === 0 || jQuery.isArray( elems ) ) ;
+
+		// Go through the array, translating each of the items to their
+		if ( isArray ) {
+			for ( ; i < length; i++ ) {
+				value = callback( elems[ i ], i, arg );
+
+				if ( value != null ) {
+					ret[ ret.length ] = value;
+				}
+			}
+
+		// Go through every key on the object,
+		} else {
+			for ( key in elems ) {
+				value = callback( elems[ key ], key, arg );
+
+				if ( value != null ) {
+					ret[ ret.length ] = value;
+				}
+			}
+		}
+
+		// Flatten any nested arrays
+		return ret.concat.apply( [], ret );
+	},
+
+	// A global GUID counter for objects
+	guid: 1,
+
+	// Bind a function to a context, optionally partially applying any
+	// arguments.
+	proxy: function( fn, context ) {
+		if ( typeof context === "string" ) {
+			var tmp = fn[ context ];
+			context = fn;
+			fn = tmp;
+		}
+
+		// Quick check to determine if target is callable, in the spec
+		// this throws a TypeError, but we will just return undefined.
+		if ( !jQuery.isFunction( fn ) ) {
+			return undefined;
+		}
+
+		// Simulated bind
+		var args = slice.call( arguments, 2 ),
+			proxy = function() {
+				return fn.apply( context, args.concat( slice.call( arguments ) ) );
+			};
+
+		// Set the guid of unique handler to the same of original handler, so it can be removed
+		proxy.guid = fn.guid = fn.guid || proxy.guid || jQuery.guid++;
+
+		return proxy;
+	},
+
+	// Mutifunctional method to get and set values to a collection
+	// The value/s can be optionally by executed if its a function
+	access: function( elems, key, value, exec, fn, pass ) {
+		var length = elems.length;
+
+		// Setting many attributes
+		if ( typeof key === "object" ) {
+			for ( var k in key ) {
+				jQuery.access( elems, k, key[k], exec, fn, value );
+			}
+			return elems;
+		}
+
+		// Setting one attribute
+		if ( value !== undefined ) {
+			// Optionally, function values get executed if exec is true
+			exec = !pass && exec && jQuery.isFunction(value);
+
+			for ( var i = 0; i < length; i++ ) {
+				fn( elems[i], key, exec ? value.call( elems[i], i, fn( elems[i], key ) ) : value, pass );
+			}
+
+			return elems;
+		}
+
+		// Getting an attribute
+		return length ? fn( elems[0], key ) : undefined;
+	},
+
+	now: function() {
+		return (new Date()).getTime();
+	},
+
+	// Use of jQuery.browser is frowned upon.
+	// More details: http://docs.jquery.com/Utilities/jQuery.browser
+	uaMatch: function( ua ) {
+		ua = ua.toLowerCase();
+
+		var match = rwebkit.exec( ua ) ||
+			ropera.exec( ua ) ||
+			rmsie.exec( ua ) ||
+			ua.indexOf("compatible") < 0 && rmozilla.exec( ua ) ||
+			[];
+
+		return { browser: match[1] || "", version: match[2] || "0" };
+	},
+
+	sub: function() {
+		function jQuerySub( selector, context ) {
+			return new jQuerySub.fn.init( selector, context );
+		}
+		jQuery.extend( true, jQuerySub, this );
+		jQuerySub.superclass = this;
+		jQuerySub.fn = jQuerySub.prototype = this();
+		jQuerySub.fn.constructor = jQuerySub;
+		jQuerySub.sub = this.sub;
+		jQuerySub.fn.init = function init( selector, context ) {
+			if ( context && context instanceof jQuery && !(context instanceof jQuerySub) ) {
+				context = jQuerySub( context );
+			}
+
+			return jQuery.fn.init.call( this, selector, context, rootjQuerySub );
+		};
+		jQuerySub.fn.init.prototype = jQuerySub.fn;
+		var rootjQuerySub = jQuerySub(document);
+		return jQuerySub;
+	},
+
+	browser: {}
+});
+
+// Populate the class2type map
+jQuery.each("Boolean Number String Function Array Date RegExp Object".split(" "), function(i, name) {
+	class2type[ "[object " + name + "]" ] = name.toLowerCase();
+});
+
+browserMatch = jQuery.uaMatch( userAgent );
+if ( browserMatch.browser ) {
+	jQuery.browser[ browserMatch.browser ] = true;
+	jQuery.browser.version = browserMatch.version;
+}
+
+// Deprecated, use jQuery.browser.webkit instead
+if ( jQuery.browser.webkit ) {
+	jQuery.browser.safari = true;
+}
+
+// IE doesn't match non-breaking spaces with \s
+if ( rnotwhite.test( "\xA0" ) ) {
+	trimLeft = /^[\s\xA0]+/;
+	trimRight = /[\s\xA0]+$/;
+}
+
+// All jQuery objects should point back to these
+rootjQuery = jQuery(document);
+
+// Cleanup functions for the document ready method
+if ( document.addEventListener ) {
+	DOMContentLoaded = function() {
+		document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
+		jQuery.ready();
+	};
+
+} else if ( document.attachEvent ) {
+	DOMContentLoaded = function() {
+		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
+		if ( document.readyState === "complete" ) {
+			document.detachEvent( "onreadystatechange", DOMContentLoaded );
+			jQuery.ready();
+		}
+	};
+}
+
+// The DOM ready check for Internet Explorer
+function doScrollCheck() {
+	if ( jQuery.isReady ) {
+		return;
+	}
+
+	try {
+		// If IE is used, use the trick by Diego Perini
+		// http://javascript.nwbox.com/IEContentLoaded/
+		document.documentElement.doScroll("left");
+	} catch(e) {
+		setTimeout( doScrollCheck, 1 );
+		return;
+	}
+
+	// and execute any waiting functions
+	jQuery.ready();
+}
+
+// Expose jQuery to the global object
+return jQuery;
+
+})();
+
+
+var // Promise methods
+	promiseMethods = "done fail isResolved isRejected promise then always pipe".split( " " ),
+	// Static reference to slice
+	sliceDeferred = [].slice;
+
+jQuery.extend({
+	// Create a simple deferred (one callbacks list)
+	_Deferred: function() {
+		var // callbacks list
+			callbacks = [],
+			// stored [ context , args ]
+			fired,
+			// to avoid firing when already doing so
+			firing,
+			// flag to know if the deferred has been cancelled
+			cancelled,
+			// the deferred itself
+			deferred  = {
+
+				// done( f1, f2, ...)
+				done: function() {
+					if ( !cancelled ) {
+						var args = arguments,
+							i,
+							length,
+							elem,
+							type,
+							_fired;
+						if ( fired ) {
+							_fired = fired;
+							fired = 0;
+						}
+						for ( i = 0, length = args.length; i < length; i++ ) {
+							elem = args[ i ];
+							type = jQuery.type( elem );
+							if ( type === "array" ) {
+								deferred.done.apply( deferred, elem );
+							} else if ( type === "function" ) {
+								callbacks.push( elem );
+							}
+						}
+						if ( _fired ) {
+							deferred.resolveWith( _fired[ 0 ], _fired[ 1 ] );
+						}
+					}
+					return this;
+				},
+
+				// resolve with given context and args
+				resolveWith: function( context, args ) {
+					if ( !cancelled && !fired && !firing ) {
+						// make sure args are available (#8421)
+						args = args || [];
+						firing = 1;
+						try {
+							while( callbacks[ 0 ] ) {
+								callbacks.shift().apply( context, args );
+							}
+						}
+						finally {
+							fired = [ context, args ];
+							firing = 0;
+						}
+					}
+					return this;
+				},
+
+				// resolve with this as context and given arguments
+				resolve: function() {
+					deferred.resolveWith( this, arguments );
+					return this;
+				},
+
+				// Has this deferred been resolved?
+				isResolved: function() {
+					return !!( firing || fired );
+				},
+
+				// Cancel
+				cancel: function() {
+					cancelled = 1;
+					callbacks = [];
+					return this;
+				}
+			};
+
+		return deferred;
+	},
+
+	// Full fledged deferred (two callbacks list)
+	Deferred: function( func ) {
+		var deferred = jQuery._Deferred(),
+			failDeferred = jQuery._Deferred(),
+			promise;
+		// Add errorDeferred methods, then and promise
+		jQuery.extend( deferred, {
+			then: function( doneCallbacks, failCallbacks ) {
+				deferred.done( doneCallbacks ).fail( failCallbacks );
+				return this;
+			},
+			always: function() {
+				return deferred.done.apply( deferred, arguments ).fail.apply( this, arguments );
+			},
+			fail: failDeferred.done,
+			rejectWith: failDeferred.resolveWith,
+			reject: failDeferred.resolve,
+			isRejected: failDeferred.isResolved,
+			pipe: function( fnDone, fnFail ) {
+				return jQuery.Deferred(function( newDefer ) {
+					jQuery.each( {
+						done: [ fnDone, "resolve" ],
+						fail: [ fnFail, "reject" ]
+					}, function( handler, data ) {
+						var fn = data[ 0 ],
+							action = data[ 1 ],
+							returned;
+						if ( jQuery.isFunction( fn ) ) {
+							deferred[ handler ](function() {
+								returned = fn.apply( this, arguments );
+								if ( returned && jQuery.isFunction( returned.promise ) ) {
+									returned.promise().then( newDefer.resolve, newDefer.reject );
+								} else {
+									newDefer[ action ]( returned );
+								}
+							});
+						} else {
+							deferred[ handler ]( newDefer[ action ] );
+						}
+					});
+				}).promise();
+			},
+			// Get a promise for this deferred
+			// If obj is provided, the promise aspect is added to the object
+			promise: function( obj ) {
+				if ( obj == null ) {
+					if ( promise ) {
+						return promise;
+					}
+					promise = obj = {};
+				}
+				var i = promiseMethods.length;
+				while( i-- ) {
+					obj[ promiseMethods[i] ] = deferred[ promiseMethods[i] ];
+				}
+				return obj;
+			}
+		});
+		// Make sure only one callback list will be used
+		deferred.done( failDeferred.cancel ).fail( deferred.cancel );
+		// Unexpose cancel
+		delete deferred.cancel;
+		// Call given func if any
+		if ( func ) {
+			func.call( deferred, deferred );
+		}
+		return deferred;
+	},
+
+	// Deferred helper
+	when: function( firstParam ) {
+		var args = arguments,
+			i = 0,
+			length = args.length,
+			count = length,
+			deferred = length <= 1 && firstParam && jQuery.isFunction( firstParam.promise ) ?
+				firstParam :
+				jQuery.Deferred();
+		function resolveFunc( i ) {
+			return function( value ) {
+				args[ i ] = arguments.length > 1 ? sliceDeferred.call( arguments, 0 ) : value;
+				if ( !( --count ) ) {
+					// Strange bug in FF4:
+					// Values changed onto the arguments object sometimes end up as undefined values
+					// outside the $.when method. Cloning the object into a fresh array solves the issue
+					deferred.resolveWith( deferred, sliceDeferred.call( args, 0 ) );
+				}
+			};
+		}
+		if ( length > 1 ) {
+			for( ; i < length; i++ ) {
+				if ( args[ i ] && jQuery.isFunction( args[ i ].promise ) ) {
+					args[ i ].promise().then( resolveFunc(i), deferred.reject );
+				} else {
+					--count;
+				}
+			}
+			if ( !count ) {
+				deferred.resolveWith( deferred, args );
+			}
+		} else if ( deferred !== firstParam ) {
+			deferred.resolveWith( deferred, length ? [ firstParam ] : [] );
+		}
+		return deferred.promise();
+	}
+});
+
+
+
+jQuery.support = (function() {
+
+	var div = document.createElement( "div" ),
+		documentElement = document.documentElement,
+		all,
+		a,
+		select,
+		opt,
+		input,
+		marginDiv,
+		support,
+		fragment,
+		body,
+		bodyStyle,
+		tds,
+		events,
+		eventName,
+		i,
+		isSupported;
+
+	// Preliminary tests
+	div.setAttribute("className", "t");
+	div.innerHTML = "   <link/><table></table><a href='/a' style='top:1px;float:left;opacity:.55;'>a</a><input type='checkbox'/>";
+
+	all = div.getElementsByTagName( "*" );
+	a = div.getElementsByTagName( "a" )[ 0 ];
+
+	// Can't get basic test support
+	if ( !all || !all.length || !a ) {
+		return {};
+	}
+
+	// First batch of supports tests
+	select = document.createElement( "select" );
+	opt = select.appendChild( document.createElement("option") );
+	input = div.getElementsByTagName( "input" )[ 0 ];
+
+	support = {
+		// IE strips leading whitespace when .innerHTML is used
+		leadingWhitespace: ( div.firstChild.nodeType === 3 ),
+
+		// Make sure that tbody elements aren't automatically inserted
+		// IE will insert them into empty tables
+		tbody: !div.getElementsByTagName( "tbody" ).length,
+
+		// Make sure that link elements get serialized correctly by innerHTML
+		// This requires a wrapper element in IE
+		htmlSerialize: !!div.getElementsByTagName( "link" ).length,
+
+		// Get the style information from getAttribute
+		// (IE uses .cssText instead)
+		style: /top/.test( a.getAttribute("style") ),
+
+		// Make sure that URLs aren't manipulated
+		// (IE normalizes it by default)
+		hrefNormalized: ( a.getAttribute( "href" ) === "/a" ),
+
+		// Make sure that element opacity exists
+		// (IE uses filter instead)
+		// Use a regex to work around a WebKit issue. See #5145
+		opacity: /^0.55$/.test( a.style.opacity ),
+
+		// Verify style float existence
+		// (IE uses styleFloat instead of cssFloat)
+		cssFloat: !!a.style.cssFloat,
+
+		// Make sure that if no value is specified for a checkbox
+		// that it defaults to "on".
+		// (WebKit defaults to "" instead)
+		checkOn: ( input.value === "on" ),
+
+		// Make sure that a selected-by-default option has a working selected property.
+		// (WebKit defaults to false instead of true, IE too, if it's in an optgroup)
+		optSelected: opt.selected,
+
+		// Test setAttribute on camelCase class. If it works, we need attrFixes when doing get/setAttribute (ie6/7)
+		getSetAttribute: div.className !== "t",
+
+		// Will be defined later
+		submitBubbles: true,
+		changeBubbles: true,
+		focusinBubbles: false,
+		deleteExpando: true,
+		noCloneEvent: true,
+		inlineBlockNeedsLayout: false,
+		shrinkWrapBlocks: false,
+		reliableMarginRight: true
+	};
+
+	// Make sure checked status is properly cloned
+	input.checked = true;
+	support.noCloneChecked = input.cloneNode( true ).checked;
+
+	// Make sure that the options inside disabled selects aren't marked as disabled
+	// (WebKit marks them as disabled)
+	select.disabled = true;
+	support.optDisabled = !opt.disabled;
+
+	// Test to see if it's possible to delete an expando from an element
+	// Fails in Internet Explorer
+	try {
+		delete div.test;
+	} catch( e ) {
+		support.deleteExpando = false;
+	}
+
+	if ( !div.addEventListener && div.attachEvent && div.fireEvent ) {
+		div.attachEvent( "onclick", function click() {
+			// Cloning a node shouldn't copy over any
+			// bound event handlers (IE does this)
+			support.noCloneEvent = false;
+			div.detachEvent( "onclick", click );
+		});
+		div.cloneNode( true ).fireEvent( "onclick" );
+	}
+
+	// Check if a radio maintains it's value
+	// after being appended to the DOM
+	input = document.createElement("input");
+	input.value = "t";
+	input.setAttribute("type", "radio");
+	support.radioValue = input.value === "t";
+
+	input.setAttribute("checked", "checked");
+	div.appendChild( input );
+	fragment = document.createDocumentFragment();
+	fragment.appendChild( div.firstChild );
+
+	// WebKit doesn't clone checked state correctly in fragments
+	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
+
+	div.innerHTML = "";
+
+	// Figure out if the W3C box model works as expected
+	div.style.width = div.style.paddingLeft = "1px";
+
+	// We use our own, invisible, body
+	body = document.createElement( "body" );
+	bodyStyle = {
+		visibility: "hidden",
+		width: 0,
+		height: 0,
+		border: 0,
+		margin: 0,
+		// Set background to avoid IE crashes when removing (#9028)
+		background: "none"
+	};
+	for ( i in bodyStyle ) {
+		body.style[ i ] = bodyStyle[ i ];
+	}
+	body.appendChild( div );
+	documentElement.insertBefore( body, documentElement.firstChild );
+
+	// Check if a disconnected checkbox will retain its checked
+	// value of true after appended to the DOM (IE6/7)
+	support.appendChecked = input.checked;
+
+	support.boxModel = div.offsetWidth === 2;
+
+	if ( "zoom" in div.style ) {
+		// Check if natively block-level elements act like inline-block
+		// elements when setting their display to 'inline' and giving
+		// them layout
+		// (IE < 8 does this)
+		div.style.display = "inline";
+		div.style.zoom = 1;
+		support.inlineBlockNeedsLayout = ( div.offsetWidth === 2 );
+
+		// Check if elements with layout shrink-wrap their children
+		// (IE 6 does this)
+		div.style.display = "";
+		div.innerHTML = "<div style='width:4px;'></div>";
+		support.shrinkWrapBlocks = ( div.offsetWidth !== 2 );
+	}
+
+	div.innerHTML = "<table><tr><td style='padding:0;border:0;display:none'></td><td>t</td></tr></table>";
+	tds = div.getElementsByTagName( "td" );
+
+	// Check if table cells still have offsetWidth/Height when they are set
+	// to display:none and there are still other visible table cells in a
+	// table row; if so, offsetWidth/Height are not reliable for use when
+	// determining if an element has been hidden directly using
+	// display:none (it is still safe to use offsets if a parent element is
+	// hidden; don safety goggles and see bug #4512 for more information).
+	// (only IE 8 fails this test)
+	isSupported = ( tds[ 0 ].offsetHeight === 0 );
+
+	tds[ 0 ].style.display = "";
+	tds[ 1 ].style.display = "none";
+
+	// Check if empty table cells still have offsetWidth/Height
+	// (IE < 8 fail this test)
+	support.reliableHiddenOffsets = isSupported && ( tds[ 0 ].offsetHeight === 0 );
+	div.innerHTML = "";
+
+	// Check if div with explicit width and no margin-right incorrectly
+	// gets computed margin-right based on width of container. For more
+	// info see bug #3333
+	// Fails in WebKit before Feb 2011 nightlies
+	// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
+	if ( document.defaultView && document.defaultView.getComputedStyle ) {
+		marginDiv = document.createElement( "div" );
+		marginDiv.style.width = "0";
+		marginDiv.style.marginRight = "0";
+		div.appendChild( marginDiv );
+		support.reliableMarginRight =
+			( parseInt( ( document.defaultView.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
+	}
+
+	// Remove the body element we added
+	body.innerHTML = "";
+	documentElement.removeChild( body );
+
+	// Technique from Juriy Zaytsev
+	// http://thinkweb2.com/projects/prototype/detecting-event-support-without-browser-sniffing/
+	// We only care about the case where non-standard event systems
+	// are used, namely in IE. Short-circuiting here helps us to
+	// avoid an eval call (in setAttribute) which can cause CSP
+	// to go haywire. See: https://developer.mozilla.org/en/Security/CSP
+	if ( div.attachEvent ) {
+		for( i in {
+			submit: 1,
+			change: 1,
+			focusin: 1
+		} ) {
+			eventName = "on" + i;
+			isSupported = ( eventName in div );
+			if ( !isSupported ) {
+				div.setAttribute( eventName, "return;" );
+				isSupported = ( typeof div[ eventName ] === "function" );
+			}
+			support[ i + "Bubbles" ] = isSupported;
+		}
+	}
+
+	return support;
+})();
+
+// Keep track of boxModel
+jQuery.boxModel = jQuery.support.boxModel;
+
+
+
+
+var rbrace = /^(?:\{.*\}|\[.*\])$/,
+	rmultiDash = /([a-z])([A-Z])/g;
+
+jQuery.extend({
+	cache: {},
+
+	// Please use with caution
+	uuid: 0,
+
+	// Unique for each copy of jQuery on the page
+	// Non-digits removed to match rinlinejQuery
+	expando: "jQuery" + ( jQuery.fn.jquery + Math.random() ).replace( /\D/g, "" ),
+
+	// The following elements throw uncatchable exceptions if you
+	// attempt to add expando properties to them.
+	noData: {
+		"embed": true,
+		// Ban all objects except for Flash (which handle expandos)
+		"object": "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000",
+		"applet": true
+	},
+
+	hasData: function( elem ) {
+		elem = elem.nodeType ? jQuery.cache[ elem[jQuery.expando] ] : elem[ jQuery.expando ];
+
+		return !!elem && !isEmptyDataObject( elem );
+	},
+
+	data: function( elem, name, data, pvt /* Internal Use Only */ ) {
+		if ( !jQuery.acceptData( elem ) ) {
+			return;
+		}
+
+		var internalKey = jQuery.expando, getByName = typeof name === "string", thisCache,
+
+			// We have to handle DOM nodes and JS objects differently because IE6-7
+			// can't GC object references properly across the DOM-JS boundary
+			isNode = elem.nodeType,
+
+			// Only DOM nodes need the global jQuery cache; JS object data is
+			// attached directly to the object so GC can occur automatically
+			cache = isNode ? jQuery.cache : elem,
+
+			// Only defining an ID for JS objects if its cache already exists allows
+			// the code to shortcut on the same path as a DOM node with no cache
+			id = isNode ? elem[ jQuery.expando ] : elem[ jQuery.expando ] && jQuery.expando;
+
+		// Avoid doing any more work than we need to when trying to get data on an
+		// object that has no data at all
+		if ( (!id || (pvt && id && !cache[ id ][ internalKey ])) && getByName && data === undefined ) {
+			return;
+		}
+
+		if ( !id ) {
+			// Only DOM nodes need a new unique ID for each element since their data
+			// ends up in the global cache
+			if ( isNode ) {
+				elem[ jQuery.expando ] = id = ++jQuery.uuid;
+			} else {
+				id = jQuery.expando;
+			}
+		}
+
+		if ( !cache[ id ] ) {
+			cache[ id ] = {};
+
+			// TODO: This is a hack for 1.5 ONLY. Avoids exposing jQuery
+			// metadata on plain JS objects when the object is serialized using
+			// JSON.stringify
+			if ( !isNode ) {
+				cache[ id ].toJSON = jQuery.noop;
+			}
+		}
+
+		// An object can be passed to jQuery.data instead of a key/value pair; this gets
+		// shallow copied over onto the existing cache
+		if ( typeof name === "object" || typeof name === "function" ) {
+			if ( pvt ) {
+				cache[ id ][ internalKey ] = jQuery.extend(cache[ id ][ internalKey ], name);
+			} else {
+				cache[ id ] = jQuery.extend(cache[ id ], name);
+			}
+		}
+
+		thisCache = cache[ id ];
+
+		// Internal jQuery data is stored in a separate object inside the object's data
+		// cache in order to avoid key collisions between internal data and user-defined
+		// data
+		if ( pvt ) {
+			if ( !thisCache[ internalKey ] ) {
+				thisCache[ internalKey ] = {};
+			}
+
+			thisCache = thisCache[ internalKey ];
+		}
+
+		if ( data !== undefined ) {
+			thisCache[ jQuery.camelCase( name ) ] = data;
+		}
+
+		// TODO: This is a hack for 1.5 ONLY. It will be removed in 1.6. Users should
+		// not attempt to inspect the internal events object using jQuery.data, as this
+		// internal data object is undocumented and subject to change.
+		if ( name === "events" && !thisCache[name] ) {
+			return thisCache[ internalKey ] && thisCache[ internalKey ].events;
+		}
+
+		return getByName ? thisCache[ jQuery.camelCase( name ) ] : thisCache;
+	},
+
+	removeData: function( elem, name, pvt /* Internal Use Only */ ) {
+		if ( !jQuery.acceptData( elem ) ) {
+			return;
+		}
+
+		var internalKey = jQuery.expando, isNode = elem.nodeType,
+
+			// See jQuery.data for more information
+			cache = isNode ? jQuery.cache : elem,
+
+			// See jQuery.data for more information
+			id = isNode ? elem[ jQuery.expando ] : jQuery.expando;
+
+		// If there is already no cache entry for this object, there is no
+		// purpose in continuing
+		if ( !cache[ id ] ) {
+			return;
+		}
+
+		if ( name ) {
+			var thisCache = pvt ? cache[ id ][ internalKey ] : cache[ id ];
+
+			if ( thisCache ) {
+				delete thisCache[ name ];
+
+				// If there is no data left in the cache, we want to continue
+				// and let the cache object itself get destroyed
+				if ( !isEmptyDataObject(thisCache) ) {
+					return;
+				}
+			}
+		}
+
+		// See jQuery.data for more information
+		if ( pvt ) {
+			delete cache[ id ][ internalKey ];
+
+			// Don't destroy the parent cache unless the internal data object
+			// had been the only thing left in it
+			if ( !isEmptyDataObject(cache[ id ]) ) {
+				return;
+			}
+		}
+
+		var internalCache = cache[ id ][ internalKey ];
+
+		// Browsers that fail expando deletion also refuse to delete expandos on
+		// the window, but it will allow it on all other JS objects; other browsers
+		// don't care
+		if ( jQuery.support.deleteExpando || cache != window ) {
+			delete cache[ id ];
+		} else {
+			cache[ id ] = null;
+		}
+
+		// We destroyed the entire user cache at once because it's faster than
+		// iterating through each key, but we need to continue to persist internal
+		// data if it existed
+		if ( internalCache ) {
+			cache[ id ] = {};
+			// TODO: This is a hack for 1.5 ONLY. Avoids exposing jQuery
+			// metadata on plain JS objects when the object is serialized using
+			// JSON.stringify
+			if ( !isNode ) {
+				cache[ id ].toJSON = jQuery.noop;
+			}
+
+			cache[ id ][ internalKey ] = internalCache;
+
+		// Otherwise, we need to eliminate the expando on the node to avoid
+		// false lookups in the cache for entries that no longer exist
+		} else if ( isNode ) {
+			// IE does not allow us to delete expando properties from nodes,
+			// nor does it have a removeAttribute function on Document nodes;
+			// we must handle all of these cases
+			if ( jQuery.support.deleteExpando ) {
+				delete elem[ jQuery.expando ];
+			} else if ( elem.removeAttribute ) {
+				elem.removeAttribute( jQuery.expando );
+			} else {
+				elem[ jQuery.expando ] = null;
+			}
+		}
+	},
+
+	// For internal use only.
+	_data: function( elem, name, data ) {
+		return jQuery.data( elem, name, data, true );
+	},
+
+	// A method for determining if a DOM node can handle the data expando
+	acceptData: function( elem ) {
+		if ( elem.nodeName ) {
+			var match = jQuery.noData[ elem.nodeName.toLowerCase() ];
+
+			if ( match ) {
+				return !(match === true || elem.getAttribute("classid") !== match);
+			}
+		}
+
+		return true;
+	}
+});
+
+jQuery.fn.extend({
+	data: function( key, value ) {
+		var data = null;
+
+		if ( typeof key === "undefined" ) {
+			if ( this.length ) {
+				data = jQuery.data( this[0] );
+
+				if ( this[0].nodeType === 1 ) {
+			    var attr = this[0].attributes, name;
+					for ( var i = 0, l = attr.length; i < l; i++ ) {
+						name = attr[i].name;
+
+						if ( name.indexOf( "data-" ) === 0 ) {
+							name = jQuery.camelCase( name.substring(5) );
+
+							dataAttr( this[0], name, data[ name ] );
+						}
+					}
+				}
+			}
+
+			return data;
+
+		} else if ( typeof key === "object" ) {
+			return this.each(function() {
+				jQuery.data( this, key );
+			});
+		}
+
+		var parts = key.split(".");
+		parts[1] = parts[1] ? "." + parts[1] : "";
+
+		if ( value === undefined ) {
+			data = this.triggerHandler("getData" + parts[1] + "!", [parts[0]]);
+
+			// Try to fetch any internally stored data first
+			if ( data === undefined && this.length ) {
+				data = jQuery.data( this[0], key );
+				data = dataAttr( this[0], key, data );
+			}
+
+			return data === undefined && parts[1] ?
+				this.data( parts[0] ) :
+				data;
+
+		} else {
+			return this.each(function() {
+				var $this = jQuery( this ),
+					args = [ parts[0], value ];
+
+				$this.triggerHandler( "setData" + parts[1] + "!", args );
+				jQuery.data( this, key, value );
+				$this.triggerHandler( "changeData" + parts[1] + "!", args );
+			});
+		}
+	},
+
+	removeData: function( key ) {
+		return this.each(function() {
+			jQuery.removeData( this, key );
+		});
+	}
+});
+
+function dataAttr( elem, key, data ) {
+	// If nothing was found internally, try to fetch any
+	// data from the HTML5 data-* attribute
+	if ( data === undefined && elem.nodeType === 1 ) {
+		var name = "data-" + key.replace( rmultiDash, "$1-$2" ).toLowerCase();
+
+		data = elem.getAttribute( name );
+
+		if ( typeof data === "string" ) {
+			try {
+				data = data === "true" ? true :
+				data === "false" ? false :
+				data === "null" ? null :
+				!jQuery.isNaN( data ) ? parseFloat( data ) :
+					rbrace.test( data ) ? jQuery.parseJSON( data ) :
+					data;
+			} catch( e ) {}
+
+			// Make sure we set the data so it isn't changed later
+			jQuery.data( elem, key, data );
+
+		} else {
+			data = undefined;
+		}
+	}
+
+	return data;
+}
+
+// TODO: This is a hack for 1.5 ONLY to allow objects with a single toJSON
+// property to be considered empty objects; this property always exists in
+// order to make sure JSON.stringify does not expose internal metadata
+function isEmptyDataObject( obj ) {
+	for ( var name in obj ) {
+		if ( name !== "toJSON" ) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+
+
+function handleQueueMarkDefer( elem, type, src ) {
+	var deferDataKey = type + "defer",
+		queueDataKey = type + "queue",
+		markDataKey = type + "mark",
+		defer = jQuery.data( elem, deferDataKey, undefined, true );
+	if ( defer &&
+		( src === "queue" || !jQuery.data( elem, queueDataKey, undefined, true ) ) &&
+		( src === "mark" || !jQuery.data( elem, markDataKey, undefined, true ) ) ) {
+		// Give room for hard-coded callbacks to fire first
+		// and eventually mark/queue something else on the element
+		setTimeout( function() {
+			if ( !jQuery.data( elem, queueDataKey, undefined, true ) &&
+				!jQuery.data( elem, markDataKey, undefined, true ) ) {
+				jQuery.removeData( elem, deferDataKey, true );
+				defer.resolve();
+			}
+		}, 0 );
+	}
+}
+
+jQuery.extend({
+
+	_mark: function( elem, type ) {
+		if ( elem ) {
+			type = (type || "fx") + "mark";
+			jQuery.data( elem, type, (jQuery.data(elem,type,undefined,true) || 0) + 1, true );
+		}
+	},
+
+	_unmark: function( force, elem, type ) {
+		if ( force !== true ) {
+			type = elem;
+			elem = force;
+			force = false;
+		}
+		if ( elem ) {
+			type = type || "fx";
+			var key = type + "mark",
+				count = force ? 0 : ( (jQuery.data( elem, key, undefined, true) || 1 ) - 1 );
+			if ( count ) {
+				jQuery.data( elem, key, count, true );
+			} else {
+				jQuery.removeData( elem, key, true );
+				handleQueueMarkDefer( elem, type, "mark" );
+			}
+		}
+	},
+
+	queue: function( elem, type, data ) {
+		if ( elem ) {
+			type = (type || "fx") + "queue";
+			var q = jQuery.data( elem, type, undefined, true );
+			// Speed up dequeue by getting out quickly if this is just a lookup
+			if ( data ) {
+				if ( !q || jQuery.isArray(data) ) {
+					q = jQuery.data( elem, type, jQuery.makeArray(data), true );
+				} else {
+					q.push( data );
+				}
+			}
+			return q || [];
+		}
+	},
+
+	dequeue: function( elem, type ) {
+		type = type || "fx";
+
+		var queue = jQuery.queue( elem, type ),
+			fn = queue.shift(),
+			defer;
+
+		// If the fx queue is dequeued, always remove the progress sentinel
+		if ( fn === "inprogress" ) {
+			fn = queue.shift();
+		}
+
+		if ( fn ) {
+			// Add a progress sentinel to prevent the fx queue from being
+			// automatically dequeued
+			if ( type === "fx" ) {
+				queue.unshift("inprogress");
+			}
+
+			fn.call(elem, function() {
+				jQuery.dequeue(elem, type);
+			});
+		}
+
+		if ( !queue.length ) {
+			jQuery.removeData( elem, type + "queue", true );
+			handleQueueMarkDefer( elem, type, "queue" );
+		}
+	}
+});
+
+jQuery.fn.extend({
+	queue: function( type, data ) {
+		if ( typeof type !== "string" ) {
+			data = type;
+			type = "fx";
+		}
+
+		if ( data === undefined ) {
+			return jQuery.queue( this[0], type );
+		}
+		return this.each(function() {
+			var queue = jQuery.queue( this, type, data );
+
+			if ( type === "fx" && queue[0] !== "inprogress" ) {
+				jQuery.dequeue( this, type );
+			}
+		});
+	},
+	dequeue: function( type ) {
+		return this.each(function() {
+			jQuery.dequeue( this, type );
+		});
+	},
+	// Based off of the plugin by Clint Helfers, with permission.
+	// http://blindsignals.com/index.php/2009/07/jquery-delay/
+	delay: function( time, type ) {
+		time = jQuery.fx ? jQuery.fx.speeds[time] || time : time;
+		type = type || "fx";
+
+		return this.queue( type, function() {
+			var elem = this;
+			setTimeout(function() {
+				jQuery.dequeue( elem, type );
+			}, time );
+		});
+	},
+	clearQueue: function( type ) {
+		return this.queue( type || "fx", [] );
+	},
+	// Get a promise resolved when queues of a certain type
+	// are emptied (fx is the type by default)
+	promise: function( type, object ) {
+		if ( typeof type !== "string" ) {
+			object = type;
+			type = undefined;
+		}
+		type = type || "fx";
+		var defer = jQuery.Deferred(),
+			elements = this,
+			i = elements.length,
+			count = 1,
+			deferDataKey = type + "defer",
+			queueDataKey = type + "queue",
+			markDataKey = type + "mark",
+			tmp;
+		function resolve() {
+			if ( !( --count ) ) {
+				defer.resolveWith( elements, [ elements ] );
+			}
+		}
+		while( i-- ) {
+			if (( tmp = jQuery.data( elements[ i ], deferDataKey, undefined, true ) ||
+					( jQuery.data( elements[ i ], queueDataKey, undefined, true ) ||
+						jQuery.data( elements[ i ], markDataKey, undefined, true ) ) &&
+					jQuery.data( elements[ i ], deferDataKey, jQuery._Deferred(), true ) )) {
+				count++;
+				tmp.done( resolve );
+			}
+		}
+		resolve();
+		return defer.promise();
+	}
+});
+
+
+
+
+var rclass = /[\n\t\r]/g,
+	rspace = /\s+/,
+	rreturn = /\r/g,
+	rtype = /^(?:button|input)$/i,
+	rfocusable = /^(?:button|input|object|select|textarea)$/i,
+	rclickable = /^a(?:rea)?$/i,
+	rboolean = /^(?:autofocus|autoplay|async|checked|controls|defer|disabled|hidden|loop|multiple|open|readonly|required|scoped|selected)$/i,
+	rinvalidChar = /\:/,
+	formHook, boolHook;
+
+jQuery.fn.extend({
+	attr: function( name, value ) {
+		return jQuery.access( this, name, value, true, jQuery.attr );
+	},
+
+	removeAttr: function( name ) {
+		return this.each(function() {
+			jQuery.removeAttr( this, name );
+		});
+	},
+	
+	prop: function( name, value ) {
+		return jQuery.access( this, name, value, true, jQuery.prop );
+	},
+	
+	removeProp: function( name ) {
+		name = jQuery.propFix[ name ] || name;
+		return this.each(function() {
+			// try/catch handles cases where IE balks (such as removing a property on window)
+			try {
+				this[ name ] = undefined;
+				delete this[ name ];
+			} catch( e ) {}
+		});
+	},
+
+	addClass: function( value ) {
+		if ( jQuery.isFunction( value ) ) {
+			return this.each(function(i) {
+				var self = jQuery(this);
+				self.addClass( value.call(this, i, self.attr("class") || "") );
+			});
+		}
+
+		if ( value && typeof value === "string" ) {
+			var classNames = (value || "").split( rspace );
+
+			for ( var i = 0, l = this.length; i < l; i++ ) {
+				var elem = this[i];
+
+				if ( elem.nodeType === 1 ) {
+					if ( !elem.className ) {
+						elem.className = value;
+
+					} else {
+						var className = " " + elem.className + " ",
+							setClass = elem.className;
+
+						for ( var c = 0, cl = classNames.length; c < cl; c++ ) {
+							if ( className.indexOf( " " + classNames[c] + " " ) < 0 ) {
+								setClass += " " + classNames[c];
+							}
+						}
+						elem.className = jQuery.trim( setClass );
+					}
+				}
+			}
+		}
+
+		return this;
+	},
+
+	removeClass: function( value ) {
+		if ( jQuery.isFunction(value) ) {
+			return this.each(function(i) {
+				var self = jQuery(this);
+				self.removeClass( value.call(this, i, self.attr("class")) );
+			});
+		}
+
+		if ( (value && typeof value === "string") || value === undefined ) {
+			var classNames = (value || "").split( rspace );
+
+			for ( var i = 0, l = this.length; i < l; i++ ) {
+				var elem = this[i];
+
+				if ( elem.nodeType === 1 && elem.className ) {
+					if ( value ) {
+						var className = (" " + elem.className + " ").replace(rclass, " ");
+						for ( var c = 0, cl = classNames.length; c < cl; c++ ) {
+							className = className.replace(" " + classNames[c] + " ", " ");
+						}
+						elem.className = jQuery.trim( className );
+
+					} else {
+						elem.className = "";
+					}
+				}
+			}
+		}
+
+		return this;
+	},
+
+	toggleClass: function( value, stateVal ) {
+		var type = typeof value,
+			isBool = typeof stateVal === "boolean";
+
+		if ( jQuery.isFunction( value ) ) {
+			return this.each(function(i) {
+				var self = jQuery(this);
+				self.toggleClass( value.call(this, i, self.attr("class"), stateVal), stateVal );
+			});
+		}
+
+		return this.each(function() {
+			if ( type === "string" ) {
+				// toggle individual class names
+				var className,
+					i = 0,
+					self = jQuery( this ),
+					state = stateVal,
+					classNames = value.split( rspace );
+
+				while ( (className = classNames[ i++ ]) ) {
+					// check each className given, space seperated list
+					state = isBool ? state : !self.hasClass( className );
+					self[ state ? "addClass" : "removeClass" ]( className );
+				}
+
+			} else if ( type === "undefined" || type === "boolean" ) {
+				if ( this.className ) {
+					// store className if set
+					jQuery._data( this, "__className__", this.className );
+				}
+
+				// toggle whole className
+				this.className = this.className || value === false ? "" : jQuery._data( this, "__className__" ) || "";
+			}
+		});
+	},
+
+	hasClass: function( selector ) {
+		var className = " " + selector + " ";
+		for ( var i = 0, l = this.length; i < l; i++ ) {
+			if ( (" " + this[i].className + " ").replace(rclass, " ").indexOf( className ) > -1 ) {
+				return true;
+			}
+		}
+
+		return false;
+	},
+
+	val: function( value ) {
+		var hooks, ret,
+			elem = this[0];
+		
+		if ( !arguments.length ) {
+			if ( elem ) {
+				hooks = jQuery.valHooks[ elem.nodeName.toLowerCase() ] || jQuery.valHooks[ elem.type ];
+
+				if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
+					return ret;
+				}
+
+				return (elem.value || "").replace(rreturn, "");
+			}
+
+			return undefined;
+		}
+
+		var isFunction = jQuery.isFunction( value );
+
+		return this.each(function( i ) {
+			var self = jQuery(this), val;
+
+			if ( this.nodeType !== 1 ) {
+				return;
+			}
+
+			if ( isFunction ) {
+				val = value.call( this, i, self.val() );
+			} else {
+				val = value;
+			}
+
+			// Treat null/undefined as ""; convert numbers to string
+			if ( val == null ) {
+				val = "";
+			} else if ( typeof val === "number" ) {
+				val += "";
+			} else if ( jQuery.isArray( val ) ) {
+				val = jQuery.map(val, function ( value ) {
+					return value == null ? "" : value + "";
+				});
+			}
+
+			hooks = jQuery.valHooks[ this.nodeName.toLowerCase() ] || jQuery.valHooks[ this.type ];
+
+			// If set returns undefined, fall back to normal setting
+			if ( !hooks || !("set" in hooks) || hooks.set( this, val, "value" ) === undefined ) {
+				this.value = val;
+			}
+		});
+	}
+});
+
+jQuery.extend({
+	valHooks: {
+		option: {
+			get: function( elem ) {
+				// attributes.value is undefined in Blackberry 4.7 but
+				// uses .value. See #6932
+				var val = elem.attributes.value;
+				return !val || val.specified ? elem.value : elem.text;
+			}
+		},
+		select: {
+			get: function( elem ) {
+				var value,
+					index = elem.selectedIndex,
+					values = [],
+					options = elem.options,
+					one = elem.type === "select-one";
+
+				// Nothing was selected
+				if ( index < 0 ) {
+					return null;
+				}
+
+				// Loop through all the selected options
+				for ( var i = one ? index : 0, max = one ? index + 1 : options.length; i < max; i++ ) {
+					var option = options[ i ];
+
+					// Don't return options that are disabled or in a disabled optgroup
+					if ( option.selected && (jQuery.support.optDisabled ? !option.disabled : option.getAttribute("disabled") === null) &&
+							(!option.parentNode.disabled || !jQuery.nodeName( option.parentNode, "optgroup" )) ) {
+
+						// Get the specific value for the option
+						value = jQuery( option ).val();
+
+						// We don't need an array for one selects
+						if ( one ) {
+							return value;
+						}
+
+						// Multi-Selects return an array
+						values.push( value );
+					}
+				}
+
+				// Fixes Bug #2551 -- select.val() broken in IE after form.reset()
+				if ( one && !values.length && options.length ) {
+					return jQuery( options[ index ] ).val();
+				}
+
+				return values;
+			},
+
+			set: function( elem, value ) {
+				var values = jQuery.makeArray( value );
+
+				jQuery(elem).find("option").each(function() {
+					this.selected = jQuery.inArray( jQuery(this).val(), values ) >= 0;
+				});
+
+				if ( !values.length ) {
+					elem.selectedIndex = -1;
+				}
+				return values;
+			}
+		}
+	},
+
+	attrFn: {
+		val: true,
+		css: true,
+		html: true,
+		text: true,
+		data: true,
+		width: true,
+		height: true,
+		offset: true
+	},
+	
+	attrFix: {
+		// Always normalize to ensure hook usage
+		tabindex: "tabIndex"
+	},
+	
+	attr: function( elem, name, value, pass ) {
+		var nType = elem.nodeType;
+		
+		// don't get/set attributes on text, comment and attribute nodes
+		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
+			return undefined;
+		}
+
+		if ( pass && name in jQuery.attrFn ) {
+			return jQuery( elem )[ name ]( value );
+		}
+
+		// Fallback to prop when attributes are not supported
+		if ( !("getAttribute" in elem) ) {
+			return jQuery.prop( elem, name, value );
+		}
+
+		var ret, hooks,
+			notxml = nType !== 1 || !jQuery.isXMLDoc( elem );
+
+		// Normalize the name if needed
+		name = notxml && jQuery.attrFix[ name ] || name;
+
+		hooks = jQuery.attrHooks[ name ];
+
+		if ( !hooks ) {
+			// Use boolHook for boolean attributes
+			if ( rboolean.test( name ) &&
+				(typeof value === "boolean" || value === undefined || value.toLowerCase() === name.toLowerCase()) ) {
+
+				hooks = boolHook;
+
+			// Use formHook for forms and if the name contains certain characters
+			} else if ( formHook && (jQuery.nodeName( elem, "form" ) || rinvalidChar.test( name )) ) {
+				hooks = formHook;
+			}
+		}
+
+		if ( value !== undefined ) {
+
+			if ( value === null ) {
+				jQuery.removeAttr( elem, name );
+				return undefined;
+
+			} else if ( hooks && "set" in hooks && notxml && (ret = hooks.set( elem, value, name )) !== undefined ) {
+				return ret;
+
+			} else {
+				elem.setAttribute( name, "" + value );
+				return value;
+			}
+
+		} else if ( hooks && "get" in hooks && notxml ) {
+			return hooks.get( elem, name );
+
+		} else {
+
+			ret = elem.getAttribute( name );
+
+			// Non-existent attributes return null, we normalize to undefined
+			return ret === null ?
+				undefined :
+				ret;
+		}
+	},
+
+	removeAttr: function( elem, name ) {
+		var propName;
+		if ( elem.nodeType === 1 ) {
+			name = jQuery.attrFix[ name ] || name;
+		
+			if ( jQuery.support.getSetAttribute ) {
+				// Use removeAttribute in browsers that support it
+				elem.removeAttribute( name );
+			} else {
+				jQuery.attr( elem, name, "" );
+				elem.removeAttributeNode( elem.getAttributeNode( name ) );
+			}
+
+			// Set corresponding property to false for boolean attributes
+			if ( rboolean.test( name ) && (propName = jQuery.propFix[ name ] || name) in elem ) {
+				elem[ propName ] = false;
+			}
+		}
+	},
+
+	attrHooks: {
+		type: {
+			set: function( elem, value ) {
+				// We can't allow the type property to be changed (since it causes problems in IE)
+				if ( rtype.test( elem.nodeName ) && elem.parentNode ) {
+					jQuery.error( "type property can't be changed" );
+				} else if ( !jQuery.support.radioValue && value === "radio" && jQuery.nodeName(elem, "input") ) {
+					// Setting the type on a radio button after the value resets the value in IE6-9
+					// Reset value to it's default in case type is set after value
+					// This is for element creation
+					var val = elem.value;
+					elem.setAttribute( "type", value );
+					if ( val ) {
+						elem.value = val;
+					}
+					return value;
+				}
+			}
+		},
+		tabIndex: {
+			get: function( elem ) {
+				// elem.tabIndex doesn't always return the correct value when it hasn't been explicitly set
+				// http://fluidproject.org/blog/2008/01/09/getting-setting-and-removing-tabindex-values-with-javascript/
+				var attributeNode = elem.getAttributeNode("tabIndex");
+
+				return attributeNode && attributeNode.specified ?
+					parseInt( attributeNode.value, 10 ) :
+					rfocusable.test( elem.nodeName ) || rclickable.test( elem.nodeName ) && elem.href ?
+						0 :
+						undefined;
+			}
+		}
+	},
+
+	propFix: {
+		tabindex: "tabIndex",
+		readonly: "readOnly",
+		"for": "htmlFor",
+		"class": "className",
+		maxlength: "maxLength",
+		cellspacing: "cellSpacing",
+		cellpadding: "cellPadding",
+		rowspan: "rowSpan",
+		colspan: "colSpan",
+		usemap: "useMap",
+		frameborder: "frameBorder",
+		contenteditable: "contentEditable"
+	},
+	
+	prop: function( elem, name, value ) {
+		var nType = elem.nodeType;
+
+		// don't get/set properties on text, comment and attribute nodes
+		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
+			return undefined;
+		}
+
+		var ret, hooks,
+			notxml = nType !== 1 || !jQuery.isXMLDoc( elem );
+
+		// Try to normalize/fix the name
+		name = notxml && jQuery.propFix[ name ] || name;
+		
+		hooks = jQuery.propHooks[ name ];
+
+		if ( value !== undefined ) {
+			if ( hooks && "set" in hooks && (ret = hooks.set( elem, value, name )) !== undefined ) {
+				return ret;
+
+			} else {
+				return (elem[ name ] = value);
+			}
+
+		} else {
+			if ( hooks && "get" in hooks && (ret = hooks.get( elem, name )) !== undefined ) {
+				return ret;
+
+			} else {
+				return elem[ name ];
+			}
+		}
+	},
+	
+	propHooks: {}
+});
+
+// Hook for boolean attributes
+boolHook = {
+	get: function( elem, name ) {
+		// Align boolean attributes with corresponding properties
+		return elem[ jQuery.propFix[ name ] || name ] ?
+			name.toLowerCase() :
+			undefined;
+	},
+	set: function( elem, value, name ) {
+		var propName;
+		if ( value === false ) {
+			// Remove boolean attributes when set to false
+			jQuery.removeAttr( elem, name );
+		} else {
+			// value is true since we know at this point it's type boolean and not false
+			// Set boolean attributes to the same name and set the DOM property
+			propName = jQuery.propFix[ name ] || name;
+			if ( propName in elem ) {
+				// Only set the IDL specifically if it already exists on the element
+				elem[ propName ] = value;
+			}
+
+			elem.setAttribute( name, name.toLowerCase() );
+		}
+		return name;
+	}
+};
+
+// Use the value property for back compat
+// Use the formHook for button elements in IE6/7 (#1954)
+jQuery.attrHooks.value = {
+	get: function( elem, name ) {
+		if ( formHook && jQuery.nodeName( elem, "button" ) ) {
+			return formHook.get( elem, name );
+		}
+		return elem.value;
+	},
+	set: function( elem, value, name ) {
+		if ( formHook && jQuery.nodeName( elem, "button" ) ) {
+			return formHook.set( elem, value, name );
+		}
+		// Does not return so that setAttribute is also used
+		elem.value = value;
+	}
+};
+
+// IE6/7 do not support getting/setting some attributes with get/setAttribute
+if ( !jQuery.support.getSetAttribute ) {
+
+	// propFix is more comprehensive and contains all fixes
+	jQuery.attrFix = jQuery.propFix;
+	
+	// Use this for any attribute on a form in IE6/7
+	formHook = jQuery.attrHooks.name = jQuery.valHooks.button = {
+		get: function( elem, name ) {
+			var ret;
+			ret = elem.getAttributeNode( name );
+			// Return undefined if nodeValue is empty string
+			return ret && ret.nodeValue !== "" ?
+				ret.nodeValue :
+				undefined;
+		},
+		set: function( elem, value, name ) {
+			// Check form objects in IE (multiple bugs related)
+			// Only use nodeValue if the attribute node exists on the form
+			var ret = elem.getAttributeNode( name );
+			if ( ret ) {
+				ret.nodeValue = value;
+				return value;
+			}
+		}
+	};
+
+	// Set width and height to auto instead of 0 on empty string( Bug #8150 )
+	// This is for removals
+	jQuery.each([ "width", "height" ], function( i, name ) {
+		jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
+			set: function( elem, value ) {
+				if ( value === "" ) {
+					elem.setAttribute( name, "auto" );
+					return value;
+				}
+			}
+		});
+	});
+}
+
+
+// Some attributes require a special call on IE
+if ( !jQuery.support.hrefNormalized ) {
+	jQuery.each([ "href", "src", "width", "height" ], function( i, name ) {
+		jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
+			get: function( elem ) {
+				var ret = elem.getAttribute( name, 2 );
+				return ret === null ? undefined : ret;
+			}
+		});
+	});
+}
+
+if ( !jQuery.support.style ) {
+	jQuery.attrHooks.style = {
+		get: function( elem ) {
+			// Return undefined in the case of empty string
+			// Normalize to lowercase since IE uppercases css property names
+			return elem.style.cssText.toLowerCase() || undefined;
+		},
+		set: function( elem, value ) {
+			return (elem.style.cssText = "" + value);
+		}
+	};
+}
+
+// Safari mis-reports the default selected property of an option
+// Accessing the parent's selectedIndex property fixes it
+if ( !jQuery.support.optSelected ) {
+	jQuery.propHooks.selected = jQuery.extend( jQuery.propHooks.selected, {
+		get: function( elem ) {
+			var parent = elem.parentNode;
+
+			if ( parent ) {
+				parent.selectedIndex;
+
+				// Make sure that it also works with optgroups, see #5701
+				if ( parent.parentNode ) {
+					parent.parentNode.selectedIndex;
+				}
+			}
+		}
+	});
+}
+
+// Radios and checkboxes getter/setter
+if ( !jQuery.support.checkOn ) {
+	jQuery.each([ "radio", "checkbox" ], function() {
+		jQuery.valHooks[ this ] = {
+			get: function( elem ) {
+				// Handle the case where in Webkit "" is returned instead of "on" if a value isn't specified
+				return elem.getAttribute("value") === null ? "on" : elem.value;
+			}
+		};
+	});
+}
+jQuery.each([ "radio", "checkbox" ], function() {
+	jQuery.valHooks[ this ] = jQuery.extend( jQuery.valHooks[ this ], {
+		set: function( elem, value ) {
+			if ( jQuery.isArray( value ) ) {
+				return (elem.checked = jQuery.inArray( jQuery(elem).val(), value ) >= 0);
+			}
+		}
+	});
+});
+
+
+
+
+var hasOwn = Object.prototype.hasOwnProperty,
+	rnamespaces = /\.(.*)$/,
+	rformElems = /^(?:textarea|input|select)$/i,
+	rperiod = /\./g,
+	rspaces = / /g,
+	rescape = /[^\w\s.|`]/g,
+	fcleanup = function( nm ) {
+		return nm.replace(rescape, "\\$&");
+	};
+
+/*
+ * A number of helper functions used for managing events.
+ * Many of the ideas behind this code originated from
+ * Dean Edwards' addEvent library.
+ */
+jQuery.event = {
+
+	// Bind an event to an element
+	// Original by Dean Edwards
+	add: function( elem, types, handler, data ) {
+		if ( elem.nodeType === 3 || elem.nodeType === 8 ) {
+			return;
+		}
+
+		if ( handler === false ) {
+			handler = returnFalse;
+		} else if ( !handler ) {
+			// Fixes bug #7229. Fix recommended by jdalton
+			return;
+		}
+
+		var handleObjIn, handleObj;
+
+		if ( handler.handler ) {
+			handleObjIn = handler;
+			handler = handleObjIn.handler;
+		}
+
+		// Make sure that the function being executed has a unique ID
+		if ( !handler.guid ) {
+			handler.guid = jQuery.guid++;
+		}
+
+		// Init the element's event structure
+		var elemData = jQuery._data( elem );
+
+		// If no elemData is found then we must be trying to bind to one of the
+		// banned noData elements
+		if ( !elemData ) {
+			return;
+		}
+
+		var events = elemData.events,
+			eventHandle = elemData.handle;
+
+		if ( !events ) {
+			elemData.events = events = {};
+		}
+
+		if ( !eventHandle ) {
+			elemData.handle = eventHandle = function( e ) {
+				// Discard the second event of a jQuery.event.trigger() and
+				// when an event is called after a page has unloaded
+				return typeof jQuery !== "undefined" && (!e || jQuery.event.triggered !== e.type) ?
+					jQuery.event.handle.apply( eventHandle.elem, arguments ) :
+					undefined;
+			};
+		}
+
+		// Add elem as a property of the handle function
+		// This is to prevent a memory leak with non-native events in IE.
+		eventHandle.elem = elem;
+
+		// Handle multiple events separated by a space
+		// jQuery(...).bind("mouseover mouseout", fn);
+		types = types.split(" ");
+
+		var type, i = 0, namespaces;
+
+		while ( (type = types[ i++ ]) ) {
+			handleObj = handleObjIn ?
+				jQuery.extend({}, handleObjIn) :
+				{ handler: handler, data: data };
+
+			// Namespaced event handlers
+			if ( type.indexOf(".") > -1 ) {
+				namespaces = type.split(".");
+				type = namespaces.shift();
+				handleObj.namespace = namespaces.slice(0).sort().join(".");
+
+			} else {
+				namespaces = [];
+				handleObj.namespace = "";
+			}
+
+			handleObj.type = type;
+			if ( !handleObj.guid ) {
+				handleObj.guid = handler.guid;
+			}
+
+			// Get the current list of functions bound to this event
+			var handlers = events[ type ],
+				special = jQuery.event.special[ type ] || {};
+
+			// Init the event handler queue
+			if ( !handlers ) {
+				handlers = events[ type ] = [];
+
+				// Check for a special event handler
+				// Only use addEventListener/attachEvent if the special
+				// events handler returns false
+				if ( !special.setup || special.setup.call( elem, data, namespaces, eventHandle ) === false ) {
+					// Bind the global event handler to the element
+					if ( elem.addEventListener ) {
+						elem.addEventListener( type, eventHandle, false );
+
+					} else if ( elem.attachEvent ) {
+						elem.attachEvent( "on" + type, eventHandle );
+					}
+				}
+			}
+
+			if ( special.add ) {
+				special.add.call( elem, handleObj );
+
+				if ( !handleObj.handler.guid ) {
+					handleObj.handler.guid = handler.guid;
+				}
+			}
+
+			// Add the function to the element's handler list
+			handlers.push( handleObj );
+
+			// Keep track of which events have been used, for event optimization
+			jQuery.event.global[ type ] = true;
+		}
+
+		// Nullify elem to prevent memory leaks in IE
+		elem = null;
+	},
+
+	global: {},
+
+	// Detach an event or set of events from an element
+	remove: function( elem, types, handler, pos ) {
+		// don't do events on text and comment nodes
+		if ( elem.nodeType === 3 || elem.nodeType === 8 ) {
+			return;
+		}
+
+		if ( handler === false ) {
+			handler = returnFalse;
+		}
+
+		var ret, type, fn, j, i = 0, all, namespaces, namespace, special, eventType, handleObj, origType,
+			elemData = jQuery.hasData( elem ) && jQuery._data( elem ),
+			events = elemData && elemData.events;
+
+		if ( !elemData || !events ) {
+			return;
+		}
+
+		// types is actually an event object here
+		if ( types && types.type ) {
+			handler = types.handler;
+			types = types.type;
+		}
+
+		// Unbind all events for the element
+		if ( !types || typeof types === "string" && types.charAt(0) === "." ) {
+			types = types || "";
+
+			for ( type in events ) {
+				jQuery.event.remove( elem, type + types );
+			}
+
+			return;
+		}
+
+		// Handle multiple events separated by a space
+		// jQuery(...).unbind("mouseover mouseout", fn);
+		types = types.split(" ");
+
+		while ( (type = types[ i++ ]) ) {
+			origType = type;
+			handleObj = null;
+			all = type.indexOf(".") < 0;
+			namespaces = [];
+
+			if ( !all ) {
+				// Namespaced event handlers
+				namespaces = type.split(".");
+				type = namespaces.shift();
+
+				namespace = new RegExp("(^|\\.)" +
+					jQuery.map( namespaces.slice(0).sort(), fcleanup ).join("\\.(?:.*\\.)?") + "(\\.|$)");
+			}
+
+			eventType = events[ type ];
+
+			if ( !eventType ) {
+				continue;
+			}
+
+			if ( !handler ) {
+				for ( j = 0; j < eventType.length; j++ ) {
+					handleObj = eventType[ j ];
+
+					if ( all || namespace.test( handleObj.namespace ) ) {
+						jQuery.event.remove( elem, origType, handleObj.handler, j );
+						eventType.splice( j--, 1 );
+					}
+				}
+
+				continue;
+			}
+
+			special = jQuery.event.special[ type ] || {};
+
+			for ( j = pos || 0; j < eventType.length; j++ ) {
+				handleObj = eventType[ j ];
+
+				if ( handler.guid === handleObj.guid ) {
+					// remove the given handler for the given type
+					if ( all || namespace.test( handleObj.namespace ) ) {
+						if ( pos == null ) {
+							eventType.splice( j--, 1 );
+						}
+
+						if ( special.remove ) {
+							special.remove.call( elem, handleObj );
+						}
+					}
+
+					if ( pos != null ) {
+						break;
+					}
+				}
+			}
+
+			// remove generic event handler if no more handlers exist
+			if ( eventType.length === 0 || pos != null && eventType.length === 1 ) {
+				if ( !special.teardown || special.teardown.call( elem, namespaces ) === false ) {
+					jQuery.removeEvent( elem, type, elemData.handle );
+				}
+
+				ret = null;
+				delete events[ type ];
+			}
+		}
+
+		// Remove the expando if it's no longer used
+		if ( jQuery.isEmptyObject( events ) ) {
+			var handle = elemData.handle;
+			if ( handle ) {
+				handle.elem = null;
+			}
+
+			delete elemData.events;
+			delete elemData.handle;
+
+			if ( jQuery.isEmptyObject( elemData ) ) {
+				jQuery.removeData( elem, undefined, true );
+			}
+		}
+	},
+	
+	// Events that are safe to short-circuit if no handlers are attached.
+	// Native DOM events should not be added, they may have inline handlers.
+	customEvent: {
+		"getData": true,
+		"setData": true,
+		"changeData": true
+	},
+
+	trigger: function( event, data, elem, onlyHandlers ) {
+		// Event object or event type
+		var type = event.type || event,
+			namespaces = [],
+			exclusive;
+
+		if ( type.indexOf("!") >= 0 ) {
+			// Exclusive events trigger only for the exact event (no namespaces)
+			type = type.slice(0, -1);
+			exclusive = true;
+		}
+
+		if ( type.indexOf(".") >= 0 ) {
+			// Namespaced trigger; create a regexp to match event type in handle()
+			namespaces = type.split(".");
+			type = namespaces.shift();
+			namespaces.sort();
+		}
+
+		if ( (!elem || jQuery.event.customEvent[ type ]) && !jQuery.event.global[ type ] ) {
+			// No jQuery handlers for this event type, and it can't have inline handlers
+			return;
+		}
+
+		// Caller can pass in an Event, Object, or just an event type string
+		event = typeof event === "object" ?
+			// jQuery.Event object
+			event[ jQuery.expando ] ? event :
+			// Object literal
+			new jQuery.Event( type, event ) :
+			// Just the event type (string)
+			new jQuery.Event( type );
+
+		event.type = type;
+		event.exclusive = exclusive;
+		event.namespace = namespaces.join(".");
+		event.namespace_re = new RegExp("(^|\\.)" + namespaces.join("\\.(?:.*\\.)?") + "(\\.|$)");
+		
+		// triggerHandler() and global events don't bubble or run the default action
+		if ( onlyHandlers || !elem ) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+
+		// Handle a global trigger
+		if ( !elem ) {
+			// TODO: Stop taunting the data cache; remove global events and always attach to document
+			jQuery.each( jQuery.cache, function() {
+				// internalKey variable is just used to make it easier to find
+				// and potentially change this stuff later; currently it just
+				// points to jQuery.expando
+				var internalKey = jQuery.expando,
+					internalCache = this[ internalKey ];
+				if ( internalCache && internalCache.events && internalCache.events[ type ] ) {
+					jQuery.event.trigger( event, data, internalCache.handle.elem );
+				}
+			});
+			return;
+		}
+
+		// Don't do events on text and comment nodes
+		if ( elem.nodeType === 3 || elem.nodeType === 8 ) {
+			return;
+		}
+
+		// Clean up the event in case it is being reused
+		event.result = undefined;
+		event.target = elem;
+
+		// Clone any incoming data and prepend the event, creating the handler arg list
+		data = data ? jQuery.makeArray( data ) : [];
+		data.unshift( event );
+
+		var cur = elem,
+			// IE doesn't like method names with a colon (#3533, #8272)
+			ontype = type.indexOf(":") < 0 ? "on" + type : "";
+
+		// Fire event on the current element, then bubble up the DOM tree
+		do {
+			var handle = jQuery._data( cur, "handle" );
+
+			event.currentTarget = cur;
+			if ( handle ) {
+				handle.apply( cur, data );
+			}
+
+			// Trigger an inline bound script
+			if ( ontype && jQuery.acceptData( cur ) && cur[ ontype ] && cur[ ontype ].apply( cur, data ) === false ) {
+				event.result = false;
+				event.preventDefault();
+			}
+
+			// Bubble up to document, then to window
+			cur = cur.parentNode || cur.ownerDocument || cur === event.target.ownerDocument && window;
+		} while ( cur && !event.isPropagationStopped() );
+
+		// If nobody prevented the default action, do it now
+		if ( !event.isDefaultPrevented() ) {
+			var old,
+				special = jQuery.event.special[ type ] || {};
+
+			if ( (!special._default || special._default.call( elem.ownerDocument, event ) === false) &&
+				!(type === "click" && jQuery.nodeName( elem, "a" )) && jQuery.acceptData( elem ) ) {
+
+				// Call a native DOM method on the target with the same name name as the event.
+				// Can't use an .isFunction)() check here because IE6/7 fails that test.
+				// IE<9 dies on focus to hidden element (#1486), may want to revisit a try/catch.
+				try {
+					if ( ontype && elem[ type ] ) {
+						// Don't re-trigger an onFOO event when we call its FOO() method
+						old = elem[ ontype ];
+
+						if ( old ) {
+							elem[ ontype ] = null;
+						}
+
+						jQuery.event.triggered = type;
+						elem[ type ]();
+					}
+				} catch ( ieError ) {}
+
+				if ( old ) {
+					elem[ ontype ] = old;
+				}
+
+				jQuery.event.triggered = undefined;
+			}
+		}
+		
+		return event.result;
+	},
+
+	handle: function( event ) {
+		event = jQuery.event.fix( event || window.event );
+		// Snapshot the handlers list since a called handler may add/remove events.
+		var handlers = ((jQuery._data( this, "events" ) || {})[ event.type ] || []).slice(0),
+			run_all = !event.exclusive && !event.namespace,
+			args = Array.prototype.slice.call( arguments, 0 );
+
+		// Use the fix-ed Event rather than the (read-only) native event
+		args[0] = event;
+		event.currentTarget = this;
+
+		for ( var j = 0, l = handlers.length; j < l; j++ ) {
+			var handleObj = handlers[ j ];
+
+			// Triggered event must 1) be non-exclusive and have no namespace, or
+			// 2) have namespace(s) a subset or equal to those in the bound event.
+			if ( run_all || event.namespace_re.test( handleObj.namespace ) ) {
+				// Pass in a reference to the handler function itself
+				// So that we can later remove it
+				event.handler = handleObj.handler;
+				event.data = handleObj.data;
+				event.handleObj = handleObj;
+
+				var ret = handleObj.handler.apply( this, args );
+
+				if ( ret !== undefined ) {
+					event.result = ret;
+					if ( ret === false ) {
+						event.preventDefault();
+						event.stopPropagation();
+					}
+				}
+
+				if ( event.isImmediatePropagationStopped() ) {
+					break;
+				}
+			}
+		}
+		return event.result;
+	},
+
+	props: "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
+
+	fix: function( event ) {
+		if ( event[ jQuery.expando ] ) {
+			return event;
+		}
+
+		// store a copy of the original event object
+		// and "clone" to set read-only properties
+		var originalEvent = event;
+		event = jQuery.Event( originalEvent );
+
+		for ( var i = this.props.length, prop; i; ) {
+			prop = this.props[ --i ];
+			event[ prop ] = originalEvent[ prop ];
+		}
+
+		// Fix target property, if necessary
+		if ( !event.target ) {
+			// Fixes #1925 where srcElement might not be defined either
+			event.target = event.srcElement || document;
+		}
+
+		// check if target is a textnode (safari)
+		if ( event.target.nodeType === 3 ) {
+			event.target = event.target.parentNode;
+		}
+
+		// Add relatedTarget, if necessary
+		if ( !event.relatedTarget && event.fromElement ) {
+			event.relatedTarget = event.fromElement === event.target ? event.toElement : event.fromElement;
+		}
+
+		// Calculate pageX/Y if missing and clientX/Y available
+		if ( event.pageX == null && event.clientX != null ) {
+			var eventDocument = event.target.ownerDocument || document,
+				doc = eventDocument.documentElement,
+				body = eventDocument.body;
+
+			event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
+			event.pageY = event.clientY + (doc && doc.scrollTop  || body && body.scrollTop  || 0) - (doc && doc.clientTop  || body && body.clientTop  || 0);
+		}
+
+		// Add which for key events
+		if ( event.which == null && (event.charCode != null || event.keyCode != null) ) {
+			event.which = event.charCode != null ? event.charCode : event.keyCode;
+		}
+
+		// Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
+		if ( !event.metaKey && event.ctrlKey ) {
+			event.metaKey = event.ctrlKey;
+		}
+
+		// Add which for click: 1 === left; 2 === middle; 3 === right
+		// Note: button is not normalized, so don't use it
+		if ( !event.which && event.button !== undefined ) {
+			event.which = (event.button & 1 ? 1 : ( event.button & 2 ? 3 : ( event.button & 4 ? 2 : 0 ) ));
+		}
+
+		return event;
+	},
+
+	// Deprecated, use jQuery.guid instead
+	guid: 1E8,
+
+	// Deprecated, use jQuery.proxy instead
+	proxy: jQuery.proxy,
+
+	special: {
+		ready: {
+			// Make sure the ready event is setup
+			setup: jQuery.bindReady,
+			teardown: jQuery.noop
+		},
+
+		live: {
+			add: function( handleObj ) {
+				jQuery.event.add( this,
+					liveConvert( handleObj.origType, handleObj.selector ),
+					jQuery.extend({}, handleObj, {handler: liveHandler, guid: handleObj.handler.guid}) );
+			},
+
+			remove: function( handleObj ) {
+				jQuery.event.remove( this, liveConvert( handleObj.origType, handleObj.selector ), handleObj );
+			}
+		},
+
+		beforeunload: {
+			setup: function( data, namespaces, eventHandle ) {
+				// We only want to do this special case on windows
+				if ( jQuery.isWindow( this ) ) {
+					this.onbeforeunload = eventHandle;
+				}
+			},
+
+			teardown: function( namespaces, eventHandle ) {
+				if ( this.onbeforeunload === eventHandle ) {
+					this.onbeforeunload = null;
+				}
+			}
+		}
+	}
+};
+
+jQuery.removeEvent = document.removeEventListener ?
+	function( elem, type, handle ) {
+		if ( elem.removeEventListener ) {
+			elem.removeEventListener( type, handle, false );
+		}
+	} :
+	function( elem, type, handle ) {
+		if ( elem.detachEvent ) {
+			elem.detachEvent( "on" + type, handle );
+		}
+	};
+
+jQuery.Event = function( src, props ) {
+	// Allow instantiation without the 'new' keyword
+	if ( !this.preventDefault ) {
+		return new jQuery.Event( src, props );
+	}
+
+	// Event object
+	if ( src && src.type ) {
+		this.originalEvent = src;
+		this.type = src.type;
+
+		// Events bubbling up the document may have been marked as prevented
+		// by a handler lower down the tree; reflect the correct value.
+		this.isDefaultPrevented = (src.defaultPrevented || src.returnValue === false ||
+			src.getPreventDefault && src.getPreventDefault()) ? returnTrue : returnFalse;
+
+	// Event type
+	} else {
+		this.type = src;
+	}
+
+	// Put explicitly provided properties onto the event object
+	if ( props ) {
+		jQuery.extend( this, props );
+	}
+
+	// timeStamp is buggy for some events on Firefox(#3843)
+	// So we won't rely on the native value
+	this.timeStamp = jQuery.now();
+
+	// Mark it as fixed
+	this[ jQuery.expando ] = true;
+};
+
+function returnFalse() {
+	return false;
+}
+function returnTrue() {
+	return true;
+}
+
+// jQuery.Event is based on DOM3 Events as specified by the ECMAScript Language Binding
+// http://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/ecma-script-binding.html
+jQuery.Event.prototype = {
+	preventDefault: function() {
+		this.isDefaultPrevented = returnTrue;
+
+		var e = this.originalEvent;
+		if ( !e ) {
+			return;
+		}
+
+		// if preventDefault exists run it on the original event
+		if ( e.preventDefault ) {
+			e.preventDefault();
+
+		// otherwise set the returnValue property of the original event to false (IE)
+		} else {
+			e.returnValue = false;
+		}
+	},
+	stopPropagation: function() {
+		this.isPropagationStopped = returnTrue;
+
+		var e = this.originalEvent;
+		if ( !e ) {
+			return;
+		}
+		// if stopPropagation exists run it on the original event
+		if ( e.stopPropagation ) {
+			e.stopPropagation();
+		}
+		// otherwise set the cancelBubble property of the original event to true (IE)
+		e.cancelBubble = true;
+	},
+	stopImmediatePropagation: function() {
+		this.isImmediatePropagationStopped = returnTrue;
+		this.stopPropagation();
+	},
+	isDefaultPrevented: returnFalse,
+	isPropagationStopped: returnFalse,
+	isImmediatePropagationStopped: returnFalse
+};
+
+// Checks if an event happened on an element within another element
+// Used in jQuery.event.special.mouseenter and mouseleave handlers
+var withinElement = function( event ) {
+	// Check if mouse(over|out) are still within the same parent element
+	var parent = event.relatedTarget;
+
+	// set the correct event type
+	event.type = event.data;
+
+	// Firefox sometimes assigns relatedTarget a XUL element
+	// which we cannot access the parentNode property of
+	try {
+
+		// Chrome does something similar, the parentNode property
+		// can be accessed but is null.
+		if ( parent && parent !== document && !parent.parentNode ) {
+			return;
+		}
+
+		// Traverse up the tree
+		while ( parent && parent !== this ) {
+			parent = parent.parentNode;
+		}
+
+		if ( parent !== this ) {
+			// handle event if we actually just moused on to a non sub-element
+			jQuery.event.handle.apply( this, arguments );
+		}
+
+	// assuming we've left the element since we most likely mousedover a xul element
+	} catch(e) { }
+},
+
+// In case of event delegation, we only need to rename the event.type,
+// liveHandler will take care of the rest.
+delegate = function( event ) {
+	event.type = event.data;
+	jQuery.event.handle.apply( this, arguments );
+};
+
+// Create mouseenter and mouseleave events
+jQuery.each({
+	mouseenter: "mouseover",
+	mouseleave: "mouseout"
+}, function( orig, fix ) {
+	jQuery.event.special[ orig ] = {
+		setup: function( data ) {
+			jQuery.event.add( this, fix, data && data.selector ? delegate : withinElement, orig );
+		},
+		teardown: function( data ) {
+			jQuery.event.remove( this, fix, data && data.selector ? delegate : withinElement );
+		}
+	};
+});
+
+// submit delegation
+if ( !jQuery.support.submitBubbles ) {
+
+	jQuery.event.special.submit = {
+		setup: function( data, namespaces ) {
+			if ( !jQuery.nodeName( this, "form" ) ) {
+				jQuery.event.add(this, "click.specialSubmit", function( e ) {
+					var elem = e.target,
+						type = elem.type;
+
+					if ( (type === "submit" || type === "image") && jQuery( elem ).closest("form").length ) {
+						trigger( "submit", this, arguments );
+					}
+				});
+
+				jQuery.event.add(this, "keypress.specialSubmit", function( e ) {
+					var elem = e.target,
+						type = elem.type;
+
+					if ( (type === "text" || type === "password") && jQuery( elem ).closest("form").length && e.keyCode === 13 ) {
+						trigger( "submit", this, arguments );
+					}
+				});
+
+			} else {
+				return false;
+			}
+		},
+
+		teardown: function( namespaces ) {
+			jQuery.event.remove( this, ".specialSubmit" );
+		}
+	};
+
+}
+
+// change delegation, happens here so we have bind.
+if ( !jQuery.support.changeBubbles ) {
+
+	var changeFilters,
+
+	getVal = function( elem ) {
+		var type = elem.type, val = elem.value;
+
+		if ( type === "radio" || type === "checkbox" ) {
+			val = elem.checked;
+
+		} else if ( type === "select-multiple" ) {
+			val = elem.selectedIndex > -1 ?
+				jQuery.map( elem.options, function( elem ) {
+					return elem.selected;
+				}).join("-") :
+				"";
+
+		} else if ( jQuery.nodeName( elem, "select" ) ) {
+			val = elem.selectedIndex;
+		}
+
+		return val;
+	},
+
+	testChange = function testChange( e ) {
+		var elem = e.target, data, val;
+
+		if ( !rformElems.test( elem.nodeName ) || elem.readOnly ) {
+			return;
+		}
+
+		data = jQuery._data( elem, "_change_data" );
+		val = getVal(elem);
+
+		// the current data will be also retrieved by beforeactivate
+		if ( e.type !== "focusout" || elem.type !== "radio" ) {
+			jQuery._data( elem, "_change_data", val );
+		}
+
+		if ( data === undefined || val === data ) {
+			return;
+		}
+
+		if ( data != null || val ) {
+			e.type = "change";
+			e.liveFired = undefined;
+			jQuery.event.trigger( e, arguments[1], elem );
+		}
+	};
+
+	jQuery.event.special.change = {
+		filters: {
+			focusout: testChange,
+
+			beforedeactivate: testChange,
+
+			click: function( e ) {
+				var elem = e.target, type = jQuery.nodeName( elem, "input" ) ? elem.type : "";
+
+				if ( type === "radio" || type === "checkbox" || jQuery.nodeName( elem, "select" ) ) {
+					testChange.call( this, e );
+				}
+			},
+
+			// Change has to be called before submit
+			// Keydown will be called before keypress, which is used in submit-event delegation
+			keydown: function( e ) {
+				var elem = e.target, type = jQuery.nodeName( elem, "input" ) ? elem.type : "";
+
+				if ( (e.keyCode === 13 && !jQuery.nodeName( elem, "textarea" ) ) ||
+					(e.keyCode === 32 && (type === "checkbox" || type === "radio")) ||
+					type === "select-multiple" ) {
+					testChange.call( this, e );
+				}
+			},
+
+			// Beforeactivate happens also before the previous element is blurred
+			// with this event you can't trigger a change event, but you can store
+			// information
+			beforeactivate: function( e ) {
+				var elem = e.target;
+				jQuery._data( elem, "_change_data", getVal(elem) );
+			}
+		},
+
+		setup: function( data, namespaces ) {
+			if ( this.type === "file" ) {
+				return false;
+			}
+
+			for ( var type in changeFilters ) {
+				jQuery.event.add( this, type + ".specialChange", changeFilters[type] );
+			}
+
+			return rformElems.test( this.nodeName );
+		},
+
+		teardown: function( namespaces ) {
+			jQuery.event.remove( this, ".specialChange" );
+
+			return rformElems.test( this.nodeName );
+		}
+	};
+
+	changeFilters = jQuery.event.special.change.filters;
+
+	// Handle when the input is .focus()'d
+	changeFilters.focus = changeFilters.beforeactivate;
+}
+
+function trigger( type, elem, args ) {
+	// Piggyback on a donor event to simulate a different one.
+	// Fake originalEvent to avoid donor's stopPropagation, but if the
+	// simulated event prevents default then we do the same on the donor.
+	// Don't pass args or remember liveFired; they apply to the donor event.
+	var event = jQuery.extend( {}, args[ 0 ] );
+	event.type = type;
+	event.originalEvent = {};
+	event.liveFired = undefined;
+	jQuery.event.handle.call( elem, event );
+	if ( event.isDefaultPrevented() ) {
+		args[ 0 ].preventDefault();
+	}
+}
+
+// Create "bubbling" focus and blur events
+if ( !jQuery.support.focusinBubbles ) {
+	jQuery.each({ focus: "focusin", blur: "focusout" }, function( orig, fix ) {
+
+		// Attach a single capturing handler while someone wants focusin/focusout
+		var attaches = 0;
+
+		jQuery.event.special[ fix ] = {
+			setup: function() {
+				if ( attaches++ === 0 ) {
+					document.addEventListener( orig, handler, true );
+				}
+			},
+			teardown: function() {
+				if ( --attaches === 0 ) {
+					document.removeEventListener( orig, handler, true );
+				}
+			}
+		};
+
+		function handler( donor ) {
+			// Donor event is always a native one; fix it and switch its type.
+			// Let focusin/out handler cancel the donor focus/blur event.
+			var e = jQuery.event.fix( donor );
+			e.type = fix;
+			e.originalEvent = {};
+			jQuery.event.trigger( e, null, e.target );
+			if ( e.isDefaultPrevented() ) {
+				donor.preventDefault();
+			}
+		}
+	});
+}
+
+jQuery.each(["bind", "one"], function( i, name ) {
+	jQuery.fn[ name ] = function( type, data, fn ) {
+		var handler;
+
+		// Handle object literals
+		if ( typeof type === "object" ) {
+			for ( var key in type ) {
+				this[ name ](key, data, type[key], fn);
+			}
+			return this;
+		}
+
+		if ( arguments.length === 2 || data === false ) {
+			fn = data;
+			data = undefined;
+		}
+
+		if ( name === "one" ) {
+			handler = function( event ) {
+				jQuery( this ).unbind( event, handler );
+				return fn.apply( this, arguments );
+			};
+			handler.guid = fn.guid || jQuery.guid++;
+		} else {
+			handler = fn;
+		}
+
+		if ( type === "unload" && name !== "one" ) {
+			this.one( type, data, fn );
+
+		} else {
+			for ( var i = 0, l = this.length; i < l; i++ ) {
+				jQuery.event.add( this[i], type, handler, data );
+			}
+		}
+
+		return this;
+	};
+});
+
+jQuery.fn.extend({
+	unbind: function( type, fn ) {
+		// Handle object literals
+		if ( typeof type === "object" && !type.preventDefault ) {
+			for ( var key in type ) {
+				this.unbind(key, type[key]);
+			}
+
+		} else {
+			for ( var i = 0, l = this.length; i < l; i++ ) {
+				jQuery.event.remove( this[i], type, fn );
+			}
+		}
+
+		return this;
+	},
+
+	delegate: function( selector, types, data, fn ) {
+		return this.live( types, data, fn, selector );
+	},
+
+	undelegate: function( selector, types, fn ) {
+		if ( arguments.length === 0 ) {
+			return this.unbind( "live" );
+
+		} else {
+			return this.die( types, null, fn, selector );
+		}
+	},
+
+	trigger: function( type, data ) {
+		return this.each(function() {
+			jQuery.event.trigger( type, data, this );
+		});
+	},
+
+	triggerHandler: function( type, data ) {
+		if ( this[0] ) {
+			return jQuery.event.trigger( type, data, this[0], true );
+		}
+	},
+
+	toggle: function( fn ) {
+		// Save reference to arguments for access in closure
+		var args = arguments,
+			guid = fn.guid || jQuery.guid++,
+			i = 0,
+			toggler = function( event ) {
+				// Figure out which function to execute
+				var lastToggle = ( jQuery.data( this, "lastToggle" + fn.guid ) || 0 ) % i;
+				jQuery.data( this, "lastToggle" + fn.guid, lastToggle + 1 );
+
+				// Make sure that clicks stop
+				event.preventDefault();
+
+				// and execute the function
+				return args[ lastToggle ].apply( this, arguments ) || false;
+			};
+
+		// link all the functions, so any of them can unbind this click handler
+		toggler.guid = guid;
+		while ( i < args.length ) {
+			args[ i++ ].guid = guid;
+		}
+
+		return this.click( toggler );
+	},
+
+	hover: function( fnOver, fnOut ) {
+		return this.mouseenter( fnOver ).mouseleave( fnOut || fnOver );
+	}
+});
+
+var liveMap = {
+	focus: "focusin",
+	blur: "focusout",
+	mouseenter: "mouseover",
+	mouseleave: "mouseout"
+};
+
+jQuery.each(["live", "die"], function( i, name ) {
+	jQuery.fn[ name ] = function( types, data, fn, origSelector /* Internal Use Only */ ) {
+		var type, i = 0, match, namespaces, preType,
+			selector = origSelector || this.selector,
+			context = origSelector ? this : jQuery( this.context );
+
+		if ( typeof types === "object" && !types.preventDefault ) {
+			for ( var key in types ) {
+				context[ name ]( key, data, types[key], selector );
+			}
+
+			return this;
+		}
+
+		if ( name === "die" && !types &&
+					origSelector && origSelector.charAt(0) === "." ) {
+
+			context.unbind( origSelector );
+
+			return this;
+		}
+
+		if ( data === false || jQuery.isFunction( data ) ) {
+			fn = data || returnFalse;
+			data = undefined;
+		}
+
+		types = (types || "").split(" ");
+
+		while ( (type = types[ i++ ]) != null ) {
+			match = rnamespaces.exec( type );
+			namespaces = "";
+
+			if ( match )  {
+				namespaces = match[0];
+				type = type.replace( rnamespaces, "" );
+			}
+
+			if ( type === "hover" ) {
+				types.push( "mouseenter" + namespaces, "mouseleave" + namespaces );
+				continue;
+			}
+
+			preType = type;
+
+			if ( liveMap[ type ] ) {
+				types.push( liveMap[ type ] + namespaces );
+				type = type + namespaces;
+
+			} else {
+				type = (liveMap[ type ] || type) + namespaces;
+			}
+
+			if ( name === "live" ) {
+				// bind live handler
+				for ( var j = 0, l = context.length; j < l; j++ ) {
+					jQuery.event.add( context[j], "live." + liveConvert( type, selector ),
+						{ data: data, selector: selector, handler: fn, origType: type, origHandler: fn, preType: preType } );
+				}
+
+			} else {
+				// unbind live handler
+				context.unbind( "live." + liveConvert( type, selector ), fn );
+			}
+		}
+
+		return this;
+	};
+});
+
+function liveHandler( event ) {
+	var stop, maxLevel, related, match, handleObj, elem, j, i, l, data, close, namespace, ret,
+		elems = [],
+		selectors = [],
+		events = jQuery._data( this, "events" );
+
+	// Make sure we avoid non-left-click bubbling in Firefox (#3861) and disabled elements in IE (#6911)
+	if ( event.liveFired === this || !events || !events.live || event.target.disabled || event.button && event.type === "click" ) {
+		return;
+	}
+
+	if ( event.namespace ) {
+		namespace = new RegExp("(^|\\.)" + event.namespace.split(".").join("\\.(?:.*\\.)?") + "(\\.|$)");
+	}
+
+	event.liveFired = this;
+
+	var live = events.live.slice(0);
+
+	for ( j = 0; j < live.length; j++ ) {
+		handleObj = live[j];
+
+		if ( handleObj.origType.replace( rnamespaces, "" ) === event.type ) {
+			selectors.push( handleObj.selector );
+
+		} else {
+			live.splice( j--, 1 );
+		}
+	}
+
+	match = jQuery( event.target ).closest( selectors, event.currentTarget );
+
+	for ( i = 0, l = match.length; i < l; i++ ) {
+		close = match[i];
+
+		for ( j = 0; j < live.length; j++ ) {
+			handleObj = live[j];
+
+			if ( close.selector === handleObj.selector && (!namespace || namespace.test( handleObj.namespace )) && !close.elem.disabled ) {
+				elem = close.elem;
+				related = null;
+
+				// Those two events require additional checking
+				if ( handleObj.preType === "mouseenter" || handleObj.preType === "mouseleave" ) {
+					event.type = handleObj.preType;
+					related = jQuery( event.relatedTarget ).closest( handleObj.selector )[0];
+
+					// Make sure not to accidentally match a child element with the same selector
+					if ( related && jQuery.contains( elem, related ) ) {
+						related = elem;
+					}
+				}
+
+				if ( !related || related !== elem ) {
+					elems.push({ elem: elem, handleObj: handleObj, level: close.level });
+				}
+			}
+		}
+	}
+
+	for ( i = 0, l = elems.length; i < l; i++ ) {
+		match = elems[i];
+
+		if ( maxLevel && match.level > maxLevel ) {
+			break;
+		}
+
+		event.currentTarget = match.elem;
+		event.data = match.handleObj.data;
+		event.handleObj = match.handleObj;
+
+		ret = match.handleObj.origHandler.apply( match.elem, arguments );
+
+		if ( ret === false || event.isPropagationStopped() ) {
+			maxLevel = match.level;
+
+			if ( ret === false ) {
+				stop = false;
+			}
+			if ( event.isImmediatePropagationStopped() ) {
+				break;
+			}
+		}
+	}
+
+	return stop;
+}
+
+function liveConvert( type, selector ) {
+	return (type && type !== "*" ? type + "." : "") + selector.replace(rperiod, "`").replace(rspaces, "&");
+}
+
+jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblclick " +
+	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
+	"change select submit keydown keypress keyup error").split(" "), function( i, name ) {
+
+	// Handle event binding
+	jQuery.fn[ name ] = function( data, fn ) {
+		if ( fn == null ) {
+			fn = data;
+			data = null;
+		}
+
+		return arguments.length > 0 ?
+			this.bind( name, data, fn ) :
+			this.trigger( name );
+	};
+
+	if ( jQuery.attrFn ) {
+		jQuery.attrFn[ name ] = true;
+	}
+});
+
+
+
+/*!
+ * Sizzle CSS Selector Engine
+ *  Copyright 2011, The Dojo Foundation
+ *  Released under the MIT, BSD, and GPL Licenses.
+ *  More information: http://sizzlejs.com/
+ */
+(function(){
+
+var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['"][^'"]*['"]|[^\[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,
+	done = 0,
+	toString = Object.prototype.toString,
+	hasDuplicate = false,
+	baseHasDuplicate = true,
+	rBackslash = /\\/g,
+	rNonWord = /\W/;
+
+// Here we check if the JavaScript engine is using some sort of
+// optimization where it does not always call our comparision
+// function. If that is the case, discard the hasDuplicate value.
+//   Thus far that includes Google Chrome.
+[0, 0].sort(function() {
+	baseHasDuplicate = false;
+	return 0;
+});
+
+var Sizzle = function( selector, context, results, seed ) {
+	results = results || [];
+	context = context || document;
+
+	var origContext = context;
+
+	if ( context.nodeType !== 1 && context.nodeType !== 9 ) {
+		return [];
+	}
+	
+	if ( !selector || typeof selector !== "string" ) {
+		return results;
+	}
+
+	var m, set, checkSet, extra, ret, cur, pop, i,
+		prune = true,
+		contextXML = Sizzle.isXML( context ),
+		parts = [],
+		soFar = selector;
+	
+	// Reset the position of the chunker regexp (start from head)
+	do {
+		chunker.exec( "" );
+		m = chunker.exec( soFar );
+
+		if ( m ) {
+			soFar = m[3];
+		
+			parts.push( m[1] );
+		
+			if ( m[2] ) {
+				extra = m[3];
+				break;
+			}
+		}
+	} while ( m );
+
+	if ( parts.length > 1 && origPOS.exec( selector ) ) {
+
+		if ( parts.length === 2 && Expr.relative[ parts[0] ] ) {
+			set = posProcess( parts[0] + parts[1], context );
+
+		} else {
+			set = Expr.relative[ parts[0] ] ?
+				[ context ] :
+				Sizzle( parts.shift(), context );
+
+			while ( parts.length ) {
+				selector = parts.shift();
+
+				if ( Expr.relative[ selector ] ) {
+					selector += parts.shift();
+				}
+				
+				set = posProcess( selector, set );
+			}
+		}
+
+	} else {
+		// Take a shortcut and set the context if the root selector is an ID
+		// (but not if it'll be faster if the inner selector is an ID)
+		if ( !seed && parts.length > 1 && context.nodeType === 9 && !contextXML &&
+				Expr.match.ID.test(parts[0]) && !Expr.match.ID.test(parts[parts.length - 1]) ) {
+
+			ret = Sizzle.find( parts.shift(), context, contextXML );
+			context = ret.expr ?
+				Sizzle.filter( ret.expr, ret.set )[0] :
+				ret.set[0];
+		}
+
+		if ( context ) {
+			ret = seed ?
+				{ expr: parts.pop(), set: makeArray(seed) } :
+				Sizzle.find( parts.pop(), parts.length === 1 && (parts[0] === "~" || parts[0] === "+") && context.parentNode ? context.parentNode : context, contextXML );
+
+			set = ret.expr ?
+				Sizzle.filter( ret.expr, ret.set ) :
+				ret.set;
+
+			if ( parts.length > 0 ) {
+				checkSet = makeArray( set );
+
+			} else {
+				prune = false;
+			}
+
+			while ( parts.length ) {
+				cur = parts.pop();
+				pop = cur;
+
+				if ( !Expr.relative[ cur ] ) {
+					cur = "";
+				} else {
+					pop = parts.pop();
+				}
+
+				if ( pop == null ) {
+					pop = context;
+				}
+
+				Expr.relative[ cur ]( checkSet, pop, contextXML );
+			}
+
+		} else {
+			checkSet = parts = [];
+		}
+	}
+
+	if ( !checkSet ) {
+		checkSet = set;
+	}
+
+	if ( !checkSet ) {
+		Sizzle.error( cur || selector );
+	}
+
+	if ( toString.call(checkSet) === "[object Array]" ) {
+		if ( !prune ) {
+			results.push.apply( results, checkSet );
+
+		} else if ( context && context.nodeType === 1 ) {
+			for ( i = 0; checkSet[i] != null; i++ ) {
+				if ( checkSet[i] && (checkSet[i] === true || checkSet[i].nodeType === 1 && Sizzle.contains(context, checkSet[i])) ) {
+					results.push( set[i] );
+				}
+			}
+
+		} else {
+			for ( i = 0; checkSet[i] != null; i++ ) {
+				if ( checkSet[i] && checkSet[i].nodeType === 1 ) {
+					results.push( set[i] );
+				}
+			}
+		}
+
+	} else {
+		makeArray( checkSet, results );
+	}
+
+	if ( extra ) {
+		Sizzle( extra, origContext, results, seed );
+		Sizzle.uniqueSort( results );
+	}
+
+	return results;
+};
+
+Sizzle.uniqueSort = function( results ) {
+	if ( sortOrder ) {
+		hasDuplicate = baseHasDuplicate;
+		results.sort( sortOrder );
+
+		if ( hasDuplicate ) {
+			for ( var i = 1; i < results.length; i++ ) {
+				if ( results[i] === results[ i - 1 ] ) {
+					results.splice( i--, 1 );
+				}
+			}
+		}
+	}
+
+	return results;
+};
+
+Sizzle.matches = function( expr, set ) {
+	return Sizzle( expr, null, null, set );
+};
+
+Sizzle.matchesSelector = function( node, expr ) {
+	return Sizzle( expr, null, null, [node] ).length > 0;
+};
+
+Sizzle.find = function( expr, context, isXML ) {
+	var set;
+
+	if ( !expr ) {
+		return [];
+	}
+
+	for ( var i = 0, l = Expr.order.length; i < l; i++ ) {
+		var match,
+			type = Expr.order[i];
+		
+		if ( (match = Expr.leftMatch[ type ].exec( expr )) ) {
+			var left = match[1];
+			match.splice( 1, 1 );
+
+			if ( left.substr( left.length - 1 ) !== "\\" ) {
+				match[1] = (match[1] || "").replace( rBackslash, "" );
+				set = Expr.find[ type ]( match, context, isXML );
+
+				if ( set != null ) {
+					expr = expr.replace( Expr.match[ type ], "" );
+					break;
+				}
+			}
+		}
+	}
+
+	if ( !set ) {
+		set = typeof context.getElementsByTagName !== "undefined" ?
+			context.getElementsByTagName( "*" ) :
+			[];
+	}
+
+	return { set: set, expr: expr };
+};
+
+Sizzle.filter = function( expr, set, inplace, not ) {
+	var match, anyFound,
+		old = expr,
+		result = [],
+		curLoop = set,
+		isXMLFilter = set && set[0] && Sizzle.isXML( set[0] );
+
+	while ( expr && set.length ) {
+		for ( var type in Expr.filter ) {
+			if ( (match = Expr.leftMatch[ type ].exec( expr )) != null && match[2] ) {
+				var found, item,
+					filter = Expr.filter[ type ],
+					left = match[1];
+
+				anyFound = false;
+
+				match.splice(1,1);
+
+				if ( left.substr( left.length - 1 ) === "\\" ) {
+					continue;
+				}
+
+				if ( curLoop === result ) {
+					result = [];
+				}
+
+				if ( Expr.preFilter[ type ] ) {
+					match = Expr.preFilter[ type ]( match, curLoop, inplace, result, not, isXMLFilter );
+
+					if ( !match ) {
+						anyFound = found = true;
+
+					} else if ( match === true ) {
+						continue;
+					}
+				}
+
+				if ( match ) {
+					for ( var i = 0; (item = curLoop[i]) != null; i++ ) {
+						if ( item ) {
+							found = filter( item, match, i, curLoop );
+							var pass = not ^ !!found;
+
+							if ( inplace && found != null ) {
+								if ( pass ) {
+									anyFound = true;
+
+								} else {
+									curLoop[i] = false;
+								}
+
+							} else if ( pass ) {
+								result.push( item );
+								anyFound = true;
+							}
+						}
+					}
+				}
+
+				if ( found !== undefined ) {
+					if ( !inplace ) {
+						curLoop = result;
+					}
+
+					expr = expr.replace( Expr.match[ type ], "" );
+
+					if ( !anyFound ) {
+						return [];
+					}
+
+					break;
+				}
+			}
+		}
+
+		// Improper expression
+		if ( expr === old ) {
+			if ( anyFound == null ) {
+				Sizzle.error( expr );
+
+			} else {
+				break;
+			}
+		}
+
+		old = expr;
+	}
+
+	return curLoop;
+};
+
+Sizzle.error = function( msg ) {
+	throw "Syntax error, unrecognized expression: " + msg;
+};
+
+var Expr = Sizzle.selectors = {
+	order: [ "ID", "NAME", "TAG" ],
+
+	match: {
+		ID: /#((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
+		CLASS: /\.((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
+		NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF\-]|\\.)+)['"]*\]/,
+		ATTR: /\[\s*((?:[\w\u00c0-\uFFFF\-]|\\.)+)\s*(?:(\S?=)\s*(?:(['"])(.*?)\3|(#?(?:[\w\u00c0-\uFFFF\-]|\\.)*)|)|)\s*\]/,
+		TAG: /^((?:[\w\u00c0-\uFFFF\*\-]|\\.)+)/,
+		CHILD: /:(only|nth|last|first)-child(?:\(\s*(even|odd|(?:[+\-]?\d+|(?:[+\-]?\d*)?n\s*(?:[+\-]\s*\d+)?))\s*\))?/,
+		POS: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^\-]|$)/,
+		PSEUDO: /:((?:[\w\u00c0-\uFFFF\-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/
+	},
+
+	leftMatch: {},
+
+	attrMap: {
+		"class": "className",
+		"for": "htmlFor"
+	},
+
+	attrHandle: {
+		href: function( elem ) {
+			return elem.getAttribute( "href" );
+		},
+		type: function( elem ) {
+			return elem.getAttribute( "type" );
+		}
+	},
+
+	relative: {
+		"+": function(checkSet, part){
+			var isPartStr = typeof part === "string",
+				isTag = isPartStr && !rNonWord.test( part ),
+				isPartStrNotTag = isPartStr && !isTag;
+
+			if ( isTag ) {
+				part = part.toLowerCase();
+			}
+
+			for ( var i = 0, l = checkSet.length, elem; i < l; i++ ) {
+				if ( (elem = checkSet[i]) ) {
+					while ( (elem = elem.previousSibling) && elem.nodeType !== 1 ) {}
+
+					checkSet[i] = isPartStrNotTag || elem && elem.nodeName.toLowerCase() === part ?
+						elem || false :
+						elem === part;
+				}
+			}
+
+			if ( isPartStrNotTag ) {
+				Sizzle.filter( part, checkSet, true );
+			}
+		},
+
+		">": function( checkSet, part ) {
+			var elem,
+				isPartStr = typeof part === "string",
+				i = 0,
+				l = checkSet.length;
+
+			if ( isPartStr && !rNonWord.test( part ) ) {
+				part = part.toLowerCase();
+
+				for ( ; i < l; i++ ) {
+					elem = checkSet[i];
+
+					if ( elem ) {
+						var parent = elem.parentNode;
+						checkSet[i] = parent.nodeName.toLowerCase() === part ? parent : false;
+					}
+				}
+
+			} else {
+				for ( ; i < l; i++ ) {
+					elem = checkSet[i];
+
+					if ( elem ) {
+						checkSet[i] = isPartStr ?
+							elem.parentNode :
+							elem.parentNode === part;
+					}
+				}
+
+				if ( isPartStr ) {
+					Sizzle.filter( part, checkSet, true );
+				}
+			}
+		},
+
+		"": function(checkSet, part, isXML){
+			var nodeCheck,
+				doneName = done++,
+				checkFn = dirCheck;
+
+			if ( typeof part === "string" && !rNonWord.test( part ) ) {
+				part = part.toLowerCase();
+				nodeCheck = part;
+				checkFn = dirNodeCheck;
+			}
+
+			checkFn( "parentNode", part, doneName, checkSet, nodeCheck, isXML );
+		},
+
+		"~": function( checkSet, part, isXML ) {
+			var nodeCheck,
+				doneName = done++,
+				checkFn = dirCheck;
+
+			if ( typeof part === "string" && !rNonWord.test( part ) ) {
+				part = part.toLowerCase();
+				nodeCheck = part;
+				checkFn = dirNodeCheck;
+			}
+
+			checkFn( "previousSibling", part, doneName, checkSet, nodeCheck, isXML );
+		}
+	},
+
+	find: {
+		ID: function( match, context, isXML ) {
+			if ( typeof context.getElementById !== "undefined" && !isXML ) {
+				var m = context.getElementById(match[1]);
+				// Check parentNode to catch when Blackberry 4.6 returns
+				// nodes that are no longer in the document #6963
+				return m && m.parentNode ? [m] : [];
+			}
+		},
+
+		NAME: function( match, context ) {
+			if ( typeof context.getElementsByName !== "undefined" ) {
+				var ret = [],
+					results = context.getElementsByName( match[1] );
+
+				for ( var i = 0, l = results.length; i < l; i++ ) {
+					if ( results[i].getAttribute("name") === match[1] ) {
+						ret.push( results[i] );
+					}
+				}
+
+				return ret.length === 0 ? null : ret;
+			}
+		},
+
+		TAG: function( match, context ) {
+			if ( typeof context.getElementsByTagName !== "undefined" ) {
+				return context.getElementsByTagName( match[1] );
+			}
+		}
+	},
+	preFilter: {
+		CLASS: function( match, curLoop, inplace, result, not, isXML ) {
+			match = " " + match[1].replace( rBackslash, "" ) + " ";
+
+			if ( isXML ) {
+				return match;
+			}
+
+			for ( var i = 0, elem; (elem = curLoop[i]) != null; i++ ) {
+				if ( elem ) {
+					if ( not ^ (elem.className && (" " + elem.className + " ").replace(/[\t\n\r]/g, " ").indexOf(match) >= 0) ) {
+						if ( !inplace ) {
+							result.push( elem );
+						}
+
+					} else if ( inplace ) {
+						curLoop[i] = false;
+					}
+				}
+			}
+
+			return false;
+		},
+
+		ID: function( match ) {
+			return match[1].replace( rBackslash, "" );
+		},
+
+		TAG: function( match, curLoop ) {
+			return match[1].replace( rBackslash, "" ).toLowerCase();
+		},
+
+		CHILD: function( match ) {
+			if ( match[1] === "nth" ) {
+				if ( !match[2] ) {
+					Sizzle.error( match[0] );
+				}
+
+				match[2] = match[2].replace(/^\+|\s*/g, '');
+
+				// parse equations like 'even', 'odd', '5', '2n', '3n+2', '4n-1', '-n+6'
+				var test = /(-?)(\d*)(?:n([+\-]?\d*))?/.exec(
+					match[2] === "even" && "2n" || match[2] === "odd" && "2n+1" ||
+					!/\D/.test( match[2] ) && "0n+" + match[2] || match[2]);
+
+				// calculate the numbers (first)n+(last) including if they are negative
+				match[2] = (test[1] + (test[2] || 1)) - 0;
+				match[3] = test[3] - 0;
+			}
+			else if ( match[2] ) {
+				Sizzle.error( match[0] );
+			}
+
+			// TODO: Move to normal caching system
+			match[0] = done++;
+
+			return match;
+		},
+
+		ATTR: function( match, curLoop, inplace, result, not, isXML ) {
+			var name = match[1] = match[1].replace( rBackslash, "" );
+			
+			if ( !isXML && Expr.attrMap[name] ) {
+				match[1] = Expr.attrMap[name];
+			}
+
+			// Handle if an un-quoted value was used
+			match[4] = ( match[4] || match[5] || "" ).replace( rBackslash, "" );
+
+			if ( match[2] === "~=" ) {
+				match[4] = " " + match[4] + " ";
+			}
+
+			return match;
+		},
+
+		PSEUDO: function( match, curLoop, inplace, result, not ) {
+			if ( match[1] === "not" ) {
+				// If we're dealing with a complex expression, or a simple one
+				if ( ( chunker.exec(match[3]) || "" ).length > 1 || /^\w/.test(match[3]) ) {
+					match[3] = Sizzle(match[3], null, null, curLoop);
+
+				} else {
+					var ret = Sizzle.filter(match[3], curLoop, inplace, true ^ not);
+
+					if ( !inplace ) {
+						result.push.apply( result, ret );
+					}
+
+					return false;
+				}
+
+			} else if ( Expr.match.POS.test( match[0] ) || Expr.match.CHILD.test( match[0] ) ) {
+				return true;
+			}
+			
+			return match;
+		},
+
+		POS: function( match ) {
+			match.unshift( true );
+
+			return match;
+		}
+	},
+	
+	filters: {
+		enabled: function( elem ) {
+			return elem.disabled === false && elem.type !== "hidden";
+		},
+
+		disabled: function( elem ) {
+			return elem.disabled === true;
+		},
+
+		checked: function( elem ) {
+			return elem.checked === true;
+		},
+		
+		selected: function( elem ) {
+			// Accessing this property makes selected-by-default
+			// options in Safari work properly
+			if ( elem.parentNode ) {
+				elem.parentNode.selectedIndex;
+			}
+			
+			return elem.selected === true;
+		},
+
+		parent: function( elem ) {
+			return !!elem.firstChild;
+		},
+
+		empty: function( elem ) {
+			return !elem.firstChild;
+		},
+
+		has: function( elem, i, match ) {
+			return !!Sizzle( match[3], elem ).length;
+		},
+
+		header: function( elem ) {
+			return (/h\d/i).test( elem.nodeName );
+		},
+
+		text: function( elem ) {
+			var attr = elem.getAttribute( "type" ), type = elem.type;
+			// IE6 and 7 will map elem.type to 'text' for new HTML5 types (search, etc) 
+			// use getAttribute instead to test this case
+			return elem.nodeName.toLowerCase() === "input" && "text" === type && ( attr === type || attr === null );
+		},
+
+		radio: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "radio" === elem.type;
+		},
+
+		checkbox: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "checkbox" === elem.type;
+		},
+
+		file: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "file" === elem.type;
+		},
+
+		password: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "password" === elem.type;
+		},
+
+		submit: function( elem ) {
+			var name = elem.nodeName.toLowerCase();
+			return (name === "input" || name === "button") && "submit" === elem.type;
+		},
+
+		image: function( elem ) {
+			return elem.nodeName.toLowerCase() === "input" && "image" === elem.type;
+		},
+
+		reset: function( elem ) {
+			var name = elem.nodeName.toLowerCase();
+			return (name === "input" || name === "button") && "reset" === elem.type;
+		},
+
+		button: function( elem ) {
+			var name = elem.nodeName.toLowerCase();
+			return name === "input" && "button" === elem.type || name === "button";
+		},
+
+		input: function( elem ) {
+			return (/input|select|textarea|button/i).test( elem.nodeName );
+		},
+
+		focus: function( elem ) {
+			return elem === elem.ownerDocument.activeElement;
+		}
+	},
+	setFilters: {
+		first: function( elem, i ) {
+			return i === 0;
+		},
+
+		last: function( elem, i, match, array ) {
+			return i === array.length - 1;
+		},
+
+		even: function( elem, i ) {
+			return i % 2 === 0;
+		},
+
+		odd: function( elem, i ) {
+			return i % 2 === 1;
+		},
+
+		lt: function( elem, i, match ) {
+			return i < match[3] - 0;
+		},
+
+		gt: function( elem, i, match ) {
+			return i > match[3] - 0;
+		},
+
+		nth: function( elem, i, match ) {
+			return match[3] - 0 === i;
+		},
+
+		eq: function( elem, i, match ) {
+			return match[3] - 0 === i;
+		}
+	},
+	filter: {
+		PSEUDO: function( elem, match, i, array ) {
+			var name = match[1],
+				filter = Expr.filters[ name ];
+
+			if ( filter ) {
+				return filter( elem, i, match, array );
+
+			} else if ( name === "contains" ) {
+				return (elem.textContent || elem.innerText || Sizzle.getText([ elem ]) || "").indexOf(match[3]) >= 0;
+
+			} else if ( name === "not" ) {
+				var not = match[3];
+
+				for ( var j = 0, l = not.length; j < l; j++ ) {
+					if ( not[j] === elem ) {
+						return false;
+					}
+				}
+
+				return true;
+
+			} else {
+				Sizzle.error( name );
+			}
+		},
+
+		CHILD: function( elem, match ) {
+			var type = match[1],
+				node = elem;
+
+			switch ( type ) {
+				case "only":
+				case "first":
+					while ( (node = node.previousSibling) )	 {
+						if ( node.nodeType === 1 ) { 
+							return false; 
+						}
+					}
+
+					if ( type === "first" ) { 
+						return true; 
+					}
+
+					node = elem;
+
+				case "last":
+					while ( (node = node.nextSibling) )	 {
+						if ( node.nodeType === 1 ) { 
+							return false; 
+						}
+					}
+
+					return true;
+
+				case "nth":
+					var first = match[2],
+						last = match[3];
+
+					if ( first === 1 && last === 0 ) {
+						return true;
+					}
+					
+					var doneName = match[0],
+						parent = elem.parentNode;
+	
+					if ( parent && (parent.sizcache !== doneName || !elem.nodeIndex) ) {
+						var count = 0;
+						
+						for ( node = parent.firstChild; node; node = node.nextSibling ) {
+							if ( node.nodeType === 1 ) {
+								node.nodeIndex = ++count;
+							}
+						} 
+
+						parent.sizcache = doneName;
+					}
+					
+					var diff = elem.nodeIndex - last;
+
+					if ( first === 0 ) {
+						return diff === 0;
+
+					} else {
+						return ( diff % first === 0 && diff / first >= 0 );
+					}
+			}
+		},
+
+		ID: function( elem, match ) {
+			return elem.nodeType === 1 && elem.getAttribute("id") === match;
+		},
+
+		TAG: function( elem, match ) {
+			return (match === "*" && elem.nodeType === 1) || elem.nodeName.toLowerCase() === match;
+		},
+		
+		CLASS: function( elem, match ) {
+			return (" " + (elem.className || elem.getAttribute("class")) + " ")
+				.indexOf( match ) > -1;
+		},
+
+		ATTR: function( elem, match ) {
+			var name = match[1],
+				result = Expr.attrHandle[ name ] ?
+					Expr.attrHandle[ name ]( elem ) :
+					elem[ name ] != null ?
+						elem[ name ] :
+						elem.getAttribute( name ),
+				value = result + "",
+				type = match[2],
+				check = match[4];
+
+			return result == null ?
+				type === "!=" :
+				type === "=" ?
+				value === check :
+				type === "*=" ?
+				value.indexOf(check) >= 0 :
+				type === "~=" ?
+				(" " + value + " ").indexOf(check) >= 0 :
+				!check ?
+				value && result !== false :
+				type === "!=" ?
+				value !== check :
+				type === "^=" ?
+				value.indexOf(check) === 0 :
+				type === "$=" ?
+				value.substr(value.length - check.length) === check :
+				type === "|=" ?
+				value === check || value.substr(0, check.length + 1) === check + "-" :
+				false;
+		},
+
+		POS: function( elem, match, i, array ) {
+			var name = match[2],
+				filter = Expr.setFilters[ name ];
+
+			if ( filter ) {
+				return filter( elem, i, match, array );
+			}
+		}
+	}
+};
+
+var origPOS = Expr.match.POS,
+	fescape = function(all, num){
+		return "\\" + (num - 0 + 1);
+	};
+
+for ( var type in Expr.match ) {
+	Expr.match[ type ] = new RegExp( Expr.match[ type ].source + (/(?![^\[]*\])(?![^\(]*\))/.source) );
+	Expr.leftMatch[ type ] = new RegExp( /(^(?:.|\r|\n)*?)/.source + Expr.match[ type ].source.replace(/\\(\d+)/g, fescape) );
+}
+
+var makeArray = function( array, results ) {
+	array = Array.prototype.slice.call( array, 0 );
+
+	if ( results ) {
+		results.push.apply( results, array );
+		return results;
+	}
+	
+	return array;
+};
+
+// Perform a simple check to determine if the browser is capable of
+// converting a NodeList to an array using builtin methods.
+// Also verifies that the returned array holds DOM nodes
+// (which is not the case in the Blackberry browser)
+try {
+	Array.prototype.slice.call( document.documentElement.childNodes, 0 )[0].nodeType;
+
+// Provide a fallback method if it does not work
+} catch( e ) {
+	makeArray = function( array, results ) {
+		var i = 0,
+			ret = results || [];
+
+		if ( toString.call(array) === "[object Array]" ) {
+			Array.prototype.push.apply( ret, array );
+
+		} else {
+			if ( typeof array.length === "number" ) {
+				for ( var l = array.length; i < l; i++ ) {
+					ret.push( array[i] );
+				}
+
+			} else {
+				for ( ; array[i]; i++ ) {
+					ret.push( array[i] );
+				}
+			}
+		}
+
+		return ret;
+	};
+}
+
+var sortOrder, siblingCheck;
+
+if ( document.documentElement.compareDocumentPosition ) {
+	sortOrder = function( a, b ) {
+		if ( a === b ) {
+			hasDuplicate = true;
+			return 0;
+		}
+
+		if ( !a.compareDocumentPosition || !b.compareDocumentPosition ) {
+			return a.compareDocumentPosition ? -1 : 1;
+		}
+
+		return a.compareDocumentPosition(b) & 4 ? -1 : 1;
+	};
+
+} else {
+	sortOrder = function( a, b ) {
+		// The nodes are identical, we can exit early
+		if ( a === b ) {
+			hasDuplicate = true;
+			return 0;
+
+		// Fallback to using sourceIndex (in IE) if it's available on both nodes
+		} else if ( a.sourceIndex && b.sourceIndex ) {
+			return a.sourceIndex - b.sourceIndex;
+		}
+
+		var al, bl,
+			ap = [],
+			bp = [],
+			aup = a.parentNode,
+			bup = b.parentNode,
+			cur = aup;
+
+		// If the nodes are siblings (or identical) we can do a quick check
+		if ( aup === bup ) {
+			return siblingCheck( a, b );
+
+		// If no parents were found then the nodes are disconnected
+		} else if ( !aup ) {
+			return -1;
+
+		} else if ( !bup ) {
+			return 1;
+		}
+
+		// Otherwise they're somewhere else in the tree so we need
+		// to build up a full list of the parentNodes for comparison
+		while ( cur ) {
+			ap.unshift( cur );
+			cur = cur.parentNode;
+		}
+
+		cur = bup;
+
+		while ( cur ) {
+			bp.unshift( cur );
+			cur = cur.parentNode;
+		}
+
+		al = ap.length;
+		bl = bp.length;
+
+		// Start walking down the tree looking for a discrepancy
+		for ( var i = 0; i < al && i < bl; i++ ) {
+			if ( ap[i] !== bp[i] ) {
+				return siblingCheck( ap[i], bp[i] );
+			}
+		}
+
+		// We ended someplace up the tree so do a sibling check
+		return i === al ?
+			siblingCheck( a, bp[i], -1 ) :
+			siblingCheck( ap[i], b, 1 );
+	};
+
+	siblingCheck = function( a, b, ret ) {
+		if ( a === b ) {
+			return ret;
+		}
+
+		var cur = a.nextSibling;
+
+		while ( cur ) {
+			if ( cur === b ) {
+				return -1;
+			}
+
+			cur = cur.nextSibling;
+		}
+
+		return 1;
+	};
+}
+
+// Utility function for retreiving the text value of an array of DOM nodes
+Sizzle.getText = function( elems ) {
+	var ret = "", elem;
+
+	for ( var i = 0; elems[i]; i++ ) {
+		elem = elems[i];
+
+		// Get the text from text nodes and CDATA nodes
+		if ( elem.nodeType === 3 || elem.nodeType === 4 ) {
+			ret += elem.nodeValue;
+
+		// Traverse everything else, except comment nodes
+		} else if ( elem.nodeType !== 8 ) {
+			ret += Sizzle.getText( elem.childNodes );
+		}
+	}
+
+	return ret;
+};
+
+// Check to see if the browser returns elements by name when
+// querying by getElementById (and provide a workaround)
+(function(){
+	// We're going to inject a fake input element with a specified name
+	var form = document.createElement("div"),
+		id = "script" + (new Date()).getTime(),
+		root = document.documentElement;
+
+	form.innerHTML = "<a name='" + id + "'/>";
+
+	// Inject it into the root element, check its status, and remove it quickly
+	root.insertBefore( form, root.firstChild );
+
+	// The workaround has to do additional checks after a getElementById
+	// Which slows things down for other browsers (hence the branching)
+	if ( document.getElementById( id ) ) {
+		Expr.find.ID = function( match, context, isXML ) {
+			if ( typeof context.getElementById !== "undefined" && !isXML ) {
+				var m = context.getElementById(match[1]);
+
+				return m ?
+					m.id === match[1] || typeof m.getAttributeNode !== "undefined" && m.getAttributeNode("id").nodeValue === match[1] ?
+						[m] :
+						undefined :
+					[];
+			}
+		};
+
+		Expr.filter.ID = function( elem, match ) {
+			var node = typeof elem.getAttributeNode !== "undefined" && elem.getAttributeNode("id");
+
+			return elem.nodeType === 1 && node && node.nodeValue === match;
+		};
+	}
+
+	root.removeChild( form );
+
+	// release memory in IE
+	root = form = null;
+})();
+
+(function(){
+	// Check to see if the browser returns only elements
+	// when doing getElementsByTagName("*")
+
+	// Create a fake element
+	var div = document.createElement("div");
+	div.appendChild( document.createComment("") );
+
+	// Make sure no comments are found
+	if ( div.getElementsByTagName("*").length > 0 ) {
+		Expr.find.TAG = function( match, context ) {
+			var results = context.getElementsByTagName( match[1] );
+
+			// Filter out possible comments
+			if ( match[1] === "*" ) {
+				var tmp = [];
+
+				for ( var i = 0; results[i]; i++ ) {
+					if ( results[i].nodeType === 1 ) {
+						tmp.push( results[i] );
+					}
+				}
+
+				results = tmp;
+			}
+
+			return results;
+		};
+	}
+
+	// Check to see if an attribute returns normalized href attributes
+	div.innerHTML = "<a href='#'></a>";
+
+	if ( div.firstChild && typeof div.firstChild.getAttribute !== "undefined" &&
+			div.firstChild.getAttribute("href") !== "#" ) {
+
+		Expr.attrHandle.href = function( elem ) {
+			return elem.getAttribute( "href", 2 );
+		};
+	}
+
+	// release memory in IE
+	div = null;
+})();
+
+if ( document.querySelectorAll ) {
+	(function(){
+		var oldSizzle = Sizzle,
+			div = document.createElement("div"),
+			id = "__sizzle__";
+
+		div.innerHTML = "<p class='TEST'></p>";
+
+		// Safari can't handle uppercase or unicode characters when
+		// in quirks mode.
+		if ( div.querySelectorAll && div.querySelectorAll(".TEST").length === 0 ) {
+			return;
+		}
+	
+		Sizzle = function( query, context, extra, seed ) {
+			context = context || document;
+
+			// Only use querySelectorAll on non-XML documents
+			// (ID selectors don't work in non-HTML documents)
+			if ( !seed && !Sizzle.isXML(context) ) {
+				// See if we find a selector to speed up
+				var match = /^(\w+$)|^\.([\w\-]+$)|^#([\w\-]+$)/.exec( query );
+				
+				if ( match && (context.nodeType === 1 || context.nodeType === 9) ) {
+					// Speed-up: Sizzle("TAG")
+					if ( match[1] ) {
+						return makeArray( context.getElementsByTagName( query ), extra );
+					
+					// Speed-up: Sizzle(".CLASS")
+					} else if ( match[2] && Expr.find.CLASS && context.getElementsByClassName ) {
+						return makeArray( context.getElementsByClassName( match[2] ), extra );
+					}
+				}
+				
+				if ( context.nodeType === 9 ) {
+					// Speed-up: Sizzle("body")
+					// The body element only exists once, optimize finding it
+					if ( query === "body" && context.body ) {
+						return makeArray( [ context.body ], extra );
+						
+					// Speed-up: Sizzle("#ID")
+					} else if ( match && match[3] ) {
+						var elem = context.getElementById( match[3] );
+
+						// Check parentNode to catch when Blackberry 4.6 returns
+						// nodes that are no longer in the document #6963
+						if ( elem && elem.parentNode ) {
+							// Handle the case where IE and Opera return items
+							// by name instead of ID
+							if ( elem.id === match[3] ) {
+								return makeArray( [ elem ], extra );
+							}
+							
+						} else {
+							return makeArray( [], extra );
+						}
+					}
+					
+					try {
+						return makeArray( context.querySelectorAll(query), extra );
+					} catch(qsaError) {}
+
+				// qSA works strangely on Element-rooted queries
+				// We can work around this by specifying an extra ID on the root
+				// and working up from there (Thanks to Andrew Dupont for the technique)
+				// IE 8 doesn't work on object elements
+				} else if ( context.nodeType === 1 && context.nodeName.toLowerCase() !== "object" ) {
+					var oldContext = context,
+						old = context.getAttribute( "id" ),
+						nid = old || id,
+						hasParent = context.parentNode,
+						relativeHierarchySelector = /^\s*[+~]/.test( query );
+
+					if ( !old ) {
+						context.setAttribute( "id", nid );
+					} else {
+						nid = nid.replace( /'/g, "\\$&" );
+					}
+					if ( relativeHierarchySelector && hasParent ) {
+						context = context.parentNode;
+					}
+
+					try {
+						if ( !relativeHierarchySelector || hasParent ) {
+							return makeArray( context.querySelectorAll( "[id='" + nid + "'] " + query ), extra );
+						}
+
+					} catch(pseudoError) {
+					} finally {
+						if ( !old ) {
+							oldContext.removeAttribute( "id" );
+						}
+					}
+				}
+			}
+		
+			return oldSizzle(query, context, extra, seed);
+		};
+
+		for ( var prop in oldSizzle ) {
+			Sizzle[ prop ] = oldSizzle[ prop ];
+		}
+
+		// release memory in IE
+		div = null;
+	})();
+}
+
+(function(){
+	var html = document.documentElement,
+		matches = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector;
+
+	if ( matches ) {
+		// Check to see if it's possible to do matchesSelector
+		// on a disconnected node (IE 9 fails this)
+		var disconnectedMatch = !matches.call( document.createElement( "div" ), "div" ),
+			pseudoWorks = false;
+
+		try {
+			// This should fail with an exception
+			// Gecko does not error, returns false instead
+			matches.call( document.documentElement, "[test!='']:sizzle" );
+	
+		} catch( pseudoError ) {
+			pseudoWorks = true;
+		}
+
+		Sizzle.matchesSelector = function( node, expr ) {
+			// Make sure that attribute selectors are quoted
+			expr = expr.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
+
+			if ( !Sizzle.isXML( node ) ) {
+				try { 
+					if ( pseudoWorks || !Expr.match.PSEUDO.test( expr ) && !/!=/.test( expr ) ) {
+						var ret = matches.call( node, expr );
+
+						// IE 9's matchesSelector returns false on disconnected nodes
+						if ( ret || !disconnectedMatch ||
+								// As well, disconnected nodes are said to be in a document
+								// fragment in IE 9, so check for that
+								node.document && node.document.nodeType !== 11 ) {
+							return ret;
+						}
+					}
+				} catch(e) {}
+			}
+
+			return Sizzle(expr, null, null, [node]).length > 0;
+		};
+	}
+})();
+
+(function(){
+	var div = document.createElement("div");
+
+	div.innerHTML = "<div class='test e'></div><div class='test'></div>";
+
+	// Opera can't find a second classname (in 9.6)
+	// Also, make sure that getElementsByClassName actually exists
+	if ( !div.getElementsByClassName || div.getElementsByClassName("e").length === 0 ) {
+		return;
+	}
+
+	// Safari caches class attributes, doesn't catch changes (in 3.2)
+	div.lastChild.className = "e";
+
+	if ( div.getElementsByClassName("e").length === 1 ) {
+		return;
+	}
+	
+	Expr.order.splice(1, 0, "CLASS");
+	Expr.find.CLASS = function( match, context, isXML ) {
+		if ( typeof context.getElementsByClassName !== "undefined" && !isXML ) {
+			return context.getElementsByClassName(match[1]);
+		}
+	};
+
+	// release memory in IE
+	div = null;
+})();
+
+function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
+	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
+		var elem = checkSet[i];
+
+		if ( elem ) {
+			var match = false;
+
+			elem = elem[dir];
+
+			while ( elem ) {
+				if ( elem.sizcache === doneName ) {
+					match = checkSet[elem.sizset];
+					break;
+				}
+
+				if ( elem.nodeType === 1 && !isXML ){
+					elem.sizcache = doneName;
+					elem.sizset = i;
+				}
+
+				if ( elem.nodeName.toLowerCase() === cur ) {
+					match = elem;
+					break;
+				}
+
+				elem = elem[dir];
+			}
+
+			checkSet[i] = match;
+		}
+	}
+}
+
+function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
+	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
+		var elem = checkSet[i];
+
+		if ( elem ) {
+			var match = false;
+			
+			elem = elem[dir];
+
+			while ( elem ) {
+				if ( elem.sizcache === doneName ) {
+					match = checkSet[elem.sizset];
+					break;
+				}
+
+				if ( elem.nodeType === 1 ) {
+					if ( !isXML ) {
+						elem.sizcache = doneName;
+						elem.sizset = i;
+					}
+
+					if ( typeof cur !== "string" ) {
+						if ( elem === cur ) {
+							match = true;
+							break;
+						}
+
+					} else if ( Sizzle.filter( cur, [elem] ).length > 0 ) {
+						match = elem;
+						break;
+					}
+				}
+
+				elem = elem[dir];
+			}
+
+			checkSet[i] = match;
+		}
+	}
+}
+
+if ( document.documentElement.contains ) {
+	Sizzle.contains = function( a, b ) {
+		return a !== b && (a.contains ? a.contains(b) : true);
+	};
+
+} else if ( document.documentElement.compareDocumentPosition ) {
+	Sizzle.contains = function( a, b ) {
+		return !!(a.compareDocumentPosition(b) & 16);
+	};
+
+} else {
+	Sizzle.contains = function() {
+		return false;
+	};
+}
+
+Sizzle.isXML = function( elem ) {
+	// documentElement is verified for cases where it doesn't yet exist
+	// (such as loading iframes in IE - #4833) 
+	var documentElement = (elem ? elem.ownerDocument || elem : 0).documentElement;
+
+	return documentElement ? documentElement.nodeName !== "HTML" : false;
+};
+
+var posProcess = function( selector, context ) {
+	var match,
+		tmpSet = [],
+		later = "",
+		root = context.nodeType ? [context] : context;
+
+	// Position selectors must be done after the filter
+	// And so must :not(positional) so we move all PSEUDOs to the end
+	while ( (match = Expr.match.PSEUDO.exec( selector )) ) {
+		later += match[0];
+		selector = selector.replace( Expr.match.PSEUDO, "" );
+	}
+
+	selector = Expr.relative[selector] ? selector + "*" : selector;
+
+	for ( var i = 0, l = root.length; i < l; i++ ) {
+		Sizzle( selector, root[i], tmpSet );
+	}
+
+	return Sizzle.filter( later, tmpSet );
+};
+
+// EXPOSE
+jQuery.find = Sizzle;
+jQuery.expr = Sizzle.selectors;
+jQuery.expr[":"] = jQuery.expr.filters;
+jQuery.unique = Sizzle.uniqueSort;
+jQuery.text = Sizzle.getText;
+jQuery.isXMLDoc = Sizzle.isXML;
+jQuery.contains = Sizzle.contains;
+
+
+})();
+
+
+var runtil = /Until$/,
+	rparentsprev = /^(?:parents|prevUntil|prevAll)/,
+	// Note: This RegExp should be improved, or likely pulled from Sizzle
+	rmultiselector = /,/,
+	isSimple = /^.[^:#\[\.,]*$/,
+	slice = Array.prototype.slice,
+	POS = jQuery.expr.match.POS,
+	// methods guaranteed to produce a unique set when starting from a unique set
+	guaranteedUnique = {
+		children: true,
+		contents: true,
+		next: true,
+		prev: true
+	};
+
+jQuery.fn.extend({
+	find: function( selector ) {
+		var self = this,
+			i, l;
+
+		if ( typeof selector !== "string" ) {
+			return jQuery( selector ).filter(function() {
+				for ( i = 0, l = self.length; i < l; i++ ) {
+					if ( jQuery.contains( self[ i ], this ) ) {
+						return true;
+					}
+				}
+			});
+		}
+
+		var ret = this.pushStack( "", "find", selector ),
+			length, n, r;
+
+		for ( i = 0, l = this.length; i < l; i++ ) {
+			length = ret.length;
+			jQuery.find( selector, this[i], ret );
+
+			if ( i > 0 ) {
+				// Make sure that the results are unique
+				for ( n = length; n < ret.length; n++ ) {
+					for ( r = 0; r < length; r++ ) {
+						if ( ret[r] === ret[n] ) {
+							ret.splice(n--, 1);
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		return ret;
+	},
+
+	has: function( target ) {
+		var targets = jQuery( target );
+		return this.filter(function() {
+			for ( var i = 0, l = targets.length; i < l; i++ ) {
+				if ( jQuery.contains( this, targets[i] ) ) {
+					return true;
+				}
+			}
+		});
+	},
+
+	not: function( selector ) {
+		return this.pushStack( winnow(this, selector, false), "not", selector);
+	},
+
+	filter: function( selector ) {
+		return this.pushStack( winnow(this, selector, true), "filter", selector );
+	},
+
+	is: function( selector ) {
+		return !!selector && ( typeof selector === "string" ?
+			jQuery.filter( selector, this ).length > 0 :
+			this.filter( selector ).length > 0 );
+	},
+
+	closest: function( selectors, context ) {
+		var ret = [], i, l, cur = this[0];
+		
+		// Array
+		if ( jQuery.isArray( selectors ) ) {
+			var match, selector,
+				matches = {},
+				level = 1;
+
+			if ( cur && selectors.length ) {
+				for ( i = 0, l = selectors.length; i < l; i++ ) {
+					selector = selectors[i];
+
+					if ( !matches[ selector ] ) {
+						matches[ selector ] = POS.test( selector ) ?
+							jQuery( selector, context || this.context ) :
+							selector;
+					}
+				}
+
+				while ( cur && cur.ownerDocument && cur !== context ) {
+					for ( selector in matches ) {
+						match = matches[ selector ];
+
+						if ( match.jquery ? match.index( cur ) > -1 : jQuery( cur ).is( match ) ) {
+							ret.push({ selector: selector, elem: cur, level: level });
+						}
+					}
+
+					cur = cur.parentNode;
+					level++;
+				}
+			}
+
+			return ret;
+		}
+
+		// String
+		var pos = POS.test( selectors ) || typeof selectors !== "string" ?
+				jQuery( selectors, context || this.context ) :
+				0;
+
+		for ( i = 0, l = this.length; i < l; i++ ) {
+			cur = this[i];
+
+			while ( cur ) {
+				if ( pos ? pos.index(cur) > -1 : jQuery.find.matchesSelector(cur, selectors) ) {
+					ret.push( cur );
+					break;
+
+				} else {
+					cur = cur.parentNode;
+					if ( !cur || !cur.ownerDocument || cur === context || cur.nodeType === 11 ) {
+						break;
+					}
+				}
+			}
+		}
+
+		ret = ret.length > 1 ? jQuery.unique( ret ) : ret;
+
+		return this.pushStack( ret, "closest", selectors );
+	},
+
+	// Determine the position of an element within
+	// the matched set of elements
+	index: function( elem ) {
+		if ( !elem || typeof elem === "string" ) {
+			return jQuery.inArray( this[0],
+				// If it receives a string, the selector is used
+				// If it receives nothing, the siblings are used
+				elem ? jQuery( elem ) : this.parent().children() );
+		}
+		// Locate the position of the desired element
+		return jQuery.inArray(
+			// If it receives a jQuery object, the first element is used
+			elem.jquery ? elem[0] : elem, this );
+	},
+
+	add: function( selector, context ) {
+		var set = typeof selector === "string" ?
+				jQuery( selector, context ) :
+				jQuery.makeArray( selector && selector.nodeType ? [ selector ] : selector ),
+			all = jQuery.merge( this.get(), set );
+
+		return this.pushStack( isDisconnected( set[0] ) || isDisconnected( all[0] ) ?
+			all :
+			jQuery.unique( all ) );
+	},
+
+	andSelf: function() {
+		return this.add( this.prevObject );
+	}
+});
+
+// A painfully simple check to see if an element is disconnected
+// from a document (should be improved, where feasible).
+function isDisconnected( node ) {
+	return !node || !node.parentNode || node.parentNode.nodeType === 11;
+}
+
+jQuery.each({
+	parent: function( elem ) {
+		var parent = elem.parentNode;
+		return parent && parent.nodeType !== 11 ? parent : null;
+	},
+	parents: function( elem ) {
+		return jQuery.dir( elem, "parentNode" );
+	},
+	parentsUntil: function( elem, i, until ) {
+		return jQuery.dir( elem, "parentNode", until );
+	},
+	next: function( elem ) {
+		return jQuery.nth( elem, 2, "nextSibling" );
+	},
+	prev: function( elem ) {
+		return jQuery.nth( elem, 2, "previousSibling" );
+	},
+	nextAll: function( elem ) {
+		return jQuery.dir( elem, "nextSibling" );
+	},
+	prevAll: function( elem ) {
+		return jQuery.dir( elem, "previousSibling" );
+	},
+	nextUntil: function( elem, i, until ) {
+		return jQuery.dir( elem, "nextSibling", until );
+	},
+	prevUntil: function( elem, i, until ) {
+		return jQuery.dir( elem, "previousSibling", until );
+	},
+	siblings: function( elem ) {
+		return jQuery.sibling( elem.parentNode.firstChild, elem );
+	},
+	children: function( elem ) {
+		return jQuery.sibling( elem.firstChild );
+	},
+	contents: function( elem ) {
+		return jQuery.nodeName( elem, "iframe" ) ?
+			elem.contentDocument || elem.contentWindow.document :
+			jQuery.makeArray( elem.childNodes );
+	}
+}, function( name, fn ) {
+	jQuery.fn[ name ] = function( until, selector ) {
+		var ret = jQuery.map( this, fn, until ),
+			// The variable 'args' was introduced in
+			// https://github.com/jquery/jquery/commit/52a0238
+			// to work around a bug in Chrome 10 (Dev) and should be removed when the bug is fixed.
+			// http://code.google.com/p/v8/issues/detail?id=1050
+			args = slice.call(arguments);
+
+		if ( !runtil.test( name ) ) {
+			selector = until;
+		}
+
+		if ( selector && typeof selector === "string" ) {
+			ret = jQuery.filter( selector, ret );
+		}
+
+		ret = this.length > 1 && !guaranteedUnique[ name ] ? jQuery.unique( ret ) : ret;
+
+		if ( (this.length > 1 || rmultiselector.test( selector )) && rparentsprev.test( name ) ) {
+			ret = ret.reverse();
+		}
+
+		return this.pushStack( ret, name, args.join(",") );
+	};
+});
+
+jQuery.extend({
+	filter: function( expr, elems, not ) {
+		if ( not ) {
+			expr = ":not(" + expr + ")";
+		}
+
+		return elems.length === 1 ?
+			jQuery.find.matchesSelector(elems[0], expr) ? [ elems[0] ] : [] :
+			jQuery.find.matches(expr, elems);
+	},
+
+	dir: function( elem, dir, until ) {
+		var matched = [],
+			cur = elem[ dir ];
+
+		while ( cur && cur.nodeType !== 9 && (until === undefined || cur.nodeType !== 1 || !jQuery( cur ).is( until )) ) {
+			if ( cur.nodeType === 1 ) {
+				matched.push( cur );
+			}
+			cur = cur[dir];
+		}
+		return matched;
+	},
+
+	nth: function( cur, result, dir, elem ) {
+		result = result || 1;
+		var num = 0;
+
+		for ( ; cur; cur = cur[dir] ) {
+			if ( cur.nodeType === 1 && ++num === result ) {
+				break;
+			}
+		}
+
+		return cur;
+	},
+
+	sibling: function( n, elem ) {
+		var r = [];
+
+		for ( ; n; n = n.nextSibling ) {
+			if ( n.nodeType === 1 && n !== elem ) {
+				r.push( n );
+			}
+		}
+
+		return r;
+	}
+});
+
+// Implement the identical functionality for filter and not
+function winnow( elements, qualifier, keep ) {
+
+	// Can't pass null or undefined to indexOf in Firefox 4
+	// Set to 0 to skip string check
+	qualifier = qualifier || 0;
+
+	if ( jQuery.isFunction( qualifier ) ) {
+		return jQuery.grep(elements, function( elem, i ) {
+			var retVal = !!qualifier.call( elem, i, elem );
+			return retVal === keep;
+		});
+
+	} else if ( qualifier.nodeType ) {
+		return jQuery.grep(elements, function( elem, i ) {
+			return (elem === qualifier) === keep;
+		});
+
+	} else if ( typeof qualifier === "string" ) {
+		var filtered = jQuery.grep(elements, function( elem ) {
+			return elem.nodeType === 1;
+		});
+
+		if ( isSimple.test( qualifier ) ) {
+			return jQuery.filter(qualifier, filtered, !keep);
+		} else {
+			qualifier = jQuery.filter( qualifier, filtered );
+		}
+	}
+
+	return jQuery.grep(elements, function( elem, i ) {
+		return (jQuery.inArray( elem, qualifier ) >= 0) === keep;
+	});
+}
+
+
+
+
+var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
+	rleadingWhitespace = /^\s+/,
+	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
+	rtagName = /<([\w:]+)/,
+	rtbody = /<tbody/i,
+	rhtml = /<|&#?\w+;/,
+	rnocache = /<(?:script|object|embed|option|style)/i,
+	// checked="checked" or checked
+	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
+	rscriptType = /\/(java|ecma)script/i,
+	rcleanScript = /^\s*<!(?:\[CDATA\[|\-\-)/,
+	wrapMap = {
+		option: [ 1, "<select multiple='multiple'>", "</select>" ],
+		legend: [ 1, "<fieldset>", "</fieldset>" ],
+		thead: [ 1, "<table>", "</table>" ],
+		tr: [ 2, "<table><tbody>", "</tbody></table>" ],
+		td: [ 3, "<table><tbody><tr>", "</tr></tbody></table>" ],
+		col: [ 2, "<table><tbody></tbody><colgroup>", "</colgroup></table>" ],
+		area: [ 1, "<map>", "</map>" ],
+		_default: [ 0, "", "" ]
+	};
+
+wrapMap.optgroup = wrapMap.option;
+wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
+wrapMap.th = wrapMap.td;
+
+// IE can't serialize <link> and <script> tags normally
+if ( !jQuery.support.htmlSerialize ) {
+	wrapMap._default = [ 1, "div<div>", "</div>" ];
+}
+
+jQuery.fn.extend({
+	text: function( text ) {
+		if ( jQuery.isFunction(text) ) {
+			return this.each(function(i) {
+				var self = jQuery( this );
+
+				self.text( text.call(this, i, self.text()) );
+			});
+		}
+
+		if ( typeof text !== "object" && text !== undefined ) {
+			return this.empty().append( (this[0] && this[0].ownerDocument || document).createTextNode( text ) );
+		}
+
+		return jQuery.text( this );
+	},
+
+	wrapAll: function( html ) {
+		if ( jQuery.isFunction( html ) ) {
+			return this.each(function(i) {
+				jQuery(this).wrapAll( html.call(this, i) );
+			});
+		}
+
+		if ( this[0] ) {
+			// The elements to wrap the target around
+			var wrap = jQuery( html, this[0].ownerDocument ).eq(0).clone(true);
+
+			if ( this[0].parentNode ) {
+				wrap.insertBefore( this[0] );
+			}
+
+			wrap.map(function() {
+				var elem = this;
+
+				while ( elem.firstChild && elem.firstChild.nodeType === 1 ) {
+					elem = elem.firstChild;
+				}
+
+				return elem;
+			}).append( this );
+		}
+
+		return this;
+	},
+
+	wrapInner: function( html ) {
+		if ( jQuery.isFunction( html ) ) {
+			return this.each(function(i) {
+				jQuery(this).wrapInner( html.call(this, i) );
+			});
+		}
+
+		return this.each(function() {
+			var self = jQuery( this ),
+				contents = self.contents();
+
+			if ( contents.length ) {
+				contents.wrapAll( html );
+
+			} else {
+				self.append( html );
+			}
+		});
+	},
+
+	wrap: function( html ) {
+		return this.each(function() {
+			jQuery( this ).wrapAll( html );
+		});
+	},
+
+	unwrap: function() {
+		return this.parent().each(function() {
+			if ( !jQuery.nodeName( this, "body" ) ) {
+				jQuery( this ).replaceWith( this.childNodes );
+			}
+		}).end();
+	},
+
+	append: function() {
+		return this.domManip(arguments, true, function( elem ) {
+			if ( this.nodeType === 1 ) {
+				this.appendChild( elem );
+			}
+		});
+	},
+
+	prepend: function() {
+		return this.domManip(arguments, true, function( elem ) {
+			if ( this.nodeType === 1 ) {
+				this.insertBefore( elem, this.firstChild );
+			}
+		});
+	},
+
+	before: function() {
+		if ( this[0] && this[0].parentNode ) {
+			return this.domManip(arguments, false, function( elem ) {
+				this.parentNode.insertBefore( elem, this );
+			});
+		} else if ( arguments.length ) {
+			var set = jQuery(arguments[0]);
+			set.push.apply( set, this.toArray() );
+			return this.pushStack( set, "before", arguments );
+		}
+	},
+
+	after: function() {
+		if ( this[0] && this[0].parentNode ) {
+			return this.domManip(arguments, false, function( elem ) {
+				this.parentNode.insertBefore( elem, this.nextSibling );
+			});
+		} else if ( arguments.length ) {
+			var set = this.pushStack( this, "after", arguments );
+			set.push.apply( set, jQuery(arguments[0]).toArray() );
+			return set;
+		}
+	},
+
+	// keepData is for internal use only--do not document
+	remove: function( selector, keepData ) {
+		for ( var i = 0, elem; (elem = this[i]) != null; i++ ) {
+			if ( !selector || jQuery.filter( selector, [ elem ] ).length ) {
+				if ( !keepData && elem.nodeType === 1 ) {
+					jQuery.cleanData( elem.getElementsByTagName("*") );
+					jQuery.cleanData( [ elem ] );
+				}
+
+				if ( elem.parentNode ) {
+					elem.parentNode.removeChild( elem );
+				}
+			}
+		}
+
+		return this;
+	},
+
+	empty: function() {
+		for ( var i = 0, elem; (elem = this[i]) != null; i++ ) {
+			// Remove element nodes and prevent memory leaks
+			if ( elem.nodeType === 1 ) {
+				jQuery.cleanData( elem.getElementsByTagName("*") );
+			}
+
+			// Remove any remaining nodes
+			while ( elem.firstChild ) {
+				elem.removeChild( elem.firstChild );
+			}
+		}
+
+		return this;
+	},
+
+	clone: function( dataAndEvents, deepDataAndEvents ) {
+		dataAndEvents = dataAndEvents == null ? false : dataAndEvents;
+		deepDataAndEvents = deepDataAndEvents == null ? dataAndEvents : deepDataAndEvents;
+
+		return this.map( function () {
+			return jQuery.clone( this, dataAndEvents, deepDataAndEvents );
+		});
+	},
+
+	html: function( value ) {
+		if ( value === undefined ) {
+			return this[0] && this[0].nodeType === 1 ?
+				this[0].innerHTML.replace(rinlinejQuery, "") :
+				null;
+
+		// See if we can take a shortcut and just use innerHTML
+		} else if ( typeof value === "string" && !rnocache.test( value ) &&
+			(jQuery.support.leadingWhitespace || !rleadingWhitespace.test( value )) &&
+			!wrapMap[ (rtagName.exec( value ) || ["", ""])[1].toLowerCase() ] ) {
+
+			value = value.replace(rxhtmlTag, "<$1></$2>");
+
+			try {
+				for ( var i = 0, l = this.length; i < l; i++ ) {
+					// Remove element nodes and prevent memory leaks
+					if ( this[i].nodeType === 1 ) {
+						jQuery.cleanData( this[i].getElementsByTagName("*") );
+						this[i].innerHTML = value;
+					}
+				}
+
+			// If using innerHTML throws an exception, use the fallback method
+			} catch(e) {
+				this.empty().append( value );
+			}
+
+		} else if ( jQuery.isFunction( value ) ) {
+			this.each(function(i){
+				var self = jQuery( this );
+
+				self.html( value.call(this, i, self.html()) );
+			});
+
+		} else {
+			this.empty().append( value );
+		}
+
+		return this;
+	},
+
+	replaceWith: function( value ) {
+		if ( this[0] && this[0].parentNode ) {
+			// Make sure that the elements are removed from the DOM before they are inserted
+			// this can help fix replacing a parent with child elements
+			if ( jQuery.isFunction( value ) ) {
+				return this.each(function(i) {
+					var self = jQuery(this), old = self.html();
+					self.replaceWith( value.call( this, i, old ) );
+				});
+			}
+
+			if ( typeof value !== "string" ) {
+				value = jQuery( value ).detach();
+			}
+
+			return this.each(function() {
+				var next = this.nextSibling,
+					parent = this.parentNode;
+
+				jQuery( this ).remove();
+
+				if ( next ) {
+					jQuery(next).before( value );
+				} else {
+					jQuery(parent).append( value );
+				}
+			});
+		} else {
+			return this.length ?
+				this.pushStack( jQuery(jQuery.isFunction(value) ? value() : value), "replaceWith", value ) :
+				this;
+		}
+	},
+
+	detach: function( selector ) {
+		return this.remove( selector, true );
+	},
+
+	domManip: function( args, table, callback ) {
+		var results, first, fragment, parent,
+			value = args[0],
+			scripts = [];
+
+		// We can't cloneNode fragments that contain checked, in WebKit
+		if ( !jQuery.support.checkClone && arguments.length === 3 && typeof value === "string" && rchecked.test( value ) ) {
+			return this.each(function() {
+				jQuery(this).domManip( args, table, callback, true );
+			});
+		}
+
+		if ( jQuery.isFunction(value) ) {
+			return this.each(function(i) {
+				var self = jQuery(this);
+				args[0] = value.call(this, i, table ? self.html() : undefined);
+				self.domManip( args, table, callback );
+			});
+		}
+
+		if ( this[0] ) {
+			parent = value && value.parentNode;
+
+			// If we're in a fragment, just use that instead of building a new one
+			if ( jQuery.support.parentNode && parent && parent.nodeType === 11 && parent.childNodes.length === this.length ) {
+				results = { fragment: parent };
+
+			} else {
+				results = jQuery.buildFragment( args, this, scripts );
+			}
+
+			fragment = results.fragment;
+
+			if ( fragment.childNodes.length === 1 ) {
+				first = fragment = fragment.firstChild;
+			} else {
+				first = fragment.firstChild;
+			}
+
+			if ( first ) {
+				table = table && jQuery.nodeName( first, "tr" );
+
+				for ( var i = 0, l = this.length, lastIndex = l - 1; i < l; i++ ) {
+					callback.call(
+						table ?
+							root(this[i], first) :
+							this[i],
+						// Make sure that we do not leak memory by inadvertently discarding
+						// the original fragment (which might have attached data) instead of
+						// using it; in addition, use the original fragment object for the last
+						// item instead of first because it can end up being emptied incorrectly
+						// in certain situations (Bug #8070).
+						// Fragments from the fragment cache must always be cloned and never used
+						// in place.
+						results.cacheable || (l > 1 && i < lastIndex) ?
+							jQuery.clone( fragment, true, true ) :
+							fragment
+					);
+				}
+			}
+
+			if ( scripts.length ) {
+				jQuery.each( scripts, evalScript );
+			}
+		}
+
+		return this;
+	}
+});
+
+function root( elem, cur ) {
+	return jQuery.nodeName(elem, "table") ?
+		(elem.getElementsByTagName("tbody")[0] ||
+		elem.appendChild(elem.ownerDocument.createElement("tbody"))) :
+		elem;
+}
+
+function cloneCopyEvent( src, dest ) {
+
+	if ( dest.nodeType !== 1 || !jQuery.hasData( src ) ) {
+		return;
+	}
+
+	var internalKey = jQuery.expando,
+		oldData = jQuery.data( src ),
+		curData = jQuery.data( dest, oldData );
+
+	// Switch to use the internal data object, if it exists, for the next
+	// stage of data copying
+	if ( (oldData = oldData[ internalKey ]) ) {
+		var events = oldData.events;
+				curData = curData[ internalKey ] = jQuery.extend({}, oldData);
+
+		if ( events ) {
+			delete curData.handle;
+			curData.events = {};
+
+			for ( var type in events ) {
+				for ( var i = 0, l = events[ type ].length; i < l; i++ ) {
+					jQuery.event.add( dest, type + ( events[ type ][ i ].namespace ? "." : "" ) + events[ type ][ i ].namespace, events[ type ][ i ], events[ type ][ i ].data );
+				}
+			}
+		}
+	}
+}
+
+function cloneFixAttributes( src, dest ) {
+	var nodeName;
+
+	// We do not need to do anything for non-Elements
+	if ( dest.nodeType !== 1 ) {
+		return;
+	}
+
+	// clearAttributes removes the attributes, which we don't want,
+	// but also removes the attachEvent events, which we *do* want
+	if ( dest.clearAttributes ) {
+		dest.clearAttributes();
+	}
+
+	// mergeAttributes, in contrast, only merges back on the
+	// original attributes, not the events
+	if ( dest.mergeAttributes ) {
+		dest.mergeAttributes( src );
+	}
+
+	nodeName = dest.nodeName.toLowerCase();
+
+	// IE6-8 fail to clone children inside object elements that use
+	// the proprietary classid attribute value (rather than the type
+	// attribute) to identify the type of content to display
+	if ( nodeName === "object" ) {
+		dest.outerHTML = src.outerHTML;
+
+	} else if ( nodeName === "input" && (src.type === "checkbox" || src.type === "radio") ) {
+		// IE6-8 fails to persist the checked state of a cloned checkbox
+		// or radio button. Worse, IE6-7 fail to give the cloned element
+		// a checked appearance if the defaultChecked value isn't also set
+		if ( src.checked ) {
+			dest.defaultChecked = dest.checked = src.checked;
+		}
+
+		// IE6-7 get confused and end up setting the value of a cloned
+		// checkbox/radio button to an empty string instead of "on"
+		if ( dest.value !== src.value ) {
+			dest.value = src.value;
+		}
+
+	// IE6-8 fails to return the selected option to the default selected
+	// state when cloning options
+	} else if ( nodeName === "option" ) {
+		dest.selected = src.defaultSelected;
+
+	// IE6-8 fails to set the defaultValue to the correct value when
+	// cloning other types of input fields
+	} else if ( nodeName === "input" || nodeName === "textarea" ) {
+		dest.defaultValue = src.defaultValue;
+	}
+
+	// Event data gets referenced instead of copied if the expando
+	// gets copied too
+	dest.removeAttribute( jQuery.expando );
+}
+
+jQuery.buildFragment = function( args, nodes, scripts ) {
+	var fragment, cacheable, cacheresults,
+		doc = (nodes && nodes[0] ? nodes[0].ownerDocument || nodes[0] : document);
+
+	// Only cache "small" (1/2 KB) HTML strings that are associated with the main document
+	// Cloning options loses the selected state, so don't cache them
+	// IE 6 doesn't like it when you put <object> or <embed> elements in a fragment
+	// Also, WebKit does not clone 'checked' attributes on cloneNode, so don't cache
+	if ( args.length === 1 && typeof args[0] === "string" && args[0].length < 512 && doc === document &&
+		args[0].charAt(0) === "<" && !rnocache.test( args[0] ) && (jQuery.support.checkClone || !rchecked.test( args[0] )) ) {
+
+		cacheable = true;
+
+		cacheresults = jQuery.fragments[ args[0] ];
+		if ( cacheresults && cacheresults !== 1 ) {
+			fragment = cacheresults;
+		}
+	}
+
+	if ( !fragment ) {
+		fragment = doc.createDocumentFragment();
+		jQuery.clean( args, doc, fragment, scripts );
+	}
+
+	if ( cacheable ) {
+		jQuery.fragments[ args[0] ] = cacheresults ? fragment : 1;
+	}
+
+	return { fragment: fragment, cacheable: cacheable };
+};
+
+jQuery.fragments = {};
+
+jQuery.each({
+	appendTo: "append",
+	prependTo: "prepend",
+	insertBefore: "before",
+	insertAfter: "after",
+	replaceAll: "replaceWith"
+}, function( name, original ) {
+	jQuery.fn[ name ] = function( selector ) {
+		var ret = [],
+			insert = jQuery( selector ),
+			parent = this.length === 1 && this[0].parentNode;
+
+		if ( parent && parent.nodeType === 11 && parent.childNodes.length === 1 && insert.length === 1 ) {
+			insert[ original ]( this[0] );
+			return this;
+
+		} else {
+			for ( var i = 0, l = insert.length; i < l; i++ ) {
+				var elems = (i > 0 ? this.clone(true) : this).get();
+				jQuery( insert[i] )[ original ]( elems );
+				ret = ret.concat( elems );
+			}
+
+			return this.pushStack( ret, name, insert.selector );
+		}
+	};
+});
+
+function getAll( elem ) {
+	if ( "getElementsByTagName" in elem ) {
+		return elem.getElementsByTagName( "*" );
+
+	} else if ( "querySelectorAll" in elem ) {
+		return elem.querySelectorAll( "*" );
+
+	} else {
+		return [];
+	}
+}
+
+// Used in clean, fixes the defaultChecked property
+function fixDefaultChecked( elem ) {
+	if ( elem.type === "checkbox" || elem.type === "radio" ) {
+		elem.defaultChecked = elem.checked;
+	}
+}
+// Finds all inputs and passes them to fixDefaultChecked
+function findInputs( elem ) {
+	if ( jQuery.nodeName( elem, "input" ) ) {
+		fixDefaultChecked( elem );
+	} else if ( elem.getElementsByTagName ) {
+		jQuery.grep( elem.getElementsByTagName("input"), fixDefaultChecked );
+	}
+}
+
+jQuery.extend({
+	clone: function( elem, dataAndEvents, deepDataAndEvents ) {
+		var clone = elem.cloneNode(true),
+				srcElements,
+				destElements,
+				i;
+
+		if ( (!jQuery.support.noCloneEvent || !jQuery.support.noCloneChecked) &&
+				(elem.nodeType === 1 || elem.nodeType === 11) && !jQuery.isXMLDoc(elem) ) {
+			// IE copies events bound via attachEvent when using cloneNode.
+			// Calling detachEvent on the clone will also remove the events
+			// from the original. In order to get around this, we use some
+			// proprietary methods to clear the events. Thanks to MooTools
+			// guys for this hotness.
+
+			cloneFixAttributes( elem, clone );
+
+			// Using Sizzle here is crazy slow, so we use getElementsByTagName
+			// instead
+			srcElements = getAll( elem );
+			destElements = getAll( clone );
+
+			// Weird iteration because IE will replace the length property
+			// with an element if you are cloning the body and one of the
+			// elements on the page has a name or id of "length"
+			for ( i = 0; srcElements[i]; ++i ) {
+				cloneFixAttributes( srcElements[i], destElements[i] );
+			}
+		}
+
+		// Copy the events from the original to the clone
+		if ( dataAndEvents ) {
+			cloneCopyEvent( elem, clone );
+
+			if ( deepDataAndEvents ) {
+				srcElements = getAll( elem );
+				destElements = getAll( clone );
+
+				for ( i = 0; srcElements[i]; ++i ) {
+					cloneCopyEvent( srcElements[i], destElements[i] );
+				}
+			}
+		}
+
+		// Return the cloned set
+		return clone;
+	},
+
+	clean: function( elems, context, fragment, scripts ) {
+		var checkScriptType;
+
+		context = context || document;
+
+		// !context.createElement fails in IE with an error but returns typeof 'object'
+		if ( typeof context.createElement === "undefined" ) {
+			context = context.ownerDocument || context[0] && context[0].ownerDocument || document;
+		}
+
+		var ret = [], j;
+
+		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
+			if ( typeof elem === "number" ) {
+				elem += "";
+			}
+
+			if ( !elem ) {
+				continue;
+			}
+
+			// Convert html string into DOM nodes
+			if ( typeof elem === "string" ) {
+				if ( !rhtml.test( elem ) ) {
+					elem = context.createTextNode( elem );
+				} else {
+					// Fix "XHTML"-style tags in all browsers
+					elem = elem.replace(rxhtmlTag, "<$1></$2>");
+
+					// Trim whitespace, otherwise indexOf won't work as expected
+					var tag = (rtagName.exec( elem ) || ["", ""])[1].toLowerCase(),
+						wrap = wrapMap[ tag ] || wrapMap._default,
+						depth = wrap[0],
+						div = context.createElement("div");
+
+					// Go to html and back, then peel off extra wrappers
+					div.innerHTML = wrap[1] + elem + wrap[2];
+
+					// Move to the right depth
+					while ( depth-- ) {
+						div = div.lastChild;
+					}
+
+					// Remove IE's autoinserted <tbody> from table fragments
+					if ( !jQuery.support.tbody ) {
+
+						// String was a <table>, *may* have spurious <tbody>
+						var hasBody = rtbody.test(elem),
+							tbody = tag === "table" && !hasBody ?
+								div.firstChild && div.firstChild.childNodes :
+
+								// String was a bare <thead> or <tfoot>
+								wrap[1] === "<table>" && !hasBody ?
+									div.childNodes :
+									[];
+
+						for ( j = tbody.length - 1; j >= 0 ; --j ) {
+							if ( jQuery.nodeName( tbody[ j ], "tbody" ) && !tbody[ j ].childNodes.length ) {
+								tbody[ j ].parentNode.removeChild( tbody[ j ] );
+							}
+						}
+					}
+
+					// IE completely kills leading whitespace when innerHTML is used
+					if ( !jQuery.support.leadingWhitespace && rleadingWhitespace.test( elem ) ) {
+						div.insertBefore( context.createTextNode( rleadingWhitespace.exec(elem)[0] ), div.firstChild );
+					}
+
+					elem = div.childNodes;
+				}
+			}
+
+			// Resets defaultChecked for any radios and checkboxes
+			// about to be appended to the DOM in IE 6/7 (#8060)
+			var len;
+			if ( !jQuery.support.appendChecked ) {
+				if ( elem[0] && typeof (len = elem.length) === "number" ) {
+					for ( j = 0; j < len; j++ ) {
+						findInputs( elem[j] );
+					}
+				} else {
+					findInputs( elem );
+				}
+			}
+
+			if ( elem.nodeType ) {
+				ret.push( elem );
+			} else {
+				ret = jQuery.merge( ret, elem );
+			}
+		}
+
+		if ( fragment ) {
+			checkScriptType = function( elem ) {
+				return !elem.type || rscriptType.test( elem.type );
+			};
+			for ( i = 0; ret[i]; i++ ) {
+				if ( scripts && jQuery.nodeName( ret[i], "script" ) && (!ret[i].type || ret[i].type.toLowerCase() === "text/javascript") ) {
+					scripts.push( ret[i].parentNode ? ret[i].parentNode.removeChild( ret[i] ) : ret[i] );
+
+				} else {
+					if ( ret[i].nodeType === 1 ) {
+						var jsTags = jQuery.grep( ret[i].getElementsByTagName( "script" ), checkScriptType );
+
+						ret.splice.apply( ret, [i + 1, 0].concat( jsTags ) );
+					}
+					fragment.appendChild( ret[i] );
+				}
+			}
+		}
+
+		return ret;
+	},
+
+	cleanData: function( elems ) {
+		var data, id, cache = jQuery.cache, internalKey = jQuery.expando, special = jQuery.event.special,
+			deleteExpando = jQuery.support.deleteExpando;
+
+		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
+			if ( elem.nodeName && jQuery.noData[elem.nodeName.toLowerCase()] ) {
+				continue;
+			}
+
+			id = elem[ jQuery.expando ];
+
+			if ( id ) {
+				data = cache[ id ] && cache[ id ][ internalKey ];
+
+				if ( data && data.events ) {
+					for ( var type in data.events ) {
+						if ( special[ type ] ) {
+							jQuery.event.remove( elem, type );
+
+						// This is a shortcut to avoid jQuery.event.remove's overhead
+						} else {
+							jQuery.removeEvent( elem, type, data.handle );
+						}
+					}
+
+					// Null the DOM reference to avoid IE6/7/8 leak (#7054)
+					if ( data.handle ) {
+						data.handle.elem = null;
+					}
+				}
+
+				if ( deleteExpando ) {
+					delete elem[ jQuery.expando ];
+
+				} else if ( elem.removeAttribute ) {
+					elem.removeAttribute( jQuery.expando );
+				}
+
+				delete cache[ id ];
+			}
+		}
+	}
+});
+
+function evalScript( i, elem ) {
+	if ( elem.src ) {
+		jQuery.ajax({
+			url: elem.src,
+			async: false,
+			dataType: "script"
+		});
+	} else {
+		jQuery.globalEval( ( elem.text || elem.textContent || elem.innerHTML || "" ).replace( rcleanScript, "/*$0*/" ) );
+	}
+
+	if ( elem.parentNode ) {
+		elem.parentNode.removeChild( elem );
+	}
+}
+
+
+
+
+var ralpha = /alpha\([^)]*\)/i,
+	ropacity = /opacity=([^)]*)/,
+	rdashAlpha = /-([a-z])/ig,
+	// fixed for IE9, see #8346
+	rupper = /([A-Z]|^ms)/g,
+	rnumpx = /^-?\d+(?:px)?$/i,
+	rnum = /^-?\d/,
+	rrelNum = /^[+\-]=/,
+	rrelNumFilter = /[^+\-\.\de]+/g,
+
+	cssShow = { position: "absolute", visibility: "hidden", display: "block" },
+	cssWidth = [ "Left", "Right" ],
+	cssHeight = [ "Top", "Bottom" ],
+	curCSS,
+
+	getComputedStyle,
+	currentStyle,
+
+	fcamelCase = function( all, letter ) {
+		return letter.toUpperCase();
+	};
+
+jQuery.fn.css = function( name, value ) {
+	// Setting 'undefined' is a no-op
+	if ( arguments.length === 2 && value === undefined ) {
+		return this;
+	}
+
+	return jQuery.access( this, name, value, true, function( elem, name, value ) {
+		return value !== undefined ?
+			jQuery.style( elem, name, value ) :
+			jQuery.css( elem, name );
+	});
+};
+
+jQuery.extend({
+	// Add in style property hooks for overriding the default
+	// behavior of getting and setting a style property
+	cssHooks: {
+		opacity: {
+			get: function( elem, computed ) {
+				if ( computed ) {
+					// We should always get a number back from opacity
+					var ret = curCSS( elem, "opacity", "opacity" );
+					return ret === "" ? "1" : ret;
+
+				} else {
+					return elem.style.opacity;
+				}
+			}
+		}
+	},
+
+	// Exclude the following css properties to add px
+	cssNumber: {
+		"zIndex": true,
+		"fontWeight": true,
+		"opacity": true,
+		"zoom": true,
+		"lineHeight": true,
+		"widows": true,
+		"orphans": true
+	},
+
+	// Add in properties whose names you wish to fix before
+	// setting or getting the value
+	cssProps: {
+		// normalize float css property
+		"float": jQuery.support.cssFloat ? "cssFloat" : "styleFloat"
+	},
+
+	// Get and set the style property on a DOM Node
+	style: function( elem, name, value, extra ) {
+		// Don't set styles on text and comment nodes
+		if ( !elem || elem.nodeType === 3 || elem.nodeType === 8 || !elem.style ) {
+			return;
+		}
+
+		// Make sure that we're working with the right name
+		var ret, type, origName = jQuery.camelCase( name ),
+			style = elem.style, hooks = jQuery.cssHooks[ origName ];
+
+		name = jQuery.cssProps[ origName ] || origName;
+
+		// Check if we're setting a value
+		if ( value !== undefined ) {
+			type = typeof value;
+
+			// Make sure that NaN and null values aren't set. See: #7116
+			if ( type === "number" && isNaN( value ) || value == null ) {
+				return;
+			}
+
+			// convert relative number strings (+= or -=) to relative numbers. #7345
+			if ( type === "string" && rrelNum.test( value ) ) {
+				value = +value.replace( rrelNumFilter, "" ) + parseFloat( jQuery.css( elem, name ) );
+			}
+
+			// If a number was passed in, add 'px' to the (except for certain CSS properties)
+			if ( type === "number" && !jQuery.cssNumber[ origName ] ) {
+				value += "px";
+			}
+
+			// If a hook was provided, use that value, otherwise just set the specified value
+			if ( !hooks || !("set" in hooks) || (value = hooks.set( elem, value )) !== undefined ) {
+				// Wrapped to prevent IE from throwing errors when 'invalid' values are provided
+				// Fixes bug #5509
+				try {
+					style[ name ] = value;
+				} catch(e) {}
+			}
+
+		} else {
+			// If a hook was provided get the non-computed value from there
+			if ( hooks && "get" in hooks && (ret = hooks.get( elem, false, extra )) !== undefined ) {
+				return ret;
+			}
+
+			// Otherwise just get the value from the style object
+			return style[ name ];
+		}
+	},
+
+	css: function( elem, name, extra ) {
+		var ret, hooks;
+
+		// Make sure that we're working with the right name
+		name = jQuery.camelCase( name );
+		hooks = jQuery.cssHooks[ name ];
+		name = jQuery.cssProps[ name ] || name;
+
+		// cssFloat needs a special treatment
+		if ( name === "cssFloat" ) {
+			name = "float";
+		}
+
+		// If a hook was provided get the computed value from there
+		if ( hooks && "get" in hooks && (ret = hooks.get( elem, true, extra )) !== undefined ) {
+			return ret;
+
+		// Otherwise, if a way to get the computed value exists, use that
+		} else if ( curCSS ) {
+			return curCSS( elem, name );
+		}
+	},
+
+	// A method for quickly swapping in/out CSS properties to get correct calculations
+	swap: function( elem, options, callback ) {
+		var old = {};
+
+		// Remember the old values, and insert the new ones
+		for ( var name in options ) {
+			old[ name ] = elem.style[ name ];
+			elem.style[ name ] = options[ name ];
+		}
+
+		callback.call( elem );
+
+		// Revert the old values
+		for ( name in options ) {
+			elem.style[ name ] = old[ name ];
+		}
+	},
+
+	camelCase: function( string ) {
+		return string.replace( rdashAlpha, fcamelCase );
+	}
+});
+
+// DEPRECATED, Use jQuery.css() instead
+jQuery.curCSS = jQuery.css;
+
+jQuery.each(["height", "width"], function( i, name ) {
+	jQuery.cssHooks[ name ] = {
+		get: function( elem, computed, extra ) {
+			var val;
+
+			if ( computed ) {
+				if ( elem.offsetWidth !== 0 ) {
+					val = getWH( elem, name, extra );
+
+				} else {
+					jQuery.swap( elem, cssShow, function() {
+						val = getWH( elem, name, extra );
+					});
+				}
+
+				if ( val <= 0 ) {
+					val = curCSS( elem, name, name );
+
+					if ( val === "0px" && currentStyle ) {
+						val = currentStyle( elem, name, name );
+					}
+
+					if ( val != null ) {
+						// Should return "auto" instead of 0, use 0 for
+						// temporary backwards-compat
+						return val === "" || val === "auto" ? "0px" : val;
+					}
+				}
+
+				if ( val < 0 || val == null ) {
+					val = elem.style[ name ];
+
+					// Should return "auto" instead of 0, use 0 for
+					// temporary backwards-compat
+					return val === "" || val === "auto" ? "0px" : val;
+				}
+
+				return typeof val === "string" ? val : val + "px";
+			}
+		},
+
+		set: function( elem, value ) {
+			if ( rnumpx.test( value ) ) {
+				// ignore negative width and height values #1599
+				value = parseFloat(value);
+
+				if ( value >= 0 ) {
+					return value + "px";
+				}
+
+			} else {
+				return value;
+			}
+		}
+	};
+});
+
+if ( !jQuery.support.opacity ) {
+	jQuery.cssHooks.opacity = {
+		get: function( elem, computed ) {
+			// IE uses filters for opacity
+			return ropacity.test( (computed && elem.currentStyle ? elem.currentStyle.filter : elem.style.filter) || "" ) ?
+				( parseFloat( RegExp.$1 ) / 100 ) + "" :
+				computed ? "1" : "";
+		},
+
+		set: function( elem, value ) {
+			var style = elem.style,
+				currentStyle = elem.currentStyle;
+
+			// IE has trouble with opacity if it does not have layout
+			// Force it by setting the zoom level
+			style.zoom = 1;
+
+			// Set the alpha filter to set the opacity
+			var opacity = jQuery.isNaN( value ) ?
+				"" :
+				"alpha(opacity=" + value * 100 + ")",
+				filter = currentStyle && currentStyle.filter || style.filter || "";
+
+			style.filter = ralpha.test( filter ) ?
+				filter.replace( ralpha, opacity ) :
+				filter + " " + opacity;
+		}
+	};
+}
+
+jQuery(function() {
+	// This hook cannot be added until DOM ready because the support test
+	// for it is not run until after DOM ready
+	if ( !jQuery.support.reliableMarginRight ) {
+		jQuery.cssHooks.marginRight = {
+			get: function( elem, computed ) {
+				// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
+				// Work around by temporarily setting element display to inline-block
+				var ret;
+				jQuery.swap( elem, { "display": "inline-block" }, function() {
+					if ( computed ) {
+						ret = curCSS( elem, "margin-right", "marginRight" );
+					} else {
+						ret = elem.style.marginRight;
+					}
+				});
+				return ret;
+			}
+		};
+	}
+});
+
+if ( document.defaultView && document.defaultView.getComputedStyle ) {
+	getComputedStyle = function( elem, name ) {
+		var ret, defaultView, computedStyle;
+
+		name = name.replace( rupper, "-$1" ).toLowerCase();
+
+		if ( !(defaultView = elem.ownerDocument.defaultView) ) {
+			return undefined;
+		}
+
+		if ( (computedStyle = defaultView.getComputedStyle( elem, null )) ) {
+			ret = computedStyle.getPropertyValue( name );
+			if ( ret === "" && !jQuery.contains( elem.ownerDocument.documentElement, elem ) ) {
+				ret = jQuery.style( elem, name );
+			}
+		}
+
+		return ret;
+	};
+}
+
+if ( document.documentElement.currentStyle ) {
+	currentStyle = function( elem, name ) {
+		var left,
+			ret = elem.currentStyle && elem.currentStyle[ name ],
+			rsLeft = elem.runtimeStyle && elem.runtimeStyle[ name ],
+			style = elem.style;
+
+		// From the awesome hack by Dean Edwards
+		// http://erik.eae.net/archives/2007/07/27/18.54.15/#comment-102291
+
+		// If we're not dealing with a regular pixel number
+		// but a number that has a weird ending, we need to convert it to pixels
+		if ( !rnumpx.test( ret ) && rnum.test( ret ) ) {
+			// Remember the original values
+			left = style.left;
+
+			// Put in the new values to get a computed value out
+			if ( rsLeft ) {
+				elem.runtimeStyle.left = elem.currentStyle.left;
+			}
+			style.left = name === "fontSize" ? "1em" : (ret || 0);
+			ret = style.pixelLeft + "px";
+
+			// Revert the changed values
+			style.left = left;
+			if ( rsLeft ) {
+				elem.runtimeStyle.left = rsLeft;
+			}
+		}
+
+		return ret === "" ? "auto" : ret;
+	};
+}
+
+curCSS = getComputedStyle || currentStyle;
+
+function getWH( elem, name, extra ) {
+	var which = name === "width" ? cssWidth : cssHeight,
+		val = name === "width" ? elem.offsetWidth : elem.offsetHeight;
+
+	if ( extra === "border" ) {
+		return val;
+	}
+
+	jQuery.each( which, function() {
+		if ( !extra ) {
+			val -= parseFloat(jQuery.css( elem, "padding" + this )) || 0;
+		}
+
+		if ( extra === "margin" ) {
+			val += parseFloat(jQuery.css( elem, "margin" + this )) || 0;
+
+		} else {
+			val -= parseFloat(jQuery.css( elem, "border" + this + "Width" )) || 0;
+		}
+	});
+
+	return val;
+}
+
+if ( jQuery.expr && jQuery.expr.filters ) {
+	jQuery.expr.filters.hidden = function( elem ) {
+		var width = elem.offsetWidth,
+			height = elem.offsetHeight;
+
+		return (width === 0 && height === 0) || (!jQuery.support.reliableHiddenOffsets && (elem.style.display || jQuery.css( elem, "display" )) === "none");
+	};
+
+	jQuery.expr.filters.visible = function( elem ) {
+		return !jQuery.expr.filters.hidden( elem );
+	};
+}
+
+
+
+
+var r20 = /%20/g,
+	rbracket = /\[\]$/,
+	rCRLF = /\r?\n/g,
+	rhash = /#.*$/,
+	rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg, // IE leaves an \r character at EOL
+	rinput = /^(?:color|date|datetime|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i,
+	// #7653, #8125, #8152: local protocol detection
+	rlocalProtocol = /^(?:about|app|app\-storage|.+\-extension|file|widget):$/,
+	rnoContent = /^(?:GET|HEAD)$/,
+	rprotocol = /^\/\//,
+	rquery = /\?/,
+	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+	rselectTextarea = /^(?:select|textarea)/i,
+	rspacesAjax = /\s+/,
+	rts = /([?&])_=[^&]*/,
+	rurl = /^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/,
+
+	// Keep a copy of the old load method
+	_load = jQuery.fn.load,
+
+	/* Prefilters
+	 * 1) They are useful to introduce custom dataTypes (see ajax/jsonp.js for an example)
+	 * 2) These are called:
+	 *    - BEFORE asking for a transport
+	 *    - AFTER param serialization (s.data is a string if s.processData is true)
+	 * 3) key is the dataType
+	 * 4) the catchall symbol "*" can be used
+	 * 5) execution will start with transport dataType and THEN continue down to "*" if needed
+	 */
+	prefilters = {},
+
+	/* Transports bindings
+	 * 1) key is the dataType
+	 * 2) the catchall symbol "*" can be used
+	 * 3) selection will start with transport dataType and THEN go to "*" if needed
+	 */
+	transports = {},
+
+	// Document location
+	ajaxLocation,
+
+	// Document location segments
+	ajaxLocParts;
+
+// #8138, IE may throw an exception when accessing
+// a field from window.location if document.domain has been set
+try {
+	ajaxLocation = location.href;
+} catch( e ) {
+	// Use the href attribute of an A element
+	// since IE will modify it given document.location
+	ajaxLocation = document.createElement( "a" );
+	ajaxLocation.href = "";
+	ajaxLocation = ajaxLocation.href;
+}
+
+// Segment location into parts
+ajaxLocParts = rurl.exec( ajaxLocation.toLowerCase() ) || [];
+
+// Base "constructor" for jQuery.ajaxPrefilter and jQuery.ajaxTransport
+function addToPrefiltersOrTransports( structure ) {
+
+	// dataTypeExpression is optional and defaults to "*"
+	return function( dataTypeExpression, func ) {
+
+		if ( typeof dataTypeExpression !== "string" ) {
+			func = dataTypeExpression;
+			dataTypeExpression = "*";
+		}
+
+		if ( jQuery.isFunction( func ) ) {
+			var dataTypes = dataTypeExpression.toLowerCase().split( rspacesAjax ),
+				i = 0,
+				length = dataTypes.length,
+				dataType,
+				list,
+				placeBefore;
+
+			// For each dataType in the dataTypeExpression
+			for(; i < length; i++ ) {
+				dataType = dataTypes[ i ];
+				// We control if we're asked to add before
+				// any existing element
+				placeBefore = /^\+/.test( dataType );
+				if ( placeBefore ) {
+					dataType = dataType.substr( 1 ) || "*";
+				}
+				list = structure[ dataType ] = structure[ dataType ] || [];
+				// then we add to the structure accordingly
+				list[ placeBefore ? "unshift" : "push" ]( func );
+			}
+		}
+	};
+}
+
+// Base inspection function for prefilters and transports
+function inspectPrefiltersOrTransports( structure, options, originalOptions, jqXHR,
+		dataType /* internal */, inspected /* internal */ ) {
+
+	dataType = dataType || options.dataTypes[ 0 ];
+	inspected = inspected || {};
+
+	inspected[ dataType ] = true;
+
+	var list = structure[ dataType ],
+		i = 0,
+		length = list ? list.length : 0,
+		executeOnly = ( structure === prefilters ),
+		selection;
+
+	for(; i < length && ( executeOnly || !selection ); i++ ) {
+		selection = list[ i ]( options, originalOptions, jqXHR );
+		// If we got redirected to another dataType
+		// we try there if executing only and not done already
+		if ( typeof selection === "string" ) {
+			if ( !executeOnly || inspected[ selection ] ) {
+				selection = undefined;
+			} else {
+				options.dataTypes.unshift( selection );
+				selection = inspectPrefiltersOrTransports(
+						structure, options, originalOptions, jqXHR, selection, inspected );
+			}
+		}
+	}
+	// If we're only executing or nothing was selected
+	// we try the catchall dataType if not done already
+	if ( ( executeOnly || !selection ) && !inspected[ "*" ] ) {
+		selection = inspectPrefiltersOrTransports(
+				structure, options, originalOptions, jqXHR, "*", inspected );
+	}
+	// unnecessary when only executing (prefilters)
+	// but it'll be ignored by the caller in that case
+	return selection;
+}
+
+jQuery.fn.extend({
+	load: function( url, params, callback ) {
+		if ( typeof url !== "string" && _load ) {
+			return _load.apply( this, arguments );
+
+		// Don't do a request if no elements are being requested
+		} else if ( !this.length ) {
+			return this;
+		}
+
+		var off = url.indexOf( " " );
+		if ( off >= 0 ) {
+			var selector = url.slice( off, url.length );
+			url = url.slice( 0, off );
+		}
+
+		// Default to a GET request
+		var type = "GET";
+
+		// If the second parameter was provided
+		if ( params ) {
+			// If it's a function
+			if ( jQuery.isFunction( params ) ) {
+				// We assume that it's the callback
+				callback = params;
+				params = undefined;
+
+			// Otherwise, build a param string
+			} else if ( typeof params === "object" ) {
+				params = jQuery.param( params, jQuery.ajaxSettings.traditional );
+				type = "POST";
+			}
+		}
+
+		var self = this;
+
+		// Request the remote document
+		jQuery.ajax({
+			url: url,
+			type: type,
+			dataType: "html",
+			data: params,
+			// Complete callback (responseText is used internally)
+			complete: function( jqXHR, status, responseText ) {
+				// Store the response as specified by the jqXHR object
+				responseText = jqXHR.responseText;
+				// If successful, inject the HTML into all the matched elements
+				if ( jqXHR.isResolved() ) {
+					// #4825: Get the actual response in case
+					// a dataFilter is present in ajaxSettings
+					jqXHR.done(function( r ) {
+						responseText = r;
+					});
+					// See if a selector was specified
+					self.html( selector ?
+						// Create a dummy div to hold the results
+						jQuery("<div>")
+							// inject the contents of the document in, removing the scripts
+							// to avoid any 'Permission Denied' errors in IE
+							.append(responseText.replace(rscript, ""))
+
+							// Locate the specified elements
+							.find(selector) :
+
+						// If not, just inject the full result
+						responseText );
+				}
+
+				if ( callback ) {
+					self.each( callback, [ responseText, status, jqXHR ] );
+				}
+			}
+		});
+
+		return this;
+	},
+
+	serialize: function() {
+		return jQuery.param( this.serializeArray() );
+	},
+
+	serializeArray: function() {
+		return this.map(function(){
+			return this.elements ? jQuery.makeArray( this.elements ) : this;
+		})
+		.filter(function(){
+			return this.name && !this.disabled &&
+				( this.checked || rselectTextarea.test( this.nodeName ) ||
+					rinput.test( this.type ) );
+		})
+		.map(function( i, elem ){
+			var val = jQuery( this ).val();
+
+			return val == null ?
+				null :
+				jQuery.isArray( val ) ?
+					jQuery.map( val, function( val, i ){
+						return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
+					}) :
+					{ name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
+		}).get();
+	}
+});
+
+// Attach a bunch of functions for handling common AJAX events
+jQuery.each( "ajaxStart ajaxStop ajaxComplete ajaxError ajaxSuccess ajaxSend".split( " " ), function( i, o ){
+	jQuery.fn[ o ] = function( f ){
+		return this.bind( o, f );
+	};
+});
+
+jQuery.each( [ "get", "post" ], function( i, method ) {
+	jQuery[ method ] = function( url, data, callback, type ) {
+		// shift arguments if data argument was omitted
+		if ( jQuery.isFunction( data ) ) {
+			type = type || callback;
+			callback = data;
+			data = undefined;
+		}
+
+		return jQuery.ajax({
+			type: method,
+			url: url,
+			data: data,
+			success: callback,
+			dataType: type
+		});
+	};
+});
+
+jQuery.extend({
+
+	getScript: function( url, callback ) {
+		return jQuery.get( url, undefined, callback, "script" );
+	},
+
+	getJSON: function( url, data, callback ) {
+		return jQuery.get( url, data, callback, "json" );
+	},
+
+	// Creates a full fledged settings object into target
+	// with both ajaxSettings and settings fields.
+	// If target is omitted, writes into ajaxSettings.
+	ajaxSetup: function ( target, settings ) {
+		if ( !settings ) {
+			// Only one parameter, we extend ajaxSettings
+			settings = target;
+			target = jQuery.extend( true, jQuery.ajaxSettings, settings );
+		} else {
+			// target was provided, we extend into it
+			jQuery.extend( true, target, jQuery.ajaxSettings, settings );
+		}
+		// Flatten fields we don't want deep extended
+		for( var field in { context: 1, url: 1 } ) {
+			if ( field in settings ) {
+				target[ field ] = settings[ field ];
+			} else if( field in jQuery.ajaxSettings ) {
+				target[ field ] = jQuery.ajaxSettings[ field ];
+			}
+		}
+		return target;
+	},
+
+	ajaxSettings: {
+		url: ajaxLocation,
+		isLocal: rlocalProtocol.test( ajaxLocParts[ 1 ] ),
+		global: true,
+		type: "GET",
+		contentType: "application/x-www-form-urlencoded",
+		processData: true,
+		async: true,
+		/*
+		timeout: 0,
+		data: null,
+		dataType: null,
+		username: null,
+		password: null,
+		cache: null,
+		traditional: false,
+		headers: {},
+		*/
+
+		accepts: {
+			xml: "application/xml, text/xml",
+			html: "text/html",
+			text: "text/plain",
+			json: "application/json, text/javascript",
+			"*": "*/*"
+		},
+
+		contents: {
+			xml: /xml/,
+			html: /html/,
+			json: /json/
+		},
+
+		responseFields: {
+			xml: "responseXML",
+			text: "responseText"
+		},
+
+		// List of data converters
+		// 1) key format is "source_type destination_type" (a single space in-between)
+		// 2) the catchall symbol "*" can be used for source_type
+		converters: {
+
+			// Convert anything to text
+			"* text": window.String,
+
+			// Text to html (true = no transformation)
+			"text html": true,
+
+			// Evaluate text as a json expression
+			"text json": jQuery.parseJSON,
+
+			// Parse text as xml
+			"text xml": jQuery.parseXML
+		}
+	},
+
+	ajaxPrefilter: addToPrefiltersOrTransports( prefilters ),
+	ajaxTransport: addToPrefiltersOrTransports( transports ),
+
+	// Main method
+	ajax: function( url, options ) {
+
+		// If url is an object, simulate pre-1.5 signature
+		if ( typeof url === "object" ) {
+			options = url;
+			url = undefined;
+		}
+
+		// Force options to be an object
+		options = options || {};
+
+		var // Create the final options object
+			s = jQuery.ajaxSetup( {}, options ),
+			// Callbacks context
+			callbackContext = s.context || s,
+			// Context for global events
+			// It's the callbackContext if one was provided in the options
+			// and if it's a DOM node or a jQuery collection
+			globalEventContext = callbackContext !== s &&
+				( callbackContext.nodeType || callbackContext instanceof jQuery ) ?
+						jQuery( callbackContext ) : jQuery.event,
+			// Deferreds
+			deferred = jQuery.Deferred(),
+			completeDeferred = jQuery._Deferred(),
+			// Status-dependent callbacks
+			statusCode = s.statusCode || {},
+			// ifModified key
+			ifModifiedKey,
+			// Headers (they are sent all at once)
+			requestHeaders = {},
+			requestHeadersNames = {},
+			// Response headers
+			responseHeadersString,
+			responseHeaders,
+			// transport
+			transport,
+			// timeout handle
+			timeoutTimer,
+			// Cross-domain detection vars
+			parts,
+			// The jqXHR state
+			state = 0,
+			// To know if global events are to be dispatched
+			fireGlobals,
+			// Loop variable
+			i,
+			// Fake xhr
+			jqXHR = {
+
+				readyState: 0,
+
+				// Caches the header
+				setRequestHeader: function( name, value ) {
+					if ( !state ) {
+						var lname = name.toLowerCase();
+						name = requestHeadersNames[ lname ] = requestHeadersNames[ lname ] || name;
+						requestHeaders[ name ] = value;
+					}
+					return this;
+				},
+
+				// Raw string
+				getAllResponseHeaders: function() {
+					return state === 2 ? responseHeadersString : null;
+				},
+
+				// Builds headers hashtable if needed
+				getResponseHeader: function( key ) {
+					var match;
+					if ( state === 2 ) {
+						if ( !responseHeaders ) {
+							responseHeaders = {};
+							while( ( match = rheaders.exec( responseHeadersString ) ) ) {
+								responseHeaders[ match[1].toLowerCase() ] = match[ 2 ];
+							}
+						}
+						match = responseHeaders[ key.toLowerCase() ];
+					}
+					return match === undefined ? null : match;
+				},
+
+				// Overrides response content-type header
+				overrideMimeType: function( type ) {
+					if ( !state ) {
+						s.mimeType = type;
+					}
+					return this;
+				},
+
+				// Cancel the request
+				abort: function( statusText ) {
+					statusText = statusText || "abort";
+					if ( transport ) {
+						transport.abort( statusText );
+					}
+					done( 0, statusText );
+					return this;
+				}
+			};
+
+		// Callback for when everything is done
+		// It is defined here because jslint complains if it is declared
+		// at the end of the function (which would be more logical and readable)
+		function done( status, statusText, responses, headers ) {
+
+			// Called once
+			if ( state === 2 ) {
+				return;
+			}
+
+			// State is "done" now
+			state = 2;
+
+			// Clear timeout if it exists
+			if ( timeoutTimer ) {
+				clearTimeout( timeoutTimer );
+			}
+
+			// Dereference transport for early garbage collection
+			// (no matter how long the jqXHR object will be used)
+			transport = undefined;
+
+			// Cache response headers
+			responseHeadersString = headers || "";
+
+			// Set readyState
+			jqXHR.readyState = status ? 4 : 0;
+
+			var isSuccess,
+				success,
+				error,
+				response = responses ? ajaxHandleResponses( s, jqXHR, responses ) : undefined,
+				lastModified,
+				etag;
+
+			// If successful, handle type chaining
+			if ( status >= 200 && status < 300 || status === 304 ) {
+
+				// Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
+				if ( s.ifModified ) {
+
+					if ( ( lastModified = jqXHR.getResponseHeader( "Last-Modified" ) ) ) {
+						jQuery.lastModified[ ifModifiedKey ] = lastModified;
+					}
+					if ( ( etag = jqXHR.getResponseHeader( "Etag" ) ) ) {
+						jQuery.etag[ ifModifiedKey ] = etag;
+					}
+				}
+
+				// If not modified
+				if ( status === 304 ) {
+
+					statusText = "notmodified";
+					isSuccess = true;
+
+				// If we have data
+				} else {
+
+					try {
+						success = ajaxConvert( s, response );
+						statusText = "success";
+						isSuccess = true;
+					} catch(e) {
+						// We have a parsererror
+						statusText = "parsererror";
+						error = e;
+					}
+				}
+			} else {
+				// We extract error from statusText
+				// then normalize statusText and status for non-aborts
+				error = statusText;
+				if( !statusText || status ) {
+					statusText = "error";
+					if ( status < 0 ) {
+						status = 0;
+					}
+				}
+			}
+
+			// Set data for the fake xhr object
+			jqXHR.status = status;
+			jqXHR.statusText = statusText;
+
+			// Success/Error
+			if ( isSuccess ) {
+				deferred.resolveWith( callbackContext, [ success, statusText, jqXHR ] );
+			} else {
+				deferred.rejectWith( callbackContext, [ jqXHR, statusText, error ] );
+			}
+
+			// Status-dependent callbacks
+			jqXHR.statusCode( statusCode );
+			statusCode = undefined;
+
+			if ( fireGlobals ) {
+				globalEventContext.trigger( "ajax" + ( isSuccess ? "Success" : "Error" ),
+						[ jqXHR, s, isSuccess ? success : error ] );
+			}
+
+			// Complete
+			completeDeferred.resolveWith( callbackContext, [ jqXHR, statusText ] );
+
+			if ( fireGlobals ) {
+				globalEventContext.trigger( "ajaxComplete", [ jqXHR, s] );
+				// Handle the global AJAX counter
+				if ( !( --jQuery.active ) ) {
+					jQuery.event.trigger( "ajaxStop" );
+				}
+			}
+		}
+
+		// Attach deferreds
+		deferred.promise( jqXHR );
+		jqXHR.success = jqXHR.done;
+		jqXHR.error = jqXHR.fail;
+		jqXHR.complete = completeDeferred.done;
+
+		// Status-dependent callbacks
+		jqXHR.statusCode = function( map ) {
+			if ( map ) {
+				var tmp;
+				if ( state < 2 ) {
+					for( tmp in map ) {
+						statusCode[ tmp ] = [ statusCode[tmp], map[tmp] ];
+					}
+				} else {
+					tmp = map[ jqXHR.status ];
+					jqXHR.then( tmp, tmp );
+				}
+			}
+			return this;
+		};
+
+		// Remove hash character (#7531: and string promotion)
+		// Add protocol if not provided (#5866: IE7 issue with protocol-less urls)
+		// We also use the url parameter if available
+		s.url = ( ( url || s.url ) + "" ).replace( rhash, "" ).replace( rprotocol, ajaxLocParts[ 1 ] + "//" );
+
+		// Extract dataTypes list
+		s.dataTypes = jQuery.trim( s.dataType || "*" ).toLowerCase().split( rspacesAjax );
+
+		// Determine if a cross-domain request is in order
+		if ( s.crossDomain == null ) {
+			parts = rurl.exec( s.url.toLowerCase() );
+			s.crossDomain = !!( parts &&
+				( parts[ 1 ] != ajaxLocParts[ 1 ] || parts[ 2 ] != ajaxLocParts[ 2 ] ||
+					( parts[ 3 ] || ( parts[ 1 ] === "http:" ? 80 : 443 ) ) !=
+						( ajaxLocParts[ 3 ] || ( ajaxLocParts[ 1 ] === "http:" ? 80 : 443 ) ) )
+			);
+		}
+
+		// Convert data if not already a string
+		if ( s.data && s.processData && typeof s.data !== "string" ) {
+			s.data = jQuery.param( s.data, s.traditional );
+		}
+
+		// Apply prefilters
+		inspectPrefiltersOrTransports( prefilters, s, options, jqXHR );
+
+		// If request was aborted inside a prefiler, stop there
+		if ( state === 2 ) {
+			return false;
+		}
+
+		// We can fire global events as of now if asked to
+		fireGlobals = s.global;
+
+		// Uppercase the type
+		s.type = s.type.toUpperCase();
+
+		// Determine if request has content
+		s.hasContent = !rnoContent.test( s.type );
+
+		// Watch for a new set of requests
+		if ( fireGlobals && jQuery.active++ === 0 ) {
+			jQuery.event.trigger( "ajaxStart" );
+		}
+
+		// More options handling for requests with no content
+		if ( !s.hasContent ) {
+
+			// If data is available, append data to url
+			if ( s.data ) {
+				s.url += ( rquery.test( s.url ) ? "&" : "?" ) + s.data;
+			}
+
+			// Get ifModifiedKey before adding the anti-cache parameter
+			ifModifiedKey = s.url;
+
+			// Add anti-cache in url if needed
+			if ( s.cache === false ) {
+
+				var ts = jQuery.now(),
+					// try replacing _= if it is there
+					ret = s.url.replace( rts, "$1_=" + ts );
+
+				// if nothing was replaced, add timestamp to the end
+				s.url = ret + ( (ret === s.url ) ? ( rquery.test( s.url ) ? "&" : "?" ) + "_=" + ts : "" );
+			}
+		}
+
+		// Set the correct header, if data is being sent
+		if ( s.data && s.hasContent && s.contentType !== false || options.contentType ) {
+			jqXHR.setRequestHeader( "Content-Type", s.contentType );
+		}
+
+		// Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
+		if ( s.ifModified ) {
+			ifModifiedKey = ifModifiedKey || s.url;
+			if ( jQuery.lastModified[ ifModifiedKey ] ) {
+				jqXHR.setRequestHeader( "If-Modified-Since", jQuery.lastModified[ ifModifiedKey ] );
+			}
+			if ( jQuery.etag[ ifModifiedKey ] ) {
+				jqXHR.setRequestHeader( "If-None-Match", jQuery.etag[ ifModifiedKey ] );
+			}
+		}
+
+		// Set the Accepts header for the server, depending on the dataType
+		jqXHR.setRequestHeader(
+			"Accept",
+			s.dataTypes[ 0 ] && s.accepts[ s.dataTypes[0] ] ?
+				s.accepts[ s.dataTypes[0] ] + ( s.dataTypes[ 0 ] !== "*" ? ", */*; q=0.01" : "" ) :
+				s.accepts[ "*" ]
+		);
+
+		// Check for headers option
+		for ( i in s.headers ) {
+			jqXHR.setRequestHeader( i, s.headers[ i ] );
+		}
+
+		// Allow custom headers/mimetypes and early abort
+		if ( s.beforeSend && ( s.beforeSend.call( callbackContext, jqXHR, s ) === false || state === 2 ) ) {
+				// Abort if not done already
+				jqXHR.abort();
+				return false;
+
+		}
+
+		// Install callbacks on deferreds
+		for ( i in { success: 1, error: 1, complete: 1 } ) {
+			jqXHR[ i ]( s[ i ] );
+		}
+
+		// Get transport
+		transport = inspectPrefiltersOrTransports( transports, s, options, jqXHR );
+
+		// If no transport, we auto-abort
+		if ( !transport ) {
+			done( -1, "No Transport" );
+		} else {
+			jqXHR.readyState = 1;
+			// Send global event
+			if ( fireGlobals ) {
+				globalEventContext.trigger( "ajaxSend", [ jqXHR, s ] );
+			}
+			// Timeout
+			if ( s.async && s.timeout > 0 ) {
+				timeoutTimer = setTimeout( function(){
+					jqXHR.abort( "timeout" );
+				}, s.timeout );
+			}
+
+			try {
+				state = 1;
+				transport.send( requestHeaders, done );
+			} catch (e) {
+				// Propagate exception as error if not done
+				if ( status < 2 ) {
+					done( -1, e );
+				// Simply rethrow otherwise
+				} else {
+					jQuery.error( e );
+				}
+			}
+		}
+
+		return jqXHR;
+	},
+
+	// Serialize an array of form elements or a set of
+	// key/values into a query string
+	param: function( a, traditional ) {
+		var s = [],
+			add = function( key, value ) {
+				// If value is a function, invoke it and return its value
+				value = jQuery.isFunction( value ) ? value() : value;
+				s[ s.length ] = encodeURIComponent( key ) + "=" + encodeURIComponent( value );
+			};
+
+		// Set traditional to true for jQuery <= 1.3.2 behavior.
+		if ( traditional === undefined ) {
+			traditional = jQuery.ajaxSettings.traditional;
+		}
+
+		// If an array was passed in, assume that it is an array of form elements.
+		if ( jQuery.isArray( a ) || ( a.jquery && !jQuery.isPlainObject( a ) ) ) {
+			// Serialize the form elements
+			jQuery.each( a, function() {
+				add( this.name, this.value );
+			});
+
+		} else {
+			// If traditional, encode the "old" way (the way 1.3.2 or older
+			// did it), otherwise encode params recursively.
+			for ( var prefix in a ) {
+				buildParams( prefix, a[ prefix ], traditional, add );
+			}
+		}
+
+		// Return the resulting serialization
+		return s.join( "&" ).replace( r20, "+" );
+	}
+});
+
+function buildParams( prefix, obj, traditional, add ) {
+	if ( jQuery.isArray( obj ) ) {
+		// Serialize array item.
+		jQuery.each( obj, function( i, v ) {
+			if ( traditional || rbracket.test( prefix ) ) {
+				// Treat each array item as a scalar.
+				add( prefix, v );
+
+			} else {
+				// If array item is non-scalar (array or object), encode its
+				// numeric index to resolve deserialization ambiguity issues.
+				// Note that rack (as of 1.0.0) can't currently deserialize
+				// nested arrays properly, and attempting to do so may cause
+				// a server error. Possible fixes are to modify rack's
+				// deserialization algorithm or to provide an option or flag
+				// to force array serialization to be shallow.
+				buildParams( prefix + "[" + ( typeof v === "object" || jQuery.isArray(v) ? i : "" ) + "]", v, traditional, add );
+			}
+		});
+
+	} else if ( !traditional && obj != null && typeof obj === "object" ) {
+		// Serialize object item.
+		for ( var name in obj ) {
+			buildParams( prefix + "[" + name + "]", obj[ name ], traditional, add );
+		}
+
+	} else {
+		// Serialize scalar item.
+		add( prefix, obj );
+	}
+}
+
+// This is still on the jQuery object... for now
+// Want to move this to jQuery.ajax some day
+jQuery.extend({
+
+	// Counter for holding the number of active queries
+	active: 0,
+
+	// Last-Modified header cache for next request
+	lastModified: {},
+	etag: {}
+
+});
+
+/* Handles responses to an ajax request:
+ * - sets all responseXXX fields accordingly
+ * - finds the right dataType (mediates between content-type and expected dataType)
+ * - returns the corresponding response
+ */
+function ajaxHandleResponses( s, jqXHR, responses ) {
+
+	var contents = s.contents,
+		dataTypes = s.dataTypes,
+		responseFields = s.responseFields,
+		ct,
+		type,
+		finalDataType,
+		firstDataType;
+
+	// Fill responseXXX fields
+	for( type in responseFields ) {
+		if ( type in responses ) {
+			jqXHR[ responseFields[type] ] = responses[ type ];
+		}
+	}
+
+	// Remove auto dataType and get content-type in the process
+	while( dataTypes[ 0 ] === "*" ) {
+		dataTypes.shift();
+		if ( ct === undefined ) {
+			ct = s.mimeType || jqXHR.getResponseHeader( "content-type" );
+		}
+	}
+
+	// Check if we're dealing with a known content-type
+	if ( ct ) {
+		for ( type in contents ) {
+			if ( contents[ type ] && contents[ type ].test( ct ) ) {
+				dataTypes.unshift( type );
+				break;
+			}
+		}
+	}
+
+	// Check to see if we have a response for the expected dataType
+	if ( dataTypes[ 0 ] in responses ) {
+		finalDataType = dataTypes[ 0 ];
+	} else {
+		// Try convertible dataTypes
+		for ( type in responses ) {
+			if ( !dataTypes[ 0 ] || s.converters[ type + " " + dataTypes[0] ] ) {
+				finalDataType = type;
+				break;
+			}
+			if ( !firstDataType ) {
+				firstDataType = type;
+			}
+		}
+		// Or just use first one
+		finalDataType = finalDataType || firstDataType;
+	}
+
+	// If we found a dataType
+	// We add the dataType to the list if needed
+	// and return the corresponding response
+	if ( finalDataType ) {
+		if ( finalDataType !== dataTypes[ 0 ] ) {
+			dataTypes.unshift( finalDataType );
+		}
+		return responses[ finalDataType ];
+	}
+}
+
+// Chain conversions given the request and the original response
+function ajaxConvert( s, response ) {
+
+	// Apply the dataFilter if provided
+	if ( s.dataFilter ) {
+		response = s.dataFilter( response, s.dataType );
+	}
+
+	var dataTypes = s.dataTypes,
+		converters = {},
+		i,
+		key,
+		length = dataTypes.length,
+		tmp,
+		// Current and previous dataTypes
+		current = dataTypes[ 0 ],
+		prev,
+		// Conversion expression
+		conversion,
+		// Conversion function
+		conv,
+		// Conversion functions (transitive conversion)
+		conv1,
+		conv2;
+
+	// For each dataType in the chain
+	for( i = 1; i < length; i++ ) {
+
+		// Create converters map
+		// with lowercased keys
+		if ( i === 1 ) {
+			for( key in s.converters ) {
+				if( typeof key === "string" ) {
+					converters[ key.toLowerCase() ] = s.converters[ key ];
+				}
+			}
+		}
+
+		// Get the dataTypes
+		prev = current;
+		current = dataTypes[ i ];
+
+		// If current is auto dataType, update it to prev
+		if( current === "*" ) {
+			current = prev;
+		// If no auto and dataTypes are actually different
+		} else if ( prev !== "*" && prev !== current ) {
+
+			// Get the converter
+			conversion = prev + " " + current;
+			conv = converters[ conversion ] || converters[ "* " + current ];
+
+			// If there is no direct converter, search transitively
+			if ( !conv ) {
+				conv2 = undefined;
+				for( conv1 in converters ) {
+					tmp = conv1.split( " " );
+					if ( tmp[ 0 ] === prev || tmp[ 0 ] === "*" ) {
+						conv2 = converters[ tmp[1] + " " + current ];
+						if ( conv2 ) {
+							conv1 = converters[ conv1 ];
+							if ( conv1 === true ) {
+								conv = conv2;
+							} else if ( conv2 === true ) {
+								conv = conv1;
+							}
+							break;
+						}
+					}
+				}
+			}
+			// If we found no converter, dispatch an error
+			if ( !( conv || conv2 ) ) {
+				jQuery.error( "No conversion from " + conversion.replace(" "," to ") );
+			}
+			// If found converter is not an equivalence
+			if ( conv !== true ) {
+				// Convert with 1 or 2 converters accordingly
+				response = conv ? conv( response ) : conv2( conv1(response) );
+			}
+		}
+	}
+	return response;
+}
+
+
+
+
+var jsc = jQuery.now(),
+	jsre = /(\=)\?(&|$)|\?\?/i;
+
+// Default jsonp settings
+jQuery.ajaxSetup({
+	jsonp: "callback",
+	jsonpCallback: function() {
+		return jQuery.expando + "_" + ( jsc++ );
+	}
+});
+
+// Detect, normalize options and install callbacks for jsonp requests
+jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
+
+	var inspectData = s.contentType === "application/x-www-form-urlencoded" &&
+		( typeof s.data === "string" );
+
+	if ( s.dataTypes[ 0 ] === "jsonp" ||
+		s.jsonp !== false && ( jsre.test( s.url ) ||
+				inspectData && jsre.test( s.data ) ) ) {
+
+		var responseContainer,
+			jsonpCallback = s.jsonpCallback =
+				jQuery.isFunction( s.jsonpCallback ) ? s.jsonpCallback() : s.jsonpCallback,
+			previous = window[ jsonpCallback ],
+			url = s.url,
+			data = s.data,
+			replace = "$1" + jsonpCallback + "$2";
+
+		if ( s.jsonp !== false ) {
+			url = url.replace( jsre, replace );
+			if ( s.url === url ) {
+				if ( inspectData ) {
+					data = data.replace( jsre, replace );
+				}
+				if ( s.data === data ) {
+					// Add callback manually
+					url += (/\?/.test( url ) ? "&" : "?") + s.jsonp + "=" + jsonpCallback;
+				}
+			}
+		}
+
+		s.url = url;
+		s.data = data;
+
+		// Install callback
+		window[ jsonpCallback ] = function( response ) {
+			responseContainer = [ response ];
+		};
+
+		// Clean-up function
+		jqXHR.always(function() {
+			// Set callback back to previous value
+			window[ jsonpCallback ] = previous;
+			// Call if it was a function and we have a response
+			if ( responseContainer && jQuery.isFunction( previous ) ) {
+				window[ jsonpCallback ]( responseContainer[ 0 ] );
+			}
+		});
+
+		// Use data converter to retrieve json after script execution
+		s.converters["script json"] = function() {
+			if ( !responseContainer ) {
+				jQuery.error( jsonpCallback + " was not called" );
+			}
+			return responseContainer[ 0 ];
+		};
+
+		// force json dataType
+		s.dataTypes[ 0 ] = "json";
+
+		// Delegate to script
+		return "script";
+	}
+});
+
+
+
+
+// Install script dataType
+jQuery.ajaxSetup({
+	accepts: {
+		script: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript"
+	},
+	contents: {
+		script: /javascript|ecmascript/
+	},
+	converters: {
+		"text script": function( text ) {
+			jQuery.globalEval( text );
+			return text;
+		}
+	}
+});
+
+// Handle cache's special case and global
+jQuery.ajaxPrefilter( "script", function( s ) {
+	if ( s.cache === undefined ) {
+		s.cache = false;
+	}
+	if ( s.crossDomain ) {
+		s.type = "GET";
+		s.global = false;
+	}
+});
+
+// Bind script tag hack transport
+jQuery.ajaxTransport( "script", function(s) {
+
+	// This transport only deals with cross domain requests
+	if ( s.crossDomain ) {
+
+		var script,
+			head = document.head || document.getElementsByTagName( "head" )[0] || document.documentElement;
+
+		return {
+
+			send: function( _, callback ) {
+
+				script = document.createElement( "script" );
+
+				script.async = "async";
+
+				if ( s.scriptCharset ) {
+					script.charset = s.scriptCharset;
+				}
+
+				script.src = s.url;
+
+				// Attach handlers for all browsers
+				script.onload = script.onreadystatechange = function( _, isAbort ) {
+
+					if ( isAbort || !script.readyState || /loaded|complete/.test( script.readyState ) ) {
+
+						// Handle memory leak in IE
+						script.onload = script.onreadystatechange = null;
+
+						// Remove the script
+						if ( head && script.parentNode ) {
+							head.removeChild( script );
+						}
+
+						// Dereference the script
+						script = undefined;
+
+						// Callback if not abort
+						if ( !isAbort ) {
+							callback( 200, "success" );
+						}
+					}
+				};
+				// Use insertBefore instead of appendChild  to circumvent an IE6 bug.
+				// This arises when a base node is used (#2709 and #4378).
+				head.insertBefore( script, head.firstChild );
+			},
+
+			abort: function() {
+				if ( script ) {
+					script.onload( 0, 1 );
+				}
+			}
+		};
+	}
+});
+
+
+
+
+var // #5280: Internet Explorer will keep connections alive if we don't abort on unload
+	xhrOnUnloadAbort = window.ActiveXObject ? function() {
+		// Abort all pending requests
+		for ( var key in xhrCallbacks ) {
+			xhrCallbacks[ key ]( 0, 1 );
+		}
+	} : false,
+	xhrId = 0,
+	xhrCallbacks;
+
+// Functions to create xhrs
+function createStandardXHR() {
+	try {
+		return new window.XMLHttpRequest();
+	} catch( e ) {}
+}
+
+function createActiveXHR() {
+	try {
+		return new window.ActiveXObject( "Microsoft.XMLHTTP" );
+	} catch( e ) {}
+}
+
+// Create the request object
+// (This is still attached to ajaxSettings for backward compatibility)
+jQuery.ajaxSettings.xhr = window.ActiveXObject ?
+	/* Microsoft failed to properly
+	 * implement the XMLHttpRequest in IE7 (can't request local files),
+	 * so we use the ActiveXObject when it is available
+	 * Additionally XMLHttpRequest can be disabled in IE7/IE8 so
+	 * we need a fallback.
+	 */
+	function() {
+		return !this.isLocal && createStandardXHR() || createActiveXHR();
+	} :
+	// For all other browsers, use the standard XMLHttpRequest object
+	createStandardXHR;
+
+// Determine support properties
+(function( xhr ) {
+	jQuery.extend( jQuery.support, {
+		ajax: !!xhr,
+		cors: !!xhr && ( "withCredentials" in xhr )
+	});
+})( jQuery.ajaxSettings.xhr() );
+
+// Create transport if the browser can provide an xhr
+if ( jQuery.support.ajax ) {
+
+	jQuery.ajaxTransport(function( s ) {
+		// Cross domain only allowed if supported through XMLHttpRequest
+		if ( !s.crossDomain || jQuery.support.cors ) {
+
+			var callback;
+
+			return {
+				send: function( headers, complete ) {
+
+					// Get a new xhr
+					var xhr = s.xhr(),
+						handle,
+						i;
+
+					// Open the socket
+					// Passing null username, generates a login popup on Opera (#2865)
+					if ( s.username ) {
+						xhr.open( s.type, s.url, s.async, s.username, s.password );
+					} else {
+						xhr.open( s.type, s.url, s.async );
+					}
+
+					// Apply custom fields if provided
+					if ( s.xhrFields ) {
+						for ( i in s.xhrFields ) {
+							xhr[ i ] = s.xhrFields[ i ];
+						}
+					}
+
+					// Override mime type if needed
+					if ( s.mimeType && xhr.overrideMimeType ) {
+						xhr.overrideMimeType( s.mimeType );
+					}
+
+					// X-Requested-With header
+					// For cross-domain requests, seeing as conditions for a preflight are
+					// akin to a jigsaw puzzle, we simply never set it to be sure.
+					// (it can always be set on a per-request basis or even using ajaxSetup)
+					// For same-domain requests, won't change header if already provided.
+					if ( !s.crossDomain && !headers["X-Requested-With"] ) {
+						headers[ "X-Requested-With" ] = "XMLHttpRequest";
+					}
+
+					// Need an extra try/catch for cross domain requests in Firefox 3
+					try {
+						for ( i in headers ) {
+							xhr.setRequestHeader( i, headers[ i ] );
+						}
+					} catch( _ ) {}
+
+					// Do send the request
+					// This may raise an exception which is actually
+					// handled in jQuery.ajax (so no try/catch here)
+					xhr.send( ( s.hasContent && s.data ) || null );
+
+					// Listener
+					callback = function( _, isAbort ) {
+
+						var status,
+							statusText,
+							responseHeaders,
+							responses,
+							xml;
+
+						// Firefox throws exceptions when accessing properties
+						// of an xhr when a network error occured
+						// http://helpful.knobs-dials.com/index.php/Component_returned_failure_code:_0x80040111_(NS_ERROR_NOT_AVAILABLE)
+						try {
+
+							// Was never called and is aborted or complete
+							if ( callback && ( isAbort || xhr.readyState === 4 ) ) {
+
+								// Only called once
+								callback = undefined;
+
+								// Do not keep as active anymore
+								if ( handle ) {
+									xhr.onreadystatechange = jQuery.noop;
+									if ( xhrOnUnloadAbort ) {
+										delete xhrCallbacks[ handle ];
+									}
+								}
+
+								// If it's an abort
+								if ( isAbort ) {
+									// Abort it manually if needed
+									if ( xhr.readyState !== 4 ) {
+										xhr.abort();
+									}
+								} else {
+									status = xhr.status;
+									responseHeaders = xhr.getAllResponseHeaders();
+									responses = {};
+									xml = xhr.responseXML;
+
+									// Construct response list
+									if ( xml && xml.documentElement /* #4958 */ ) {
+										responses.xml = xml;
+									}
+									responses.text = xhr.responseText;
+
+									// Firefox throws an exception when accessing
+									// statusText for faulty cross-domain requests
+									try {
+										statusText = xhr.statusText;
+									} catch( e ) {
+										// We normalize with Webkit giving an empty statusText
+										statusText = "";
+									}
+
+									// Filter status for non standard behaviors
+
+									// If the request is local and we have data: assume a success
+									// (success with no data won't get notified, that's the best we
+									// can do given current implementations)
+									if ( !status && s.isLocal && !s.crossDomain ) {
+										status = responses.text ? 200 : 404;
+									// IE - #1450: sometimes returns 1223 when it should be 204
+									} else if ( status === 1223 ) {
+										status = 204;
+									}
+								}
+							}
+						} catch( firefoxAccessException ) {
+							if ( !isAbort ) {
+								complete( -1, firefoxAccessException );
+							}
+						}
+
+						// Call complete if needed
+						if ( responses ) {
+							complete( status, statusText, responses, responseHeaders );
+						}
+					};
+
+					// if we're in sync mode or it's in cache
+					// and has been retrieved directly (IE6 & IE7)
+					// we need to manually fire the callback
+					if ( !s.async || xhr.readyState === 4 ) {
+						callback();
+					} else {
+						handle = ++xhrId;
+						if ( xhrOnUnloadAbort ) {
+							// Create the active xhrs callbacks list if needed
+							// and attach the unload handler
+							if ( !xhrCallbacks ) {
+								xhrCallbacks = {};
+								jQuery( window ).unload( xhrOnUnloadAbort );
+							}
+							// Add to list of active xhrs callbacks
+							xhrCallbacks[ handle ] = callback;
+						}
+						xhr.onreadystatechange = callback;
+					}
+				},
+
+				abort: function() {
+					if ( callback ) {
+						callback(0,1);
+					}
+				}
+			};
+		}
+	});
+}
+
+
+
+
+var elemdisplay = {},
+	iframe, iframeDoc,
+	rfxtypes = /^(?:toggle|show|hide)$/,
+	rfxnum = /^([+\-]=)?([\d+.\-]+)([a-z%]*)$/i,
+	timerId,
+	fxAttrs = [
+		// height animations
+		[ "height", "marginTop", "marginBottom", "paddingTop", "paddingBottom" ],
+		// width animations
+		[ "width", "marginLeft", "marginRight", "paddingLeft", "paddingRight" ],
+		// opacity animations
+		[ "opacity" ]
+	],
+	fxNow,
+	requestAnimationFrame = window.webkitRequestAnimationFrame ||
+	    window.mozRequestAnimationFrame ||
+	    window.oRequestAnimationFrame;
+
+jQuery.fn.extend({
+	show: function( speed, easing, callback ) {
+		var elem, display;
+
+		if ( speed || speed === 0 ) {
+			return this.animate( genFx("show", 3), speed, easing, callback);
+
+		} else {
+			for ( var i = 0, j = this.length; i < j; i++ ) {
+				elem = this[i];
+
+				if ( elem.style ) {
+					display = elem.style.display;
+
+					// Reset the inline display of this element to learn if it is
+					// being hidden by cascaded rules or not
+					if ( !jQuery._data(elem, "olddisplay") && display === "none" ) {
+						display = elem.style.display = "";
+					}
+
+					// Set elements which have been overridden with display: none
+					// in a stylesheet to whatever the default browser style is
+					// for such an element
+					if ( display === "" && jQuery.css( elem, "display" ) === "none" ) {
+						jQuery._data(elem, "olddisplay", defaultDisplay(elem.nodeName));
+					}
+				}
+			}
+
+			// Set the display of most of the elements in a second loop
+			// to avoid the constant reflow
+			for ( i = 0; i < j; i++ ) {
+				elem = this[i];
+
+				if ( elem.style ) {
+					display = elem.style.display;
+
+					if ( display === "" || display === "none" ) {
+						elem.style.display = jQuery._data(elem, "olddisplay") || "";
+					}
+				}
+			}
+
+			return this;
+		}
+	},
+
+	hide: function( speed, easing, callback ) {
+		if ( speed || speed === 0 ) {
+			return this.animate( genFx("hide", 3), speed, easing, callback);
+
+		} else {
+			for ( var i = 0, j = this.length; i < j; i++ ) {
+				if ( this[i].style ) {
+					var display = jQuery.css( this[i], "display" );
+
+					if ( display !== "none" && !jQuery._data( this[i], "olddisplay" ) ) {
+						jQuery._data( this[i], "olddisplay", display );
+					}
+				}
+			}
+
+			// Set the display of the elements in a second loop
+			// to avoid the constant reflow
+			for ( i = 0; i < j; i++ ) {
+				if ( this[i].style ) {
+					this[i].style.display = "none";
+				}
+			}
+
+			return this;
+		}
+	},
+
+	// Save the old toggle function
+	_toggle: jQuery.fn.toggle,
+
+	toggle: function( fn, fn2, callback ) {
+		var bool = typeof fn === "boolean";
+
+		if ( jQuery.isFunction(fn) && jQuery.isFunction(fn2) ) {
+			this._toggle.apply( this, arguments );
+
+		} else if ( fn == null || bool ) {
+			this.each(function() {
+				var state = bool ? fn : jQuery(this).is(":hidden");
+				jQuery(this)[ state ? "show" : "hide" ]();
+			});
+
+		} else {
+			this.animate(genFx("toggle", 3), fn, fn2, callback);
+		}
+
+		return this;
+	},
+
+	fadeTo: function( speed, to, easing, callback ) {
+		return this.filter(":hidden").css("opacity", 0).show().end()
+					.animate({opacity: to}, speed, easing, callback);
+	},
+
+	animate: function( prop, speed, easing, callback ) {
+		var optall = jQuery.speed(speed, easing, callback);
+
+		if ( jQuery.isEmptyObject( prop ) ) {
+			return this.each( optall.complete, [ false ] );
+		}
+
+		// Do not change referenced properties as per-property easing will be lost
+		prop = jQuery.extend( {}, prop );
+
+		return this[ optall.queue === false ? "each" : "queue" ](function() {
+			// XXX 'this' does not always have a nodeName when running the
+			// test suite
+
+			if ( optall.queue === false ) {
+				jQuery._mark( this );
+			}
+
+			var opt = jQuery.extend( {}, optall ),
+				isElement = this.nodeType === 1,
+				hidden = isElement && jQuery(this).is(":hidden"),
+				name, val, p,
+				display, e,
+				parts, start, end, unit;
+
+			// will store per property easing and be used to determine when an animation is complete
+			opt.animatedProperties = {};
+
+			for ( p in prop ) {
+
+				// property name normalization
+				name = jQuery.camelCase( p );
+				if ( p !== name ) {
+					prop[ name ] = prop[ p ];
+					delete prop[ p ];
+				}
+
+				val = prop[ name ];
+
+				// easing resolution: per property > opt.specialEasing > opt.easing > 'swing' (default)
+				if ( jQuery.isArray( val ) ) {
+					opt.animatedProperties[ name ] = val[ 1 ];
+					val = prop[ name ] = val[ 0 ];
+				} else {
+					opt.animatedProperties[ name ] = opt.specialEasing && opt.specialEasing[ name ] || opt.easing || 'swing';
+				}
+
+				if ( val === "hide" && hidden || val === "show" && !hidden ) {
+					return opt.complete.call( this );
+				}
+
+				if ( isElement && ( name === "height" || name === "width" ) ) {
+					// Make sure that nothing sneaks out
+					// Record all 3 overflow attributes because IE does not
+					// change the overflow attribute when overflowX and
+					// overflowY are set to the same value
+					opt.overflow = [ this.style.overflow, this.style.overflowX, this.style.overflowY ];
+
+					// Set display property to inline-block for height/width
+					// animations on inline elements that are having width/height
+					// animated
+					if ( jQuery.css( this, "display" ) === "inline" &&
+							jQuery.css( this, "float" ) === "none" ) {
+						if ( !jQuery.support.inlineBlockNeedsLayout ) {
+							this.style.display = "inline-block";
+
+						} else {
+							display = defaultDisplay( this.nodeName );
+
+							// inline-level elements accept inline-block;
+							// block-level elements need to be inline with layout
+							if ( display === "inline" ) {
+								this.style.display = "inline-block";
+
+							} else {
+								this.style.display = "inline";
+								this.style.zoom = 1;
+							}
+						}
+					}
+				}
+			}
+
+			if ( opt.overflow != null ) {
+				this.style.overflow = "hidden";
+			}
+
+			for ( p in prop ) {
+				e = new jQuery.fx( this, opt, p );
+				val = prop[ p ];
+
+				if ( rfxtypes.test(val) ) {
+					e[ val === "toggle" ? hidden ? "show" : "hide" : val ]();
+
+				} else {
+					parts = rfxnum.exec( val );
+					start = e.cur();
+
+					if ( parts ) {
+						end = parseFloat( parts[2] );
+						unit = parts[3] || ( jQuery.cssNumber[ p ] ? "" : "px" );
+
+						// We need to compute starting value
+						if ( unit !== "px" ) {
+							jQuery.style( this, p, (end || 1) + unit);
+							start = ((end || 1) / e.cur()) * start;
+							jQuery.style( this, p, start + unit);
+						}
+
+						// If a +=/-= token was provided, we're doing a relative animation
+						if ( parts[1] ) {
+							end = ( (parts[ 1 ] === "-=" ? -1 : 1) * end ) + start;
+						}
+
+						e.custom( start, end, unit );
+
+					} else {
+						e.custom( start, val, "" );
+					}
+				}
+			}
+
+			// For JS strict compliance
+			return true;
+		});
+	},
+
+	stop: function( clearQueue, gotoEnd ) {
+		if ( clearQueue ) {
+			this.queue([]);
+		}
+
+		this.each(function() {
+			var timers = jQuery.timers,
+				i = timers.length;
+			// clear marker counters if we know they won't be
+			if ( !gotoEnd ) {
+				jQuery._unmark( true, this );
+			}
+			while ( i-- ) {
+				if ( timers[i].elem === this ) {
+					if (gotoEnd) {
+						// force the next step to be the last
+						timers[i](true);
+					}
+
+					timers.splice(i, 1);
+				}
+			}
+		});
+
+		// start the next in the queue if the last step wasn't forced
+		if ( !gotoEnd ) {
+			this.dequeue();
+		}
+
+		return this;
+	}
+
+});
+
+// Animations created synchronously will run synchronously
+function createFxNow() {
+	setTimeout( clearFxNow, 0 );
+	return ( fxNow = jQuery.now() );
+}
+
+function clearFxNow() {
+	fxNow = undefined;
+}
+
+// Generate parameters to create a standard animation
+function genFx( type, num ) {
+	var obj = {};
+
+	jQuery.each( fxAttrs.concat.apply([], fxAttrs.slice(0,num)), function() {
+		obj[ this ] = type;
+	});
+
+	return obj;
+}
+
+// Generate shortcuts for custom animations
+jQuery.each({
+	slideDown: genFx("show", 1),
+	slideUp: genFx("hide", 1),
+	slideToggle: genFx("toggle", 1),
+	fadeIn: { opacity: "show" },
+	fadeOut: { opacity: "hide" },
+	fadeToggle: { opacity: "toggle" }
+}, function( name, props ) {
+	jQuery.fn[ name ] = function( speed, easing, callback ) {
+		return this.animate( props, speed, easing, callback );
+	};
+});
+
+jQuery.extend({
+	speed: function( speed, easing, fn ) {
+		var opt = speed && typeof speed === "object" ? jQuery.extend({}, speed) : {
+			complete: fn || !fn && easing ||
+				jQuery.isFunction( speed ) && speed,
+			duration: speed,
+			easing: fn && easing || easing && !jQuery.isFunction(easing) && easing
+		};
+
+		opt.duration = jQuery.fx.off ? 0 : typeof opt.duration === "number" ? opt.duration :
+			opt.duration in jQuery.fx.speeds ? jQuery.fx.speeds[opt.duration] : jQuery.fx.speeds._default;
+
+		// Queueing
+		opt.old = opt.complete;
+		opt.complete = function( noUnmark ) {
+			if ( opt.queue !== false ) {
+				jQuery.dequeue( this );
+			} else if ( noUnmark !== false ) {
+				jQuery._unmark( this );
+			}
+
+			if ( jQuery.isFunction( opt.old ) ) {
+				opt.old.call( this );
+			}
+		};
+
+		return opt;
+	},
+
+	easing: {
+		linear: function( p, n, firstNum, diff ) {
+			return firstNum + diff * p;
+		},
+		swing: function( p, n, firstNum, diff ) {
+			return ((-Math.cos(p*Math.PI)/2) + 0.5) * diff + firstNum;
+		}
+	},
+
+	timers: [],
+
+	fx: function( elem, options, prop ) {
+		this.options = options;
+		this.elem = elem;
+		this.prop = prop;
+
+		options.orig = options.orig || {};
+	}
+
+});
+
+jQuery.fx.prototype = {
+	// Simple function for setting a style value
+	update: function() {
+		if ( this.options.step ) {
+			this.options.step.call( this.elem, this.now, this );
+		}
+
+		(jQuery.fx.step[this.prop] || jQuery.fx.step._default)( this );
+	},
+
+	// Get the current size
+	cur: function() {
+		if ( this.elem[this.prop] != null && (!this.elem.style || this.elem.style[this.prop] == null) ) {
+			return this.elem[ this.prop ];
+		}
+
+		var parsed,
+			r = jQuery.css( this.elem, this.prop );
+		// Empty strings, null, undefined and "auto" are converted to 0,
+		// complex values such as "rotate(1rad)" are returned as is,
+		// simple values such as "10px" are parsed to Float.
+		return isNaN( parsed = parseFloat( r ) ) ? !r || r === "auto" ? 0 : r : parsed;
+	},
+
+	// Start an animation from one number to another
+	custom: function( from, to, unit ) {
+		var self = this,
+			fx = jQuery.fx,
+			raf;
+
+		this.startTime = fxNow || createFxNow();
+		this.start = from;
+		this.end = to;
+		this.unit = unit || this.unit || ( jQuery.cssNumber[ this.prop ] ? "" : "px" );
+		this.now = this.start;
+		this.pos = this.state = 0;
+
+		function t( gotoEnd ) {
+			return self.step(gotoEnd);
+		}
+
+		t.elem = this.elem;
+
+		if ( t() && jQuery.timers.push(t) && !timerId ) {
+			// Use requestAnimationFrame instead of setInterval if available
+			if ( requestAnimationFrame ) {
+				timerId = 1;
+				raf = function() {
+					// When timerId gets set to null at any point, this stops
+					if ( timerId ) {
+						requestAnimationFrame( raf );
+						fx.tick();
+					}
+				};
+				requestAnimationFrame( raf );
+			} else {
+				timerId = setInterval( fx.tick, fx.interval );
+			}
+		}
+	},
+
+	// Simple 'show' function
+	show: function() {
+		// Remember where we started, so that we can go back to it later
+		this.options.orig[this.prop] = jQuery.style( this.elem, this.prop );
+		this.options.show = true;
+
+		// Begin the animation
+		// Make sure that we start at a small width/height to avoid any
+		// flash of content
+		this.custom(this.prop === "width" || this.prop === "height" ? 1 : 0, this.cur());
+
+		// Start by showing the element
+		jQuery( this.elem ).show();
+	},
+
+	// Simple 'hide' function
+	hide: function() {
+		// Remember where we started, so that we can go back to it later
+		this.options.orig[this.prop] = jQuery.style( this.elem, this.prop );
+		this.options.hide = true;
+
+		// Begin the animation
+		this.custom(this.cur(), 0);
+	},
+
+	// Each step of an animation
+	step: function( gotoEnd ) {
+		var t = fxNow || createFxNow(),
+			done = true,
+			elem = this.elem,
+			options = this.options,
+			i, n;
+
+		if ( gotoEnd || t >= options.duration + this.startTime ) {
+			this.now = this.end;
+			this.pos = this.state = 1;
+			this.update();
+
+			options.animatedProperties[ this.prop ] = true;
+
+			for ( i in options.animatedProperties ) {
+				if ( options.animatedProperties[i] !== true ) {
+					done = false;
+				}
+			}
+
+			if ( done ) {
+				// Reset the overflow
+				if ( options.overflow != null && !jQuery.support.shrinkWrapBlocks ) {
+
+					jQuery.each( [ "", "X", "Y" ], function (index, value) {
+						elem.style[ "overflow" + value ] = options.overflow[index];
+					});
+				}
+
+				// Hide the element if the "hide" operation was done
+				if ( options.hide ) {
+					jQuery(elem).hide();
+				}
+
+				// Reset the properties, if the item has been hidden or shown
+				if ( options.hide || options.show ) {
+					for ( var p in options.animatedProperties ) {
+						jQuery.style( elem, p, options.orig[p] );
+					}
+				}
+
+				// Execute the complete function
+				options.complete.call( elem );
+			}
+
+			return false;
+
+		} else {
+			// classical easing cannot be used with an Infinity duration
+			if ( options.duration == Infinity ) {
+				this.now = t;
+			} else {
+				n = t - this.startTime;
+				this.state = n / options.duration;
+
+				// Perform the easing function, defaults to swing
+				this.pos = jQuery.easing[ options.animatedProperties[ this.prop ] ]( this.state, n, 0, 1, options.duration );
+				this.now = this.start + ((this.end - this.start) * this.pos);
+			}
+			// Perform the next step of the animation
+			this.update();
+		}
+
+		return true;
+	}
+};
+
+jQuery.extend( jQuery.fx, {
+	tick: function() {
+		for ( var timers = jQuery.timers, i = 0 ; i < timers.length ; ++i ) {
+			if ( !timers[i]() ) {
+				timers.splice(i--, 1);
+			}
+		}
+
+		if ( !timers.length ) {
+			jQuery.fx.stop();
+		}
+	},
+
+	interval: 13,
+
+	stop: function() {
+		clearInterval( timerId );
+		timerId = null;
+	},
+
+	speeds: {
+		slow: 600,
+		fast: 200,
+		// Default speed
+		_default: 400
+	},
+
+	step: {
+		opacity: function( fx ) {
+			jQuery.style( fx.elem, "opacity", fx.now );
+		},
+
+		_default: function( fx ) {
+			if ( fx.elem.style && fx.elem.style[ fx.prop ] != null ) {
+				fx.elem.style[ fx.prop ] = (fx.prop === "width" || fx.prop === "height" ? Math.max(0, fx.now) : fx.now) + fx.unit;
+			} else {
+				fx.elem[ fx.prop ] = fx.now;
+			}
+		}
+	}
+});
+
+if ( jQuery.expr && jQuery.expr.filters ) {
+	jQuery.expr.filters.animated = function( elem ) {
+		return jQuery.grep(jQuery.timers, function( fn ) {
+			return elem === fn.elem;
+		}).length;
+	};
+}
+
+// Try to restore the default display value of an element
+function defaultDisplay( nodeName ) {
+
+	if ( !elemdisplay[ nodeName ] ) {
+
+		var elem = jQuery( "<" + nodeName + ">" ).appendTo( "body" ),
+			display = elem.css( "display" );
+
+		elem.remove();
+
+		// If the simple way fails,
+		// get element's real default display by attaching it to a temp iframe
+		if ( display === "none" || display === "" ) {
+			// No iframe to use yet, so create it
+			if ( !iframe ) {
+				iframe = document.createElement( "iframe" );
+				iframe.frameBorder = iframe.width = iframe.height = 0;
+			}
+
+			document.body.appendChild( iframe );
+
+			// Create a cacheable copy of the iframe document on first call.
+			// IE and Opera will allow us to reuse the iframeDoc without re-writing the fake html
+			// document to it, Webkit & Firefox won't allow reusing the iframe document
+			if ( !iframeDoc || !iframe.createElement ) {
+				iframeDoc = ( iframe.contentWindow || iframe.contentDocument ).document;
+				iframeDoc.write( "<!doctype><html><body></body></html>" );
+			}
+
+			elem = iframeDoc.createElement( nodeName );
+
+			iframeDoc.body.appendChild( elem );
+
+			display = jQuery.css( elem, "display" );
+
+			document.body.removeChild( iframe );
+		}
+
+		// Store the correct default display
+		elemdisplay[ nodeName ] = display;
+	}
+
+	return elemdisplay[ nodeName ];
+}
+
+
+
+
+var rtable = /^t(?:able|d|h)$/i,
+	rroot = /^(?:body|html)$/i;
+
+if ( "getBoundingClientRect" in document.documentElement ) {
+	jQuery.fn.offset = function( options ) {
+		var elem = this[0], box;
+
+		if ( options ) {
+			return this.each(function( i ) {
+				jQuery.offset.setOffset( this, options, i );
+			});
+		}
+
+		if ( !elem || !elem.ownerDocument ) {
+			return null;
+		}
+
+		if ( elem === elem.ownerDocument.body ) {
+			return jQuery.offset.bodyOffset( elem );
+		}
+
+		try {
+			box = elem.getBoundingClientRect();
+		} catch(e) {}
+
+		var doc = elem.ownerDocument,
+			docElem = doc.documentElement;
+
+		// Make sure we're not dealing with a disconnected DOM node
+		if ( !box || !jQuery.contains( docElem, elem ) ) {
+			return box ? { top: box.top, left: box.left } : { top: 0, left: 0 };
+		}
+
+		var body = doc.body,
+			win = getWindow(doc),
+			clientTop  = docElem.clientTop  || body.clientTop  || 0,
+			clientLeft = docElem.clientLeft || body.clientLeft || 0,
+			scrollTop  = win.pageYOffset || jQuery.support.boxModel && docElem.scrollTop  || body.scrollTop,
+			scrollLeft = win.pageXOffset || jQuery.support.boxModel && docElem.scrollLeft || body.scrollLeft,
+			top  = box.top  + scrollTop  - clientTop,
+			left = box.left + scrollLeft - clientLeft;
+
+		return { top: top, left: left };
+	};
+
+} else {
+	jQuery.fn.offset = function( options ) {
+		var elem = this[0];
+
+		if ( options ) {
+			return this.each(function( i ) {
+				jQuery.offset.setOffset( this, options, i );
+			});
+		}
+
+		if ( !elem || !elem.ownerDocument ) {
+			return null;
+		}
+
+		if ( elem === elem.ownerDocument.body ) {
+			return jQuery.offset.bodyOffset( elem );
+		}
+
+		jQuery.offset.initialize();
+
+		var computedStyle,
+			offsetParent = elem.offsetParent,
+			prevOffsetParent = elem,
+			doc = elem.ownerDocument,
+			docElem = doc.documentElement,
+			body = doc.body,
+			defaultView = doc.defaultView,
+			prevComputedStyle = defaultView ? defaultView.getComputedStyle( elem, null ) : elem.currentStyle,
+			top = elem.offsetTop,
+			left = elem.offsetLeft;
+
+		while ( (elem = elem.parentNode) && elem !== body && elem !== docElem ) {
+			if ( jQuery.offset.supportsFixedPosition && prevComputedStyle.position === "fixed" ) {
+				break;
+			}
+
+			computedStyle = defaultView ? defaultView.getComputedStyle(elem, null) : elem.currentStyle;
+			top  -= elem.scrollTop;
+			left -= elem.scrollLeft;
+
+			if ( elem === offsetParent ) {
+				top  += elem.offsetTop;
+				left += elem.offsetLeft;
+
+				if ( jQuery.offset.doesNotAddBorder && !(jQuery.offset.doesAddBorderForTableAndCells && rtable.test(elem.nodeName)) ) {
+					top  += parseFloat( computedStyle.borderTopWidth  ) || 0;
+					left += parseFloat( computedStyle.borderLeftWidth ) || 0;
+				}
+
+				prevOffsetParent = offsetParent;
+				offsetParent = elem.offsetParent;
+			}
+
+			if ( jQuery.offset.subtractsBorderForOverflowNotVisible && computedStyle.overflow !== "visible" ) {
+				top  += parseFloat( computedStyle.borderTopWidth  ) || 0;
+				left += parseFloat( computedStyle.borderLeftWidth ) || 0;
+			}
+
+			prevComputedStyle = computedStyle;
+		}
+
+		if ( prevComputedStyle.position === "relative" || prevComputedStyle.position === "static" ) {
+			top  += body.offsetTop;
+			left += body.offsetLeft;
+		}
+
+		if ( jQuery.offset.supportsFixedPosition && prevComputedStyle.position === "fixed" ) {
+			top  += Math.max( docElem.scrollTop, body.scrollTop );
+			left += Math.max( docElem.scrollLeft, body.scrollLeft );
+		}
+
+		return { top: top, left: left };
+	};
+}
+
+jQuery.offset = {
+	initialize: function() {
+		var body = document.body, container = document.createElement("div"), innerDiv, checkDiv, table, td, bodyMarginTop = parseFloat( jQuery.css(body, "marginTop") ) || 0,
+			html = "<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div><table style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>";
+
+		jQuery.extend( container.style, { position: "absolute", top: 0, left: 0, margin: 0, border: 0, width: "1px", height: "1px", visibility: "hidden" } );
+
+		container.innerHTML = html;
+		body.insertBefore( container, body.firstChild );
+		innerDiv = container.firstChild;
+		checkDiv = innerDiv.firstChild;
+		td = innerDiv.nextSibling.firstChild.firstChild;
+
+		this.doesNotAddBorder = (checkDiv.offsetTop !== 5);
+		this.doesAddBorderForTableAndCells = (td.offsetTop === 5);
+
+		checkDiv.style.position = "fixed";
+		checkDiv.style.top = "20px";
+
+		// safari subtracts parent border width here which is 5px
+		this.supportsFixedPosition = (checkDiv.offsetTop === 20 || checkDiv.offsetTop === 15);
+		checkDiv.style.position = checkDiv.style.top = "";
+
+		innerDiv.style.overflow = "hidden";
+		innerDiv.style.position = "relative";
+
+		this.subtractsBorderForOverflowNotVisible = (checkDiv.offsetTop === -5);
+
+		this.doesNotIncludeMarginInBodyOffset = (body.offsetTop !== bodyMarginTop);
+
+		body.removeChild( container );
+		jQuery.offset.initialize = jQuery.noop;
+	},
+
+	bodyOffset: function( body ) {
+		var top = body.offsetTop,
+			left = body.offsetLeft;
+
+		jQuery.offset.initialize();
+
+		if ( jQuery.offset.doesNotIncludeMarginInBodyOffset ) {
+			top  += parseFloat( jQuery.css(body, "marginTop") ) || 0;
+			left += parseFloat( jQuery.css(body, "marginLeft") ) || 0;
+		}
+
+		return { top: top, left: left };
+	},
+
+	setOffset: function( elem, options, i ) {
+		var position = jQuery.css( elem, "position" );
+
+		// set position first, in-case top/left are set even on static elem
+		if ( position === "static" ) {
+			elem.style.position = "relative";
+		}
+
+		var curElem = jQuery( elem ),
+			curOffset = curElem.offset(),
+			curCSSTop = jQuery.css( elem, "top" ),
+			curCSSLeft = jQuery.css( elem, "left" ),
+			calculatePosition = (position === "absolute" || position === "fixed") && jQuery.inArray("auto", [curCSSTop, curCSSLeft]) > -1,
+			props = {}, curPosition = {}, curTop, curLeft;
+
+		// need to be able to calculate position if either top or left is auto and position is either absolute or fixed
+		if ( calculatePosition ) {
+			curPosition = curElem.position();
+			curTop = curPosition.top;
+			curLeft = curPosition.left;
+		} else {
+			curTop = parseFloat( curCSSTop ) || 0;
+			curLeft = parseFloat( curCSSLeft ) || 0;
+		}
+
+		if ( jQuery.isFunction( options ) ) {
+			options = options.call( elem, i, curOffset );
+		}
+
+		if (options.top != null) {
+			props.top = (options.top - curOffset.top) + curTop;
+		}
+		if (options.left != null) {
+			props.left = (options.left - curOffset.left) + curLeft;
+		}
+
+		if ( "using" in options ) {
+			options.using.call( elem, props );
+		} else {
+			curElem.css( props );
+		}
+	}
+};
+
+
+jQuery.fn.extend({
+	position: function() {
+		if ( !this[0] ) {
+			return null;
+		}
+
+		var elem = this[0],
+
+		// Get *real* offsetParent
+		offsetParent = this.offsetParent(),
+
+		// Get correct offsets
+		offset       = this.offset(),
+		parentOffset = rroot.test(offsetParent[0].nodeName) ? { top: 0, left: 0 } : offsetParent.offset();
+
+		// Subtract element margins
+		// note: when an element has margin: auto the offsetLeft and marginLeft
+		// are the same in Safari causing offset.left to incorrectly be 0
+		offset.top  -= parseFloat( jQuery.css(elem, "marginTop") ) || 0;
+		offset.left -= parseFloat( jQuery.css(elem, "marginLeft") ) || 0;
+
+		// Add offsetParent borders
+		parentOffset.top  += parseFloat( jQuery.css(offsetParent[0], "borderTopWidth") ) || 0;
+		parentOffset.left += parseFloat( jQuery.css(offsetParent[0], "borderLeftWidth") ) || 0;
+
+		// Subtract the two offsets
+		return {
+			top:  offset.top  - parentOffset.top,
+			left: offset.left - parentOffset.left
+		};
+	},
+
+	offsetParent: function() {
+		return this.map(function() {
+			var offsetParent = this.offsetParent || document.body;
+			while ( offsetParent && (!rroot.test(offsetParent.nodeName) && jQuery.css(offsetParent, "position") === "static") ) {
+				offsetParent = offsetParent.offsetParent;
+			}
+			return offsetParent;
+		});
+	}
+});
+
+
+// Create scrollLeft and scrollTop methods
+jQuery.each( ["Left", "Top"], function( i, name ) {
+	var method = "scroll" + name;
+
+	jQuery.fn[ method ] = function( val ) {
+		var elem, win;
+
+		if ( val === undefined ) {
+			elem = this[ 0 ];
+
+			if ( !elem ) {
+				return null;
+			}
+
+			win = getWindow( elem );
+
+			// Return the scroll offset
+			return win ? ("pageXOffset" in win) ? win[ i ? "pageYOffset" : "pageXOffset" ] :
+				jQuery.support.boxModel && win.document.documentElement[ method ] ||
+					win.document.body[ method ] :
+				elem[ method ];
+		}
+
+		// Set the scroll offset
+		return this.each(function() {
+			win = getWindow( this );
+
+			if ( win ) {
+				win.scrollTo(
+					!i ? val : jQuery( win ).scrollLeft(),
+					 i ? val : jQuery( win ).scrollTop()
+				);
+
+			} else {
+				this[ method ] = val;
+			}
+		});
+	};
+});
+
+function getWindow( elem ) {
+	return jQuery.isWindow( elem ) ?
+		elem :
+		elem.nodeType === 9 ?
+			elem.defaultView || elem.parentWindow :
+			false;
+}
+
+
+
+
+// Create innerHeight, innerWidth, outerHeight and outerWidth methods
+jQuery.each([ "Height", "Width" ], function( i, name ) {
+
+	var type = name.toLowerCase();
+
+	// innerHeight and innerWidth
+	jQuery.fn["inner" + name] = function() {
+		return this[0] ?
+			parseFloat( jQuery.css( this[0], type, "padding" ) ) :
+			null;
+	};
+
+	// outerHeight and outerWidth
+	jQuery.fn["outer" + name] = function( margin ) {
+		return this[0] ?
+			parseFloat( jQuery.css( this[0], type, margin ? "margin" : "border" ) ) :
+			null;
+	};
+
+	jQuery.fn[ type ] = function( size ) {
+		// Get window width or height
+		var elem = this[0];
+		if ( !elem ) {
+			return size == null ? null : this;
+		}
+
+		if ( jQuery.isFunction( size ) ) {
+			return this.each(function( i ) {
+				var self = jQuery( this );
+				self[ type ]( size.call( this, i, self[ type ]() ) );
+			});
+		}
+
+		if ( jQuery.isWindow( elem ) ) {
+			// Everyone else use document.documentElement or document.body depending on Quirks vs Standards mode
+			// 3rd condition allows Nokia support, as it supports the docElem prop but not CSS1Compat
+			var docElemProp = elem.document.documentElement[ "client" + name ];
+			return elem.document.compatMode === "CSS1Compat" && docElemProp ||
+				elem.document.body[ "client" + name ] || docElemProp;
+
+		// Get document width or height
+		} else if ( elem.nodeType === 9 ) {
+			// Either scroll[Width/Height] or offset[Width/Height], whichever is greater
+			return Math.max(
+				elem.documentElement["client" + name],
+				elem.body["scroll" + name], elem.documentElement["scroll" + name],
+				elem.body["offset" + name], elem.documentElement["offset" + name]
+			);
+
+		// Get or set width or height on the element
+		} else if ( size === undefined ) {
+			var orig = jQuery.css( elem, type ),
+				ret = parseFloat( orig );
+
+			return jQuery.isNaN( ret ) ? orig : ret;
+
+		// Set the width or height on the element (default to pixels if value is unitless)
+		} else {
+			return this.css( type, typeof size === "string" ? size : size + "px" );
+		}
+	};
+
+});
+
+
+window.jQuery = window.$ = jQuery;
+})(window);
+/*!
  * jQuery UI 1.8.12
  *
  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
@@ -16348,5 +25284,5473 @@ var fluid_1_5 = fluid_1_5 || {};
         
         that.refreshView();
     };    
+
+})(jQuery, fluid_1_5);
+/**
+ * jQuery.ScrollTo
+ * Copyright (c) 2007-2009 Ariel Flesler - aflesler(at)gmail(dot)com | http://flesler.blogspot.com
+ * Dual licensed under MIT and GPL.
+ * Date: 5/25/2009
+ *
+ * @projectDescription Easy element scrolling using jQuery.
+ * http://flesler.blogspot.com/2007/10/jqueryscrollto.html
+ * Works with jQuery +1.2.6. Tested on FF 2/3, IE 6/7/8, Opera 9.5/6, Safari 3, Chrome 1 on WinXP.
+ *
+ * @author Ariel Flesler
+ * @version 1.4.2
+ *
+ * @id jQuery.scrollTo
+ * @id jQuery.fn.scrollTo
+ * @param {String, Number, DOMElement, jQuery, Object} target Where to scroll the matched elements.
+ *	  The different options for target are:
+ *		- A number position (will be applied to all axes).
+ *		- A string position ('44', '100px', '+=90', etc ) will be applied to all axes
+ *		- A jQuery/DOM element ( logically, child of the element to scroll )
+ *		- A string selector, that will be relative to the element to scroll ( 'li:eq(2)', etc )
+ *		- A hash { top:x, left:y }, x and y can be any kind of number/string like above.
+*		- A percentage of the container's dimension/s, for example: 50% to go to the middle.
+ *		- The string 'max' for go-to-end. 
+ * @param {Number} duration The OVERALL length of the animation, this argument can be the settings object instead.
+ * @param {Object,Function} settings Optional set of settings or the onAfter callback.
+ *	 @option {String} axis Which axis must be scrolled, use 'x', 'y', 'xy' or 'yx'.
+ *	 @option {Number} duration The OVERALL length of the animation.
+ *	 @option {String} easing The easing method for the animation.
+ *	 @option {Boolean} margin If true, the margin of the target element will be deducted from the final position.
+ *	 @option {Object, Number} offset Add/deduct from the end position. One number for both axes or { top:x, left:y }.
+ *	 @option {Object, Number} over Add/deduct the height/width multiplied by 'over', can be { top:x, left:y } when using both axes.
+ *	 @option {Boolean} queue If true, and both axis are given, the 2nd axis will only be animated after the first one ends.
+ *	 @option {Function} onAfter Function to be called after the scrolling ends. 
+ *	 @option {Function} onAfterFirst If queuing is activated, this function will be called after the first scrolling ends.
+ * @return {jQuery} Returns the same jQuery object, for chaining.
+ *
+ * @desc Scroll to a fixed position
+ * @example $('div').scrollTo( 340 );
+ *
+ * @desc Scroll relatively to the actual position
+ * @example $('div').scrollTo( '+=340px', { axis:'y' } );
+ *
+ * @dec Scroll using a selector (relative to the scrolled element)
+ * @example $('div').scrollTo( 'p.paragraph:eq(2)', 500, { easing:'swing', queue:true, axis:'xy' } );
+ *
+ * @ Scroll to a DOM element (same for jQuery object)
+ * @example var second_child = document.getElementById('container').firstChild.nextSibling;
+ *			$('#container').scrollTo( second_child, { duration:500, axis:'x', onAfter:function(){
+ *				alert('scrolled!!');																   
+ *			}});
+ *
+ * @desc Scroll on both axes, to different values
+ * @example $('div').scrollTo( { top: 300, left:'+=200' }, { axis:'xy', offset:-20 } );
+ */
+;(function( $ ){
+	
+	var $scrollTo = $.scrollTo = function( target, duration, settings ){
+		$(window).scrollTo( target, duration, settings );
+	};
+
+	$scrollTo.defaults = {
+		axis:'xy',
+		duration: parseFloat($.fn.jquery) >= 1.3 ? 0 : 1
+	};
+
+	// Returns the element that needs to be animated to scroll the window.
+	// Kept for backwards compatibility (specially for localScroll & serialScroll)
+	$scrollTo.window = function( scope ){
+		return $(window)._scrollable();
+	};
+
+	// Hack, hack, hack :)
+	// Returns the real elements to scroll (supports window/iframes, documents and regular nodes)
+	$.fn._scrollable = function(){
+		return this.map(function(){
+			var elem = this,
+				isWin = !elem.nodeName || $.inArray( elem.nodeName.toLowerCase(), ['iframe','#document','html','body'] ) != -1;
+
+				if( !isWin )
+					return elem;
+
+			var doc = (elem.contentWindow || elem).document || elem.ownerDocument || elem;
+			
+			return $.browser.safari || doc.compatMode == 'BackCompat' ?
+				doc.body : 
+				doc.documentElement;
+		});
+	};
+
+	$.fn.scrollTo = function( target, duration, settings ){
+		if( typeof duration == 'object' ){
+			settings = duration;
+			duration = 0;
+		}
+		if( typeof settings == 'function' )
+			settings = { onAfter:settings };
+			
+		if( target == 'max' )
+			target = 9e9;
+			
+		settings = $.extend( {}, $scrollTo.defaults, settings );
+		// Speed is still recognized for backwards compatibility
+		duration = duration || settings.speed || settings.duration;
+		// Make sure the settings are given right
+		settings.queue = settings.queue && settings.axis.length > 1;
+		
+		if( settings.queue )
+			// Let's keep the overall duration
+			duration /= 2;
+		settings.offset = both( settings.offset );
+		settings.over = both( settings.over );
+
+		return this._scrollable().each(function(){
+			var elem = this,
+				$elem = $(elem),
+				targ = target, toff, attr = {},
+				win = $elem.is('html,body');
+
+			switch( typeof targ ){
+				// A number will pass the regex
+				case 'number':
+				case 'string':
+					if( /^([+-]=)?\d+(\.\d+)?(px|%)?$/.test(targ) ){
+						targ = both( targ );
+						// We are done
+						break;
+					}
+					// Relative selector, no break!
+					targ = $(targ,this);
+				case 'object':
+					// DOMElement / jQuery
+					if( targ.is || targ.style )
+						// Get the real position of the target 
+						toff = (targ = $(targ)).offset();
+			}
+			$.each( settings.axis.split(''), function( i, axis ){
+				var Pos	= axis == 'x' ? 'Left' : 'Top',
+					pos = Pos.toLowerCase(),
+					key = 'scroll' + Pos,
+					old = elem[key],
+					max = $scrollTo.max(elem, axis);
+
+				if( toff ){// jQuery / DOMElement
+					attr[key] = toff[pos] + ( win ? 0 : old - $elem.offset()[pos] );
+
+					// If it's a dom element, reduce the margin
+					if( settings.margin ){
+						attr[key] -= parseInt(targ.css('margin'+Pos)) || 0;
+						attr[key] -= parseInt(targ.css('border'+Pos+'Width')) || 0;
+					}
+					
+					attr[key] += settings.offset[pos] || 0;
+					
+					if( settings.over[pos] )
+						// Scroll to a fraction of its width/height
+						attr[key] += targ[axis=='x'?'width':'height']() * settings.over[pos];
+				}else{ 
+					var val = targ[pos];
+					// Handle percentage values
+					attr[key] = val.slice && val.slice(-1) == '%' ? 
+						parseFloat(val) / 100 * max
+						: val;
+				}
+
+				// Number or 'number'
+				if( /^\d+$/.test(attr[key]) )
+					// Check the limits
+					attr[key] = attr[key] <= 0 ? 0 : Math.min( attr[key], max );
+
+				// Queueing axes
+				if( !i && settings.queue ){
+					// Don't waste time animating, if there's no need.
+					if( old != attr[key] )
+						// Intermediate animation
+						animate( settings.onAfterFirst );
+					// Don't animate this axis again in the next iteration.
+					delete attr[key];
+				}
+			});
+
+			animate( settings.onAfter );			
+
+			function animate( callback ){
+				$elem.animate( attr, duration, settings.easing, callback && function(){
+					callback.call(this, target, settings);
+				});
+			};
+
+		}).end();
+	};
+	
+	// Max scrolling position, works on quirks mode
+	// It only fails (not too badly) on IE, quirks mode.
+	$scrollTo.max = function( elem, axis ){
+		var Dim = axis == 'x' ? 'Width' : 'Height',
+			scroll = 'scroll'+Dim;
+		
+		if( !$(elem).is('html,body') )
+			return elem[scroll] - $(elem)[Dim.toLowerCase()]();
+		
+		var size = 'client' + Dim,
+			html = elem.ownerDocument.documentElement,
+			body = elem.ownerDocument.body;
+
+		return Math.max( html[scroll], body[scroll] ) 
+			 - Math.min( html[size]  , body[size]   );
+			
+	};
+
+	function both( val ){
+		return typeof val == 'object' ? val : { top:val, left:val };
+	};
+
+})( jQuery );/*!	SWFObject v2.2 <http://code.google.com/p/swfobject/> 
+	is released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
+*/
+
+var swfobject = function() {
+	
+	var UNDEF = "undefined",
+		OBJECT = "object",
+		SHOCKWAVE_FLASH = "Shockwave Flash",
+		SHOCKWAVE_FLASH_AX = "ShockwaveFlash.ShockwaveFlash",
+		FLASH_MIME_TYPE = "application/x-shockwave-flash",
+		EXPRESS_INSTALL_ID = "SWFObjectExprInst",
+		ON_READY_STATE_CHANGE = "onreadystatechange",
+		
+		win = window,
+		doc = document,
+		nav = navigator,
+		
+		plugin = false,
+		domLoadFnArr = [main],
+		regObjArr = [],
+		objIdArr = [],
+		listenersArr = [],
+		storedAltContent,
+		storedAltContentId,
+		storedCallbackFn,
+		storedCallbackObj,
+		isDomLoaded = false,
+		isExpressInstallActive = false,
+		dynamicStylesheet,
+		dynamicStylesheetMedia,
+		autoHideShow = true,
+	
+	/* Centralized function for browser feature detection
+		- User agent string detection is only used when no good alternative is possible
+		- Is executed directly for optimal performance
+	*/	
+	ua = function() {
+		var w3cdom = typeof doc.getElementById != UNDEF && typeof doc.getElementsByTagName != UNDEF && typeof doc.createElement != UNDEF,
+			u = nav.userAgent.toLowerCase(),
+			p = nav.platform.toLowerCase(),
+			windows = p ? /win/.test(p) : /win/.test(u),
+			mac = p ? /mac/.test(p) : /mac/.test(u),
+			webkit = /webkit/.test(u) ? parseFloat(u.replace(/^.*webkit\/(\d+(\.\d+)?).*$/, "$1")) : false, // returns either the webkit version or false if not webkit
+			ie = !+"\v1", // feature detection based on Andrea Giammarchi's solution: http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
+			playerVersion = [0,0,0],
+			d = null;
+		if (typeof nav.plugins != UNDEF && typeof nav.plugins[SHOCKWAVE_FLASH] == OBJECT) {
+			d = nav.plugins[SHOCKWAVE_FLASH].description;
+			if (d && !(typeof nav.mimeTypes != UNDEF && nav.mimeTypes[FLASH_MIME_TYPE] && !nav.mimeTypes[FLASH_MIME_TYPE].enabledPlugin)) { // navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin indicates whether plug-ins are enabled or disabled in Safari 3+
+				plugin = true;
+				ie = false; // cascaded feature detection for Internet Explorer
+				d = d.replace(/^.*\s+(\S+\s+\S+$)/, "$1");
+				playerVersion[0] = parseInt(d.replace(/^(.*)\..*$/, "$1"), 10);
+				playerVersion[1] = parseInt(d.replace(/^.*\.(.*)\s.*$/, "$1"), 10);
+				playerVersion[2] = /[a-zA-Z]/.test(d) ? parseInt(d.replace(/^.*[a-zA-Z]+(.*)$/, "$1"), 10) : 0;
+			}
+		}
+		else if (typeof win.ActiveXObject != UNDEF) {
+			try {
+				var a = new ActiveXObject(SHOCKWAVE_FLASH_AX);
+				if (a) { // a will return null when ActiveX is disabled
+					d = a.GetVariable("$version");
+					if (d) {
+						ie = true; // cascaded feature detection for Internet Explorer
+						d = d.split(" ")[1].split(",");
+						playerVersion = [parseInt(d[0], 10), parseInt(d[1], 10), parseInt(d[2], 10)];
+					}
+				}
+			}
+			catch(e) {}
+		}
+		return { w3:w3cdom, pv:playerVersion, wk:webkit, ie:ie, win:windows, mac:mac };
+	}(),
+	
+	/* Cross-browser onDomLoad
+		- Will fire an event as soon as the DOM of a web page is loaded
+		- Internet Explorer workaround based on Diego Perini's solution: http://javascript.nwbox.com/IEContentLoaded/
+		- Regular onload serves as fallback
+	*/ 
+	onDomLoad = function() {
+		if (!ua.w3) { return; }
+		if ((typeof doc.readyState != UNDEF && doc.readyState == "complete") || (typeof doc.readyState == UNDEF && (doc.getElementsByTagName("body")[0] || doc.body))) { // function is fired after onload, e.g. when script is inserted dynamically 
+			callDomLoadFunctions();
+		}
+		if (!isDomLoaded) {
+			if (typeof doc.addEventListener != UNDEF) {
+				doc.addEventListener("DOMContentLoaded", callDomLoadFunctions, false);
+			}		
+			if (ua.ie && ua.win) {
+				doc.attachEvent(ON_READY_STATE_CHANGE, function() {
+					if (doc.readyState == "complete") {
+						doc.detachEvent(ON_READY_STATE_CHANGE, arguments.callee);
+						callDomLoadFunctions();
+					}
+				});
+				if (win == top) { // if not inside an iframe
+					(function(){
+						if (isDomLoaded) { return; }
+						try {
+							doc.documentElement.doScroll("left");
+						}
+						catch(e) {
+							setTimeout(arguments.callee, 0);
+							return;
+						}
+						callDomLoadFunctions();
+					})();
+				}
+			}
+			if (ua.wk) {
+				(function(){
+					if (isDomLoaded) { return; }
+					if (!/loaded|complete/.test(doc.readyState)) {
+						setTimeout(arguments.callee, 0);
+						return;
+					}
+					callDomLoadFunctions();
+				})();
+			}
+			addLoadEvent(callDomLoadFunctions);
+		}
+	}();
+	
+	function callDomLoadFunctions() {
+		if (isDomLoaded) { return; }
+		try { // test if we can really add/remove elements to/from the DOM; we don't want to fire it too early
+			var t = doc.getElementsByTagName("body")[0].appendChild(createElement("span"));
+			t.parentNode.removeChild(t);
+		}
+		catch (e) { return; }
+		isDomLoaded = true;
+		var dl = domLoadFnArr.length;
+		for (var i = 0; i < dl; i++) {
+			domLoadFnArr[i]();
+		}
+	}
+	
+	function addDomLoadEvent(fn) {
+		if (isDomLoaded) {
+			fn();
+		}
+		else { 
+			domLoadFnArr[domLoadFnArr.length] = fn; // Array.push() is only available in IE5.5+
+		}
+	}
+	
+	/* Cross-browser onload
+		- Based on James Edwards' solution: http://brothercake.com/site/resources/scripts/onload/
+		- Will fire an event as soon as a web page including all of its assets are loaded 
+	 */
+	function addLoadEvent(fn) {
+		if (typeof win.addEventListener != UNDEF) {
+			win.addEventListener("load", fn, false);
+		}
+		else if (typeof doc.addEventListener != UNDEF) {
+			doc.addEventListener("load", fn, false);
+		}
+		else if (typeof win.attachEvent != UNDEF) {
+			addListener(win, "onload", fn);
+		}
+		else if (typeof win.onload == "function") {
+			var fnOld = win.onload;
+			win.onload = function() {
+				fnOld();
+				fn();
+			};
+		}
+		else {
+			win.onload = fn;
+		}
+	}
+	
+	/* Main function
+		- Will preferably execute onDomLoad, otherwise onload (as a fallback)
+	*/
+	function main() { 
+		if (plugin) {
+			testPlayerVersion();
+		}
+		else {
+			matchVersions();
+		}
+	}
+	
+	/* Detect the Flash Player version for non-Internet Explorer browsers
+		- Detecting the plug-in version via the object element is more precise than using the plugins collection item's description:
+		  a. Both release and build numbers can be detected
+		  b. Avoid wrong descriptions by corrupt installers provided by Adobe
+		  c. Avoid wrong descriptions by multiple Flash Player entries in the plugin Array, caused by incorrect browser imports
+		- Disadvantage of this method is that it depends on the availability of the DOM, while the plugins collection is immediately available
+	*/
+	function testPlayerVersion() {
+		var b = doc.getElementsByTagName("body")[0];
+		var o = createElement(OBJECT);
+		o.setAttribute("type", FLASH_MIME_TYPE);
+		var t = b.appendChild(o);
+		if (t) {
+			var counter = 0;
+			(function(){
+				if (typeof t.GetVariable != UNDEF) {
+					var d = t.GetVariable("$version");
+					if (d) {
+						d = d.split(" ")[1].split(",");
+						ua.pv = [parseInt(d[0], 10), parseInt(d[1], 10), parseInt(d[2], 10)];
+					}
+				}
+				else if (counter < 10) {
+					counter++;
+					setTimeout(arguments.callee, 10);
+					return;
+				}
+				b.removeChild(o);
+				t = null;
+				matchVersions();
+			})();
+		}
+		else {
+			matchVersions();
+		}
+	}
+	
+	/* Perform Flash Player and SWF version matching; static publishing only
+	*/
+	function matchVersions() {
+		var rl = regObjArr.length;
+		if (rl > 0) {
+			for (var i = 0; i < rl; i++) { // for each registered object element
+				var id = regObjArr[i].id;
+				var cb = regObjArr[i].callbackFn;
+				var cbObj = {success:false, id:id};
+				if (ua.pv[0] > 0) {
+					var obj = getElementById(id);
+					if (obj) {
+						if (hasPlayerVersion(regObjArr[i].swfVersion) && !(ua.wk && ua.wk < 312)) { // Flash Player version >= published SWF version: Houston, we have a match!
+							setVisibility(id, true);
+							if (cb) {
+								cbObj.success = true;
+								cbObj.ref = getObjectById(id);
+								cb(cbObj);
+							}
+						}
+						else if (regObjArr[i].expressInstall && canExpressInstall()) { // show the Adobe Express Install dialog if set by the web page author and if supported
+							var att = {};
+							att.data = regObjArr[i].expressInstall;
+							att.width = obj.getAttribute("width") || "0";
+							att.height = obj.getAttribute("height") || "0";
+							if (obj.getAttribute("class")) { att.styleclass = obj.getAttribute("class"); }
+							if (obj.getAttribute("align")) { att.align = obj.getAttribute("align"); }
+							// parse HTML object param element's name-value pairs
+							var par = {};
+							var p = obj.getElementsByTagName("param");
+							var pl = p.length;
+							for (var j = 0; j < pl; j++) {
+								if (p[j].getAttribute("name").toLowerCase() != "movie") {
+									par[p[j].getAttribute("name")] = p[j].getAttribute("value");
+								}
+							}
+							showExpressInstall(att, par, id, cb);
+						}
+						else { // Flash Player and SWF version mismatch or an older Webkit engine that ignores the HTML object element's nested param elements: display alternative content instead of SWF
+							displayAltContent(obj);
+							if (cb) { cb(cbObj); }
+						}
+					}
+				}
+				else {	// if no Flash Player is installed or the fp version cannot be detected we let the HTML object element do its job (either show a SWF or alternative content)
+					setVisibility(id, true);
+					if (cb) {
+						var o = getObjectById(id); // test whether there is an HTML object element or not
+						if (o && typeof o.SetVariable != UNDEF) { 
+							cbObj.success = true;
+							cbObj.ref = o;
+						}
+						cb(cbObj);
+					}
+				}
+			}
+		}
+	}
+	
+	function getObjectById(objectIdStr) {
+		var r = null;
+		var o = getElementById(objectIdStr);
+		if (o && o.nodeName == "OBJECT") {
+			if (typeof o.SetVariable != UNDEF) {
+				r = o;
+			}
+			else {
+				var n = o.getElementsByTagName(OBJECT)[0];
+				if (n) {
+					r = n;
+				}
+			}
+		}
+		return r;
+	}
+	
+	/* Requirements for Adobe Express Install
+		- only one instance can be active at a time
+		- fp 6.0.65 or higher
+		- Win/Mac OS only
+		- no Webkit engines older than version 312
+	*/
+	function canExpressInstall() {
+		return !isExpressInstallActive && hasPlayerVersion("6.0.65") && (ua.win || ua.mac) && !(ua.wk && ua.wk < 312);
+	}
+	
+	/* Show the Adobe Express Install dialog
+		- Reference: http://www.adobe.com/cfusion/knowledgebase/index.cfm?id=6a253b75
+	*/
+	function showExpressInstall(att, par, replaceElemIdStr, callbackFn) {
+		isExpressInstallActive = true;
+		storedCallbackFn = callbackFn || null;
+		storedCallbackObj = {success:false, id:replaceElemIdStr};
+		var obj = getElementById(replaceElemIdStr);
+		if (obj) {
+			if (obj.nodeName == "OBJECT") { // static publishing
+				storedAltContent = abstractAltContent(obj);
+				storedAltContentId = null;
+			}
+			else { // dynamic publishing
+				storedAltContent = obj;
+				storedAltContentId = replaceElemIdStr;
+			}
+			att.id = EXPRESS_INSTALL_ID;
+			if (typeof att.width == UNDEF || (!/%$/.test(att.width) && parseInt(att.width, 10) < 310)) { att.width = "310"; }
+			if (typeof att.height == UNDEF || (!/%$/.test(att.height) && parseInt(att.height, 10) < 137)) { att.height = "137"; }
+			doc.title = doc.title.slice(0, 47) + " - Flash Player Installation";
+			var pt = ua.ie && ua.win ? "ActiveX" : "PlugIn",
+				fv = "MMredirectURL=" + win.location.toString().replace(/&/g,"%26") + "&MMplayerType=" + pt + "&MMdoctitle=" + doc.title;
+			if (typeof par.flashvars != UNDEF) {
+				par.flashvars += "&" + fv;
+			}
+			else {
+				par.flashvars = fv;
+			}
+			// IE only: when a SWF is loading (AND: not available in cache) wait for the readyState of the object element to become 4 before removing it,
+			// because you cannot properly cancel a loading SWF file without breaking browser load references, also obj.onreadystatechange doesn't work
+			if (ua.ie && ua.win && obj.readyState != 4) {
+				var newObj = createElement("div");
+				replaceElemIdStr += "SWFObjectNew";
+				newObj.setAttribute("id", replaceElemIdStr);
+				obj.parentNode.insertBefore(newObj, obj); // insert placeholder div that will be replaced by the object element that loads expressinstall.swf
+				obj.style.display = "none";
+				(function(){
+					if (obj.readyState == 4) {
+						obj.parentNode.removeChild(obj);
+					}
+					else {
+						setTimeout(arguments.callee, 10);
+					}
+				})();
+			}
+			createSWF(att, par, replaceElemIdStr);
+		}
+	}
+	
+	/* Functions to abstract and display alternative content
+	*/
+	function displayAltContent(obj) {
+		if (ua.ie && ua.win && obj.readyState != 4) {
+			// IE only: when a SWF is loading (AND: not available in cache) wait for the readyState of the object element to become 4 before removing it,
+			// because you cannot properly cancel a loading SWF file without breaking browser load references, also obj.onreadystatechange doesn't work
+			var el = createElement("div");
+			obj.parentNode.insertBefore(el, obj); // insert placeholder div that will be replaced by the alternative content
+			el.parentNode.replaceChild(abstractAltContent(obj), el);
+			obj.style.display = "none";
+			(function(){
+				if (obj.readyState == 4) {
+					obj.parentNode.removeChild(obj);
+				}
+				else {
+					setTimeout(arguments.callee, 10);
+				}
+			})();
+		}
+		else {
+			obj.parentNode.replaceChild(abstractAltContent(obj), obj);
+		}
+	} 
+
+	function abstractAltContent(obj) {
+		var ac = createElement("div");
+		if (ua.win && ua.ie) {
+			ac.innerHTML = obj.innerHTML;
+		}
+		else {
+			var nestedObj = obj.getElementsByTagName(OBJECT)[0];
+			if (nestedObj) {
+				var c = nestedObj.childNodes;
+				if (c) {
+					var cl = c.length;
+					for (var i = 0; i < cl; i++) {
+						if (!(c[i].nodeType == 1 && c[i].nodeName == "PARAM") && !(c[i].nodeType == 8)) {
+							ac.appendChild(c[i].cloneNode(true));
+						}
+					}
+				}
+			}
+		}
+		return ac;
+	}
+	
+	/* Cross-browser dynamic SWF creation
+	*/
+	function createSWF(attObj, parObj, id) {
+		var r, el = getElementById(id);
+		if (ua.wk && ua.wk < 312) { return r; }
+		if (el) {
+			if (typeof attObj.id == UNDEF) { // if no 'id' is defined for the object element, it will inherit the 'id' from the alternative content
+				attObj.id = id;
+			}
+			if (ua.ie && ua.win) { // Internet Explorer + the HTML object element + W3C DOM methods do not combine: fall back to outerHTML
+				var att = "";
+				for (var i in attObj) {
+					if (attObj[i] != Object.prototype[i]) { // filter out prototype additions from other potential libraries
+						if (i.toLowerCase() == "data") {
+							parObj.movie = attObj[i];
+						}
+						else if (i.toLowerCase() == "styleclass") { // 'class' is an ECMA4 reserved keyword
+							att += ' class="' + attObj[i] + '"';
+						}
+						else if (i.toLowerCase() != "classid") {
+							att += ' ' + i + '="' + attObj[i] + '"';
+						}
+					}
+				}
+				var par = "";
+				for (var j in parObj) {
+					if (parObj[j] != Object.prototype[j]) { // filter out prototype additions from other potential libraries
+						par += '<param name="' + j + '" value="' + parObj[j] + '" />';
+					}
+				}
+				el.outerHTML = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"' + att + '>' + par + '</object>';
+				objIdArr[objIdArr.length] = attObj.id; // stored to fix object 'leaks' on unload (dynamic publishing only)
+				r = getElementById(attObj.id);	
+			}
+			else { // well-behaving browsers
+				var o = createElement(OBJECT);
+				o.setAttribute("type", FLASH_MIME_TYPE);
+				for (var m in attObj) {
+					if (attObj[m] != Object.prototype[m]) { // filter out prototype additions from other potential libraries
+						if (m.toLowerCase() == "styleclass") { // 'class' is an ECMA4 reserved keyword
+							o.setAttribute("class", attObj[m]);
+						}
+						else if (m.toLowerCase() != "classid") { // filter out IE specific attribute
+							o.setAttribute(m, attObj[m]);
+						}
+					}
+				}
+				for (var n in parObj) {
+					if (parObj[n] != Object.prototype[n] && n.toLowerCase() != "movie") { // filter out prototype additions from other potential libraries and IE specific param element
+						createObjParam(o, n, parObj[n]);
+					}
+				}
+				el.parentNode.replaceChild(o, el);
+				r = o;
+			}
+		}
+		return r;
+	}
+	
+	function createObjParam(el, pName, pValue) {
+		var p = createElement("param");
+		p.setAttribute("name", pName);	
+		p.setAttribute("value", pValue);
+		el.appendChild(p);
+	}
+	
+	/* Cross-browser SWF removal
+		- Especially needed to safely and completely remove a SWF in Internet Explorer
+	*/
+	function removeSWF(id) {
+		var obj = getElementById(id);
+		if (obj && obj.nodeName == "OBJECT") {
+			if (ua.ie && ua.win) {
+				obj.style.display = "none";
+				(function(){
+					if (obj.readyState == 4) {
+						removeObjectInIE(id);
+					}
+					else {
+						setTimeout(arguments.callee, 10);
+					}
+				})();
+			}
+			else {
+				obj.parentNode.removeChild(obj);
+			}
+		}
+	}
+	
+	function removeObjectInIE(id) {
+		var obj = getElementById(id);
+		if (obj) {
+			for (var i in obj) {
+				if (typeof obj[i] == "function") {
+					obj[i] = null;
+				}
+			}
+			obj.parentNode.removeChild(obj);
+		}
+	}
+	
+	/* Functions to optimize JavaScript compression
+	*/
+	function getElementById(id) {
+		var el = null;
+		try {
+			el = doc.getElementById(id);
+		}
+		catch (e) {}
+		return el;
+	}
+	
+	function createElement(el) {
+		return doc.createElement(el);
+	}
+	
+	/* Updated attachEvent function for Internet Explorer
+		- Stores attachEvent information in an Array, so on unload the detachEvent functions can be called to avoid memory leaks
+	*/	
+	function addListener(target, eventType, fn) {
+		target.attachEvent(eventType, fn);
+		listenersArr[listenersArr.length] = [target, eventType, fn];
+	}
+	
+	/* Flash Player and SWF content version matching
+	*/
+	function hasPlayerVersion(rv) {
+		var pv = ua.pv, v = rv.split(".");
+		v[0] = parseInt(v[0], 10);
+		v[1] = parseInt(v[1], 10) || 0; // supports short notation, e.g. "9" instead of "9.0.0"
+		v[2] = parseInt(v[2], 10) || 0;
+		return (pv[0] > v[0] || (pv[0] == v[0] && pv[1] > v[1]) || (pv[0] == v[0] && pv[1] == v[1] && pv[2] >= v[2])) ? true : false;
+	}
+	
+	/* Cross-browser dynamic CSS creation
+		- Based on Bobby van der Sluis' solution: http://www.bobbyvandersluis.com/articles/dynamicCSS.php
+	*/	
+	function createCSS(sel, decl, media, newStyle) {
+		if (ua.ie && ua.mac) { return; }
+		var h = doc.getElementsByTagName("head")[0];
+		if (!h) { return; } // to also support badly authored HTML pages that lack a head element
+		var m = (media && typeof media == "string") ? media : "screen";
+		if (newStyle) {
+			dynamicStylesheet = null;
+			dynamicStylesheetMedia = null;
+		}
+		if (!dynamicStylesheet || dynamicStylesheetMedia != m) { 
+			// create dynamic stylesheet + get a global reference to it
+			var s = createElement("style");
+			s.setAttribute("type", "text/css");
+			s.setAttribute("media", m);
+			dynamicStylesheet = h.appendChild(s);
+			if (ua.ie && ua.win && typeof doc.styleSheets != UNDEF && doc.styleSheets.length > 0) {
+				dynamicStylesheet = doc.styleSheets[doc.styleSheets.length - 1];
+			}
+			dynamicStylesheetMedia = m;
+		}
+		// add style rule
+		if (ua.ie && ua.win) {
+			if (dynamicStylesheet && typeof dynamicStylesheet.addRule == OBJECT) {
+				dynamicStylesheet.addRule(sel, decl);
+			}
+		}
+		else {
+			if (dynamicStylesheet && typeof doc.createTextNode != UNDEF) {
+				dynamicStylesheet.appendChild(doc.createTextNode(sel + " {" + decl + "}"));
+			}
+		}
+	}
+	
+	function setVisibility(id, isVisible) {
+		if (!autoHideShow) { return; }
+		var v = isVisible ? "visible" : "hidden";
+		if (isDomLoaded && getElementById(id)) {
+			getElementById(id).style.visibility = v;
+		}
+		else {
+			createCSS("#" + id, "visibility:" + v);
+		}
+	}
+
+	/* Filter to avoid XSS attacks
+	*/
+	function urlEncodeIfNecessary(s) {
+		var regex = /[\\\"<>\.;]/;
+		var hasBadChars = regex.exec(s) != null;
+		return hasBadChars && typeof encodeURIComponent != UNDEF ? encodeURIComponent(s) : s;
+	}
+	
+	/* Release memory to avoid memory leaks caused by closures, fix hanging audio/video threads and force open sockets/NetConnections to disconnect (Internet Explorer only)
+	*/
+	var cleanup = function() {
+		if (ua.ie && ua.win) {
+			window.attachEvent("onunload", function() {
+				// remove listeners to avoid memory leaks
+				var ll = listenersArr.length;
+				for (var i = 0; i < ll; i++) {
+					listenersArr[i][0].detachEvent(listenersArr[i][1], listenersArr[i][2]);
+				}
+				// cleanup dynamically embedded objects to fix audio/video threads and force open sockets and NetConnections to disconnect
+				var il = objIdArr.length;
+				for (var j = 0; j < il; j++) {
+					removeSWF(objIdArr[j]);
+				}
+				// cleanup library's main closures to avoid memory leaks
+				for (var k in ua) {
+					ua[k] = null;
+				}
+				ua = null;
+				for (var l in swfobject) {
+					swfobject[l] = null;
+				}
+				swfobject = null;
+			});
+		}
+	}();
+	
+	return {
+		/* Public API
+			- Reference: http://code.google.com/p/swfobject/wiki/documentation
+		*/ 
+		registerObject: function(objectIdStr, swfVersionStr, xiSwfUrlStr, callbackFn) {
+			if (ua.w3 && objectIdStr && swfVersionStr) {
+				var regObj = {};
+				regObj.id = objectIdStr;
+				regObj.swfVersion = swfVersionStr;
+				regObj.expressInstall = xiSwfUrlStr;
+				regObj.callbackFn = callbackFn;
+				regObjArr[regObjArr.length] = regObj;
+				setVisibility(objectIdStr, false);
+			}
+			else if (callbackFn) {
+				callbackFn({success:false, id:objectIdStr});
+			}
+		},
+		
+		getObjectById: function(objectIdStr) {
+			if (ua.w3) {
+				return getObjectById(objectIdStr);
+			}
+		},
+		
+		embedSWF: function(swfUrlStr, replaceElemIdStr, widthStr, heightStr, swfVersionStr, xiSwfUrlStr, flashvarsObj, parObj, attObj, callbackFn) {
+			var callbackObj = {success:false, id:replaceElemIdStr};
+			if (ua.w3 && !(ua.wk && ua.wk < 312) && swfUrlStr && replaceElemIdStr && widthStr && heightStr && swfVersionStr) {
+				setVisibility(replaceElemIdStr, false);
+				addDomLoadEvent(function() {
+					widthStr += ""; // auto-convert to string
+					heightStr += "";
+					var att = {};
+					if (attObj && typeof attObj === OBJECT) {
+						for (var i in attObj) { // copy object to avoid the use of references, because web authors often reuse attObj for multiple SWFs
+							att[i] = attObj[i];
+						}
+					}
+					att.data = swfUrlStr;
+					att.width = widthStr;
+					att.height = heightStr;
+					var par = {}; 
+					if (parObj && typeof parObj === OBJECT) {
+						for (var j in parObj) { // copy object to avoid the use of references, because web authors often reuse parObj for multiple SWFs
+							par[j] = parObj[j];
+						}
+					}
+					if (flashvarsObj && typeof flashvarsObj === OBJECT) {
+						for (var k in flashvarsObj) { // copy object to avoid the use of references, because web authors often reuse flashvarsObj for multiple SWFs
+							if (typeof par.flashvars != UNDEF) {
+								par.flashvars += "&" + k + "=" + flashvarsObj[k];
+							}
+							else {
+								par.flashvars = k + "=" + flashvarsObj[k];
+							}
+						}
+					}
+					if (hasPlayerVersion(swfVersionStr)) { // create SWF
+						var obj = createSWF(att, par, replaceElemIdStr);
+						if (att.id == replaceElemIdStr) {
+							setVisibility(replaceElemIdStr, true);
+						}
+						callbackObj.success = true;
+						callbackObj.ref = obj;
+					}
+					else if (xiSwfUrlStr && canExpressInstall()) { // show Adobe Express Install
+						att.data = xiSwfUrlStr;
+						showExpressInstall(att, par, replaceElemIdStr, callbackFn);
+						return;
+					}
+					else { // show alternative content
+						setVisibility(replaceElemIdStr, true);
+					}
+					if (callbackFn) { callbackFn(callbackObj); }
+				});
+			}
+			else if (callbackFn) { callbackFn(callbackObj);	}
+		},
+		
+		switchOffAutoHideShow: function() {
+			autoHideShow = false;
+		},
+		
+		ua: ua,
+		
+		getFlashPlayerVersion: function() {
+			return { major:ua.pv[0], minor:ua.pv[1], release:ua.pv[2] };
+		},
+		
+		hasFlashPlayerVersion: hasPlayerVersion,
+		
+		createSWF: function(attObj, parObj, replaceElemIdStr) {
+			if (ua.w3) {
+				return createSWF(attObj, parObj, replaceElemIdStr);
+			}
+			else {
+				return undefined;
+			}
+		},
+		
+		showExpressInstall: function(att, par, replaceElemIdStr, callbackFn) {
+			if (ua.w3 && canExpressInstall()) {
+				showExpressInstall(att, par, replaceElemIdStr, callbackFn);
+			}
+		},
+		
+		removeSWF: function(objElemIdStr) {
+			if (ua.w3) {
+				removeSWF(objElemIdStr);
+			}
+		},
+		
+		createCSS: function(selStr, declStr, mediaStr, newStyleBoolean) {
+			if (ua.w3) {
+				createCSS(selStr, declStr, mediaStr, newStyleBoolean);
+			}
+		},
+		
+		addDomLoadEvent: addDomLoadEvent,
+		
+		addLoadEvent: addLoadEvent,
+		
+		getQueryParamValue: function(param) {
+			var q = doc.location.search || doc.location.hash;
+			if (q) {
+				if (/\?/.test(q)) { q = q.split("?")[1]; } // strip question mark
+				if (param == null) {
+					return urlEncodeIfNecessary(q);
+				}
+				var pairs = q.split("&");
+				for (var i = 0; i < pairs.length; i++) {
+					if (pairs[i].substring(0, pairs[i].indexOf("=")) == param) {
+						return urlEncodeIfNecessary(pairs[i].substring((pairs[i].indexOf("=") + 1)));
+					}
+				}
+			}
+			return "";
+		},
+		
+		// For internal usage only
+		expressInstallCallback: function() {
+			if (isExpressInstallActive) {
+				var obj = getElementById(EXPRESS_INSTALL_ID);
+				if (obj && storedAltContent) {
+					obj.parentNode.replaceChild(storedAltContent, obj);
+					if (storedAltContentId) {
+						setVisibility(storedAltContentId, true);
+						if (ua.ie && ua.win) { storedAltContent.style.display = "block"; }
+					}
+					if (storedCallbackFn) { storedCallbackFn(storedCallbackObj); }
+				}
+				isExpressInstallActive = false;
+			} 
+		}
+	};
+}();
+/**
+ * SWFUpload: http://www.swfupload.org, http://swfupload.googlecode.com
+ *
+ * mmSWFUpload 1.0: Flash upload dialog - http://profandesign.se/swfupload/,  http://www.vinterwebb.se/
+ *
+ * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilz�n and Mammon Media and is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * SWFUpload 2 is (c) 2007-2008 Jake Roberts and is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ */
+
+
+/* ******************* */
+/* Constructor & Init  */
+/* ******************* */
+var SWFUpload;
+
+if (SWFUpload == undefined) {
+	SWFUpload = function (settings) {
+		this.initSWFUpload(settings);
+	};
+}
+
+SWFUpload.prototype.initSWFUpload = function (settings) {
+	try {
+		this.customSettings = {};	// A container where developers can place their own settings associated with this instance.
+		this.settings = settings;
+		this.eventQueue = [];
+		this.movieName = "SWFUpload_" + SWFUpload.movieCount++;
+		this.movieElement = null;
+
+
+		// Setup global control tracking
+		SWFUpload.instances[this.movieName] = this;
+
+		// Load the settings.  Load the Flash movie.
+		this.initSettings();
+		this.loadFlash();
+		this.displayDebugInfo();
+	} catch (ex) {
+		delete SWFUpload.instances[this.movieName];
+		throw ex;
+	}
+};
+
+/* *************** */
+/* Static Members  */
+/* *************** */
+SWFUpload.instances = {};
+SWFUpload.movieCount = 0;
+SWFUpload.version = "2.2.0 2009-03-25";
+SWFUpload.QUEUE_ERROR = {
+	QUEUE_LIMIT_EXCEEDED	  		: -100,
+	FILE_EXCEEDS_SIZE_LIMIT  		: -110,
+	ZERO_BYTE_FILE			  		: -120,
+	INVALID_FILETYPE		  		: -130
+};
+SWFUpload.UPLOAD_ERROR = {
+	HTTP_ERROR				  		: -200,
+	MISSING_UPLOAD_URL	      		: -210,
+	IO_ERROR				  		: -220,
+	SECURITY_ERROR			  		: -230,
+	UPLOAD_LIMIT_EXCEEDED	  		: -240,
+	UPLOAD_FAILED			  		: -250,
+	SPECIFIED_FILE_ID_NOT_FOUND		: -260,
+	FILE_VALIDATION_FAILED	  		: -270,
+	FILE_CANCELLED			  		: -280,
+	UPLOAD_STOPPED					: -290
+};
+SWFUpload.FILE_STATUS = {
+	QUEUED		 : -1,
+	IN_PROGRESS	 : -2,
+	ERROR		 : -3,
+	COMPLETE	 : -4,
+	CANCELLED	 : -5
+};
+SWFUpload.BUTTON_ACTION = {
+	SELECT_FILE  : -100,
+	SELECT_FILES : -110,
+	START_UPLOAD : -120
+};
+SWFUpload.CURSOR = {
+	ARROW : -1,
+	HAND : -2
+};
+SWFUpload.WINDOW_MODE = {
+	WINDOW : "window",
+	TRANSPARENT : "transparent",
+	OPAQUE : "opaque"
+};
+
+// Private: takes a URL, determines if it is relative and converts to an absolute URL
+// using the current site. Only processes the URL if it can, otherwise returns the URL untouched
+SWFUpload.completeURL = function(url) {
+	if (typeof(url) !== "string" || url.match(/^https?:\/\//i) || url.match(/^\//)) {
+		return url;
+	}
+	
+	var currentURL = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "");
+	
+	var indexSlash = window.location.pathname.lastIndexOf("/");
+	if (indexSlash <= 0) {
+		path = "/";
+	} else {
+		path = window.location.pathname.substr(0, indexSlash) + "/";
+	}
+	
+	return /*currentURL +*/ path + url;
+	
+};
+
+
+/* ******************** */
+/* Instance Members  */
+/* ******************** */
+
+// Private: initSettings ensures that all the
+// settings are set, getting a default value if one was not assigned.
+SWFUpload.prototype.initSettings = function () {
+	this.ensureDefault = function (settingName, defaultValue) {
+		this.settings[settingName] = (this.settings[settingName] == undefined) ? defaultValue : this.settings[settingName];
+	};
+	
+	// Upload backend settings
+	this.ensureDefault("upload_url", "");
+	this.ensureDefault("preserve_relative_urls", false);
+	this.ensureDefault("file_post_name", "Filedata");
+	this.ensureDefault("post_params", {});
+	this.ensureDefault("use_query_string", false);
+	this.ensureDefault("requeue_on_error", false);
+	this.ensureDefault("http_success", []);
+	this.ensureDefault("assume_success_timeout", 0);
+	
+	// File Settings
+	this.ensureDefault("file_types", "*.*");
+	this.ensureDefault("file_types_description", "All Files");
+	this.ensureDefault("file_size_limit", 0);	// Default zero means "unlimited"
+	this.ensureDefault("file_upload_limit", 0);
+	this.ensureDefault("file_queue_limit", 0);
+
+	// Flash Settings
+	this.ensureDefault("flash_url", "swfupload.swf");
+	this.ensureDefault("prevent_swf_caching", true);
+	
+	// Button Settings
+	this.ensureDefault("button_image_url", "");
+	this.ensureDefault("button_width", 1);
+	this.ensureDefault("button_height", 1);
+	this.ensureDefault("button_text", "");
+	this.ensureDefault("button_text_style", "color: #000000; font-size: 16pt;");
+	this.ensureDefault("button_text_top_padding", 0);
+	this.ensureDefault("button_text_left_padding", 0);
+	this.ensureDefault("button_action", SWFUpload.BUTTON_ACTION.SELECT_FILES);
+	this.ensureDefault("button_disabled", false);
+	this.ensureDefault("button_placeholder_id", "");
+	this.ensureDefault("button_placeholder", null);
+	this.ensureDefault("button_cursor", SWFUpload.CURSOR.ARROW);
+	this.ensureDefault("button_window_mode", SWFUpload.WINDOW_MODE.WINDOW);
+	
+	// Debug Settings
+	this.ensureDefault("debug", false);
+	this.settings.debug_enabled = this.settings.debug;	// Here to maintain v2 API
+	
+	// Event Handlers
+	this.settings.return_upload_start_handler = this.returnUploadStart;
+	this.ensureDefault("swfupload_loaded_handler", null);
+	this.ensureDefault("file_dialog_start_handler", null);
+	this.ensureDefault("file_queued_handler", null);
+	this.ensureDefault("file_queue_error_handler", null);
+	this.ensureDefault("file_dialog_complete_handler", null);
+	
+	this.ensureDefault("upload_start_handler", null);
+	this.ensureDefault("upload_progress_handler", null);
+	this.ensureDefault("upload_error_handler", null);
+	this.ensureDefault("upload_success_handler", null);
+	this.ensureDefault("upload_complete_handler", null);
+	
+	this.ensureDefault("debug_handler", this.debugMessage);
+
+	this.ensureDefault("custom_settings", {});
+
+	// Other settings
+	this.customSettings = this.settings.custom_settings;
+	
+	// Update the flash url if needed
+	if (!!this.settings.prevent_swf_caching) {
+		this.settings.flash_url = this.settings.flash_url + (this.settings.flash_url.indexOf("?") < 0 ? "?" : "&") + "preventswfcaching=" + new Date().getTime();
+	}
+	
+	if (!this.settings.preserve_relative_urls) {
+		//this.settings.flash_url = SWFUpload.completeURL(this.settings.flash_url);	// Don't need to do this one since flash doesn't look at it
+		this.settings.upload_url = SWFUpload.completeURL(this.settings.upload_url);
+		this.settings.button_image_url = SWFUpload.completeURL(this.settings.button_image_url);
+	}
+	
+	delete this.ensureDefault;
+};
+
+// Private: loadFlash replaces the button_placeholder element with the flash movie.
+SWFUpload.prototype.loadFlash = function () {
+	var targetElement, tempParent;
+
+	// Make sure an element with the ID we are going to use doesn't already exist
+	if (document.getElementById(this.movieName) !== null) {
+		throw "ID " + this.movieName + " is already in use. The Flash Object could not be added";
+	}
+
+	// Get the element where we will be placing the flash movie
+	targetElement = document.getElementById(this.settings.button_placeholder_id) || this.settings.button_placeholder;
+
+	if (targetElement == undefined) {
+		throw "Could not find the placeholder element: " + this.settings.button_placeholder_id;
+	}
+
+	// Append the container and load the flash
+	tempParent = document.createElement("div");
+	tempParent.innerHTML = this.getFlashHTML();	// Using innerHTML is non-standard but the only sensible way to dynamically add Flash in IE (and maybe other browsers)
+	targetElement.parentNode.replaceChild(tempParent.firstChild, targetElement);
+
+	// Fix IE Flash/Form bug
+	if (window[this.movieName] == undefined) {
+		window[this.movieName] = this.getMovieElement();
+	}
+	
+};
+
+// Private: getFlashHTML generates the object tag needed to embed the flash in to the document
+SWFUpload.prototype.getFlashHTML = function () {
+	// Flash Satay object syntax: http://www.alistapart.com/articles/flashsatay
+	return ['<object id="', this.movieName, '" type="application/x-shockwave-flash" data="', this.settings.flash_url, '" width="', this.settings.button_width, '" height="', this.settings.button_height, '" class="swfupload">',
+				'<param name="wmode" value="', this.settings.button_window_mode, '" />',
+				'<param name="movie" value="', this.settings.flash_url, '" />',
+				'<param name="quality" value="high" />',
+				'<param name="menu" value="false" />',
+				'<param name="allowScriptAccess" value="always" />',
+				'<param name="flashvars" value="' + this.getFlashVars() + '" />',
+				'</object>'].join("");
+};
+
+// Private: getFlashVars builds the parameter string that will be passed
+// to flash in the flashvars param.
+SWFUpload.prototype.getFlashVars = function () {
+	// Build a string from the post param object
+	var paramString = this.buildParamString();
+	var httpSuccessString = this.settings.http_success.join(",");
+	
+	// Build the parameter string
+	return ["movieName=", encodeURIComponent(this.movieName),
+			"&amp;uploadURL=", encodeURIComponent(this.settings.upload_url),
+			"&amp;useQueryString=", encodeURIComponent(this.settings.use_query_string),
+			"&amp;requeueOnError=", encodeURIComponent(this.settings.requeue_on_error),
+			"&amp;httpSuccess=", encodeURIComponent(httpSuccessString),
+			"&amp;assumeSuccessTimeout=", encodeURIComponent(this.settings.assume_success_timeout),
+			"&amp;params=", encodeURIComponent(paramString),
+			"&amp;filePostName=", encodeURIComponent(this.settings.file_post_name),
+			"&amp;fileTypes=", encodeURIComponent(this.settings.file_types),
+			"&amp;fileTypesDescription=", encodeURIComponent(this.settings.file_types_description),
+			"&amp;fileSizeLimit=", encodeURIComponent(this.settings.file_size_limit),
+			"&amp;fileUploadLimit=", encodeURIComponent(this.settings.file_upload_limit),
+			"&amp;fileQueueLimit=", encodeURIComponent(this.settings.file_queue_limit),
+			"&amp;debugEnabled=", encodeURIComponent(this.settings.debug_enabled),
+			"&amp;buttonImageURL=", encodeURIComponent(this.settings.button_image_url),
+			"&amp;buttonWidth=", encodeURIComponent(this.settings.button_width),
+			"&amp;buttonHeight=", encodeURIComponent(this.settings.button_height),
+			"&amp;buttonText=", encodeURIComponent(this.settings.button_text),
+			"&amp;buttonTextTopPadding=", encodeURIComponent(this.settings.button_text_top_padding),
+			"&amp;buttonTextLeftPadding=", encodeURIComponent(this.settings.button_text_left_padding),
+			"&amp;buttonTextStyle=", encodeURIComponent(this.settings.button_text_style),
+			"&amp;buttonAction=", encodeURIComponent(this.settings.button_action),
+			"&amp;buttonDisabled=", encodeURIComponent(this.settings.button_disabled),
+			"&amp;buttonCursor=", encodeURIComponent(this.settings.button_cursor)
+		].join("");
+};
+
+// Public: getMovieElement retrieves the DOM reference to the Flash element added by SWFUpload
+// The element is cached after the first lookup
+SWFUpload.prototype.getMovieElement = function () {
+	if (this.movieElement == undefined) {
+		this.movieElement = document.getElementById(this.movieName);
+	}
+
+	if (this.movieElement === null) {
+		throw "Could not find Flash element";
+	}
+	
+	return this.movieElement;
+};
+
+// Private: buildParamString takes the name/value pairs in the post_params setting object
+// and joins them up in to a string formatted "name=value&amp;name=value"
+SWFUpload.prototype.buildParamString = function () {
+	var postParams = this.settings.post_params; 
+	var paramStringPairs = [];
+
+	if (typeof(postParams) === "object") {
+		for (var name in postParams) {
+			if (postParams.hasOwnProperty(name)) {
+				paramStringPairs.push(encodeURIComponent(name.toString()) + "=" + encodeURIComponent(postParams[name].toString()));
+			}
+		}
+	}
+
+	return paramStringPairs.join("&amp;");
+};
+
+// Public: Used to remove a SWFUpload instance from the page. This method strives to remove
+// all references to the SWF, and other objects so memory is properly freed.
+// Returns true if everything was destroyed. Returns a false if a failure occurs leaving SWFUpload in an inconsistant state.
+// Credits: Major improvements provided by steffen
+SWFUpload.prototype.destroy = function () {
+	try {
+		// Make sure Flash is done before we try to remove it
+		this.cancelUpload(null, false);
+		
+
+		// Remove the SWFUpload DOM nodes
+		var movieElement = null;
+		movieElement = this.getMovieElement();
+		
+		if (movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
+			// Loop through all the movie's properties and remove all function references (DOM/JS IE 6/7 memory leak workaround)
+			for (var i in movieElement) {
+				try {
+					if (typeof(movieElement[i]) === "function") {
+						movieElement[i] = null;
+					}
+				} catch (ex1) {}
+			}
+
+			// Remove the Movie Element from the page
+			try {
+				movieElement.parentNode.removeChild(movieElement);
+			} catch (ex) {}
+		}
+		
+		// Remove IE form fix reference
+		window[this.movieName] = null;
+
+		// Destroy other references
+		SWFUpload.instances[this.movieName] = null;
+		delete SWFUpload.instances[this.movieName];
+
+		this.movieElement = null;
+		this.settings = null;
+		this.customSettings = null;
+		this.eventQueue = null;
+		this.movieName = null;
+		
+		
+		return true;
+	} catch (ex2) {
+		return false;
+	}
+};
+
+
+// Public: displayDebugInfo prints out settings and configuration
+// information about this SWFUpload instance.
+// This function (and any references to it) can be deleted when placing
+// SWFUpload in production.
+SWFUpload.prototype.displayDebugInfo = function () {
+	this.debug(
+		[
+			"---SWFUpload Instance Info---\n",
+			"Version: ", SWFUpload.version, "\n",
+			"Movie Name: ", this.movieName, "\n",
+			"Settings:\n",
+			"\t", "upload_url:               ", this.settings.upload_url, "\n",
+			"\t", "flash_url:                ", this.settings.flash_url, "\n",
+			"\t", "use_query_string:         ", this.settings.use_query_string.toString(), "\n",
+			"\t", "requeue_on_error:         ", this.settings.requeue_on_error.toString(), "\n",
+			"\t", "http_success:             ", this.settings.http_success.join(", "), "\n",
+			"\t", "assume_success_timeout:   ", this.settings.assume_success_timeout, "\n",
+			"\t", "file_post_name:           ", this.settings.file_post_name, "\n",
+			"\t", "post_params:              ", this.settings.post_params.toString(), "\n",
+			"\t", "file_types:               ", this.settings.file_types, "\n",
+			"\t", "file_types_description:   ", this.settings.file_types_description, "\n",
+			"\t", "file_size_limit:          ", this.settings.file_size_limit, "\n",
+			"\t", "file_upload_limit:        ", this.settings.file_upload_limit, "\n",
+			"\t", "file_queue_limit:         ", this.settings.file_queue_limit, "\n",
+			"\t", "debug:                    ", this.settings.debug.toString(), "\n",
+
+			"\t", "prevent_swf_caching:      ", this.settings.prevent_swf_caching.toString(), "\n",
+
+			"\t", "button_placeholder_id:    ", this.settings.button_placeholder_id.toString(), "\n",
+			"\t", "button_placeholder:       ", (this.settings.button_placeholder ? "Set" : "Not Set"), "\n",
+			"\t", "button_image_url:         ", this.settings.button_image_url.toString(), "\n",
+			"\t", "button_width:             ", this.settings.button_width.toString(), "\n",
+			"\t", "button_height:            ", this.settings.button_height.toString(), "\n",
+			"\t", "button_text:              ", this.settings.button_text.toString(), "\n",
+			"\t", "button_text_style:        ", this.settings.button_text_style.toString(), "\n",
+			"\t", "button_text_top_padding:  ", this.settings.button_text_top_padding.toString(), "\n",
+			"\t", "button_text_left_padding: ", this.settings.button_text_left_padding.toString(), "\n",
+			"\t", "button_action:            ", this.settings.button_action.toString(), "\n",
+			"\t", "button_disabled:          ", this.settings.button_disabled.toString(), "\n",
+
+			"\t", "custom_settings:          ", this.settings.custom_settings.toString(), "\n",
+			"Event Handlers:\n",
+			"\t", "swfupload_loaded_handler assigned:  ", (typeof this.settings.swfupload_loaded_handler === "function").toString(), "\n",
+			"\t", "file_dialog_start_handler assigned: ", (typeof this.settings.file_dialog_start_handler === "function").toString(), "\n",
+			"\t", "file_queued_handler assigned:       ", (typeof this.settings.file_queued_handler === "function").toString(), "\n",
+			"\t", "file_queue_error_handler assigned:  ", (typeof this.settings.file_queue_error_handler === "function").toString(), "\n",
+			"\t", "upload_start_handler assigned:      ", (typeof this.settings.upload_start_handler === "function").toString(), "\n",
+			"\t", "upload_progress_handler assigned:   ", (typeof this.settings.upload_progress_handler === "function").toString(), "\n",
+			"\t", "upload_error_handler assigned:      ", (typeof this.settings.upload_error_handler === "function").toString(), "\n",
+			"\t", "upload_success_handler assigned:    ", (typeof this.settings.upload_success_handler === "function").toString(), "\n",
+			"\t", "upload_complete_handler assigned:   ", (typeof this.settings.upload_complete_handler === "function").toString(), "\n",
+			"\t", "debug_handler assigned:             ", (typeof this.settings.debug_handler === "function").toString(), "\n"
+		].join("")
+	);
+};
+
+/* Note: addSetting and getSetting are no longer used by SWFUpload but are included
+	the maintain v2 API compatibility
+*/
+// Public: (Deprecated) addSetting adds a setting value. If the value given is undefined or null then the default_value is used.
+SWFUpload.prototype.addSetting = function (name, value, default_value) {
+    if (value == undefined) {
+        return (this.settings[name] = default_value);
+    } else {
+        return (this.settings[name] = value);
+	}
+};
+
+// Public: (Deprecated) getSetting gets a setting. Returns an empty string if the setting was not found.
+SWFUpload.prototype.getSetting = function (name) {
+    if (this.settings[name] != undefined) {
+        return this.settings[name];
+	}
+
+    return "";
+};
+
+
+
+// Private: callFlash handles function calls made to the Flash element.
+// Calls are made with a setTimeout for some functions to work around
+// bugs in the ExternalInterface library.
+SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
+	argumentArray = argumentArray || [];
+	
+	var movieElement = this.getMovieElement();
+	var returnValue, returnString;
+
+	// Flash's method if calling ExternalInterface methods (code adapted from MooTools).
+	try {
+		returnString = movieElement.CallFunction('<invoke name="' + functionName + '" returntype="javascript">' + __flash__argumentsToXML(argumentArray, 0) + '</invoke>');
+		returnValue = eval(returnString);
+	} catch (ex) {
+		throw "Call to " + functionName + " failed";
+	}
+	
+	// Unescape file post param values
+	if (returnValue != undefined && typeof returnValue.post === "object") {
+		returnValue = this.unescapeFilePostParams(returnValue);
+	}
+
+	return returnValue;
+};
+
+/* *****************************
+	-- Flash control methods --
+	Your UI should use these
+	to operate SWFUpload
+   ***************************** */
+
+// WARNING: this function does not work in Flash Player 10
+// Public: selectFile causes a File Selection Dialog window to appear.  This
+// dialog only allows 1 file to be selected.
+SWFUpload.prototype.selectFile = function () {
+	this.callFlash("SelectFile");
+};
+
+// WARNING: this function does not work in Flash Player 10
+// Public: selectFiles causes a File Selection Dialog window to appear/ This
+// dialog allows the user to select any number of files
+// Flash Bug Warning: Flash limits the number of selectable files based on the combined length of the file names.
+// If the selection name length is too long the dialog will fail in an unpredictable manner.  There is no work-around
+// for this bug.
+SWFUpload.prototype.selectFiles = function () {
+	this.callFlash("SelectFiles");
+};
+
+
+// Public: startUpload starts uploading the first file in the queue unless
+// the optional parameter 'fileID' specifies the ID 
+SWFUpload.prototype.startUpload = function (fileID) {
+	this.callFlash("StartUpload", [fileID]);
+};
+
+// Public: cancelUpload cancels any queued file.  The fileID parameter may be the file ID or index.
+// If you do not specify a fileID the current uploading file or first file in the queue is cancelled.
+// If you do not want the uploadError event to trigger you can specify false for the triggerErrorEvent parameter.
+SWFUpload.prototype.cancelUpload = function (fileID, triggerErrorEvent) {
+	if (triggerErrorEvent !== false) {
+		triggerErrorEvent = true;
+	}
+	this.callFlash("CancelUpload", [fileID, triggerErrorEvent]);
+};
+
+// Public: stopUpload stops the current upload and requeues the file at the beginning of the queue.
+// If nothing is currently uploading then nothing happens.
+SWFUpload.prototype.stopUpload = function () {
+	this.callFlash("StopUpload");
+};
+
+/* ************************
+ * Settings methods
+ *   These methods change the SWFUpload settings.
+ *   SWFUpload settings should not be changed directly on the settings object
+ *   since many of the settings need to be passed to Flash in order to take
+ *   effect.
+ * *********************** */
+
+// Public: getStats gets the file statistics object.
+SWFUpload.prototype.getStats = function () {
+	return this.callFlash("GetStats");
+};
+
+// Public: setStats changes the SWFUpload statistics.  You shouldn't need to 
+// change the statistics but you can.  Changing the statistics does not
+// affect SWFUpload accept for the successful_uploads count which is used
+// by the upload_limit setting to determine how many files the user may upload.
+SWFUpload.prototype.setStats = function (statsObject) {
+	this.callFlash("SetStats", [statsObject]);
+};
+
+// Public: getFile retrieves a File object by ID or Index.  If the file is
+// not found then 'null' is returned.
+SWFUpload.prototype.getFile = function (fileID) {
+	if (typeof(fileID) === "number") {
+		return this.callFlash("GetFileByIndex", [fileID]);
+	} else {
+		return this.callFlash("GetFile", [fileID]);
+	}
+};
+
+// Public: addFileParam sets a name/value pair that will be posted with the
+// file specified by the Files ID.  If the name already exists then the
+// exiting value will be overwritten.
+SWFUpload.prototype.addFileParam = function (fileID, name, value) {
+	return this.callFlash("AddFileParam", [fileID, name, value]);
+};
+
+// Public: removeFileParam removes a previously set (by addFileParam) name/value
+// pair from the specified file.
+SWFUpload.prototype.removeFileParam = function (fileID, name) {
+	this.callFlash("RemoveFileParam", [fileID, name]);
+};
+
+// Public: setUploadUrl changes the upload_url setting.
+SWFUpload.prototype.setUploadURL = function (url) {
+	this.settings.upload_url = url.toString();
+	this.callFlash("SetUploadURL", [url]);
+};
+
+// Public: setPostParams changes the post_params setting
+SWFUpload.prototype.setPostParams = function (paramsObject) {
+	this.settings.post_params = paramsObject;
+	this.callFlash("SetPostParams", [paramsObject]);
+};
+
+// Public: addPostParam adds post name/value pair.  Each name can have only one value.
+SWFUpload.prototype.addPostParam = function (name, value) {
+	this.settings.post_params[name] = value;
+	this.callFlash("SetPostParams", [this.settings.post_params]);
+};
+
+// Public: removePostParam deletes post name/value pair.
+SWFUpload.prototype.removePostParam = function (name) {
+	delete this.settings.post_params[name];
+	this.callFlash("SetPostParams", [this.settings.post_params]);
+};
+
+// Public: setFileTypes changes the file_types setting and the file_types_description setting
+SWFUpload.prototype.setFileTypes = function (types, description) {
+	this.settings.file_types = types;
+	this.settings.file_types_description = description;
+	this.callFlash("SetFileTypes", [types, description]);
+};
+
+// Public: setFileSizeLimit changes the file_size_limit setting
+SWFUpload.prototype.setFileSizeLimit = function (fileSizeLimit) {
+	this.settings.file_size_limit = fileSizeLimit;
+	this.callFlash("SetFileSizeLimit", [fileSizeLimit]);
+};
+
+// Public: setFileUploadLimit changes the file_upload_limit setting
+SWFUpload.prototype.setFileUploadLimit = function (fileUploadLimit) {
+	this.settings.file_upload_limit = fileUploadLimit;
+	this.callFlash("SetFileUploadLimit", [fileUploadLimit]);
+};
+
+// Public: setFileQueueLimit changes the file_queue_limit setting
+SWFUpload.prototype.setFileQueueLimit = function (fileQueueLimit) {
+	this.settings.file_queue_limit = fileQueueLimit;
+	this.callFlash("SetFileQueueLimit", [fileQueueLimit]);
+};
+
+// Public: setFilePostName changes the file_post_name setting
+SWFUpload.prototype.setFilePostName = function (filePostName) {
+	this.settings.file_post_name = filePostName;
+	this.callFlash("SetFilePostName", [filePostName]);
+};
+
+// Public: setUseQueryString changes the use_query_string setting
+SWFUpload.prototype.setUseQueryString = function (useQueryString) {
+	this.settings.use_query_string = useQueryString;
+	this.callFlash("SetUseQueryString", [useQueryString]);
+};
+
+// Public: setRequeueOnError changes the requeue_on_error setting
+SWFUpload.prototype.setRequeueOnError = function (requeueOnError) {
+	this.settings.requeue_on_error = requeueOnError;
+	this.callFlash("SetRequeueOnError", [requeueOnError]);
+};
+
+// Public: setHTTPSuccess changes the http_success setting
+SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
+	if (typeof http_status_codes === "string") {
+		http_status_codes = http_status_codes.replace(" ", "").split(",");
+	}
+	
+	this.settings.http_success = http_status_codes;
+	this.callFlash("SetHTTPSuccess", [http_status_codes]);
+};
+
+// Public: setHTTPSuccess changes the http_success setting
+SWFUpload.prototype.setAssumeSuccessTimeout = function (timeout_seconds) {
+	this.settings.assume_success_timeout = timeout_seconds;
+	this.callFlash("SetAssumeSuccessTimeout", [timeout_seconds]);
+};
+
+// Public: setDebugEnabled changes the debug_enabled setting
+SWFUpload.prototype.setDebugEnabled = function (debugEnabled) {
+	this.settings.debug_enabled = debugEnabled;
+	this.callFlash("SetDebugEnabled", [debugEnabled]);
+};
+
+// Public: setButtonImageURL loads a button image sprite
+SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
+	if (buttonImageURL == undefined) {
+		buttonImageURL = "";
+	}
+	
+	this.settings.button_image_url = buttonImageURL;
+	this.callFlash("SetButtonImageURL", [buttonImageURL]);
+};
+
+// Public: setButtonDimensions resizes the Flash Movie and button
+SWFUpload.prototype.setButtonDimensions = function (width, height) {
+	this.settings.button_width = width;
+	this.settings.button_height = height;
+	
+	var movie = this.getMovieElement();
+	if (movie != undefined) {
+		movie.style.width = width + "px";
+		movie.style.height = height + "px";
+	}
+	
+	this.callFlash("SetButtonDimensions", [width, height]);
+};
+// Public: setButtonText Changes the text overlaid on the button
+SWFUpload.prototype.setButtonText = function (html) {
+	this.settings.button_text = html;
+	this.callFlash("SetButtonText", [html]);
+};
+// Public: setButtonTextPadding changes the top and left padding of the text overlay
+SWFUpload.prototype.setButtonTextPadding = function (left, top) {
+	this.settings.button_text_top_padding = top;
+	this.settings.button_text_left_padding = left;
+	this.callFlash("SetButtonTextPadding", [left, top]);
+};
+
+// Public: setButtonTextStyle changes the CSS used to style the HTML/Text overlaid on the button
+SWFUpload.prototype.setButtonTextStyle = function (css) {
+	this.settings.button_text_style = css;
+	this.callFlash("SetButtonTextStyle", [css]);
+};
+// Public: setButtonDisabled disables/enables the button
+SWFUpload.prototype.setButtonDisabled = function (isDisabled) {
+	this.settings.button_disabled = isDisabled;
+	this.callFlash("SetButtonDisabled", [isDisabled]);
+};
+// Public: setButtonAction sets the action that occurs when the button is clicked
+SWFUpload.prototype.setButtonAction = function (buttonAction) {
+	this.settings.button_action = buttonAction;
+	this.callFlash("SetButtonAction", [buttonAction]);
+};
+
+// Public: setButtonCursor changes the mouse cursor displayed when hovering over the button
+SWFUpload.prototype.setButtonCursor = function (cursor) {
+	this.settings.button_cursor = cursor;
+	this.callFlash("SetButtonCursor", [cursor]);
+};
+
+/* *******************************
+	Flash Event Interfaces
+	These functions are used by Flash to trigger the various
+	events.
+	
+	All these functions a Private.
+	
+	Because the ExternalInterface library is buggy the event calls
+	are added to a queue and the queue then executed by a setTimeout.
+	This ensures that events are executed in a determinate order and that
+	the ExternalInterface bugs are avoided.
+******************************* */
+
+SWFUpload.prototype.queueEvent = function (handlerName, argumentArray) {
+	// Warning: Don't call this.debug inside here or you'll create an infinite loop
+	
+	if (argumentArray == undefined) {
+		argumentArray = [];
+	} else if (!(argumentArray instanceof Array)) {
+		argumentArray = [argumentArray];
+	}
+	
+	var self = this;
+	if (typeof this.settings[handlerName] === "function") {
+		// Queue the event
+		this.eventQueue.push(function () {
+			this.settings[handlerName].apply(this, argumentArray);
+		});
+		
+		// Execute the next queued event
+		setTimeout(function () {
+			self.executeNextEvent();
+		}, 0);
+		
+	} else if (this.settings[handlerName] !== null) {
+		throw "Event handler " + handlerName + " is unknown or is not a function";
+	}
+};
+
+// Private: Causes the next event in the queue to be executed.  Since events are queued using a setTimeout
+// we must queue them in order to garentee that they are executed in order.
+SWFUpload.prototype.executeNextEvent = function () {
+	// Warning: Don't call this.debug inside here or you'll create an infinite loop
+
+	var  f = this.eventQueue ? this.eventQueue.shift() : null;
+	if (typeof(f) === "function") {
+		f.apply(this);
+	}
+};
+
+// Private: unescapeFileParams is part of a workaround for a flash bug where objects passed through ExternalInterface cannot have
+// properties that contain characters that are not valid for JavaScript identifiers. To work around this
+// the Flash Component escapes the parameter names and we must unescape again before passing them along.
+SWFUpload.prototype.unescapeFilePostParams = function (file) {
+	var reg = /[$]([0-9a-f]{4})/i;
+	var unescapedPost = {};
+	var uk;
+
+	if (file != undefined) {
+		for (var k in file.post) {
+			if (file.post.hasOwnProperty(k)) {
+				uk = k;
+				var match;
+				while ((match = reg.exec(uk)) !== null) {
+					uk = uk.replace(match[0], String.fromCharCode(parseInt("0x" + match[1], 16)));
+				}
+				unescapedPost[uk] = file.post[k];
+			}
+		}
+
+		file.post = unescapedPost;
+	}
+
+	return file;
+};
+
+// Private: Called by Flash to see if JS can call in to Flash (test if External Interface is working)
+SWFUpload.prototype.testExternalInterface = function () {
+	try {
+		return this.callFlash("TestExternalInterface");
+	} catch (ex) {
+		return false;
+	}
+};
+
+// Private: This event is called by Flash when it has finished loading. Don't modify this.
+// Use the swfupload_loaded_handler event setting to execute custom code when SWFUpload has loaded.
+SWFUpload.prototype.flashReady = function () {
+	// Check that the movie element is loaded correctly with its ExternalInterface methods defined
+	var movieElement = this.getMovieElement();
+
+	if (!movieElement) {
+		this.debug("Flash called back ready but the flash movie can't be found.");
+		return;
+	}
+
+	this.cleanUp(movieElement);
+	
+	this.queueEvent("swfupload_loaded_handler");
+};
+
+// Private: removes Flash added fuctions to the DOM node to prevent memory leaks in IE.
+// This function is called by Flash each time the ExternalInterface functions are created.
+SWFUpload.prototype.cleanUp = function (movieElement) {
+	// Pro-actively unhook all the Flash functions
+	try {
+		if (this.movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
+			this.debug("Removing Flash functions hooks (this should only run in IE and should prevent memory leaks)");
+			for (var key in movieElement) {
+				try {
+					if (typeof(movieElement[key]) === "function") {
+						movieElement[key] = null;
+					}
+				} catch (ex) {
+				}
+			}
+		}
+	} catch (ex1) {
+	
+	}
+
+	// Fix Flashes own cleanup code so if the SWFMovie was removed from the page
+	// it doesn't display errors.
+	window["__flash__removeCallback"] = function (instance, name) {
+		try {
+			if (instance) {
+				instance[name] = null;
+			}
+		} catch (flashEx) {
+		
+		}
+	};
+
+};
+
+
+/* This is a chance to do something before the browse window opens */
+SWFUpload.prototype.fileDialogStart = function () {
+	this.queueEvent("file_dialog_start_handler");
+};
+
+
+/* Called when a file is successfully added to the queue. */
+SWFUpload.prototype.fileQueued = function (file) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("file_queued_handler", file);
+};
+
+
+/* Handle errors that occur when an attempt to queue a file fails. */
+SWFUpload.prototype.fileQueueError = function (file, errorCode, message) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("file_queue_error_handler", [file, errorCode, message]);
+};
+
+/* Called after the file dialog has closed and the selected files have been queued.
+	You could call startUpload here if you want the queued files to begin uploading immediately. */
+SWFUpload.prototype.fileDialogComplete = function (numFilesSelected, numFilesQueued, numFilesInQueue) {
+	this.queueEvent("file_dialog_complete_handler", [numFilesSelected, numFilesQueued, numFilesInQueue]);
+};
+
+SWFUpload.prototype.uploadStart = function (file) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("return_upload_start_handler", file);
+};
+
+SWFUpload.prototype.returnUploadStart = function (file) {
+	var returnValue;
+	if (typeof this.settings.upload_start_handler === "function") {
+		file = this.unescapeFilePostParams(file);
+		returnValue = this.settings.upload_start_handler.call(this, file);
+	} else if (this.settings.upload_start_handler != undefined) {
+		throw "upload_start_handler must be a function";
+	}
+
+	// Convert undefined to true so if nothing is returned from the upload_start_handler it is
+	// interpretted as 'true'.
+	if (returnValue === undefined) {
+		returnValue = true;
+	}
+	
+	returnValue = !!returnValue;
+	
+	this.callFlash("ReturnUploadStart", [returnValue]);
+};
+
+
+
+SWFUpload.prototype.uploadProgress = function (file, bytesComplete, bytesTotal) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_progress_handler", [file, bytesComplete, bytesTotal]);
+};
+
+SWFUpload.prototype.uploadError = function (file, errorCode, message) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_error_handler", [file, errorCode, message]);
+};
+
+SWFUpload.prototype.uploadSuccess = function (file, serverData, responseReceived) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_success_handler", [file, serverData, responseReceived]);
+};
+
+SWFUpload.prototype.uploadComplete = function (file) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_complete_handler", file);
+};
+
+/* Called by SWFUpload JavaScript and Flash functions when debug is enabled. By default it writes messages to the
+   internal debug console.  You can override this event and have messages written where you want. */
+SWFUpload.prototype.debug = function (message) {
+	this.queueEvent("debug_handler", message);
+};
+
+
+/* **********************************
+	Debug Console
+	The debug console is a self contained, in page location
+	for debug message to be sent.  The Debug Console adds
+	itself to the body if necessary.
+
+	The console is automatically scrolled as messages appear.
+	
+	If you are using your own debug handler or when you deploy to production and
+	have debug disabled you can remove these functions to reduce the file size
+	and complexity.
+********************************** */
+   
+// Private: debugMessage is the default debug_handler.  If you want to print debug messages
+// call the debug() function.  When overriding the function your own function should
+// check to see if the debug setting is true before outputting debug information.
+SWFUpload.prototype.debugMessage = function (message) {
+	if (this.settings.debug) {
+		var exceptionMessage, exceptionValues = [];
+
+		// Check for an exception object and print it nicely
+		if (typeof message === "object" && typeof message.name === "string" && typeof message.message === "string") {
+			for (var key in message) {
+				if (message.hasOwnProperty(key)) {
+					exceptionValues.push(key + ": " + message[key]);
+				}
+			}
+			exceptionMessage = exceptionValues.join("\n") || "";
+			exceptionValues = exceptionMessage.split("\n");
+			exceptionMessage = "EXCEPTION: " + exceptionValues.join("\nEXCEPTION: ");
+			SWFUpload.Console.writeLine(exceptionMessage);
+		} else {
+			SWFUpload.Console.writeLine(message);
+		}
+	}
+};
+
+SWFUpload.Console = {};
+SWFUpload.Console.writeLine = function (message) {
+	var console, documentForm;
+
+	try {
+		console = document.getElementById("SWFUpload_Console");
+
+		if (!console) {
+			documentForm = document.createElement("form");
+			document.getElementsByTagName("body")[0].appendChild(documentForm);
+
+			console = document.createElement("textarea");
+			console.id = "SWFUpload_Console";
+			console.style.fontFamily = "monospace";
+			console.setAttribute("wrap", "off");
+			console.wrap = "off";
+			console.style.overflow = "auto";
+			console.style.width = "700px";
+			console.style.height = "350px";
+			console.style.margin = "5px";
+			documentForm.appendChild(console);
+		}
+
+		console.value += message + "\n";
+
+		console.scrollTop = console.scrollHeight - console.clientHeight;
+	} catch (ex) {
+		alert("Exception: " + ex.name + " Message: " + ex.message);
+	}
+};
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {    
+    
+    var animateDisplay = function (elm, animation, defaultAnimation) {
+        animation = (animation) ? animation : defaultAnimation;
+        elm.animate(animation.params, animation.duration, animation.callback);
+    };
+    
+    var animateProgress = function (elm, width, speed) {
+        // de-queue any left over animations
+        elm.queue("fx", []); 
+        
+        elm.animate({ 
+            width: width,
+            queue: false
+        }, 
+            speed);
+    };
+    
+    var showProgress = function (that, animation) {
+        if (animation === false) {
+            that.displayElement.show();
+        } else {
+            animateDisplay(that.displayElement, animation, that.options.showAnimation);
+        }
+    };
+    
+    var hideProgress = function (that, delay, animation) {
+        
+        delay = (delay === null || isNaN(delay)) ? that.options.delay : delay;
+        
+        if (delay) {
+            // use a setTimeout to delay the hide for n millies, note use of recursion
+            var timeOut = setTimeout(function () {
+                hideProgress(that, 0, animation);
+            }, delay);
+        } else {
+            if (animation === false) {
+                that.displayElement.hide();
+            } else {
+                animateDisplay(that.displayElement, animation, that.options.hideAnimation);
+            }
+        }   
+    };
+    
+    var updateWidth = function (that, newWidth, dontAnimate) {
+        dontAnimate  = dontAnimate || false;
+        var currWidth = that.indicator.width();
+        var direction = that.options.animate;
+        if ((newWidth > currWidth) && (direction === "both" || direction === "forward") && !dontAnimate) {
+            animateProgress(that.indicator, newWidth, that.options.speed);
+        } else if ((newWidth < currWidth) && (direction === "both" || direction === "backward") && !dontAnimate) {
+            animateProgress(that.indicator, newWidth, that.options.speed);
+        } else {
+            that.indicator.width(newWidth);
+        }
+    };
+         
+    var percentToPixels = function (that, percent) {
+        // progress does not support percents over 100, also all numbers are rounded to integers
+        return Math.round((Math.min(percent, 100) * that.progressBar.innerWidth()) / 100);
+    };
+    
+    var refreshRelativeWidth = function (that) {
+        var pixels = Math.max(percentToPixels(that, parseFloat(that.storedPercent)), that.options.minWidth);
+        updateWidth(that, pixels, true);
+    };
+        
+    var initARIA = function (ariaElement, ariaBusyText) {
+        ariaElement.attr("role", "progressbar");
+        ariaElement.attr("aria-valuemin", "0");
+        ariaElement.attr("aria-valuemax", "100");
+        ariaElement.attr("aria-valuenow", "0");
+        //Empty value for ariaBusyText will default to aria-valuenow.
+        if (ariaBusyText) {
+            ariaElement.attr("aria-valuetext", "");
+        }
+        ariaElement.attr("aria-busy", "false");
+    };
+    
+    var updateARIA = function (that, percent) {
+        var str = that.options.strings;
+        var busy = percent < 100 && percent > 0;
+        that.ariaElement.attr("aria-busy", busy);
+        that.ariaElement.attr("aria-valuenow", percent);   
+        //Empty value for ariaBusyText will default to aria-valuenow.
+        if (str.ariaBusyText) {
+            if (busy) {
+                var busyString = fluid.stringTemplate(str.ariaBusyText, {percentComplete : percent});           
+                that.ariaElement.attr("aria-valuetext", busyString);
+            } else if (percent === 100) {
+                // FLUID-2936: JAWS doesn't currently read the "Progress is complete" message to the user, even though we set it here.
+                that.ariaElement.attr("aria-valuetext", str.ariaDoneText);
+            }
+        }
+    };
+        
+    var updateText = function (label, value) {
+        label.html(value);
+    };
+    
+    var repositionIndicator = function (that) {
+        that.indicator.css("top", that.progressBar.position().top)
+            .css("left", 0)
+            .height(that.progressBar.height());
+        refreshRelativeWidth(that);
+    };
+        
+    var updateProgress = function (that, percent, labelText, animationForShow) {
+        
+        // show progress before updating, jQuery will handle the case if the object is already displayed
+        showProgress(that, animationForShow);
+            
+        // do not update if the value of percent is falsey
+        if (percent !== null) {
+            that.storedPercent = percent;
+        
+            var pixels = Math.max(percentToPixels(that, parseFloat(percent)), that.options.minWidth);   
+            updateWidth(that, pixels);
+        }
+        
+        if (labelText !== null) {
+            updateText(that.label, labelText);
+        }
+        
+        // update ARIA
+        if (that.ariaElement) {
+            updateARIA(that, percent);
+        }
+    };
+        
+    var setupProgress = function (that) {
+        that.displayElement = that.locate("displayElement");
+
+        // hide file progress in case it is showing
+        if (that.options.initiallyHidden) {
+            that.displayElement.hide();
+        }
+
+        that.progressBar = that.locate("progressBar");
+        that.label = that.locate("label");
+        that.indicator = that.locate("indicator");
+        that.ariaElement = that.locate("ariaElement");
+        
+        that.indicator.width(that.options.minWidth);
+
+        that.storedPercent = 0;
+                
+        // initialize ARIA
+        if (that.ariaElement) {
+            initARIA(that.ariaElement, that.options.strings.ariaBusyText);
+        }
+        
+        // afterProgressHidden:  
+        // Registering listener with the callback provided by the user and reinitializing
+        // the event trigger function. 
+        // Note: callback deprecated as of 1.5, use afterProgressHidden event
+        if (that.options.hideAnimation.callback) {
+            that.events.afterProgressHidden.addListener(that.options.hideAnimation.callback);           
+        }
+        
+        // triggers the afterProgressHidden event    
+        // Note: callback deprecated as of 1.5, use afterProgressHidden event
+        that.options.hideAnimation.callback = that.events.afterProgressHidden.fire;
+
+        
+        // onProgressBegin:
+        // Registering listener with the callback provided by the user and reinitializing
+        // the event trigger function.  
+        // Note: callback deprecated as of 1.5, use onProgressBegin event
+        if (that.options.showAnimation.callback) {
+            that.events.onProgressBegin.addListener(that.options.showAnimation.callback);                      
+        } 
+            
+        // triggers the onProgressBegin event
+        // Note: callback deprecated as of 1.5, use onProgressBegin event
+        that.options.showAnimation.callback = that.events.onProgressBegin.fire;
+    };
+           
+    /**
+    * Instantiates a new Progress component.
+    * 
+    * @param {jQuery|Selector|Element} container the DOM element in which the Uploader lives
+    * @param {Object} options configuration options for the component.
+    */
+    fluid.progress = function (container, options) {
+        var that = fluid.initView("fluid.progress", container, options);
+        setupProgress(that);
+        
+        /**
+         * Shows the progress bar if is currently hidden.
+         * 
+         * @param {Object} animation a custom animation used when showing the progress bar
+         */
+        that.show = function (animation) {
+            showProgress(that, animation);
+        };
+        
+        /**
+         * Hides the progress bar if it is visible.
+         * 
+         * @param {Number} delay the amount of time to wait before hiding
+         * @param {Object} animation a custom animation used when hiding the progress bar
+         */
+        that.hide = function (delay, animation) {
+            hideProgress(that, delay, animation);
+        };
+        
+        /**
+         * Updates the state of the progress bar.
+         * This will automatically show the progress bar if it is currently hidden.
+         * Percentage is specified as a decimal value, but will be automatically converted if needed.
+         * 
+         * 
+         * @param {Number|String} percentage the current percentage, specified as a "float-ish" value 
+         * @param {String} labelValue the value to set for the label; this can be an HTML string
+         * @param {Object} animationForShow the animation to use when showing the progress bar if it is hidden
+         */
+        that.update = function (percentage, labelValue, animationForShow) {
+            updateProgress(that, percentage, labelValue, animationForShow);
+        };
+        
+        that.refreshView = function () {
+            repositionIndicator(that);
+        };
+                        
+        return that;  
+    };
+      
+    fluid.defaults("fluid.progress", {
+        gradeNames: "fluid.viewComponent",
+        selectors: {
+            displayElement: ".flc-progress", // required, the element that gets displayed when progress is displayed, could be the indicator or bar or some larger outer wrapper as in an overlay effect
+            progressBar: ".flc-progress-bar", //required
+            indicator: ".flc-progress-indicator", //required
+            label: ".flc-progress-label", //optional
+            ariaElement: ".flc-progress-bar" // usually required, except in cases where there are more than one progressor for the same data such as a total and a sub-total
+        },
+        
+        strings: {
+            //Empty value for ariaBusyText will default to aria-valuenow.
+            ariaBusyText: "Progress is %percentComplete percent complete",
+            ariaDoneText: "Progress is complete."
+        },
+        
+        // progress display and hide animations, use the jQuery animation primatives, set to false to use no animation
+        // animations must be symetrical (if you hide with width, you'd better show with width) or you get odd effects
+        // see jQuery docs about animations to customize
+        showAnimation: {
+            params: {
+                opacity: "show"
+            }, 
+            duration: "slow",
+            //callback has been deprecated and will be removed as of 1.5, instead use onProgressBegin event 
+            callback: null 
+        }, // equivalent of $().fadeIn("slow")
+        
+        hideAnimation: {
+            params: {
+                opacity: "hide"
+            }, 
+            duration: "slow", 
+            //callback has been deprecated and will be removed as of 1.5, instead use afterProgressHidden event 
+            callback: null
+        }, // equivalent of $().fadeOut("slow")
+        
+        events: {            
+            onProgressBegin: null,
+            afterProgressHidden: null            
+        },
+
+        minWidth: 5, // 0 length indicators can look broken if there is a long pause between updates
+        delay: 0, // the amount to delay the fade out of the progress
+        speed: 200, // default speed for animations, pretty fast
+        animate: "forward", // suppport "forward", "backward", and "both", any other value is no animation either way
+        initiallyHidden: true, // supports progress indicators which may always be present
+        updatePosition: false
+    });
+    
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global window, fluid_1_5:true, jQuery, swfobject*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+    fluid.registerNamespace("fluid.browser");
+    
+    fluid.browser.binaryXHR = function () {
+        var canSendBinary = window.FormData || 
+            (window.XMLHttpRequest && 
+                window.XMLHttpRequest.prototype &&
+                window.XMLHttpRequest.prototype.sendAsBinary);
+        return canSendBinary ? fluid.typeTag("fluid.browser.supportsBinaryXHR") : undefined;
+    };
+    
+    fluid.browser.formData  = function () {
+        return window.FormData ? fluid.typeTag("fluid.browser.supportsFormData") : undefined;
+    };
+    
+    fluid.browser.flash = function () {
+        var hasModernFlash = (typeof(swfobject) !== "undefined") && (swfobject.getFlashPlayerVersion().major > 8);
+        return hasModernFlash ? fluid.typeTag("fluid.browser.supportsFlash") : undefined;
+    };
+    
+    fluid.progressiveChecker = function (options) {
+        var that = fluid.initLittleComponent("fluid.progressiveChecker", options);
+        return fluid.typeTag(fluid.find(that.options.checks, function(check) {
+            if (check.feature) {
+                return check.contextName;
+            }}, that.options.defaultContextName
+        ));
+    };
+    
+    fluid.defaults("fluid.progressiveChecker", {
+        gradeNames: "fluid.typeFount",
+        checks: [], // [{"feature": "{IoC Expression}", "contextName": "context.name"}]
+        defaultContextName: undefined
+    });
+    
+    fluid.progressiveCheckerForComponent = function (options) {
+        var that = fluid.initLittleComponent("fluid.progressiveCheckerForComponent", options);
+        var defaults = fluid.defaults(that.options.componentName);
+        return fluid.progressiveChecker(fluid.expandOptions(fluid.copy(defaults.progressiveCheckerOptions), that));  
+    };
+
+    fluid.defaults("fluid.progressiveCheckerForComponent", {
+        gradeNames: "fluid.typeFount"
+    });
+    
+    /**********************************************************
+     * This code runs immediately upon inclusion of this file *
+     **********************************************************/
+    
+    // Use JavaScript to hide any markup that is specifically in place for cases when JavaScript is off.
+    // Note: the use of fl-ProgEnhance-basic is deprecated, and replaced by fl-progEnhance-basic.
+    // It is included here for backward compatibility only.
+    $("head").append("<style type='text/css'>.fl-progEnhance-basic, .fl-ProgEnhance-basic { display: none; } .fl-progEnhance-enhanced, .fl-ProgEnhance-enhanced { display: block; }</style>");
+    
+    // Browser feature detection--adds corresponding type tags to the static environment,
+    // which can be used to define appropriate demands blocks for components using the IoC system.
+    var features = {
+        supportsBinaryXHR: fluid.browser.binaryXHR(),
+        supportsFormData: fluid.browser.formData(),
+        supportsFlash: fluid.browser.flash()
+    };
+    fluid.merge(null, fluid.staticEnvironment, features);
+    
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global window, fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+/************
+ * Uploader *
+ ************/
+
+(function ($, fluid) {
+
+    var fileOrFiles = function (that, numFiles) {
+        return (numFiles === 1) ? that.options.strings.progress.singleFile : 
+            that.options.strings.progress.pluralFiles;
+    };
+    
+    var enableElement = function (that, elm) {
+        elm.prop("disabled", false);
+        elm.removeClass(that.options.styles.dim);
+    };
+    
+    var disableElement = function (that, elm) {
+        elm.prop("disabled", true);
+        elm.addClass(that.options.styles.dim);
+    };
+    
+    var showElement = function (that, elm) {
+        elm.removeClass(that.options.styles.hidden);
+    };
+     
+    var hideElement = function (that, elm) {
+        elm.addClass(that.options.styles.hidden);
+    };
+    
+    var maxFilesUploaded = function (that) {
+        var fileUploadLimit = that.queue.getUploadedFiles().length + that.queue.getReadyFiles().length + that.queue.getErroredFiles().length;
+        return (fileUploadLimit === that.options.queueSettings.fileUploadLimit);
+    };    
+    
+    var setTotalProgressStyle = function (that, didError) {
+        didError = didError || false;
+        var indicator = that.totalProgress.indicator;
+        indicator.toggleClass(that.options.styles.totalProgress, !didError);
+        indicator.toggleClass(that.options.styles.totalProgressError, didError);
+    };
+    
+    var setStateEmpty = function (that) {
+        disableElement(that, that.locate("uploadButton"));
+        
+        // If the queue is totally empty, treat it specially.
+        if (that.queue.files.length === 0) { 
+            that.locate("browseButtonText").text(that.options.strings.buttons.browse);
+            that.locate("browseButton").removeClass(that.options.styles.browseButton);
+            showElement(that, that.locate("instructions"));
+        }
+    };
+    
+    // Only enable the browse button if the fileUploadLimit 
+    // has not been reached
+    var enableBrowseButton = function (that) {
+        if (!maxFilesUploaded(that)) {
+            enableElement(that, that.locate("browseButton"));
+            that.strategy.local.enableBrowseButton();            
+        }
+    };
+    
+    var setStateDone = function (that) {
+        disableElement(that, that.locate("uploadButton"));
+        hideElement(that, that.locate("pauseButton"));
+        showElement(that, that.locate("uploadButton"));
+        enableBrowseButton(that);
+    };
+
+    var setStateLoaded = function (that) {
+        that.locate("browseButtonText").text(that.options.strings.buttons.addMore);
+        that.locate("browseButton").addClass(that.options.styles.browseButton);
+        hideElement(that, that.locate("pauseButton"));
+        showElement(that, that.locate("uploadButton"));
+        enableElement(that, that.locate("uploadButton"));
+        hideElement(that, that.locate("instructions"));
+        that.totalProgress.hide();
+        enableBrowseButton(that);
+    };
+    
+    var setStateUploading = function (that) {
+        that.totalProgress.hide(false, false);
+        setTotalProgressStyle(that);
+        hideElement(that, that.locate("uploadButton"));
+        disableElement(that, that.locate("browseButton"));
+        that.strategy.local.disableBrowseButton();
+        enableElement(that, that.locate("pauseButton"));
+        showElement(that, that.locate("pauseButton"));
+        that.locate(that.options.focusWithEvent.afterUploadStart).focus();
+    };
+
+    var setStateFull = function (that) {        
+        that.locate("browseButtonText").text(that.options.strings.buttons.addMore);
+        that.locate("browseButton").addClass(that.options.styles.browseButton);
+        hideElement(that, that.locate("pauseButton"));
+        showElement(that, that.locate("uploadButton"));
+        enableElement(that, that.locate("uploadButton"));
+        disableElement(that, that.locate("browseButton"));        
+        that.strategy.local.disableBrowseButton();
+        hideElement(that, that.locate("instructions"));
+        that.totalProgress.hide();
+    };    
+    
+    var renderUploadTotalMessage = function (that) {
+        // Render template for the total file status message.
+        var numReadyFiles = that.queue.getReadyFiles().length;
+        var bytesReadyFiles = that.queue.sizeOfReadyFiles();
+        var fileLabelStr = fileOrFiles(that, numReadyFiles);
+
+        var totalStateStr = fluid.stringTemplate(that.options.strings.progress.toUploadLabel, {
+            fileCount: numReadyFiles, 
+            fileLabel: fileLabelStr, 
+            totalBytes: fluid.uploader.formatFileSize(bytesReadyFiles)
+        });
+        that.locate("totalFileStatusText").html(totalStateStr);
+    };
+    
+    var renderFileUploadLimit = function (that) {
+        if (that.options.queueSettings.fileUploadLimit > 0) {
+            var fileUploadLimitText = fluid.stringTemplate(that.options.strings.progress.fileUploadLimitLabel, {
+                fileUploadLimit: that.options.queueSettings.fileUploadLimit, 
+                fileLabel: fileOrFiles(that, that.options.queueSettings.fileUploadLimit) 
+            });
+            that.locate("fileUploadLimitText").html(fileUploadLimitText);
+        }
+    };
+        
+    var updateTotalProgress = function (that) {
+        var batch = that.queue.currentBatch;
+        var totalPercent = fluid.uploader.derivePercent(batch.totalBytesUploaded, batch.totalBytes);
+        var numFilesInBatch = batch.files.length;
+        var fileLabelStr = fileOrFiles(that, numFilesInBatch);
+        
+        var totalProgressStr = fluid.stringTemplate(that.options.strings.progress.totalProgressLabel, {
+            curFileN: batch.fileIdx, 
+            totalFilesN: numFilesInBatch, 
+            fileLabel: fileLabelStr,
+            currBytes: fluid.uploader.formatFileSize(batch.totalBytesUploaded), 
+            totalBytes: fluid.uploader.formatFileSize(batch.totalBytes)
+        });  
+        that.totalProgress.update(totalPercent, totalProgressStr);
+    };
+    
+    var updateTotalAtCompletion = function (that) {
+        var numErroredFiles = that.queue.getErroredFiles().length;
+        var numTotalFiles = that.queue.files.length;
+        var fileLabelStr = fileOrFiles(that, numTotalFiles);
+        var errorStr = "";
+        
+        // if there are errors then change the total progress bar
+        // and set up the errorStr so that we can use it in the totalProgressStr
+        if (numErroredFiles > 0) {
+            var errorLabelString = (numErroredFiles === 1) ? that.options.strings.progress.singleError : 
+                                                             that.options.strings.progress.pluralErrors;
+            setTotalProgressStyle(that, true);
+            errorStr = fluid.stringTemplate(that.options.strings.progress.numberOfErrors, {
+                errorsN: numErroredFiles,
+                errorLabel: errorLabelString
+            });
+        }
+        
+        var totalProgressStr = fluid.stringTemplate(that.options.strings.progress.completedLabel, {
+            curFileN: that.queue.getUploadedFiles().length, 
+            totalFilesN: numTotalFiles,
+            errorString: errorStr,
+            fileLabel: fileLabelStr,
+            totalCurrBytes: fluid.uploader.formatFileSize(that.queue.sizeOfUploadedFiles())
+        });
+        
+        that.totalProgress.update(100, totalProgressStr);
+    };
+
+    /*
+     * Summarizes the status of all the files in the file queue.  
+     */
+    var updateQueueSummaryText = function (that) {
+        var fileQueueTable = that.locate("fileQueue");        
+        if (that.queue.files.length === 0) {
+            fileQueueTable.attr("summary", that.options.strings.queue.emptyQueue);
+        } else {
+            var queueSummary = fluid.stringTemplate(that.options.strings.queue.queueSummary, {
+                totalUploaded: that.queue.getUploadedFiles().length, 
+                totalInUploadQueue: that.queue.files.length - that.queue.getUploadedFiles().length
+            });
+            fileQueueTable.attr("summary", queueSummary);
+        }
+    };
+    
+    var bindDOMEvents = function (that) {
+        that.locate("uploadButton").click(function () {
+            that.start();
+        });
+
+        that.locate("pauseButton").click(function () {
+            that.stop();
+        });
+    };
+
+    var updateStateAfterFileDialog = function (that) {
+        var queueLength = that.queue.getReadyFiles().length;
+        if (queueLength > 0) {
+            if (queueLength === that.options.queueSettings.fileUploadLimit) {
+                setStateFull(that);
+            } else {
+                setStateLoaded(that);
+            }
+            renderUploadTotalMessage(that);
+            that.locate(that.options.focusWithEvent.afterFileDialog).focus();
+            updateQueueSummaryText(that);
+        }
+    };
+    
+    var updateStateAfterFileRemoval = function (that) {
+        if (that.queue.getReadyFiles().length === 0) {
+            setStateEmpty(that);
+        } else {
+            setStateLoaded(that);
+        }
+        renderUploadTotalMessage(that);
+        updateQueueSummaryText(that);
+    };
+    
+    var updateStateAfterCompletion = function (that) {
+        if (that.queue.getReadyFiles().length === 0) {
+            setStateDone(that);
+        } else {
+            setStateLoaded(that);
+        }
+        updateTotalAtCompletion(that);
+        updateQueueSummaryText(that);
+    }; 
+    
+    var uploadNextOrFinish = function (that) {
+        if (that.queue.shouldUploadNextFile()) {
+            that.strategy.remote.uploadNextFile();
+        } else {
+            that.events.afterUploadComplete.fire(that.queue.currentBatch.files);
+            that.queue.clearCurrentBatch();
+        }        
+    };
+    
+    var bindEvents = function (that) {
+        that.events.afterFileDialog.addListener(function () {
+            updateStateAfterFileDialog(that);
+        });
+        
+        that.events.afterFileQueued.addListener(function (file) {
+            that.queue.addFile(file); 
+        });
+        
+        that.events.onFileRemoved.addListener(function (file) {
+            that.removeFile(file);
+        });
+        
+        that.events.afterFileRemoved.addListener(function () {
+            updateStateAfterFileRemoval(that);
+        });
+        
+        that.events.onUploadStart.addListener(function () {
+            setStateUploading(that);
+        });
+        
+        that.events.onUploadStop.addListener(function () {
+            that.locate(that.options.focusWithEvent.onUploadStop).focus();
+        });
+        
+        that.events.onFileStart.addListener(function (file) {
+            file.filestatus = fluid.uploader.fileStatusConstants.IN_PROGRESS;
+            that.queue.startFile();
+        });
+        
+        that.events.onFileProgress.addListener(function (file, currentBytes, totalBytes) {
+            that.queue.updateBatchStatus(currentBytes);
+            updateTotalProgress(that); 
+        });
+        
+        that.events.onFileComplete.addListener(function (file) {
+            that.queue.finishFile(file);
+            that.events.afterFileComplete.fire(file); 
+            uploadNextOrFinish(that);
+        });
+        
+        that.events.onFileSuccess.addListener(function (file) {
+            file.filestatus = fluid.uploader.fileStatusConstants.COMPLETE;
+            if (that.queue.currentBatch.bytesUploadedForFile === 0) {
+                that.queue.currentBatch.totalBytesUploaded += file.size;
+            }
+            
+            updateTotalProgress(that); 
+        });
+        
+        that.events.onFileError.addListener(function (file, error) {
+            if (error === fluid.uploader.errorConstants.UPLOAD_STOPPED) {
+                file.filestatus = fluid.uploader.fileStatusConstants.CANCELLED;
+                return;
+            } else {
+              // TODO: Avoid reaching directly into the filequeue and manipulating its state from here
+                file.filestatus = fluid.uploader.fileStatusConstants.ERROR;
+                if (that.queue.isUploading) {
+                    that.queue.currentBatch.totalBytesUploaded += file.size;
+                    that.queue.currentBatch.numFilesErrored++;
+                    uploadNextOrFinish(that);
+                }
+            }
+        });
+
+        that.events.afterUploadComplete.addListener(function () {
+            that.queue.isUploading = false;
+            updateStateAfterCompletion(that);
+        });
+    };
+    
+    var setupUploader = function (that) {
+        that.demo = fluid.typeTag(that.options.demo ? "fluid.uploader.demo" : "fluid.uploader.live");
+        
+        fluid.initDependents(that);
+
+        // Upload button should not be enabled until there are files to upload
+        disableElement(that, that.locate("uploadButton"));
+        bindDOMEvents(that);
+        bindEvents(that);
+        
+        updateQueueSummaryText(that);
+        that.statusUpdater();
+        renderFileUploadLimit(that);
+        
+        // Uploader uses application-style keyboard conventions, so give it a suitable role.
+        that.container.attr("role", "application");
+    };
+    
+    /**
+     * Instantiates a new Uploader component.
+     * 
+     * @param {Object} container the DOM element in which the Uploader lives
+     * @param {Object} options configuration options for the component.
+     */
+    fluid.uploader = function (container, uploaderOptions) {
+      // Do not try to expand uploaderOptions here or else our subcomponents will end up
+      // nested inside uploaderImpl
+        var that = fluid.initView("fluid.uploader", container);
+        
+        // Unsupported, non-API function fluid.uploader.transformOptions
+        if (fluid.uploader.transformOptions) {
+            uploaderOptions = fluid.uploader.transformOptions(uploaderOptions);
+        }
+
+        that.uploaderOptions = uploaderOptions;
+        fluid.initDependents(that);
+        return that.uploaderImpl;
+    };
+    
+    fluid.uploaderImpl = function () {
+        fluid.fail("Error creating uploader component - please make sure that a " + 
+            "progressiveCheckerForComponent for \"fluid.uploader\" is registered either in the " + 
+            "static environment or else is visible in the current component tree");
+    };
+    
+    fluid.defaults("fluid.uploader", {
+        gradeNames: ["fluid.viewComponent"],
+        components: {
+            uploaderContext: {
+                type: "fluid.progressiveCheckerForComponent",
+                options: {componentName: "fluid.uploader"}
+            },
+            uploaderImpl: {
+                type: "fluid.uploaderImpl",
+                container: "{uploader}.container",
+                options: "{uploader}.uploaderOptions"
+            }
+        },
+        progressiveCheckerOptions: {
+            checks: [
+                {
+                    feature: "{fluid.browser.supportsBinaryXHR}",
+                    contextName: "fluid.uploader.html5"
+                },
+                {
+                    feature: "{fluid.browser.supportsFlash}",
+                    contextName: "fluid.uploader.swfUpload"
+                }
+            ],
+            defaultContextName: "fluid.uploader.singleFile"
+        }
+    });
+    
+    // Ensure that for all uploaders created via IoC, we bypass the wrapper and directly create the concrete uploader
+    fluid.alias("fluid.uploader", "fluid.uploaderImpl");
+    
+    // This method has been deprecated as of Infusion 1.3. Use fluid.uploader() instead, 
+    // which now includes built-in support for progressive enhancement.
+    fluid.progressiveEnhanceableUploader = function (container, enhanceable, options) {
+        return fluid.uploader(container, options);
+    };
+
+    /**
+     * Multiple file Uploader implementation. Use fluid.uploader() for IoC-resolved, progressively
+     * enhanceable Uploader, or call this directly if you don't want support for old-style single uploads
+     *
+     * @param {jQueryable} container the component's container
+     * @param {Object} options configuration options
+     */
+    fluid.uploader.multiFileUploader = function (container, options) {
+        var that = fluid.initView("fluid.uploader.multiFileUploader", container, options);
+        that.queue = fluid.uploader.fileQueue();
+        
+        /**
+         * Opens the native OS browse file dialog.
+         */
+        that.browse = function () {
+            if (!that.queue.isUploading) {
+                that.strategy.local.browse();
+            }
+        };
+        
+        /**
+         * Removes the specified file from the upload queue.
+         * 
+         * @param {File} file the file to remove
+         */
+        that.removeFile = function (file) {
+            that.queue.removeFile(file);
+            that.strategy.local.removeFile(file);
+            that.events.afterFileRemoved.fire(file);
+        };
+        
+        /**
+         * Starts uploading all queued files to the server.
+         */
+        that.start = function () {
+            that.queue.start();
+            that.events.onUploadStart.fire(that.queue.currentBatch.files);           
+            that.strategy.remote.uploadNextFile();
+        };
+        
+        /**
+         * Cancels an in-progress upload.
+         */
+        that.stop = function () {
+            that.events.onUploadStop.fire();
+            that.strategy.remote.stop();
+        };
+        
+        setupUploader(that);
+        return that;  
+    };
+    
+    fluid.defaults("fluid.uploader.multiFileUploader", {
+        gradeNames: "fluid.viewComponent",
+        components: {
+            strategy: {
+                type: "fluid.uploader.progressiveStrategy"
+            },
+
+            errorPanel: {
+                type: "fluid.uploader.errorPanel"
+            },
+
+            fileQueueView: {
+                type: "fluid.uploader.fileQueueView",
+                options: {
+                    model: "{multiFileUploader}.queue.files",
+                    uploaderContainer: "{multiFileUploader}.container"
+                }
+            },
+            
+            totalProgress: {
+                type: "fluid.uploader.totalProgressBar",
+                options: {
+                    selectors: {
+                        progressBar: ".flc-uploader-queue-footer",
+                        displayElement: ".flc-uploader-total-progress", 
+                        label: ".flc-uploader-total-progress-text",
+                        indicator: ".flc-uploader-total-progress",
+                        ariaElement: ".flc-uploader-total-progress"
+                    }
+                }
+            }
+        },
+        
+        invokers: {
+            statusUpdater: "fluid.uploader.ariaLiveRegionUpdater"
+        },
+        
+        queueSettings: {
+            uploadURL: "",
+            postParams: {},
+            fileSizeLimit: "20480",
+            fileTypes: null,
+            fileTypesDescription: null,
+            fileUploadLimit: 0,
+            fileQueueLimit: 0
+        },
+
+        demo: false,
+        
+        selectors: {
+            fileQueue: ".flc-uploader-queue",
+            browseButton: ".flc-uploader-button-browse",
+            browseButtonText: ".flc-uploader-button-browse-text",
+            uploadButton: ".flc-uploader-button-upload",
+            pauseButton: ".flc-uploader-button-pause",
+            totalFileStatusText: ".flc-uploader-total-progress-text",
+            fileUploadLimitText: ".flc-uploader-upload-limit-text",
+            instructions: ".flc-uploader-browse-instructions",
+            statusRegion: ".flc-uploader-status-region",
+            errorsPanel: ".flc-uploader-errorsPanel"
+        },
+
+        // Specifies a selector name to move keyboard focus to when a particular event fires.
+        // Event listeners must already be implemented to use these options.
+        focusWithEvent: {
+            afterFileDialog: "uploadButton",
+            afterUploadStart: "pauseButton",
+            onUploadStop: "uploadButton"
+        },
+        
+        styles: {
+            disabled: "fl-uploader-disabled",
+            hidden: "fl-uploader-hidden",
+            dim: "fl-uploader-dim",
+            totalProgress: "fl-uploader-total-progress-okay",
+            totalProgressError: "fl-uploader-total-progress-errored",
+            browseButton: "fl-uploader-browseMore"
+        },
+        
+        events: {
+            afterReady: null,
+            onFileDialog: null,
+            onFilesSelected: null,
+            onFileQueued: null,
+            afterFileQueued: null,
+            onFileRemoved: null,
+            afterFileRemoved: null,
+            afterFileDialog: null,
+            onUploadStart: null,
+            onUploadStop: null,
+            onFileStart: null,
+            onFileProgress: null,
+            onFileError: null,
+            onQueueError: null,
+            onFileSuccess: null,
+            onFileComplete: null,
+            afterFileComplete: null,
+            afterUploadComplete: null
+        },
+
+        strings: {
+            progress: {
+                fileUploadLimitLabel: "%fileUploadLimit %fileLabel maximum",
+                toUploadLabel: "To upload: %fileCount %fileLabel (%totalBytes)", 
+                totalProgressLabel: "Uploading: %curFileN of %totalFilesN %fileLabel (%currBytes of %totalBytes)", 
+                completedLabel: "Uploaded: %curFileN of %totalFilesN %fileLabel (%totalCurrBytes)%errorString",
+                numberOfErrors: ", %errorsN %errorLabel",
+                singleFile: "file",
+                pluralFiles: "files",
+                singleError: "error",
+                pluralErrors: "errors"
+            },
+            buttons: {
+                browse: "Browse Files",
+                addMore: "Add More",
+                stopUpload: "Stop Upload",
+                cancelRemaning: "Cancel remaining Uploads",
+                resumeUpload: "Resume Upload"
+            },
+            queue: {
+                emptyQueue: "File list: No files waiting to be uploaded.",
+                queueSummary: "File list:  %totalUploaded files uploaded, %totalInUploadQueue file waiting to be uploaded." 
+            }
+        },
+        
+        mergePolicy: {
+            "fileQueueView.options.model": "preserve"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.totalProgressBar", "fluid.uploader.multiFileUploader", {
+        funcName: "fluid.progress",
+        container: "{multiFileUploader}.container"
+    });
+    
+    /** Demands blocks for binding to fileQueueView **/
+            
+    fluid.demands("fluid.uploader.fileQueueView", "fluid.uploader.multiFileUploader", {
+        container: "{multiFileUploader}.dom.fileQueue",
+        options: {
+            events: {
+                onFileRemoved: "{multiFileUploader}.events.onFileRemoved"
+            }
+        }
+    });
+        
+    fluid.demands("fluid.uploader.fileQueueView.eventBinder", [
+        "fluid.uploader.multiFileUploader",
+        "fluid.uploader.fileQueueView"
+    ], {
+        options: {
+            listeners: {
+                "{multiFileUploader}.events.afterFileQueued": "{fileQueueView}.addFile",
+                "{multiFileUploader}.events.onUploadStart": "{fileQueueView}.prepareForUpload",
+                "{multiFileUploader}.events.onFileStart": "{fileQueueView}.showFileProgress",
+                "{multiFileUploader}.events.onFileProgress": "{fileQueueView}.updateFileProgress",
+                "{multiFileUploader}.events.onFileSuccess": "{fileQueueView}.markFileComplete",
+                "{multiFileUploader}.events.onFileError": "{fileQueueView}.showErrorForFile",
+                "{multiFileUploader}.events.afterFileComplete": "{fileQueueView}.hideFileProgress",
+                "{multiFileUploader}.events.afterUploadComplete": "{fileQueueView}.refreshAfterUpload"
+            }
+        }
+    });
+        
+   /**
+    * Pretty prints a file's size, converting from bytes to kilobytes or megabytes.
+    * 
+    * @param {Number} bytes the files size, specified as in number bytes.
+    */
+    fluid.uploader.formatFileSize = function (bytes) {
+        if (typeof (bytes) === "number") {
+            if (bytes === 0) {
+                return "0.0 KB";
+            } else if (bytes > 0) {
+                if (bytes < 1048576) {
+                    return (Math.ceil(bytes / 1024 * 10) / 10).toFixed(1) + " KB";
+                } else {
+                    return (Math.ceil(bytes / 1048576 * 10) / 10).toFixed(1) + " MB";
+                }
+            }
+        }
+        return "";
+    };
+
+    fluid.uploader.derivePercent = function (num, total) {
+        return Math.round((num * 100) / total);
+    };
+     
+    // TODO: Refactor this to be a general ARIA utility
+    fluid.uploader.ariaLiveRegionUpdater = function (statusRegion, totalFileStatusText, events) {
+        statusRegion.attr("role", "log");     
+        statusRegion.attr("aria-live", "assertive");
+        statusRegion.attr("aria-relevant", "text");
+        statusRegion.attr("aria-atomic", "true");
+
+        var regionUpdater = function () {
+            statusRegion.text(totalFileStatusText.text());
+        };
+
+        events.afterFileDialog.addListener(regionUpdater);
+        events.afterFileRemoved.addListener(regionUpdater);
+        events.afterUploadComplete.addListener(regionUpdater);
+    };
+    
+    fluid.demands("fluid.uploader.ariaLiveRegionUpdater", "fluid.uploader.multiFileUploader", {
+        funcName: "fluid.uploader.ariaLiveRegionUpdater",
+        args: [
+            "{multiFileUploader}.dom.statusRegion",
+            "{multiFileUploader}.dom.totalFileStatusText",
+            "{multiFileUploader}.events"
+        ]
+    });
+
+    
+    /**************************************************
+     * Error constants for the Uploader               *
+     * TODO: These are SWFUpload-specific error codes *
+     **************************************************/
+    // TODO: Change these opaque numerical constants into strings which are easy to interpret
+    fluid.uploader.queueErrorConstants = {
+        QUEUE_LIMIT_EXCEEDED: -100,
+        FILE_EXCEEDS_SIZE_LIMIT: -110,
+        ZERO_BYTE_FILE: -120,
+        INVALID_FILETYPE: -130
+    };
+    
+    fluid.uploader.errorConstants = {
+        HTTP_ERROR: -200,
+        MISSING_UPLOAD_URL: -210,
+        IO_ERROR: -220,
+        SECURITY_ERROR: -230,
+        UPLOAD_LIMIT_EXCEEDED: -240,
+        UPLOAD_FAILED: -250,
+        SPECIFIED_FILE_ID_NOT_FOUND: -260,
+        FILE_VALIDATION_FAILED: -270,
+        FILE_CANCELLED: -280,
+        UPLOAD_STOPPED: -290
+    };
+    
+    fluid.uploader.fileStatusConstants = {
+        QUEUED: -1,
+        IN_PROGRESS: -2,
+        ERROR: -3,
+        COMPLETE: -4,
+        CANCELLED: -5
+    };
+
+    var toggleVisibility = function (toShow, toHide) {
+        // For FLUID-2789: hide() doesn't work in Opera
+        if (window.opera) { 
+            toShow.show().removeClass("hideUploaderForOpera");
+            toHide.show().addClass("hideUploaderForOpera");
+        } else {
+            toShow.show();
+            toHide.hide();
+        }
+    };
+
+    /**
+     * Single file Uploader implementation. Use fluid.uploader() for IoC-resolved, progressively
+     * enhanceable Uploader, or call this directly if you only want a standard single file uploader.
+     * But why would you want that?
+     *
+     * @param {jQueryable} container the component's container
+     * @param {Object} options configuration options
+     */
+    fluid.uploader.singleFileUploader = function (container, options) {
+        var that = fluid.initView("fluid.uploader.singleFileUploader", container, options);
+        // TODO: direct DOM fascism that will fail with multiple uploaders on a single page.
+        toggleVisibility($(that.options.selectors.basicUpload), that.container);
+        return that;
+    };
+
+    fluid.defaults("fluid.uploader.singleFileUploader", {
+        gradeNames: "fluid.viewComponent",
+        selectors: {
+            basicUpload: ".fl-progEnhance-basic"
+        }
+    });
+
+    fluid.demands("fluid.uploaderImpl", "fluid.uploader.singleFile", {
+        funcName: "fluid.uploader.singleFileUploader"
+    });
+    
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery, SWFUpload*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+    
+    fluid.uploader = fluid.uploader || {};
+    
+    var filterFiles = function (files, filterFn) {
+        var filteredFiles = [];
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (filterFn(file) === true) {
+                filteredFiles.push(file);
+            }
+        }
+        
+        return filteredFiles;
+    };
+     
+    fluid.uploader.fileQueue = function () {
+        var that = {};
+        that.files = [];
+        that.isUploading = false;
+        
+        /********************
+         * Queue Operations *
+         ********************/
+         
+        that.start = function () {
+            that.setupCurrentBatch();
+            that.isUploading = true;
+            that.shouldStop = false;
+        };
+        
+        that.startFile = function () {
+            that.currentBatch.fileIdx++;
+            that.currentBatch.bytesUploadedForFile = 0;
+            that.currentBatch.previousBytesUploadedForFile = 0; 
+        };
+                
+        that.finishFile = function (file) {
+            that.currentBatch.numFilesCompleted++;
+        };
+        
+        that.shouldUploadNextFile = function () {
+            return !that.shouldStop && 
+                that.isUploading && 
+                (that.currentBatch.numFilesCompleted + that.currentBatch.numFilesErrored) 
+                < that.currentBatch.files.length;
+        };
+        
+        /*****************************
+         * File manipulation methods *
+         *****************************/
+         
+        that.addFile = function (file) {
+            that.files.push(file);    
+        };
+        
+        that.removeFile = function (file) {
+            var idx = $.inArray(file, that.files);
+            that.files.splice(idx, 1);        
+        };
+        
+        /**********************
+         * Queue Info Methods *
+         **********************/
+         
+        that.totalBytes = function () {
+            return fluid.uploader.fileQueue.sizeOfFiles(that.files);
+        };
+
+        that.getReadyFiles = function () {
+            return filterFiles(that.files, function (file) {
+                return (file.filestatus === fluid.uploader.fileStatusConstants.QUEUED || file.filestatus === fluid.uploader.fileStatusConstants.CANCELLED);
+            });        
+        };
+        
+        that.getErroredFiles = function () {
+            return filterFiles(that.files, function (file) {
+                return (file.filestatus === fluid.uploader.fileStatusConstants.ERROR);
+            });        
+        };
+        
+        that.sizeOfReadyFiles = function () {
+            return fluid.uploader.fileQueue.sizeOfFiles(that.getReadyFiles());
+        };
+        
+        that.getUploadedFiles = function () {
+            return filterFiles(that.files, function (file) {
+                return (file.filestatus === fluid.uploader.fileStatusConstants.COMPLETE);
+            });        
+        };
+
+        that.sizeOfUploadedFiles = function () {
+            return fluid.uploader.fileQueue.sizeOfFiles(that.getUploadedFiles());
+        };
+
+        /*****************
+         * Batch Methods *
+         *****************/
+         
+        that.setupCurrentBatch = function () {
+            that.clearCurrentBatch();
+            that.updateCurrentBatch();
+        };
+        
+        that.clearCurrentBatch = function () {
+            that.currentBatch = {
+                fileIdx: 0,
+                files: [],
+                totalBytes: 0,
+                numFilesCompleted: 0,
+                numFilesErrored: 0,
+                bytesUploadedForFile: 0,
+                previousBytesUploadedForFile: 0,
+                totalBytesUploaded: 0
+            };
+        };
+        
+        that.updateCurrentBatch = function () {
+            var readyFiles = that.getReadyFiles();
+            that.currentBatch.files = readyFiles;
+            that.currentBatch.totalBytes = fluid.uploader.fileQueue.sizeOfFiles(readyFiles);
+        };
+        
+        that.updateBatchStatus = function (currentBytes) {
+            var byteIncrement = currentBytes - that.currentBatch.previousBytesUploadedForFile;
+            that.currentBatch.totalBytesUploaded += byteIncrement;
+            that.currentBatch.bytesUploadedForFile += byteIncrement;
+            that.currentBatch.previousBytesUploadedForFile = currentBytes;
+        };
+                
+        return that;
+    };
+    
+    fluid.uploader.fileQueue.sizeOfFiles = function (files) {
+        var totalBytes = 0;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            totalBytes += file.size;
+        }        
+        return totalBytes;
+    };
+          
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2008-2009 University of Cambridge
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+/*******************
+ * File Queue View *
+ *******************/
+
+(function ($, fluid) {
+    
+    // Real data binding would be nice to replace these two pairs.
+    var rowForFile = function (that, file) {
+        return that.locate("fileQueue").find("#" + file.id);
+    };
+    
+    var errorRowForFile = function (that, file) {
+        return $("#" + file.id + "_error", that.container);
+    };
+    
+    var fileForRow = function (that, row) {
+        var files = that.model;
+        var i;
+        for (i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (file.id.toString() === row.prop("id")) {
+                return file;
+            }
+        }
+        return null;
+    };
+    
+    var progressorForFile = function (that, file) {
+        var progressId = file.id + "_progress";
+        return that.fileProgressors[progressId];
+    };
+    
+    var startFileProgress = function (that, file) {
+        var fileRowElm = rowForFile(that, file);
+        that.scroller.scrollTo(fileRowElm);
+               
+        // update the progressor and make sure that it's in position
+        var fileProgressor = progressorForFile(that, file);
+        fileProgressor.refreshView();
+        fileProgressor.show();
+    };
+        
+    var updateFileProgress = function (that, file, fileBytesComplete, fileTotalBytes) {
+        var filePercent = fluid.uploader.derivePercent(fileBytesComplete, fileTotalBytes);
+        var filePercentStr = filePercent + "%";    
+        progressorForFile(that, file).update(filePercent, filePercentStr);
+    };
+    
+    var hideFileProgress = function (that, file) {
+        var fileRowElm = rowForFile(that, file);
+        progressorForFile(that, file).hide();
+        if (file.filestatus === fluid.uploader.fileStatusConstants.COMPLETE) {
+            that.locate("fileIconBtn", fileRowElm).removeClass(that.options.styles.dim);
+        } 
+    };
+    
+    var removeFileProgress = function (that, file) {
+        var fileProgressor = progressorForFile(that, file);
+        if (!fileProgressor) {
+            return;
+        }
+        var rowProgressor = fileProgressor.displayElement;
+        rowProgressor.remove();
+    };
+ 
+    var animateRowRemoval = function (that, row) {
+        row.fadeOut("fast", function () {
+            row.remove();  
+            that.refreshView();
+        });
+    };
+    
+    var removeFileErrorRow = function (that, file) {
+        if (file.filestatus === fluid.uploader.fileStatusConstants.ERROR) {
+            animateRowRemoval(that, errorRowForFile(that, file));
+        }
+    };
+   
+    var removeFileAndRow = function (that, file, row) {
+        // Clean up the stuff associated with a file row.
+        removeFileProgress(that, file);
+        removeFileErrorRow(that, file);
+        
+        // Remove the file itself.
+        that.events.onFileRemoved.fire(file);
+        animateRowRemoval(that, row);
+    };
+    
+    var removeFileForRow = function (that, row) {
+        var file = fileForRow(that, row);
+        if (!file || file.filestatus === fluid.uploader.fileStatusConstants.COMPLETE) {
+            return;
+        }
+        removeFileAndRow(that, file, row);
+    };
+    
+    var removeRowForFile = function (that, file) {
+        var row = rowForFile(that, file);
+        removeFileAndRow(that, file, row);
+    };
+    
+    var bindHover = function (row, styles) {
+        var over = function () {
+            if (row.hasClass(styles.ready) && !row.hasClass(styles.uploading)) {
+                row.addClass(styles.hover);
+            }
+        };
+        
+        var out = function () {
+            if (row.hasClass(styles.ready) && !row.hasClass(styles.uploading)) {
+                row.removeClass(styles.hover);
+            }   
+        };
+        row.hover(over, out);
+    };
+    
+    var bindDeleteKey = function (that, row) {
+        var deleteHandler = function () {
+            removeFileForRow(that, row);
+        };
+       
+        fluid.activatable(row, null, {
+            additionalBindings: [{
+                key: $.ui.keyCode.DELETE, 
+                activateHandler: deleteHandler
+            }]
+        });
+    };
+    
+    var bindRowHandlers = function (that, row) {
+        if ($.browser.msie && $.browser.version < 7) {
+            bindHover(row, that.options.styles);
+        }
+        
+        that.locate("fileIconBtn", row).click(function () {
+            removeFileForRow(that, row);
+        });
+        
+        bindDeleteKey(that, row);
+    };
+    
+    var renderRowFromTemplate = function (that, file) {
+        var row = that.rowTemplate.clone(),
+            fileName = file.name,
+            fileSize = fluid.uploader.formatFileSize(file.size);
+        
+        row.removeClass(that.options.styles.hiddenTemplate);
+        that.locate("fileName", row).text(fileName);
+        that.locate("fileSize", row).text(fileSize);
+        that.locate("fileIconBtn", row).addClass(that.options.styles.remove);
+        row.prop("id", file.id);
+        row.addClass(that.options.styles.ready);
+        bindRowHandlers(that, row);
+        fluid.updateAriaLabel(row, fileName + " " + fileSize);
+        return row;    
+    };
+    
+    var createProgressorFromTemplate = function (that, row) {
+        // create a new progress bar for the row and position it
+        var rowProgressor = that.rowProgressorTemplate.clone();
+        var rowId = row.prop("id");
+        var progressId = rowId + "_progress";
+        rowProgressor.prop("id", progressId);
+        rowProgressor.css("top", row.position().top);
+        rowProgressor.height(row.height()).width(5);
+        that.container.after(rowProgressor);
+       
+        that.fileProgressors[progressId] = fluid.progress(that.options.uploaderContainer, {
+            selectors: {
+                progressBar: "#" + rowId,
+                displayElement: "#" + progressId,
+                label: "#" + progressId + " .fl-uploader-file-progress-text",
+                indicator: "#" + progressId
+            }
+        });
+    };
+    
+    var addFile = function (that, file) {
+        var row = renderRowFromTemplate(that, file);
+        /* FLUID-2720 - do not hide the row under IE8 */
+        if (!($.browser.msie && ($.browser.version >= 8))) {
+            row.hide();
+        }
+        that.container.append(row);
+        row.attr("title", that.options.strings.status.remove);
+        row.fadeIn("slow");
+        createProgressorFromTemplate(that, row);
+        that.refreshView();
+        that.scroller.scrollTo("100%");
+    };
+    
+    // Toggle keyboard row handlers on and off depending on the uploader state
+    var enableRows = function (rows, state) {
+        var i;
+        for (i = 0; i < rows.length; i++) {
+            fluid.enabled(rows[i], state);  
+        }               
+    };
+    
+    var prepareForUpload = function (that) {
+        var rowButtons = that.locate("fileIconBtn", that.locate("fileRows"));
+        rowButtons.prop("disabled", true);
+        rowButtons.addClass(that.options.styles.dim);
+        enableRows(that.locate("fileRows"), false);
+    };
+
+    var refreshAfterUpload = function (that) {
+        var rowButtons = that.locate("fileIconBtn", that.locate("fileRows"));
+        rowButtons.prop("disabled", false);
+        rowButtons.removeClass(that.options.styles.dim);
+        enableRows(that.locate("fileRows"), true);        
+    };
+        
+    var changeRowState = function (that, row, newState) {
+        row.removeClass(that.options.styles.ready).removeClass(that.options.styles.error).addClass(newState);
+    };
+    
+    var markRowAsComplete = function (that, file) {
+        // update styles and keyboard bindings for the file row
+        var row = rowForFile(that, file);
+        changeRowState(that, row, that.options.styles.uploaded);
+        row.attr("title", that.options.strings.status.success);
+        fluid.enabled(row, false);
+        
+        // update the click event and the styling for the file delete button
+        var removeRowBtn = that.locate("fileIconBtn", row);
+        removeRowBtn.unbind("click");
+        removeRowBtn.removeClass(that.options.styles.remove);
+        removeRowBtn.attr("title", that.options.strings.status.success); 
+    };
+    
+    var renderErrorInfoRowFromTemplate = function (that, fileRow, error) {
+        // Render the row by cloning the template and binding its id to the file.
+        var errorRow = that.errorInfoRowTemplate.clone();
+        errorRow.prop("id", fileRow.prop("id") + "_error");
+        
+        // Look up the error message and render it.
+        var errorType = fluid.keyForValue(fluid.uploader.errorConstants, error);
+        var errorMsg = that.options.strings.errors[errorType];
+        that.locate("errorText", errorRow).text(errorMsg);
+        fileRow.after(errorRow);
+        that.scroller.scrollTo(errorRow);
+    };
+    
+    var showErrorForFile = function (that, file, error) {
+        hideFileProgress(that, file);
+        if (file.filestatus === fluid.uploader.fileStatusConstants.ERROR) {
+            var fileRowElm = rowForFile(that, file);
+            changeRowState(that, fileRowElm, that.options.styles.error);
+            renderErrorInfoRowFromTemplate(that, fileRowElm, error);
+        }
+    };
+    
+    var addKeyboardNavigation = function (that) {
+        fluid.tabbable(that.container);
+        that.selectableContext = fluid.selectable(that.container, {
+            selectableSelector: that.options.selectors.fileRows,
+            onSelect: function (itemToSelect) {
+                $(itemToSelect).addClass(that.options.styles.selected);
+            },
+            onUnselect: function (selectedItem) {
+                $(selectedItem).removeClass(that.options.styles.selected);
+            }
+        });
+    };
+    
+    var prepareTemplateElements = function (that) {
+        // Grab our template elements out of the DOM.  
+        that.rowTemplate = that.locate("rowTemplate").remove();
+        that.errorInfoRowTemplate = that.locate("errorInfoRowTemplate").remove();
+        that.errorInfoRowTemplate.removeClass(that.options.styles.hiddenTemplate);
+        that.rowProgressorTemplate = that.locate("rowProgressorTemplate", that.options.uploaderContainer).remove();
+    };
+    
+    fluid.registerNamespace("fluid.uploader.fileQueueView");
+    
+    
+    fluid.uploader.fileQueueView.finalInit = function (that) {
+        prepareTemplateElements(that);         
+        addKeyboardNavigation(that);
+    };
+    
+    /**
+     * Creates a new File Queue view.
+     * 
+     * @param {jQuery|selector} container the file queue's container DOM element
+     * @param {fileQueue} queue a file queue model instance
+     * @param {Object} options configuration options for the view
+     */
+    fluid.uploader.fileQueueView.preInit = function (that) {
+        that.fileProgressors = {};
+
+        that.addFile = function (file) {
+            addFile(that, file);
+        };
+        
+        that.removeFile = function (file) {
+            removeRowForFile(that, file);
+        };
+        
+        that.prepareForUpload = function () {
+            prepareForUpload(that);
+        };
+        
+        that.refreshAfterUpload = function () {
+            refreshAfterUpload(that);
+        };
+
+        that.showFileProgress = function (file) {
+            startFileProgress(that, file);
+        };
+        
+        that.updateFileProgress = function (file, fileBytesComplete, fileTotalBytes) {
+            updateFileProgress(that, file, fileBytesComplete, fileTotalBytes); 
+        };
+        
+        that.markFileComplete = function (file) {
+            progressorForFile(that, file).update(100, "100%");
+            markRowAsComplete(that, file);
+        };
+        
+        that.showErrorForFile = function (file, error) {
+            showErrorForFile(that, file, error);
+        };
+        
+        that.hideFileProgress = function (file) {
+            hideFileProgress(that, file);
+        };
+        
+        that.refreshView = function () {
+            that.selectableContext.refresh();
+            that.scroller.refreshView();
+        };
+    };
+    
+    fluid.defaults("fluid.uploader.fileQueueView", {
+        gradeNames: ["fluid.viewComponent", "autoInit"],
+        preInitFunction:   "fluid.uploader.fileQueueView.preInit",
+        finalInitFunction: "fluid.uploader.fileQueueView.finalInit",
+        
+        components: {
+            scroller: {
+                type: "fluid.scrollableTable"
+            },
+            
+            eventBinder: {
+                type: "fluid.uploader.fileQueueView.eventBinder"
+            }
+        },
+        
+        selectors: {
+            fileRows: ".flc-uploader-file",
+            fileName: ".flc-uploader-file-name",
+            fileSize: ".flc-uploader-file-size",
+            fileIconBtn: ".flc-uploader-file-action",      
+            errorText: ".flc-uploader-file-error",
+            
+            rowTemplate: ".flc-uploader-file-tmplt",
+            errorInfoRowTemplate: ".flc-uploader-file-error-tmplt",
+            rowProgressorTemplate: ".flc-uploader-file-progressor-tmplt"
+        },
+        
+        styles: {
+            hover: "fl-uploader-file-hover",
+            selected: "fl-uploader-file-focus",
+            ready: "fl-uploader-file-state-ready",
+            uploading: "fl-uploader-file-state-uploading",
+            uploaded: "fl-uploader-file-state-uploaded",
+            error: "fl-uploader-file-state-error",
+            remove: "fl-uploader-file-action-remove",
+            dim: "fl-uploader-dim",
+            hiddenTemplate: "fl-uploader-hidden-templates"
+        },
+        
+        strings: {
+            progress: {
+                toUploadLabel: "To upload: %fileCount %fileLabel (%totalBytes)", 
+                singleFile: "file",
+                pluralFiles: "files"
+            },
+            status: {
+                success: "File Uploaded",
+                error: "File Upload Error",
+                remove: "Press Delete key to remove file"
+            }, 
+            errors: {
+                HTTP_ERROR: "File upload error: a network error occured or the file was rejected (reason unknown).",
+                IO_ERROR: "File upload error: a network error occured.",
+                UPLOAD_LIMIT_EXCEEDED: "File upload error: you have uploaded as many files as you are allowed during this session",
+                UPLOAD_FAILED: "File upload error: the upload failed for an unknown reason.",
+                QUEUE_LIMIT_EXCEEDED: "You have as many files in the queue as can be added at one time. Removing files from the queue may allow you to add different files.",
+                FILE_EXCEEDS_SIZE_LIMIT: "One or more of the files that you attempted to add to the queue exceeded the limit of %fileSizeLimit.",
+                ZERO_BYTE_FILE: "One or more of the files that you attempted to add contained no data.",
+                INVALID_FILETYPE: "One or more files were not added to the queue because they were of the wrong type."
+            }
+        },
+        events: {
+            onFileRemoved: null
+        },
+        
+        mergePolicy: {
+            model: "preserve"
+        }
+    });
+    
+    /**
+     * EventBinder declaratively binds FileQueueView's methods as listeners to Uploader events using IoC.
+     */
+    fluid.defaults("fluid.uploader.fileQueueView.eventBinder", {
+        gradeNames: ["fluid.eventedComponent", "autoInit"]
+    });
+    
+    fluid.demands("fluid.uploader.fileQueueView.eventBinder", [], {});
+    /**************
+     * Scrollable *
+     **************/
+     
+    /**
+     * Simple component cover for the jQuery scrollTo plugin. Provides roughly equivalent
+     * functionality to Uploader's old Scroller plugin.
+     *
+     * @param {jQueryable} element the element to make scrollable
+     * @param {Object} options for the component
+     * @return the scrollable component
+     */
+    fluid.scrollable = function (element, options) {
+        var that = fluid.initView("fluid.scrollable", element, options);
+        that.scrollable = that.options.makeScrollableFn(that.container, that.options);
+        that.maxHeight = that.scrollable.css("max-height");
+
+        /**
+         * Programmatically scrolls this scrollable element to the region specified.
+         * This method is directly compatible with the underlying jQuery.scrollTo plugin.
+         */
+        that.scrollTo = function () {
+            that.scrollable.scrollTo.apply(that.scrollable, arguments);
+        };
+
+        /* 
+         * Updates the view of the scrollable region. This should be called when the content of the scrollable region is changed. 
+         */
+        that.refreshView = function () {
+            if ($.browser.msie && $.browser.version === "6.0") {    
+                that.scrollable.css("height", "");
+
+                // Set height, if max-height is reached, to allow scrolling in IE6.
+                if (that.scrollable.height() >= parseInt(that.maxHeight, 10)) {
+                    that.scrollable.css("height", that.maxHeight);           
+                }
+            }
+        };          
+
+        that.refreshView();
+
+        return that;
+    };
+
+    fluid.scrollable.makeSimple = function (element, options) {
+        return fluid.container(element);
+    };
+
+    fluid.scrollable.makeTable =  function (table, options) {
+        table.wrap(options.wrapperMarkup);
+        return table.closest(".fl-scrollable-scroller");
+    };
+
+    fluid.defaults("fluid.scrollable", {
+        makeScrollableFn: fluid.scrollable.makeSimple
+    });
+
+    /** 
+     * Wraps a table in order to make it scrollable with the jQuery.scrollTo plugin.
+     * Container divs are injected to allow cross-browser support. 
+     *
+     * @param {jQueryable} table the table to make scrollable
+     * @param {Object} options configuration options
+     * @return the scrollable component
+     */
+    fluid.scrollableTable = function (table, options) {
+        options = $.extend({}, fluid.defaults("fluid.scrollableTable"), options);
+        return fluid.scrollable(table, options);
+    };
+
+    fluid.defaults("fluid.scrollableTable", {
+        gradeNames: "fluid.viewComponent",
+        makeScrollableFn: fluid.scrollable.makeTable,
+        wrapperMarkup: "<div class='fl-scrollable-scroller'><div class='fl-scrollable-inner'></div></div>"
+    });    
+    
+    fluid.demands("fluid.scrollableTable", "fluid.uploader.fileQueueView", {
+        funcName: "fluid.scrollableTable",
+        args: [
+            "{fileQueueView}.container"
+        ]
+    });
+   
+})(jQuery, fluid_1_5);
+/*
+Copyright 2011 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global window, fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+
+    fluid.uploader = fluid.uploader || {};
+    
+    fluid.defaults("fluid.uploader.errorPanel", {
+        gradeNames: ["fluid.viewComponent", "autoInit"],
+        preInitFunction: "fluid.uploader.errorPanel.preInit",
+        postInitFunction: "fluid.uploader.errorPanel.renderSectionTemplates",
+        finalInitFunction: "fluid.uploader.errorPanel.finalInit",
+        
+        components: {
+            // TODO: This won't scale nicely with more types of errors. 
+            fileSizeErrorSection: {
+                type: "fluid.uploader.errorPanel.section",
+                container: "{errorPanel}.dom.fileSizeErrorSection",
+                options: {
+                    model: {
+                        errorCode: fluid.uploader.queueErrorConstants.FILE_EXCEEDS_SIZE_LIMIT
+                    },
+                    strings: {
+                        header: "{errorPanel}.options.strings.exceedsFileSize"
+                    }
+                }
+            },
+            
+            numFilesErrorSection: {
+                type: "fluid.uploader.errorPanel.section",
+                container: "{errorPanel}.dom.numFilesErrorSection",
+                options: {
+                    model: {
+                        errorCode: fluid.uploader.queueErrorConstants.QUEUE_LIMIT_EXCEEDED
+                    },
+                    strings: {
+                        header: "{errorPanel}.options.strings.exceedsNumFilesLimit"
+                    }
+                }
+            }
+        },
+        
+        selectors: {
+            header: ".flc-uploader-errorPanel-header",
+            sectionTemplate: ".flc-uploader-errorPanel-section-tmplt",
+            fileSizeErrorSection: ".flc-uploader-errorPanel-section-fileSize",
+            numFilesErrorSection: ".flc-uploader-errorPanel-section-numFiles"
+        },
+        
+        strings: {
+            headerText: "Warning(s)",
+            exceedsNumFilesLimit: "Too many files were selected. %numFiles were not added to the queue.",
+            exceedsFileSize: "%numFiles files were too large and were not added to the queue."
+        },
+        
+        styles: {
+            hiddenTemplate: "fl-hidden-templates"
+        }
+    });
+
+    fluid.uploader.errorPanel.preInit = function (that) {
+        that.refreshView = function () {
+            for (var i = 0; i < that.sections.length; i++) {
+                if (that.sections[i].model.files.length > 0) {
+                    // One of the sections has errors. Show them and bail immediately.
+                    that.container.show();
+                    return;
+                }
+            }            
+            that.container.hide();
+        };
+    };
+    
+    fluid.uploader.errorPanel.renderSectionTemplates = function (that) {
+        var sectionTmpl = that.locate("sectionTemplate").remove().removeClass(that.options.styles.hiddenTemplate);
+        that.locate("fileSizeErrorSection").append(sectionTmpl.clone());
+        that.locate("numFilesErrorSection").append(sectionTmpl.clone());
+    };
+    
+    fluid.uploader.errorPanel.finalInit = function (that) {
+        that.sections = [that.fileSizeErrorSection, that.numFilesErrorSection];
+        that.locate("header").text(that.options.strings.headerText);
+        that.container.hide();
+    };
+
+    fluid.demands("fluid.uploader.errorPanel", "fluid.uploader.multiFileUploader", {
+        container: "{multiFileUploader}.dom.errorsPanel",
+        options: {            
+            listeners: {
+                "{multiFileUploader}.events.afterFileDialog": "{errorPanel}.refreshView"
+            }
+        }
+    });
+    
+    fluid.defaults("fluid.uploader.errorPanel.section", {
+        gradeNames: ["fluid.viewComponent", "autoInit"],
+        preInitFunction: "fluid.uploader.errorPanel.section.preInit",
+        finalInitFunction: "fluid.uploader.errorPanel.section.finalInit",
+        
+        model: {
+            errorCode: undefined,
+            files: [],
+            showingDetails: false
+        },
+        
+        events: {
+            afterErrorsCleared: null
+        },
+        
+        selectors: {
+            errorTitle: ".fl-uploader-errorPanel-section-title",
+            deleteErrorButton: ".flc-uploader-errorPanel-section-removeButton",
+            errorDetails: ".flc-uploader-errorPanel-section-details",
+            erroredFiles: ".flc-uploader-errorPanel-section-files",
+            showHideFilesToggle: ".flc-uploader-errorPanel-section-toggleDetails"
+        },
+        
+        strings: {
+            hideFiles: "Hide files",
+            showFiles: "Show files",
+            fileListDelimiter: ", "
+        }
+    });
+    
+    fluid.uploader.errorPanel.section.preInit = function (that) {
+        that.toggleDetails = function () {
+            var detailsAction = that.model.showingDetails ? that.hideDetails : that.showDetails;
+            detailsAction();
+        };
+        
+        that.showDetails = function () {
+            that.locate("errorDetails").show();
+            that.locate("showHideFilesToggle").text(that.options.strings.hideFiles);
+            that.model.showingDetails = true;
+        };
+        
+        that.hideDetails = function () {
+            that.locate("errorDetails").hide();
+            that.locate("showHideFilesToggle").text(that.options.strings.showFiles);
+            that.model.showingDetails = false;
+        };
+        
+        that.addFile = function (file, errorCode) {
+            if (errorCode === that.model.errorCode) {
+                that.model.files.push(file.name);
+                that.refreshView();
+            }
+        };
+        
+        that.clear = function () {
+            that.model.files = [];
+            that.refreshView();
+            that.events.afterErrorsCleared.fire();
+        };
+        
+        that.refreshView = function () {
+            fluid.uploader.errorPanel.section.renderHeader(that);
+            fluid.uploader.errorPanel.section.renderErrorDetails(that);
+            that.hideDetails();
+            
+            if (that.model.files.length <= 0) {
+                that.container.hide();
+            } else {
+                that.container.show();
+            }
+        };
+    };
+    
+    fluid.uploader.errorPanel.section.finalInit = function (that) {        
+        // Bind delete button
+        that.locate("deleteErrorButton").click(that.clear);
+
+        // Bind hide/show error details link
+        that.locate("showHideFilesToggle").click(that.toggleDetails);
+        
+        that.refreshView();
+    };
+    
+    fluid.uploader.errorPanel.section.renderHeader = function (that) {
+        var errorTitle = fluid.stringTemplate(that.options.strings.header, {
+            numFiles: that.model.files.length
+        });
+        
+        that.locate("errorTitle").text(errorTitle);         
+    };
+    
+    fluid.uploader.errorPanel.section.renderErrorDetails = function (that) {
+        var files = that.model.files;
+        var filesList = files.length > 0 ? files.join(that.options.strings.fileListDelimiter) : "";
+        that.locate("erroredFiles").text(filesList);
+    };
+    
+    fluid.demands("fluid.uploader.errorPanel.section", [
+        "fluid.uploader.errorPanel", 
+        "fluid.uploader.multiFileUploader"
+    ], {
+        options: {
+            listeners: {                
+                "{multiFileUploader}.events.onQueueError": "{section}.addFile",
+                "{multiFileUploader}.events.onFilesSelected": "{section}.clear",
+                "{multiFileUploader}.events.onUploadStart": "{section}.clear",
+                "{section}.events.afterErrorsCleared": "{errorPanel}.refreshView"
+            }
+        }
+    });
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery, swfobject, SWFUpload */
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+
+    fluid.uploader = fluid.uploader || {};
+    
+    fluid.demands("fluid.uploaderImpl", "fluid.uploader.swfUpload", {
+        funcName: "fluid.uploader.multiFileUploader"
+    });
+    
+    /**********************
+     * uploader.swfUpload *
+     **********************/
+    
+    fluid.uploader.swfUploadStrategy = function (options) {
+        var that = fluid.initLittleComponent("fluid.uploader.swfUploadStrategy", options);
+        fluid.initDependents(that);
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.swfUploadStrategy", {
+        components: {
+            engine: {
+                type: "fluid.uploader.swfUploadStrategy.engine",
+                options: {
+                    queueSettings: "{multiFileUploader}.options.queueSettings",
+                    flashMovieSettings: "{swfUploadStrategy}.options.flashMovieSettings"
+                }
+            },
+            
+            local: {
+                type: "fluid.uploader.local",
+                options: {
+                    errorHandler: "{multiFileUploader}.dom.errorHandler"
+                }
+            },
+            
+            remote: {
+                type: "fluid.uploader.remote"
+            }
+        },
+        
+        // TODO: Rename this to "flashSettings" and remove the "flash" prefix from each option
+        flashMovieSettings: {
+            flashURL: "../../../lib/swfupload/flash/swfupload.swf",
+            flashButtonPeerId: "",
+            flashButtonAlwaysVisible: false,
+            flashButtonTransparentEvenInIE: true,
+            flashButtonImageURL: "../images/browse.png", // Used only when the Flash movie is visible.
+            flashButtonCursorEffect: SWFUpload.CURSOR.HAND,
+            debug: false
+        },
+
+        styles: {
+            browseButtonOverlay: "fl-uploader-browse-overlay",
+            flash9Container: "fl-uploader-flash9-container",
+            uploaderWrapperFlash10: "fl-uploader-flash10-wrapper"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.progressiveStrategy", "fluid.uploader.swfUpload", {
+        funcName: "fluid.uploader.swfUploadStrategy"
+    });
+    
+    
+    fluid.uploader.swfUploadStrategy.remote = function (swfUpload, queue, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.swfUploadStrategy.remote", options);
+        that.swfUpload = swfUpload;
+        that.queue = queue;
+        
+        that.uploadNextFile = function () {
+            that.swfUpload.startUpload();
+        };
+        
+        that.stop = function () {
+            // FLUID-822: Instead of actually stopping SWFUpload right away, we wait until the current file 
+            // is finished and then don't bother to upload any new ones. This is due an issue where SWFUpload
+            // appears to hang while Uploading a file that was previously stopped. I have a lingering suspicion
+            // that this may actually be a bug in our Image Gallery demo, rather than in SWFUpload itself.
+            that.queue.shouldStop = true;
+        };
+        return that;
+    };
+    
+    fluid.demands("fluid.uploader.remote", "fluid.uploader.swfUploadStrategy", {
+        funcName: "fluid.uploader.swfUploadStrategy.remote",
+        args: [
+            "{engine}.swfUpload",
+            "{multiFileUploader}.queue",
+            "{options}"
+        ]
+    });
+
+    
+    fluid.uploader.swfUploadStrategy.local = function (swfUpload, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.swfUploadStrategy.local", options);
+        that.swfUpload = swfUpload;
+        
+        that.browse = function () {
+            if (that.options.file_queue_limit === 1) {
+                that.swfUpload.selectFile();
+            } else {
+                that.swfUpload.selectFiles();
+            }    
+        };
+        
+        that.removeFile = function (file) {
+            that.swfUpload.cancelUpload(file.id);
+        };
+        
+        that.enableBrowseButton = function () {
+            that.swfUpload.setButtonDisabled(false);
+        };
+        
+        that.disableBrowseButton = function () {
+            that.swfUpload.setButtonDisabled(true);
+        };
+        
+        return that;
+    };
+    
+    fluid.demands("fluid.uploader.local", "fluid.uploader.swfUploadStrategy", {
+        funcName: "fluid.uploader.swfUploadStrategy.local",
+        args: [
+            "{engine}.swfUpload",
+            "{options}"
+        ]
+    });
+    
+    fluid.uploader.swfUploadStrategy.engine = function (options) {
+        var that = fluid.initLittleComponent("fluid.uploader.swfUploadStrategy.engine", options);
+        
+        // Get the Flash version from swfobject and setup a new context so that the appropriate
+        // Flash 9/10 strategies are selected.
+        var flashVersion = swfobject.getFlashPlayerVersion().major;
+        that.flashVersionContext = fluid.typeTag("fluid.uploader.flash." + flashVersion);
+        
+        // Merge Uploader's generic queue options with our Flash-specific options.
+        that.config = $.extend({}, that.options.queueSettings, that.options.flashMovieSettings);
+        
+        // Configure the SWFUpload subsystem.
+        fluid.initDependents(that);
+        that.flashContainer = that.setupDOM();
+        that.swfUploadConfig = that.setupConfig();
+        that.swfUpload = new SWFUpload(that.swfUploadConfig);
+        that.bindEvents();
+        
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.swfUploadStrategy.engine", {
+        invokers: {
+            setupDOM: "fluid.uploader.swfUploadStrategy.setupDOM",
+            setupConfig: "fluid.uploader.swfUploadStrategy.setupConfig",
+            bindEvents: "fluid.uploader.swfUploadStrategy.eventBinder"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.swfUploadStrategy.engine", "fluid.uploader.swfUploadStrategy", {
+        funcName: "fluid.uploader.swfUploadStrategy.engine",
+        args: [
+            fluid.COMPONENT_OPTIONS
+        ]
+    });
+    
+
+    /*
+     * Transform HTML5 MIME types into file types for SWFUpload.
+     */
+    fluid.uploader.swfUploadStrategy.fileTypeTransformer = function (model, expandSpec) { 
+        var fileExts = "";
+        var mimeTypes = fluid.get(model, expandSpec.path); 
+        var mimeTypesMap = fluid.uploader.mimeTypeRegistry;
+        
+        if (!mimeTypes) {
+            return "*";
+        } else if (typeof (mimeTypes) === "string") {
+            return mimeTypes;
+        }
+        
+        fluid.each(mimeTypes, function (mimeType) {
+            fluid.each(mimeTypesMap, function (mimeTypeForExt, ext) {
+                if (mimeTypeForExt === mimeType) {
+                    fileExts += "*." + ext + ";";
+                }
+            });
+        });
+
+        return fileExts.length === 0 ? "*" : fileExts.substring(0, fileExts.length - 1);
+    };
+    
+    /**********************
+     * swfUpload.setupDOM *
+     **********************/
+    
+    fluid.uploader.swfUploadStrategy.flash10SetupDOM = function (uploaderContainer, browseButton, progressBar, styles) {
+        // Wrap the whole uploader first.
+        uploaderContainer.wrap("<div class='" + styles.uploaderWrapperFlash10 + "'></div>");
+
+        // Then create a container and placeholder for the Flash movie as a sibling to the uploader.
+        var flashContainer = $("<div><span></span></div>");
+        flashContainer.addClass(styles.browseButtonOverlay);
+        uploaderContainer.after(flashContainer);
+        progressBar.append(flashContainer);
+        browseButton.attr("tabindex", -1);        
+        return flashContainer;   
+    };
+    
+    fluid.demands("fluid.uploader.swfUploadStrategy.setupDOM", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.10"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash10SetupDOM",
+        args: [            
+            "{multiFileUploader}.container",
+            "{multiFileUploader}.dom.browseButton",
+            "{totalProgress}.dom.progressBar",
+            "{swfUploadStrategy}.options.styles"
+        ]
+    });
+     
+     
+    /*********************************
+     * swfUpload.setupConfig *
+     *********************************/
+      
+    // Maps SWFUpload's setting names to our component's setting names.
+    var swfUploadOptionsMap = {
+        uploadURL: "upload_url",
+        flashURL: "flash_url",
+        postParams: "post_params",
+        fileSizeLimit: "file_size_limit",
+        fileTypes: "file_types",
+        fileUploadLimit: "file_upload_limit",
+        fileQueueLimit: "file_queue_limit",
+        flashButtonPeerId: "button_placeholder_id",
+        flashButtonImageURL: "button_image_url",
+        flashButtonHeight: "button_height",
+        flashButtonWidth: "button_width",
+        flashButtonWindowMode: "button_window_mode",
+        flashButtonCursorEffect: "button_cursor",
+        debug: "debug"
+    };
+
+    // Maps SWFUpload's callback names to our component's callback names.
+    var swfUploadEventMap = {
+        afterReady: "swfupload_loaded_handler",
+        onFileDialog: "file_dialog_start_handler",
+        onFileQueued: "file_queued_handler",        
+        onQueueError: "file_queue_error_handler",
+        afterFileDialog: "file_dialog_complete_handler",
+        onFileStart: "upload_start_handler",
+        onFileProgress: "upload_progress_handler",
+        onFileComplete: "upload_complete_handler",
+        onFileError: "upload_error_handler",
+        onFileSuccess: "upload_success_handler"
+    };
+    
+    var mapNames = function (nameMap, source, target) {
+        var result = target || {};
+        for (var key in source) {
+            var mappedKey = nameMap[key];
+            if (mappedKey) {
+                result[mappedKey] = source[key];
+            }
+        }
+        
+        return result;
+    };
+    
+    // For each event type, hand the fire function to SWFUpload so it can fire the event at the right time for us.
+    // TODO: Refactor out duplication with mapNames()--should be able to use Engage's mapping tool
+    var mapSWFUploadEvents = function (nameMap, events, target) {
+        var result = target || {};
+        for (var eventType in events) {
+            var fireFn = events[eventType].fire;
+            var mappedName = nameMap[eventType];
+            if (mappedName) {
+                result[mappedName] = fireFn;
+            }   
+        }
+        return result;
+    };
+    
+    fluid.uploader.swfUploadStrategy.convertConfigForSWFUpload = function (flashContainer, config, events, queueSettings) {
+        config.flashButtonPeerId = fluid.allocateSimpleId(flashContainer.children().eq(0));
+        // Map the event and settings names to SWFUpload's expectations.
+        // Convert HTML5 MIME types into SWFUpload file types
+        config.fileTypes = fluid.uploader.swfUploadStrategy.fileTypeTransformer(queueSettings, {
+            path: "fileTypes"
+        });
+        var convertedConfig = mapNames(swfUploadOptionsMap, config);
+        // TODO:  Same with the FLUID-3886 branch:  Can these declarations be done elsewhere?
+        convertedConfig.file_upload_limit = 0;
+        convertedConfig.file_size_limit = 0;
+        return mapSWFUploadEvents(swfUploadEventMap, events, convertedConfig);
+    };
+    
+    fluid.uploader.swfUploadStrategy.flash10SetupConfig = function (config, events, flashContainer, browseButton, queueSettings) {
+        var isTransparent = config.flashButtonAlwaysVisible ? false : (!$.browser.msie || config.flashButtonTransparentEvenInIE);
+        config.flashButtonImageURL = isTransparent ? undefined : config.flashButtonImageURL;
+        config.flashButtonHeight = config.flashButtonHeight || browseButton.outerHeight();
+        config.flashButtonWidth = config.flashButtonWidth || browseButton.outerWidth();
+        config.flashButtonWindowMode = isTransparent ? SWFUpload.WINDOW_MODE.TRANSPARENT : SWFUpload.WINDOW_MODE.OPAQUE;
+        return fluid.uploader.swfUploadStrategy.convertConfigForSWFUpload(flashContainer, config, events, queueSettings);
+    };
+    
+    fluid.demands("fluid.uploader.swfUploadStrategy.setupConfig", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.10"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash10SetupConfig",
+        args: [
+            "{engine}.config",
+            "{multiFileUploader}.events",
+            "{engine}.flashContainer",
+            "{multiFileUploader}.dom.browseButton",
+            "{multiFileUploader}.options.queueSettings"
+        ]
+    });
+
+     
+    /*********************************
+     * swfUpload.eventBinder *
+     *********************************/
+     
+    var unbindSWFUploadSelectFiles = function () {
+        // There's a bug in SWFUpload 2.2.0b3 that causes the entire browser to crash 
+        // if selectFile() or selectFiles() is invoked. Remove them so no one will accidently crash their browser.
+        var emptyFunction = function () {};
+        SWFUpload.prototype.selectFile = emptyFunction;
+        SWFUpload.prototype.selectFiles = emptyFunction;
+    };
+    
+    fluid.uploader.swfUploadStrategy.bindFileEventListeners = function (model, events) {
+        // Manually update our public model to keep it in sync with SWFUpload's insane,
+        // always-changing references to its internal model.        
+        var manualModelUpdater = function (file) {
+            fluid.find(model, function (potentialMatch) {
+                if (potentialMatch.id === file.id) {
+                    potentialMatch.filestatus = file.filestatus;
+                    return true;
+                }
+            });
+        };
+        
+        events.onFileStart.addListener(manualModelUpdater);
+        events.onFileProgress.addListener(manualModelUpdater);
+        events.onFileError.addListener(manualModelUpdater);
+        events.onFileSuccess.addListener(manualModelUpdater);
+    };
+    
+    var filterErroredFiles = function (file, events, queue, queueSettings) {
+        var fileSizeLimit = queueSettings.fileSizeLimit * 1000;
+        var fileUploadLimit = queueSettings.fileUploadLimit;
+        var processedFiles = queue.getReadyFiles().length + queue.getUploadedFiles().length; 
+
+        if (file.size > fileSizeLimit) {
+            file.filestatus = fluid.uploader.fileStatusConstants.ERROR;
+            events.onQueueError.fire(file, fluid.uploader.queueErrorConstants.FILE_EXCEEDS_SIZE_LIMIT);
+        } else if (processedFiles >= fileUploadLimit) {
+            events.onQueueError.fire(file, fluid.uploader.queueErrorConstants.QUEUE_LIMIT_EXCEEDED);
+        } else {
+            events.afterFileQueued.fire(file);
+        }
+    };
+    
+    fluid.uploader.swfUploadStrategy.flash10EventBinder = function (queue, queueSettings, events) {
+        var model = queue.files;
+        unbindSWFUploadSelectFiles();      
+              
+        events.onFileQueued.addListener(function (file) {
+            filterErroredFiles(file, events, queue, queueSettings);
+        });        
+        
+        fluid.uploader.swfUploadStrategy.bindFileEventListeners(model, events);
+    };
+    
+    fluid.demands("fluid.uploader.swfUploadStrategy.eventBinder", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.10"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash10EventBinder",
+        args: [
+            "{multiFileUploader}.queue",
+            "{multiFileUploader}.queue.files",
+            "{multiFileUploader}.events"
+        ]
+    });
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+
+    fluid.registerNamespace("fluid.uploader.swfUploadStrategy");
+    
+    /**********************************************************************************
+     * The functions in this file, which provide support for Flash 9 in the Uploader, *
+     * have been deprecated as of Infusion 1.3.                                       * 
+     **********************************************************************************/
+    
+    fluid.uploader.swfUploadStrategy.flash9SetupDOM = function (styles) {
+        var container = $("<div><span></span></div>");
+        container.addClass(styles.flash9Container);
+        $("body").append(container);
+        return container;       
+    };
+
+    fluid.demands("fluid.uploader.swfUploadStrategy.setupDOM", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.9"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash9SetupDOM",
+        args: [
+            "{swfUploadStrategy}.options.styles"
+        ]
+    });
+
+    fluid.uploader.swfUploadStrategy.flash9SetupConfig = function (flashContainer, config, events) {
+        return fluid.uploader.swfUploadStrategy.convertConfigForSWFUpload(flashContainer, config, events);
+    };
+
+    fluid.demands("fluid.uploader.swfUploadStrategy.setupConfig", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.9"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash9SetupConfig",
+        args: [
+            "{engine}.flashContainer",
+            "{engine}.config",
+            "{multiFileUploader}.events"
+        ]
+    });
+
+    fluid.uploader.swfUploadStrategy.flash9EventBinder = function (model, events, local, browseButton) {
+        browseButton.click(function (e) {        
+            local.browse();
+            e.preventDefault();
+        });
+        fluid.uploader.swfUploadStrategy.bindFileEventListeners(model, events);
+    };
+
+    fluid.demands("fluid.uploader.swfUploadStrategy.eventBinder", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.9"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash9EventBinder",
+        args: [
+            "{multiFileUploader}.queue.files",
+            "{multiFileUploader}.events",
+            "{local}",
+            "{multiFileUploader}.dom.browseButton"
+        ]
+    });
+
+})(jQuery, fluid_1_5);
+/*
+Copyright 2010-2011 OCAD University 
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global FormData, fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+
+    fluid.demands("fluid.uploaderImpl", "fluid.uploader.html5", {
+        funcName: "fluid.uploader.multiFileUploader"
+    });
+    
+    fluid.demands("fluid.uploader.progressiveStrategy", "fluid.uploader.html5", {
+        funcName: "fluid.uploader.html5Strategy"
+    });
+    
+    fluid.defaults("fluid.uploader.html5Strategy", {
+        gradeNames: ["fluid.littleComponent", "autoInit"],
+        components: {
+            local: {
+                type: "fluid.uploader.local",
+                options: {
+                    queueSettings: "{multiFileUploader}.options.queueSettings",
+                    events: {
+                        onFileDialog: "{multiFileUploader}.events.onFileDialog",
+                        onFilesSelected: "{multiFileUploader}.events.onFilesSelected",
+                        afterFileDialog: "{multiFileUploader}.events.afterFileDialog",
+                        afterFileQueued: "{multiFileUploader}.events.afterFileQueued",
+                        onQueueError: "{multiFileUploader}.events.onQueueError"
+                    }
+                }
+            },
+            
+            remote: {
+                type: "fluid.uploader.remote",
+                options: {
+                    queueSettings: "{multiFileUploader}.options.queueSettings",
+                    events: {
+                        afterReady: "{multiFileUploader}.events.afterReady",
+                        onFileStart: "{multiFileUploader}.events.onFileStart",
+                        onFileProgress: "{multiFileUploader}.events.onFileProgress",
+                        onFileSuccess: "{multiFileUploader}.events.onFileSuccess",
+                        onFileError: "{multiFileUploader}.events.onFileError",
+                        onFileComplete: "{multiFileUploader}.events.onFileComplete"
+                    }
+                }
+            }
+        },
+        
+        // Used for browsers that rely on File.getAsBinary(), such as Firefox 3.6,
+        // which load the entire file to be loaded into memory.
+        // Set this option to a sane limit (100MB) so your users won't experience crashes or slowdowns (FLUID-3937).
+        legacyBrowserFileLimit: 100000
+    });
+    
+    
+    // TODO: The following two or three functions probably ultimately belong on a that responsible for
+    // coordinating with the XHR. A fileConnection object or something similar.
+    
+    fluid.uploader.html5Strategy.fileSuccessHandler = function (file, events, xhr) {
+        events.onFileSuccess.fire(file, xhr.responseText, xhr);
+        events.onFileComplete.fire(file);
+    };
+    
+    fluid.uploader.html5Strategy.fileErrorHandler = function (file, events, xhr) {
+        events.onFileError.fire(file, 
+                                fluid.uploader.errorConstants.UPLOAD_FAILED,
+                                xhr.status,
+                                xhr);
+        events.onFileComplete.fire(file);
+    };
+    
+    fluid.uploader.html5Strategy.fileStopHandler = function (file, events, xhr) {
+        events.onFileError.fire(file, 
+                                fluid.uploader.errorConstants.UPLOAD_STOPPED,
+                                xhr.status,
+                                xhr);
+        events.onFileComplete.fire(file);
+    };
+    
+    fluid.uploader.html5Strategy.monitorFileUploadXHR = function (file, events, xhr) {
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                var status = xhr.status;
+                // TODO: See a pattern here? Fix it.
+                if (status >= 200 && status <= 204) {
+                    fluid.uploader.html5Strategy.fileSuccessHandler(file, events, xhr);
+                } else if (status === 0) {
+                    fluid.uploader.html5Strategy.fileStopHandler(file, events, xhr);
+                } else {
+                    fluid.uploader.html5Strategy.fileErrorHandler(file, events, xhr);
+                }
+            }
+        };
+
+        xhr.upload.onprogress = function (pe) {
+            events.onFileProgress.fire(file, pe.loaded, pe.total);
+        };
+    };
+    
+    
+    /*************************************
+     * HTML5 Strategy's remote behaviour *
+     *************************************/
+     
+    fluid.uploader.html5Strategy.remote = function (queue, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.html5Strategy.remote", options);
+        that.queue = queue;
+        that.queueSettings = that.options.queueSettings;
+        
+        // Upload files in the current batch without exceeding the fileUploadLimit
+        that.uploadNextFile = function () {
+            var batch = that.queue.currentBatch;
+            var file = batch.files[batch.fileIdx];                        
+            that.uploadFile(file);
+        };
+        
+        that.uploadFile = function (file) {
+            that.events.onFileStart.fire(file);
+            that.currentXHR = that.createXHR();
+            fluid.uploader.html5Strategy.monitorFileUploadXHR(file, that.events, that.currentXHR);
+            that.fileSender.send(file, that.queueSettings, that.currentXHR);            
+        };
+
+        that.stop = function () {
+            that.queue.isUploading = false;
+            that.currentXHR.abort();         
+        };
+        
+        fluid.initDependents(that);
+        that.events.afterReady.fire();
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.html5Strategy.remote", {
+        gradeNames: ["fluid.eventedComponent"],
+        argumentMap: {
+            options: 1  
+        },                
+        components: {
+            fileSender: {
+                type: "fluid.uploader.html5Strategy.fileSender"
+            }
+        },
+        invokers: {
+            createXHR: "fluid.uploader.html5Strategy.createXHR"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.remote", ["fluid.uploader.html5Strategy", "fluid.uploader.live"], {
+        funcName: "fluid.uploader.html5Strategy.remote",
+        args: [
+            "{multiFileUploader}.queue", 
+            fluid.COMPONENT_OPTIONS
+        ]
+    });
+
+
+    fluid.uploader.html5Strategy.createXHR = function () {
+        return new XMLHttpRequest();
+    };
+    
+    fluid.uploader.html5Strategy.createFormData = function () {
+        return new FormData();
+    };
+    
+    // Set additional POST parameters for xhr  
+    var setPostParams =  function (formData, postParams) {
+        $.each(postParams,  function (key, value) {
+            formData.append(key, value);
+        });
+    };
+    
+    /*******************************************************
+     * HTML5 FormData Sender, used by most modern browsers *
+     *******************************************************/
+    
+    fluid.defaults("fluid.uploader.html5Strategy.formDataSender", {
+        gradeNames: ["fluid.littleComponent", "autoInit"],
+        finalInitFunction: "fluid.uploader.html5Strategy.formDataSender.init",
+        invokers: {
+            createFormData: "fluid.uploader.html5Strategy.createFormData"
+        }
+    });
+    
+    fluid.uploader.html5Strategy.formDataSender.init = function (that) {
+        /**
+         * Uploads the file using the HTML5 FormData object.
+         */
+        that.send = function (file, queueSettings, xhr) {
+            var formData = that.createFormData();
+            formData.append("file", file);
+            setPostParams(formData, queueSettings.postParams);
+            xhr.open("POST", queueSettings.uploadURL, true);
+            xhr.send(formData);
+            return formData;
+        };
+    };
+    
+    fluid.demands("fluid.uploader.html5Strategy.fileSender", [
+        "fluid.uploader.html5Strategy.remote", 
+        "fluid.browser.supportsFormData"
+    ], {
+        funcName: "fluid.uploader.html5Strategy.formDataSender"
+    });
+    
+    /********************************************
+     * Raw MIME Sender, required by Firefox 3.6 *
+     ********************************************/
+     
+    fluid.uploader.html5Strategy.generateMultipartBoundary = function () {
+        var boundary = "---------------------------";
+        boundary += Math.floor(Math.random() * 32768);
+        boundary += Math.floor(Math.random() * 32768);
+        boundary += Math.floor(Math.random() * 32768);
+        return boundary;
+    };
+    
+    fluid.uploader.html5Strategy.generateMultiPartContent = function (boundary, file) {
+        var CRLF = "\r\n";
+        var multipart = "";
+        multipart += "--" + boundary + CRLF;
+        multipart += "Content-Disposition: form-data;" +
+            " name=\"fileData\";" + 
+            " filename=\"" + file.name + 
+            "\"" + CRLF;
+        multipart += "Content-Type: " + file.type + CRLF + CRLF;
+        multipart += file.getAsBinary(); // Concatting binary data to JS String; yes, FF will handle it.
+        multipart += CRLF + "--" + boundary + "--" + CRLF;
+        return multipart;
+    };
+    
+    fluid.defaults("fluid.uploader.html5Strategy.rawMIMESender", {
+        gradeNames: ["fluid.littleComponent", "autoInit"],
+        finalInitFunction: "fluid.uploader.html5Strategy.rawMIMESender.init"
+    });
+    
+    fluid.uploader.html5Strategy.rawMIMESender.init = function (that) {
+        /**
+         * Uploads the file by manually creating the multipart/form-data request. Required by Firefox 3.6.
+         */
+        that.send = function (file, queueSettings, xhr) {
+            var boundary =  fluid.uploader.html5Strategy.generateMultipartBoundary();
+            var multipart = fluid.uploader.html5Strategy.generateMultiPartContent(boundary, file);
+            xhr.open("POST", queueSettings.uploadURL, true);
+            xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
+            xhr.sendAsBinary(multipart);
+            return multipart;
+        };
+    };
+    
+    fluid.demands("fluid.uploader.html5Strategy.fileSender", "fluid.uploader.html5Strategy.remote", {
+        funcName: "fluid.uploader.html5Strategy.rawMIMESender"
+    });
+
+
+    /************************************
+     * HTML5 Strategy's Local Behaviour *
+     ************************************/
+     
+    fluid.uploader.html5Strategy.local = function (queue, legacyBrowserFileLimit, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.html5Strategy.local", options);
+        that.queue = queue;
+        that.queueSettings = that.options.queueSettings;
+
+        // Add files to the file queue without exceeding the fileUploadLimit and the fileSizeLimit
+        // NOTE:  fileSizeLimit set to bytes for HTML5 Uploader (KB for SWF Uploader).  
+        that.addFiles = function (files) {
+            // TODO: These look like they should be part of a real model.
+            var sizeLimit = (legacyBrowserFileLimit || that.queueSettings.fileSizeLimit) * 1024;
+            var fileLimit = that.queueSettings.fileUploadLimit;
+            var uploaded = that.queue.getUploadedFiles().length;
+            var queued = that.queue.getReadyFiles().length;
+            var remainingUploadLimit = fileLimit - uploaded - queued;
+            
+            that.events.onFilesSelected.fire(files.length);
+            
+            // Provide feedback to the user if the file size is too large and isn't added to the file queue
+            var numFilesAdded = 0;
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (fileLimit && remainingUploadLimit === 0) {
+                    that.events.onQueueError.fire(file, fluid.uploader.queueErrorConstants.QUEUE_LIMIT_EXCEEDED);
+                } else if (file.size >= sizeLimit) {
+                    file.filestatus = fluid.uploader.fileStatusConstants.ERROR;
+                    that.events.onQueueError.fire(file, fluid.uploader.queueErrorConstants.FILE_EXCEEDS_SIZE_LIMIT);
+                } else if (!fileLimit || remainingUploadLimit > 0) {
+                    file.id = "file-" + fluid.allocateGuid();
+                    file.filestatus = fluid.uploader.fileStatusConstants.QUEUED;
+                    that.events.afterFileQueued.fire(file);
+                    remainingUploadLimit--;
+                    numFilesAdded++;
+                }
+            }            
+            that.events.afterFileDialog.fire(numFilesAdded);
+        };
+        
+        that.removeFile = function (file) {
+        };
+        
+        that.enableBrowseButton = function () {
+            that.browseButtonView.enable();
+        };
+        
+        that.disableBrowseButton = function () {
+            that.browseButtonView.disable();
+        };
+        
+        fluid.initDependents(that);
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.html5Strategy.local", {
+        argumentMap: {
+            options: 2  
+        },
+        gradeNames: ["fluid.eventedComponent"],
+        
+        components: {
+            browseButtonView: {
+                type: "fluid.uploader.html5Strategy.browseButtonView",
+                options: {
+                    queueSettings: "{multiFileUploader}.options.queueSettings",
+                    selectors: {
+                        browseButton: "{multiFileUploader}.options.selectors.browseButton"
+                    },
+                    listeners: {
+                        onFilesQueued: "{local}.addFiles"
+                    }
+                }
+            }
+        }
+    });
+    
+    fluid.demands("fluid.uploader.local", "fluid.uploader.html5Strategy", {
+        funcName: "fluid.uploader.html5Strategy.local",
+        args: [
+            "{multiFileUploader}.queue",
+            "{html5Strategy}.options.legacyBrowserFileLimit",
+            "{options}"
+        ]
+    });
+    
+    fluid.demands("fluid.uploader.local", [
+        "fluid.uploader.html5Strategy",
+        "fluid.browser.supportsFormData"
+    ], {
+        funcName: "fluid.uploader.html5Strategy.local",
+        args: [
+            "{multiFileUploader}.queue",
+            undefined,
+            "{options}"
+        ]
+    });
+    
+    
+    /********************
+     * browseButtonView *
+     ********************/
+    
+    var bindEventsToFileInput = function (that, fileInput) {
+        fileInput.click(function () {
+            that.events.onBrowse.fire();
+        });
+        
+        fileInput.change(function () {
+            var files = fileInput[0].files;
+            that.renderFreshMultiFileInput();
+            that.events.onFilesQueued.fire(files);
+        });
+        
+        fileInput.focus(function () {
+            that.browseButton.addClass("focus");
+        });
+        
+        fileInput.blur(function () {
+            that.browseButton.removeClass("focus");
+        });
+    };
+    
+    var renderMultiFileInput = function (that) {
+        var multiFileInput = $(that.options.multiFileInputMarkup);
+        var fileTypes = that.options.queueSettings.fileTypes;
+        if (fluid.isArrayable(fileTypes)) {
+            fileTypes = fileTypes.join();
+            multiFileInput.attr("accept", fileTypes);
+        }
+        bindEventsToFileInput(that, multiFileInput);
+        return multiFileInput;
+    };
+    
+    var setupBrowseButtonView = function (that) {
+        var multiFileInput = renderMultiFileInput(that);        
+        that.browseButton.append(multiFileInput);
+        that.browseButton.attr("tabindex", -1);
+    };
+    
+    fluid.uploader.html5Strategy.browseButtonView = function (container, options) {
+        var that = fluid.initView("fluid.uploader.html5Strategy.browseButtonView", container, options);
+        that.browseButton = that.locate("browseButton");
+        
+        that.renderFreshMultiFileInput = function () {
+            var previousInput = that.locate("fileInputs").last();
+            previousInput.hide();
+            previousInput.attr("tabindex", -1);
+            var newInput = renderMultiFileInput(that);
+            previousInput.after(newInput);
+        };
+        
+        that.enable = function () {
+            that.locate("fileInputs").prop("disabled", false);
+        };
+        
+        that.disable = function () {
+            that.locate("fileInputs").prop("disabled", true);
+        };
+        
+        that.isEnabled = function () {
+            return !that.locate("fileInputs").prop("disabled");  
+        };
+        
+        setupBrowseButtonView(that);
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.html5Strategy.browseButtonView", {
+        gradeNames: "fluid.viewComponent",
+        multiFileInputMarkup: "<input type='file' multiple='' class='flc-uploader-html5-input' />",
+        
+        queueSettings: {},
+        
+        selectors: {
+            browseButton: ".flc-uploader-button-browse",
+            fileInputs: ".flc-uploader-html5-input"
+        },
+        
+        events: {
+            onBrowse: null,
+            onFilesQueued: null
+        }        
+    });
+
+    fluid.demands("fluid.uploader.html5Strategy.browseButtonView", "fluid.uploader.html5Strategy.local", {
+        container: "{multiFileUploader}.container",
+        mergeOptions: {
+            events: {
+                onBrowse: "{local}.events.onFileDialog"
+            }
+        }
+    });
+
+})(jQuery, fluid_1_5);/*
+Copyright 2009 University of Toronto
+Copyright 2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+    
+    fluid.uploader = fluid.uploader || {};
+    
+    var startUploading; // Define early due to subtle circular dependency.
+    
+    var updateProgress = function (file, events, demoState, isUploading) {
+        if (!isUploading) {
+            return;
+        }
+        
+        var chunk = Math.min(demoState.chunkSize, file.size);
+        demoState.bytesUploaded = Math.min(demoState.bytesUploaded + chunk, file.size);
+        events.onFileProgress.fire(file, demoState.bytesUploaded, file.size);
+    };
+    
+    var finishAndContinueOrCleanup = function (that, file) {
+        that.queue.finishFile(file);
+        that.events.afterFileComplete.fire(file);
+        
+        if (that.queue.shouldUploadNextFile()) {
+            startUploading(that);
+        } else {
+            that.events.afterUploadComplete.fire(that.queue.currentBatch.files);
+            if (file.status !== fluid.uploader.fileStatusConstants.CANCELLED) {
+                that.queue.clearCurrentBatch(); // Only clear the current batch if we're actually done the batch.
+            }
+        }
+    };
+    
+    var finishUploading = function (that) {
+        if (!that.queue.isUploading) {
+            return;
+        }
+        
+        var file = that.demoState.currentFile;
+        that.events.onFileSuccess.fire(file);
+        that.demoState.fileIdx++;
+        finishAndContinueOrCleanup(that, file);
+    };
+    
+    var simulateUpload = function (that) {
+        if (!that.queue.isUploading) {
+            return;
+        }
+        
+        var file = that.demoState.currentFile;
+        if (that.demoState.bytesUploaded < file.size) {
+            fluid.invokeAfterRandomDelay(function () {
+                updateProgress(file, that.events, that.demoState, that.queue.isUploading);
+                simulateUpload(that);
+            });
+        } else {
+            finishUploading(that);
+        } 
+    };
+    
+    startUploading = function (that) {
+        // Reset our upload stats for each new file.
+        that.demoState.currentFile = that.queue.files[that.demoState.fileIdx];
+        that.demoState.chunksForCurrentFile = Math.ceil(that.demoState.currentFile / that.demoState.chunkSize);
+        that.demoState.bytesUploaded = 0;
+        that.queue.isUploading = true;
+        
+        that.events.onFileStart.fire(that.demoState.currentFile);
+        simulateUpload(that);
+    };
+
+    var stopDemo = function (that) {
+        var file = that.demoState.currentFile;
+        file.filestatus = fluid.uploader.fileStatusConstants.CANCELLED;
+        that.queue.shouldStop = true;
+        
+        // In SWFUpload's world, pausing is a combinination of an UPLOAD_STOPPED error and a complete.
+        that.events.onFileError.fire(file, 
+                                     fluid.uploader.errorConstants.UPLOAD_STOPPED, 
+                                     "The demo upload was paused by the user.");
+        finishAndContinueOrCleanup(that, file);
+        that.events.onUploadStop.fire();
+    };
+    
+    var setupDemo = function (that) {
+        if (that.simulateDelay === undefined || that.simulateDelay === null) {
+            that.simulateDelay = true;
+        }
+          
+        // Initialize state for our upload simulation.
+        that.demoState = {
+            fileIdx: 0,
+            chunkSize: 200000
+        };
+        
+        return that;
+    };
+       
+    /**
+     * The demo remote pretends to upload files to the server, firing all the appropriate events
+     * but without sending anything over the network or requiring a server to be running.
+     * 
+     * @param {FileQueue} queue the Uploader's file queue instance
+     * @param {Object} the Uploader's bundle of event firers
+     * @param {Object} configuration options
+     */
+    fluid.uploader.demoRemote = function (queue, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.demoRemote", options);
+        that.queue = queue;
+        
+        that.uploadNextFile = function () {
+            startUploading(that);   
+        };
+        
+        that.stop = function () {
+            stopDemo(that);
+        };
+        
+        setupDemo(that);
+        return that;
+    };
+    
+    /**
+     * Invokes a function after a random delay by using setTimeout.
+     * If the simulateDelay option is false, the function is invoked immediately.
+     * This is an odd function, but a potential candidate for central inclusion.
+     * 
+     * @param {Function} fn the function to invoke
+     */
+    fluid.invokeAfterRandomDelay = function (fn) {
+        var delay = Math.floor(Math.random() * 1000 + 100);
+        setTimeout(fn, delay);
+    };
+    
+    fluid.defaults("fluid.uploader.demoRemote", {
+        gradeNames: ["fluid.eventedComponent"],
+        argumentMap: {
+            options: 1  
+        },
+        events: {
+            onFileProgress: "{multiFileUploader}.events.onFileProgress",
+            afterFileComplete: "{multiFileUploader}.events.afterFileComplete",
+            afterUploadComplete: "{multiFileUploader}.events.afterUploadComplete",
+            onFileSuccess: "{multiFileUploader}.events.onFileSuccess",
+            onFileStart: "{multiFileUploader}.events.onFileStart",
+            onFileError: "{multiFileUploader}.events.onFileError",
+            onUploadStop: "{multiFileUploader}.events.onUploadStop"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.remote", ["fluid.uploader.multiFileUploader", "fluid.uploader.demo"], {
+        funcName: "fluid.uploader.demoRemote",
+        args: [
+            "{multiFileUploader}.queue",
+            "{multiFileUploader}.events",
+            fluid.COMPONENT_OPTIONS
+        ]
+    });
+    
+})(jQuery, fluid_1_5);
+/*
+Copyright 2011 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+/*global fluid_1_5:true*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function (fluid) {
+
+    fluid.uploader = fluid.uploader || {};
+    
+    fluid.uploader.mimeTypeRegistry = {
+        // Images
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        bmp: "image/bmp",
+        png: "image/png",
+        tif: "image/tiff",
+        tiff: "image/tiff",
+        
+        // Audio
+        mp3: "audio/mpeg",
+        m4a: "audio/mp4a-latm",
+        ogg: "audio/ogg",
+        wav: "audio/x-wav",
+        aiff: "audio/x-aiff",
+        
+        // Video
+        mpg: "video/mpeg",
+        mpeg: "video/mpeg",
+        m4v: "video/x-m4v",
+        ogv: "video/ogg",
+        mov: "video/quicktime",
+        avi: "video/x-msvideo",
+        
+        // Text documents
+        html: "text/html",
+        htm: "text/html",
+        text: "text/plain",
+        
+        // Office Docs.
+        doc: "application/msword",
+        docx: "application/msword",
+        xls: "application/vnd.ms-excel",
+        xlsx: "application/vnd.ms-excel",
+        ppt: "application/vnd.ms-powerpoint",
+        pptx: "application/vnd.ms-powerpoint"
+    };    
+})(fluid_1_5);/*
+ * jQuery UI Tooltip @VERSION
+ *
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Tooltip
+ *
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
+ *	jquery.ui.position.js
+ */
+(function($) {
+
+var increments = 0;
+
+$.widget("ui.tooltip", {
+	options: {
+		items: "[title]",
+		content: function() {
+			return $(this).attr("title");
+		},
+		position: {
+			my: "left center",
+			at: "right center",
+			offset: "15 0"
+		}
+	},
+	_create: function() {
+		var self = this;
+		this.tooltip = $("<div></div>")
+			.attr("id", "ui-tooltip-" + increments++)
+			.attr("role", "tooltip")
+			.attr("aria-hidden", "true")
+			.addClass("ui-tooltip ui-widget ui-corner-all ui-widget-content")
+			.appendTo(document.body)
+			.hide();
+		this.tooltipContent = $("<div></div>")
+			.addClass("ui-tooltip-content")
+			.appendTo(this.tooltip);
+		this.opacity = this.tooltip.css("opacity");
+		this.element
+			.bind("focus.tooltip mouseover.tooltip", function(event) {
+				self.open( event );
+			})
+			.bind("blur.tooltip mouseout.tooltip", function(event) {
+				self.close( event );
+			});
+	},
+	
+	enable: function() {
+		this.options.disabled = false;
+	},
+	
+	disable: function() {
+		this.options.disabled = true;
+	},
+	
+	destroy: function() {
+		this.tooltip.remove();
+		$.Widget.prototype.destroy.apply(this, arguments);
+	},
+	
+	widget: function() {
+		return this.element.pushStack(this.tooltip.get());
+	},
+	
+	open: function(event) {
+		var target = $(event && event.target || this.element).closest(this.options.items);
+		// already visible? possible when both focus and mouseover events occur
+		if (this.current && this.current[0] == target[0])
+			return;
+		var self = this;
+		this.current = target;
+		this.currentTitle = target.attr("title");
+		var content = this.options.content.call(target[0], function(response) {
+			// IE may instantly serve a cached response, need to give it a chance to finish with _show before that
+			setTimeout(function() {
+				// ignore async responses that come in after the tooltip is already hidden
+				if (self.current == target)
+					self._show(event, target, response);
+			}, 13);
+		});
+		if (content) {
+			self._show(event, target, content);
+		}
+	},
+	
+	_show: function(event, target, content) {
+		if (!content)
+			return;
+		
+		target.attr("title", "");
+		
+		if (this.options.disabled)
+			return;
+			
+		this.tooltipContent.html(content);
+		this.tooltip.css({
+			top: 0,
+			left: 0
+		}).show().position( $.extend({
+			of: target
+		}, this.options.position )).hide();
+		
+		this.tooltip.attr("aria-hidden", "false");
+		target.attr("aria-describedby", this.tooltip.attr("id"));
+
+		this.tooltip.stop(false, true).fadeIn();
+
+		this._trigger( "open", event );
+	},
+	
+	close: function(event) {
+		if (!this.current)
+			return;
+		
+		var current = this.current;
+		this.current = null;
+		current.attr("title", this.currentTitle);
+		
+		if (this.options.disabled)
+			return;
+		
+		current.removeAttr("aria-describedby");
+		this.tooltip.attr("aria-hidden", "true");
+		
+		this.tooltip.stop(false, true).fadeOut();
+		
+		this._trigger( "close", event );
+	}
+	
+});
+
+})(jQuery);
+/*
+Copyright 2010 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+    
+    var createContentFunc = function (content) {
+        return typeof content === "function" ? content : function () {
+            return content;
+        };
+    };
+
+    var setup = function (that) {
+        that.container.tooltip({
+            content: createContentFunc(that.options.content),
+            position: that.options.position,
+            items: that.options.items,
+            open: function (event) {
+                var tt = $(event.target).tooltip("widget");
+                tt.stop(false, true);
+                tt.hide();
+                if (that.options.delay) {
+                    tt.delay(that.options.delay).fadeIn("default", that.events.afterOpen.fire());
+                } else {
+                    tt.show();
+                    that.events.afterOpen.fire();
+                }
+            },
+            close: function (event) {
+                var tt = $(event.target).tooltip("widget");
+                tt.stop(false, true);
+                tt.hide();
+                tt.clearQueue();
+                that.events.afterClose.fire();
+            } 
+        });
+        
+        that.elm = that.container.tooltip("widget");
+        
+        that.elm.addClass(that.options.styles.tooltip);
+    };
+
+    fluid.tooltip = function (container, options) {
+        var that = fluid.initView("fluid.tooltip", container, options);
+        
+        /**
+         * Updates the contents displayed in the tooltip
+         * 
+         * @param {Object} content, the content to be displayed in the tooltip
+         */
+        that.updateContent = function (content) {
+            that.container.tooltip("option", "content", createContentFunc(content));
+        };
+        
+        /**
+         * Destroys the underlying jquery ui tooltip
+         */
+        that.destroy = function () {
+            that.container.tooltip("destroy");
+        };
+        
+        /**
+         * Manually displays the tooltip
+         */
+        that.open = function () {
+            that.container.tooltip("open");
+        };
+        
+        /**
+         * Manually hides the tooltip
+         */
+        that.close = function () {
+            that.container.tooltip("close");
+        };
+        
+        setup(that);
+        
+        return that;
+    };
+    
+    fluid.defaults("fluid.tooltip", {
+        styles: {
+            tooltip: ""
+        },
+        
+        events: {
+            afterOpen: null,
+            afterClose: null  
+        },
+        
+        content: "",
+        
+        position: {
+            my: "left top",
+            at: "left bottom",
+            offset: "0 5"
+        },
+        
+        items: "*",
+        
+        delay: 300
+    });
 
 })(jQuery, fluid_1_5);

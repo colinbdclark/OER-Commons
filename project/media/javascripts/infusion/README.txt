@@ -6,6 +6,9 @@ This version of Infusion was created from
 
 using the following custom build command:
 
-    ant -lib lib/rhino customBuild -Dinclude="uiOptions" -Dexclude="jQuery" -DnoMinify="true"
+    ant -lib lib/rhino customBuild -Dinclude="uiOptions, uploader, tooltip" -lib lib/rhino -DnoMinify="true"
+
+"uploader" and "tooltip" components are added for the proper functioning of the video player.
 
 Any unnecessary files have been removed from this folder.
+

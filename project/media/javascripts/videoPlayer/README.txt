@@ -2,6 +2,6 @@
 This version of Infusion was created from 
 
     https://github.com/amb26/videoPlayer/tree/demo-integration-sketch
-    commit 0e0f140eba3327c74db2ead3ba08540ba37630b5
+    commit a68fb050e0e0f9376c0d3a13a24fa56cf965a668
 
 Any unnecessary files have been removed from this folder.
