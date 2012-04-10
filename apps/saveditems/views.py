@@ -1,63 +1,43 @@
-from annoying.decorators import JsonResponse
-from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
-from django.http import Http404
 from django.shortcuts import get_object_or_404
+
+from annoying.decorators import ajax_request
 from saveditems.models import SavedItem
 from utils.decorators import login_required
 from core.search import reindex
-from utils.shortcuts import redirect_to_next_url
 
 
 @login_required
-def save(request, slug=None, model=None):
-    """ Save item if it isn't saved.
-    Unsave item if it's saved. """
+@ajax_request
+def save(request):
+    content_type_id, object_id = request.POST["identifier"].split(".")
 
-    if not slug or not model:
-        raise Http404()
-
-    item = get_object_or_404(model, slug=slug)
-
-    content_type = ContentType.objects.get_for_model(item)
-    object_id = item.id
+    content_type = get_object_or_404(ContentType, id=content_type_id)
+    item = get_object_or_404(content_type.model_class(), id=object_id)
     SavedItem.objects.get_or_create(content_type=content_type,
                           object_id=object_id,
                           user=request.user)
-
     reindex(item)
 
-    if request.is_ajax():
-        return JsonResponse(dict(status="success",
-                                 message=u"Item was saved in your collection."))
-
-    messages.success(request, u"Item was saved in your collection.")
-    return redirect_to_next_url(request, item.get_absolute_url())
+    return dict(status="success",
+                message=u"Item was saved in your collection.")
 
 
 @login_required
-def unsave(request, slug=None, model=None):
+@ajax_request
+def unsave(request):
+    content_type_id, object_id = request.POST["identifier"].split(".")
 
-    if not slug or not model:
-        raise Http404()
-
-    item = get_object_or_404(model, slug=slug)
-
-    content_type = ContentType.objects.get_for_model(item)
-    object_id = item.id
+    content_type = get_object_or_404(ContentType, id=content_type_id)
+    item = get_object_or_404(content_type.model_class(), id=object_id)
     try:
         SavedItem.objects.get(content_type=content_type,
                               object_id=object_id,
                               user=request.user).delete()
 
         reindex(item)
-
-        if request.is_ajax():
-            return JsonResponse(dict(status="success",
-                                     message=u"Item was removed from your collection."))
-
-        messages.success(request, u"Item was removed from your collection.")
     except SavedItem.DoesNotExist:
         pass
 
-    return redirect_to_next_url(request, item.get_absolute_url())
+    return dict(status="success",
+                message=u"Item was removed from your collection.")

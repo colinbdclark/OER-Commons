@@ -31,7 +31,7 @@ oer.myitems._changeNumber = function($elements, delta) {
 };
 
 
-oer.myitems.init_folder_form = function($folderList, template, getRequestParams) {
+oer.myitems.init_folder_form = function($folderList, template, additionalParams) {
     var $folderLast = $folderList.find("li.last");
     var $form = $folderLast.find(".folder-create-form");
     var $button = $form.find("#folder-create-button");
@@ -47,6 +47,11 @@ oer.myitems.init_folder_form = function($folderList, template, getRequestParams)
     });
     $form.submit(function(e) {
         var folder;
+        var params = {
+            'name': $folderInput.val(),
+        }
+        $.extend(params, additionalParams);
+
         $.post($form.attr("action"), getRequestParams($form), function(response) {
             if (response.status === "success") {
                 folder.setParams(response);
@@ -68,29 +73,24 @@ oer.myitems.init_folder_form = function($folderList, template, getRequestParams)
         $form.submit();
         e.preventDefault();
     });
-    
+
 };
 
 oer.myitems.init = function() {
     oer.myitems.index.init();
-    
+
     $.template("myitems:folder",
         '<li class="folder"><i class="folder-icon"></i> <a><span class="name">${name}</span> (<span class="number">${number}</span>)</a> <a href="#" class="delete">×</a></li>');
     $.template("myitems:item-folder", '<li data-folder-id="${id}"><div class="folder-deco"></div>${name} <a href="#" class="delete">×</a></li>');
-    
+
     var $folderList = $(".my-items-views");
     var $folderLast = $folderList.find("li.last");
     var $itemFolderLists = $("article ul.folder-list");
     var $itemFolderAddButton = $itemFolderLists.find("li.last a");
     var $itemFolderForm = $('<li id="folder-item-form" class="hidden"><form><input type="text" /><a class="dashed" href="#">Submit</a></form></li>');
     var $itemFolderInput = $itemFolderForm.find("input");
-    
-    var getRequestParams = function($form) {
-        return $form.serialize();
-    };
-    
-    oer.myitems.init_folder_form($folderList, "myitems:folder", getRequestParams);
 
+    oer.myitems.init_folder_form($folderList, "myitems:folder", {});
 
     var addItemUrl = django_js_utils.urls.resolve('myitems:folder_add_item');
     var deleteUrl = django_js_utils.urls.resolve('myitems:folder_delete');
@@ -101,7 +101,7 @@ oer.myitems.init = function() {
         $folderList.delegate("a.delete", "click", function(action) {
             $(action.target).parent().addClass("to-delete");
         });
-    
+
         $folderList.find("a.delete").inlineConfirmation({
             confirm: "<a class='confirm rc3' href='#'>Confirm</a>",
             cancel: "<a class='cancel' href='#'>Cancel</a>",
@@ -320,42 +320,51 @@ oer.myitems.index.init = function() {
 oer.myitems.init_save_button = function() {
     $.template("myitems:button-folder",
         '<li class="folder selected"><i class="folder-icon"></i> <a href="${url}"><span class="name">${name}</span> (<span class="number">1</span>)</a></li>');
-        
-    var getRequestParams = function($form) {
-        return {
-            name: $form.find("input").val(),
-            item_id: $form.attr("data-identifier"),
-        };
-    };
 
-    $saveButton = $(".myitems-save-button");
-    $folderList = $saveButton.find(".my-items-views");
-    oer.myitems.init_folder_form($folderList, "myitems:button-folder", getRequestParams);
-    
-    
-    $saveButton.delegate(".save-unsave-button", "click", function(e) {
+    var $myitemsSaveButton = $(".myitems-save-button");
+    var $folderList = $myitemsSaveButton.find(".my-items-views");
+    var identifier = $myitemsSaveButton.attr("data-identifier");
+    oer.myitems.init_folder_form($folderList, "myitems:button-folder", { item_id: identifier });
+
+    var saveUrl = django_js_utils.urls.resolve('saveditems:save_item');
+    var unsaveUrl = django_js_utils.urls.resolve('saveditems:unsave_item');
+
+    var $saveUnsaveButton = $myitemsSaveButton.find(".save-unsave-button");
+    var $saveButton = $saveUnsaveButton.filter(".save");
+    var $unsaveButton = $saveUnsaveButton.filter(".unsave");
+
+    $myitemsSaveButton.delegate(".save", "click", function(e) {
         e.preventDefault();
-        
-        var $this = $(this);
-        $other = $this.siblings(".save-unsave-button.hidden");
-        $this.addClass("hidden");
-        $other.removeClass("hidden");
-        $.post($this.attr("href"), function(response) {
-            if (response.status === "success") {
-                if ($this.hasClass("unsave")) {
-                    var $folders = $folderList.find(".folder.selected");
-                    $folders.removeClass("selected");
-                    oer.myitems._changeNumber($folders.find(".number"), -1);
-                }
-            }
-            else {
-                $other.addClass("hidden");
-                $this.removeClass("hidden");
+
+        $saveButton.addClass("hidden");
+        $unsaveButton.removeClass("hidden");
+        $.post(saveUrl, { identifier: identifier }, function(response) {
+            if (response.status !== "success") {
+                $unsaveButton.addClass("hidden");
+                $saveButton.removeClass("hidden");
             }
         });
     });
-    
-    
+
+    $myitemsSaveButton.delegate(".unsave", "click", function(e) {
+        e.preventDefault();
+
+        $unsaveButton.addClass("hidden");
+        $saveButton.removeClass("hidden");
+        var $folders = $folderList.find(".folder.selected");
+        $folders.removeClass("selected");
+        oer.myitems._changeNumber($folders.find(".number"), -1);
+        $.post(unsaveUrl, { identifier: identifier }, function(response) {
+            if (response.status !== "success") {
+                $saveButton.addClass("hidden");
+                $unsaveButton.removeClass("hidden");
+                $folders.addClass("selected");
+                oer.myitems._changeNumber($folders.find(".number"), 1);
+            }
+        });
+    });
+
+
     $folderList.delegate(".folder", "click", function() {
         var $this = $(this);
         var $number = $this.find(".number");
@@ -363,11 +372,11 @@ oer.myitems.init_save_button = function() {
         var addItemUrl = django_js_utils.urls.resolve('myitems:folder_add_item');
         var deleteItemFolderUrl = django_js_utils.urls.resolve('myitems:folder_delete_item');
         var $form = $folderList.find(".last .folder-create-form");
-        
+
         var params = {
             folder_name: $this.find(".name").text(),
             folder_id: $this.data("folder-id"),
-            item_id: $form.attr("data-identifier"),
+            item_id: identifier,
         };
         var action = $this.hasClass("selected");
         var action_dicts = {
@@ -390,23 +399,23 @@ oer.myitems.init_save_button = function() {
         modifyFolder(action_dict);
         $.post(action_dict.url, params, function(response) {
             if (response.status === "success") {
-                var $unsave = $saveButton.find(".save-unsave-button.unsave");
+                var $unsave = $myitemsSaveButton.find(".save-unsave-button.unsave");
                 if (!action && $unsave.hasClass("hidden")) {
-                    $saveButton.find(".save-unsave-button.save").addClass("hidden");
+                    $myitemsSaveButton.find(".save-unsave-button.save").addClass("hidden");
                     $unsave.removeClass("hidden")
                 }
             }
             else {
                 modifyFolder(action_dicts[!action]);
-            } 
+            }
         });
     });
-    $saveButton.find(".folder-list-button").click(function(e) {
+    $myitemsSaveButton.find(".folder-list-button").click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         $folderList.slideToggle();
     });
-    $saveButton.click(function(e) {
+    $myitemsSaveButton.click(function(e) {
         e.stopPropagation();
     });
     $("body").click(function(e) {

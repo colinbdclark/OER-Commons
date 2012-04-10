@@ -1,12 +1,13 @@
 from itertools import chain
 
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve
 from django.db.models.aggregates import Count
 from django.template import Library
+
 from materials.utils import get_name_from_slug
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
-
+from saveditems.models import SavedItem
 from myitems.models import Folder, FolderItem
 from myitems.views import FolderForm, AllItems, SubmittedItems, PublishedItems, DraftItems
 
@@ -70,6 +71,11 @@ def myitems_save_button(context):
     request = context["request"]
     item = context["item"]
     content_type = context["content_type"]
+    saved = SavedItem.objects.filter(
+        content_type=content_type,
+        object_id=item.id,
+        user=request.user
+    ).exists()
     folders = ((
             {
                 "url": f.get_absolute_url(),
@@ -86,9 +92,37 @@ def myitems_save_button(context):
     return {
         'folders': folders,
         'folder_create_form': FolderForm(),
-        'saved': context["saved"],
-        'save_url': context["save_url"],
-        'unsave_url': context["unsave_url"],
+        'saved': saved,
         'content_type': content_type.id,
         'object_id': item.id,
+    }
+
+
+PROFILE_TABS = [
+    ("users", "profile", "Profile", None),
+    ("myitems", "myitems", "My Items", None),
+    ("preferences", "preferences", "", "preferences"),
+]
+
+
+@register.inclusion_tag("myitems/include/profile-tabs.html", takes_context=True)
+def profile_tabs(context):
+    request = context["request"]
+    tabs = []
+    for namespace, url_name, tab_name, tab_class in PROFILE_TABS:
+        url = reverse("%s:%s" % (namespace, url_name))
+        classes = []
+        if resolve(request.path).namespace == namespace:
+            classes.append("selected")
+        if tab_class:
+            classes.append(tab_class)
+
+        tabs.append({
+            'url': url,
+            'name': tab_name,
+            'classes': ' '.join(classes),
+        })
+
+    return {
+        'tabs': tabs,
     }

@@ -7,14 +7,14 @@ import json
 
 
 class PreferencesForm(forms.models.ModelForm):
-    
+
     success_message = u"You preferences were saved."
     error_message = u"Please correct the indicated errors."
-    
+
     show_toolbar = forms.BooleanField(label=u"Show OER Commons toolbar when viewing resources.",
                                       widget=forms.CheckboxInput(),
                                       required=False)
-    
+
     class Meta:
         model = Preferences
         fields = PREFERENCE_FIELDS.keys()
@@ -31,7 +31,7 @@ def get_preferences_from_cookies(request):
             except ValueError:
                 pass
         preferences[field_name] = value
-            
+
     return preferences
 
 
@@ -47,14 +47,13 @@ def save_preferences_to_cookies(response, data):
 
 def delete_preference_cookies(response):
     for cookie_name, default_value in PREFERENCE_FIELDS.values():
-        response.delete_cookie(cookie_name)    
+        response.delete_cookie(cookie_name)
 
 
 def preferences(request):
-    
+
     page_title = u"My Preferences"
-    breadcrumbs = [{"url": reverse("preferences:preferences"), "title": page_title}]
-    
+
     user = request.user.is_authenticated() and request.user or None
     instance = None
     if user:
@@ -66,7 +65,7 @@ def preferences(request):
         form = PreferencesForm(instance=user)
     else:
         form = PreferencesForm(initial=get_preferences_from_cookies(request))
-    
+
     if request.method == "POST":
         if user:
             if not instance:
@@ -92,5 +91,5 @@ def preferences(request):
                 return response
             else:
                 messages.error(request, form.error_message)
-    
+
     return direct_to_template(request, "preferences/preferences.html", locals())

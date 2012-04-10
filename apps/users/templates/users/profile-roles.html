@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load users_tags %}
+{% load myitems_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -10,9 +11,13 @@
   </script>
 {% endblock %}
 
-{% block bodyclass %}no-columns profile-edit{% endblock %}
+{% block bodyclass %}no-columns profile-edit with-profile-tabs{% endblock %}
 
-{% block above-content %}{% endblock %}
+{% block above-content %}
+    {% profile_tabs %}
+{% endblock %}
+
+{% block page-title %}{% endblock %}
 
 {% block content %}
 

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load utils %}
+{% load myitems_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -10,9 +11,13 @@
   </script>
 {% endblock %}
 
-{% block bodyclass %}profile profile-view{% endblock %}
+{% block bodyclass %}profile profile-view with-profile-tabs{% endblock %}
 
-{% block above-content %}{% endblock %}
+{% block above-content %}
+    {% profile_tabs %}
+{% endblock %}
+
+{% block page-title %}{% endblock %}
 
 {% block column-left %}
   <a href="{% url users:profile_edit %}" class="edit rc10">Edit My Profile</a>
