@@ -180,7 +180,8 @@
     background-position: 98% 0;
     background-repeat: no-repeat;
     background-size: cover; }
-  .afa-summary .afa-icon:hover {
+  .afa-summary .afa-icon:hover,
+  .afa-summary .afa-icon:focus {
     width: 40px;
     height: 40px; }
   .afa-summary .afa-track-right {
@@ -260,6 +261,9 @@
 .fl-theme-uio-bw .afa-summary .sign-lang,
 .fl-theme-uio-by .afa-summary .sign-lang {
   background-image: url(../../images/icons-A4A/sign-black.png); }
+.fl-theme-uio-bw .afa-summary .translations,
+.fl-theme-uio-by .afa-summary .translations {
+  background-image: url(../../images/icons-A4A/translation-black.png); }
 
 .fl-theme-uio-wb .afa-summary .mouse-access {
   background-image: url(../../images/icons-A4A/mouseaccess-white.png); }
@@ -285,6 +289,8 @@
   background-image: url(../../images/icons-A4A/longdescription-white.png); }
 .fl-theme-uio-wb .afa-summary .sign-lang {
   background-image: url(../../images/icons-A4A/sign-white.png); }
+.fl-theme-uio-wb .afa-summary .translations {
+  background-image: url(../../images/icons-A4A/translation-white.png); }
 
 .fl-theme-uio-yb .afa-summary .mouse-access {
   background-image: url(../../images/icons-A4A/mouseaccess-yellow.png); }
@@ -310,6 +316,8 @@
   background-image: url(../../images/icons-A4A/longdescription-yellow.png); }
 .fl-theme-uio-yb .afa-summary .sign-lang {
   background-image: url(../../images/icons-A4A/sign-yellow.png); }
+.fl-theme-uio-yb .afa-summary .translations {
+  background-image: url(../../images/icons-A4A/translation-yellow.png); }
 
 /* Tooltip */
 .ui-tooltip {
