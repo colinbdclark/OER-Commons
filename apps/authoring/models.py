@@ -90,10 +90,11 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
     alignment_tags = generic.GenericRelation(TaggedMaterial)
-    folders = generic.GenericRelation(FolderItem)
 
     workflow_state = models.CharField(max_length=50, default=PRIVATE_STATE,
                                       choices=WORKFLOW_STATES)
+
+    folders = generic.GenericRelation(FolderItem)
 
     screenshot = models.ImageField(null=True, blank=True, upload_to="upload/materials/screenshots")
 

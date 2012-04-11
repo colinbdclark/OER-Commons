@@ -54,6 +54,7 @@
 .myitems article .folder-list li,
 .myitems article .widgets > li,
 .popup-dialog a.remove,
+.portlet.bookmarklet a,
 .portlet.item-tags li,
 .portlet.save a,
 .profile-edit form[name="about"],
