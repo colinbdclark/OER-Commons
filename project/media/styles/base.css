@@ -67,7 +67,7 @@ hr.tall {
 }
 
 .breadcrumbs {
-  margin-top: 5px;
+  margin-top: 1em;
 }
 
 .breadcrumbs a {
@@ -75,14 +75,14 @@ hr.tall {
 }
 
 .page-title {
-  margin-top: 5px;
-  color: #668D16;
+  margin-top: 0.7em;
   font-weight: normal;
   font-size: 25px;
+  color: #1F4D64;
 }
 
 .page-title span {
-  color: #666;
+  color: #668D16;
 }
 
 .status-message {
