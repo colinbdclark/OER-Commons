@@ -1,19 +1,15 @@
-import datetime
-import embedly
-import os
-
+from annoying.functions import get_object_or_None
+from autoslug import AutoSlugField
+from common.models import GradeLevel, MediaFormat
+from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
+from curriculum.models import TaggedMaterial
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from annoying.functions import get_object_or_None
-from autoslug import AutoSlugField
-from common.models import GradeLevel, MediaFormat
-from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
-from curriculum.models import TaggedMaterial
-from materials.models import  Keyword, \
+from materials.models import Keyword, \
     GeneralSubject, License, CourseMaterialType
 from materials.models.common import Language
 from materials.models.material import TAGGED, REVIEWED, RATED, PUBLISHED_STATE, WORKFLOW_STATES, PRIVATE_STATE
@@ -23,13 +19,15 @@ from rating.models import Rating
 from reviews.models import Review
 from rubrics.models import Evaluation, EvaluatedItemMixin
 from saveditems.models import SavedItem
-from myitems.models import FolderItem
 from tags.models import Tag
 from utils.templatetags.utils import full_url
 from visitcounts.models import Visit
 
 import gdata.youtube
 import gdata.youtube.service
+import datetime
+import embedly
+import os
 
 
 class LearningGoal(models.Model):
