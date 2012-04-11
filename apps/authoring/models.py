@@ -19,6 +19,7 @@ from rating.models import Rating
 from reviews.models import Review
 from rubrics.models import Evaluation, EvaluatedItemMixin
 from saveditems.models import SavedItem
+from myitems.models import FolderItem
 from tags.models import Tag
 from utils.templatetags.utils import full_url
 from visitcounts.models import Visit
