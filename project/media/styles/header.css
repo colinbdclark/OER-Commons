@@ -81,6 +81,7 @@ header.global nav a.button-contribute {
   background-size: contain;
   background-image: url(../images/global-tabs-bg.png);
   background-repeat: repeat-x;
+  margin-bottom: 1em;
 }
 
 .global-tabs .fixed-width {
@@ -101,7 +102,6 @@ header.global nav a.button-contribute {
 
 .global-tabs nav li {
   float: left;
-  height: 2.5em;
   margin-right: 2px;
   padding-left: 3px;
   background: url(../images/section-sep.gif) no-repeat 0 50%;
@@ -110,21 +110,21 @@ header.global nav a.button-contribute {
 .global-tabs nav li span {
   display: block;
   padding: 0 16px;
-    height: inherit;
-    display: table-cell;
-    vertical-align: middle;
+  vertical-align: middle;
+  height: 40px;
 }
 
 .global-tabs nav li.selected span {
   background: url(../images/section-active-bg.png) repeat-x;
-    background-size: contain;
+  background-size: contain;
 }
 
 .global-tabs nav li a {
   color: #0C5670;
   text-decoration: none;
   font-weight: bold;
-  font-size: 0.875em;
+  font-size: 1.077em;
+  line-height: 40px;
 }
 
 .global-tabs nav li.selected a {
