@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site, RequestSite
@@ -90,3 +91,8 @@ def username(value):
     if value.first_name or value.last_name:
         return u"%s %s" % (value.first_name, value.last_name)
     return unicode(value)
+
+
+@register.simple_tag
+def file_contents(path):
+    return open(os.path.join(settings.STATIC_ROOT, path)).read()
