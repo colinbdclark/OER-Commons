@@ -15,7 +15,7 @@ var WriteStep = function (tool) {
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
-  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "rangySelectionBoundary"];
+  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "rangySelectionBoundary", "html5Video"];
   for (var i = 1; i < 6; i++) {
     this.ALLOWED_CLASSES.push("text-color-" + i);
     this.ALLOWED_CLASSES.push("bg-color-" + i);
@@ -81,6 +81,7 @@ var WriteStep = function (tool) {
   this.shouldSaveState = true; // Flag to define if we should save current state in undo history
 
   this.$area.html(editor.cleanHTML(false));
+  this.ensureHTML5Video(editor);
   this.ensureTextInput();
 
   // Track when user presses and releases Ctrl or Cmd or Shift keys
@@ -325,7 +326,9 @@ WriteStep.prototype.cleanHTML = function (preSave) {
   $document.find(".flc-subtitle-mainWrap").replaceWith(function () {
     return $(this).find("figure.embed")[0];
   });
-  
+
+  $document.find(".html5Video").children().remove();
+
   // Remove non-safe elements (scripts, styles, forms, inputs)
   $document.find("script,style,form,input,textarea,button").remove();
 
@@ -381,6 +384,9 @@ WriteStep.prototype.cleanHTML = function (preSave) {
       return;
     }
     if ($figure.hasClass("embed") && $figure.data("url")) {
+      return;
+    }
+    if ($figure.hasClass("html5Video") && $figure.data("url")) {
       return;
     }
     if ($figure.hasClass("image") && $figure.find("img")) {
@@ -1574,6 +1580,15 @@ WriteStep.prototype.initVideoPlayer = function (container, videoURL, contentType
     fluid.videoPlayer.makeEnhancedInstances(instance, uiOptions.relay);
 };
 
+WriteStep.prototype.ensureHTML5Video = function (editor) {
+  $.each(this.$area.find(".html5Video"), function (index, video) {
+    video = $(video);
+    var url = video.data("url"),
+        contentType = video.data("contenttype");
+    editor.initVideoPlayer(video, url, contentType);
+  });
+};
+
 function MediaDialog(editor) {
   this.editor = editor;
   this.displayed = false;
@@ -1833,8 +1848,6 @@ MediaDialog.ImageStep.prototype.prepare = function (data) {
   this.$selectorOptions.first().click();
 };
 
-var numOfLocalVideos = numOfLocalVideos || 0;
-
 MediaDialog.VideoStep = function (dialog) {
   MediaDialog.Step.call(this, dialog);
 
@@ -1855,19 +1868,18 @@ MediaDialog.VideoStep = function (dialog) {
     if (description !== "") {
       title += ": ";
     }
-    
+    var $figure;
     if ($step.data("contentType")) {  // embed a html5 video link
-      var selector = "localVideo-" + numOfLocalVideos;
-      var $figure = $('<figure class="embed ' + selector + '"></figure>');
-      
-      numOfLocalVideos++;
+      $figure = $('<figure class="html5Video"></figure>').attr({
+          "data-url": $step.data("url"),
+          "data-contenttype": $step.data("contentType")
+      }).append($caption);
     } else {  // upload a youtube video
       var $caption = $("<figcaption></figcaption>").text(description);
       if (title) {
         $caption.prepend($("<strong></strong>").text(title));
       }
-
-      var $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
+      $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
     }
 
     editor.initFigure($figure);
@@ -1880,8 +1892,7 @@ MediaDialog.VideoStep = function (dialog) {
 
     if ($step.data("contentType")) {  // embed a html5 video link
       // Use infusion video player
-      editor.initVideoPlayer("." + selector, $step.data("url"), $step.data("contentType"));
-
+      editor.initVideoPlayer($figure, $step.data("url"), $step.data("contentType"));
       // ToDo: add video caption
     } else {  // upload a youtube video
       editor.loadEmbed($figure);
