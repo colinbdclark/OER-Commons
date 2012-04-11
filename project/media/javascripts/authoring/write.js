@@ -189,6 +189,9 @@ var WriteStep = function (tool) {
       }
       if ($.inArray(e.which, [editor.BACKSPACE, editor.DELETE]) == -1) {
         return;
+      } else {
+        // dynamically update the AfA section at the content delete.
+        afa.summerizeAfA();
       }
     }
 
@@ -317,6 +320,11 @@ WriteStep.prototype.cleanHTML = function (preSave) {
   // Create a document and clear HTML comments
   var $document = $("<div></div>").html($area.html().replace(/<!--[\s\S]*?-->/g, ""));
 
+  // Remove the subtitle widget panel
+  $document.find(".flc-subtitle-mainWrap").replaceWith(function () {
+    return $(this).find("figure.embed")[0];
+  });
+  
   // Remove non-safe elements (scripts, styles, forms, inputs)
   $document.find("script,style,form,input,textarea,button").remove();
 
@@ -435,7 +443,7 @@ WriteStep.prototype.cleanHTML = function (preSave) {
     $document.find("[contenteditable]").removeAttr("contenteditable");
     $document.find("p,div").each(function () {
       var $this = $(this);
-      if ($.trim($this.text()) === "") {
+      if ($.trim($this.text()) === "" && $this.html().indexOf("<img") === -1) {
         $this.remove();
       }
     });
@@ -1000,6 +1008,9 @@ WriteStep.prototype.initLinks = function () {
   });
 
   this.$area.delegate("a", "click", function (e) {
+    if ($(this).is(".flc-subtitle-panel-language-link, .flc-subtitle-panel-menu-addSubtitle")) {
+        return;
+    }
     var $link = $(this);
     if ($link.closest("figure.download", editor.$area)) {
       return;
@@ -1152,6 +1163,13 @@ WriteStep.prototype.loadEmbed = function ($figure) {
     $.post(this.$area.data("load-embed-url"), {url: url}, function (response) {
       var $caption = $figure.find("figcaption").detach();
       $figure.html(response.html).append($caption).fadeIn();
+
+      // Add AfA metadata for embedded videos
+      afa.addAfAToEmbeddedVideo($figure);
+
+      fluid.subtitleWidget($figure, {
+        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html"
+      });
     });
   }
 };
@@ -1799,8 +1817,16 @@ MediaDialog.ImageStep = function (dialog) {
       if (title) {
         $caption.prepend($("<strong></strong>").text(title));
       }
-      $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL).attr("alt", description)).append($caption);
-    }
+      $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL)).append($caption);
+      $img = $("img", $figure);
+
+      if (description != "") {
+        $img.attr("alt", description);
+      }
+      // Add AfA wrapper container. Note that the dynamical update on the AfA section is performed at the end of this function.
+      afa.addAfAToImage($img, description != "");
+      
+   }
 
     editor.saveState();
     if (editor.$focusBlock) {
@@ -1812,6 +1838,9 @@ MediaDialog.ImageStep = function (dialog) {
     editor.ensureTextInput();
     editor.updateDND();
     dialog.hide();
+    
+    // Dynamically re-summerize on AfA properties
+    afa.summerizeAfA();
   });
 
   $step.find("input[type='text']").keydown(function(e) {
@@ -1873,11 +1902,14 @@ MediaDialog.VideoStep = function (dialog) {
     } else {
       editor.$area.append($figure);
     }
-    editor.loadEmbed($figure);
+    editor.loadEmbed($figure);  // AfA meta data is added
     editor.initFigure($figure);
     editor.ensureTextInput();
     editor.updateDND();
     dialog.hide();
+    
+    // Dynamically update the AfA section as meta data is added in loadEmbed()
+    afa.summerizeAfA();
   });
 
   $step.find("input[type='text']").keydown(function(e) {

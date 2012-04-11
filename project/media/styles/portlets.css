@@ -65,6 +65,7 @@
 .portlet.twitter .tweets li {
   margin: 5px 5px 10px 5px;
   line-height: 1.25;
+  font-size: 0.8125em;
 }
 
 .portlet.twitter .tweets .date {
@@ -127,10 +128,11 @@
 }
 
 .portlet.bookmarklet {
-  padding: 10px;
-  height: 188px;
+  padding: 14px;
+  height: 11.75em;
   background: url(../images/bookmarklet-portlet-bg.png) no-repeat 50% 50%;
   text-align: center;
+  background-size: cover;
 }
 
 .portlet.bookmarklet h1 {
@@ -141,6 +143,8 @@
 
 .portlet.bookmarklet p {
   color: #1E4E62;
+  font-size: 0.8125em;
+  line-height: 1.25em;
   margin-bottom: 1em;
 }
 

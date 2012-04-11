@@ -6,6 +6,7 @@
 {% block extra-css %}
   {% compress css %}
     <link rel="stylesheet" href="{{ STATIC_URL}}styles/authoring/edit.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}javascripts/infusion/components/subtitleWidget/css/SubtitleWidget.css">
   {% endcompress %}
 {% endblock %}
 
@@ -115,6 +116,7 @@
   <script src="{{ STATIC_URL }}javascripts/authoring/describe.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/submit.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/tool.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/afa.js"></script>
   <script>
     $(function(e) {
       new AuthoringTool({% if hide_submit_step %}true{% else %}false{% endif %});

@@ -1,0 +1,206 @@
+.fl-subtitle-mainWrap {
+    display: table-cell;
+    width: 500px;
+}
+.fl-subtitle-panel-languages {
+    position: absolute;
+}
+.fl-subtitle-widgetWrap {
+    display: block;
+    overflow: hidden;
+}
+.flc-subtitle-panel {
+    float: right;
+    font-family: "Myriad Pro",Helvetica,sans-serif;
+}
+div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div.fl-subtitle-panel div.fl-subtitle-panel-menu, div.fl-subtitle-panel .fl-subtitle-panel-languages {
+    margin-bottom: 0em;
+}
+.fl-subtitle-panel-menu {
+    background-color: #E6E6E6;
+    color: #A7A7A7;
+    border-color: #E0E0E0;
+    border-width: 0.125em;
+    border-style: solid;
+    width: 12.5em;
+    text-shadow: #ffffff 0.063em 0.063em 0.063em;
+}
+.fl-subtitle-panel-menu span {
+    padding: 0.5em;
+    display: block;
+}
+.fl-subtitle-panel-menu span:hover {
+    color: #9BCB37;
+}
+.fl-subtitle-panel-languages {
+    list-style-type: none;
+    margin: 0em;
+    padding: 0em;
+    max-height: 17.563em;
+    overflow-y: scroll;
+}
+.fl-subtitle-panel-languages li a {
+    display: block;
+    text-decoration: none;
+    background-color: #E6E6E6;
+    background-image: url(../images/pencil-default.png);
+    background-size: 0.563em 0.938em;
+    background-repeat: no-repeat;
+    background-position: 0.656em center;
+    padding: 0.5em 0.5em 0.5em 1.875em;
+    color: #4091C4;
+    border-color: #E0E0E0;
+    border-width: 0.063em;
+    border-style: solid;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 9.375em;
+    min-height: 1.188em;
+}
+.fl-subtitle-panel-languages li a:hover {
+    color: #9BCB37;
+    background-image: url(../images/pencil-hover.png);
+}
+.fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-default.png);
+    background-size: 0.688em 0.563em;
+}
+.fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-hover.png);
+    background-size: 0.688em 0.563em;
+}
+.fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle {
+    text-decoration: none;
+    background-image: url(../images/arrow-default.png);
+    background-size: 0.688em 0.563em;
+    background-repeat: no-repeat;
+    background-position: 0.5em center;
+    padding: 0.5em 0.5em 0.5em 1.875em;
+    color: #4091C4;
+    width: 10.188em;
+    min-height: 1.188em;
+    display: block;
+}
+.fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-hover.png);
+    color: #9BCB37;
+}
+.fl-subtitle-panel-tooltip {
+    position    : absolute;
+    padding     : 0.188em 0.313em;
+    background-color: #FFCB33;
+    color: black;
+    font-family: "Myriad Pro",Helvetica,sans-serif;
+    border: #F6E8C4 0.063em solid; 
+}
+
+/* UIO High Contrast Themes */
+.fl-theme-uio-bw .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle,
+.fl-theme-uio-by .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-black.png);
+}
+.fl-theme-uio-bw .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle,
+.fl-theme-uio-by .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle{
+    background-image: url(../images/arrow-black.png);
+}
+.fl-theme-uio-bw .fl-subtitle-panel-languages li a,
+.fl-theme-uio-by .fl-subtitle-panel-languages li a {
+    background-image: url(../images/pencil-black.png);
+}
+.fl-theme-uio-bw .fl-subtitle-panel-languages li a:hover {
+    background-image: url(../images/pencil-white.png);
+    color: white !important;
+    background-color: black !important;
+}
+.fl-theme-uio-bw .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-white.png);
+    color: white !important;
+    background-color: black !important;
+}
+.fl-theme-uio-bw .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-black.png);
+}
+.fl-theme-uio-bw .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-white.png);
+    color: white !important;
+    background-color: black !important;
+}
+.fl-theme-uio-by .fl-subtitle-panel-languages li a:hover {
+    background-image: url(../images/pencil-yellow.png);
+    color: yellow !important;
+    background-color: black !important;
+}
+.fl-theme-uio-by .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-yellow.png);
+    color: yellow !important;
+    background-color: black !important;
+}
+.fl-theme-uio-by .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-black.png);
+}
+.fl-theme-uio-by .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-yellow.png);
+    color: yellow !important;
+    background-color: black !important;
+}
+
+.fl-theme-uio-wb .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-white.png);
+}
+.fl-theme-uio-wb .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-white.png);
+}
+.fl-theme-uio-wb .fl-subtitle-panel-languages li a {
+    background-image: url(../images/pencil-white.png);
+}
+.fl-theme-uio-wb .fl-subtitle-panel-languages li a:hover {
+    background-image: url(../images/pencil-black.png);
+    color: black !important;
+    background-color: white !important;
+}
+.fl-theme-uio-wb .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-black.png);
+    color: black !important;
+    background-color: white !important;
+}
+.fl-theme-uio-wb .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-white.png);
+}
+.fl-theme-uio-wb .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-black.png);
+    color: black !important;
+    background-color: white !important;
+}
+
+.fl-theme-uio-yb .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-yellow.png);
+}
+.fl-theme-uio-yb .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-yellow.png);
+}
+.fl-theme-uio-yb .fl-subtitle-panel-languages li a {
+    background-image: url(../images/pencil-yellow.png);
+}
+.fl-theme-uio-yb .fl-subtitle-panel-languages li a:hover {
+    color: black !important;
+    background-color: yellow !important;
+    background-image: url(../images/pencil-white.png);
+}
+.fl-theme-uio-yb .fl-subtitle-panel-languages li a:hover {
+    background-image: url(../images/pencil-black.png);
+    color: black !important;
+    background-color: yellow !important;
+}
+.fl-theme-uio-yb .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-black.png);
+    color: black !important;
+    background-color: yellow !important;
+}
+.fl-theme-uio-yb .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle {
+    background-image: url(../images/arrow-yellow.png);
+}
+.fl-theme-uio-yb .fl-subtitle-panel-menu .fl-subtitle-panel-addSubtitle:hover {
+    background-image: url(../images/arrow-black.png);
+    color: black !important;
+    background-color: yellow !important;
+}

@@ -6,6 +6,6 @@ This version of Infusion was created from
 
 using the following custom build command:
 
-    ant -lib lib/rhino customBuild -Dinclude="uiOptions" -Dexclude="jQuery" -DnoMinify="true"
+    ant -lib lib/rhino customBuild -Dinclude="uiOptions, tooltip" -Dexclude="jQuery" -DnoMinify="true"
 
 Any unnecessary files have been removed from this folder.

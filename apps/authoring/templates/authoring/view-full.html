@@ -16,7 +16,7 @@
     </div>
   {% endif %}
 
-  <div class="layout-columns">
+  <div class="oer-container layout-columns">
 
     <div class="column-left">
       <section id="toc">
@@ -45,6 +45,10 @@
         <br/>under <a href="{{ object.license.url }}">{{ object.license.name }}</a>
       </section>
 
+      <section id="afa">
+        {% include "authoring/include/afa.html" %}
+      </section>
+
     </div>
 
     <div class="column-main clearfix">
@@ -64,3 +68,7 @@
 {% endblock %}
 
 {% block footer %}{% endblock %}
+
+{% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/authoring/afa.js"></script>
+{% endblock %}
