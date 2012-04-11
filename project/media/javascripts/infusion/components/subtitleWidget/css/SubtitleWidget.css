@@ -143,6 +143,10 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     color: yellow !important;
     background-color: black !important;
 }
+.fl-theme-uio-by .fl-subtitle-panel-menu,
+.fl-theme-uio-bw .fl-subtitle-panel-menu {
+    text-shadow: none;
+}
 
 .fl-theme-uio-wb .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle {
     background-image: url(../images/arrow-white.png);
@@ -170,6 +174,9 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     background-image: url(../images/arrow-black.png);
     color: black !important;
     background-color: white !important;
+}
+.fl-theme-uio-wb .fl-subtitle-panel-menu {
+    text-shadow: none;
 }
 
 .fl-theme-uio-yb .fl-subtitle-panel-languages li a.fl-subtitle-panel-addSubtitle {
@@ -203,4 +210,7 @@ div.fl-subtitle-widgetWrap, div.fl-subtitle-mainWrap, div.fl-subtitle-panel, div
     background-image: url(../images/arrow-black.png);
     color: black !important;
     background-color: yellow !important;
+}
+.fl-theme-uio-yb .fl-subtitle-panel-menu {
+    text-shadow: none;
 }
