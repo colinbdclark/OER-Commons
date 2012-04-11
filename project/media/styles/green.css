@@ -1,5 +1,6 @@
 body.green .page {
   background-image: url(../images/green-main-bg.png);
+  background-repeat: repeat-x;
 }
 
 .green header.global {
