@@ -67,6 +67,9 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
                 """ % url
                 embed.html(self.add_afa(content) + caption)
 
+        # Remove <br> from headers
+        document.find("h2 > br,h3 > br").remove()
+
         # Build references
         footnotes = pq("""<div id="footnotes"></div>""")
         for ref in document.find("a.reference"):

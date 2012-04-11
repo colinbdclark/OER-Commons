@@ -11,7 +11,7 @@
     margin-bottom: 0.4em;
     font-weight: bold;
     font-size: 1.3em;
-    color: #1a4d63;
+    color: #1F4D64;
   }
   h2 {
     margin-bottom: 0.3em;
@@ -29,24 +29,36 @@
   }
   h3 {
     margin-bottom: 1em;
-    color: #1f4d64;
+    color: #1F4D64;
     font-size: 1em;
     font-weight: bold;
     letter-spacing: 0.1em;
   }
-  img {
-    -webkit-box-shadow: 0 0 10px #bbb;
-    -moz-box-shadow: 0 0 10px #bbb;
-    -ms-box-shadow: 0 0 10px #bbb;
-    box-shadow: 0 0 10px #bbb;
-    border: 1px solid #eee;
+  .sample {
+    margin: 0 auto 1em auto;
+    width: 299px;
+    height: 170px;
+    background: url(../images/authoring-sample.png) no-repeat;
+    -webkit-box-shadow: inset 0 0 7px #999;
+    -moz-box-shadow: inset 0 0 7px #999;
+    -ms-box-shadow: inset 0 0 7px #999;
+    box-shadow: inset 0 0 7px #999;
   }
   .bookmarklet {
     margin: 0 auto 1em auto;
-    padding: 1em 1em 0 1em;
-    width: 65%;
-    border: 1px solid #567a8b;
+    padding: 1.3em;
+    width: 299px;
+    height: 170px;
+    box-sizing: border-box;
+    background: url(../images/contribute-bookmarklet-bg.png);
     color: #666;
+    -webkit-box-shadow: inset 0 0 7px #999;
+    -moz-box-shadow: inset 0 0 7px #999;
+    -ms-box-shadow: inset 0 0 7px #999;
+    box-shadow: inset 0 0 7px #999;
+    p {
+      margin-bottom: 1.3em;
+    }
   }
   .help {
     font-style: italic;
@@ -60,7 +72,7 @@
     clear: both;
     text-align: right;
     span {
-      color: #1a4d63;
+      color: #1F4D64;
       font-weight: bold;
     }
     .addthis_toolbox {

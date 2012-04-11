@@ -27,14 +27,13 @@
         <a href="{% url authoring:new %}" class="require-login button-green rc3">Launch Open Author</a>
       </p>
       <h3>What is Open Author?</h3>
-      <p>
-        <img src="{{ STATIC_URL }}images/authoring-sample.png" alt="Open Author" width="291" height="168">
-      </p>
+      <div class="sample rc5"></div>
       <p class="help">
         Open Author lets you combine text, pictures, sound, files and video.
-        Saved as openly licensed educational resourcs, you can share them with
+        Saved as openly licensed educational resources, you can share them with
         friends, colleagues and educators from around the world. You can also
-        print, download them as PDF, and download included media.
+        print and download your resource as a PDF, as well as download all
+        included media.
       </p>
     </section>
     <section class="sheet">
@@ -50,8 +49,8 @@
       <p>
         <a href="{% url materials:courses:add %}" class="require-login button-green rc3">Submit a Resource</a>
       </p>
-      <h3>Bookmark Button</h3>
-      <div class="bookmarklet rc10">
+      <h3>Or, Use the Bookmark Button</h3>
+      <div class="bookmarklet rc5">
         <p>Submit resource from any website.</p>
         <p>
           <a class="button-orange rc5 rc-shape" href="javascript:(function() {OER_HOST = '{% protocol %}{% domain %}';try {var x = document.createElement('SCRIPT');x.type = 'text/javascript';x.src = OER_HOST + '/media/javascripts/submit.js?' + (new Date().getTime() / 100000);document.getElementsByTagName('head')[0].appendChild(x);} catch (e) {}})();">Submit OER</a>
@@ -60,11 +59,11 @@
           the web, click the new link to submit.</p>
       </div>
       <p class="help">
-        Open Content includes teaching and learning materials freely available
-        online for everyone to use. Examples of content appropriate for OER
-        Commons include: full courses, course modules, syllabi, lectures,
-        homework assignments, quizzes, lab and classroom activities and many
-        more.
+        Open educational resources (OER) are teaching and learning materials
+        freely available online for everyone to use. Examples of content
+        appropriate for OER Commons include: full courses, course modules,
+        syllabi, lectures, homework assignments, quizzes, lab and classroom
+        activities, presentations, and more.
       </p>
     </section>
   </div>
