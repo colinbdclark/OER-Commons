@@ -1550,21 +1550,17 @@ WriteStep.prototype.initTable = function($table) {
   return $table;
 };
 
-WriteStep.prototype.initVideoPlayer = function (container, videoURL, timeout) {
-    timeout = timeout || 0;
-    
-    // The mapping btw the video extension and type
-    var videoType = {
-      "mp4": "video/mp4",
-      "webm": "video/webm"
-    };
-    
+WriteStep.prototype.initVideoPlayer = function (container, videoURL, contentType) {
     var instance = [{
       container: container,
       options: {
         video: {
-          src: videoURL,
-          type: "video/mp4"   // ToDo: get video type from the mapping object "videoType"
+          sources: [
+            {
+              src: videoURL,
+              type: contentType
+            }
+          ]
         },
         templates: {
             videoPlayer: {
@@ -1838,7 +1834,6 @@ MediaDialog.ImageStep.prototype.prepare = function (data) {
 };
 
 var numOfLocalVideos = numOfLocalVideos || 0;
-var timeInterval = 500;
 
 MediaDialog.VideoStep = function (dialog) {
   MediaDialog.Step.call(this, dialog);
@@ -1861,7 +1856,7 @@ MediaDialog.VideoStep = function (dialog) {
       title += ": ";
     }
     
-    if ($step.data("source") === "local") {  // upload a local video
+    if ($step.data("contentType")) {  // embed a html5 video link
       var selector = "localVideo-" + numOfLocalVideos;
       var $figure = $('<figure class="embed ' + selector + '"></figure>');
       
@@ -1883,9 +1878,9 @@ MediaDialog.VideoStep = function (dialog) {
       editor.$area.append($figure);
     }
 
-    if ($step.data("source") === "local") {  // upload a local video
+    if ($step.data("contentType")) {  // embed a html5 video link
       // Use infusion video player
-      editor.initVideoPlayer("." + selector, $step.data("url"), numOfLocalVideos * timeInterval);
+      editor.initVideoPlayer("." + selector, $step.data("url"), $step.data("contentType"));
 
       // ToDo: add video caption
     } else {  // upload a youtube video
@@ -1905,7 +1900,7 @@ MediaDialog.VideoStep.prototype = new MediaDialog.Step();
 MediaDialog.VideoStep.prototype.constructor = MediaDialog.VideoStep;
 MediaDialog.VideoStep.prototype.prepare = function (data) {
   this.$step.data("url", data.url);
-  this.$step.data("source", data.source);
+  this.$step.data("contentType", data.contentType);
   this.$imageCt.empty();
   //noinspection JSUnresolvedVariable
   var $image = $("<img>").attr("src", data.thumbnail);

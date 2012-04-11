@@ -22,6 +22,7 @@ import urlparse
 import pdb
 
 IMAGE_CONTENT_TYPE_RE = re.compile(r"^image/(png|p?jpeg|gif)", re.I)
+HTML5_VIDEO_CONTENT_TYPE_RE = re.compile(r"^video/(webm|mp4)", re.I)
 MAX_IMAGE_SIZE = 10485760   # 10 MB
 
 IMAGE_FILENAME_RE = re.compile("^.+\.(?:png|gif|jpg|jpeg)$", re.I)
@@ -90,7 +91,10 @@ class MediaUploadForm(forms.Form):
                 file = File(response.raw, name=filename)
                 file._size = content_length
                 self.cleaned_data["file"] = file
-
+            elif HTML5_VIDEO_CONTENT_TYPE_RE.match(content_type):
+                self.media_type = "html5_video"
+                self.url = url
+                self.content_type = content_type
             else:
                 self.embed = Embed.get_for_url(url)
 
@@ -148,16 +152,11 @@ class MediaUpload(SingleObjectMixin, FormMixin, ProcessFormView):
                 title=video.title or u"",
                 thumbnail=video.thumbnail or u""
             )
-        elif "video" in form.cleaned_data["file"].content_type :
-#            Use the "Video" class rather than "Document" after finding a way to migrate the db for "Video"
-#            video = Video(material=object, video=form.cleaned_data["file"])
-            video = Document(material=object, file=form.cleaned_data["file"])
+        elif form.media_type == "html5_video":
             response = dict(
-                source="local",
                 type="video",
-#                url=request.build_absolute_url(video.file.url),
-                url=video.file.url,
-                title=video.file.name.split(os.path.sep)[-1],
+                contentType=form.content_type,
+                url=form.url,
                 thumbnail="/media/images/default-video-thumbnail.jpg" or u""
             )
         else:
