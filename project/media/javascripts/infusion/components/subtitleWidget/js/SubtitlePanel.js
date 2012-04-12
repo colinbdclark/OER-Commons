@@ -112,7 +112,7 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             addSubtitle: "http://www.universalsubtitles.org/en/videos/%videoId/"
         },
         strings: {
-            label: "CURRENT SUBTITLES",
+            label: "EDIT SUBTITLES",
             addSubtitle: "add subtitle",
             editSubtitles: "edit subtitles",
             helpImageToolTip: "edit or add subtitles for this video"
