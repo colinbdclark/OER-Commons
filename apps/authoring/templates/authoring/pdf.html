@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% load utils %}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{{ material.title }}</title>
+    <style>
+      @font-face {
+        font-family: Arial; src: url({{ STATIC_ROOT }}/fonts/arial.ttf);
+      }
+      @page {
+        @frame {
+          margin: 2cm;
+          margin-bottom: 3.5cm;
+        }
+        @frame footer {
+          -pdf-frame-content: footer;
+          bottom: 2cm;
+          margin-left: 2cm;
+          margin-right: 2cm;
+          height: 1.5cm;
+        }
+      }
+      {% file_contents "styles/authoring/pdf.css" %}
+    </style>
+  </head>
+  <body>
+    {{ material.title }}
+    {{ text }}
+    <div id="footer">
+      <strong>"{{ material.title }}”</strong>
+    </div>
+  </body>
+</html>
