@@ -9,7 +9,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from materials.models import  Keyword, \
+from materials.models import Keyword, \
     GeneralSubject, License, CourseMaterialType
 from materials.models.common import Language
 from materials.models.material import TAGGED, REVIEWED, RATED, PUBLISHED_STATE, WORKFLOW_STATES, PRIVATE_STATE
