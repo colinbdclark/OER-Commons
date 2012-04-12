@@ -40,3 +40,21 @@
 .evaluation-results .comment {
   top: -2px;
 }
+
+.myitems .portlet h1 .rocon-bl,
+.myitems .portlet h1 .rocon-br {
+  display: none;
+}
+
+.portlet.save .save-unsave-button .rocon-tr,
+.portlet.save .save-unsave-button .rocon-br,
+.portlet.save .folder-list-button .rocon-tl,
+.portlet.save .folder-list-button .rocon-bl {
+  display: none;
+}
+
+
+#content.contribute .sheet {
+  width: 37% !important;
+}
+

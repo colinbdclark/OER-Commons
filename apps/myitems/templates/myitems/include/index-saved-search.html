@@ -2,7 +2,7 @@
   <div class="details">
     <h3>
       <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
-      <a class="unsave-item" href="{{ item.unsave_item_url }}"><img alt="Remove saved search" src="{{ STATIC_URL }}images/remove-from-collection.png" /></a>  
+      <a class="delete" href="{{ item.unsave_item_url }}">×</a>
     </h3>
   </div>
 </div>

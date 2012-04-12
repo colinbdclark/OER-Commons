@@ -1,0 +1,8 @@
+<div class="grades-widget" data-field-name="{{ name }}">
+  <ul>
+    {% for existing_grade in existing %}
+      {{ existing_grade }}
+    {% endfor %}
+  </ul>
+  {{ select }}
+</div>

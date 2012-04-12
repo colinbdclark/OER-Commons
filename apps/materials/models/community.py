@@ -7,7 +7,7 @@ from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject,\
-    Language, GeographicRelevance
+    Language, GeographicRelevance, AgeRange
 from materials.models.material import Material
 
 
@@ -55,7 +55,7 @@ class CommunityTopic(models.Model):
         return "materials:community:community_topic_index", [], {"community_topics": self.slug}
 
 
-class CommunityItem(Material):
+class CommunityItem(Material, AgeRange):
 
     namespace = "community"
 
@@ -77,6 +77,7 @@ class CommunityItem(Material):
     grade_sublevels = models.ManyToManyField(GradeSubLevel,
                                           verbose_name=_(u"Grade sub-level"))
     grades = models.ManyToManyField(Grade, verbose_name=_(u"Grade"))
+
     languages = models.ManyToManyField(Language,
                                        verbose_name=_(u"Languages"))
     geographic_relevance = models.ManyToManyField(GeographicRelevance,

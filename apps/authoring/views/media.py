@@ -1,7 +1,9 @@
 from annoying.decorators import JsonResponse
-from authoring.models import Image, Document, Embed, AuthoredMaterial
+from authoring.models import Image, Document, Embed, AuthoredMaterial, \
+    UploadedVideo
 from cache_utils.decorators import cached
 from django.core.files import File
+from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.defaultfilters import filesizeformat
 from django.utils.decorators import method_decorator
@@ -112,6 +114,9 @@ class MediaUploadForm(forms.Form):
                 ).to_python(file)
                 self.media_type = "image"
 
+            elif content_type in UploadedVideo.SUPPORTED_CONTENT_TYPES:
+                self.media_type = "video"
+
 
         return self.cleaned_data
 
@@ -121,9 +126,21 @@ class MediaUpload(SingleObjectMixin, FormMixin, ProcessFormView):
     model = AuthoredMaterial
     form_class = MediaUploadForm
 
+    def get_queryset(self):
+        qs = super(MediaUpload, self).get_queryset()
+        user = self.request.user
+        if not user.is_superuser and not user.is_staff:
+            qs = qs.filter(author=user)
+            # TODO: or user in owners
+        return qs
+
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         #noinspection PyUnresolvedReferences
+
+        # Always save the uploaded file to temp file. We need it YouTube uploads.
+        request.upload_handlers = [TemporaryFileUploadHandler()]
+
         return super(MediaUpload, self).dispatch(request, *args, **kwargs)
 
     def json_response(self, data):

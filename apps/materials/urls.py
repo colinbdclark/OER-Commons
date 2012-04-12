@@ -5,7 +5,6 @@ from materials.models.course import Course
 from materials.models.library import Library
 from materials.views.data_import import DataImport
 from materials.views.view_item import ViewItem, ToolbarViewItem
-from saveditems.urls import saved_item_patterns
 
 
 general_subject_patterns = patterns('materials.views',
@@ -53,8 +52,7 @@ course_patterns = browse_patterns + patterns('materials.views',
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.course.edit.edit", name="edit"),
     url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
     url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
-) + \
-saved_item_patterns
+)
 
 library_patterns = browse_patterns + patterns('materials.views',
     url(r"^/add/?$", "forms.library.add.add", name="add"),
@@ -64,8 +62,7 @@ library_patterns = browse_patterns + patterns('materials.views',
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.library.edit.edit", name="edit"),
     url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
     url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
-) + \
-saved_item_patterns
+)
 
 community_patterns = general_subject_patterns + \
 grade_level_patterns + \
@@ -79,8 +76,7 @@ keyword_patterns + patterns('materials.views',
     url(r"^/(?P<slug>[^/]+)/edit/?$", "forms.community.edit.edit", name="edit"),
     url(r"^/(?P<slug>[^/]+)/delete/?$", "delete.delete", name="delete"),
     url(r"^/(?P<slug>[^/]+)/transition/(?P<transition_id>[^/]+)/?$", "transition.transition", name="transition"),
-) + \
-saved_item_patterns
+)
 
 microsite_browse_patterns = browse_patterns + patterns('materials.views',
     url(r"^/material_types/(?P<course_material_types>[^/]+)/?$", "index.index", name="material_type_index"),

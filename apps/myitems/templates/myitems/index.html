@@ -1,10 +1,9 @@
-{% extends "base.html" %}
-{% load myitems_tags %}
+{% extends "myitems/myitems.html" %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
-      oer.myitems.index.init();
+      oer.myitems.init();
       oer.rating.init();
     });
   </script>
@@ -14,34 +13,3 @@
   {% include "myitems/include/index-action-panel.html" %}
 {% endblock %}
 
-{% block column-left %}
-  {% myitems_views_portlet %}
-{% endblock %}
-
-{% block content %}
-  {% include "myitems/include/user-info.html" %}
-
-  {% if items %}
-  <div class="materials-index collapsibles">
-  {% with "top" as class %}
-    {% include "materials/include/index-navigation.html" %}
-  {% endwith %}
-
-  {% for item in items %}
-    {% include "materials/include/index-item.html" %}
-  {% endfor %}
-
-  {% with "bottom" as class %}
-    {% include "materials/include/index-navigation.html" %}
-  {% endwith %}
-  </div>
-  
-  {% else %}
-  {% if no_items_message %}<p class="clear">{{ no_items_message }}</p>{% endif %}
-  {% endif %}
-    
-{% endblock %}
-
-{% block column-right %}
-  {% my_tags_portlet %}
-{% endblock %}

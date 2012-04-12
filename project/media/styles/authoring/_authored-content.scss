@@ -3,7 +3,7 @@
   background-color: #fff;
   font-size: 1em;
   font-family: "Times New Roman", serif;
-  word-wrap:break-word;
+  word-wrap: break-word;
 
   div, h1, h2, h3, h4, h5, h6, p, blockquote, pre, dl, ol, ul, table, figure {
     margin-bottom: 1em;
@@ -87,9 +87,13 @@
   }
 
   figure.download {
+    color: #0B7BA9;
     font-size: 110%;
     padding: 3px 0 3px 22px;
-    background: url(../images/authoring/download_icon&16.png) 0% 50% no-repeat;
+    background: url(../../images/authoring/icon-download.png) 0% 50% no-repeat;
+    a {
+      font-weight: bold;
+    }
   }
 
   figure.video {

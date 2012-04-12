@@ -435,13 +435,22 @@
 
 .portlet.save a {
   display: inline-block;
-  line-height: 27px;
+  line-height: 35px;
   font-size: 18px;
 }
 
-.portlet.save a.save {
-  padding-left: 35px;
-  background: url(../images/icon-save.png) no-repeat 0 50%;
+.portlet.save .myitems-save-button .save-unsave-button {
+  width: 200px;
+}
+.portlet.save .myitems-save-button .folder-list-button {
+  width: 40px;
+}
+.portlet.save .myitems-save-button .my-items-views {
+  top: 35px;
+  width: 248px;
+}
+.portlet.save .my-items-views .folder {
+  width: 245px;
 }
 
 /* Browse All */
@@ -829,27 +838,4 @@
 
 .no-items-match {
   font-size: 14px;
-}
-
-#content.contribute h2 {
-  color: #679801;
-  font-weight: normal;
-  font-size: 16px;
-}
-
-#content.contribute dt,
-#content.contribute dd {
-  margin-bottom: 1em;
-}
-
-#content.contribute dd,
-#content.contribute p {
-  margin-right: 1em;
-  margin-left: 1em;
-}
-
-#content.contribute p.footnote {
-  margin-right: 0;
-  margin-left: 0;
-  font-size: 12px;
 }

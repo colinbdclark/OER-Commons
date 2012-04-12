@@ -68,14 +68,18 @@
   <div id="link-dialog" class="popup-dialog">
     <div class="head">Link <span class="triangle"></span></div>
     <div class="body">
-      <div class="field">
-        <label for="id_link_text">Displayed text</label>
-        <input type="text" id="id_link_text" name="link_text" placeholder="Enter text link will appear as">
-      </div>
-      <div class="field">
-        <label for="id_link_url">Website, email</label>
-        <input type="text" id="id_link_url" name="link_url" placeholder="Enter link here">
-      </div>
+      <form>
+        <div class="field">
+          <label for="id_link_text">Displayed text</label>
+          <div class="errors"></div>
+          <input type="text" id="id_link_text" name="link_text" placeholder="Enter text link will appear as">
+        </div>
+        <div class="field">
+          <label for="id_link_url">Website, email</label>
+          <div class="errors"></div>
+          <input type="text" id="id_link_url" name="link_url" placeholder="Enter link here">
+        </div>
+      </form>
     </div>
     <div class="actions">
       <a href="#remove" class="remove">clear link</a>
@@ -87,7 +91,12 @@
   <div id="reference-dialog" class="popup-dialog">
     <div class="head">Reference <span class="triangle"></span></div>
     <div class="body">
-      <textarea name="reference_text" placeholder="Enter the source of this content through author, title of work, url, date, etc."></textarea>
+      <form>
+        <div class="field">
+          <div class="errors"></div>
+          <textarea name="reference_text" placeholder="Enter the source of this content through author, title of work, url, date, etc."></textarea>
+        </div>
+      </form>
     </div>
     <div class="actions">
       <a href="#remove" class="remove">Clear reference</a>
@@ -119,6 +128,7 @@
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.linkify.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/learning-goals-widget.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/grades-widget.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/write.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/describe.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/submit.js"></script>

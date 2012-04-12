@@ -69,7 +69,6 @@ class ScoreValue(models.Model):
         #noinspection PyUnresolvedReferences
         return self.get_value_display()
 
-
     class Meta:
         abstract = True
         ordering = ["id"]
@@ -79,10 +78,10 @@ class Rubric(models.Model):
 
     name = models.CharField(max_length=200)
     description = models.TextField()
+    video_link = models.URLField(null=True, blank=True)
 
     def __unicode__(self):
         return self.name
-
 
     class Meta:
         ordering = ["id"]

@@ -25,6 +25,9 @@ class GradeLevel(models.Model):
     description = models.TextField(default=u"", blank=True,
                                    verbose_name=_(u"Description"))
 
+    start_age = models.IntegerField(default=0)
+    end_age = models.IntegerField(null=True, blank=True)
+
     def __unicode__(self):
         return self.name
 
@@ -48,6 +51,9 @@ class GradeSubLevel(models.Model):
 
     grade_level = models.ForeignKey(GradeLevel)
 
+    start_age = models.IntegerField(default=0)
+    end_age = models.IntegerField(null=True, blank=True)
+
     def __unicode__(self):
         return self.name
 
@@ -70,10 +76,13 @@ class Grade(models.Model):
     grade_sublevel = models.ForeignKey(GradeSubLevel, null=True)
     order = models.IntegerField(default=0)
 
+    start_age = models.IntegerField(default=0)
+    end_age = models.IntegerField(null=True, blank=True)
+
     objects = GradeManager()
 
     def __unicode__(self):
-        return "%s (%s)" % (self.name, self.code)
+        return "%s" % self.name
 
     def natural_key(self):
         return self.code,

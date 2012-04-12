@@ -1,56 +1,88 @@
 {% extends "base.html" %}
+{% load utils %}
+
+{% block extra-css %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}styles/contribute.css">
+{% endblock %}
+
+{% block bodyclass %}no-columns{% endblock %}
 
 {% block contentclass %}contribute{% endblock %}
 
 {% block above-content %}{% endblock %}
 
 {% block content %}
-  <p>OER Commons is a network of teaching and learning materials built by
-     linking to institutional collections and individual authors’ curricula
-     and other learning materials.</p>
-  <p class="align-center">
-    <a href="{% url materials:courses:add %}" class="require-login button-blue-big rc5">Add a Resource</a>
-  </p>
-  <h2>Criteria for Submission</h2>
-  <dl>
-    <dt>Learning-focused</dt>
-    <dd>Most of our resources are course-related materials, which includes
-      materials that have an explicit learning focus.</dd>
-    <dt>Materials are hosted elsewhere</dt>
-    <dd>You do not need to upload your materials. We link to them where
-      they are currently hosted. Examples: educational materials on a website
-      for a scientific organization, activities on a teacher’s wiki</dd>
-    <dt>Right to Use</dt>
-    <dd>For OER Commons to include your educational resources, they need to
-      have usage rights, or “conditions of use” that allow the material to be
-      used and shared without violating copyright law. This is possible through
-      Creative Commons licenses (or other open licenses such as GFDL) that
-      specify how others may use, share, and change resources. We encourage
-      authors to make their resources as “open” as possible.</dd>
-    <dd>If you are the author of the resource, you can choose an open license
-      on the submission form. If you are not the author, you can submit
-      resources that are already openly licensed.</dd>
-  </dl>
-  <p class="align-right">
-    <a href="http://creativecommons.org/about/licenses/meet-the-licenses">Learn more about Creative Commons Licenses</a>
-  </p>
-  <h2>Submitting a Resource</h2>
-  <p>We welcome you to submit resources! You will be able to enter details or
-    “metadata”, such as the URL and keywords, that enable others to find your content more easily.</p>
-  <p>After submitting the resource information, our staff will review the
-    submission and either approve it or contact you for more information.  </p>
-  <p class="align-center">
-    <a href="{% url materials:courses:add %}" class="require-login button-blue-big rc5">Add a Resource</a>
-  </p>
-  <p class="footnote">
-    Are you affiliated with an institution or organization that would like to
-    contribute a collection of resources? We have a metadata schema we can
-    share, and we can harvest some RSS and OAI feeds. Please contact
-    <a href="mailto:info@oercommons.org">info@oercommons.org</a>,
-    we would be happy to talk with you.
-  </p>
+  <div class="wrap">
+    <section class="sheet">
+      <header>
+        <hgroup>
+          <h1>Create OER</h1>
+          <h2>Be an Educational Resource</h2>
+        </hgroup>
+        <hr>
+      </header>
+      <p>Create an educational resource in Open Author and instantly share your
+        resource with the world.</p>
+      <p>
+        <a href="{% url authoring:new %}" class="require-login button-green rc3">Launch Open Author</a>
+      </p>
+      <h3>What is Open Author?</h3>
+      <div class="sample rc5"></div>
+      <p class="help">
+        Open Author lets you combine text, pictures, sound, files and video.
+        Saved as openly licensed educational resources, you can share them with
+        friends, colleagues and educators from around the world. You can also
+        print and download your resource as a PDF, as well as download all
+        included media.
+      </p>
+    </section>
+    <section class="sheet">
+      <header>
+        <hgroup>
+          <h1>Add OER from the Web</h1>
+          <h2>Submit Open Resources to OER Commons</h2>
+        </hgroup>
+        <hr>
+      </header>
+      <p>Know of a great resource that belongs in the OER Commons collection?
+        Submit it here!</p>
+      <p>
+        <a href="{% url materials:courses:add %}" class="require-login button-green rc3">Submit a Resource</a>
+      </p>
+      <h3>Or, Use the Bookmark Button</h3>
+      <div class="bookmarklet rc5">
+        <p>Submit resource from any website.</p>
+        <p>
+          <a class="button-orange rc5 rc-shape" href="javascript:(function() {OER_HOST = '{% protocol %}{% domain %}';try {var x = document.createElement('SCRIPT');x.type = 'text/javascript';x.src = OER_HOST + '/media/javascripts/submit.js?' + (new Date().getTime() / 100000);document.getElementsByTagName('head')[0].appendChild(x);} catch (e) {}})();">Submit OER</a>
+        </p>
+        <p>Drag this button to your favorites bar. When you find a resource on
+          the web, click the new link to submit.</p>
+      </div>
+      <p class="help">
+        Open educational resources (OER) are teaching and learning materials
+        freely available online for everyone to use. Examples of content
+        appropriate for OER Commons include: full courses, course modules,
+        syllabi, lectures, homework assignments, quizzes, lab and classroom
+        activities, presentations, and more.
+      </p>
+    </section>
+  </div>
+  <div class="share-buttons">
+    <span>Share</span>
+    <div class="addthis_toolbox addthis_32x32_style addthis_default_style">
+      <a class="addthis_button_facebook"></a>
+      <a class="addthis_button_diigo"></a>
+      <a class="addthis_button_email"></a>
+      <a class="addthis_button_compact"></a>
+    </div>
+    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=oercommons"></script>
+  </div>
 {% endblock %}
 
-{% block column-right %}
-  {% include "include/portlets/bookmarklet.html" %}
+{% block extra-js %}
+  <script>
+    $(function() {
+      $("#content div.wrap").equalHeights();
+    });
+  </script>
 {% endblock %}

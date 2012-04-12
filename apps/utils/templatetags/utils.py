@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site, RequestSite
@@ -5,6 +6,7 @@ from django.forms.fields import FileField
 from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.template.defaulttags import Node
+from roman import toRoman
 
 
 register = Library()
@@ -90,3 +92,30 @@ def username(value):
     if value.first_name or value.last_name:
         return u"%s %s" % (value.first_name, value.last_name)
     return unicode(value)
+
+
+@register.filter("romanize")
+def romanize_filter(value, args=None):
+    """Change int or long into Roman Numeral all other types are passed out
+    You can add an argument like this:
+        ...
+        {{ object.id|romanize:"upper" }}
+        ...
+    For upper case roman numerals. The tag defaults to lowercase numerals for
+    no good reason other than I prefer the look of them."""
+    if isinstance(value, int) or isinstance(value, long):
+        if args is not None:
+            if args.lower() == "upper":
+                return toRoman(value)
+            else:
+                return toRoman(value).lower()
+        else:
+            return toRoman(value).lower()
+    else:
+        return value
+
+
+@register.simple_tag
+def file_contents(path):
+    return open(os.path.join(settings.STATIC_ROOT, path)).read()
+

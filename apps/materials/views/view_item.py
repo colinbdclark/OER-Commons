@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, resolve
 from django.db.models import Avg
 from django.http import Http404, QueryDict, HttpRequest
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.datastructures import MultiValueDict
 from django.views.generic.base import TemplateView
 from haystack.query import SearchQuerySet
@@ -40,11 +40,19 @@ class BaseViewItemMixin(object):
     model = None
 
     def get(self, request, *args, **kwargs):
+        self.pk = kwargs.get("pk")
         self.slug = kwargs["slug"]
         self.model = self.model or kwargs.get("model")
-        if not self.slug or not self.model:
+        if not self.model:
             raise Http404()
-        self.item = get_object_or_404(self.model, slug=self.slug)
+        if self.pk:
+            self.item = get_object_or_404(self.model, pk=self.pk)
+            if self.item.slug != self.slug:
+                return redirect(self.item, permanent=True)
+        elif self.slug:
+            self.item = get_object_or_404(self.model, slug=self.slug)
+        else:
+            raise Http404()
 
         # Not published item is shown only to staff users or to the user that added it.
         if self.item.workflow_state != PUBLISHED_STATE:
@@ -187,19 +195,6 @@ class BaseViewItemMixin(object):
         if came_from_index:
             data["index_cookie"] = request.COOKIES.get("_i")
 
-
-        if request.user.is_authenticated():
-            data["saved"] = SavedItem.objects.filter(
-                content_type=content_type,
-                object_id=item.id,
-                user=request.user
-            ).exists()
-
-        if hasattr(item, "namespace"):
-            data["save_url"] = reverse("materials:%s:save_item" % item.namespace,
-                           kwargs=dict(slug=item.slug))
-            data["unsave_url"] = reverse("materials:%s:unsave_item" % item.namespace,
-                           kwargs=dict(slug=item.slug))
 
         data["comment_url"] = reverse(
             "reviews:review",

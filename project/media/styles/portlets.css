@@ -145,16 +145,7 @@
   color: #1E4E62;
   font-size: 0.8125em;
   line-height: 1.25em;
-}
-
-.portlet.bookmarklet a {
-  display: inline-block;
-  margin: 10px 0;
-  padding: 5px 10px;
-  border: 1px solid #F5A456;
-  background-color: #FFCA74;
-  color: #1E4E62;
-  font-size: 15px;
+  margin-bottom: 1em;
 }
 
 #sponsors-portlet p {

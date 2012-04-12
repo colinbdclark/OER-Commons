@@ -7,7 +7,7 @@ from django.db import models
 from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
 from materials.models.common import Author, Keyword, GeneralSubject,\
-    Language, GeographicRelevance, Institution, Collection
+    Language, GeographicRelevance, Institution, Collection, AgeRange
 from materials.models.material import Material
 
 
@@ -33,7 +33,7 @@ class LibraryMaterialType(models.Model):
         return "materials:libraries:material_type_index", [], {"library_material_types": self.slug}
 
 
-class Library(Material):
+class Library(Material, AgeRange):
 
     namespace = "libraries"
 
@@ -58,6 +58,7 @@ class Library(Material):
     grade_sublevels = models.ManyToManyField(GradeSubLevel,
                                           verbose_name=_(u"Grade sub-level"))
     grades = models.ManyToManyField(Grade, verbose_name=_(u"Grade"))
+
     languages = models.ManyToManyField(Language,
                                        verbose_name=_(u"Languages"))
     geographic_relevance = models.ManyToManyField(GeographicRelevance,

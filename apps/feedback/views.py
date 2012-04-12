@@ -62,5 +62,5 @@ def feedback(request):
         elif "cancel" in request.POST:
             return redirect_to(request, reverse("frontpage"), permanent=False)
 
-
+    disable_getsatisfaction_tab = True
     return direct_to_template(request, "feedback/feedback.html", locals())

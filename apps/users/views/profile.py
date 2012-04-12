@@ -20,15 +20,11 @@ import time
 
 @login_required
 def profile_view(request):
-
-    page_title = u"My Profile"
-    breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
-    hide_global_notifications = True
-
-    user = request.user
-    profile = Profile.objects.get_or_create(user=user)[0]
-
-    return direct_to_template(request, "users/profile.html", locals())
+    return direct_to_template(request, "users/profile.html", {
+        'page_title': u"My Profile",
+        'hide_global_notifications': True,
+        'profile': Profile.objects.get_or_create(user=request.user)[0],
+    })
 
 
 @login_required
@@ -56,7 +52,6 @@ def profile_edit(request):
                 return redirect("users:profile_about")
 
     page_title = u"My Profile"
-    breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
     hide_global_notifications = True
 
     user_info_form = UserInfoForm(instance=user)
@@ -170,7 +165,6 @@ def avatar_delete(request):
 def geography(request):
 
     page_title = u"My Profile"
-    breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
     hide_global_notifications = True
 
     user = request.user
@@ -210,7 +204,6 @@ def geography(request):
 def roles(request):
 
     page_title = u"My Profile"
-    breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
     hide_global_notifications = True
 
     user = request.user
@@ -241,7 +234,6 @@ def roles(request):
 def about(request):
 
     page_title = u"My Profile"
-    breadcrumbs = [{"url": reverse("users:profile"), "title": page_title}]
     hide_global_notifications = True
 
     user = request.user

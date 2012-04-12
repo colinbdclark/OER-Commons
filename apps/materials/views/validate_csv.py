@@ -135,6 +135,25 @@ def extract_keywords(value):
     keywords = extract_list(value)
     return sorted(set([smart_title_case(k) for k in keywords]))
 
+AGE_RANGE_RE = re.compile(r"^(?P<start>\d+)(?:-(?P<end>\d+|U))?$")
+def extract_age_range(value):
+    value = extract_string(value)
+    r = AGE_RANGE_RE.search(value)
+    if value and not r:
+        raise ValidationError('Invalid age range format: %s' % value)
+    if not r:
+        return None
+    start, end = r.groups()
+    start = int(start)
+    if end == u"U":
+        end = None
+    elif end:
+        end = int(end)
+    else:
+        end = start
+    return start, end
+
+
 URL_VALIDATOR = URLValidator()
 
 def check_URL(value):
@@ -212,6 +231,7 @@ COURSE_FIELDS = {
     'CR_LEVEL': (extract_list_slugify, [check_required, check_in_list(GRADE_LEVEL_SLUGS)]),
     'CR_SUBLEVEL': (extract_list_slugify, [check_in_list(GRADE_SUBLEVEL_SLUGS)]),
     'CR_GRADE': (extract_list_slugify, [check_in_list(GRADE_CODES)]),
+    'CR_TYPICAL_AGE_RANGE': (extract_age_range, None),
     'CR_ABSTRACT': (extract_string, check_required),
     'CR_KEYWORDS': (extract_keywords, check_required),
     'CR_LANGUAGE': (extract_list, check_in_list(LANGUAGE_SLUGS)),
@@ -262,6 +282,7 @@ LIBRARY_FIELDS = {
     'LIB_LEVEL': (extract_list_slugify, [check_required, check_in_list(GRADE_LEVEL_SLUGS)]),
     'LIB_SUBLEVEL': (extract_list_slugify, [check_in_list(GRADE_SUBLEVEL_SLUGS)]),
     'LIB_GRADE': (extract_list_slugify, [check_in_list(GRADE_CODES)]),
+    'LIB_TYPICAL_AGE_RANGE': (extract_age_range, None),
     'LIB_ABSTRACT': (extract_string, check_required),
     'LIB_KEYWORDS': (extract_keywords, check_required),
     'LIB_LANGUAGE': (extract_list, check_in_list(LANGUAGE_SLUGS)),

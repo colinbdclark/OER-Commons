@@ -1,4 +1,4 @@
-from common.models import GradeLevel, MediaFormat
+from common.models import GradeLevel, GradeSubLevel, Grade, MediaFormat
 from core.forms import AutoCreateField, MultipleAutoCreateField, \
     AutocompleteListWidget
 from curriculum.models import AlignmentTag
@@ -24,9 +24,9 @@ from materials.views.forms import RSSFields
 from materials.views.forms.course import DerivedFields, PrePostRequisitesFields
 
 COURSE_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "collection", "workflow_state",
-                     "content_creation_date", "tech_requirements", "keywords",
-                     "general_subjects", "grade_levels", "material_types",
-                     "media_formats", "languages", "geographic_relevance",
+                     "content_creation_date", "tech_requirements", "keywords", "general_subjects",
+                     "grade_levels", "grade_sublevels", "grades", "start_age", "end_age",
+                     "material_types", "media_formats", "languages", "geographic_relevance",
                      "curriculum_standards", "featured", "in_rss", "rss_description", "rss_timestamp",
                      "derived", "derived_title", "derived_url", "derived_description",
                   "derived_from",
@@ -39,9 +39,9 @@ COURSE_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "coll
 
 
 MAIN_FIELDS_ADD = ["creator", "title", "url", "abstract", "institution", "collection", "workflow_state",
-               "content_creation_date", "tech_requirements", "keywords",
-               "general_subjects", "grade_levels", "material_types",
-               "media_formats", "languages", "geographic_relevance",
+               "content_creation_date", "tech_requirements", "keywords", "general_subjects",
+               "grade_levels", "grade_sublevels", "grades", "start_age", "end_age",
+               "material_types", "media_formats", "languages", "geographic_relevance",
                "curriculum_standards", "featured"]
 MAIN_FIELDS_CHANGE = ["slug"] + MAIN_FIELDS_ADD
 
@@ -69,7 +69,18 @@ class CourseAddForm(forms.ModelForm, DerivedFields, PrePostRequisitesFields,
                                 widget=forms.CheckboxSelectMultiple())
     grade_levels = forms.ModelMultipleChoiceField(
                                 GradeLevel.objects.all(),
-                                widget=forms.CheckboxSelectMultiple())
+                                widget=forms.CheckboxSelectMultiple(),
+                                required=False)
+    grade_sublevels = forms.ModelMultipleChoiceField(
+                                GradeSubLevel.objects.all(),
+                                widget=forms.CheckboxSelectMultiple(),
+                                required=False)
+    grades = forms.ModelMultipleChoiceField(
+                                Grade.objects.all(),
+                                widget=forms.CheckboxSelectMultiple(),
+                                required=False)
+    start_age = forms.IntegerField(required=False)
+    end_age = forms.IntegerField(required=False)
     material_types = forms.ModelMultipleChoiceField(
                                 CourseMaterialType.objects.all(),
                                 widget=forms.CheckboxSelectMultiple())

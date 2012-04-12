@@ -70,10 +70,12 @@ class MaterialSearchIndex(SearchIndex, EvaluatedItemIndex):
     rated_by = ByField(model_attr="ratings")
     reviewed_by = ByField(model_attr="reviews")
 
+    saved_in_folders = MultiValueField(model_attr="saved_in_folders")
+
     creator = IntegerField(model_attr="creator__id")
 
     license = CharField(model_attr="license__type", null=True)
-    cou_bucket = CharField(model_attr="license__bucket")
+    cou_bucket = CharField(model_attr="license__bucket", null=True)
 
     microsites = VocabularyMultiValueField(model_attr="microsites")
     topics = VocabularyMultiValueField(model_attr="topics")

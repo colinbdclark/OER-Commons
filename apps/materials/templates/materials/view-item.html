@@ -8,6 +8,7 @@
 {% load curriculum_tags %}
 {% load utils %}
 {% load i18n %}
+{% load myitems_tags %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -25,6 +26,7 @@
       {% endif %}
       $("section.portlet a.tooltip").qtip(TOPLEFTSIDE_TOOLTIP_OPTIONS);
       oer.align_form.init_tag_tooltip($("div.evaluation-results td.alignment-scores span"));
+      oer.myitems.init_save_button();
     });
   </script>
 {% endblock %}
@@ -283,12 +285,8 @@
 {% endblock %}
 
 {% block column-right %}
-  <section class="portlet dotted save">
-    {% if saved %}
-      <a href="{{ unsave_url }}" class="require-login">Remove from My Items</a>
-    {% else %}
-      <a href="{{ save_url }}" class="require-login save">Add to My Items</a>
-    {% endif %}
+  <section class="portlet save">
+    {% myitems_save_button %}
   </section>
 
   <section class="portlet dotted">

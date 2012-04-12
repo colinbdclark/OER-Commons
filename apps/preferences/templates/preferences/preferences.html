@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% load myitems_tags %}
 
-{% block bodyclass %}preferences{% endblock %}
+{% block bodyclass %}preferences with-profile-tabs{% endblock %}
 
-{% block above-content %}{% endblock %}
+{% block above-content %}
+    {% profile_tabs %}
+{% endblock %}
+
+{% block page-title %}{% endblock %}
 
 {% block content %}
     <form method="post" class="formatted preferences" name="preferences" action="{% url preferences:preferences %}">

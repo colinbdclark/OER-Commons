@@ -1,10 +1,18 @@
-from django.core.urlresolvers import reverse
+from itertools import chain
+
+from django.core.urlresolvers import reverse, resolve
 from django.db.models.aggregates import Count
 from django.template import Library
+from django.contrib.contenttypes.models import ContentType
+
 from materials.utils import get_name_from_slug
+from materials.models import Material
+from authoring.models import AuthoredMaterial, AuthoredMaterialDraft
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
-
+from saveditems.models import SavedItem
+from myitems.models import Folder, FolderItem
+from myitems.views import FolderForm, AllItems, SubmittedItems, PublishedItems, DraftItems
 
 register = Library()
 
@@ -19,24 +27,120 @@ def my_tags_portlet(context):
 
 
 VIEWS = [
-    ("myitems", u"My Saved Items"),
-    ("rated", u"My Rated Items"),
-    ("tagged", u"My Tagged Items"),
-    ("commented", u"My Commented Items"),
-    ("submitted", u"My Submitted Items"),
-    ("searches", u"My Saved Searches"),
+    AllItems,
+    SubmittedItems,
+    PublishedItems,
+    DraftItems,
 ]
 
 
 @register.inclusion_tag("myitems/include/views-portlet.html", takes_context=True)
 def myitems_views_portlet(context):
-    current_path = context["request"].path
-    views = []
-    for view_name, view_title in VIEWS:
-        view = {}
-        view["url"] = reverse("myitems:%s" % view_name)
-        view["title"] = view_title
-        view["selected"] = view["url"] == current_path
-        views.append(view)
+    request = context["request"]
+    current_path = request.path
+    views = [
+        {
+            "url": reverse("myitems:%s" % view.slug),
+            "title": view.name,
+            "count": view.get_count(request.user),
+            "name": view.slug,
+        }
+        for view in VIEWS
+    ]
+    folders = [
+        {
+            "url": f.get_absolute_url(),
+            "title": f.name,
+            "id": f.id,
+            "count": f.folderitem__count,
+        }
+        for f in Folder.objects.filter(user=request.user).annotate(Count('folderitem'))
+    ]
 
-    return dict(views=views)
+    for item in chain(views, folders):
+        if item["url"] == current_path:
+            item["selected"] = True
+            break
+
+    return {
+        'views': views,
+        'folders': folders,
+        'folder_create_form': FolderForm(),
+    }
+
+
+@register.inclusion_tag("myitems/include/save-button.html", takes_context=True)
+def myitems_save_button(context):
+    request = context["request"]
+    item = context["item"]
+    content_type = ContentType.objects.get_for_model(item)
+
+    if isinstance(item, Material):
+        creator = item.creator
+    elif isinstance(item, AuthoredMaterial):
+        creator = item.author
+    elif isinstance(item, AuthoredMaterialDraft):
+        creator = item.material.author
+    else:
+        assert False, type(item)
+
+
+    saved = (
+        creator == request.user
+        or SavedItem.objects.filter(
+            user=request.user,
+            content_type=content_type,
+            object_id=item.id
+        ).exists()
+    )
+
+    folders = ((
+            {
+                "url": f.get_absolute_url(),
+                "title": f.name,
+                "id": f.id,
+                "count": f.folderitem__count,
+                "saved": FolderItem.objects.filter(
+                    folder=f, content_type=content_type, object_id=item.id).exists()
+            }
+            for f in Folder.objects.filter(user=request.user).annotate(Count('folderitem'))
+        ) if request.user.is_authenticated()
+        else []
+    )
+    return {
+        'folders': folders,
+        'folder_create_form': FolderForm(),
+        'saved': saved,
+        'content_type': content_type.id,
+        'object_id': item.id,
+    }
+
+
+PROFILE_TABS = [
+    ("users", "profile", "Profile", None),
+    ("myitems", "myitems", "My Items", None),
+    ("preferences", "preferences", "", "preferences"),
+]
+
+
+@register.inclusion_tag("myitems/include/profile-tabs.html", takes_context=True)
+def profile_tabs(context):
+    request = context["request"]
+    tabs = []
+    for namespace, url_name, tab_name, tab_class in PROFILE_TABS:
+        url = reverse("%s:%s" % (namespace, url_name))
+        classes = []
+        if resolve(request.path).namespace == namespace:
+            classes.append("selected")
+        if tab_class:
+            classes.append(tab_class)
+
+        tabs.append({
+            'url': url,
+            'name': tab_name,
+            'classes': ' '.join(classes),
+        })
+
+    return {
+        'tabs': tabs,
+    }

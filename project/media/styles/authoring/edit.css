@@ -82,9 +82,12 @@
         font-style: normal;
         color: #666; }
   .authored-content figure.download {
+    color: #0B7BA9;
     font-size: 110%;
     padding: 3px 0 3px 22px;
-    background: url(../images/authoring/download_icon&16.png) 0% 50% no-repeat; }
+    background: url(../../images/authoring/icon-download.png) 0% 50% no-repeat; }
+    .authored-content figure.download a {
+      font-weight: bold; }
   .authored-content figure.video {
     text-align: center; }
     .authored-content figure.video iframe, .authored-content figure.video object, .authored-content figure.video embed {
@@ -162,6 +165,15 @@
     display: inline-block;
     position: relative;
     top: -1px; }
+
+.grades-widget ul {
+  list-style-type: none; }
+.grades-widget li {
+  padding: 4px 0; }
+.grades-widget a.delete {
+  display: inline-block;
+  position: relative;
+  top: -1px; }
 
 #toc .header {
   margin-bottom: 0.5em;
@@ -377,11 +389,18 @@
   .authoring-edit a.button:hover, .authoring-edit a.button.primary:hover {
     background-color: #92c33a; }
   .authoring-edit a.button.disabled {
+    background-color: #b6b8ba;
     cursor: default; }
   .authoring-edit a.button.primary {
     background-color: #79bcde; }
   .authoring-edit a.button.primary.disabled {
     background-color: #b7daed; }
+  .authoring-edit a.button.hidden {
+    display: none; }
+.authoring-edit .errors label {
+  color: #f00;
+  font-size: 0.9em;
+  text-transform: none; }
 
 .authoring-form .label {
   margin-bottom: 5px; }
@@ -1253,6 +1272,10 @@
 
 #step-describe .layout-columns {
   padding-top: 30px; }
+#step-describe .columns-wrapper {
+  overflow-y: auto; }
+  #step-describe .columns-wrapper .inner-wrapper {
+    position: relative; }
 #step-describe .column-left, #step-describe .column-main, #step-describe .column-right {
   float: left;
   width: 30%;
@@ -1264,8 +1287,8 @@
   width: 100%; }
 #step-describe .learning-goals-widget input[type='text'] {
   width: 90%; }
-#step-describe #id_summary {
-  height: 20em; }
+#step-describe #id_abstract {
+  height: 11em; }
 #step-describe .field.subjects ul {
   list-style-type: none;
   display: inline-block;
@@ -1295,6 +1318,31 @@
     width: 90%; }
 #step-describe #keywords-widget input[type='text'] {
   width: 180px; }
+#step-describe #align-tag-description-ct {
+  position: absolute;
+  bottom: 45px;
+  left: 0;
+  width: 30%; }
+#step-describe #align-tag-description {
+  float: none;
+  margin-left: 0;
+  margin-bottom: 0;
+  width: auto; }
+#step-describe .alignment-tags-ct {
+  margin-left: 30%;
+  margin-bottom: 1em;
+  padding-left: 40px; }
+#step-describe #align-form-buttons {
+  float: left; }
+  #step-describe #align-form-buttons a.button {
+    margin-right: 0.5em; }
+#step-describe ul.align-tags {
+  margin-left: 10em; }
+  #step-describe ul.align-tags li {
+    margin-top: 0;
+    margin-bottom: 3px; }
+#step-describe .field.grade, #step-describe .field.category, #step-describe .field.tag {
+  margin-left: 2em; }
 
 #step-submit .layout-columns {
   padding-top: 30px; }

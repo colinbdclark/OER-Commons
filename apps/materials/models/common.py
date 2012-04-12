@@ -330,3 +330,20 @@ class GeographicRelevance(models.Model):
         verbose_name_plural = _(u"Geographic relevances")
         ordering = ("id",)
 
+
+class AgeRange(models.Model):
+
+    start_age = models.IntegerField(null=True)
+    end_age = models.IntegerField(null=True)
+
+    @property
+    def typical_age_range(self):
+        if self.start_age is None:
+            return u""
+        if self.start_age == self.end_age:
+            return unicode(self.start_age)
+        return u"%i-%s" % (self.start_age, u"U" if self.end_age is None else unicode(self.end_age))
+
+    class Meta:
+        abstract = True
+

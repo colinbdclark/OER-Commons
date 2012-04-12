@@ -164,9 +164,8 @@ var WriteStep = function (tool) {
     }, 200);
   });
 
-  // Update selected nodes when user click on editor area or select text with mouse
-  // and save selection.
-  this.$area.mouseup(function () {
+  // Track selection when user releases the mouse button.
+  $document.mouseup(function () {
     editor.trackSelection();
   });
 
@@ -475,11 +474,15 @@ WriteStep.prototype.ensureTextInput = function () {
   }
   $area.find("figure:not(.inline)").each(function () {
     var $figure = $(this);
-    if (!$figure.prev().is("p,div")) {
-      $("<p><br></p>").data("auto", true).insertBefore($figure);
-    }
-    if (!$figure.next().is("p,div")) {
-      $("<p><br></p>").text(" ").data("auto", true).insertBefore($figure);
+
+    // If the figure is wrapped with universalSubtitle widget then we do not want to add any <p><br><p/>
+    if (!$figure.parent().is(".fl-subtitle-videoWrap")) {
+        if (!$figure.prev().is("p,div")) {
+          $("<p><br></p>").data("auto", true).insertBefore($figure);
+        }
+        if (!$figure.next().is("p,div")) {
+          $("<p><br></p>").text(" ").data("auto", true).insertBefore($figure);
+        }
     }
   });
   // Remove duplicate empty paragraphs
@@ -526,7 +529,7 @@ WriteStep.prototype.focusOnNode = function ($node) {
 WriteStep.prototype.trackSelection = function () {
 
   // Rangy is not initialized?
-  if (!"getSelection" in rangy) {
+  if (!("getSelection" in rangy)) {
     return;
   }
 
@@ -958,6 +961,32 @@ WriteStep.prototype.initLinks = function () {
   });
 
   var $dialog = $("#link-dialog");
+  var $form = $dialog.find("form");
+  $form.validate({
+    rules: {
+      "link_text": "required",
+      "link_url": {
+        required: true,
+        url: true
+      }
+    },
+    submitHandler: function() {
+      var $link = $dialog.data("link");
+      if (!$link.data("new")) {
+        editor.saveState();
+      }
+      $link.text($textInput.val());
+      $link.attr("href", $urlInput.val());
+      $dialog.hide();
+    }
+  });
+  $form.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      e.preventDefault();
+      $form.submit();
+    }
+  });
+
   var $urlInput = $dialog.find("input[name='link_url']");
   var $textInput = $dialog.find("input[name='link_text']");
 
@@ -975,13 +1004,7 @@ WriteStep.prototype.initLinks = function () {
 
   $dialog.find("a.button[href='#save']").click(function (e) {
     e.preventDefault();
-    var $link = $dialog.data("link");
-    if (!$link.data("new")) {
-      editor.saveState();
-    }
-    $link.text($textInput.val());
-    $link.attr("href", $urlInput.val());
-    $dialog.hide();
+    $form.submit();
   });
 
   $dialog.find("a.remove").click(function (e) {
@@ -1000,7 +1023,10 @@ WriteStep.prototype.initLinks = function () {
         return;
     }
     var $link = $(this);
-    if ($link.closest("tr.ui-column-controls,td.ui-row-controls").length) {
+    if ($link.closest("figure.download", editor.$area)) {
+      return;
+    }
+    if ($link.closest("tr.ui-column-controls,td.ui-row-controls", editor.$area).length) {
       return;
     }
     e.preventDefault();
@@ -1016,7 +1042,11 @@ WriteStep.prototype.initLinks = function () {
       top: offset.top + 35 + "px"
     });
     $dialog.show();
-    $urlInput.focus();
+    if ($textInput.val() === "") {
+      $textInput.focus();
+    } else {
+      $urlInput.focus();
+    }
   });
 
 };
@@ -1051,6 +1081,7 @@ WriteStep.prototype.initColorButtons = function () {
   });
   $selectors.delegate("li", "mousedown", function (e) {
     e.stopPropagation();
+    e.preventDefault();
     var $this = $(this);
     var i, applier;
     editor.saveState();
@@ -1073,6 +1104,8 @@ WriteStep.prototype.initColorButtons = function () {
 
     // TODO: initialize and save CssclassAppliers on editor initialization and re-use them here
 
+    var selection = rangy.saveSelection();
+
     // Remove existing colors
     for (i = 1; i < 6; i++) {
       applier = rangy.createCssClassApplier(prefix + "-color-" + i);
@@ -1082,6 +1115,10 @@ WriteStep.prototype.initColorButtons = function () {
       applier = rangy.createCssClassApplier(class_);
       applier.applyToSelection();
     }
+
+    rangy.restoreSelection(selection);
+    editor.trackSelection();
+
   });
 
   $(document).click(function () {
@@ -1180,6 +1217,28 @@ WriteStep.prototype.initReferences = function () {
   });
 
   var $dialog = $("#reference-dialog");
+
+  var $form = $dialog.find("form");
+  $form.validate({
+    rules: {
+      "reference_text": "required"
+    },
+    submitHandler: function() {
+      var $reference = $dialog.data("reference");
+      var text = $.trim($dialog.find("textarea").val());
+      if (text !== $reference.data("text")) {
+        if (!$reference.data("new")) {
+          editor.saveState();
+        }
+        $reference.attr("data-text", text);
+        $reference.data("text", text);
+        editor.updateReferences();
+      }
+      $reference.data("new", false);
+      $dialog.hide();
+    }
+  });
+
   $dialog.find("a.button[href='#cancel']").click(function (e) {
     e.preventDefault();
     var $reference = $dialog.data("reference");
@@ -1191,18 +1250,7 @@ WriteStep.prototype.initReferences = function () {
 
   $dialog.find("a.button[href='#save']").click(function (e) {
     e.preventDefault();
-    var $reference = $dialog.data("reference");
-    var text = $.trim($dialog.find("textarea").val());
-    if (text !== $reference.data("text")) {
-      if (!$reference.data("new")) {
-        editor.saveState();
-      }
-      $reference.attr("data-text", text);
-      $reference.data("text", text);
-      editor.updateReferences();
-    }
-    $reference.data("new", false);
-    $dialog.hide();
+    $form.submit();
   });
 
   $dialog.find("a.remove").click(function () {
@@ -1636,6 +1684,7 @@ MediaDialog.Step.prototype.open = function (data) {
   this.prepare(data);
   this.dialog.$steps.not(this.$step).hide();
   this.$step.show();
+  this.$step.find("input[type='text'],textarea").first().focus();
 };
 //noinspection JSUnusedLocalSymbols
 MediaDialog.Step.prototype.prepare = function (data) {
@@ -1675,6 +1724,7 @@ MediaDialog.UploadProgressStep.prototype.displayProgress = function (percent) {
 
 MediaDialog.UploadStep = function (dialog, uploadProgress) {
   MediaDialog.Step.call(this, dialog);
+  var editor = this.dialog.editor;
   var $step = this.$step = this.dialog.$steps.filter(".upload");
   var $input = this.$input = $step.find("input:text");
   this.uploadProgress = uploadProgress;
@@ -1692,6 +1742,12 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
       dialog.handleUploadResponse(response);
       $step.unblock();
     }, "text");
+  });
+
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
   });
 
   var $dropZone = $step.find("div.drop-zone");
@@ -1812,6 +1868,12 @@ MediaDialog.ImageStep = function (dialog) {
     afa.summerizeAfA();
   });
 
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
+  });
+
 };
 //noinspection JSCheckFunctionSignatures
 MediaDialog.ImageStep.prototype = new MediaDialog.Step();
@@ -1865,6 +1927,9 @@ MediaDialog.VideoStep = function (dialog) {
     } else {  // upload a youtube video
       $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
     }
+    if ($step.data("uploaded-video-id")) {
+      $figure.attr("data-uploaded-video-id", $step.data("uploaded-video-id"));
+    }
 
     if (editor.$focusBlock) {
       $figure.insertAfter(editor.$focusBlock);
@@ -1885,13 +1950,25 @@ MediaDialog.VideoStep = function (dialog) {
     editor.updateDND();
     dialog.hide();
   });
+
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
+  });
 };
+
 //noinspection JSCheckFunctionSignatures
 MediaDialog.VideoStep.prototype = new MediaDialog.Step();
 MediaDialog.VideoStep.prototype.constructor = MediaDialog.VideoStep;
 MediaDialog.VideoStep.prototype.prepare = function (data) {
   this.$step.data("url", data.url);
   this.$step.data("contentType", data.contentType);
+  if ("uploaded_video_id" in data) {
+    this.$step.data("uploaded-video-id", data["uploaded_video_id"]);
+  } else {
+    this.$step.data("uploaded-video-id", null);
+  }
   this.$imageCt.empty();
   //noinspection JSUnresolvedVariable
   var $image = $("<img>").attr("src", data.thumbnail);
@@ -1946,7 +2023,14 @@ MediaDialog.DocumentStep = function (dialog) {
     editor.updateDND();
     dialog.hide();
   });
+
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
+  });
 };
+
 //noinspection JSCheckFunctionSignatures
 MediaDialog.DocumentStep.prototype = new MediaDialog.Step();
 MediaDialog.DocumentStep.prototype.constructor = MediaDialog.DocumentStep;

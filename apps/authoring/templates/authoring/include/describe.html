@@ -2,31 +2,79 @@
 
 <div class="layout-columns">
 
-  <div class="column-left">
-    {% with form.summary as field %}
-      {% include "include/form-field.html" %}
-    {% endwith %}
-  </div>
+  <div class="columns-wrapper"><div class="inner-wrapper">
+    <div class="column-left">
+      {% with form.abstract as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+      <div id="align-tag-description-ct">
+        <div id="align-tag-description"></div>
+      </div>
+    </div>
 
-  <div class="column-main">
-    {% with form.learning_goals as field %}{% with "learning-goals" as field_class %}
-      {% include "include/form-field.html" %}
-    {% endwith %}{% endwith %}
-    {% with form.keywords as field %}
-      {% include "include/form-field.html" %}
-    {% endwith %}
-  </div>
+    <div class="column-main">
+      {% with form.learning_goals as field %}{% with "learning-goals" as field_class %}
+        {% include "include/form-field.html" %}
+      {% endwith %}{% endwith %}
+      {% with form.keywords as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+      <div class="alignment">
+        <div class="field standard">
+           <div class="label"><label for="id_curriculum_standard">Common Core State Standards</label></div>
+           <select name="standard" id="id_curriculum_standard" data-source="{% url curriculum:list_standards %}">
+             <option value="-">Select a standard</option>
+           </select>
+        </div>
+        <div class="field grade hidden">
+           <div class="label"><label for="id_curriculum_grade">Grade Level</label></div>
+           <select disabled="disabled" name="grade" id="id_curriculum_grade" data-source="{% url curriculum:list_grades %}">
+             <option value="-">Select a grade level</option>
+           </select>
+        </div>
+        <div class="field category hidden">
+           <div class="label"><label for="id_curriculum_category">Learning Domain</label></div>
+           <select disabled="disabled" name="category" id="id_curriculum_category" data-source="{% url curriculum:list_categories %}">
+             <option value="-">Select a learning domain</option>
+           </select>
+        </div>
+        <div class="field tag hidden">
+           <div class="label"><label for="id_curriculum_tag">Alignment Tag</label></div>
+           <select disabled="disabled" name="tag" id="id_curriculum_tag" data-source="{% url curriculum:list_tags %}">
+             <option value="-">Select an alignment tag</option>
+           </select>
+        </div>
+      </div>
+    </div>
 
-  <div class="column-right">
-    {% with form.general_subjects as field %}{% with "subjects" as field_class %}
-      {% include "include/form-field.html" %}
-    {% endwith %}{% endwith %}
-    {% with form.grade_level as field %}
-      {% include "include/form-field.html" %}
-    {% endwith %}
-    {% with form.language as field %}
-      {% include "include/form-field.html" %}
-    {% endwith %}
+    <div class="column-right">
+      {% with form.general_subjects as field %}{% with "subjects" as field_class %}
+        {% include "include/form-field.html" %}
+      {% endwith %}{% endwith %}
+      {% with form.grades as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+      {% with form.languages as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+      {% with form.material_types as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="alignment-tags-ct">
+    <div class="buttons" id="align-form-buttons">
+      <a href="#" class="button primary align disabled">Align</a>
+      <a href="#" class="button clear disabled">Clear</a>
+    </div>
+    <ul class="align-tags">
+      {{ form.alignment_tags }}
+    </ul>
+    <div class="clear"></div>
+  </div></div>
+
   </div>
 
   {% spaceless %}

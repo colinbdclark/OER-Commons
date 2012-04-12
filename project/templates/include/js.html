@@ -13,6 +13,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.pjax.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jquery.inline-confirmation.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/tag-it.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}javascripts/jquery/jQuery.equalHeights.js"></script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/infusion/MyInfusion.js"></script>
 
@@ -33,13 +34,14 @@
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/autocomplete-list-widget.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/tags-form.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/align-form.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}javascripts/myitems-index.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}javascripts/myitems.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/saved-search.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/send-this.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/content-submission.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/newsletter.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/evaluation-tool.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/global-init.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}django_js_utils/django_js_utils.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/UIOptions.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/videoPlayer/js/VideoPlayer_framework.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}javascripts/videoPlayer/js/VideoPlayer_uiOptions.js"></script>
@@ -49,6 +51,8 @@
   <script type="text/javascript" src="{{ STATIC_URL }}javascripts/infusion/components/subtitleWidget/js/ResourceFetcher.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}javascripts/infusion/components/subtitleWidget/js/UniSubComponent.js"></script>
 {% endcompress %}
+
+<script type="text/javascript" src="{% url jsurls %}"></script>
 
 <!--[if lt IE 9]>
   {% compress js %}

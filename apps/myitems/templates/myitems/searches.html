@@ -1,40 +1,24 @@
-{% extends "base.html" %}
-{% load rating_tags %}
-{% load myitems_tags %}
+{% extends "myitems/myitems.html" %}
 
 {% block extra-js %}
   <script type="text/javascript">
     $(function() {
-      oer.myitems.index.init_saved_items();
+      oer.myitems.init();
     });
   </script>
 {% endblock %}
 
-{% block above-content %}
-{% endblock %}
-
-{% block column-left %}
-  {% myitems_views_portlet %}
-{% endblock %}
 
 {% block content %}
   {% include "myitems/include/user-info.html" %}
 
   {% if items %}
     <div class="materials-index saved searches">
-  
-    <p class="hint dotted">
-      Click <img alt="Remove search" src="{{ STATIC_URL }}images/remove-from-collection.png" />  to remove a saved search.
-    </p>
-  
+
     {% for item in items %}
       {% include "myitems/include/index-saved-search.html" %}
     {% endfor %}
 
-    <p class="hint">
-      Click <img alt="Remove search" src="{{ STATIC_URL }}images/remove-from-collection.png" />  to remove a saved search.
-    </p>
-  
     </div>
 
     <div class="unsave-confirmation message">
@@ -45,8 +29,4 @@
     <p class="clear">You have not saved any search yet.</p>
   {% endif %}
   
-{% endblock %}
-
-{% block column-right %}
-  {% my_tags_portlet %}
 {% endblock %}

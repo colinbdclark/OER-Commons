@@ -122,7 +122,9 @@
     "pk": 1, 
     "model": "common.gradelevel", 
     "fields": {
+      "start_age": 0, 
       "description": "includes Pre-K - Grade 6; Elementary; Lower Elementary; Upper Elementary", 
+      "end_age": 11, 
       "name": "Primary", 
       "slug": "primary"
     }
@@ -131,7 +133,9 @@
     "pk": 2, 
     "model": "common.gradelevel", 
     "fields": {
+      "start_age": 10, 
       "description": "includes Grades 7 - 12; High School; Middle School; Jr. High School", 
+      "end_age": 19, 
       "name": "Secondary", 
       "slug": "secondary"
     }
@@ -140,7 +144,9 @@
     "pk": 3, 
     "model": "common.gradelevel", 
     "fields": {
+      "start_age": 17, 
       "description": "includes all Higher Education; College, University, Graduate Levels; Professional Development; Training", 
+      "end_age": null, 
       "name": "Post-secondary", 
       "slug": "post-secondary"
     }
@@ -149,7 +155,9 @@
     "pk": 1, 
     "model": "common.gradesublevel", 
     "fields": {
+      "end_age": 5, 
       "grade_level": 1, 
+      "start_age": 0, 
       "name": "Preschool", 
       "slug": "preschool"
     }
@@ -158,7 +166,9 @@
     "pk": 2, 
     "model": "common.gradesublevel", 
     "fields": {
+      "end_age": 8, 
       "grade_level": 1, 
+      "start_age": 4, 
       "name": "Lower-Primary", 
       "slug": "lower-primary"
     }
@@ -167,7 +177,9 @@
     "pk": 3, 
     "model": "common.gradesublevel", 
     "fields": {
+      "end_age": 11, 
       "grade_level": 1, 
+      "start_age": 7, 
       "name": "Upper-Primary", 
       "slug": "upper-primary"
     }
@@ -176,7 +188,9 @@
     "pk": 4, 
     "model": "common.gradesublevel", 
     "fields": {
+      "end_age": 14, 
       "grade_level": 2, 
+      "start_age": 10, 
       "name": "Middle School", 
       "slug": "middle-school"
     }
@@ -185,7 +199,9 @@
     "pk": 5, 
     "model": "common.gradesublevel", 
     "fields": {
+      "end_age": 19, 
       "grade_level": 2, 
+      "start_age": 14, 
       "name": "High School", 
       "slug": "high-school"
     }
@@ -194,7 +210,9 @@
     "pk": 6, 
     "model": "common.gradesublevel", 
     "fields": {
+      "end_age": null, 
       "grade_level": 3, 
+      "start_age": 17, 
       "name": "Community College - Lower Division", 
       "slug": "community-college-lower-division"
     }
@@ -203,7 +221,9 @@
     "pk": 7, 
     "model": "common.gradesublevel", 
     "fields": {
+      "end_age": null, 
       "grade_level": 3, 
+      "start_age": 19, 
       "name": "College - Upper Division", 
       "slug": "college-upper-division"
     }
@@ -212,7 +232,9 @@
     "pk": 8, 
     "model": "common.gradesublevel", 
     "fields": {
+      "end_age": null, 
       "grade_level": 3, 
+      "start_age": 21, 
       "name": "Graduate / Professional", 
       "slug": "graduate-professional"
     }
@@ -221,7 +243,9 @@
     "pk": 9, 
     "model": "common.gradesublevel", 
     "fields": {
+      "end_age": null, 
       "grade_level": 3, 
+      "start_age": 18, 
       "name": "Career / Technical", 
       "slug": "career-technical"
     }
@@ -232,6 +256,8 @@
     "fields": {
       "code": "PK", 
       "name": "Pre-kindergarten", 
+      "end_age": 5, 
+      "start_age": 3, 
       "grade_sublevel": 1, 
       "order": 1
     }
@@ -242,6 +268,8 @@
     "fields": {
       "code": "K", 
       "name": "Kindergarten", 
+      "end_age": 6, 
+      "start_age": 4, 
       "grade_sublevel": 2, 
       "order": 2
     }
@@ -252,6 +280,8 @@
     "fields": {
       "code": "1", 
       "name": "1st Grade", 
+      "end_age": 7, 
+      "start_age": 5, 
       "grade_sublevel": 2, 
       "order": 3
     }
@@ -262,6 +292,8 @@
     "fields": {
       "code": "2", 
       "name": "2nd Grade", 
+      "end_age": 8, 
+      "start_age": 6, 
       "grade_sublevel": 2, 
       "order": 4
     }
@@ -272,6 +304,8 @@
     "fields": {
       "code": "3", 
       "name": "3rd Grade", 
+      "end_age": 9, 
+      "start_age": 7, 
       "grade_sublevel": 3, 
       "order": 5
     }
@@ -282,6 +316,8 @@
     "fields": {
       "code": "4", 
       "name": "4th Grade", 
+      "end_age": 10, 
+      "start_age": 8, 
       "grade_sublevel": 3, 
       "order": 6
     }
@@ -292,6 +328,8 @@
     "fields": {
       "code": "5", 
       "name": "5th Grade", 
+      "end_age": 11, 
+      "start_age": 9, 
       "grade_sublevel": 3, 
       "order": 7
     }
@@ -302,6 +340,8 @@
     "fields": {
       "code": "6", 
       "name": "6th Grade", 
+      "end_age": 12, 
+      "start_age": 10, 
       "grade_sublevel": 4, 
       "order": 8
     }
@@ -312,6 +352,8 @@
     "fields": {
       "code": "7", 
       "name": "7th Grade", 
+      "end_age": 13, 
+      "start_age": 11, 
       "grade_sublevel": 4, 
       "order": 9
     }
@@ -322,6 +364,8 @@
     "fields": {
       "code": "8", 
       "name": "8th Grade", 
+      "end_age": 14, 
+      "start_age": 12, 
       "grade_sublevel": 4, 
       "order": 10
     }
@@ -332,6 +376,8 @@
     "fields": {
       "code": "9", 
       "name": "9th Grade", 
+      "end_age": 16, 
+      "start_age": 14, 
       "grade_sublevel": 5, 
       "order": 11
     }
@@ -342,6 +388,8 @@
     "fields": {
       "code": "10", 
       "name": "10th Grade", 
+      "end_age": 17, 
+      "start_age": 15, 
       "grade_sublevel": 5, 
       "order": 12
     }
@@ -352,6 +400,8 @@
     "fields": {
       "code": "11", 
       "name": "11th Grade", 
+      "end_age": 18, 
+      "start_age": 16, 
       "grade_sublevel": 5, 
       "order": 13
     }
@@ -362,6 +412,8 @@
     "fields": {
       "code": "12", 
       "name": "12th Grade", 
+      "end_age": 19, 
+      "start_age": 17, 
       "grade_sublevel": 5, 
       "order": 14
     }

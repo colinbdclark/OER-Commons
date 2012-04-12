@@ -1,12 +1,12 @@
 from django.conf import settings
-from django.conf.urls.defaults import patterns, handler500, handler404, url, \
-    include
+from django.conf.urls.defaults import patterns, url, include
 from django.contrib import admin
 from oai.oer.oai_dc import OAIDublinCore
 from oai.oer.oai_oer2 import OAIOER2
 from oai.oer.oer_recommender import OERRecommender
 from oai.oer.oer_submissions import OERSubmissions
 from oai.oer.repository import OERRepository
+from project.views import Contribute
 from sitemap import sitemaps
 
 
@@ -26,7 +26,7 @@ repository = OERRepository(u"OER Commons Repository", "oercommons.org", oai_meta
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', "project.views.frontpage", name="frontpage"),
-    url(r'^contribute$', "project.views.contribute", name="contribute"),
+    url(r'^contribute$', Contribute.as_view(), name="contribute"),
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.index', {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     url(r'^robots.txt$', 'django.views.generic.simple.direct_to_template', {'template': "robots.txt", "mimetype": "text/plain"}),
@@ -55,6 +55,8 @@ urlpatterns = patterns('',
     url(r'', include('stats.urls')),
     url(r'', include('newsletter.urls', app_name=None, namespace="newsletter")),
     url(r'', include('materials.urls', app_name=None, namespace="materials")),
+    url(r'^saveditems', include('saveditems.urls', app_name=None, namespace="saveditems")),
+    url(r'^jsurls.js$', 'django_js_utils.views.jsurls', name='jsurls'),
 )
 
 if settings.DEBUG:

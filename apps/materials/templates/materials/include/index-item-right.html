@@ -11,9 +11,7 @@
     <dd>
       {% spaceless %}
       <ul>
-        {% if item.save_item_url %}
-          <li><a class="save-item" href="{{ item.save_item_url }}">Save this item</a></li>
-        {% endif %}
+        <li><a class="save-item" href="#">Save this item</a></li>
         {% if item.add_tags_url %}
           <li><a class="tag-item" href="{{ item.add_tags_url }}">Tag this item</a></li>
         {% endif %}

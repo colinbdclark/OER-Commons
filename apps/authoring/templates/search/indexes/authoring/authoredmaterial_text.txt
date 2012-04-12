@@ -2,4 +2,4 @@
 {% for keyword in object.keywords.all %}{{ keyword.name }} | {% endfor %}
 {% for tag in object.tags.all %}{{ tag.name }} | {% endfor %}
 {{ object.author.get_full_name }} |
-{{ object.summary }}
+{{ object.abstract }}

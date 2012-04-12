@@ -7,7 +7,7 @@ class Widget
       label = $(@)
       input = label.next()
       label.hide()
-      input.show()
+      input.show().focus()
       return
     )
     @widget.delegate("a.delete", "click", (e)->
@@ -37,7 +37,9 @@ class Widget
       input = $(e.target)
       if e.which != 13
         return
-      input.parent().next().find("input").focus()
+      parent = input.parent()
+      parent.find("span").text(input.val()).show()
+      input.hide()
       return
     )
 (($)->

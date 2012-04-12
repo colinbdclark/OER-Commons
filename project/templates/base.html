@@ -2,6 +2,7 @@
 {% load compress %}
 {% load flatblock_tags %}
 {% load users_tags %}
+{% load getsatisfaction %}
 <html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
     <meta charset="utf-8"/>
@@ -101,6 +102,11 @@
     {% compress js %}
     {% block extra-js %}{% endblock %}
     {% endcompress %}
+
+    {% if not hide_getsatisfaction %}
+      {% fastpass %}
+      {% include "getsatisfaction/tab.html" %}
+    {% endif %}
 
     {% if not debug %}
       {% flatblock "google-analytics" %}

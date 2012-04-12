@@ -15,9 +15,12 @@ class AuthoredMaterialSearchIndex(MaterialSearchIndex):
     keywords = MultiValueField(model_attr="keyword_slugs")
     keywords_names = MultiValueField(model_attr="keyword_names", weight=3.0)
     general_subjects = VocabularyMultiValueField(model_attr="general_subjects")
-    grade_levels = VocabularyMultiValueField(model_attr="grade_levels")
+    grade_levels = VocabularyMultiValueField(model_attr="indexed_grade_levels")
+    grade_sublevels = VocabularyMultiValueField(model_attr="indexed_grade_sublevels")
+    grades = VocabularyMultiValueField(model_attr="grades")
     media_formats = VocabularyMultiValueField(model_attr="media_formats")
     languages = VocabularyMultiValueField(model_attr="languages")
+    course_material_types = VocabularyMultiValueField(model_attr="material_types")
 
 
 site.register(AuthoredMaterial, AuthoredMaterialSearchIndex)

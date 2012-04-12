@@ -167,7 +167,6 @@ class ResetPasswordViewTest(TestCase, TestDataGenerator):
     def test_key_is_none(self):
         # Test that key is None.
         reset_password_url = reverse('users:reset_password', args=[None])
-        print reset_password_url
         response = self.client.get(reset_password_url)
         self.assertEqual(response.status_code, 404)
 
