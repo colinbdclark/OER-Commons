@@ -53,7 +53,10 @@
       bindsOnEvent: "click",
       expiresIn: 0,
       confirmCallback: function() { return true; },
-      cancelCallback: function() { return true; }
+      cancelCallback: function() { return true; },
+      selector: null,
+      hideFunc: function($element) { $element.hide(); },
+      showFunc: function($element) { $element.show(); },
     };
 
     var timeout_id;
@@ -72,10 +75,13 @@
       : options.cancel + options.separator + options.confirm;
     var $action_set = $("<span class='" + block_class + "'>" + action_set + "</span>");
 
+    var hideFunc = options.hideFunc;
+    var showFunc = options.showFunc;
+
     $action_set.children().click(function(e) {
       clearTimeout(timeout_id);
       $action_set.detach();
-      $original_action.show();
+      showFunc($original_action);
 
       var args = new Array();
       args[0]  = $original_action;
@@ -88,25 +94,32 @@
       e.preventDefault();
     });
 
-    $(this).live(options.bindsOnEvent, function(e) {
+    var eventCb = function(e) {
       $action_set.detach();
       if ($original_action) {
-        $original_action.show();
+        showFunc($original_action);
       }
       $original_action = $(this);
       if (options.hideOriginalAction === true) {
-        $original_action.trigger("update").hide();
+        hideFunc($original_action);
       }
 
       $original_action.after($action_set);
       if (options.expiresIn > 0) {
         timeout_id = setTimeout(function() {
           $action_set.detach();
-          $original_action.show();
+          showFunc($original_action);
         }, options.expiresIn * 1000);
       }
       e.preventDefault();
-    });
+    };
+
+    if (options.selector) {
+      $(this).delegate(options.selector, options.bindsOnEvent, eventCb);
+    }
+    else {
+      $(this).live(options.bindsOnEvent, eventCb);
+    }$
   };
 
 })(jQuery);

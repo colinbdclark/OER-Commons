@@ -330,8 +330,8 @@ oer.myitems.init_save_button = function() {
     var unsaveUrl = django_js_utils.urls.resolve('myitems:delete_item');
 
     var $saveUnsaveButton = $myitemsSaveButton.find(".save-unsave-button");
-    var $saveButton = $saveUnsaveButton.filter(".save");
-    var $unsaveButton = $saveUnsaveButton.filter(".unsave");
+    var $saveButton = $saveUnsaveButton.children(".save");
+    var $unsaveButton = $saveUnsaveButton.children(".unsave");
 
     $myitemsSaveButton.delegate(".save", "click", function(e) {
         e.preventDefault();
@@ -348,24 +348,27 @@ oer.myitems.init_save_button = function() {
         });
     });
 
-    $myitemsSaveButton.delegate(".unsave", "click", function(e) {
-        e.preventDefault();
-
-        oer.login.check_login(function() {
-            $unsaveButton.addClass("hidden");
-            $saveButton.removeClass("hidden");
-            var $folders = $folderList.find(".folder.selected");
-            $folders.removeClass("selected");
-            oer.myitems._changeNumber($folders.find(".number"), -1);
-            $.post(unsaveUrl, { item_id: identifier }, function(response) {
-                if (response.status !== "success") {
-                    $saveButton.addClass("hidden");
-                    $unsaveButton.removeClass("hidden");
-                    $folders.addClass("selected");
-                    oer.myitems._changeNumber($folders.find(".number"), 1);
-                }
+    $(".myitems-save-button").inlineConfirmation({
+        selector: ".unsave",
+        confirmCallback: function(action) {
+            oer.login.check_login(function() {
+                $unsaveButton.addClass("hidden");
+                $saveButton.removeClass("hidden");
+                var $folders = $folderList.find(".folder.selected");
+                $folders.removeClass("selected");
+                oer.myitems._changeNumber($folders.find(".number"), -1);
+                $.post(unsaveUrl, { item_id: identifier }, function(response) {
+                    if (response.status !== "success") {
+                        $saveButton.addClass("hidden");
+                        $unsaveButton.removeClass("hidden");
+                        $folders.addClass("selected");
+                        oer.myitems._changeNumber($folders.find(".number"), 1);
+                    }
+                });
             });
-        });
+        },
+        showFunc: function($element) { $element.removeClass("hidden") },
+        hideFunc: function($element) { $element.addClass("hidden") },
     });
 
 
@@ -416,14 +419,12 @@ oer.myitems.init_save_button = function() {
     });
     $folderList.delegate(".folder a", "click", function(e) {
         e.preventDefault();
+        e.stopPropagation();
     });
     $myitemsSaveButton.find(".folder-list-button").click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         $folderList.slideToggle();
-    });
-    $myitemsSaveButton.click(function(e) {
-        e.stopPropagation();
     });
     $("body").click(function(e) {
         $folderList.slideUp();

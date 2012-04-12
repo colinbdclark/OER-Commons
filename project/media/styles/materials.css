@@ -433,8 +433,11 @@
   text-align: right;
 }
 
+.portlet.save {
+  margin-bottom: 10px;
+}
+
 .portlet.save a {
-  display: inline-block;
   line-height: 35px;
   font-size: 18px;
 }

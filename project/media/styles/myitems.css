@@ -300,15 +300,12 @@ dl.user-info dt {
   position: relative;
 }
 
-.myitems-save-button .save-unsave-button,
-.myitems-save-button .folder-list-button {
+.myitems-save-button .button-main a {
   color: #FFFFFF;
-  margin-bottom: 10px;
 }
 
 .myitems-save-button .save-unsave-button {
   background-color: #8CC63F;
-  float: left;
   padding-left: 10px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -331,7 +328,7 @@ dl.user-info dt {
   border-width: 1px;
 }
 
-.myitems-save-button .save-unsave-button.hidden {
+.myitems-save-button a.hidden {
   display: none;
 }
 
@@ -440,4 +437,8 @@ dl.user-info dt {
 .with-profile-tabs footer {
   margin-top: 0;
   border: none;
+}
+
+.myitems-search {
+  float: right;
 }
