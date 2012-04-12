@@ -324,10 +324,11 @@ WriteStep.prototype.cleanHTML = function (preSave) {
 
   // Remove the subtitle widget panel
   $document.find(".flc-subtitle-mainWrap").replaceWith(function () {
-    return $(this).find("figure.embed")[0];
+    return $(this).find("figure.embed")[0] || $(this).find("figure.html5Video")[0];
   });
 
   $document.find(".html5Video").children().remove();
+  $document.find(".html5Video").html("");
 
   // Remove non-safe elements (scripts, styles, forms, inputs)
   $document.find("script,style,form,input,textarea,button").remove();

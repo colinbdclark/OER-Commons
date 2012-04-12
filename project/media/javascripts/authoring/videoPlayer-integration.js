@@ -23,6 +23,9 @@ var vp = vp || {};
             listeners:{
                 onReady: function (videoPlayer) {
                     videoPlayer.container.append($(caption));
+                    fluid.subtitleWidget(videoPlayer.container, {
+                        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html"
+                    });
                 }
             } 
           }
