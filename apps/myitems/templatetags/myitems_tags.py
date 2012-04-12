@@ -82,31 +82,30 @@ def myitems_save_button(context):
     elif isinstance(item, AuthoredMaterialDraft):
         creator = item.material.author
     else:
-        assert False, type(item)
+        raise ValueError(u"Save button for '%s' is not supported." % type(item))
 
-
-    saved = (
-        creator == request.user
-        or SavedItem.objects.filter(
+    saved = False
+    folders = []
+    if request.user.is_authenticated():
+        saved = (creator == request.user) or SavedItem.objects.filter(
             user=request.user,
             content_type=content_type,
             object_id=item.id
         ).exists()
-    )
-
-    folders = ((
-            {
-                "url": f.get_absolute_url(),
+        saved_in_folders = set(FolderItem.objects.filter(
+            content_type=content_type,
+            object_id=item.id,
+            folder__user=request.user,
+        ).values_list("folder__id", flat=True))
+        for f in Folder.objects.filter(user=request.user).annotate(Count('folderitem')):
+            #noinspection PyUnresolvedReferences
+            folders.append({
                 "title": f.name,
                 "id": f.id,
                 "count": f.folderitem__count,
-                "saved": FolderItem.objects.filter(
-                    folder=f, content_type=content_type, object_id=item.id).exists()
-            }
-            for f in Folder.objects.filter(user=request.user).annotate(Count('folderitem'))
-        ) if request.user.is_authenticated()
-        else []
-    )
+                "saved": f.id in saved_in_folders,
+            })
+
     return {
         'folders': folders,
         'folder_create_form': FolderForm(),

@@ -1,6 +1,6 @@
 from annoying.functions import get_object_or_None
 from autoslug import AutoSlugField
-from common.models import GradeLevel, MediaFormat
+from common.models import GradeLevel, MediaFormat, GradeSubLevel, Grade
 from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 from curriculum.models import TaggedMaterial
 from django.conf import settings
@@ -9,7 +9,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from materials.models import  Keyword, \
+from materials.models import Keyword, \
     GeneralSubject, License, CourseMaterialType
 from materials.models.common import Language
 from materials.models.material import TAGGED, REVIEWED, RATED, PUBLISHED_STATE, WORKFLOW_STATES, PRIVATE_STATE
@@ -50,6 +50,8 @@ class AbstractAuthoredMaterial(models.Model):
     keywords = AutoCreateManyToManyField(Keyword)
     general_subjects = models.ManyToManyField(GeneralSubject)
     grade_levels = models.ManyToManyField(GradeLevel)
+    grade_sublevels = models.ManyToManyField(GradeSubLevel)
+    grades = models.ManyToManyField(Grade)
     languages = models.ManyToManyField(Language)
     material_types = models.ManyToManyField(CourseMaterialType)
     license = AutoCreateForeignKey(License, null=True, respect_all_fields=True)
@@ -90,10 +92,11 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     saved_items = generic.GenericRelation(SavedItem)
     ratings = generic.GenericRelation(Rating)
     alignment_tags = generic.GenericRelation(TaggedMaterial)
-    folders = generic.GenericRelation(FolderItem)
 
     workflow_state = models.CharField(max_length=50, default=PRIVATE_STATE,
                                       choices=WORKFLOW_STATES)
+
+    folders = generic.GenericRelation(FolderItem)
 
     screenshot = models.ImageField(null=True, blank=True, upload_to="upload/materials/screenshots")
 
@@ -306,6 +309,21 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     @property
     def alignment_categories(self):
         return self.alignment_tags.values_list("tag__category__id", flat=True).order_by().distinct()
+
+    @property
+    def indexed_grade_sublevels(self):
+        grade_sublevels = set(self.grade_sublevels.all())
+        for grade in self.grades.all():
+            if grade.grade_sublevel:
+                grade_sublevels.add(grade.grade_sublevel)
+        return sorted(grade_sublevels, key=lambda x: x.id)
+
+    @property
+    def indexed_grade_levels(self):
+        grade_levels = set(self.grade_levels.all())
+        for sublevel in self.indexed_grade_sublevels:
+            grade_levels.add(sublevel.grade_level)
+        return sorted(grade_levels, key=lambda x: x.id)
 
     @property
     def saved_in_folders(self):

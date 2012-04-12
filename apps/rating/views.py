@@ -78,6 +78,5 @@ def rate(request):
                     stars_class=get_rating_stars_class(form.instance.rating),
                     message=u"Your rating was saved.")
     else:
-        print "!!!", form.errors
         return dict(status="error",
                     message=u"There was a problem with saving your rate.")
