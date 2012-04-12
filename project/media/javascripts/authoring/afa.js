@@ -297,7 +297,7 @@ var afa = afa || {};
    * and the absense (i.e. an empty string) as "false." Eventually, we should look at individual values
    */
   afa.checkDispTrans = function (itemName, itemProperty) {
-    var itemsThatQualify = $(".oer-container, figure.embed.video");
+    var itemsThatQualify = $(".oer-container, figure.embed.video, figure.html5Video");
     var total = itemsThatQualify.length;
     var haveProp = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "']").length;
     var yes = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
@@ -316,7 +316,7 @@ var afa = afa || {};
    * Check on "mouse-access" and "kbd-access"
    */
   afa.checkA11y = function (itemName, itemProperty) {
-    var itemsThatQualify = $(".oer-container, figure.embed.video");
+    var itemsThatQualify = $(".oer-container, figure.embed.video, figure.html5Video");
     var total = itemsThatQualify.length;
     var haveProp = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "']").length;
     var yes = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
@@ -349,7 +349,7 @@ var afa = afa || {};
   };
   
   afa.checkCaptions = function (itemName, itemProperty) {
-    var videos = $("figure.embed.video");
+    var videos = $("figure.embed.video, figure.html5Video");
     var total = videos.length;
     var haveProp = videos.find("meta[itemprop='" + itemProperty.name + "']").length;
     var yes = videos.find("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
@@ -413,7 +413,7 @@ var afa = afa || {};
     });
 
     afa.updateMediaIconDisplay(".afa-images", $(".oer-container img:visible").length !== 0);
-    afa.updateMediaIconDisplay(".afa-video", $(".oer-container figure.embed.video").length !== 0);
+    afa.updateMediaIconDisplay(".afa-video", $(".oer-container figure.embed.video").length + $(".oer-container figure.html5Video").length !== 0);
   };
   
   afa.addAfAToBody = function () {

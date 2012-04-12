@@ -12,13 +12,26 @@
             tocTemplate: static_url + "javascripts/infusion/components/tableOfContents/html/TableOfContents.html"
         });
 
-        fluid.uiOptions.fatPanel(".flc-uiOptions", {
+        // ToDo: is it proper to declare uiOptions as a global variable?
+        uiOptions = fluid.uiOptions.fatPanel.withMediaPanel(".flc-uiOptions", {
             prefix: static_url + "javascripts/infusion/components/uiOptions/html/",
             slidingPanel: {
                 options: {
                     strings: {
                         showText: "+ Learner Options",
                         hideText: "- Learner Options"
+                    }
+                }
+            },
+            components: {
+                relay: {
+                    type: "fluid.videoPlayer.relay"
+                },
+                templateLoader: {
+                    options: {
+                        templates: {
+                            mediaControls: static_url + "javascripts/videoPlayer/html/UIOptionsTemplate-media.html"
+                        }
                     }
                 }
             }

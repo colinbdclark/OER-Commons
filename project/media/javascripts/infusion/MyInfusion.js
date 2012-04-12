@@ -5326,36 +5326,38 @@ var fluid_1_5 = fluid_1_5 || {};
         var fetchStrategies = [fluid.model.funcResolverStrategy, makeGingerStrategy(instantiator, parentThat, thatStack)]; 
         var fetcher = function(parsed) {
             var context = parsed.context;
+            var foundComponent;
             if (context === "instantiator") {
                 // special treatment for the current instantiator which used to be discovered as unique in threadLocal
                 return instantiator;
             }
-            if (localRecord && localRecordExpected.test(context)) {
+            else if (context === "that") {
+                foundComponent = parentThat; 
+            }
+            else if (localRecord && localRecordExpected.test(context)) {
                 var fetched = fluid.get(localRecord[context], parsed.path);
                 return (context === "arguments" || expandOptions.direct)? fetched : {
                     marker: context === "options"? fluid.EXPAND : fluid.EXPAND_NOW,
                     value: fetched
                 };
             }
-            var foundComponent;
-            visitComponents(instantiator, thatStack, function(component, name, options, up, down) {
-                if (context === name || context === component.typeName || context === component.nickName) {
-                    foundComponent = component;
-                    if (down > 1) {
-                        fluid.log("***WARNING: value resolution for context " + context + " found at depth " + down + ": this may not be supported in future");   
+            if (!foundComponent) {
+                visitComponents(instantiator, thatStack, function(component, name, options, up, down) {
+                    if (context === name || context === component.typeName || context === component.nickName) {
+                        foundComponent = component;
+                        return true; // YOUR VISIT IS AT AN END!!
                     }
-                    return true; // YOUR VISIT IS AT AN END!!
-                }
-                if (fluid.get(component, fluid.path("options", "components", context, "type")) && !component[context]) {
-                    foundComponent = fluid.get(component, context, {strategies: fetchStrategies});
-                    return true;
-                }
-            });
+                    if (fluid.get(component, fluid.path("options", "components", context, "type")) && !component[context]) {
+                        foundComponent = fluid.get(component, context, {strategies: fetchStrategies});
+                        return true;
+                    }
+                });
+            }
             if (!foundComponent && parsed.path !== "") {
                 var ref = fluid.renderContextReference(parsed);
                 fluid.log("Failed to resolve reference " + ref + ": thatStack contains\n" + fluid.dumpThatStack(thatStack, instantiator));
                 fluid.fail("Failed to resolve reference " + ref + " - could not match context with name " 
-                    + context + " from component leaf of type " + thatStack[thatStack.length - 1].typeName, "\ninstantiator contents: ", instantiator);
+                    + context + " from component leaf of type " + parentThat.typeName, "\ninstantiator contents: ", instantiator);
             }
             return fluid.get(foundComponent, parsed.path, fetchStrategies);
         };
@@ -6064,6 +6066,7 @@ outer:  for (var i = 0; i < exist.length; ++i) {
     
     fluid.expandComponentOptions = fluid.wrapActivity(fluid.expandComponentOptions, 
         ["    while expanding component options ", "arguments.1.value", " with record ", "arguments.1", " for component ", "arguments.2"]);
+
    
     // NON-API function 
     fluid.getInstantiators = function() {
@@ -14271,6 +14274,11 @@ var fluid_1_5 = fluid_1_5 || {};
     fluid.defaults("fluid.uiOptions.store", {
         gradeNames: ["fluid.littleComponent", "autoInit"],
         defaultSiteSettings: {
+        // TODO: Note that since antification is not complete, this information now
+        // duplicates that kept within the "halfway ants" which are registered as the panels
+        // in UIOptions, so that when we create a "bare UIEnhancer" we can still get at them.
+        // In time, the UIEnhancer will be abolished and replaced with a relay system similar
+        // to the one used in the Video Player
             textFont: "default",          // key from classname map
             theme: "default",             // key from classname map
             textSize: 1,                  // in points
@@ -14329,7 +14337,7 @@ var fluid_1_5 = fluid_1_5 || {};
             } 
         }
         
-        return retObj || defaults;
+        return $.extend(true, {}, defaults, retObj);
     };
     
     /**
@@ -14381,6 +14389,7 @@ var fluid_1_5 = fluid_1_5 || {};
                 args: ["{arguments}.0", "{tempStore}"]
             }
         },
+        defaultSiteSettings: {},
         finalInitFunction: "fluid.tempStore.finalInit"
     });
 
@@ -14473,7 +14482,7 @@ var fluid_1_5 = fluid_1_5 || {};
                     invokers: {
                         calcInitSize: {
                             funcName: "fluid.uiEnhancer.textSizer.calcInitSize",
-                            args: ["{textSizer}.container", "{uiEnhancer}.options.fontSizeMap"]
+                            args: ["{that}.container", "{uiEnhancer}.options.fontSizeMap"]
                         }
                     }
                 }
@@ -14516,7 +14525,7 @@ var fluid_1_5 = fluid_1_5 || {};
                     invokers: {
                         calcInitSize: {
                             funcName: "fluid.uiEnhancer.lineSpacer.calcInitSize",
-                            args: ["{lineSpacer}.container", "{uiEnhancer}.options.fontSizeMap"]
+                            args: ["{that}.container", "{uiEnhancer}.options.fontSizeMap"]
                         }
                     }
                 }
@@ -14562,8 +14571,6 @@ var fluid_1_5 = fluid_1_5 || {};
             modelChanged: null
         },
         listeners: {
-            // TODO: listener merging does not work in a reasonable way. Non-namespaced listeners
-            // override rather than merging as they should
             "lateRefreshView.domReading": "fluid.uiEnhancer.applyDomReadingSettings"
         },
         classnameMap: {
@@ -14989,7 +14996,8 @@ var fluid_1_5 = fluid_1_5 || {};
                 container: "{textfieldSlider}.dom.slider",
                 options: {
                     model: "{textfieldSlider}.model",
-                    applier: "{textfieldSlider}.applier"
+                    applier: "{textfieldSlider}.applier",
+                    sliderOptions: "{textfieldSlider}.options.sliderOptions"
                 }
             }
         },
@@ -15007,30 +15015,26 @@ var fluid_1_5 = fluid_1_5 || {};
         },
         sliderOptions: {
             orientation: "horizontal",
-            step: 0.1
+            step: 1.0
         }, 
         finalInitFunction: "fluid.textfieldSlider.finalInit"
     });    
     
     fluid.textfieldSlider.finalInit = function (that) {
-        // initialize slider
-        var sliderOptions = $.extend(true, {}, that.options.sliderOptions, that.model);
-        
-        that.slider.initSlider(sliderOptions);
 
         that.refreshView = function () {
             var val = that.model.value;
-            
             that.textfield.container.val(val);
-            that.slider.setSliderValue(val);
-            that.slider.setSliderAria(val);
         };
         
+        // TODO: replace this with "model events relay" system.
+        // problem: if we place these directly in "events", this will destroy all
+        // existing events named "modelChanged".
         that.applier.modelChanged.addListener("value", 
             function (newModel) {
                 that.events.modelChanged.fire(newModel.value);
             }
-            );
+        );
 
         that.events.modelChanged.addListener(that.refreshView);
 
@@ -15054,7 +15058,6 @@ var fluid_1_5 = fluid_1_5 || {};
             } else if (newValue > model.max) {
                 newValue = model.max;
             }
-            
             changeRequest.value = newValue;
         } else {
             changeRequest.value = oldValue;
@@ -15074,13 +15077,16 @@ var fluid_1_5 = fluid_1_5 || {};
         finalInitFunction: "fluid.textfieldSlider.slider.finalInit",
         selectors: {
             thumb: ".ui-slider-handle"
-        }
+        },
+        events: {
+            modelChanged: null
+        },
     });
     
     // This will be removed once the jQuery UI slider has built in ARIA 
     var initSliderAria = function (thumb, opts) {
         var ariaDefaults = {
-            role: 'slider',
+            role: "slider",
             "aria-valuenow": opts.value,
             "aria-valuemin": opts.min,
             "aria-valuemax": opts.max
@@ -15089,12 +15095,10 @@ var fluid_1_5 = fluid_1_5 || {};
     };
     
     fluid.textfieldSlider.slider.finalInit = function (that) {
-        that.slider = that.container.slider(that.model);
+        var sliderOptions = $.extend(true, {}, that.options.sliderOptions, that.model);
         
-        that.initSlider = function (sliderOptions) {
-            var slider = that.slider.slider(sliderOptions);
-            initSliderAria(that.locate("thumb"), sliderOptions);
-        };
+        that.slider = that.container.slider(sliderOptions);
+        initSliderAria(that.locate("thumb"), sliderOptions);
         
         that.setSliderValue = function (value) {
             that.slider.slider("value", value);
@@ -15107,6 +15111,15 @@ var fluid_1_5 = fluid_1_5 || {};
         that.slider.bind("slide", function (e, ui) {
             that.applier.requestChange("value", ui.value);
         });
+        
+        that.applier.modelChanged.addListener("value", 
+            function (newModel) {
+                that.setSliderValue(newModel.value);
+                that.setSliderAria(newModel.value);
+                that.events.modelChanged.fire(newModel.value);
+            }
+        );
+        
     };
 
 })(jQuery, fluid_1_5);
@@ -15175,8 +15188,14 @@ var fluid_1_5 = fluid_1_5 || {};
         }
     });
     
+    // A temporary function to automate the work of making a creator function for a UIOptions configuration.
+    // These creator functions accept literal options from the user (via direct function call) and
+    // apply a mapping transformation to them to make some deeply nested configuration more accessible.
+    
+    // Unfortunately this operation conflicts with the workflow of the IoC system in constructing a component - 
+    // so these UIOptions configurations are not suitable for use as IoC-driven subcomponents. 
     fluid.uiOptions.inline.makeCreator = function (componentName, processor) {
-        fluid.setGlobalValue(componentName, function (container, options) {
+        var creator = function (container, options) {
             // make "container" one of the options so it can be munged by the uiOptions.mapOptions.
             // This container is passed down to be used as uiOptionsLoader.container
             var defaults = fluid.defaults(componentName);
@@ -15186,11 +15205,17 @@ var fluid_1_5 = fluid_1_5 || {};
             var mappedOptions = fluid.uiOptions.mapOptions(options, defaults.uiOptionsTransform.config, defaults.mergePolicy, 
                 fluid.copy(defaults.derivedDefaults));
             var that = fluid.initView(componentName, container, mappedOptions);
-            // Fake out standard framework failed view diagnosis to prevent "that is null" message - remove this in 1.5
+            // This workflow copied from fluid.initView
             fluid.diagnoseFailedView(componentName, that, fluid.defaults(componentName), [componentName, container, mappedOptions]);
             fluid.initDependents(that);
             return that;
-        });
+        };
+        // This workflow taken from framework fluid.makeComponent
+        var existing = fluid.getGlobalValue(componentName);
+        if (existing) {
+            $.extend(creator, existing);
+        }
+        fluid.setGlobalValue(componentName, creator);
     };
     
     /**
@@ -15356,8 +15381,42 @@ var fluid_1_5 = fluid_1_5 || {};
     });
     
     fluid.uiOptions.loader.finalInit = function (that) {
-        fluid.fetchResources(that.options.resources, function () {that.events.onUIOptionsTemplateReady.fire();});
+        fluid.fetchResources(that.options.resources, that.events.onUIOptionsTemplateReady.fire);
     };
+    
+        
+    // This function compensates for a framework deficiency that due to lack of gingerness, the "refreshView"
+    // function synthesized by rendererComponent is not available during listener registration which only 
+    // occurs after component init functions have completed (http://issues.fluidproject.org/browse/FLUID-4334)
+    fluid.uiOptions.lateRefreshViewBinder = function (that) {
+        that.refreshView = function () {
+            that.renderer.refreshView();
+        };
+    };
+    
+    fluid.uiOptions.defaultModelMerger = function (target, source) {
+        $.extend(true, target, source);
+    };
+    
+    // Temporary, encapsulation-violating definition of an Ant - currently these can't
+    // be deployed outside the direct environment of a UIOptions component
+    fluid.defaults("fluid.uiOptions.ant", {
+        gradeNames: ["fluid.rendererComponent"],
+        model: "{uiOptions}.model",
+        applier: "{uiOptions}.applier",
+        events: {
+            onUIOptionsRefresh: "{uiOptions}.events.onUIOptionsRefresh",
+        },
+        listeners: {
+            onUIOptionsRefresh: "{that}.refreshView",     
+            "{uiOptions}.events.contributeDefaultModel": {
+                listener: "fluid.uiOptions.defaultModelMerger",
+                args: ["{arguments}.0", "{that}.options.defaultModel"]
+            }
+        },
+        preInitFunction: "fluid.uiOptions.lateRefreshViewBinder",
+        finalInitFunction: "fluid.uiOptions.controlsFinalInit",
+    });
 
     /**
      * A component that works in conjunction with the UI Enhancer component and the Fluid Skinning System (FSS) 
@@ -15374,43 +15433,26 @@ var fluid_1_5 = fluid_1_5 || {};
             textControls: {
                 type: "fluid.uiOptions.textControls",
                 container: "{uiOptions}.dom.textControls",
-                createOnEvent: "onUIOptionsComponentReady",
+                createOnEvent: "onUIOptionsMarkupReady",
                 options: {
-                    model: "{uiOptions}.model",
-                    applier: "{uiOptions}.applier",
                     classnameMap: "{uiEnhancer}.options.classnameMap",
-                    rendererOptions: "{uiOptions}.options.rendererOptions",
-                    events: {
-                        onUIOptionsRefresh: "{uiOptions}.events.onUIOptionsRefresh"
-                    }
+
                 }
             },
             layoutControls: {
                 type: "fluid.uiOptions.layoutControls",
                 container: "{uiOptions}.dom.layoutControls",
-                createOnEvent: "onUIOptionsComponentReady",
+                createOnEvent: "onUIOptionsMarkupReady",
                 options: {
-                    model: "{uiOptions}.model",
-                    applier: "{uiOptions}.applier",
                     classnameMap: "{uiEnhancer}.options.classnameMap",
-                    rendererOptions: "{uiOptions}.options.rendererOptions",
-                    events: {
-                        onUIOptionsRefresh: "{uiOptions}.events.onUIOptionsRefresh"
-                    }
                 }
             },
             linksControls: {
                 type: "fluid.uiOptions.linksControls",
                 container: "{uiOptions}.dom.linksControls",
-                createOnEvent: "onUIOptionsComponentReady",
+                createOnEvent: "onUIOptionsMarkupReady",
                 options: {
-                    model: "{uiOptions}.model",
-                    applier: "{uiOptions}.applier",
                     classnameMap: "{uiEnhancer}.options.classnameMap",
-                    rendererOptions: "{uiOptions}.options.rendererOptions",
-                    events: {
-                        onUIOptionsRefresh: "{uiOptions}.events.onUIOptionsRefresh"
-                    }
                 }
             },
             preview: {
@@ -15438,8 +15480,14 @@ var fluid_1_5 = fluid_1_5 || {};
             onAutoSave: null,
             modelChanged: null,
             onUIOptionsRefresh: null,
-            onUIOptionsComponentReady: null
+            onUIOptionsMarkupReady: null,
+            onUIOptionsComponentReady: null,
+            contributeDefaultModel: null,
         },
+        listeners: {
+            onAutoSave: "{that}.save",  
+        },
+        preInitFunction: "fluid.uiOptions.preInit",
         finalInitFunction: "fluid.uiOptions.finalInit",
         resources: {
             template: "{templateLoader}.resources.uiOptions"
@@ -15447,8 +15495,39 @@ var fluid_1_5 = fluid_1_5 || {};
         autoSave: false
     });
 
-    fluid.uiOptions.finalInit = function (that) {
-        that.applier.requestChange("selections", fluid.copy(that.settingsStore.fetch()));
+    // called once markup is applied to the document containing tab component roots
+    fluid.uiOptions.finishInit = function (that) {
+        var bindHandlers = function (that) {
+            var saveButton = that.locate("save");            
+            if (saveButton.length > 0) {
+                saveButton.click(that.saveAndApply);
+                var form = fluid.findForm(saveButton);
+                $(form).submit(function () {
+                    that.saveAndApply();
+                });
+            }
+            that.locate("reset").click(that.reset);
+            that.locate("cancel").click(that.cancel);
+        };
+        
+        that.container.append(that.options.resources.template.resourceText);
+        bindHandlers(that);
+        // This creates subcomponents - we can find default model afterwards
+        that.events.onUIOptionsMarkupReady.fire(that);
+        
+        that.defaultModel = {};
+        that.events.contributeDefaultModel.fire(that.defaultModel);
+        that.fetch();
+        that.events.onUIOptionsComponentReady.fire(that);
+    };
+    
+    fluid.uiOptions.preInit = function (that) {
+        that.fetch = function () {
+            var initialModel = that.settingsStore.fetch();
+            initialModel = $.extend(true, {}, that.defaultModel, initialModel);
+            that.updateModel(initialModel);
+            that.events.onUIOptionsRefresh.fire();
+        };
 
         /**
          * Saves the current model and fires onSave
@@ -15465,12 +15544,11 @@ var fluid_1_5 = fluid_1_5 || {};
             that.events.onUIOptionsRefresh.fire();
         };
 
-
         /**
          * Resets the selections to the integrator's defaults and fires onReset
          */
         that.reset = function () {
-            that.updateModel(fluid.copy(that.settingsStore.options.defaultSiteSettings));
+            that.updateModel(fluid.copy(that.defaultModel));
             that.events.onReset.fire(that);
             that.events.onUIOptionsRefresh.fire();
         };
@@ -15480,8 +15558,7 @@ var fluid_1_5 = fluid_1_5 || {};
          */
         that.cancel = function () {
             that.events.onCancel.fire();
-            that.updateModel(that.settingsStore.fetch());
-            that.events.onUIOptionsRefresh.fire();
+            that.fetch();
         };
         
         /**
@@ -15501,36 +15578,16 @@ var fluid_1_5 = fluid_1_5 || {};
                     that.events.onAutoSave.fire();
                 }
             }
-            );
-            
-        var bindHandlers = function (that) {
-            var saveButton = that.locate("save");            
-            if (saveButton.length > 0) {
-                saveButton.click(that.saveAndApply);
-                var form = fluid.findForm(saveButton);
-                $(form).submit(function () {
-                    that.saveAndApply();
-                });
-            }
-            that.locate("reset").click(that.reset);
-            that.locate("cancel").click(that.cancel);
-        };
-        
-        var bindEventHandlers = function (that) {
-            that.events.onAutoSave.addListener(function () {
-                that.save();    
-            });
-        };
-        
+        );
+    };
+
+    fluid.uiOptions.finalInit = function (that) {
         fluid.fetchResources(that.options.resources, function () {
           // This setTimeout is to ensure that fetching of resources is asynchronous,
           // and so that component construction does not run ahead of subcomponents for FatPanel
           // (FLUID-4453 - this may be a replacement for a branch removed for a FLUID-2248 fix) 
             setTimeout(function () {
-                that.container.append(that.options.resources.template.resourceText);
-                bindHandlers(that);
-                bindEventHandlers(that);
-                that.events.onUIOptionsComponentReady.fire(that);
+                fluid.uiOptions.finishInit(that);
             }, 1);
         });
     };
@@ -15544,21 +15601,23 @@ var fluid_1_5 = fluid_1_5 || {};
         gradeNames: ["fluid.eventedComponent", "autoInit"]
     });
 
-    var initModel = function (that) {
+    // Utility function which assembles material in the model suitable for rendering
+    // style-based selection dropdowns
+    var optionsToLabelMap = function (that) {
         fluid.each(that.options.controlValues, function (item, key) {
             that.applier.requestChange("labelMap." + key, {
                 values: that.options.controlValues[key],
                 names: that.options.strings[key],
-                classes: that.options.classnameMap[key]
+                classes: fluid.get(that, "options.classnameMap."+key)
             });
         });
     };
     
-    var createSliderNode = function (that, item) {
+    fluid.uiOptions.createSliderNode = function (that, item, type, options) {
         return {
             decorators: {
                 type: "fluid",
-                func: "fluid.textfieldSlider",
+                func: type,
                 options: {
                     listeners: {
                         modelChanged: function (value) {
@@ -15569,97 +15628,18 @@ var fluid_1_5 = fluid_1_5 || {};
                         min: that.options[item].min,
                         max: that.options[item].max,
                         value: that.model.selections[item]
-                    }
+                        
+                    },
+                    sliderOptions: that.options[item].sliderOptions
                 }
             }
         };
     };
     
     fluid.uiOptions.controlsFinalInit = function (that) {
-        initModel(that);
-        that.refreshView();        
-    };
-    
-    // This function compensates for a framework deficiency that due to lack of gingerness, the "refreshView"
-    // function synthesized by rendererComponent is not available during listener registration which only 
-    // occurs after component init functions have completed (http://issues.fluidproject.org/browse/FLUID-4334)
-    fluid.uiOptions.lateRefreshViewBinder = function (that) {
-        that.refreshView = function () {
-            that.renderer.refreshView();
-        };
+        optionsToLabelMap(that);
     };
 
-    /****************************
-     * UI Options Text Controls *
-     ****************************/
-
-    /**
-     * A sub-component of fluid.uiOptions that renders the "text and display" panel of the user preferences interface.
-     */
-    fluid.defaults("fluid.uiOptions.textControls", {
-        gradeNames: ["fluid.rendererComponent", "autoInit"], 
-        strings: {
-            textFont: ["Default", "Times New Roman", "Comic Sans", "Arial", "Verdana"],
-            theme: ["Default", "Black on white", "White on black", "Black on yellow", "Yellow on black"]
-        },
-        controlValues: { 
-            textFont: ["default", "times", "comic", "arial", "verdana"],
-            theme: ["default", "bw", "wb", "by", "yb"]
-        },
-        textSize: {
-            min: 1,
-            max: 2
-        },
-        lineSpacing: {
-            min: 1,
-            max: 2
-        },
-        selectors: {
-            textFont: ".flc-uiOptions-text-font",
-            theme: ".flc-uiOptions-theme",
-            textSize: ".flc-uiOptions-min-text-size",
-            lineSpacing: ".flc-uiOptions-line-spacing"
-        },
-        events: {
-            onUIOptionsRefresh: null    
-        },
-        listeners: {
-            onUIOptionsRefresh: "{textControls}.refreshView"     
-        },
-        preInitFunction: "fluid.uiOptions.lateRefreshViewBinder",
-        finalInitFunction: "fluid.uiOptions.controlsFinalInit",
-        produceTree: "fluid.uiOptions.textControls.produceTree",
-        resources: {
-            template: "{templateLoader}.resources.textControls"
-        }
-    });
-    
-    fluid.uiOptions.textControls.produceTree = function (that) {
-        var tree = {};
-        
-        for (var item in that.model.selections) {
-            if (item === "textFont" || item === "theme") {
-                // render drop down list box
-                tree[item] = {
-                    optionnames: "${labelMap." + item + ".names}",
-                    optionlist: "${labelMap." + item + ".values}",
-                    selection: "${selections." + item + "}",
-                    decorators: {
-                        type: "fluid",
-                        func: "fluid.uiOptions.selectDecorator",
-                        options: {
-                            styles: that.options.classnameMap[item]
-                        }
-                    }
-                };
-            } else if (item === "textSize" || item === "lineSpacing") {
-                // textfield sliders
-                tree[item] = createSliderNode(that, item);
-            }
-        }
-        
-        return tree;
-    };
 
     /***********************************************
      * UI Options Select Dropdown Options Decorator*
@@ -15686,6 +15666,84 @@ var fluid_1_5 = fluid_1_5 || {};
             $(option).addClass(styles.preview + " " + styles[fluid.value(option)]);
         });
     };
+
+    /****************************
+     * UI Options Text Controls *
+     ****************************/
+
+    /**
+     * A sub-component of fluid.uiOptions that renders the "text and display" panel of the user preferences interface.
+     */
+    fluid.defaults("fluid.uiOptions.textControls", {
+        gradeNames: ["fluid.uiOptions.ant", "autoInit"], 
+        defaultModel: {
+            textFont: "default",          // key from classname map
+            theme: "default",             // key from classname map
+            textSize: 1,                  // in points
+            lineSpacing: 1,               // in ems
+        },
+        strings: {
+            textFont: ["Default", "Times New Roman", "Comic Sans", "Arial", "Verdana"],
+            theme: ["Default", "Black on white", "White on black", "Black on yellow", "Yellow on black"]
+        },
+        controlValues: { 
+            textFont: ["default", "times", "comic", "arial", "verdana"],
+            theme: ["default", "bw", "wb", "by", "yb"]
+        },
+        textSize: {
+            min: 1,
+            max: 2,
+            sliderOptions: {
+                orientation: "horizontal",
+                step: 0.1
+            } 
+        },
+        lineSpacing: {
+            min: 1,
+            max: 2,
+            sliderOptions: {
+                orientation: "horizontal",
+                step: 0.1
+            } 
+        },
+        selectors: {
+            textFont: ".flc-uiOptions-text-font",
+            theme: ".flc-uiOptions-theme",
+            textSize: ".flc-uiOptions-min-text-size",
+            lineSpacing: ".flc-uiOptions-line-spacing"
+        },
+        produceTree: "fluid.uiOptions.textControls.produceTree",
+        resources: {
+            template: "{templateLoader}.resources.textControls"
+        }
+    });
+    
+    fluid.uiOptions.textControls.produceTree = function (that) {
+        var tree = {};
+        
+        for (var item in that.model.selections) {
+            if (item === "textFont" || item === "theme") {
+                // render drop down list box
+                tree[item] = {
+                    optionnames: "${labelMap." + item + ".names}",
+                    optionlist: "${labelMap." + item + ".values}",
+                    selection: "${selections." + item + "}",
+                    decorators: {
+                        type: "fluid",
+                        func: "fluid.uiOptions.selectDecorator",
+                        options: {
+                            styles: that.options.classnameMap[item]
+                        }
+                    }
+                };
+            } else if (item === "textSize" || item === "lineSpacing") {
+                // textfield sliders
+                tree[item] = fluid.uiOptions.createSliderNode(that, item, "fluid.textfieldSlider");
+            }
+        }
+        
+        return tree;
+    };
     
     /******************************
      * UI Options Layout Controls *
@@ -15695,37 +15753,23 @@ var fluid_1_5 = fluid_1_5 || {};
      * A sub-component of fluid.uiOptions that renders the "layout and navigation" panel of the user preferences interface.
      */
     fluid.defaults("fluid.uiOptions.layoutControls", {
-        gradeNames: ["fluid.rendererComponent", "autoInit"], 
+        gradeNames: ["fluid.uiOptions.ant", "autoInit"],
+        defaultModel: {
+            layout: false,                // boolean
+            toc: false,                   // boolean
+        },
         selectors: {
             layout: ".flc-uiOptions-layout",
             toc: ".flc-uiOptions-toc"
         },
-        events: {
-            onUIOptionsRefresh: null    
+        protoTree: {
+            toc: "${selections.toc}",
+            layout: "${selections.layout}"        
         },
-        listeners: {
-            onUIOptionsRefresh: "{layoutControls}.refreshView"     
-        },
-        preInitFunction: "fluid.uiOptions.lateRefreshViewBinder",
-        finalInitFunction: "fluid.uiOptions.controlsFinalInit",
-        produceTree: "fluid.uiOptions.layoutControls.produceTree",
         resources: {                    
             template: "{templateLoader}.resources.layoutControls"
         }
     });
-
-    fluid.uiOptions.layoutControls.produceTree = function (that) {
-        var tree = {};
-        
-        for (var item in that.model.selections) {
-            if (item === "layout" || item === "toc") {
-                // render radio buttons
-                tree[item] = "${selections." + item + "}";
-            }
-        }
-        
-        return tree;
-    };
 
     /*****************************
      * UI Options Links Controls *
@@ -15734,37 +15778,23 @@ var fluid_1_5 = fluid_1_5 || {};
      * A sub-component of fluid.uiOptions that renders the "links and buttons" panel of the user preferences interface.
      */
     fluid.defaults("fluid.uiOptions.linksControls", {
-        gradeNames: ["fluid.rendererComponent", "autoInit"], 
+        gradeNames: ["fluid.uiOptions.ant", "autoInit"],
+        defaultModel: {
+            links: false,                 // boolean
+            inputsLarger: false           // boolean
+        },
         selectors: {
             links: ".flc-uiOptions-links",
             inputsLarger: ".flc-uiOptions-inputs-larger"
         },
-        events: {
-            onUIOptionsRefresh: null    
+        protoTree: {
+            links: "${selections.links}",
+            inputsLarger: "${selections.inputsLarger}"          
         },
-        listeners: {
-            onUIOptionsRefresh: "{linksControls}.refreshView"     
-        },
-        preInitFunction: "fluid.uiOptions.lateRefreshViewBinder",
-        finalInitFunction: "fluid.uiOptions.controlsFinalInit",
-        produceTree: "fluid.uiOptions.linksControls.produceTree",
         resources: {
             template: "{templateLoader}.resources.linksControls"
         }
     });
-
-    fluid.uiOptions.linksControls.produceTree = function (that) {
-        var tree = {};
-        
-        for (var item in that.model.selections) {
-            if (item === "links" || item === "inputsLarger") {
-                // render check boxes
-                tree[item] = "${selections." + item + "}";
-            }
-        }
-
-        return tree;
-    };
 
     /**********************
      * UI Options Preview *
@@ -15809,7 +15839,7 @@ var fluid_1_5 = fluid_1_5 || {};
     
     fluid.uiOptions.preview.updateModel = function (that, selections) {
         /**
-         * Setimeout is temp fix for http://issues.fluidproject.org/browse/FLUID-2248
+         * SetTimeout is temp fix for http://issues.fluidproject.org/browse/FLUID-2248
          */
         setTimeout(function () {
             if (that.enhancer) {
@@ -15885,8 +15915,9 @@ var fluid_1_5 = fluid_1_5 || {};
 
     /*****************************************
      * Fat Panel UI Options Top Level Driver *
-     *****************************************/ 
-
+     *****************************************/
+     
+    fluid.registerNamespace("fluid.uiOptions.fatPanel"); 
 
     fluid.defaults("fluid.uiOptions.fatPanel", {
         gradeNames: ["fluid.uiOptions.inline"],
@@ -15967,6 +15998,9 @@ var fluid_1_5 = fluid_1_5 || {};
                 createOnEvent: "templatesAndIframeReady",
                 container: "{iframeRenderer}.renderUIOContainer",
                 options: {
+                    // ensure that model and applier are available to users at top level
+                    model: "{fatPanel}.model",
+                    applier: "{fatPanel}.applier",
                     events: {
                         onSignificantDOMChange: null  
                     },
@@ -16003,12 +16037,15 @@ var fluid_1_5 = fluid_1_5 || {};
         }
     });
     
-        
-    fluid.uiOptions.inline.makeCreator("fluid.uiOptions.fatPanel", function (options) {
+    fluid.uiOptions.fatPanel.optionsProcessor = function (options) {
         var enhancerOptions = fluid.get(fluid, "staticEnvironment.uiEnhancer.options.originalUserOptions");
         options.outerEnhancerOptions = enhancerOptions;
+        // Necessary to make IoC self-references work in the absence of FLUID-4392. Also see FLUID-4636
+        options.nickName = "fatPanel"; 
         return options;
-    });
+    };
+        
+    fluid.uiOptions.inline.makeCreator("fluid.uiOptions.fatPanel", fluid.uiOptions.fatPanel.optionsProcessor);
     
     /*****************************************
      * fluid.uiOptions.fatPanel.renderIframe *
@@ -16313,7 +16350,5219 @@ var fluid_1_5 = fluid_1_5 || {};
     };    
 
 })(jQuery, fluid_1_5);
+/**
+ * jQuery.ScrollTo
+ * Copyright (c) 2007-2009 Ariel Flesler - aflesler(at)gmail(dot)com | http://flesler.blogspot.com
+ * Dual licensed under MIT and GPL.
+ * Date: 5/25/2009
+ *
+ * @projectDescription Easy element scrolling using jQuery.
+ * http://flesler.blogspot.com/2007/10/jqueryscrollto.html
+ * Works with jQuery +1.2.6. Tested on FF 2/3, IE 6/7/8, Opera 9.5/6, Safari 3, Chrome 1 on WinXP.
+ *
+ * @author Ariel Flesler
+ * @version 1.4.2
+ *
+ * @id jQuery.scrollTo
+ * @id jQuery.fn.scrollTo
+ * @param {String, Number, DOMElement, jQuery, Object} target Where to scroll the matched elements.
+ *	  The different options for target are:
+ *		- A number position (will be applied to all axes).
+ *		- A string position ('44', '100px', '+=90', etc ) will be applied to all axes
+ *		- A jQuery/DOM element ( logically, child of the element to scroll )
+ *		- A string selector, that will be relative to the element to scroll ( 'li:eq(2)', etc )
+ *		- A hash { top:x, left:y }, x and y can be any kind of number/string like above.
+*		- A percentage of the container's dimension/s, for example: 50% to go to the middle.
+ *		- The string 'max' for go-to-end. 
+ * @param {Number} duration The OVERALL length of the animation, this argument can be the settings object instead.
+ * @param {Object,Function} settings Optional set of settings or the onAfter callback.
+ *	 @option {String} axis Which axis must be scrolled, use 'x', 'y', 'xy' or 'yx'.
+ *	 @option {Number} duration The OVERALL length of the animation.
+ *	 @option {String} easing The easing method for the animation.
+ *	 @option {Boolean} margin If true, the margin of the target element will be deducted from the final position.
+ *	 @option {Object, Number} offset Add/deduct from the end position. One number for both axes or { top:x, left:y }.
+ *	 @option {Object, Number} over Add/deduct the height/width multiplied by 'over', can be { top:x, left:y } when using both axes.
+ *	 @option {Boolean} queue If true, and both axis are given, the 2nd axis will only be animated after the first one ends.
+ *	 @option {Function} onAfter Function to be called after the scrolling ends. 
+ *	 @option {Function} onAfterFirst If queuing is activated, this function will be called after the first scrolling ends.
+ * @return {jQuery} Returns the same jQuery object, for chaining.
+ *
+ * @desc Scroll to a fixed position
+ * @example $('div').scrollTo( 340 );
+ *
+ * @desc Scroll relatively to the actual position
+ * @example $('div').scrollTo( '+=340px', { axis:'y' } );
+ *
+ * @dec Scroll using a selector (relative to the scrolled element)
+ * @example $('div').scrollTo( 'p.paragraph:eq(2)', 500, { easing:'swing', queue:true, axis:'xy' } );
+ *
+ * @ Scroll to a DOM element (same for jQuery object)
+ * @example var second_child = document.getElementById('container').firstChild.nextSibling;
+ *			$('#container').scrollTo( second_child, { duration:500, axis:'x', onAfter:function(){
+ *				alert('scrolled!!');																   
+ *			}});
+ *
+ * @desc Scroll on both axes, to different values
+ * @example $('div').scrollTo( { top: 300, left:'+=200' }, { axis:'xy', offset:-20 } );
+ */
+;(function( $ ){
+	
+	var $scrollTo = $.scrollTo = function( target, duration, settings ){
+		$(window).scrollTo( target, duration, settings );
+	};
+
+	$scrollTo.defaults = {
+		axis:'xy',
+		duration: parseFloat($.fn.jquery) >= 1.3 ? 0 : 1
+	};
+
+	// Returns the element that needs to be animated to scroll the window.
+	// Kept for backwards compatibility (specially for localScroll & serialScroll)
+	$scrollTo.window = function( scope ){
+		return $(window)._scrollable();
+	};
+
+	// Hack, hack, hack :)
+	// Returns the real elements to scroll (supports window/iframes, documents and regular nodes)
+	$.fn._scrollable = function(){
+		return this.map(function(){
+			var elem = this,
+				isWin = !elem.nodeName || $.inArray( elem.nodeName.toLowerCase(), ['iframe','#document','html','body'] ) != -1;
+
+				if( !isWin )
+					return elem;
+
+			var doc = (elem.contentWindow || elem).document || elem.ownerDocument || elem;
+			
+			return $.browser.safari || doc.compatMode == 'BackCompat' ?
+				doc.body : 
+				doc.documentElement;
+		});
+	};
+
+	$.fn.scrollTo = function( target, duration, settings ){
+		if( typeof duration == 'object' ){
+			settings = duration;
+			duration = 0;
+		}
+		if( typeof settings == 'function' )
+			settings = { onAfter:settings };
+			
+		if( target == 'max' )
+			target = 9e9;
+			
+		settings = $.extend( {}, $scrollTo.defaults, settings );
+		// Speed is still recognized for backwards compatibility
+		duration = duration || settings.speed || settings.duration;
+		// Make sure the settings are given right
+		settings.queue = settings.queue && settings.axis.length > 1;
+		
+		if( settings.queue )
+			// Let's keep the overall duration
+			duration /= 2;
+		settings.offset = both( settings.offset );
+		settings.over = both( settings.over );
+
+		return this._scrollable().each(function(){
+			var elem = this,
+				$elem = $(elem),
+				targ = target, toff, attr = {},
+				win = $elem.is('html,body');
+
+			switch( typeof targ ){
+				// A number will pass the regex
+				case 'number':
+				case 'string':
+					if( /^([+-]=)?\d+(\.\d+)?(px|%)?$/.test(targ) ){
+						targ = both( targ );
+						// We are done
+						break;
+					}
+					// Relative selector, no break!
+					targ = $(targ,this);
+				case 'object':
+					// DOMElement / jQuery
+					if( targ.is || targ.style )
+						// Get the real position of the target 
+						toff = (targ = $(targ)).offset();
+			}
+			$.each( settings.axis.split(''), function( i, axis ){
+				var Pos	= axis == 'x' ? 'Left' : 'Top',
+					pos = Pos.toLowerCase(),
+					key = 'scroll' + Pos,
+					old = elem[key],
+					max = $scrollTo.max(elem, axis);
+
+				if( toff ){// jQuery / DOMElement
+					attr[key] = toff[pos] + ( win ? 0 : old - $elem.offset()[pos] );
+
+					// If it's a dom element, reduce the margin
+					if( settings.margin ){
+						attr[key] -= parseInt(targ.css('margin'+Pos)) || 0;
+						attr[key] -= parseInt(targ.css('border'+Pos+'Width')) || 0;
+					}
+					
+					attr[key] += settings.offset[pos] || 0;
+					
+					if( settings.over[pos] )
+						// Scroll to a fraction of its width/height
+						attr[key] += targ[axis=='x'?'width':'height']() * settings.over[pos];
+				}else{ 
+					var val = targ[pos];
+					// Handle percentage values
+					attr[key] = val.slice && val.slice(-1) == '%' ? 
+						parseFloat(val) / 100 * max
+						: val;
+				}
+
+				// Number or 'number'
+				if( /^\d+$/.test(attr[key]) )
+					// Check the limits
+					attr[key] = attr[key] <= 0 ? 0 : Math.min( attr[key], max );
+
+				// Queueing axes
+				if( !i && settings.queue ){
+					// Don't waste time animating, if there's no need.
+					if( old != attr[key] )
+						// Intermediate animation
+						animate( settings.onAfterFirst );
+					// Don't animate this axis again in the next iteration.
+					delete attr[key];
+				}
+			});
+
+			animate( settings.onAfter );			
+
+			function animate( callback ){
+				$elem.animate( attr, duration, settings.easing, callback && function(){
+					callback.call(this, target, settings);
+				});
+			};
+
+		}).end();
+	};
+	
+	// Max scrolling position, works on quirks mode
+	// It only fails (not too badly) on IE, quirks mode.
+	$scrollTo.max = function( elem, axis ){
+		var Dim = axis == 'x' ? 'Width' : 'Height',
+			scroll = 'scroll'+Dim;
+		
+		if( !$(elem).is('html,body') )
+			return elem[scroll] - $(elem)[Dim.toLowerCase()]();
+		
+		var size = 'client' + Dim,
+			html = elem.ownerDocument.documentElement,
+			body = elem.ownerDocument.body;
+
+		return Math.max( html[scroll], body[scroll] ) 
+			 - Math.min( html[size]  , body[size]   );
+			
+	};
+
+	function both( val ){
+		return typeof val == 'object' ? val : { top:val, left:val };
+	};
+
+})( jQuery );/*!	SWFObject v2.2 <http://code.google.com/p/swfobject/> 
+	is released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
+*/
+
+var swfobject = function() {
+	
+	var UNDEF = "undefined",
+		OBJECT = "object",
+		SHOCKWAVE_FLASH = "Shockwave Flash",
+		SHOCKWAVE_FLASH_AX = "ShockwaveFlash.ShockwaveFlash",
+		FLASH_MIME_TYPE = "application/x-shockwave-flash",
+		EXPRESS_INSTALL_ID = "SWFObjectExprInst",
+		ON_READY_STATE_CHANGE = "onreadystatechange",
+		
+		win = window,
+		doc = document,
+		nav = navigator,
+		
+		plugin = false,
+		domLoadFnArr = [main],
+		regObjArr = [],
+		objIdArr = [],
+		listenersArr = [],
+		storedAltContent,
+		storedAltContentId,
+		storedCallbackFn,
+		storedCallbackObj,
+		isDomLoaded = false,
+		isExpressInstallActive = false,
+		dynamicStylesheet,
+		dynamicStylesheetMedia,
+		autoHideShow = true,
+	
+	/* Centralized function for browser feature detection
+		- User agent string detection is only used when no good alternative is possible
+		- Is executed directly for optimal performance
+	*/	
+	ua = function() {
+		var w3cdom = typeof doc.getElementById != UNDEF && typeof doc.getElementsByTagName != UNDEF && typeof doc.createElement != UNDEF,
+			u = nav.userAgent.toLowerCase(),
+			p = nav.platform.toLowerCase(),
+			windows = p ? /win/.test(p) : /win/.test(u),
+			mac = p ? /mac/.test(p) : /mac/.test(u),
+			webkit = /webkit/.test(u) ? parseFloat(u.replace(/^.*webkit\/(\d+(\.\d+)?).*$/, "$1")) : false, // returns either the webkit version or false if not webkit
+			ie = !+"\v1", // feature detection based on Andrea Giammarchi's solution: http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
+			playerVersion = [0,0,0],
+			d = null;
+		if (typeof nav.plugins != UNDEF && typeof nav.plugins[SHOCKWAVE_FLASH] == OBJECT) {
+			d = nav.plugins[SHOCKWAVE_FLASH].description;
+			if (d && !(typeof nav.mimeTypes != UNDEF && nav.mimeTypes[FLASH_MIME_TYPE] && !nav.mimeTypes[FLASH_MIME_TYPE].enabledPlugin)) { // navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin indicates whether plug-ins are enabled or disabled in Safari 3+
+				plugin = true;
+				ie = false; // cascaded feature detection for Internet Explorer
+				d = d.replace(/^.*\s+(\S+\s+\S+$)/, "$1");
+				playerVersion[0] = parseInt(d.replace(/^(.*)\..*$/, "$1"), 10);
+				playerVersion[1] = parseInt(d.replace(/^.*\.(.*)\s.*$/, "$1"), 10);
+				playerVersion[2] = /[a-zA-Z]/.test(d) ? parseInt(d.replace(/^.*[a-zA-Z]+(.*)$/, "$1"), 10) : 0;
+			}
+		}
+		else if (typeof win.ActiveXObject != UNDEF) {
+			try {
+				var a = new ActiveXObject(SHOCKWAVE_FLASH_AX);
+				if (a) { // a will return null when ActiveX is disabled
+					d = a.GetVariable("$version");
+					if (d) {
+						ie = true; // cascaded feature detection for Internet Explorer
+						d = d.split(" ")[1].split(",");
+						playerVersion = [parseInt(d[0], 10), parseInt(d[1], 10), parseInt(d[2], 10)];
+					}
+				}
+			}
+			catch(e) {}
+		}
+		return { w3:w3cdom, pv:playerVersion, wk:webkit, ie:ie, win:windows, mac:mac };
+	}(),
+	
+	/* Cross-browser onDomLoad
+		- Will fire an event as soon as the DOM of a web page is loaded
+		- Internet Explorer workaround based on Diego Perini's solution: http://javascript.nwbox.com/IEContentLoaded/
+		- Regular onload serves as fallback
+	*/ 
+	onDomLoad = function() {
+		if (!ua.w3) { return; }
+		if ((typeof doc.readyState != UNDEF && doc.readyState == "complete") || (typeof doc.readyState == UNDEF && (doc.getElementsByTagName("body")[0] || doc.body))) { // function is fired after onload, e.g. when script is inserted dynamically 
+			callDomLoadFunctions();
+		}
+		if (!isDomLoaded) {
+			if (typeof doc.addEventListener != UNDEF) {
+				doc.addEventListener("DOMContentLoaded", callDomLoadFunctions, false);
+			}		
+			if (ua.ie && ua.win) {
+				doc.attachEvent(ON_READY_STATE_CHANGE, function() {
+					if (doc.readyState == "complete") {
+						doc.detachEvent(ON_READY_STATE_CHANGE, arguments.callee);
+						callDomLoadFunctions();
+					}
+				});
+				if (win == top) { // if not inside an iframe
+					(function(){
+						if (isDomLoaded) { return; }
+						try {
+							doc.documentElement.doScroll("left");
+						}
+						catch(e) {
+							setTimeout(arguments.callee, 0);
+							return;
+						}
+						callDomLoadFunctions();
+					})();
+				}
+			}
+			if (ua.wk) {
+				(function(){
+					if (isDomLoaded) { return; }
+					if (!/loaded|complete/.test(doc.readyState)) {
+						setTimeout(arguments.callee, 0);
+						return;
+					}
+					callDomLoadFunctions();
+				})();
+			}
+			addLoadEvent(callDomLoadFunctions);
+		}
+	}();
+	
+	function callDomLoadFunctions() {
+		if (isDomLoaded) { return; }
+		try { // test if we can really add/remove elements to/from the DOM; we don't want to fire it too early
+			var t = doc.getElementsByTagName("body")[0].appendChild(createElement("span"));
+			t.parentNode.removeChild(t);
+		}
+		catch (e) { return; }
+		isDomLoaded = true;
+		var dl = domLoadFnArr.length;
+		for (var i = 0; i < dl; i++) {
+			domLoadFnArr[i]();
+		}
+	}
+	
+	function addDomLoadEvent(fn) {
+		if (isDomLoaded) {
+			fn();
+		}
+		else { 
+			domLoadFnArr[domLoadFnArr.length] = fn; // Array.push() is only available in IE5.5+
+		}
+	}
+	
+	/* Cross-browser onload
+		- Based on James Edwards' solution: http://brothercake.com/site/resources/scripts/onload/
+		- Will fire an event as soon as a web page including all of its assets are loaded 
+	 */
+	function addLoadEvent(fn) {
+		if (typeof win.addEventListener != UNDEF) {
+			win.addEventListener("load", fn, false);
+		}
+		else if (typeof doc.addEventListener != UNDEF) {
+			doc.addEventListener("load", fn, false);
+		}
+		else if (typeof win.attachEvent != UNDEF) {
+			addListener(win, "onload", fn);
+		}
+		else if (typeof win.onload == "function") {
+			var fnOld = win.onload;
+			win.onload = function() {
+				fnOld();
+				fn();
+			};
+		}
+		else {
+			win.onload = fn;
+		}
+	}
+	
+	/* Main function
+		- Will preferably execute onDomLoad, otherwise onload (as a fallback)
+	*/
+	function main() { 
+		if (plugin) {
+			testPlayerVersion();
+		}
+		else {
+			matchVersions();
+		}
+	}
+	
+	/* Detect the Flash Player version for non-Internet Explorer browsers
+		- Detecting the plug-in version via the object element is more precise than using the plugins collection item's description:
+		  a. Both release and build numbers can be detected
+		  b. Avoid wrong descriptions by corrupt installers provided by Adobe
+		  c. Avoid wrong descriptions by multiple Flash Player entries in the plugin Array, caused by incorrect browser imports
+		- Disadvantage of this method is that it depends on the availability of the DOM, while the plugins collection is immediately available
+	*/
+	function testPlayerVersion() {
+		var b = doc.getElementsByTagName("body")[0];
+		var o = createElement(OBJECT);
+		o.setAttribute("type", FLASH_MIME_TYPE);
+		var t = b.appendChild(o);
+		if (t) {
+			var counter = 0;
+			(function(){
+				if (typeof t.GetVariable != UNDEF) {
+					var d = t.GetVariable("$version");
+					if (d) {
+						d = d.split(" ")[1].split(",");
+						ua.pv = [parseInt(d[0], 10), parseInt(d[1], 10), parseInt(d[2], 10)];
+					}
+				}
+				else if (counter < 10) {
+					counter++;
+					setTimeout(arguments.callee, 10);
+					return;
+				}
+				b.removeChild(o);
+				t = null;
+				matchVersions();
+			})();
+		}
+		else {
+			matchVersions();
+		}
+	}
+	
+	/* Perform Flash Player and SWF version matching; static publishing only
+	*/
+	function matchVersions() {
+		var rl = regObjArr.length;
+		if (rl > 0) {
+			for (var i = 0; i < rl; i++) { // for each registered object element
+				var id = regObjArr[i].id;
+				var cb = regObjArr[i].callbackFn;
+				var cbObj = {success:false, id:id};
+				if (ua.pv[0] > 0) {
+					var obj = getElementById(id);
+					if (obj) {
+						if (hasPlayerVersion(regObjArr[i].swfVersion) && !(ua.wk && ua.wk < 312)) { // Flash Player version >= published SWF version: Houston, we have a match!
+							setVisibility(id, true);
+							if (cb) {
+								cbObj.success = true;
+								cbObj.ref = getObjectById(id);
+								cb(cbObj);
+							}
+						}
+						else if (regObjArr[i].expressInstall && canExpressInstall()) { // show the Adobe Express Install dialog if set by the web page author and if supported
+							var att = {};
+							att.data = regObjArr[i].expressInstall;
+							att.width = obj.getAttribute("width") || "0";
+							att.height = obj.getAttribute("height") || "0";
+							if (obj.getAttribute("class")) { att.styleclass = obj.getAttribute("class"); }
+							if (obj.getAttribute("align")) { att.align = obj.getAttribute("align"); }
+							// parse HTML object param element's name-value pairs
+							var par = {};
+							var p = obj.getElementsByTagName("param");
+							var pl = p.length;
+							for (var j = 0; j < pl; j++) {
+								if (p[j].getAttribute("name").toLowerCase() != "movie") {
+									par[p[j].getAttribute("name")] = p[j].getAttribute("value");
+								}
+							}
+							showExpressInstall(att, par, id, cb);
+						}
+						else { // Flash Player and SWF version mismatch or an older Webkit engine that ignores the HTML object element's nested param elements: display alternative content instead of SWF
+							displayAltContent(obj);
+							if (cb) { cb(cbObj); }
+						}
+					}
+				}
+				else {	// if no Flash Player is installed or the fp version cannot be detected we let the HTML object element do its job (either show a SWF or alternative content)
+					setVisibility(id, true);
+					if (cb) {
+						var o = getObjectById(id); // test whether there is an HTML object element or not
+						if (o && typeof o.SetVariable != UNDEF) { 
+							cbObj.success = true;
+							cbObj.ref = o;
+						}
+						cb(cbObj);
+					}
+				}
+			}
+		}
+	}
+	
+	function getObjectById(objectIdStr) {
+		var r = null;
+		var o = getElementById(objectIdStr);
+		if (o && o.nodeName == "OBJECT") {
+			if (typeof o.SetVariable != UNDEF) {
+				r = o;
+			}
+			else {
+				var n = o.getElementsByTagName(OBJECT)[0];
+				if (n) {
+					r = n;
+				}
+			}
+		}
+		return r;
+	}
+	
+	/* Requirements for Adobe Express Install
+		- only one instance can be active at a time
+		- fp 6.0.65 or higher
+		- Win/Mac OS only
+		- no Webkit engines older than version 312
+	*/
+	function canExpressInstall() {
+		return !isExpressInstallActive && hasPlayerVersion("6.0.65") && (ua.win || ua.mac) && !(ua.wk && ua.wk < 312);
+	}
+	
+	/* Show the Adobe Express Install dialog
+		- Reference: http://www.adobe.com/cfusion/knowledgebase/index.cfm?id=6a253b75
+	*/
+	function showExpressInstall(att, par, replaceElemIdStr, callbackFn) {
+		isExpressInstallActive = true;
+		storedCallbackFn = callbackFn || null;
+		storedCallbackObj = {success:false, id:replaceElemIdStr};
+		var obj = getElementById(replaceElemIdStr);
+		if (obj) {
+			if (obj.nodeName == "OBJECT") { // static publishing
+				storedAltContent = abstractAltContent(obj);
+				storedAltContentId = null;
+			}
+			else { // dynamic publishing
+				storedAltContent = obj;
+				storedAltContentId = replaceElemIdStr;
+			}
+			att.id = EXPRESS_INSTALL_ID;
+			if (typeof att.width == UNDEF || (!/%$/.test(att.width) && parseInt(att.width, 10) < 310)) { att.width = "310"; }
+			if (typeof att.height == UNDEF || (!/%$/.test(att.height) && parseInt(att.height, 10) < 137)) { att.height = "137"; }
+			doc.title = doc.title.slice(0, 47) + " - Flash Player Installation";
+			var pt = ua.ie && ua.win ? "ActiveX" : "PlugIn",
+				fv = "MMredirectURL=" + win.location.toString().replace(/&/g,"%26") + "&MMplayerType=" + pt + "&MMdoctitle=" + doc.title;
+			if (typeof par.flashvars != UNDEF) {
+				par.flashvars += "&" + fv;
+			}
+			else {
+				par.flashvars = fv;
+			}
+			// IE only: when a SWF is loading (AND: not available in cache) wait for the readyState of the object element to become 4 before removing it,
+			// because you cannot properly cancel a loading SWF file without breaking browser load references, also obj.onreadystatechange doesn't work
+			if (ua.ie && ua.win && obj.readyState != 4) {
+				var newObj = createElement("div");
+				replaceElemIdStr += "SWFObjectNew";
+				newObj.setAttribute("id", replaceElemIdStr);
+				obj.parentNode.insertBefore(newObj, obj); // insert placeholder div that will be replaced by the object element that loads expressinstall.swf
+				obj.style.display = "none";
+				(function(){
+					if (obj.readyState == 4) {
+						obj.parentNode.removeChild(obj);
+					}
+					else {
+						setTimeout(arguments.callee, 10);
+					}
+				})();
+			}
+			createSWF(att, par, replaceElemIdStr);
+		}
+	}
+	
+	/* Functions to abstract and display alternative content
+	*/
+	function displayAltContent(obj) {
+		if (ua.ie && ua.win && obj.readyState != 4) {
+			// IE only: when a SWF is loading (AND: not available in cache) wait for the readyState of the object element to become 4 before removing it,
+			// because you cannot properly cancel a loading SWF file without breaking browser load references, also obj.onreadystatechange doesn't work
+			var el = createElement("div");
+			obj.parentNode.insertBefore(el, obj); // insert placeholder div that will be replaced by the alternative content
+			el.parentNode.replaceChild(abstractAltContent(obj), el);
+			obj.style.display = "none";
+			(function(){
+				if (obj.readyState == 4) {
+					obj.parentNode.removeChild(obj);
+				}
+				else {
+					setTimeout(arguments.callee, 10);
+				}
+			})();
+		}
+		else {
+			obj.parentNode.replaceChild(abstractAltContent(obj), obj);
+		}
+	} 
+
+	function abstractAltContent(obj) {
+		var ac = createElement("div");
+		if (ua.win && ua.ie) {
+			ac.innerHTML = obj.innerHTML;
+		}
+		else {
+			var nestedObj = obj.getElementsByTagName(OBJECT)[0];
+			if (nestedObj) {
+				var c = nestedObj.childNodes;
+				if (c) {
+					var cl = c.length;
+					for (var i = 0; i < cl; i++) {
+						if (!(c[i].nodeType == 1 && c[i].nodeName == "PARAM") && !(c[i].nodeType == 8)) {
+							ac.appendChild(c[i].cloneNode(true));
+						}
+					}
+				}
+			}
+		}
+		return ac;
+	}
+	
+	/* Cross-browser dynamic SWF creation
+	*/
+	function createSWF(attObj, parObj, id) {
+		var r, el = getElementById(id);
+		if (ua.wk && ua.wk < 312) { return r; }
+		if (el) {
+			if (typeof attObj.id == UNDEF) { // if no 'id' is defined for the object element, it will inherit the 'id' from the alternative content
+				attObj.id = id;
+			}
+			if (ua.ie && ua.win) { // Internet Explorer + the HTML object element + W3C DOM methods do not combine: fall back to outerHTML
+				var att = "";
+				for (var i in attObj) {
+					if (attObj[i] != Object.prototype[i]) { // filter out prototype additions from other potential libraries
+						if (i.toLowerCase() == "data") {
+							parObj.movie = attObj[i];
+						}
+						else if (i.toLowerCase() == "styleclass") { // 'class' is an ECMA4 reserved keyword
+							att += ' class="' + attObj[i] + '"';
+						}
+						else if (i.toLowerCase() != "classid") {
+							att += ' ' + i + '="' + attObj[i] + '"';
+						}
+					}
+				}
+				var par = "";
+				for (var j in parObj) {
+					if (parObj[j] != Object.prototype[j]) { // filter out prototype additions from other potential libraries
+						par += '<param name="' + j + '" value="' + parObj[j] + '" />';
+					}
+				}
+				el.outerHTML = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"' + att + '>' + par + '</object>';
+				objIdArr[objIdArr.length] = attObj.id; // stored to fix object 'leaks' on unload (dynamic publishing only)
+				r = getElementById(attObj.id);	
+			}
+			else { // well-behaving browsers
+				var o = createElement(OBJECT);
+				o.setAttribute("type", FLASH_MIME_TYPE);
+				for (var m in attObj) {
+					if (attObj[m] != Object.prototype[m]) { // filter out prototype additions from other potential libraries
+						if (m.toLowerCase() == "styleclass") { // 'class' is an ECMA4 reserved keyword
+							o.setAttribute("class", attObj[m]);
+						}
+						else if (m.toLowerCase() != "classid") { // filter out IE specific attribute
+							o.setAttribute(m, attObj[m]);
+						}
+					}
+				}
+				for (var n in parObj) {
+					if (parObj[n] != Object.prototype[n] && n.toLowerCase() != "movie") { // filter out prototype additions from other potential libraries and IE specific param element
+						createObjParam(o, n, parObj[n]);
+					}
+				}
+				el.parentNode.replaceChild(o, el);
+				r = o;
+			}
+		}
+		return r;
+	}
+	
+	function createObjParam(el, pName, pValue) {
+		var p = createElement("param");
+		p.setAttribute("name", pName);	
+		p.setAttribute("value", pValue);
+		el.appendChild(p);
+	}
+	
+	/* Cross-browser SWF removal
+		- Especially needed to safely and completely remove a SWF in Internet Explorer
+	*/
+	function removeSWF(id) {
+		var obj = getElementById(id);
+		if (obj && obj.nodeName == "OBJECT") {
+			if (ua.ie && ua.win) {
+				obj.style.display = "none";
+				(function(){
+					if (obj.readyState == 4) {
+						removeObjectInIE(id);
+					}
+					else {
+						setTimeout(arguments.callee, 10);
+					}
+				})();
+			}
+			else {
+				obj.parentNode.removeChild(obj);
+			}
+		}
+	}
+	
+	function removeObjectInIE(id) {
+		var obj = getElementById(id);
+		if (obj) {
+			for (var i in obj) {
+				if (typeof obj[i] == "function") {
+					obj[i] = null;
+				}
+			}
+			obj.parentNode.removeChild(obj);
+		}
+	}
+	
+	/* Functions to optimize JavaScript compression
+	*/
+	function getElementById(id) {
+		var el = null;
+		try {
+			el = doc.getElementById(id);
+		}
+		catch (e) {}
+		return el;
+	}
+	
+	function createElement(el) {
+		return doc.createElement(el);
+	}
+	
+	/* Updated attachEvent function for Internet Explorer
+		- Stores attachEvent information in an Array, so on unload the detachEvent functions can be called to avoid memory leaks
+	*/	
+	function addListener(target, eventType, fn) {
+		target.attachEvent(eventType, fn);
+		listenersArr[listenersArr.length] = [target, eventType, fn];
+	}
+	
+	/* Flash Player and SWF content version matching
+	*/
+	function hasPlayerVersion(rv) {
+		var pv = ua.pv, v = rv.split(".");
+		v[0] = parseInt(v[0], 10);
+		v[1] = parseInt(v[1], 10) || 0; // supports short notation, e.g. "9" instead of "9.0.0"
+		v[2] = parseInt(v[2], 10) || 0;
+		return (pv[0] > v[0] || (pv[0] == v[0] && pv[1] > v[1]) || (pv[0] == v[0] && pv[1] == v[1] && pv[2] >= v[2])) ? true : false;
+	}
+	
+	/* Cross-browser dynamic CSS creation
+		- Based on Bobby van der Sluis' solution: http://www.bobbyvandersluis.com/articles/dynamicCSS.php
+	*/	
+	function createCSS(sel, decl, media, newStyle) {
+		if (ua.ie && ua.mac) { return; }
+		var h = doc.getElementsByTagName("head")[0];
+		if (!h) { return; } // to also support badly authored HTML pages that lack a head element
+		var m = (media && typeof media == "string") ? media : "screen";
+		if (newStyle) {
+			dynamicStylesheet = null;
+			dynamicStylesheetMedia = null;
+		}
+		if (!dynamicStylesheet || dynamicStylesheetMedia != m) { 
+			// create dynamic stylesheet + get a global reference to it
+			var s = createElement("style");
+			s.setAttribute("type", "text/css");
+			s.setAttribute("media", m);
+			dynamicStylesheet = h.appendChild(s);
+			if (ua.ie && ua.win && typeof doc.styleSheets != UNDEF && doc.styleSheets.length > 0) {
+				dynamicStylesheet = doc.styleSheets[doc.styleSheets.length - 1];
+			}
+			dynamicStylesheetMedia = m;
+		}
+		// add style rule
+		if (ua.ie && ua.win) {
+			if (dynamicStylesheet && typeof dynamicStylesheet.addRule == OBJECT) {
+				dynamicStylesheet.addRule(sel, decl);
+			}
+		}
+		else {
+			if (dynamicStylesheet && typeof doc.createTextNode != UNDEF) {
+				dynamicStylesheet.appendChild(doc.createTextNode(sel + " {" + decl + "}"));
+			}
+		}
+	}
+	
+	function setVisibility(id, isVisible) {
+		if (!autoHideShow) { return; }
+		var v = isVisible ? "visible" : "hidden";
+		if (isDomLoaded && getElementById(id)) {
+			getElementById(id).style.visibility = v;
+		}
+		else {
+			createCSS("#" + id, "visibility:" + v);
+		}
+	}
+
+	/* Filter to avoid XSS attacks
+	*/
+	function urlEncodeIfNecessary(s) {
+		var regex = /[\\\"<>\.;]/;
+		var hasBadChars = regex.exec(s) != null;
+		return hasBadChars && typeof encodeURIComponent != UNDEF ? encodeURIComponent(s) : s;
+	}
+	
+	/* Release memory to avoid memory leaks caused by closures, fix hanging audio/video threads and force open sockets/NetConnections to disconnect (Internet Explorer only)
+	*/
+	var cleanup = function() {
+		if (ua.ie && ua.win) {
+			window.attachEvent("onunload", function() {
+				// remove listeners to avoid memory leaks
+				var ll = listenersArr.length;
+				for (var i = 0; i < ll; i++) {
+					listenersArr[i][0].detachEvent(listenersArr[i][1], listenersArr[i][2]);
+				}
+				// cleanup dynamically embedded objects to fix audio/video threads and force open sockets and NetConnections to disconnect
+				var il = objIdArr.length;
+				for (var j = 0; j < il; j++) {
+					removeSWF(objIdArr[j]);
+				}
+				// cleanup library's main closures to avoid memory leaks
+				for (var k in ua) {
+					ua[k] = null;
+				}
+				ua = null;
+				for (var l in swfobject) {
+					swfobject[l] = null;
+				}
+				swfobject = null;
+			});
+		}
+	}();
+	
+	return {
+		/* Public API
+			- Reference: http://code.google.com/p/swfobject/wiki/documentation
+		*/ 
+		registerObject: function(objectIdStr, swfVersionStr, xiSwfUrlStr, callbackFn) {
+			if (ua.w3 && objectIdStr && swfVersionStr) {
+				var regObj = {};
+				regObj.id = objectIdStr;
+				regObj.swfVersion = swfVersionStr;
+				regObj.expressInstall = xiSwfUrlStr;
+				regObj.callbackFn = callbackFn;
+				regObjArr[regObjArr.length] = regObj;
+				setVisibility(objectIdStr, false);
+			}
+			else if (callbackFn) {
+				callbackFn({success:false, id:objectIdStr});
+			}
+		},
+		
+		getObjectById: function(objectIdStr) {
+			if (ua.w3) {
+				return getObjectById(objectIdStr);
+			}
+		},
+		
+		embedSWF: function(swfUrlStr, replaceElemIdStr, widthStr, heightStr, swfVersionStr, xiSwfUrlStr, flashvarsObj, parObj, attObj, callbackFn) {
+			var callbackObj = {success:false, id:replaceElemIdStr};
+			if (ua.w3 && !(ua.wk && ua.wk < 312) && swfUrlStr && replaceElemIdStr && widthStr && heightStr && swfVersionStr) {
+				setVisibility(replaceElemIdStr, false);
+				addDomLoadEvent(function() {
+					widthStr += ""; // auto-convert to string
+					heightStr += "";
+					var att = {};
+					if (attObj && typeof attObj === OBJECT) {
+						for (var i in attObj) { // copy object to avoid the use of references, because web authors often reuse attObj for multiple SWFs
+							att[i] = attObj[i];
+						}
+					}
+					att.data = swfUrlStr;
+					att.width = widthStr;
+					att.height = heightStr;
+					var par = {}; 
+					if (parObj && typeof parObj === OBJECT) {
+						for (var j in parObj) { // copy object to avoid the use of references, because web authors often reuse parObj for multiple SWFs
+							par[j] = parObj[j];
+						}
+					}
+					if (flashvarsObj && typeof flashvarsObj === OBJECT) {
+						for (var k in flashvarsObj) { // copy object to avoid the use of references, because web authors often reuse flashvarsObj for multiple SWFs
+							if (typeof par.flashvars != UNDEF) {
+								par.flashvars += "&" + k + "=" + flashvarsObj[k];
+							}
+							else {
+								par.flashvars = k + "=" + flashvarsObj[k];
+							}
+						}
+					}
+					if (hasPlayerVersion(swfVersionStr)) { // create SWF
+						var obj = createSWF(att, par, replaceElemIdStr);
+						if (att.id == replaceElemIdStr) {
+							setVisibility(replaceElemIdStr, true);
+						}
+						callbackObj.success = true;
+						callbackObj.ref = obj;
+					}
+					else if (xiSwfUrlStr && canExpressInstall()) { // show Adobe Express Install
+						att.data = xiSwfUrlStr;
+						showExpressInstall(att, par, replaceElemIdStr, callbackFn);
+						return;
+					}
+					else { // show alternative content
+						setVisibility(replaceElemIdStr, true);
+					}
+					if (callbackFn) { callbackFn(callbackObj); }
+				});
+			}
+			else if (callbackFn) { callbackFn(callbackObj);	}
+		},
+		
+		switchOffAutoHideShow: function() {
+			autoHideShow = false;
+		},
+		
+		ua: ua,
+		
+		getFlashPlayerVersion: function() {
+			return { major:ua.pv[0], minor:ua.pv[1], release:ua.pv[2] };
+		},
+		
+		hasFlashPlayerVersion: hasPlayerVersion,
+		
+		createSWF: function(attObj, parObj, replaceElemIdStr) {
+			if (ua.w3) {
+				return createSWF(attObj, parObj, replaceElemIdStr);
+			}
+			else {
+				return undefined;
+			}
+		},
+		
+		showExpressInstall: function(att, par, replaceElemIdStr, callbackFn) {
+			if (ua.w3 && canExpressInstall()) {
+				showExpressInstall(att, par, replaceElemIdStr, callbackFn);
+			}
+		},
+		
+		removeSWF: function(objElemIdStr) {
+			if (ua.w3) {
+				removeSWF(objElemIdStr);
+			}
+		},
+		
+		createCSS: function(selStr, declStr, mediaStr, newStyleBoolean) {
+			if (ua.w3) {
+				createCSS(selStr, declStr, mediaStr, newStyleBoolean);
+			}
+		},
+		
+		addDomLoadEvent: addDomLoadEvent,
+		
+		addLoadEvent: addLoadEvent,
+		
+		getQueryParamValue: function(param) {
+			var q = doc.location.search || doc.location.hash;
+			if (q) {
+				if (/\?/.test(q)) { q = q.split("?")[1]; } // strip question mark
+				if (param == null) {
+					return urlEncodeIfNecessary(q);
+				}
+				var pairs = q.split("&");
+				for (var i = 0; i < pairs.length; i++) {
+					if (pairs[i].substring(0, pairs[i].indexOf("=")) == param) {
+						return urlEncodeIfNecessary(pairs[i].substring((pairs[i].indexOf("=") + 1)));
+					}
+				}
+			}
+			return "";
+		},
+		
+		// For internal usage only
+		expressInstallCallback: function() {
+			if (isExpressInstallActive) {
+				var obj = getElementById(EXPRESS_INSTALL_ID);
+				if (obj && storedAltContent) {
+					obj.parentNode.replaceChild(storedAltContent, obj);
+					if (storedAltContentId) {
+						setVisibility(storedAltContentId, true);
+						if (ua.ie && ua.win) { storedAltContent.style.display = "block"; }
+					}
+					if (storedCallbackFn) { storedCallbackFn(storedCallbackObj); }
+				}
+				isExpressInstallActive = false;
+			} 
+		}
+	};
+}();
+/**
+ * SWFUpload: http://www.swfupload.org, http://swfupload.googlecode.com
+ *
+ * mmSWFUpload 1.0: Flash upload dialog - http://profandesign.se/swfupload/,  http://www.vinterwebb.se/
+ *
+ * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilz�n and Mammon Media and is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * SWFUpload 2 is (c) 2007-2008 Jake Roberts and is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ */
+
+
+/* ******************* */
+/* Constructor & Init  */
+/* ******************* */
+var SWFUpload;
+
+if (SWFUpload == undefined) {
+	SWFUpload = function (settings) {
+		this.initSWFUpload(settings);
+	};
+}
+
+SWFUpload.prototype.initSWFUpload = function (settings) {
+	try {
+		this.customSettings = {};	// A container where developers can place their own settings associated with this instance.
+		this.settings = settings;
+		this.eventQueue = [];
+		this.movieName = "SWFUpload_" + SWFUpload.movieCount++;
+		this.movieElement = null;
+
+
+		// Setup global control tracking
+		SWFUpload.instances[this.movieName] = this;
+
+		// Load the settings.  Load the Flash movie.
+		this.initSettings();
+		this.loadFlash();
+		this.displayDebugInfo();
+	} catch (ex) {
+		delete SWFUpload.instances[this.movieName];
+		throw ex;
+	}
+};
+
+/* *************** */
+/* Static Members  */
+/* *************** */
+SWFUpload.instances = {};
+SWFUpload.movieCount = 0;
+SWFUpload.version = "2.2.0 2009-03-25";
+SWFUpload.QUEUE_ERROR = {
+	QUEUE_LIMIT_EXCEEDED	  		: -100,
+	FILE_EXCEEDS_SIZE_LIMIT  		: -110,
+	ZERO_BYTE_FILE			  		: -120,
+	INVALID_FILETYPE		  		: -130
+};
+SWFUpload.UPLOAD_ERROR = {
+	HTTP_ERROR				  		: -200,
+	MISSING_UPLOAD_URL	      		: -210,
+	IO_ERROR				  		: -220,
+	SECURITY_ERROR			  		: -230,
+	UPLOAD_LIMIT_EXCEEDED	  		: -240,
+	UPLOAD_FAILED			  		: -250,
+	SPECIFIED_FILE_ID_NOT_FOUND		: -260,
+	FILE_VALIDATION_FAILED	  		: -270,
+	FILE_CANCELLED			  		: -280,
+	UPLOAD_STOPPED					: -290
+};
+SWFUpload.FILE_STATUS = {
+	QUEUED		 : -1,
+	IN_PROGRESS	 : -2,
+	ERROR		 : -3,
+	COMPLETE	 : -4,
+	CANCELLED	 : -5
+};
+SWFUpload.BUTTON_ACTION = {
+	SELECT_FILE  : -100,
+	SELECT_FILES : -110,
+	START_UPLOAD : -120
+};
+SWFUpload.CURSOR = {
+	ARROW : -1,
+	HAND : -2
+};
+SWFUpload.WINDOW_MODE = {
+	WINDOW : "window",
+	TRANSPARENT : "transparent",
+	OPAQUE : "opaque"
+};
+
+// Private: takes a URL, determines if it is relative and converts to an absolute URL
+// using the current site. Only processes the URL if it can, otherwise returns the URL untouched
+SWFUpload.completeURL = function(url) {
+	if (typeof(url) !== "string" || url.match(/^https?:\/\//i) || url.match(/^\//)) {
+		return url;
+	}
+	
+	var currentURL = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "");
+	
+	var indexSlash = window.location.pathname.lastIndexOf("/");
+	if (indexSlash <= 0) {
+		path = "/";
+	} else {
+		path = window.location.pathname.substr(0, indexSlash) + "/";
+	}
+	
+	return /*currentURL +*/ path + url;
+	
+};
+
+
+/* ******************** */
+/* Instance Members  */
+/* ******************** */
+
+// Private: initSettings ensures that all the
+// settings are set, getting a default value if one was not assigned.
+SWFUpload.prototype.initSettings = function () {
+	this.ensureDefault = function (settingName, defaultValue) {
+		this.settings[settingName] = (this.settings[settingName] == undefined) ? defaultValue : this.settings[settingName];
+	};
+	
+	// Upload backend settings
+	this.ensureDefault("upload_url", "");
+	this.ensureDefault("preserve_relative_urls", false);
+	this.ensureDefault("file_post_name", "Filedata");
+	this.ensureDefault("post_params", {});
+	this.ensureDefault("use_query_string", false);
+	this.ensureDefault("requeue_on_error", false);
+	this.ensureDefault("http_success", []);
+	this.ensureDefault("assume_success_timeout", 0);
+	
+	// File Settings
+	this.ensureDefault("file_types", "*.*");
+	this.ensureDefault("file_types_description", "All Files");
+	this.ensureDefault("file_size_limit", 0);	// Default zero means "unlimited"
+	this.ensureDefault("file_upload_limit", 0);
+	this.ensureDefault("file_queue_limit", 0);
+
+	// Flash Settings
+	this.ensureDefault("flash_url", "swfupload.swf");
+	this.ensureDefault("prevent_swf_caching", true);
+	
+	// Button Settings
+	this.ensureDefault("button_image_url", "");
+	this.ensureDefault("button_width", 1);
+	this.ensureDefault("button_height", 1);
+	this.ensureDefault("button_text", "");
+	this.ensureDefault("button_text_style", "color: #000000; font-size: 16pt;");
+	this.ensureDefault("button_text_top_padding", 0);
+	this.ensureDefault("button_text_left_padding", 0);
+	this.ensureDefault("button_action", SWFUpload.BUTTON_ACTION.SELECT_FILES);
+	this.ensureDefault("button_disabled", false);
+	this.ensureDefault("button_placeholder_id", "");
+	this.ensureDefault("button_placeholder", null);
+	this.ensureDefault("button_cursor", SWFUpload.CURSOR.ARROW);
+	this.ensureDefault("button_window_mode", SWFUpload.WINDOW_MODE.WINDOW);
+	
+	// Debug Settings
+	this.ensureDefault("debug", false);
+	this.settings.debug_enabled = this.settings.debug;	// Here to maintain v2 API
+	
+	// Event Handlers
+	this.settings.return_upload_start_handler = this.returnUploadStart;
+	this.ensureDefault("swfupload_loaded_handler", null);
+	this.ensureDefault("file_dialog_start_handler", null);
+	this.ensureDefault("file_queued_handler", null);
+	this.ensureDefault("file_queue_error_handler", null);
+	this.ensureDefault("file_dialog_complete_handler", null);
+	
+	this.ensureDefault("upload_start_handler", null);
+	this.ensureDefault("upload_progress_handler", null);
+	this.ensureDefault("upload_error_handler", null);
+	this.ensureDefault("upload_success_handler", null);
+	this.ensureDefault("upload_complete_handler", null);
+	
+	this.ensureDefault("debug_handler", this.debugMessage);
+
+	this.ensureDefault("custom_settings", {});
+
+	// Other settings
+	this.customSettings = this.settings.custom_settings;
+	
+	// Update the flash url if needed
+	if (!!this.settings.prevent_swf_caching) {
+		this.settings.flash_url = this.settings.flash_url + (this.settings.flash_url.indexOf("?") < 0 ? "?" : "&") + "preventswfcaching=" + new Date().getTime();
+	}
+	
+	if (!this.settings.preserve_relative_urls) {
+		//this.settings.flash_url = SWFUpload.completeURL(this.settings.flash_url);	// Don't need to do this one since flash doesn't look at it
+		this.settings.upload_url = SWFUpload.completeURL(this.settings.upload_url);
+		this.settings.button_image_url = SWFUpload.completeURL(this.settings.button_image_url);
+	}
+	
+	delete this.ensureDefault;
+};
+
+// Private: loadFlash replaces the button_placeholder element with the flash movie.
+SWFUpload.prototype.loadFlash = function () {
+	var targetElement, tempParent;
+
+	// Make sure an element with the ID we are going to use doesn't already exist
+	if (document.getElementById(this.movieName) !== null) {
+		throw "ID " + this.movieName + " is already in use. The Flash Object could not be added";
+	}
+
+	// Get the element where we will be placing the flash movie
+	targetElement = document.getElementById(this.settings.button_placeholder_id) || this.settings.button_placeholder;
+
+	if (targetElement == undefined) {
+		throw "Could not find the placeholder element: " + this.settings.button_placeholder_id;
+	}
+
+	// Append the container and load the flash
+	tempParent = document.createElement("div");
+	tempParent.innerHTML = this.getFlashHTML();	// Using innerHTML is non-standard but the only sensible way to dynamically add Flash in IE (and maybe other browsers)
+	targetElement.parentNode.replaceChild(tempParent.firstChild, targetElement);
+
+	// Fix IE Flash/Form bug
+	if (window[this.movieName] == undefined) {
+		window[this.movieName] = this.getMovieElement();
+	}
+	
+};
+
+// Private: getFlashHTML generates the object tag needed to embed the flash in to the document
+SWFUpload.prototype.getFlashHTML = function () {
+	// Flash Satay object syntax: http://www.alistapart.com/articles/flashsatay
+	return ['<object id="', this.movieName, '" type="application/x-shockwave-flash" data="', this.settings.flash_url, '" width="', this.settings.button_width, '" height="', this.settings.button_height, '" class="swfupload">',
+				'<param name="wmode" value="', this.settings.button_window_mode, '" />',
+				'<param name="movie" value="', this.settings.flash_url, '" />',
+				'<param name="quality" value="high" />',
+				'<param name="menu" value="false" />',
+				'<param name="allowScriptAccess" value="always" />',
+				'<param name="flashvars" value="' + this.getFlashVars() + '" />',
+				'</object>'].join("");
+};
+
+// Private: getFlashVars builds the parameter string that will be passed
+// to flash in the flashvars param.
+SWFUpload.prototype.getFlashVars = function () {
+	// Build a string from the post param object
+	var paramString = this.buildParamString();
+	var httpSuccessString = this.settings.http_success.join(",");
+	
+	// Build the parameter string
+	return ["movieName=", encodeURIComponent(this.movieName),
+			"&amp;uploadURL=", encodeURIComponent(this.settings.upload_url),
+			"&amp;useQueryString=", encodeURIComponent(this.settings.use_query_string),
+			"&amp;requeueOnError=", encodeURIComponent(this.settings.requeue_on_error),
+			"&amp;httpSuccess=", encodeURIComponent(httpSuccessString),
+			"&amp;assumeSuccessTimeout=", encodeURIComponent(this.settings.assume_success_timeout),
+			"&amp;params=", encodeURIComponent(paramString),
+			"&amp;filePostName=", encodeURIComponent(this.settings.file_post_name),
+			"&amp;fileTypes=", encodeURIComponent(this.settings.file_types),
+			"&amp;fileTypesDescription=", encodeURIComponent(this.settings.file_types_description),
+			"&amp;fileSizeLimit=", encodeURIComponent(this.settings.file_size_limit),
+			"&amp;fileUploadLimit=", encodeURIComponent(this.settings.file_upload_limit),
+			"&amp;fileQueueLimit=", encodeURIComponent(this.settings.file_queue_limit),
+			"&amp;debugEnabled=", encodeURIComponent(this.settings.debug_enabled),
+			"&amp;buttonImageURL=", encodeURIComponent(this.settings.button_image_url),
+			"&amp;buttonWidth=", encodeURIComponent(this.settings.button_width),
+			"&amp;buttonHeight=", encodeURIComponent(this.settings.button_height),
+			"&amp;buttonText=", encodeURIComponent(this.settings.button_text),
+			"&amp;buttonTextTopPadding=", encodeURIComponent(this.settings.button_text_top_padding),
+			"&amp;buttonTextLeftPadding=", encodeURIComponent(this.settings.button_text_left_padding),
+			"&amp;buttonTextStyle=", encodeURIComponent(this.settings.button_text_style),
+			"&amp;buttonAction=", encodeURIComponent(this.settings.button_action),
+			"&amp;buttonDisabled=", encodeURIComponent(this.settings.button_disabled),
+			"&amp;buttonCursor=", encodeURIComponent(this.settings.button_cursor)
+		].join("");
+};
+
+// Public: getMovieElement retrieves the DOM reference to the Flash element added by SWFUpload
+// The element is cached after the first lookup
+SWFUpload.prototype.getMovieElement = function () {
+	if (this.movieElement == undefined) {
+		this.movieElement = document.getElementById(this.movieName);
+	}
+
+	if (this.movieElement === null) {
+		throw "Could not find Flash element";
+	}
+	
+	return this.movieElement;
+};
+
+// Private: buildParamString takes the name/value pairs in the post_params setting object
+// and joins them up in to a string formatted "name=value&amp;name=value"
+SWFUpload.prototype.buildParamString = function () {
+	var postParams = this.settings.post_params; 
+	var paramStringPairs = [];
+
+	if (typeof(postParams) === "object") {
+		for (var name in postParams) {
+			if (postParams.hasOwnProperty(name)) {
+				paramStringPairs.push(encodeURIComponent(name.toString()) + "=" + encodeURIComponent(postParams[name].toString()));
+			}
+		}
+	}
+
+	return paramStringPairs.join("&amp;");
+};
+
+// Public: Used to remove a SWFUpload instance from the page. This method strives to remove
+// all references to the SWF, and other objects so memory is properly freed.
+// Returns true if everything was destroyed. Returns a false if a failure occurs leaving SWFUpload in an inconsistant state.
+// Credits: Major improvements provided by steffen
+SWFUpload.prototype.destroy = function () {
+	try {
+		// Make sure Flash is done before we try to remove it
+		this.cancelUpload(null, false);
+		
+
+		// Remove the SWFUpload DOM nodes
+		var movieElement = null;
+		movieElement = this.getMovieElement();
+		
+		if (movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
+			// Loop through all the movie's properties and remove all function references (DOM/JS IE 6/7 memory leak workaround)
+			for (var i in movieElement) {
+				try {
+					if (typeof(movieElement[i]) === "function") {
+						movieElement[i] = null;
+					}
+				} catch (ex1) {}
+			}
+
+			// Remove the Movie Element from the page
+			try {
+				movieElement.parentNode.removeChild(movieElement);
+			} catch (ex) {}
+		}
+		
+		// Remove IE form fix reference
+		window[this.movieName] = null;
+
+		// Destroy other references
+		SWFUpload.instances[this.movieName] = null;
+		delete SWFUpload.instances[this.movieName];
+
+		this.movieElement = null;
+		this.settings = null;
+		this.customSettings = null;
+		this.eventQueue = null;
+		this.movieName = null;
+		
+		
+		return true;
+	} catch (ex2) {
+		return false;
+	}
+};
+
+
+// Public: displayDebugInfo prints out settings and configuration
+// information about this SWFUpload instance.
+// This function (and any references to it) can be deleted when placing
+// SWFUpload in production.
+SWFUpload.prototype.displayDebugInfo = function () {
+	this.debug(
+		[
+			"---SWFUpload Instance Info---\n",
+			"Version: ", SWFUpload.version, "\n",
+			"Movie Name: ", this.movieName, "\n",
+			"Settings:\n",
+			"\t", "upload_url:               ", this.settings.upload_url, "\n",
+			"\t", "flash_url:                ", this.settings.flash_url, "\n",
+			"\t", "use_query_string:         ", this.settings.use_query_string.toString(), "\n",
+			"\t", "requeue_on_error:         ", this.settings.requeue_on_error.toString(), "\n",
+			"\t", "http_success:             ", this.settings.http_success.join(", "), "\n",
+			"\t", "assume_success_timeout:   ", this.settings.assume_success_timeout, "\n",
+			"\t", "file_post_name:           ", this.settings.file_post_name, "\n",
+			"\t", "post_params:              ", this.settings.post_params.toString(), "\n",
+			"\t", "file_types:               ", this.settings.file_types, "\n",
+			"\t", "file_types_description:   ", this.settings.file_types_description, "\n",
+			"\t", "file_size_limit:          ", this.settings.file_size_limit, "\n",
+			"\t", "file_upload_limit:        ", this.settings.file_upload_limit, "\n",
+			"\t", "file_queue_limit:         ", this.settings.file_queue_limit, "\n",
+			"\t", "debug:                    ", this.settings.debug.toString(), "\n",
+
+			"\t", "prevent_swf_caching:      ", this.settings.prevent_swf_caching.toString(), "\n",
+
+			"\t", "button_placeholder_id:    ", this.settings.button_placeholder_id.toString(), "\n",
+			"\t", "button_placeholder:       ", (this.settings.button_placeholder ? "Set" : "Not Set"), "\n",
+			"\t", "button_image_url:         ", this.settings.button_image_url.toString(), "\n",
+			"\t", "button_width:             ", this.settings.button_width.toString(), "\n",
+			"\t", "button_height:            ", this.settings.button_height.toString(), "\n",
+			"\t", "button_text:              ", this.settings.button_text.toString(), "\n",
+			"\t", "button_text_style:        ", this.settings.button_text_style.toString(), "\n",
+			"\t", "button_text_top_padding:  ", this.settings.button_text_top_padding.toString(), "\n",
+			"\t", "button_text_left_padding: ", this.settings.button_text_left_padding.toString(), "\n",
+			"\t", "button_action:            ", this.settings.button_action.toString(), "\n",
+			"\t", "button_disabled:          ", this.settings.button_disabled.toString(), "\n",
+
+			"\t", "custom_settings:          ", this.settings.custom_settings.toString(), "\n",
+			"Event Handlers:\n",
+			"\t", "swfupload_loaded_handler assigned:  ", (typeof this.settings.swfupload_loaded_handler === "function").toString(), "\n",
+			"\t", "file_dialog_start_handler assigned: ", (typeof this.settings.file_dialog_start_handler === "function").toString(), "\n",
+			"\t", "file_queued_handler assigned:       ", (typeof this.settings.file_queued_handler === "function").toString(), "\n",
+			"\t", "file_queue_error_handler assigned:  ", (typeof this.settings.file_queue_error_handler === "function").toString(), "\n",
+			"\t", "upload_start_handler assigned:      ", (typeof this.settings.upload_start_handler === "function").toString(), "\n",
+			"\t", "upload_progress_handler assigned:   ", (typeof this.settings.upload_progress_handler === "function").toString(), "\n",
+			"\t", "upload_error_handler assigned:      ", (typeof this.settings.upload_error_handler === "function").toString(), "\n",
+			"\t", "upload_success_handler assigned:    ", (typeof this.settings.upload_success_handler === "function").toString(), "\n",
+			"\t", "upload_complete_handler assigned:   ", (typeof this.settings.upload_complete_handler === "function").toString(), "\n",
+			"\t", "debug_handler assigned:             ", (typeof this.settings.debug_handler === "function").toString(), "\n"
+		].join("")
+	);
+};
+
+/* Note: addSetting and getSetting are no longer used by SWFUpload but are included
+	the maintain v2 API compatibility
+*/
+// Public: (Deprecated) addSetting adds a setting value. If the value given is undefined or null then the default_value is used.
+SWFUpload.prototype.addSetting = function (name, value, default_value) {
+    if (value == undefined) {
+        return (this.settings[name] = default_value);
+    } else {
+        return (this.settings[name] = value);
+	}
+};
+
+// Public: (Deprecated) getSetting gets a setting. Returns an empty string if the setting was not found.
+SWFUpload.prototype.getSetting = function (name) {
+    if (this.settings[name] != undefined) {
+        return this.settings[name];
+	}
+
+    return "";
+};
+
+
+
+// Private: callFlash handles function calls made to the Flash element.
+// Calls are made with a setTimeout for some functions to work around
+// bugs in the ExternalInterface library.
+SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
+	argumentArray = argumentArray || [];
+	
+	var movieElement = this.getMovieElement();
+	var returnValue, returnString;
+
+	// Flash's method if calling ExternalInterface methods (code adapted from MooTools).
+	try {
+		returnString = movieElement.CallFunction('<invoke name="' + functionName + '" returntype="javascript">' + __flash__argumentsToXML(argumentArray, 0) + '</invoke>');
+		returnValue = eval(returnString);
+	} catch (ex) {
+		throw "Call to " + functionName + " failed";
+	}
+	
+	// Unescape file post param values
+	if (returnValue != undefined && typeof returnValue.post === "object") {
+		returnValue = this.unescapeFilePostParams(returnValue);
+	}
+
+	return returnValue;
+};
+
+/* *****************************
+	-- Flash control methods --
+	Your UI should use these
+	to operate SWFUpload
+   ***************************** */
+
+// WARNING: this function does not work in Flash Player 10
+// Public: selectFile causes a File Selection Dialog window to appear.  This
+// dialog only allows 1 file to be selected.
+SWFUpload.prototype.selectFile = function () {
+	this.callFlash("SelectFile");
+};
+
+// WARNING: this function does not work in Flash Player 10
+// Public: selectFiles causes a File Selection Dialog window to appear/ This
+// dialog allows the user to select any number of files
+// Flash Bug Warning: Flash limits the number of selectable files based on the combined length of the file names.
+// If the selection name length is too long the dialog will fail in an unpredictable manner.  There is no work-around
+// for this bug.
+SWFUpload.prototype.selectFiles = function () {
+	this.callFlash("SelectFiles");
+};
+
+
+// Public: startUpload starts uploading the first file in the queue unless
+// the optional parameter 'fileID' specifies the ID 
+SWFUpload.prototype.startUpload = function (fileID) {
+	this.callFlash("StartUpload", [fileID]);
+};
+
+// Public: cancelUpload cancels any queued file.  The fileID parameter may be the file ID or index.
+// If you do not specify a fileID the current uploading file or first file in the queue is cancelled.
+// If you do not want the uploadError event to trigger you can specify false for the triggerErrorEvent parameter.
+SWFUpload.prototype.cancelUpload = function (fileID, triggerErrorEvent) {
+	if (triggerErrorEvent !== false) {
+		triggerErrorEvent = true;
+	}
+	this.callFlash("CancelUpload", [fileID, triggerErrorEvent]);
+};
+
+// Public: stopUpload stops the current upload and requeues the file at the beginning of the queue.
+// If nothing is currently uploading then nothing happens.
+SWFUpload.prototype.stopUpload = function () {
+	this.callFlash("StopUpload");
+};
+
+/* ************************
+ * Settings methods
+ *   These methods change the SWFUpload settings.
+ *   SWFUpload settings should not be changed directly on the settings object
+ *   since many of the settings need to be passed to Flash in order to take
+ *   effect.
+ * *********************** */
+
+// Public: getStats gets the file statistics object.
+SWFUpload.prototype.getStats = function () {
+	return this.callFlash("GetStats");
+};
+
+// Public: setStats changes the SWFUpload statistics.  You shouldn't need to 
+// change the statistics but you can.  Changing the statistics does not
+// affect SWFUpload accept for the successful_uploads count which is used
+// by the upload_limit setting to determine how many files the user may upload.
+SWFUpload.prototype.setStats = function (statsObject) {
+	this.callFlash("SetStats", [statsObject]);
+};
+
+// Public: getFile retrieves a File object by ID or Index.  If the file is
+// not found then 'null' is returned.
+SWFUpload.prototype.getFile = function (fileID) {
+	if (typeof(fileID) === "number") {
+		return this.callFlash("GetFileByIndex", [fileID]);
+	} else {
+		return this.callFlash("GetFile", [fileID]);
+	}
+};
+
+// Public: addFileParam sets a name/value pair that will be posted with the
+// file specified by the Files ID.  If the name already exists then the
+// exiting value will be overwritten.
+SWFUpload.prototype.addFileParam = function (fileID, name, value) {
+	return this.callFlash("AddFileParam", [fileID, name, value]);
+};
+
+// Public: removeFileParam removes a previously set (by addFileParam) name/value
+// pair from the specified file.
+SWFUpload.prototype.removeFileParam = function (fileID, name) {
+	this.callFlash("RemoveFileParam", [fileID, name]);
+};
+
+// Public: setUploadUrl changes the upload_url setting.
+SWFUpload.prototype.setUploadURL = function (url) {
+	this.settings.upload_url = url.toString();
+	this.callFlash("SetUploadURL", [url]);
+};
+
+// Public: setPostParams changes the post_params setting
+SWFUpload.prototype.setPostParams = function (paramsObject) {
+	this.settings.post_params = paramsObject;
+	this.callFlash("SetPostParams", [paramsObject]);
+};
+
+// Public: addPostParam adds post name/value pair.  Each name can have only one value.
+SWFUpload.prototype.addPostParam = function (name, value) {
+	this.settings.post_params[name] = value;
+	this.callFlash("SetPostParams", [this.settings.post_params]);
+};
+
+// Public: removePostParam deletes post name/value pair.
+SWFUpload.prototype.removePostParam = function (name) {
+	delete this.settings.post_params[name];
+	this.callFlash("SetPostParams", [this.settings.post_params]);
+};
+
+// Public: setFileTypes changes the file_types setting and the file_types_description setting
+SWFUpload.prototype.setFileTypes = function (types, description) {
+	this.settings.file_types = types;
+	this.settings.file_types_description = description;
+	this.callFlash("SetFileTypes", [types, description]);
+};
+
+// Public: setFileSizeLimit changes the file_size_limit setting
+SWFUpload.prototype.setFileSizeLimit = function (fileSizeLimit) {
+	this.settings.file_size_limit = fileSizeLimit;
+	this.callFlash("SetFileSizeLimit", [fileSizeLimit]);
+};
+
+// Public: setFileUploadLimit changes the file_upload_limit setting
+SWFUpload.prototype.setFileUploadLimit = function (fileUploadLimit) {
+	this.settings.file_upload_limit = fileUploadLimit;
+	this.callFlash("SetFileUploadLimit", [fileUploadLimit]);
+};
+
+// Public: setFileQueueLimit changes the file_queue_limit setting
+SWFUpload.prototype.setFileQueueLimit = function (fileQueueLimit) {
+	this.settings.file_queue_limit = fileQueueLimit;
+	this.callFlash("SetFileQueueLimit", [fileQueueLimit]);
+};
+
+// Public: setFilePostName changes the file_post_name setting
+SWFUpload.prototype.setFilePostName = function (filePostName) {
+	this.settings.file_post_name = filePostName;
+	this.callFlash("SetFilePostName", [filePostName]);
+};
+
+// Public: setUseQueryString changes the use_query_string setting
+SWFUpload.prototype.setUseQueryString = function (useQueryString) {
+	this.settings.use_query_string = useQueryString;
+	this.callFlash("SetUseQueryString", [useQueryString]);
+};
+
+// Public: setRequeueOnError changes the requeue_on_error setting
+SWFUpload.prototype.setRequeueOnError = function (requeueOnError) {
+	this.settings.requeue_on_error = requeueOnError;
+	this.callFlash("SetRequeueOnError", [requeueOnError]);
+};
+
+// Public: setHTTPSuccess changes the http_success setting
+SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
+	if (typeof http_status_codes === "string") {
+		http_status_codes = http_status_codes.replace(" ", "").split(",");
+	}
+	
+	this.settings.http_success = http_status_codes;
+	this.callFlash("SetHTTPSuccess", [http_status_codes]);
+};
+
+// Public: setHTTPSuccess changes the http_success setting
+SWFUpload.prototype.setAssumeSuccessTimeout = function (timeout_seconds) {
+	this.settings.assume_success_timeout = timeout_seconds;
+	this.callFlash("SetAssumeSuccessTimeout", [timeout_seconds]);
+};
+
+// Public: setDebugEnabled changes the debug_enabled setting
+SWFUpload.prototype.setDebugEnabled = function (debugEnabled) {
+	this.settings.debug_enabled = debugEnabled;
+	this.callFlash("SetDebugEnabled", [debugEnabled]);
+};
+
+// Public: setButtonImageURL loads a button image sprite
+SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
+	if (buttonImageURL == undefined) {
+		buttonImageURL = "";
+	}
+	
+	this.settings.button_image_url = buttonImageURL;
+	this.callFlash("SetButtonImageURL", [buttonImageURL]);
+};
+
+// Public: setButtonDimensions resizes the Flash Movie and button
+SWFUpload.prototype.setButtonDimensions = function (width, height) {
+	this.settings.button_width = width;
+	this.settings.button_height = height;
+	
+	var movie = this.getMovieElement();
+	if (movie != undefined) {
+		movie.style.width = width + "px";
+		movie.style.height = height + "px";
+	}
+	
+	this.callFlash("SetButtonDimensions", [width, height]);
+};
+// Public: setButtonText Changes the text overlaid on the button
+SWFUpload.prototype.setButtonText = function (html) {
+	this.settings.button_text = html;
+	this.callFlash("SetButtonText", [html]);
+};
+// Public: setButtonTextPadding changes the top and left padding of the text overlay
+SWFUpload.prototype.setButtonTextPadding = function (left, top) {
+	this.settings.button_text_top_padding = top;
+	this.settings.button_text_left_padding = left;
+	this.callFlash("SetButtonTextPadding", [left, top]);
+};
+
+// Public: setButtonTextStyle changes the CSS used to style the HTML/Text overlaid on the button
+SWFUpload.prototype.setButtonTextStyle = function (css) {
+	this.settings.button_text_style = css;
+	this.callFlash("SetButtonTextStyle", [css]);
+};
+// Public: setButtonDisabled disables/enables the button
+SWFUpload.prototype.setButtonDisabled = function (isDisabled) {
+	this.settings.button_disabled = isDisabled;
+	this.callFlash("SetButtonDisabled", [isDisabled]);
+};
+// Public: setButtonAction sets the action that occurs when the button is clicked
+SWFUpload.prototype.setButtonAction = function (buttonAction) {
+	this.settings.button_action = buttonAction;
+	this.callFlash("SetButtonAction", [buttonAction]);
+};
+
+// Public: setButtonCursor changes the mouse cursor displayed when hovering over the button
+SWFUpload.prototype.setButtonCursor = function (cursor) {
+	this.settings.button_cursor = cursor;
+	this.callFlash("SetButtonCursor", [cursor]);
+};
+
+/* *******************************
+	Flash Event Interfaces
+	These functions are used by Flash to trigger the various
+	events.
+	
+	All these functions a Private.
+	
+	Because the ExternalInterface library is buggy the event calls
+	are added to a queue and the queue then executed by a setTimeout.
+	This ensures that events are executed in a determinate order and that
+	the ExternalInterface bugs are avoided.
+******************************* */
+
+SWFUpload.prototype.queueEvent = function (handlerName, argumentArray) {
+	// Warning: Don't call this.debug inside here or you'll create an infinite loop
+	
+	if (argumentArray == undefined) {
+		argumentArray = [];
+	} else if (!(argumentArray instanceof Array)) {
+		argumentArray = [argumentArray];
+	}
+	
+	var self = this;
+	if (typeof this.settings[handlerName] === "function") {
+		// Queue the event
+		this.eventQueue.push(function () {
+			this.settings[handlerName].apply(this, argumentArray);
+		});
+		
+		// Execute the next queued event
+		setTimeout(function () {
+			self.executeNextEvent();
+		}, 0);
+		
+	} else if (this.settings[handlerName] !== null) {
+		throw "Event handler " + handlerName + " is unknown or is not a function";
+	}
+};
+
+// Private: Causes the next event in the queue to be executed.  Since events are queued using a setTimeout
+// we must queue them in order to garentee that they are executed in order.
+SWFUpload.prototype.executeNextEvent = function () {
+	// Warning: Don't call this.debug inside here or you'll create an infinite loop
+
+	var  f = this.eventQueue ? this.eventQueue.shift() : null;
+	if (typeof(f) === "function") {
+		f.apply(this);
+	}
+};
+
+// Private: unescapeFileParams is part of a workaround for a flash bug where objects passed through ExternalInterface cannot have
+// properties that contain characters that are not valid for JavaScript identifiers. To work around this
+// the Flash Component escapes the parameter names and we must unescape again before passing them along.
+SWFUpload.prototype.unescapeFilePostParams = function (file) {
+	var reg = /[$]([0-9a-f]{4})/i;
+	var unescapedPost = {};
+	var uk;
+
+	if (file != undefined) {
+		for (var k in file.post) {
+			if (file.post.hasOwnProperty(k)) {
+				uk = k;
+				var match;
+				while ((match = reg.exec(uk)) !== null) {
+					uk = uk.replace(match[0], String.fromCharCode(parseInt("0x" + match[1], 16)));
+				}
+				unescapedPost[uk] = file.post[k];
+			}
+		}
+
+		file.post = unescapedPost;
+	}
+
+	return file;
+};
+
+// Private: Called by Flash to see if JS can call in to Flash (test if External Interface is working)
+SWFUpload.prototype.testExternalInterface = function () {
+	try {
+		return this.callFlash("TestExternalInterface");
+	} catch (ex) {
+		return false;
+	}
+};
+
+// Private: This event is called by Flash when it has finished loading. Don't modify this.
+// Use the swfupload_loaded_handler event setting to execute custom code when SWFUpload has loaded.
+SWFUpload.prototype.flashReady = function () {
+	// Check that the movie element is loaded correctly with its ExternalInterface methods defined
+	var movieElement = this.getMovieElement();
+
+	if (!movieElement) {
+		this.debug("Flash called back ready but the flash movie can't be found.");
+		return;
+	}
+
+	this.cleanUp(movieElement);
+	
+	this.queueEvent("swfupload_loaded_handler");
+};
+
+// Private: removes Flash added fuctions to the DOM node to prevent memory leaks in IE.
+// This function is called by Flash each time the ExternalInterface functions are created.
+SWFUpload.prototype.cleanUp = function (movieElement) {
+	// Pro-actively unhook all the Flash functions
+	try {
+		if (this.movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
+			this.debug("Removing Flash functions hooks (this should only run in IE and should prevent memory leaks)");
+			for (var key in movieElement) {
+				try {
+					if (typeof(movieElement[key]) === "function") {
+						movieElement[key] = null;
+					}
+				} catch (ex) {
+				}
+			}
+		}
+	} catch (ex1) {
+	
+	}
+
+	// Fix Flashes own cleanup code so if the SWFMovie was removed from the page
+	// it doesn't display errors.
+	window["__flash__removeCallback"] = function (instance, name) {
+		try {
+			if (instance) {
+				instance[name] = null;
+			}
+		} catch (flashEx) {
+		
+		}
+	};
+
+};
+
+
+/* This is a chance to do something before the browse window opens */
+SWFUpload.prototype.fileDialogStart = function () {
+	this.queueEvent("file_dialog_start_handler");
+};
+
+
+/* Called when a file is successfully added to the queue. */
+SWFUpload.prototype.fileQueued = function (file) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("file_queued_handler", file);
+};
+
+
+/* Handle errors that occur when an attempt to queue a file fails. */
+SWFUpload.prototype.fileQueueError = function (file, errorCode, message) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("file_queue_error_handler", [file, errorCode, message]);
+};
+
+/* Called after the file dialog has closed and the selected files have been queued.
+	You could call startUpload here if you want the queued files to begin uploading immediately. */
+SWFUpload.prototype.fileDialogComplete = function (numFilesSelected, numFilesQueued, numFilesInQueue) {
+	this.queueEvent("file_dialog_complete_handler", [numFilesSelected, numFilesQueued, numFilesInQueue]);
+};
+
+SWFUpload.prototype.uploadStart = function (file) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("return_upload_start_handler", file);
+};
+
+SWFUpload.prototype.returnUploadStart = function (file) {
+	var returnValue;
+	if (typeof this.settings.upload_start_handler === "function") {
+		file = this.unescapeFilePostParams(file);
+		returnValue = this.settings.upload_start_handler.call(this, file);
+	} else if (this.settings.upload_start_handler != undefined) {
+		throw "upload_start_handler must be a function";
+	}
+
+	// Convert undefined to true so if nothing is returned from the upload_start_handler it is
+	// interpretted as 'true'.
+	if (returnValue === undefined) {
+		returnValue = true;
+	}
+	
+	returnValue = !!returnValue;
+	
+	this.callFlash("ReturnUploadStart", [returnValue]);
+};
+
+
+
+SWFUpload.prototype.uploadProgress = function (file, bytesComplete, bytesTotal) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_progress_handler", [file, bytesComplete, bytesTotal]);
+};
+
+SWFUpload.prototype.uploadError = function (file, errorCode, message) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_error_handler", [file, errorCode, message]);
+};
+
+SWFUpload.prototype.uploadSuccess = function (file, serverData, responseReceived) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_success_handler", [file, serverData, responseReceived]);
+};
+
+SWFUpload.prototype.uploadComplete = function (file) {
+	file = this.unescapeFilePostParams(file);
+	this.queueEvent("upload_complete_handler", file);
+};
+
+/* Called by SWFUpload JavaScript and Flash functions when debug is enabled. By default it writes messages to the
+   internal debug console.  You can override this event and have messages written where you want. */
+SWFUpload.prototype.debug = function (message) {
+	this.queueEvent("debug_handler", message);
+};
+
+
+/* **********************************
+	Debug Console
+	The debug console is a self contained, in page location
+	for debug message to be sent.  The Debug Console adds
+	itself to the body if necessary.
+
+	The console is automatically scrolled as messages appear.
+	
+	If you are using your own debug handler or when you deploy to production and
+	have debug disabled you can remove these functions to reduce the file size
+	and complexity.
+********************************** */
+   
+// Private: debugMessage is the default debug_handler.  If you want to print debug messages
+// call the debug() function.  When overriding the function your own function should
+// check to see if the debug setting is true before outputting debug information.
+SWFUpload.prototype.debugMessage = function (message) {
+	if (this.settings.debug) {
+		var exceptionMessage, exceptionValues = [];
+
+		// Check for an exception object and print it nicely
+		if (typeof message === "object" && typeof message.name === "string" && typeof message.message === "string") {
+			for (var key in message) {
+				if (message.hasOwnProperty(key)) {
+					exceptionValues.push(key + ": " + message[key]);
+				}
+			}
+			exceptionMessage = exceptionValues.join("\n") || "";
+			exceptionValues = exceptionMessage.split("\n");
+			exceptionMessage = "EXCEPTION: " + exceptionValues.join("\nEXCEPTION: ");
+			SWFUpload.Console.writeLine(exceptionMessage);
+		} else {
+			SWFUpload.Console.writeLine(message);
+		}
+	}
+};
+
+SWFUpload.Console = {};
+SWFUpload.Console.writeLine = function (message) {
+	var console, documentForm;
+
+	try {
+		console = document.getElementById("SWFUpload_Console");
+
+		if (!console) {
+			documentForm = document.createElement("form");
+			document.getElementsByTagName("body")[0].appendChild(documentForm);
+
+			console = document.createElement("textarea");
+			console.id = "SWFUpload_Console";
+			console.style.fontFamily = "monospace";
+			console.setAttribute("wrap", "off");
+			console.wrap = "off";
+			console.style.overflow = "auto";
+			console.style.width = "700px";
+			console.style.height = "350px";
+			console.style.margin = "5px";
+			documentForm.appendChild(console);
+		}
+
+		console.value += message + "\n";
+
+		console.scrollTop = console.scrollHeight - console.clientHeight;
+	} catch (ex) {
+		alert("Exception: " + ex.name + " Message: " + ex.message);
+	}
+};
 /*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {    
+    
+    var animateDisplay = function (elm, animation, defaultAnimation) {
+        animation = (animation) ? animation : defaultAnimation;
+        elm.animate(animation.params, animation.duration, animation.callback);
+    };
+    
+    var animateProgress = function (elm, width, speed) {
+        // de-queue any left over animations
+        elm.queue("fx", []); 
+        
+        elm.animate({ 
+            width: width,
+            queue: false
+        }, 
+            speed);
+    };
+    
+    var showProgress = function (that, animation) {
+        if (animation === false) {
+            that.displayElement.show();
+        } else {
+            animateDisplay(that.displayElement, animation, that.options.showAnimation);
+        }
+    };
+    
+    var hideProgress = function (that, delay, animation) {
+        
+        delay = (delay === null || isNaN(delay)) ? that.options.delay : delay;
+        
+        if (delay) {
+            // use a setTimeout to delay the hide for n millies, note use of recursion
+            var timeOut = setTimeout(function () {
+                hideProgress(that, 0, animation);
+            }, delay);
+        } else {
+            if (animation === false) {
+                that.displayElement.hide();
+            } else {
+                animateDisplay(that.displayElement, animation, that.options.hideAnimation);
+            }
+        }   
+    };
+    
+    var updateWidth = function (that, newWidth, dontAnimate) {
+        dontAnimate  = dontAnimate || false;
+        var currWidth = that.indicator.width();
+        var direction = that.options.animate;
+        if ((newWidth > currWidth) && (direction === "both" || direction === "forward") && !dontAnimate) {
+            animateProgress(that.indicator, newWidth, that.options.speed);
+        } else if ((newWidth < currWidth) && (direction === "both" || direction === "backward") && !dontAnimate) {
+            animateProgress(that.indicator, newWidth, that.options.speed);
+        } else {
+            that.indicator.width(newWidth);
+        }
+    };
+         
+    var percentToPixels = function (that, percent) {
+        // progress does not support percents over 100, also all numbers are rounded to integers
+        return Math.round((Math.min(percent, 100) * that.progressBar.innerWidth()) / 100);
+    };
+    
+    var refreshRelativeWidth = function (that) {
+        var pixels = Math.max(percentToPixels(that, parseFloat(that.storedPercent)), that.options.minWidth);
+        updateWidth(that, pixels, true);
+    };
+        
+    var initARIA = function (ariaElement, ariaBusyText) {
+        ariaElement.attr("role", "progressbar");
+        ariaElement.attr("aria-valuemin", "0");
+        ariaElement.attr("aria-valuemax", "100");
+        ariaElement.attr("aria-valuenow", "0");
+        //Empty value for ariaBusyText will default to aria-valuenow.
+        if (ariaBusyText) {
+            ariaElement.attr("aria-valuetext", "");
+        }
+        ariaElement.attr("aria-busy", "false");
+    };
+    
+    var updateARIA = function (that, percent) {
+        var str = that.options.strings;
+        var busy = percent < 100 && percent > 0;
+        that.ariaElement.attr("aria-busy", busy);
+        that.ariaElement.attr("aria-valuenow", percent);   
+        //Empty value for ariaBusyText will default to aria-valuenow.
+        if (str.ariaBusyText) {
+            if (busy) {
+                var busyString = fluid.stringTemplate(str.ariaBusyText, {percentComplete : percent});           
+                that.ariaElement.attr("aria-valuetext", busyString);
+            } else if (percent === 100) {
+                // FLUID-2936: JAWS doesn't currently read the "Progress is complete" message to the user, even though we set it here.
+                that.ariaElement.attr("aria-valuetext", str.ariaDoneText);
+            }
+        }
+    };
+        
+    var updateText = function (label, value) {
+        label.html(value);
+    };
+    
+    var repositionIndicator = function (that) {
+        that.indicator.css("top", that.progressBar.position().top)
+            .css("left", 0)
+            .height(that.progressBar.height());
+        refreshRelativeWidth(that);
+    };
+        
+    var updateProgress = function (that, percent, labelText, animationForShow) {
+        
+        // show progress before updating, jQuery will handle the case if the object is already displayed
+        showProgress(that, animationForShow);
+            
+        // do not update if the value of percent is falsey
+        if (percent !== null) {
+            that.storedPercent = percent;
+        
+            var pixels = Math.max(percentToPixels(that, parseFloat(percent)), that.options.minWidth);   
+            updateWidth(that, pixels);
+        }
+        
+        if (labelText !== null) {
+            updateText(that.label, labelText);
+        }
+        
+        // update ARIA
+        if (that.ariaElement) {
+            updateARIA(that, percent);
+        }
+    };
+        
+    var setupProgress = function (that) {
+        that.displayElement = that.locate("displayElement");
+
+        // hide file progress in case it is showing
+        if (that.options.initiallyHidden) {
+            that.displayElement.hide();
+        }
+
+        that.progressBar = that.locate("progressBar");
+        that.label = that.locate("label");
+        that.indicator = that.locate("indicator");
+        that.ariaElement = that.locate("ariaElement");
+        
+        that.indicator.width(that.options.minWidth);
+
+        that.storedPercent = 0;
+                
+        // initialize ARIA
+        if (that.ariaElement) {
+            initARIA(that.ariaElement, that.options.strings.ariaBusyText);
+        }
+        
+        // afterProgressHidden:  
+        // Registering listener with the callback provided by the user and reinitializing
+        // the event trigger function. 
+        // Note: callback deprecated as of 1.5, use afterProgressHidden event
+        if (that.options.hideAnimation.callback) {
+            that.events.afterProgressHidden.addListener(that.options.hideAnimation.callback);           
+        }
+        
+        // triggers the afterProgressHidden event    
+        // Note: callback deprecated as of 1.5, use afterProgressHidden event
+        that.options.hideAnimation.callback = that.events.afterProgressHidden.fire;
+
+        
+        // onProgressBegin:
+        // Registering listener with the callback provided by the user and reinitializing
+        // the event trigger function.  
+        // Note: callback deprecated as of 1.5, use onProgressBegin event
+        if (that.options.showAnimation.callback) {
+            that.events.onProgressBegin.addListener(that.options.showAnimation.callback);                      
+        } 
+            
+        // triggers the onProgressBegin event
+        // Note: callback deprecated as of 1.5, use onProgressBegin event
+        that.options.showAnimation.callback = that.events.onProgressBegin.fire;
+    };
+           
+    /**
+    * Instantiates a new Progress component.
+    * 
+    * @param {jQuery|Selector|Element} container the DOM element in which the Uploader lives
+    * @param {Object} options configuration options for the component.
+    */
+    fluid.progress = function (container, options) {
+        var that = fluid.initView("fluid.progress", container, options);
+        setupProgress(that);
+        
+        /**
+         * Shows the progress bar if is currently hidden.
+         * 
+         * @param {Object} animation a custom animation used when showing the progress bar
+         */
+        that.show = function (animation) {
+            showProgress(that, animation);
+        };
+        
+        /**
+         * Hides the progress bar if it is visible.
+         * 
+         * @param {Number} delay the amount of time to wait before hiding
+         * @param {Object} animation a custom animation used when hiding the progress bar
+         */
+        that.hide = function (delay, animation) {
+            hideProgress(that, delay, animation);
+        };
+        
+        /**
+         * Updates the state of the progress bar.
+         * This will automatically show the progress bar if it is currently hidden.
+         * Percentage is specified as a decimal value, but will be automatically converted if needed.
+         * 
+         * 
+         * @param {Number|String} percentage the current percentage, specified as a "float-ish" value 
+         * @param {String} labelValue the value to set for the label; this can be an HTML string
+         * @param {Object} animationForShow the animation to use when showing the progress bar if it is hidden
+         */
+        that.update = function (percentage, labelValue, animationForShow) {
+            updateProgress(that, percentage, labelValue, animationForShow);
+        };
+        
+        that.refreshView = function () {
+            repositionIndicator(that);
+        };
+                        
+        return that;  
+    };
+      
+    fluid.defaults("fluid.progress", {
+        gradeNames: "fluid.viewComponent",
+        selectors: {
+            displayElement: ".flc-progress", // required, the element that gets displayed when progress is displayed, could be the indicator or bar or some larger outer wrapper as in an overlay effect
+            progressBar: ".flc-progress-bar", //required
+            indicator: ".flc-progress-indicator", //required
+            label: ".flc-progress-label", //optional
+            ariaElement: ".flc-progress-bar" // usually required, except in cases where there are more than one progressor for the same data such as a total and a sub-total
+        },
+        
+        strings: {
+            //Empty value for ariaBusyText will default to aria-valuenow.
+            ariaBusyText: "Progress is %percentComplete percent complete",
+            ariaDoneText: "Progress is complete."
+        },
+        
+        // progress display and hide animations, use the jQuery animation primatives, set to false to use no animation
+        // animations must be symetrical (if you hide with width, you'd better show with width) or you get odd effects
+        // see jQuery docs about animations to customize
+        showAnimation: {
+            params: {
+                opacity: "show"
+            }, 
+            duration: "slow",
+            //callback has been deprecated and will be removed as of 1.5, instead use onProgressBegin event 
+            callback: null 
+        }, // equivalent of $().fadeIn("slow")
+        
+        hideAnimation: {
+            params: {
+                opacity: "hide"
+            }, 
+            duration: "slow", 
+            //callback has been deprecated and will be removed as of 1.5, instead use afterProgressHidden event 
+            callback: null
+        }, // equivalent of $().fadeOut("slow")
+        
+        events: {            
+            onProgressBegin: null,
+            afterProgressHidden: null            
+        },
+
+        minWidth: 5, // 0 length indicators can look broken if there is a long pause between updates
+        delay: 0, // the amount to delay the fade out of the progress
+        speed: 200, // default speed for animations, pretty fast
+        animate: "forward", // suppport "forward", "backward", and "both", any other value is no animation either way
+        initiallyHidden: true, // supports progress indicators which may always be present
+        updatePosition: false
+    });
+    
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global window, fluid_1_5:true, jQuery, swfobject*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+    fluid.registerNamespace("fluid.browser");
+    
+    fluid.browser.binaryXHR = function () {
+        var canSendBinary = window.FormData || 
+            (window.XMLHttpRequest && 
+                window.XMLHttpRequest.prototype &&
+                window.XMLHttpRequest.prototype.sendAsBinary);
+        return canSendBinary ? fluid.typeTag("fluid.browser.supportsBinaryXHR") : undefined;
+    };
+    
+    fluid.browser.formData  = function () {
+        return window.FormData ? fluid.typeTag("fluid.browser.supportsFormData") : undefined;
+    };
+    
+    fluid.browser.flash = function () {
+        var hasModernFlash = (typeof(swfobject) !== "undefined") && (swfobject.getFlashPlayerVersion().major > 8);
+        return hasModernFlash ? fluid.typeTag("fluid.browser.supportsFlash") : undefined;
+    };
+    
+    fluid.progressiveChecker = function (options) {
+        var that = fluid.initLittleComponent("fluid.progressiveChecker", options);
+        return fluid.typeTag(fluid.find(that.options.checks, function(check) {
+            if (check.feature) {
+                return check.contextName;
+            }}, that.options.defaultContextName
+        ));
+    };
+    
+    fluid.defaults("fluid.progressiveChecker", {
+        gradeNames: "fluid.typeFount",
+        checks: [], // [{"feature": "{IoC Expression}", "contextName": "context.name"}]
+        defaultContextName: undefined
+    });
+    
+    fluid.progressiveCheckerForComponent = function (options) {
+        var that = fluid.initLittleComponent("fluid.progressiveCheckerForComponent", options);
+        var defaults = fluid.defaults(that.options.componentName);
+        return fluid.progressiveChecker(fluid.expandOptions(fluid.copy(defaults.progressiveCheckerOptions), that));  
+    };
+
+    fluid.defaults("fluid.progressiveCheckerForComponent", {
+        gradeNames: "fluid.typeFount"
+    });
+    
+    /**********************************************************
+     * This code runs immediately upon inclusion of this file *
+     **********************************************************/
+    
+    // Use JavaScript to hide any markup that is specifically in place for cases when JavaScript is off.
+    // Note: the use of fl-ProgEnhance-basic is deprecated, and replaced by fl-progEnhance-basic.
+    // It is included here for backward compatibility only.
+    $("head").append("<style type='text/css'>.fl-progEnhance-basic, .fl-ProgEnhance-basic { display: none; } .fl-progEnhance-enhanced, .fl-ProgEnhance-enhanced { display: block; }</style>");
+    
+    // Browser feature detection--adds corresponding type tags to the static environment,
+    // which can be used to define appropriate demands blocks for components using the IoC system.
+    var features = {
+        supportsBinaryXHR: fluid.browser.binaryXHR(),
+        supportsFormData: fluid.browser.formData(),
+        supportsFlash: fluid.browser.flash()
+    };
+    fluid.merge(null, fluid.staticEnvironment, features);
+    
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global window, fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+/************
+ * Uploader *
+ ************/
+
+(function ($, fluid) {
+
+    var fileOrFiles = function (that, numFiles) {
+        return (numFiles === 1) ? that.options.strings.progress.singleFile : 
+            that.options.strings.progress.pluralFiles;
+    };
+    
+    var enableElement = function (that, elm) {
+        elm.prop("disabled", false);
+        elm.removeClass(that.options.styles.dim);
+    };
+    
+    var disableElement = function (that, elm) {
+        elm.prop("disabled", true);
+        elm.addClass(that.options.styles.dim);
+    };
+    
+    var showElement = function (that, elm) {
+        elm.removeClass(that.options.styles.hidden);
+    };
+     
+    var hideElement = function (that, elm) {
+        elm.addClass(that.options.styles.hidden);
+    };
+    
+    var maxFilesUploaded = function (that) {
+        var fileUploadLimit = that.queue.getUploadedFiles().length + that.queue.getReadyFiles().length + that.queue.getErroredFiles().length;
+        return (fileUploadLimit === that.options.queueSettings.fileUploadLimit);
+    };    
+    
+    var setTotalProgressStyle = function (that, didError) {
+        didError = didError || false;
+        var indicator = that.totalProgress.indicator;
+        indicator.toggleClass(that.options.styles.totalProgress, !didError);
+        indicator.toggleClass(that.options.styles.totalProgressError, didError);
+    };
+    
+    var setStateEmpty = function (that) {
+        disableElement(that, that.locate("uploadButton"));
+        
+        // If the queue is totally empty, treat it specially.
+        if (that.queue.files.length === 0) { 
+            that.locate("browseButtonText").text(that.options.strings.buttons.browse);
+            that.locate("browseButton").removeClass(that.options.styles.browseButton);
+            showElement(that, that.locate("instructions"));
+        }
+    };
+    
+    // Only enable the browse button if the fileUploadLimit 
+    // has not been reached
+    var enableBrowseButton = function (that) {
+        if (!maxFilesUploaded(that)) {
+            enableElement(that, that.locate("browseButton"));
+            that.strategy.local.enableBrowseButton();            
+        }
+    };
+    
+    var setStateDone = function (that) {
+        disableElement(that, that.locate("uploadButton"));
+        hideElement(that, that.locate("pauseButton"));
+        showElement(that, that.locate("uploadButton"));
+        enableBrowseButton(that);
+    };
+
+    var setStateLoaded = function (that) {
+        that.locate("browseButtonText").text(that.options.strings.buttons.addMore);
+        that.locate("browseButton").addClass(that.options.styles.browseButton);
+        hideElement(that, that.locate("pauseButton"));
+        showElement(that, that.locate("uploadButton"));
+        enableElement(that, that.locate("uploadButton"));
+        hideElement(that, that.locate("instructions"));
+        that.totalProgress.hide();
+        enableBrowseButton(that);
+    };
+    
+    var setStateUploading = function (that) {
+        that.totalProgress.hide(false, false);
+        setTotalProgressStyle(that);
+        hideElement(that, that.locate("uploadButton"));
+        disableElement(that, that.locate("browseButton"));
+        that.strategy.local.disableBrowseButton();
+        enableElement(that, that.locate("pauseButton"));
+        showElement(that, that.locate("pauseButton"));
+        that.locate(that.options.focusWithEvent.afterUploadStart).focus();
+    };
+
+    var setStateFull = function (that) {        
+        that.locate("browseButtonText").text(that.options.strings.buttons.addMore);
+        that.locate("browseButton").addClass(that.options.styles.browseButton);
+        hideElement(that, that.locate("pauseButton"));
+        showElement(that, that.locate("uploadButton"));
+        enableElement(that, that.locate("uploadButton"));
+        disableElement(that, that.locate("browseButton"));        
+        that.strategy.local.disableBrowseButton();
+        hideElement(that, that.locate("instructions"));
+        that.totalProgress.hide();
+    };    
+    
+    var renderUploadTotalMessage = function (that) {
+        // Render template for the total file status message.
+        var numReadyFiles = that.queue.getReadyFiles().length;
+        var bytesReadyFiles = that.queue.sizeOfReadyFiles();
+        var fileLabelStr = fileOrFiles(that, numReadyFiles);
+
+        var totalStateStr = fluid.stringTemplate(that.options.strings.progress.toUploadLabel, {
+            fileCount: numReadyFiles, 
+            fileLabel: fileLabelStr, 
+            totalBytes: fluid.uploader.formatFileSize(bytesReadyFiles)
+        });
+        that.locate("totalFileStatusText").html(totalStateStr);
+    };
+    
+    var renderFileUploadLimit = function (that) {
+        if (that.options.queueSettings.fileUploadLimit > 0) {
+            var fileUploadLimitText = fluid.stringTemplate(that.options.strings.progress.fileUploadLimitLabel, {
+                fileUploadLimit: that.options.queueSettings.fileUploadLimit, 
+                fileLabel: fileOrFiles(that, that.options.queueSettings.fileUploadLimit) 
+            });
+            that.locate("fileUploadLimitText").html(fileUploadLimitText);
+        }
+    };
+        
+    var updateTotalProgress = function (that) {
+        var batch = that.queue.currentBatch;
+        var totalPercent = fluid.uploader.derivePercent(batch.totalBytesUploaded, batch.totalBytes);
+        var numFilesInBatch = batch.files.length;
+        var fileLabelStr = fileOrFiles(that, numFilesInBatch);
+        
+        var totalProgressStr = fluid.stringTemplate(that.options.strings.progress.totalProgressLabel, {
+            curFileN: batch.fileIdx, 
+            totalFilesN: numFilesInBatch, 
+            fileLabel: fileLabelStr,
+            currBytes: fluid.uploader.formatFileSize(batch.totalBytesUploaded), 
+            totalBytes: fluid.uploader.formatFileSize(batch.totalBytes)
+        });  
+        that.totalProgress.update(totalPercent, totalProgressStr);
+    };
+    
+    var updateTotalAtCompletion = function (that) {
+        var numErroredFiles = that.queue.getErroredFiles().length;
+        var numTotalFiles = that.queue.files.length;
+        var fileLabelStr = fileOrFiles(that, numTotalFiles);
+        var errorStr = "";
+        
+        // if there are errors then change the total progress bar
+        // and set up the errorStr so that we can use it in the totalProgressStr
+        if (numErroredFiles > 0) {
+            var errorLabelString = (numErroredFiles === 1) ? that.options.strings.progress.singleError : 
+                                                             that.options.strings.progress.pluralErrors;
+            setTotalProgressStyle(that, true);
+            errorStr = fluid.stringTemplate(that.options.strings.progress.numberOfErrors, {
+                errorsN: numErroredFiles,
+                errorLabel: errorLabelString
+            });
+        }
+        
+        var totalProgressStr = fluid.stringTemplate(that.options.strings.progress.completedLabel, {
+            curFileN: that.queue.getUploadedFiles().length, 
+            totalFilesN: numTotalFiles,
+            errorString: errorStr,
+            fileLabel: fileLabelStr,
+            totalCurrBytes: fluid.uploader.formatFileSize(that.queue.sizeOfUploadedFiles())
+        });
+        
+        that.totalProgress.update(100, totalProgressStr);
+    };
+
+    /*
+     * Summarizes the status of all the files in the file queue.  
+     */
+    var updateQueueSummaryText = function (that) {
+        var fileQueueTable = that.locate("fileQueue");        
+        if (that.queue.files.length === 0) {
+            fileQueueTable.attr("summary", that.options.strings.queue.emptyQueue);
+        } else {
+            var queueSummary = fluid.stringTemplate(that.options.strings.queue.queueSummary, {
+                totalUploaded: that.queue.getUploadedFiles().length, 
+                totalInUploadQueue: that.queue.files.length - that.queue.getUploadedFiles().length
+            });
+            fileQueueTable.attr("summary", queueSummary);
+        }
+    };
+    
+    var bindDOMEvents = function (that) {
+        that.locate("uploadButton").click(function () {
+            that.start();
+        });
+
+        that.locate("pauseButton").click(function () {
+            that.stop();
+        });
+    };
+
+    var updateStateAfterFileDialog = function (that) {
+        var queueLength = that.queue.getReadyFiles().length;
+        if (queueLength > 0) {
+            if (queueLength === that.options.queueSettings.fileUploadLimit) {
+                setStateFull(that);
+            } else {
+                setStateLoaded(that);
+            }
+            renderUploadTotalMessage(that);
+            that.locate(that.options.focusWithEvent.afterFileDialog).focus();
+            updateQueueSummaryText(that);
+        }
+    };
+    
+    var updateStateAfterFileRemoval = function (that) {
+        if (that.queue.getReadyFiles().length === 0) {
+            setStateEmpty(that);
+        } else {
+            setStateLoaded(that);
+        }
+        renderUploadTotalMessage(that);
+        updateQueueSummaryText(that);
+    };
+    
+    var updateStateAfterCompletion = function (that) {
+        if (that.queue.getReadyFiles().length === 0) {
+            setStateDone(that);
+        } else {
+            setStateLoaded(that);
+        }
+        updateTotalAtCompletion(that);
+        updateQueueSummaryText(that);
+    }; 
+    
+    var uploadNextOrFinish = function (that) {
+        if (that.queue.shouldUploadNextFile()) {
+            that.strategy.remote.uploadNextFile();
+        } else {
+            that.events.afterUploadComplete.fire(that.queue.currentBatch.files);
+            that.queue.clearCurrentBatch();
+        }        
+    };
+    
+    var bindEvents = function (that) {
+        that.events.afterFileDialog.addListener(function () {
+            updateStateAfterFileDialog(that);
+        });
+        
+        that.events.afterFileQueued.addListener(function (file) {
+            that.queue.addFile(file); 
+        });
+        
+        that.events.onFileRemoved.addListener(function (file) {
+            that.removeFile(file);
+        });
+        
+        that.events.afterFileRemoved.addListener(function () {
+            updateStateAfterFileRemoval(that);
+        });
+        
+        that.events.onUploadStart.addListener(function () {
+            setStateUploading(that);
+        });
+        
+        that.events.onUploadStop.addListener(function () {
+            that.locate(that.options.focusWithEvent.onUploadStop).focus();
+        });
+        
+        that.events.onFileStart.addListener(function (file) {
+            file.filestatus = fluid.uploader.fileStatusConstants.IN_PROGRESS;
+            that.queue.startFile();
+        });
+        
+        that.events.onFileProgress.addListener(function (file, currentBytes, totalBytes) {
+            that.queue.updateBatchStatus(currentBytes);
+            updateTotalProgress(that); 
+        });
+        
+        that.events.onFileComplete.addListener(function (file) {
+            that.queue.finishFile(file);
+            that.events.afterFileComplete.fire(file); 
+            uploadNextOrFinish(that);
+        });
+        
+        that.events.onFileSuccess.addListener(function (file) {
+            file.filestatus = fluid.uploader.fileStatusConstants.COMPLETE;
+            if (that.queue.currentBatch.bytesUploadedForFile === 0) {
+                that.queue.currentBatch.totalBytesUploaded += file.size;
+            }
+            
+            updateTotalProgress(that); 
+        });
+        
+        that.events.onFileError.addListener(function (file, error) {
+            if (error === fluid.uploader.errorConstants.UPLOAD_STOPPED) {
+                file.filestatus = fluid.uploader.fileStatusConstants.CANCELLED;
+                return;
+            } else {
+              // TODO: Avoid reaching directly into the filequeue and manipulating its state from here
+                file.filestatus = fluid.uploader.fileStatusConstants.ERROR;
+                if (that.queue.isUploading) {
+                    that.queue.currentBatch.totalBytesUploaded += file.size;
+                    that.queue.currentBatch.numFilesErrored++;
+                    uploadNextOrFinish(that);
+                }
+            }
+        });
+
+        that.events.afterUploadComplete.addListener(function () {
+            that.queue.isUploading = false;
+            updateStateAfterCompletion(that);
+        });
+    };
+    
+    var setupUploader = function (that) {
+        that.demo = fluid.typeTag(that.options.demo ? "fluid.uploader.demo" : "fluid.uploader.live");
+        
+        fluid.initDependents(that);
+
+        // Upload button should not be enabled until there are files to upload
+        disableElement(that, that.locate("uploadButton"));
+        bindDOMEvents(that);
+        bindEvents(that);
+        
+        updateQueueSummaryText(that);
+        that.statusUpdater();
+        renderFileUploadLimit(that);
+        
+        // Uploader uses application-style keyboard conventions, so give it a suitable role.
+        that.container.attr("role", "application");
+    };
+    
+    /**
+     * Instantiates a new Uploader component.
+     * 
+     * @param {Object} container the DOM element in which the Uploader lives
+     * @param {Object} options configuration options for the component.
+     */
+    fluid.uploader = function (container, uploaderOptions) {
+      // Do not try to expand uploaderOptions here or else our subcomponents will end up
+      // nested inside uploaderImpl
+        var that = fluid.initView("fluid.uploader", container);
+        
+        // Unsupported, non-API function fluid.uploader.transformOptions
+        if (fluid.uploader.transformOptions) {
+            uploaderOptions = fluid.uploader.transformOptions(uploaderOptions);
+        }
+
+        that.uploaderOptions = uploaderOptions;
+        fluid.initDependents(that);
+        return that.uploaderImpl;
+    };
+    
+    fluid.uploaderImpl = function () {
+        fluid.fail("Error creating uploader component - please make sure that a " + 
+            "progressiveCheckerForComponent for \"fluid.uploader\" is registered either in the " + 
+            "static environment or else is visible in the current component tree");
+    };
+    
+    fluid.defaults("fluid.uploader", {
+        gradeNames: ["fluid.viewComponent"],
+        components: {
+            uploaderContext: {
+                type: "fluid.progressiveCheckerForComponent",
+                options: {componentName: "fluid.uploader"}
+            },
+            uploaderImpl: {
+                type: "fluid.uploaderImpl",
+                container: "{uploader}.container",
+                options: "{uploader}.uploaderOptions"
+            }
+        },
+        progressiveCheckerOptions: {
+            checks: [
+                {
+                    feature: "{fluid.browser.supportsBinaryXHR}",
+                    contextName: "fluid.uploader.html5"
+                },
+                {
+                    feature: "{fluid.browser.supportsFlash}",
+                    contextName: "fluid.uploader.swfUpload"
+                }
+            ],
+            defaultContextName: "fluid.uploader.singleFile"
+        }
+    });
+    
+    // Ensure that for all uploaders created via IoC, we bypass the wrapper and directly create the concrete uploader
+    fluid.alias("fluid.uploader", "fluid.uploaderImpl");
+    
+    // This method has been deprecated as of Infusion 1.3. Use fluid.uploader() instead, 
+    // which now includes built-in support for progressive enhancement.
+    fluid.progressiveEnhanceableUploader = function (container, enhanceable, options) {
+        return fluid.uploader(container, options);
+    };
+
+    /**
+     * Multiple file Uploader implementation. Use fluid.uploader() for IoC-resolved, progressively
+     * enhanceable Uploader, or call this directly if you don't want support for old-style single uploads
+     *
+     * @param {jQueryable} container the component's container
+     * @param {Object} options configuration options
+     */
+    fluid.uploader.multiFileUploader = function (container, options) {
+        var that = fluid.initView("fluid.uploader.multiFileUploader", container, options);
+        that.queue = fluid.uploader.fileQueue();
+        
+        /**
+         * Opens the native OS browse file dialog.
+         */
+        that.browse = function () {
+            if (!that.queue.isUploading) {
+                that.strategy.local.browse();
+            }
+        };
+        
+        /**
+         * Removes the specified file from the upload queue.
+         * 
+         * @param {File} file the file to remove
+         */
+        that.removeFile = function (file) {
+            that.queue.removeFile(file);
+            that.strategy.local.removeFile(file);
+            that.events.afterFileRemoved.fire(file);
+        };
+        
+        /**
+         * Starts uploading all queued files to the server.
+         */
+        that.start = function () {
+            that.queue.start();
+            that.events.onUploadStart.fire(that.queue.currentBatch.files);           
+            that.strategy.remote.uploadNextFile();
+        };
+        
+        /**
+         * Cancels an in-progress upload.
+         */
+        that.stop = function () {
+            that.events.onUploadStop.fire();
+            that.strategy.remote.stop();
+        };
+        
+        setupUploader(that);
+        return that;  
+    };
+    
+    fluid.defaults("fluid.uploader.multiFileUploader", {
+        gradeNames: "fluid.viewComponent",
+        components: {
+            strategy: {
+                type: "fluid.uploader.progressiveStrategy"
+            },
+
+            errorPanel: {
+                type: "fluid.uploader.errorPanel"
+            },
+
+            fileQueueView: {
+                type: "fluid.uploader.fileQueueView",
+                options: {
+                    model: "{multiFileUploader}.queue.files",
+                    uploaderContainer: "{multiFileUploader}.container"
+                }
+            },
+            
+            totalProgress: {
+                type: "fluid.uploader.totalProgressBar",
+                options: {
+                    selectors: {
+                        progressBar: ".flc-uploader-queue-footer",
+                        displayElement: ".flc-uploader-total-progress", 
+                        label: ".flc-uploader-total-progress-text",
+                        indicator: ".flc-uploader-total-progress",
+                        ariaElement: ".flc-uploader-total-progress"
+                    }
+                }
+            }
+        },
+        
+        invokers: {
+            statusUpdater: "fluid.uploader.ariaLiveRegionUpdater"
+        },
+        
+        queueSettings: {
+            uploadURL: "",
+            postParams: {},
+            fileSizeLimit: "20480",
+            fileTypes: null,
+            fileTypesDescription: null,
+            fileUploadLimit: 0,
+            fileQueueLimit: 0
+        },
+
+        demo: false,
+        
+        selectors: {
+            fileQueue: ".flc-uploader-queue",
+            browseButton: ".flc-uploader-button-browse",
+            browseButtonText: ".flc-uploader-button-browse-text",
+            uploadButton: ".flc-uploader-button-upload",
+            pauseButton: ".flc-uploader-button-pause",
+            totalFileStatusText: ".flc-uploader-total-progress-text",
+            fileUploadLimitText: ".flc-uploader-upload-limit-text",
+            instructions: ".flc-uploader-browse-instructions",
+            statusRegion: ".flc-uploader-status-region",
+            errorsPanel: ".flc-uploader-errorsPanel"
+        },
+
+        // Specifies a selector name to move keyboard focus to when a particular event fires.
+        // Event listeners must already be implemented to use these options.
+        focusWithEvent: {
+            afterFileDialog: "uploadButton",
+            afterUploadStart: "pauseButton",
+            onUploadStop: "uploadButton"
+        },
+        
+        styles: {
+            disabled: "fl-uploader-disabled",
+            hidden: "fl-uploader-hidden",
+            dim: "fl-uploader-dim",
+            totalProgress: "fl-uploader-total-progress-okay",
+            totalProgressError: "fl-uploader-total-progress-errored",
+            browseButton: "fl-uploader-browseMore"
+        },
+        
+        events: {
+            afterReady: null,
+            onFileDialog: null,
+            onFilesSelected: null,
+            onFileQueued: null,
+            afterFileQueued: null,
+            onFileRemoved: null,
+            afterFileRemoved: null,
+            afterFileDialog: null,
+            onUploadStart: null,
+            onUploadStop: null,
+            onFileStart: null,
+            onFileProgress: null,
+            onFileError: null,
+            onQueueError: null,
+            onFileSuccess: null,
+            onFileComplete: null,
+            afterFileComplete: null,
+            afterUploadComplete: null
+        },
+
+        strings: {
+            progress: {
+                fileUploadLimitLabel: "%fileUploadLimit %fileLabel maximum",
+                toUploadLabel: "To upload: %fileCount %fileLabel (%totalBytes)", 
+                totalProgressLabel: "Uploading: %curFileN of %totalFilesN %fileLabel (%currBytes of %totalBytes)", 
+                completedLabel: "Uploaded: %curFileN of %totalFilesN %fileLabel (%totalCurrBytes)%errorString",
+                numberOfErrors: ", %errorsN %errorLabel",
+                singleFile: "file",
+                pluralFiles: "files",
+                singleError: "error",
+                pluralErrors: "errors"
+            },
+            buttons: {
+                browse: "Browse Files",
+                addMore: "Add More",
+                stopUpload: "Stop Upload",
+                cancelRemaning: "Cancel remaining Uploads",
+                resumeUpload: "Resume Upload"
+            },
+            queue: {
+                emptyQueue: "File list: No files waiting to be uploaded.",
+                queueSummary: "File list:  %totalUploaded files uploaded, %totalInUploadQueue file waiting to be uploaded." 
+            }
+        },
+        
+        mergePolicy: {
+            "fileQueueView.options.model": "preserve"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.totalProgressBar", "fluid.uploader.multiFileUploader", {
+        funcName: "fluid.progress",
+        container: "{multiFileUploader}.container"
+    });
+    
+    /** Demands blocks for binding to fileQueueView **/
+            
+    fluid.demands("fluid.uploader.fileQueueView", "fluid.uploader.multiFileUploader", {
+        container: "{multiFileUploader}.dom.fileQueue",
+        options: {
+            events: {
+                onFileRemoved: "{multiFileUploader}.events.onFileRemoved"
+            }
+        }
+    });
+        
+    fluid.demands("fluid.uploader.fileQueueView.eventBinder", [
+        "fluid.uploader.multiFileUploader",
+        "fluid.uploader.fileQueueView"
+    ], {
+        options: {
+            listeners: {
+                "{multiFileUploader}.events.afterFileQueued": "{fileQueueView}.addFile",
+                "{multiFileUploader}.events.onUploadStart": "{fileQueueView}.prepareForUpload",
+                "{multiFileUploader}.events.onFileStart": "{fileQueueView}.showFileProgress",
+                "{multiFileUploader}.events.onFileProgress": "{fileQueueView}.updateFileProgress",
+                "{multiFileUploader}.events.onFileSuccess": "{fileQueueView}.markFileComplete",
+                "{multiFileUploader}.events.onFileError": "{fileQueueView}.showErrorForFile",
+                "{multiFileUploader}.events.afterFileComplete": "{fileQueueView}.hideFileProgress",
+                "{multiFileUploader}.events.afterUploadComplete": "{fileQueueView}.refreshAfterUpload"
+            }
+        }
+    });
+        
+   /**
+    * Pretty prints a file's size, converting from bytes to kilobytes or megabytes.
+    * 
+    * @param {Number} bytes the files size, specified as in number bytes.
+    */
+    fluid.uploader.formatFileSize = function (bytes) {
+        if (typeof (bytes) === "number") {
+            if (bytes === 0) {
+                return "0.0 KB";
+            } else if (bytes > 0) {
+                if (bytes < 1048576) {
+                    return (Math.ceil(bytes / 1024 * 10) / 10).toFixed(1) + " KB";
+                } else {
+                    return (Math.ceil(bytes / 1048576 * 10) / 10).toFixed(1) + " MB";
+                }
+            }
+        }
+        return "";
+    };
+
+    fluid.uploader.derivePercent = function (num, total) {
+        return Math.round((num * 100) / total);
+    };
+     
+    // TODO: Refactor this to be a general ARIA utility
+    fluid.uploader.ariaLiveRegionUpdater = function (statusRegion, totalFileStatusText, events) {
+        statusRegion.attr("role", "log");     
+        statusRegion.attr("aria-live", "assertive");
+        statusRegion.attr("aria-relevant", "text");
+        statusRegion.attr("aria-atomic", "true");
+
+        var regionUpdater = function () {
+            statusRegion.text(totalFileStatusText.text());
+        };
+
+        events.afterFileDialog.addListener(regionUpdater);
+        events.afterFileRemoved.addListener(regionUpdater);
+        events.afterUploadComplete.addListener(regionUpdater);
+    };
+    
+    fluid.demands("fluid.uploader.ariaLiveRegionUpdater", "fluid.uploader.multiFileUploader", {
+        funcName: "fluid.uploader.ariaLiveRegionUpdater",
+        args: [
+            "{multiFileUploader}.dom.statusRegion",
+            "{multiFileUploader}.dom.totalFileStatusText",
+            "{multiFileUploader}.events"
+        ]
+    });
+
+    
+    /**************************************************
+     * Error constants for the Uploader               *
+     * TODO: These are SWFUpload-specific error codes *
+     **************************************************/
+    // TODO: Change these opaque numerical constants into strings which are easy to interpret
+    fluid.uploader.queueErrorConstants = {
+        QUEUE_LIMIT_EXCEEDED: -100,
+        FILE_EXCEEDS_SIZE_LIMIT: -110,
+        ZERO_BYTE_FILE: -120,
+        INVALID_FILETYPE: -130
+    };
+    
+    fluid.uploader.errorConstants = {
+        HTTP_ERROR: -200,
+        MISSING_UPLOAD_URL: -210,
+        IO_ERROR: -220,
+        SECURITY_ERROR: -230,
+        UPLOAD_LIMIT_EXCEEDED: -240,
+        UPLOAD_FAILED: -250,
+        SPECIFIED_FILE_ID_NOT_FOUND: -260,
+        FILE_VALIDATION_FAILED: -270,
+        FILE_CANCELLED: -280,
+        UPLOAD_STOPPED: -290
+    };
+    
+    fluid.uploader.fileStatusConstants = {
+        QUEUED: -1,
+        IN_PROGRESS: -2,
+        ERROR: -3,
+        COMPLETE: -4,
+        CANCELLED: -5
+    };
+
+    var toggleVisibility = function (toShow, toHide) {
+        // For FLUID-2789: hide() doesn't work in Opera
+        if (window.opera) { 
+            toShow.show().removeClass("hideUploaderForOpera");
+            toHide.show().addClass("hideUploaderForOpera");
+        } else {
+            toShow.show();
+            toHide.hide();
+        }
+    };
+
+    /**
+     * Single file Uploader implementation. Use fluid.uploader() for IoC-resolved, progressively
+     * enhanceable Uploader, or call this directly if you only want a standard single file uploader.
+     * But why would you want that?
+     *
+     * @param {jQueryable} container the component's container
+     * @param {Object} options configuration options
+     */
+    fluid.uploader.singleFileUploader = function (container, options) {
+        var that = fluid.initView("fluid.uploader.singleFileUploader", container, options);
+        // TODO: direct DOM fascism that will fail with multiple uploaders on a single page.
+        toggleVisibility($(that.options.selectors.basicUpload), that.container);
+        return that;
+    };
+
+    fluid.defaults("fluid.uploader.singleFileUploader", {
+        gradeNames: "fluid.viewComponent",
+        selectors: {
+            basicUpload: ".fl-progEnhance-basic"
+        }
+    });
+
+    fluid.demands("fluid.uploaderImpl", "fluid.uploader.singleFile", {
+        funcName: "fluid.uploader.singleFileUploader"
+    });
+    
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery, SWFUpload*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+    
+    fluid.uploader = fluid.uploader || {};
+    
+    var filterFiles = function (files, filterFn) {
+        var filteredFiles = [];
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (filterFn(file) === true) {
+                filteredFiles.push(file);
+            }
+        }
+        
+        return filteredFiles;
+    };
+     
+    fluid.uploader.fileQueue = function () {
+        var that = {};
+        that.files = [];
+        that.isUploading = false;
+        
+        /********************
+         * Queue Operations *
+         ********************/
+         
+        that.start = function () {
+            that.setupCurrentBatch();
+            that.isUploading = true;
+            that.shouldStop = false;
+        };
+        
+        that.startFile = function () {
+            that.currentBatch.fileIdx++;
+            that.currentBatch.bytesUploadedForFile = 0;
+            that.currentBatch.previousBytesUploadedForFile = 0; 
+        };
+                
+        that.finishFile = function (file) {
+            that.currentBatch.numFilesCompleted++;
+        };
+        
+        that.shouldUploadNextFile = function () {
+            return !that.shouldStop && 
+                that.isUploading && 
+                (that.currentBatch.numFilesCompleted + that.currentBatch.numFilesErrored) 
+                < that.currentBatch.files.length;
+        };
+        
+        /*****************************
+         * File manipulation methods *
+         *****************************/
+         
+        that.addFile = function (file) {
+            that.files.push(file);    
+        };
+        
+        that.removeFile = function (file) {
+            var idx = $.inArray(file, that.files);
+            that.files.splice(idx, 1);        
+        };
+        
+        /**********************
+         * Queue Info Methods *
+         **********************/
+         
+        that.totalBytes = function () {
+            return fluid.uploader.fileQueue.sizeOfFiles(that.files);
+        };
+
+        that.getReadyFiles = function () {
+            return filterFiles(that.files, function (file) {
+                return (file.filestatus === fluid.uploader.fileStatusConstants.QUEUED || file.filestatus === fluid.uploader.fileStatusConstants.CANCELLED);
+            });        
+        };
+        
+        that.getErroredFiles = function () {
+            return filterFiles(that.files, function (file) {
+                return (file.filestatus === fluid.uploader.fileStatusConstants.ERROR);
+            });        
+        };
+        
+        that.sizeOfReadyFiles = function () {
+            return fluid.uploader.fileQueue.sizeOfFiles(that.getReadyFiles());
+        };
+        
+        that.getUploadedFiles = function () {
+            return filterFiles(that.files, function (file) {
+                return (file.filestatus === fluid.uploader.fileStatusConstants.COMPLETE);
+            });        
+        };
+
+        that.sizeOfUploadedFiles = function () {
+            return fluid.uploader.fileQueue.sizeOfFiles(that.getUploadedFiles());
+        };
+
+        /*****************
+         * Batch Methods *
+         *****************/
+         
+        that.setupCurrentBatch = function () {
+            that.clearCurrentBatch();
+            that.updateCurrentBatch();
+        };
+        
+        that.clearCurrentBatch = function () {
+            that.currentBatch = {
+                fileIdx: 0,
+                files: [],
+                totalBytes: 0,
+                numFilesCompleted: 0,
+                numFilesErrored: 0,
+                bytesUploadedForFile: 0,
+                previousBytesUploadedForFile: 0,
+                totalBytesUploaded: 0
+            };
+        };
+        
+        that.updateCurrentBatch = function () {
+            var readyFiles = that.getReadyFiles();
+            that.currentBatch.files = readyFiles;
+            that.currentBatch.totalBytes = fluid.uploader.fileQueue.sizeOfFiles(readyFiles);
+        };
+        
+        that.updateBatchStatus = function (currentBytes) {
+            var byteIncrement = currentBytes - that.currentBatch.previousBytesUploadedForFile;
+            that.currentBatch.totalBytesUploaded += byteIncrement;
+            that.currentBatch.bytesUploadedForFile += byteIncrement;
+            that.currentBatch.previousBytesUploadedForFile = currentBytes;
+        };
+                
+        return that;
+    };
+    
+    fluid.uploader.fileQueue.sizeOfFiles = function (files) {
+        var totalBytes = 0;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            totalBytes += file.size;
+        }        
+        return totalBytes;
+    };
+          
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2008-2009 University of Cambridge
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+/*******************
+ * File Queue View *
+ *******************/
+
+(function ($, fluid) {
+    
+    // Real data binding would be nice to replace these two pairs.
+    var rowForFile = function (that, file) {
+        return that.locate("fileQueue").find("#" + file.id);
+    };
+    
+    var errorRowForFile = function (that, file) {
+        return $("#" + file.id + "_error", that.container);
+    };
+    
+    var fileForRow = function (that, row) {
+        var files = that.model;
+        var i;
+        for (i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (file.id.toString() === row.prop("id")) {
+                return file;
+            }
+        }
+        return null;
+    };
+    
+    var progressorForFile = function (that, file) {
+        var progressId = file.id + "_progress";
+        return that.fileProgressors[progressId];
+    };
+    
+    var startFileProgress = function (that, file) {
+        var fileRowElm = rowForFile(that, file);
+        that.scroller.scrollTo(fileRowElm);
+               
+        // update the progressor and make sure that it's in position
+        var fileProgressor = progressorForFile(that, file);
+        fileProgressor.refreshView();
+        fileProgressor.show();
+    };
+        
+    var updateFileProgress = function (that, file, fileBytesComplete, fileTotalBytes) {
+        var filePercent = fluid.uploader.derivePercent(fileBytesComplete, fileTotalBytes);
+        var filePercentStr = filePercent + "%";    
+        progressorForFile(that, file).update(filePercent, filePercentStr);
+    };
+    
+    var hideFileProgress = function (that, file) {
+        var fileRowElm = rowForFile(that, file);
+        progressorForFile(that, file).hide();
+        if (file.filestatus === fluid.uploader.fileStatusConstants.COMPLETE) {
+            that.locate("fileIconBtn", fileRowElm).removeClass(that.options.styles.dim);
+        } 
+    };
+    
+    var removeFileProgress = function (that, file) {
+        var fileProgressor = progressorForFile(that, file);
+        if (!fileProgressor) {
+            return;
+        }
+        var rowProgressor = fileProgressor.displayElement;
+        rowProgressor.remove();
+    };
+ 
+    var animateRowRemoval = function (that, row) {
+        row.fadeOut("fast", function () {
+            row.remove();  
+            that.refreshView();
+        });
+    };
+    
+    var removeFileErrorRow = function (that, file) {
+        if (file.filestatus === fluid.uploader.fileStatusConstants.ERROR) {
+            animateRowRemoval(that, errorRowForFile(that, file));
+        }
+    };
+   
+    var removeFileAndRow = function (that, file, row) {
+        // Clean up the stuff associated with a file row.
+        removeFileProgress(that, file);
+        removeFileErrorRow(that, file);
+        
+        // Remove the file itself.
+        that.events.onFileRemoved.fire(file);
+        animateRowRemoval(that, row);
+    };
+    
+    var removeFileForRow = function (that, row) {
+        var file = fileForRow(that, row);
+        if (!file || file.filestatus === fluid.uploader.fileStatusConstants.COMPLETE) {
+            return;
+        }
+        removeFileAndRow(that, file, row);
+    };
+    
+    var removeRowForFile = function (that, file) {
+        var row = rowForFile(that, file);
+        removeFileAndRow(that, file, row);
+    };
+    
+    var bindHover = function (row, styles) {
+        var over = function () {
+            if (row.hasClass(styles.ready) && !row.hasClass(styles.uploading)) {
+                row.addClass(styles.hover);
+            }
+        };
+        
+        var out = function () {
+            if (row.hasClass(styles.ready) && !row.hasClass(styles.uploading)) {
+                row.removeClass(styles.hover);
+            }   
+        };
+        row.hover(over, out);
+    };
+    
+    var bindDeleteKey = function (that, row) {
+        var deleteHandler = function () {
+            removeFileForRow(that, row);
+        };
+       
+        fluid.activatable(row, null, {
+            additionalBindings: [{
+                key: $.ui.keyCode.DELETE, 
+                activateHandler: deleteHandler
+            }]
+        });
+    };
+    
+    var bindRowHandlers = function (that, row) {
+        if ($.browser.msie && $.browser.version < 7) {
+            bindHover(row, that.options.styles);
+        }
+        
+        that.locate("fileIconBtn", row).click(function () {
+            removeFileForRow(that, row);
+        });
+        
+        bindDeleteKey(that, row);
+    };
+    
+    var renderRowFromTemplate = function (that, file) {
+        var row = that.rowTemplate.clone(),
+            fileName = file.name,
+            fileSize = fluid.uploader.formatFileSize(file.size);
+        
+        row.removeClass(that.options.styles.hiddenTemplate);
+        that.locate("fileName", row).text(fileName);
+        that.locate("fileSize", row).text(fileSize);
+        that.locate("fileIconBtn", row).addClass(that.options.styles.remove);
+        row.prop("id", file.id);
+        row.addClass(that.options.styles.ready);
+        bindRowHandlers(that, row);
+        fluid.updateAriaLabel(row, fileName + " " + fileSize);
+        return row;    
+    };
+    
+    var createProgressorFromTemplate = function (that, row) {
+        // create a new progress bar for the row and position it
+        var rowProgressor = that.rowProgressorTemplate.clone();
+        var rowId = row.prop("id");
+        var progressId = rowId + "_progress";
+        rowProgressor.prop("id", progressId);
+        rowProgressor.css("top", row.position().top);
+        rowProgressor.height(row.height()).width(5);
+        that.container.after(rowProgressor);
+       
+        that.fileProgressors[progressId] = fluid.progress(that.options.uploaderContainer, {
+            selectors: {
+                progressBar: "#" + rowId,
+                displayElement: "#" + progressId,
+                label: "#" + progressId + " .fl-uploader-file-progress-text",
+                indicator: "#" + progressId
+            }
+        });
+    };
+    
+    var addFile = function (that, file) {
+        var row = renderRowFromTemplate(that, file);
+        /* FLUID-2720 - do not hide the row under IE8 */
+        if (!($.browser.msie && ($.browser.version >= 8))) {
+            row.hide();
+        }
+        that.container.append(row);
+        row.attr("title", that.options.strings.status.remove);
+        row.fadeIn("slow");
+        createProgressorFromTemplate(that, row);
+        that.refreshView();
+        that.scroller.scrollTo("100%");
+    };
+    
+    // Toggle keyboard row handlers on and off depending on the uploader state
+    var enableRows = function (rows, state) {
+        var i;
+        for (i = 0; i < rows.length; i++) {
+            fluid.enabled(rows[i], state);  
+        }               
+    };
+    
+    var prepareForUpload = function (that) {
+        var rowButtons = that.locate("fileIconBtn", that.locate("fileRows"));
+        rowButtons.prop("disabled", true);
+        rowButtons.addClass(that.options.styles.dim);
+        enableRows(that.locate("fileRows"), false);
+    };
+
+    var refreshAfterUpload = function (that) {
+        var rowButtons = that.locate("fileIconBtn", that.locate("fileRows"));
+        rowButtons.prop("disabled", false);
+        rowButtons.removeClass(that.options.styles.dim);
+        enableRows(that.locate("fileRows"), true);        
+    };
+        
+    var changeRowState = function (that, row, newState) {
+        row.removeClass(that.options.styles.ready).removeClass(that.options.styles.error).addClass(newState);
+    };
+    
+    var markRowAsComplete = function (that, file) {
+        // update styles and keyboard bindings for the file row
+        var row = rowForFile(that, file);
+        changeRowState(that, row, that.options.styles.uploaded);
+        row.attr("title", that.options.strings.status.success);
+        fluid.enabled(row, false);
+        
+        // update the click event and the styling for the file delete button
+        var removeRowBtn = that.locate("fileIconBtn", row);
+        removeRowBtn.unbind("click");
+        removeRowBtn.removeClass(that.options.styles.remove);
+        removeRowBtn.attr("title", that.options.strings.status.success); 
+    };
+    
+    var renderErrorInfoRowFromTemplate = function (that, fileRow, error) {
+        // Render the row by cloning the template and binding its id to the file.
+        var errorRow = that.errorInfoRowTemplate.clone();
+        errorRow.prop("id", fileRow.prop("id") + "_error");
+        
+        // Look up the error message and render it.
+        var errorType = fluid.keyForValue(fluid.uploader.errorConstants, error);
+        var errorMsg = that.options.strings.errors[errorType];
+        that.locate("errorText", errorRow).text(errorMsg);
+        fileRow.after(errorRow);
+        that.scroller.scrollTo(errorRow);
+    };
+    
+    var showErrorForFile = function (that, file, error) {
+        hideFileProgress(that, file);
+        if (file.filestatus === fluid.uploader.fileStatusConstants.ERROR) {
+            var fileRowElm = rowForFile(that, file);
+            changeRowState(that, fileRowElm, that.options.styles.error);
+            renderErrorInfoRowFromTemplate(that, fileRowElm, error);
+        }
+    };
+    
+    var addKeyboardNavigation = function (that) {
+        fluid.tabbable(that.container);
+        that.selectableContext = fluid.selectable(that.container, {
+            selectableSelector: that.options.selectors.fileRows,
+            onSelect: function (itemToSelect) {
+                $(itemToSelect).addClass(that.options.styles.selected);
+            },
+            onUnselect: function (selectedItem) {
+                $(selectedItem).removeClass(that.options.styles.selected);
+            }
+        });
+    };
+    
+    var prepareTemplateElements = function (that) {
+        // Grab our template elements out of the DOM.  
+        that.rowTemplate = that.locate("rowTemplate").remove();
+        that.errorInfoRowTemplate = that.locate("errorInfoRowTemplate").remove();
+        that.errorInfoRowTemplate.removeClass(that.options.styles.hiddenTemplate);
+        that.rowProgressorTemplate = that.locate("rowProgressorTemplate", that.options.uploaderContainer).remove();
+    };
+    
+    fluid.registerNamespace("fluid.uploader.fileQueueView");
+    
+    
+    fluid.uploader.fileQueueView.finalInit = function (that) {
+        prepareTemplateElements(that);         
+        addKeyboardNavigation(that);
+    };
+    
+    /**
+     * Creates a new File Queue view.
+     * 
+     * @param {jQuery|selector} container the file queue's container DOM element
+     * @param {fileQueue} queue a file queue model instance
+     * @param {Object} options configuration options for the view
+     */
+    fluid.uploader.fileQueueView.preInit = function (that) {
+        that.fileProgressors = {};
+
+        that.addFile = function (file) {
+            addFile(that, file);
+        };
+        
+        that.removeFile = function (file) {
+            removeRowForFile(that, file);
+        };
+        
+        that.prepareForUpload = function () {
+            prepareForUpload(that);
+        };
+        
+        that.refreshAfterUpload = function () {
+            refreshAfterUpload(that);
+        };
+
+        that.showFileProgress = function (file) {
+            startFileProgress(that, file);
+        };
+        
+        that.updateFileProgress = function (file, fileBytesComplete, fileTotalBytes) {
+            updateFileProgress(that, file, fileBytesComplete, fileTotalBytes); 
+        };
+        
+        that.markFileComplete = function (file) {
+            progressorForFile(that, file).update(100, "100%");
+            markRowAsComplete(that, file);
+        };
+        
+        that.showErrorForFile = function (file, error) {
+            showErrorForFile(that, file, error);
+        };
+        
+        that.hideFileProgress = function (file) {
+            hideFileProgress(that, file);
+        };
+        
+        that.refreshView = function () {
+            that.selectableContext.refresh();
+            that.scroller.refreshView();
+        };
+    };
+    
+    fluid.defaults("fluid.uploader.fileQueueView", {
+        gradeNames: ["fluid.viewComponent", "autoInit"],
+        preInitFunction:   "fluid.uploader.fileQueueView.preInit",
+        finalInitFunction: "fluid.uploader.fileQueueView.finalInit",
+        
+        components: {
+            scroller: {
+                type: "fluid.scrollableTable"
+            },
+            
+            eventBinder: {
+                type: "fluid.uploader.fileQueueView.eventBinder"
+            }
+        },
+        
+        selectors: {
+            fileRows: ".flc-uploader-file",
+            fileName: ".flc-uploader-file-name",
+            fileSize: ".flc-uploader-file-size",
+            fileIconBtn: ".flc-uploader-file-action",      
+            errorText: ".flc-uploader-file-error",
+            
+            rowTemplate: ".flc-uploader-file-tmplt",
+            errorInfoRowTemplate: ".flc-uploader-file-error-tmplt",
+            rowProgressorTemplate: ".flc-uploader-file-progressor-tmplt"
+        },
+        
+        styles: {
+            hover: "fl-uploader-file-hover",
+            selected: "fl-uploader-file-focus",
+            ready: "fl-uploader-file-state-ready",
+            uploading: "fl-uploader-file-state-uploading",
+            uploaded: "fl-uploader-file-state-uploaded",
+            error: "fl-uploader-file-state-error",
+            remove: "fl-uploader-file-action-remove",
+            dim: "fl-uploader-dim",
+            hiddenTemplate: "fl-uploader-hidden-templates"
+        },
+        
+        strings: {
+            progress: {
+                toUploadLabel: "To upload: %fileCount %fileLabel (%totalBytes)", 
+                singleFile: "file",
+                pluralFiles: "files"
+            },
+            status: {
+                success: "File Uploaded",
+                error: "File Upload Error",
+                remove: "Press Delete key to remove file"
+            }, 
+            errors: {
+                HTTP_ERROR: "File upload error: a network error occured or the file was rejected (reason unknown).",
+                IO_ERROR: "File upload error: a network error occured.",
+                UPLOAD_LIMIT_EXCEEDED: "File upload error: you have uploaded as many files as you are allowed during this session",
+                UPLOAD_FAILED: "File upload error: the upload failed for an unknown reason.",
+                QUEUE_LIMIT_EXCEEDED: "You have as many files in the queue as can be added at one time. Removing files from the queue may allow you to add different files.",
+                FILE_EXCEEDS_SIZE_LIMIT: "One or more of the files that you attempted to add to the queue exceeded the limit of %fileSizeLimit.",
+                ZERO_BYTE_FILE: "One or more of the files that you attempted to add contained no data.",
+                INVALID_FILETYPE: "One or more files were not added to the queue because they were of the wrong type."
+            }
+        },
+        events: {
+            onFileRemoved: null
+        },
+        
+        mergePolicy: {
+            model: "preserve"
+        }
+    });
+    
+    /**
+     * EventBinder declaratively binds FileQueueView's methods as listeners to Uploader events using IoC.
+     */
+    fluid.defaults("fluid.uploader.fileQueueView.eventBinder", {
+        gradeNames: ["fluid.eventedComponent", "autoInit"]
+    });
+    
+    fluid.demands("fluid.uploader.fileQueueView.eventBinder", [], {});
+    /**************
+     * Scrollable *
+     **************/
+     
+    /**
+     * Simple component cover for the jQuery scrollTo plugin. Provides roughly equivalent
+     * functionality to Uploader's old Scroller plugin.
+     *
+     * @param {jQueryable} element the element to make scrollable
+     * @param {Object} options for the component
+     * @return the scrollable component
+     */
+    fluid.scrollable = function (element, options) {
+        var that = fluid.initView("fluid.scrollable", element, options);
+        that.scrollable = that.options.makeScrollableFn(that.container, that.options);
+        that.maxHeight = that.scrollable.css("max-height");
+
+        /**
+         * Programmatically scrolls this scrollable element to the region specified.
+         * This method is directly compatible with the underlying jQuery.scrollTo plugin.
+         */
+        that.scrollTo = function () {
+            that.scrollable.scrollTo.apply(that.scrollable, arguments);
+        };
+
+        /* 
+         * Updates the view of the scrollable region. This should be called when the content of the scrollable region is changed. 
+         */
+        that.refreshView = function () {
+            if ($.browser.msie && $.browser.version === "6.0") {    
+                that.scrollable.css("height", "");
+
+                // Set height, if max-height is reached, to allow scrolling in IE6.
+                if (that.scrollable.height() >= parseInt(that.maxHeight, 10)) {
+                    that.scrollable.css("height", that.maxHeight);           
+                }
+            }
+        };          
+
+        that.refreshView();
+
+        return that;
+    };
+
+    fluid.scrollable.makeSimple = function (element, options) {
+        return fluid.container(element);
+    };
+
+    fluid.scrollable.makeTable =  function (table, options) {
+        table.wrap(options.wrapperMarkup);
+        return table.closest(".fl-scrollable-scroller");
+    };
+
+    fluid.defaults("fluid.scrollable", {
+        makeScrollableFn: fluid.scrollable.makeSimple
+    });
+
+    /** 
+     * Wraps a table in order to make it scrollable with the jQuery.scrollTo plugin.
+     * Container divs are injected to allow cross-browser support. 
+     *
+     * @param {jQueryable} table the table to make scrollable
+     * @param {Object} options configuration options
+     * @return the scrollable component
+     */
+    fluid.scrollableTable = function (table, options) {
+        options = $.extend({}, fluid.defaults("fluid.scrollableTable"), options);
+        return fluid.scrollable(table, options);
+    };
+
+    fluid.defaults("fluid.scrollableTable", {
+        gradeNames: "fluid.viewComponent",
+        makeScrollableFn: fluid.scrollable.makeTable,
+        wrapperMarkup: "<div class='fl-scrollable-scroller'><div class='fl-scrollable-inner'></div></div>"
+    });    
+    
+    fluid.demands("fluid.scrollableTable", "fluid.uploader.fileQueueView", {
+        funcName: "fluid.scrollableTable",
+        args: [
+            "{fileQueueView}.container"
+        ]
+    });
+   
+})(jQuery, fluid_1_5);
+/*
+Copyright 2011 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global window, fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+
+    fluid.uploader = fluid.uploader || {};
+    
+    fluid.defaults("fluid.uploader.errorPanel", {
+        gradeNames: ["fluid.viewComponent", "autoInit"],
+        preInitFunction: "fluid.uploader.errorPanel.preInit",
+        postInitFunction: "fluid.uploader.errorPanel.renderSectionTemplates",
+        finalInitFunction: "fluid.uploader.errorPanel.finalInit",
+        
+        components: {
+            // TODO: This won't scale nicely with more types of errors. 
+            fileSizeErrorSection: {
+                type: "fluid.uploader.errorPanel.section",
+                container: "{errorPanel}.dom.fileSizeErrorSection",
+                options: {
+                    model: {
+                        errorCode: fluid.uploader.queueErrorConstants.FILE_EXCEEDS_SIZE_LIMIT
+                    },
+                    strings: {
+                        header: "{errorPanel}.options.strings.exceedsFileSize"
+                    }
+                }
+            },
+            
+            numFilesErrorSection: {
+                type: "fluid.uploader.errorPanel.section",
+                container: "{errorPanel}.dom.numFilesErrorSection",
+                options: {
+                    model: {
+                        errorCode: fluid.uploader.queueErrorConstants.QUEUE_LIMIT_EXCEEDED
+                    },
+                    strings: {
+                        header: "{errorPanel}.options.strings.exceedsNumFilesLimit"
+                    }
+                }
+            }
+        },
+        
+        selectors: {
+            header: ".flc-uploader-errorPanel-header",
+            sectionTemplate: ".flc-uploader-errorPanel-section-tmplt",
+            fileSizeErrorSection: ".flc-uploader-errorPanel-section-fileSize",
+            numFilesErrorSection: ".flc-uploader-errorPanel-section-numFiles"
+        },
+        
+        strings: {
+            headerText: "Warning(s)",
+            exceedsNumFilesLimit: "Too many files were selected. %numFiles were not added to the queue.",
+            exceedsFileSize: "%numFiles files were too large and were not added to the queue."
+        },
+        
+        styles: {
+            hiddenTemplate: "fl-hidden-templates"
+        }
+    });
+
+    fluid.uploader.errorPanel.preInit = function (that) {
+        that.refreshView = function () {
+            for (var i = 0; i < that.sections.length; i++) {
+                if (that.sections[i].model.files.length > 0) {
+                    // One of the sections has errors. Show them and bail immediately.
+                    that.container.show();
+                    return;
+                }
+            }            
+            that.container.hide();
+        };
+    };
+    
+    fluid.uploader.errorPanel.renderSectionTemplates = function (that) {
+        var sectionTmpl = that.locate("sectionTemplate").remove().removeClass(that.options.styles.hiddenTemplate);
+        that.locate("fileSizeErrorSection").append(sectionTmpl.clone());
+        that.locate("numFilesErrorSection").append(sectionTmpl.clone());
+    };
+    
+    fluid.uploader.errorPanel.finalInit = function (that) {
+        that.sections = [that.fileSizeErrorSection, that.numFilesErrorSection];
+        that.locate("header").text(that.options.strings.headerText);
+        that.container.hide();
+    };
+
+    fluid.demands("fluid.uploader.errorPanel", "fluid.uploader.multiFileUploader", {
+        container: "{multiFileUploader}.dom.errorsPanel",
+        options: {            
+            listeners: {
+                "{multiFileUploader}.events.afterFileDialog": "{errorPanel}.refreshView"
+            }
+        }
+    });
+    
+    fluid.defaults("fluid.uploader.errorPanel.section", {
+        gradeNames: ["fluid.viewComponent", "autoInit"],
+        preInitFunction: "fluid.uploader.errorPanel.section.preInit",
+        finalInitFunction: "fluid.uploader.errorPanel.section.finalInit",
+        
+        model: {
+            errorCode: undefined,
+            files: [],
+            showingDetails: false
+        },
+        
+        events: {
+            afterErrorsCleared: null
+        },
+        
+        selectors: {
+            errorTitle: ".fl-uploader-errorPanel-section-title",
+            deleteErrorButton: ".flc-uploader-errorPanel-section-removeButton",
+            errorDetails: ".flc-uploader-errorPanel-section-details",
+            erroredFiles: ".flc-uploader-errorPanel-section-files",
+            showHideFilesToggle: ".flc-uploader-errorPanel-section-toggleDetails"
+        },
+        
+        strings: {
+            hideFiles: "Hide files",
+            showFiles: "Show files",
+            fileListDelimiter: ", "
+        }
+    });
+    
+    fluid.uploader.errorPanel.section.preInit = function (that) {
+        that.toggleDetails = function () {
+            var detailsAction = that.model.showingDetails ? that.hideDetails : that.showDetails;
+            detailsAction();
+        };
+        
+        that.showDetails = function () {
+            that.locate("errorDetails").show();
+            that.locate("showHideFilesToggle").text(that.options.strings.hideFiles);
+            that.model.showingDetails = true;
+        };
+        
+        that.hideDetails = function () {
+            that.locate("errorDetails").hide();
+            that.locate("showHideFilesToggle").text(that.options.strings.showFiles);
+            that.model.showingDetails = false;
+        };
+        
+        that.addFile = function (file, errorCode) {
+            if (errorCode === that.model.errorCode) {
+                that.model.files.push(file.name);
+                that.refreshView();
+            }
+        };
+        
+        that.clear = function () {
+            that.model.files = [];
+            that.refreshView();
+            that.events.afterErrorsCleared.fire();
+        };
+        
+        that.refreshView = function () {
+            fluid.uploader.errorPanel.section.renderHeader(that);
+            fluid.uploader.errorPanel.section.renderErrorDetails(that);
+            that.hideDetails();
+            
+            if (that.model.files.length <= 0) {
+                that.container.hide();
+            } else {
+                that.container.show();
+            }
+        };
+    };
+    
+    fluid.uploader.errorPanel.section.finalInit = function (that) {        
+        // Bind delete button
+        that.locate("deleteErrorButton").click(that.clear);
+
+        // Bind hide/show error details link
+        that.locate("showHideFilesToggle").click(that.toggleDetails);
+        
+        that.refreshView();
+    };
+    
+    fluid.uploader.errorPanel.section.renderHeader = function (that) {
+        var errorTitle = fluid.stringTemplate(that.options.strings.header, {
+            numFiles: that.model.files.length
+        });
+        
+        that.locate("errorTitle").text(errorTitle);         
+    };
+    
+    fluid.uploader.errorPanel.section.renderErrorDetails = function (that) {
+        var files = that.model.files;
+        var filesList = files.length > 0 ? files.join(that.options.strings.fileListDelimiter) : "";
+        that.locate("erroredFiles").text(filesList);
+    };
+    
+    fluid.demands("fluid.uploader.errorPanel.section", [
+        "fluid.uploader.errorPanel", 
+        "fluid.uploader.multiFileUploader"
+    ], {
+        options: {
+            listeners: {                
+                "{multiFileUploader}.events.onQueueError": "{section}.addFile",
+                "{multiFileUploader}.events.onFilesSelected": "{section}.clear",
+                "{multiFileUploader}.events.onUploadStart": "{section}.clear",
+                "{section}.events.afterErrorsCleared": "{errorPanel}.refreshView"
+            }
+        }
+    });
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2008-2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery, swfobject, SWFUpload */
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+
+    fluid.uploader = fluid.uploader || {};
+    
+    fluid.demands("fluid.uploaderImpl", "fluid.uploader.swfUpload", {
+        funcName: "fluid.uploader.multiFileUploader"
+    });
+    
+    /**********************
+     * uploader.swfUpload *
+     **********************/
+    
+    fluid.uploader.swfUploadStrategy = function (options) {
+        var that = fluid.initLittleComponent("fluid.uploader.swfUploadStrategy", options);
+        fluid.initDependents(that);
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.swfUploadStrategy", {
+        components: {
+            engine: {
+                type: "fluid.uploader.swfUploadStrategy.engine",
+                options: {
+                    queueSettings: "{multiFileUploader}.options.queueSettings",
+                    flashMovieSettings: "{swfUploadStrategy}.options.flashMovieSettings"
+                }
+            },
+            
+            local: {
+                type: "fluid.uploader.local",
+                options: {
+                    errorHandler: "{multiFileUploader}.dom.errorHandler"
+                }
+            },
+            
+            remote: {
+                type: "fluid.uploader.remote"
+            }
+        },
+        
+        // TODO: Rename this to "flashSettings" and remove the "flash" prefix from each option
+        flashMovieSettings: {
+            flashURL: "../../../lib/swfupload/flash/swfupload.swf",
+            flashButtonPeerId: "",
+            flashButtonAlwaysVisible: false,
+            flashButtonTransparentEvenInIE: true,
+            flashButtonImageURL: "../images/browse.png", // Used only when the Flash movie is visible.
+            flashButtonCursorEffect: SWFUpload.CURSOR.HAND,
+            debug: false
+        },
+
+        styles: {
+            browseButtonOverlay: "fl-uploader-browse-overlay",
+            flash9Container: "fl-uploader-flash9-container",
+            uploaderWrapperFlash10: "fl-uploader-flash10-wrapper"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.progressiveStrategy", "fluid.uploader.swfUpload", {
+        funcName: "fluid.uploader.swfUploadStrategy"
+    });
+    
+    
+    fluid.uploader.swfUploadStrategy.remote = function (swfUpload, queue, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.swfUploadStrategy.remote", options);
+        that.swfUpload = swfUpload;
+        that.queue = queue;
+        
+        that.uploadNextFile = function () {
+            that.swfUpload.startUpload();
+        };
+        
+        that.stop = function () {
+            // FLUID-822: Instead of actually stopping SWFUpload right away, we wait until the current file 
+            // is finished and then don't bother to upload any new ones. This is due an issue where SWFUpload
+            // appears to hang while Uploading a file that was previously stopped. I have a lingering suspicion
+            // that this may actually be a bug in our Image Gallery demo, rather than in SWFUpload itself.
+            that.queue.shouldStop = true;
+        };
+        return that;
+    };
+    
+    fluid.demands("fluid.uploader.remote", "fluid.uploader.swfUploadStrategy", {
+        funcName: "fluid.uploader.swfUploadStrategy.remote",
+        args: [
+            "{engine}.swfUpload",
+            "{multiFileUploader}.queue",
+            "{options}"
+        ]
+    });
+
+    
+    fluid.uploader.swfUploadStrategy.local = function (swfUpload, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.swfUploadStrategy.local", options);
+        that.swfUpload = swfUpload;
+        
+        that.browse = function () {
+            if (that.options.file_queue_limit === 1) {
+                that.swfUpload.selectFile();
+            } else {
+                that.swfUpload.selectFiles();
+            }    
+        };
+        
+        that.removeFile = function (file) {
+            that.swfUpload.cancelUpload(file.id);
+        };
+        
+        that.enableBrowseButton = function () {
+            that.swfUpload.setButtonDisabled(false);
+        };
+        
+        that.disableBrowseButton = function () {
+            that.swfUpload.setButtonDisabled(true);
+        };
+        
+        return that;
+    };
+    
+    fluid.demands("fluid.uploader.local", "fluid.uploader.swfUploadStrategy", {
+        funcName: "fluid.uploader.swfUploadStrategy.local",
+        args: [
+            "{engine}.swfUpload",
+            "{options}"
+        ]
+    });
+    
+    fluid.uploader.swfUploadStrategy.engine = function (options) {
+        var that = fluid.initLittleComponent("fluid.uploader.swfUploadStrategy.engine", options);
+        
+        // Get the Flash version from swfobject and setup a new context so that the appropriate
+        // Flash 9/10 strategies are selected.
+        var flashVersion = swfobject.getFlashPlayerVersion().major;
+        that.flashVersionContext = fluid.typeTag("fluid.uploader.flash." + flashVersion);
+        
+        // Merge Uploader's generic queue options with our Flash-specific options.
+        that.config = $.extend({}, that.options.queueSettings, that.options.flashMovieSettings);
+        
+        // Configure the SWFUpload subsystem.
+        fluid.initDependents(that);
+        that.flashContainer = that.setupDOM();
+        that.swfUploadConfig = that.setupConfig();
+        that.swfUpload = new SWFUpload(that.swfUploadConfig);
+        that.bindEvents();
+        
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.swfUploadStrategy.engine", {
+        invokers: {
+            setupDOM: "fluid.uploader.swfUploadStrategy.setupDOM",
+            setupConfig: "fluid.uploader.swfUploadStrategy.setupConfig",
+            bindEvents: "fluid.uploader.swfUploadStrategy.eventBinder"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.swfUploadStrategy.engine", "fluid.uploader.swfUploadStrategy", {
+        funcName: "fluid.uploader.swfUploadStrategy.engine",
+        args: [
+            fluid.COMPONENT_OPTIONS
+        ]
+    });
+    
+
+    /*
+     * Transform HTML5 MIME types into file types for SWFUpload.
+     */
+    fluid.uploader.swfUploadStrategy.fileTypeTransformer = function (model, expandSpec) { 
+        var fileExts = "";
+        var mimeTypes = fluid.get(model, expandSpec.path); 
+        var mimeTypesMap = fluid.uploader.mimeTypeRegistry;
+        
+        if (!mimeTypes) {
+            return "*";
+        } else if (typeof (mimeTypes) === "string") {
+            return mimeTypes;
+        }
+        
+        fluid.each(mimeTypes, function (mimeType) {
+            fluid.each(mimeTypesMap, function (mimeTypeForExt, ext) {
+                if (mimeTypeForExt === mimeType) {
+                    fileExts += "*." + ext + ";";
+                }
+            });
+        });
+
+        return fileExts.length === 0 ? "*" : fileExts.substring(0, fileExts.length - 1);
+    };
+    
+    /**********************
+     * swfUpload.setupDOM *
+     **********************/
+    
+    fluid.uploader.swfUploadStrategy.flash10SetupDOM = function (uploaderContainer, browseButton, progressBar, styles) {
+        // Wrap the whole uploader first.
+        uploaderContainer.wrap("<div class='" + styles.uploaderWrapperFlash10 + "'></div>");
+
+        // Then create a container and placeholder for the Flash movie as a sibling to the uploader.
+        var flashContainer = $("<div><span></span></div>");
+        flashContainer.addClass(styles.browseButtonOverlay);
+        uploaderContainer.after(flashContainer);
+        progressBar.append(flashContainer);
+        browseButton.attr("tabindex", -1);        
+        return flashContainer;   
+    };
+    
+    fluid.demands("fluid.uploader.swfUploadStrategy.setupDOM", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.10"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash10SetupDOM",
+        args: [            
+            "{multiFileUploader}.container",
+            "{multiFileUploader}.dom.browseButton",
+            "{totalProgress}.dom.progressBar",
+            "{swfUploadStrategy}.options.styles"
+        ]
+    });
+     
+     
+    /*********************************
+     * swfUpload.setupConfig *
+     *********************************/
+      
+    // Maps SWFUpload's setting names to our component's setting names.
+    var swfUploadOptionsMap = {
+        uploadURL: "upload_url",
+        flashURL: "flash_url",
+        postParams: "post_params",
+        fileSizeLimit: "file_size_limit",
+        fileTypes: "file_types",
+        fileUploadLimit: "file_upload_limit",
+        fileQueueLimit: "file_queue_limit",
+        flashButtonPeerId: "button_placeholder_id",
+        flashButtonImageURL: "button_image_url",
+        flashButtonHeight: "button_height",
+        flashButtonWidth: "button_width",
+        flashButtonWindowMode: "button_window_mode",
+        flashButtonCursorEffect: "button_cursor",
+        debug: "debug"
+    };
+
+    // Maps SWFUpload's callback names to our component's callback names.
+    var swfUploadEventMap = {
+        afterReady: "swfupload_loaded_handler",
+        onFileDialog: "file_dialog_start_handler",
+        onFileQueued: "file_queued_handler",        
+        onQueueError: "file_queue_error_handler",
+        afterFileDialog: "file_dialog_complete_handler",
+        onFileStart: "upload_start_handler",
+        onFileProgress: "upload_progress_handler",
+        onFileComplete: "upload_complete_handler",
+        onFileError: "upload_error_handler",
+        onFileSuccess: "upload_success_handler"
+    };
+    
+    var mapNames = function (nameMap, source, target) {
+        var result = target || {};
+        for (var key in source) {
+            var mappedKey = nameMap[key];
+            if (mappedKey) {
+                result[mappedKey] = source[key];
+            }
+        }
+        
+        return result;
+    };
+    
+    // For each event type, hand the fire function to SWFUpload so it can fire the event at the right time for us.
+    // TODO: Refactor out duplication with mapNames()--should be able to use Engage's mapping tool
+    var mapSWFUploadEvents = function (nameMap, events, target) {
+        var result = target || {};
+        for (var eventType in events) {
+            var fireFn = events[eventType].fire;
+            var mappedName = nameMap[eventType];
+            if (mappedName) {
+                result[mappedName] = fireFn;
+            }   
+        }
+        return result;
+    };
+    
+    fluid.uploader.swfUploadStrategy.convertConfigForSWFUpload = function (flashContainer, config, events, queueSettings) {
+        config.flashButtonPeerId = fluid.allocateSimpleId(flashContainer.children().eq(0));
+        // Map the event and settings names to SWFUpload's expectations.
+        // Convert HTML5 MIME types into SWFUpload file types
+        config.fileTypes = fluid.uploader.swfUploadStrategy.fileTypeTransformer(queueSettings, {
+            path: "fileTypes"
+        });
+        var convertedConfig = mapNames(swfUploadOptionsMap, config);
+        // TODO:  Same with the FLUID-3886 branch:  Can these declarations be done elsewhere?
+        convertedConfig.file_upload_limit = 0;
+        convertedConfig.file_size_limit = 0;
+        return mapSWFUploadEvents(swfUploadEventMap, events, convertedConfig);
+    };
+    
+    fluid.uploader.swfUploadStrategy.flash10SetupConfig = function (config, events, flashContainer, browseButton, queueSettings) {
+        var isTransparent = config.flashButtonAlwaysVisible ? false : (!$.browser.msie || config.flashButtonTransparentEvenInIE);
+        config.flashButtonImageURL = isTransparent ? undefined : config.flashButtonImageURL;
+        config.flashButtonHeight = config.flashButtonHeight || browseButton.outerHeight();
+        config.flashButtonWidth = config.flashButtonWidth || browseButton.outerWidth();
+        config.flashButtonWindowMode = isTransparent ? SWFUpload.WINDOW_MODE.TRANSPARENT : SWFUpload.WINDOW_MODE.OPAQUE;
+        return fluid.uploader.swfUploadStrategy.convertConfigForSWFUpload(flashContainer, config, events, queueSettings);
+    };
+    
+    fluid.demands("fluid.uploader.swfUploadStrategy.setupConfig", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.10"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash10SetupConfig",
+        args: [
+            "{engine}.config",
+            "{multiFileUploader}.events",
+            "{engine}.flashContainer",
+            "{multiFileUploader}.dom.browseButton",
+            "{multiFileUploader}.options.queueSettings"
+        ]
+    });
+
+     
+    /*********************************
+     * swfUpload.eventBinder *
+     *********************************/
+     
+    var unbindSWFUploadSelectFiles = function () {
+        // There's a bug in SWFUpload 2.2.0b3 that causes the entire browser to crash 
+        // if selectFile() or selectFiles() is invoked. Remove them so no one will accidently crash their browser.
+        var emptyFunction = function () {};
+        SWFUpload.prototype.selectFile = emptyFunction;
+        SWFUpload.prototype.selectFiles = emptyFunction;
+    };
+    
+    fluid.uploader.swfUploadStrategy.bindFileEventListeners = function (model, events) {
+        // Manually update our public model to keep it in sync with SWFUpload's insane,
+        // always-changing references to its internal model.        
+        var manualModelUpdater = function (file) {
+            fluid.find(model, function (potentialMatch) {
+                if (potentialMatch.id === file.id) {
+                    potentialMatch.filestatus = file.filestatus;
+                    return true;
+                }
+            });
+        };
+        
+        events.onFileStart.addListener(manualModelUpdater);
+        events.onFileProgress.addListener(manualModelUpdater);
+        events.onFileError.addListener(manualModelUpdater);
+        events.onFileSuccess.addListener(manualModelUpdater);
+    };
+    
+    var filterErroredFiles = function (file, events, queue, queueSettings) {
+        var fileSizeLimit = queueSettings.fileSizeLimit * 1000;
+        var fileUploadLimit = queueSettings.fileUploadLimit;
+        var processedFiles = queue.getReadyFiles().length + queue.getUploadedFiles().length; 
+
+        if (file.size > fileSizeLimit) {
+            file.filestatus = fluid.uploader.fileStatusConstants.ERROR;
+            events.onQueueError.fire(file, fluid.uploader.queueErrorConstants.FILE_EXCEEDS_SIZE_LIMIT);
+        } else if (processedFiles >= fileUploadLimit) {
+            events.onQueueError.fire(file, fluid.uploader.queueErrorConstants.QUEUE_LIMIT_EXCEEDED);
+        } else {
+            events.afterFileQueued.fire(file);
+        }
+    };
+    
+    fluid.uploader.swfUploadStrategy.flash10EventBinder = function (queue, queueSettings, events) {
+        var model = queue.files;
+        unbindSWFUploadSelectFiles();      
+              
+        events.onFileQueued.addListener(function (file) {
+            filterErroredFiles(file, events, queue, queueSettings);
+        });        
+        
+        fluid.uploader.swfUploadStrategy.bindFileEventListeners(model, events);
+    };
+    
+    fluid.demands("fluid.uploader.swfUploadStrategy.eventBinder", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.10"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash10EventBinder",
+        args: [
+            "{multiFileUploader}.queue",
+            "{multiFileUploader}.queue.files",
+            "{multiFileUploader}.events"
+        ]
+    });
+})(jQuery, fluid_1_5);
+/*
+Copyright 2008-2009 University of Toronto
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+
+    fluid.registerNamespace("fluid.uploader.swfUploadStrategy");
+    
+    /**********************************************************************************
+     * The functions in this file, which provide support for Flash 9 in the Uploader, *
+     * have been deprecated as of Infusion 1.3.                                       * 
+     **********************************************************************************/
+    
+    fluid.uploader.swfUploadStrategy.flash9SetupDOM = function (styles) {
+        var container = $("<div><span></span></div>");
+        container.addClass(styles.flash9Container);
+        $("body").append(container);
+        return container;       
+    };
+
+    fluid.demands("fluid.uploader.swfUploadStrategy.setupDOM", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.9"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash9SetupDOM",
+        args: [
+            "{swfUploadStrategy}.options.styles"
+        ]
+    });
+
+    fluid.uploader.swfUploadStrategy.flash9SetupConfig = function (flashContainer, config, events) {
+        return fluid.uploader.swfUploadStrategy.convertConfigForSWFUpload(flashContainer, config, events);
+    };
+
+    fluid.demands("fluid.uploader.swfUploadStrategy.setupConfig", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.9"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash9SetupConfig",
+        args: [
+            "{engine}.flashContainer",
+            "{engine}.config",
+            "{multiFileUploader}.events"
+        ]
+    });
+
+    fluid.uploader.swfUploadStrategy.flash9EventBinder = function (model, events, local, browseButton) {
+        browseButton.click(function (e) {        
+            local.browse();
+            e.preventDefault();
+        });
+        fluid.uploader.swfUploadStrategy.bindFileEventListeners(model, events);
+    };
+
+    fluid.demands("fluid.uploader.swfUploadStrategy.eventBinder", [
+        "fluid.uploader.swfUploadStrategy.engine",
+        "fluid.uploader.flash.9"
+    ], {
+        funcName: "fluid.uploader.swfUploadStrategy.flash9EventBinder",
+        args: [
+            "{multiFileUploader}.queue.files",
+            "{multiFileUploader}.events",
+            "{local}",
+            "{multiFileUploader}.dom.browseButton"
+        ]
+    });
+
+})(jQuery, fluid_1_5);
+/*
+Copyright 2010-2011 OCAD University 
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global FormData, fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+
+    fluid.demands("fluid.uploaderImpl", "fluid.uploader.html5", {
+        funcName: "fluid.uploader.multiFileUploader"
+    });
+    
+    fluid.demands("fluid.uploader.progressiveStrategy", "fluid.uploader.html5", {
+        funcName: "fluid.uploader.html5Strategy"
+    });
+    
+    fluid.defaults("fluid.uploader.html5Strategy", {
+        gradeNames: ["fluid.littleComponent", "autoInit"],
+        components: {
+            local: {
+                type: "fluid.uploader.local",
+                options: {
+                    queueSettings: "{multiFileUploader}.options.queueSettings",
+                    events: {
+                        onFileDialog: "{multiFileUploader}.events.onFileDialog",
+                        onFilesSelected: "{multiFileUploader}.events.onFilesSelected",
+                        afterFileDialog: "{multiFileUploader}.events.afterFileDialog",
+                        afterFileQueued: "{multiFileUploader}.events.afterFileQueued",
+                        onQueueError: "{multiFileUploader}.events.onQueueError"
+                    }
+                }
+            },
+            
+            remote: {
+                type: "fluid.uploader.remote",
+                options: {
+                    queueSettings: "{multiFileUploader}.options.queueSettings",
+                    events: {
+                        afterReady: "{multiFileUploader}.events.afterReady",
+                        onFileStart: "{multiFileUploader}.events.onFileStart",
+                        onFileProgress: "{multiFileUploader}.events.onFileProgress",
+                        onFileSuccess: "{multiFileUploader}.events.onFileSuccess",
+                        onFileError: "{multiFileUploader}.events.onFileError",
+                        onFileComplete: "{multiFileUploader}.events.onFileComplete"
+                    }
+                }
+            }
+        },
+        
+        // Used for browsers that rely on File.getAsBinary(), such as Firefox 3.6,
+        // which load the entire file to be loaded into memory.
+        // Set this option to a sane limit (100MB) so your users won't experience crashes or slowdowns (FLUID-3937).
+        legacyBrowserFileLimit: 100000
+    });
+    
+    
+    // TODO: The following two or three functions probably ultimately belong on a that responsible for
+    // coordinating with the XHR. A fileConnection object or something similar.
+    
+    fluid.uploader.html5Strategy.fileSuccessHandler = function (file, events, xhr) {
+        events.onFileSuccess.fire(file, xhr.responseText, xhr);
+        events.onFileComplete.fire(file);
+    };
+    
+    fluid.uploader.html5Strategy.fileErrorHandler = function (file, events, xhr) {
+        events.onFileError.fire(file, 
+                                fluid.uploader.errorConstants.UPLOAD_FAILED,
+                                xhr.status,
+                                xhr);
+        events.onFileComplete.fire(file);
+    };
+    
+    fluid.uploader.html5Strategy.fileStopHandler = function (file, events, xhr) {
+        events.onFileError.fire(file, 
+                                fluid.uploader.errorConstants.UPLOAD_STOPPED,
+                                xhr.status,
+                                xhr);
+        events.onFileComplete.fire(file);
+    };
+    
+    fluid.uploader.html5Strategy.monitorFileUploadXHR = function (file, events, xhr) {
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                var status = xhr.status;
+                // TODO: See a pattern here? Fix it.
+                if (status >= 200 && status <= 204) {
+                    fluid.uploader.html5Strategy.fileSuccessHandler(file, events, xhr);
+                } else if (status === 0) {
+                    fluid.uploader.html5Strategy.fileStopHandler(file, events, xhr);
+                } else {
+                    fluid.uploader.html5Strategy.fileErrorHandler(file, events, xhr);
+                }
+            }
+        };
+
+        xhr.upload.onprogress = function (pe) {
+            events.onFileProgress.fire(file, pe.loaded, pe.total);
+        };
+    };
+    
+    
+    /*************************************
+     * HTML5 Strategy's remote behaviour *
+     *************************************/
+     
+    fluid.uploader.html5Strategy.remote = function (queue, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.html5Strategy.remote", options);
+        that.queue = queue;
+        that.queueSettings = that.options.queueSettings;
+        
+        // Upload files in the current batch without exceeding the fileUploadLimit
+        that.uploadNextFile = function () {
+            var batch = that.queue.currentBatch;
+            var file = batch.files[batch.fileIdx];                        
+            that.uploadFile(file);
+        };
+        
+        that.uploadFile = function (file) {
+            that.events.onFileStart.fire(file);
+            that.currentXHR = that.createXHR();
+            fluid.uploader.html5Strategy.monitorFileUploadXHR(file, that.events, that.currentXHR);
+            that.fileSender.send(file, that.queueSettings, that.currentXHR);            
+        };
+
+        that.stop = function () {
+            that.queue.isUploading = false;
+            that.currentXHR.abort();         
+        };
+        
+        fluid.initDependents(that);
+        that.events.afterReady.fire();
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.html5Strategy.remote", {
+        gradeNames: ["fluid.eventedComponent"],
+        argumentMap: {
+            options: 1  
+        },                
+        components: {
+            fileSender: {
+                type: "fluid.uploader.html5Strategy.fileSender"
+            }
+        },
+        invokers: {
+            createXHR: "fluid.uploader.html5Strategy.createXHR"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.remote", ["fluid.uploader.html5Strategy", "fluid.uploader.live"], {
+        funcName: "fluid.uploader.html5Strategy.remote",
+        args: [
+            "{multiFileUploader}.queue", 
+            fluid.COMPONENT_OPTIONS
+        ]
+    });
+
+
+    fluid.uploader.html5Strategy.createXHR = function () {
+        return new XMLHttpRequest();
+    };
+    
+    fluid.uploader.html5Strategy.createFormData = function () {
+        return new FormData();
+    };
+    
+    // Set additional POST parameters for xhr  
+    var setPostParams =  function (formData, postParams) {
+        $.each(postParams,  function (key, value) {
+            formData.append(key, value);
+        });
+    };
+    
+    /*******************************************************
+     * HTML5 FormData Sender, used by most modern browsers *
+     *******************************************************/
+    
+    fluid.defaults("fluid.uploader.html5Strategy.formDataSender", {
+        gradeNames: ["fluid.littleComponent", "autoInit"],
+        finalInitFunction: "fluid.uploader.html5Strategy.formDataSender.init",
+        invokers: {
+            createFormData: "fluid.uploader.html5Strategy.createFormData"
+        }
+    });
+    
+    fluid.uploader.html5Strategy.formDataSender.init = function (that) {
+        /**
+         * Uploads the file using the HTML5 FormData object.
+         */
+        that.send = function (file, queueSettings, xhr) {
+            var formData = that.createFormData();
+            formData.append("file", file);
+            setPostParams(formData, queueSettings.postParams);
+            xhr.open("POST", queueSettings.uploadURL, true);
+            xhr.send(formData);
+            return formData;
+        };
+    };
+    
+    fluid.demands("fluid.uploader.html5Strategy.fileSender", [
+        "fluid.uploader.html5Strategy.remote", 
+        "fluid.browser.supportsFormData"
+    ], {
+        funcName: "fluid.uploader.html5Strategy.formDataSender"
+    });
+    
+    /********************************************
+     * Raw MIME Sender, required by Firefox 3.6 *
+     ********************************************/
+     
+    fluid.uploader.html5Strategy.generateMultipartBoundary = function () {
+        var boundary = "---------------------------";
+        boundary += Math.floor(Math.random() * 32768);
+        boundary += Math.floor(Math.random() * 32768);
+        boundary += Math.floor(Math.random() * 32768);
+        return boundary;
+    };
+    
+    fluid.uploader.html5Strategy.generateMultiPartContent = function (boundary, file) {
+        var CRLF = "\r\n";
+        var multipart = "";
+        multipart += "--" + boundary + CRLF;
+        multipart += "Content-Disposition: form-data;" +
+            " name=\"fileData\";" + 
+            " filename=\"" + file.name + 
+            "\"" + CRLF;
+        multipart += "Content-Type: " + file.type + CRLF + CRLF;
+        multipart += file.getAsBinary(); // Concatting binary data to JS String; yes, FF will handle it.
+        multipart += CRLF + "--" + boundary + "--" + CRLF;
+        return multipart;
+    };
+    
+    fluid.defaults("fluid.uploader.html5Strategy.rawMIMESender", {
+        gradeNames: ["fluid.littleComponent", "autoInit"],
+        finalInitFunction: "fluid.uploader.html5Strategy.rawMIMESender.init"
+    });
+    
+    fluid.uploader.html5Strategy.rawMIMESender.init = function (that) {
+        /**
+         * Uploads the file by manually creating the multipart/form-data request. Required by Firefox 3.6.
+         */
+        that.send = function (file, queueSettings, xhr) {
+            var boundary =  fluid.uploader.html5Strategy.generateMultipartBoundary();
+            var multipart = fluid.uploader.html5Strategy.generateMultiPartContent(boundary, file);
+            xhr.open("POST", queueSettings.uploadURL, true);
+            xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
+            xhr.sendAsBinary(multipart);
+            return multipart;
+        };
+    };
+    
+    fluid.demands("fluid.uploader.html5Strategy.fileSender", "fluid.uploader.html5Strategy.remote", {
+        funcName: "fluid.uploader.html5Strategy.rawMIMESender"
+    });
+
+
+    /************************************
+     * HTML5 Strategy's Local Behaviour *
+     ************************************/
+     
+    fluid.uploader.html5Strategy.local = function (queue, legacyBrowserFileLimit, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.html5Strategy.local", options);
+        that.queue = queue;
+        that.queueSettings = that.options.queueSettings;
+
+        // Add files to the file queue without exceeding the fileUploadLimit and the fileSizeLimit
+        // NOTE:  fileSizeLimit set to bytes for HTML5 Uploader (KB for SWF Uploader).  
+        that.addFiles = function (files) {
+            // TODO: These look like they should be part of a real model.
+            var sizeLimit = (legacyBrowserFileLimit || that.queueSettings.fileSizeLimit) * 1024;
+            var fileLimit = that.queueSettings.fileUploadLimit;
+            var uploaded = that.queue.getUploadedFiles().length;
+            var queued = that.queue.getReadyFiles().length;
+            var remainingUploadLimit = fileLimit - uploaded - queued;
+            
+            that.events.onFilesSelected.fire(files.length);
+            
+            // Provide feedback to the user if the file size is too large and isn't added to the file queue
+            var numFilesAdded = 0;
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (fileLimit && remainingUploadLimit === 0) {
+                    that.events.onQueueError.fire(file, fluid.uploader.queueErrorConstants.QUEUE_LIMIT_EXCEEDED);
+                } else if (file.size >= sizeLimit) {
+                    file.filestatus = fluid.uploader.fileStatusConstants.ERROR;
+                    that.events.onQueueError.fire(file, fluid.uploader.queueErrorConstants.FILE_EXCEEDS_SIZE_LIMIT);
+                } else if (!fileLimit || remainingUploadLimit > 0) {
+                    file.id = "file-" + fluid.allocateGuid();
+                    file.filestatus = fluid.uploader.fileStatusConstants.QUEUED;
+                    that.events.afterFileQueued.fire(file);
+                    remainingUploadLimit--;
+                    numFilesAdded++;
+                }
+            }            
+            that.events.afterFileDialog.fire(numFilesAdded);
+        };
+        
+        that.removeFile = function (file) {
+        };
+        
+        that.enableBrowseButton = function () {
+            that.browseButtonView.enable();
+        };
+        
+        that.disableBrowseButton = function () {
+            that.browseButtonView.disable();
+        };
+        
+        fluid.initDependents(that);
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.html5Strategy.local", {
+        argumentMap: {
+            options: 2  
+        },
+        gradeNames: ["fluid.eventedComponent"],
+        
+        components: {
+            browseButtonView: {
+                type: "fluid.uploader.html5Strategy.browseButtonView",
+                options: {
+                    queueSettings: "{multiFileUploader}.options.queueSettings",
+                    selectors: {
+                        browseButton: "{multiFileUploader}.options.selectors.browseButton"
+                    },
+                    listeners: {
+                        onFilesQueued: "{local}.addFiles"
+                    }
+                }
+            }
+        }
+    });
+    
+    fluid.demands("fluid.uploader.local", "fluid.uploader.html5Strategy", {
+        funcName: "fluid.uploader.html5Strategy.local",
+        args: [
+            "{multiFileUploader}.queue",
+            "{html5Strategy}.options.legacyBrowserFileLimit",
+            "{options}"
+        ]
+    });
+    
+    fluid.demands("fluid.uploader.local", [
+        "fluid.uploader.html5Strategy",
+        "fluid.browser.supportsFormData"
+    ], {
+        funcName: "fluid.uploader.html5Strategy.local",
+        args: [
+            "{multiFileUploader}.queue",
+            undefined,
+            "{options}"
+        ]
+    });
+    
+    
+    /********************
+     * browseButtonView *
+     ********************/
+    
+    var bindEventsToFileInput = function (that, fileInput) {
+        fileInput.click(function () {
+            that.events.onBrowse.fire();
+        });
+        
+        fileInput.change(function () {
+            var files = fileInput[0].files;
+            that.renderFreshMultiFileInput();
+            that.events.onFilesQueued.fire(files);
+        });
+        
+        fileInput.focus(function () {
+            that.browseButton.addClass("focus");
+        });
+        
+        fileInput.blur(function () {
+            that.browseButton.removeClass("focus");
+        });
+    };
+    
+    var renderMultiFileInput = function (that) {
+        var multiFileInput = $(that.options.multiFileInputMarkup);
+        var fileTypes = that.options.queueSettings.fileTypes;
+        if (fluid.isArrayable(fileTypes)) {
+            fileTypes = fileTypes.join();
+            multiFileInput.attr("accept", fileTypes);
+        }
+        bindEventsToFileInput(that, multiFileInput);
+        return multiFileInput;
+    };
+    
+    var setupBrowseButtonView = function (that) {
+        var multiFileInput = renderMultiFileInput(that);        
+        that.browseButton.append(multiFileInput);
+        that.browseButton.attr("tabindex", -1);
+    };
+    
+    fluid.uploader.html5Strategy.browseButtonView = function (container, options) {
+        var that = fluid.initView("fluid.uploader.html5Strategy.browseButtonView", container, options);
+        that.browseButton = that.locate("browseButton");
+        
+        that.renderFreshMultiFileInput = function () {
+            var previousInput = that.locate("fileInputs").last();
+            previousInput.hide();
+            previousInput.attr("tabindex", -1);
+            var newInput = renderMultiFileInput(that);
+            previousInput.after(newInput);
+        };
+        
+        that.enable = function () {
+            that.locate("fileInputs").prop("disabled", false);
+        };
+        
+        that.disable = function () {
+            that.locate("fileInputs").prop("disabled", true);
+        };
+        
+        that.isEnabled = function () {
+            return !that.locate("fileInputs").prop("disabled");  
+        };
+        
+        setupBrowseButtonView(that);
+        return that;
+    };
+    
+    fluid.defaults("fluid.uploader.html5Strategy.browseButtonView", {
+        gradeNames: "fluid.viewComponent",
+        multiFileInputMarkup: "<input type='file' multiple='' class='flc-uploader-html5-input' />",
+        
+        queueSettings: {},
+        
+        selectors: {
+            browseButton: ".flc-uploader-button-browse",
+            fileInputs: ".flc-uploader-html5-input"
+        },
+        
+        events: {
+            onBrowse: null,
+            onFilesQueued: null
+        }        
+    });
+
+    fluid.demands("fluid.uploader.html5Strategy.browseButtonView", "fluid.uploader.html5Strategy.local", {
+        container: "{multiFileUploader}.container",
+        mergeOptions: {
+            events: {
+                onBrowse: "{local}.events.onFileDialog"
+            }
+        }
+    });
+
+})(jQuery, fluid_1_5);/*
+Copyright 2009 University of Toronto
+Copyright 2009 University of California, Berkeley
+Copyright 2010-2011 OCAD University
+Copyright 2011 Lucendo Development Ltd.
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+// Declare dependencies
+/*global fluid_1_5:true, jQuery*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function ($, fluid) {
+    
+    fluid.uploader = fluid.uploader || {};
+    
+    var startUploading; // Define early due to subtle circular dependency.
+    
+    var updateProgress = function (file, events, demoState, isUploading) {
+        if (!isUploading) {
+            return;
+        }
+        
+        var chunk = Math.min(demoState.chunkSize, file.size);
+        demoState.bytesUploaded = Math.min(demoState.bytesUploaded + chunk, file.size);
+        events.onFileProgress.fire(file, demoState.bytesUploaded, file.size);
+    };
+    
+    var finishAndContinueOrCleanup = function (that, file) {
+        that.queue.finishFile(file);
+        that.events.afterFileComplete.fire(file);
+        
+        if (that.queue.shouldUploadNextFile()) {
+            startUploading(that);
+        } else {
+            that.events.afterUploadComplete.fire(that.queue.currentBatch.files);
+            if (file.status !== fluid.uploader.fileStatusConstants.CANCELLED) {
+                that.queue.clearCurrentBatch(); // Only clear the current batch if we're actually done the batch.
+            }
+        }
+    };
+    
+    var finishUploading = function (that) {
+        if (!that.queue.isUploading) {
+            return;
+        }
+        
+        var file = that.demoState.currentFile;
+        that.events.onFileSuccess.fire(file);
+        that.demoState.fileIdx++;
+        finishAndContinueOrCleanup(that, file);
+    };
+    
+    var simulateUpload = function (that) {
+        if (!that.queue.isUploading) {
+            return;
+        }
+        
+        var file = that.demoState.currentFile;
+        if (that.demoState.bytesUploaded < file.size) {
+            fluid.invokeAfterRandomDelay(function () {
+                updateProgress(file, that.events, that.demoState, that.queue.isUploading);
+                simulateUpload(that);
+            });
+        } else {
+            finishUploading(that);
+        } 
+    };
+    
+    startUploading = function (that) {
+        // Reset our upload stats for each new file.
+        that.demoState.currentFile = that.queue.files[that.demoState.fileIdx];
+        that.demoState.chunksForCurrentFile = Math.ceil(that.demoState.currentFile / that.demoState.chunkSize);
+        that.demoState.bytesUploaded = 0;
+        that.queue.isUploading = true;
+        
+        that.events.onFileStart.fire(that.demoState.currentFile);
+        simulateUpload(that);
+    };
+
+    var stopDemo = function (that) {
+        var file = that.demoState.currentFile;
+        file.filestatus = fluid.uploader.fileStatusConstants.CANCELLED;
+        that.queue.shouldStop = true;
+        
+        // In SWFUpload's world, pausing is a combinination of an UPLOAD_STOPPED error and a complete.
+        that.events.onFileError.fire(file, 
+                                     fluid.uploader.errorConstants.UPLOAD_STOPPED, 
+                                     "The demo upload was paused by the user.");
+        finishAndContinueOrCleanup(that, file);
+        that.events.onUploadStop.fire();
+    };
+    
+    var setupDemo = function (that) {
+        if (that.simulateDelay === undefined || that.simulateDelay === null) {
+            that.simulateDelay = true;
+        }
+          
+        // Initialize state for our upload simulation.
+        that.demoState = {
+            fileIdx: 0,
+            chunkSize: 200000
+        };
+        
+        return that;
+    };
+       
+    /**
+     * The demo remote pretends to upload files to the server, firing all the appropriate events
+     * but without sending anything over the network or requiring a server to be running.
+     * 
+     * @param {FileQueue} queue the Uploader's file queue instance
+     * @param {Object} the Uploader's bundle of event firers
+     * @param {Object} configuration options
+     */
+    fluid.uploader.demoRemote = function (queue, options) {
+        var that = fluid.initLittleComponent("fluid.uploader.demoRemote", options);
+        that.queue = queue;
+        
+        that.uploadNextFile = function () {
+            startUploading(that);   
+        };
+        
+        that.stop = function () {
+            stopDemo(that);
+        };
+        
+        setupDemo(that);
+        return that;
+    };
+    
+    /**
+     * Invokes a function after a random delay by using setTimeout.
+     * If the simulateDelay option is false, the function is invoked immediately.
+     * This is an odd function, but a potential candidate for central inclusion.
+     * 
+     * @param {Function} fn the function to invoke
+     */
+    fluid.invokeAfterRandomDelay = function (fn) {
+        var delay = Math.floor(Math.random() * 1000 + 100);
+        setTimeout(fn, delay);
+    };
+    
+    fluid.defaults("fluid.uploader.demoRemote", {
+        gradeNames: ["fluid.eventedComponent"],
+        argumentMap: {
+            options: 1  
+        },
+        events: {
+            onFileProgress: "{multiFileUploader}.events.onFileProgress",
+            afterFileComplete: "{multiFileUploader}.events.afterFileComplete",
+            afterUploadComplete: "{multiFileUploader}.events.afterUploadComplete",
+            onFileSuccess: "{multiFileUploader}.events.onFileSuccess",
+            onFileStart: "{multiFileUploader}.events.onFileStart",
+            onFileError: "{multiFileUploader}.events.onFileError",
+            onUploadStop: "{multiFileUploader}.events.onUploadStop"
+        }
+    });
+    
+    fluid.demands("fluid.uploader.remote", ["fluid.uploader.multiFileUploader", "fluid.uploader.demo"], {
+        funcName: "fluid.uploader.demoRemote",
+        args: [
+            "{multiFileUploader}.queue",
+            "{multiFileUploader}.events",
+            fluid.COMPONENT_OPTIONS
+        ]
+    });
+    
+})(jQuery, fluid_1_5);
+/*
+Copyright 2011 OCAD University
+
+Licensed under the Educational Community License (ECL), Version 2.0 or the New
+BSD license. You may not use this file except in compliance with one these
+Licenses.
+
+You may obtain a copy of the ECL 2.0 License and BSD License at
+https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
+*/
+
+/*global fluid_1_5:true*/
+
+// JSLint options 
+/*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
+
+var fluid_1_5 = fluid_1_5 || {};
+
+(function (fluid) {
+
+    fluid.uploader = fluid.uploader || {};
+    
+    fluid.uploader.mimeTypeRegistry = {
+        // Images
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        bmp: "image/bmp",
+        png: "image/png",
+        tif: "image/tiff",
+        tiff: "image/tiff",
+        
+        // Audio
+        mp3: "audio/mpeg",
+        m4a: "audio/mp4a-latm",
+        ogg: "audio/ogg",
+        wav: "audio/x-wav",
+        aiff: "audio/x-aiff",
+        
+        // Video
+        mpg: "video/mpeg",
+        mpeg: "video/mpeg",
+        m4v: "video/x-m4v",
+        ogv: "video/ogg",
+        mov: "video/quicktime",
+        avi: "video/x-msvideo",
+        
+        // Text documents
+        html: "text/html",
+        htm: "text/html",
+        text: "text/plain",
+        
+        // Office Docs.
+        doc: "application/msword",
+        docx: "application/msword",
+        xls: "application/vnd.ms-excel",
+        xlsx: "application/vnd.ms-excel",
+        ppt: "application/vnd.ms-powerpoint",
+        pptx: "application/vnd.ms-powerpoint"
+    };    
+})(fluid_1_5);/*
  * jQuery UI Tooltip @VERSION
  *
  * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)

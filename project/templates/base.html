@@ -17,6 +17,7 @@
       {% flatblock "chartbeat-head" %}
     {% endif %}
     {% block extra-head %}{% endblock %}
+    {% include "include/js.html" %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
 
@@ -98,7 +99,6 @@
 
     </div>
 
-    {% include "include/js.html" %}
     {% compress js %}
     {% block extra-js %}{% endblock %}
     {% endcompress %}
