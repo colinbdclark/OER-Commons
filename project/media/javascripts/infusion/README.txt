@@ -1,11 +1,11 @@
 
 This version of Infusion was created from 
 
-    https://github.com/fluid-project/infusion
-    commit a61001900ddc39bb58e1c3c20679aef7c945aae3
+    https://github.com/amb26/infusion/tree/FLUID-4531
+    commit a84ee84008399eb95ef4c714b99a5e5102ac28c3
 
 using the following custom build command:
 
-    ant -lib lib/rhino customBuild -Dinclude="uiOptions, tooltip" -Dexclude="jQuery" -DnoMinify="true"
+    ant customBuild -Dinclude="uiOptions, uploader, tooltip" -lib lib/rhino -Dexclude="jQuery" -DnoMinify="true"
 
-Any unnecessary files have been removed from this folder.
+"uploader" and "tooltip" components are added for the proper functioning of the video player.

@@ -21,8 +21,10 @@ import requests
 import string
 import urlparse
 
+import pdb
 
 IMAGE_CONTENT_TYPE_RE = re.compile(r"^image/(png|p?jpeg|gif)", re.I)
+HTML5_VIDEO_CONTENT_TYPE_RE = re.compile(r"^video/(webm|mp4)", re.I)
 MAX_IMAGE_SIZE = 10485760   # 10 MB
 
 IMAGE_FILENAME_RE = re.compile("^.+\.(?:png|gif|jpg|jpeg)$", re.I)
@@ -91,7 +93,10 @@ class MediaUploadForm(forms.Form):
                 file = File(response.raw, name=filename)
                 file._size = content_length
                 self.cleaned_data["file"] = file
-
+            elif HTML5_VIDEO_CONTENT_TYPE_RE.match(content_type):
+                self.media_type = "html5_video"
+                self.url = url
+                self.content_type = content_type
             else:
                 self.embed = Embed.get_for_url(url)
 
@@ -164,14 +169,12 @@ class MediaUpload(SingleObjectMixin, FormMixin, ProcessFormView):
                 title=video.title or u"",
                 thumbnail=video.thumbnail or u""
             )
-        elif form.media_type == "video":
-            uploaded_video_id, url, thumbnail = UploadedVideo.upload(form.cleaned_data["file"], object)
+        elif form.media_type == "html5_video":
             response = dict(
                 type="video",
-                url=url,
-                uploaded_video_id=uploaded_video_id,
-                title=u"",
-                thumbnail=thumbnail,
+                contentType=form.content_type,
+                url=form.url,
+                thumbnail="/media/images/default-video-thumbnail.jpg" or u""
             )
         else:
             if form.cleaned_data["file"]:

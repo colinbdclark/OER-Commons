@@ -8,6 +8,7 @@ from django.views.generic.detail import BaseDetailView
 from materials.models.material import PUBLISHED_STATE
 from pyquery import PyQuery as pq
 
+import pdb
 
 class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
 
@@ -66,6 +67,30 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
                     </script>
                 """ % url
                 embed.html(self.add_afa(content) + caption)
+
+        # Process the embed html5 video lins
+        for video in document.find("figure.html5Video"):
+#            pdb.set_trace()
+            video = pq(video)
+            #noinspection PyCallingNonCallable
+            url = video.attr("data-url")
+
+            contentType = video.attr("data-contenttype")
+            video.removeAttr("data-contenttype")
+
+            caption = video.attr("data-caption")
+            video.removeAttr("data-caption")
+
+            videoid = video.attr("id")
+            if videoid and url and contentType:
+                content = u"""
+                    <script type="text/javascript">
+                    $(document).ready(function () {
+                      vp.initVideoPlayer("#%s", "%s", "%s", "%s");
+                    });
+                    </script>
+                """ % (videoid, url, contentType, caption)
+                video.before(content)
 
         # Remove <br> from headers
         document.find("h2 > br,h3 > br").remove()

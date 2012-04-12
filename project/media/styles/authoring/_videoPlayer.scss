@@ -1,0 +1,33 @@
+.fl-videoPlayer-controller-buttons *,
+.fl-videoPlayer-transcript-text {
+  font-family: sans-serif;
+}
+.fl-videoPlayer-video {
+  height: 400px;
+  width: 400px;
+}
+.authored-content figure.html5Video .fl-videoPlayer-main {
+  background-color: #808080;
+  border: 2px solid #808080;
+  * {
+    margin-bottom: 0;
+  }
+}
+.fl-videoPlayer-scrubber .ui-slider-handle > span {
+  width: 6em;
+  padding: 5%;
+  color: #FFFFFF;
+  font-size: 100%;
+}
+div.fl-subtitle-mainWrap {
+  text-align: center;
+}
+figure.html5Video .fl-videoPlayer-volumeControl {
+    background-color: #F2F2F2;
+    border-width: 5px 11px;
+    bottom: 19px;
+    position: absolute;
+    right: 1px;
+    width: 25%;
+    z-index: 1000;
+}
