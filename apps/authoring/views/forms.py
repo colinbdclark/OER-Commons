@@ -1,5 +1,5 @@
 from authoring.models import AuthoredMaterialDraft
-from common.models import GradeLevel
+from common.models import Grade
 from curriculum.models import AlignmentTag, TaggedMaterial
 from django import forms
 from django.contrib.contenttypes.models import ContentType
@@ -187,6 +187,25 @@ class AlignmentTagsWidget(forms.SelectMultiple):
         return mark_safe(u"\n".join(output))
 
 
+class GradesWidget(forms.SelectMultiple):
+
+    def render(self, name, value, attrs=None, choices=()):
+        value = value or []
+        select = forms.Select(choices=self.choices).render(name+"_select", None)
+        choices_dict = dict(self.choices)
+        existing = []
+        for v in value:
+            existing.append(mark_safe(u"""<li><span>%s</span> %s <a href="#" class="delete ui-icon ui-icon-close">Delete</a></li>""" % (
+                choices_dict[v],
+                forms.HiddenInput().render(name, v),
+            )))
+        return render_to_string("authoring/forms/grades-widget.html", dict(
+            name=name,
+            existing=existing,
+            select=select,
+        ))
+
+
 class EditFormNoLicense(forms.ModelForm):
 
     # TODO: clean up HTML from `text` field.
@@ -196,7 +215,7 @@ class EditFormNoLicense(forms.ModelForm):
     learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
     keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), required=False)
     general_subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
-    grade_levels = forms.ModelMultipleChoiceField(label=u"Grade Level", queryset=GradeLevel.objects.all(), widget=SelectMultiple())
+    grades = forms.ModelMultipleChoiceField(label=u"Grade", queryset=Grade.objects.all(), widget=GradesWidget())
     languages = forms.ModelMultipleChoiceField(label=u"Language", queryset=Language.objects.all(), widget=SelectMultiple())
     material_types = forms.ModelMultipleChoiceField(label=u"Material Type", queryset=CourseMaterialType.objects.all(), widget=SelectMultiple())
     alignment_tags = forms.ModelMultipleChoiceField(
@@ -209,6 +228,7 @@ class EditFormNoLicense(forms.ModelForm):
         not_required = kwargs.pop("not_required", False)
         self.user = kwargs.pop("user")
         super(EditFormNoLicense, self).__init__(*args, **kwargs)
+        self.fields["grades"].empty_label = u"Select a Grade"
         self.content_type = ContentType.objects.get_for_model(self.instance)
         self.initial["alignment_tags"] = list(tagged.tag for tagged in TaggedMaterial.objects.filter(
             content_type=self.content_type,
@@ -221,7 +241,7 @@ class EditFormNoLicense(forms.ModelForm):
 
     class Meta:
         model = AuthoredMaterialDraft
-        fields = ["title", "text", "abstract", "learning_goals", "keywords", "general_subjects", "grade_levels", "languages", "material_types"]
+        fields = ["title", "text", "abstract", "learning_goals", "keywords", "general_subjects", "grades", "languages", "material_types"]
         widgets = dict(
             title=forms.HiddenInput(),
             text=forms.HiddenInput(),
