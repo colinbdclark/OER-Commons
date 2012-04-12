@@ -1,6 +1,6 @@
 from annoying.functions import get_object_or_None
 from autoslug import AutoSlugField
-from common.models import GradeLevel, MediaFormat
+from common.models import GradeLevel, MediaFormat, GradeSubLevel, Grade
 from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 from curriculum.models import TaggedMaterial
 from django.conf import settings
@@ -50,6 +50,8 @@ class AbstractAuthoredMaterial(models.Model):
     keywords = AutoCreateManyToManyField(Keyword)
     general_subjects = models.ManyToManyField(GeneralSubject)
     grade_levels = models.ManyToManyField(GradeLevel)
+    grade_sublevels = models.ManyToManyField(GradeSubLevel)
+    grades = models.ManyToManyField(Grade)
     languages = models.ManyToManyField(Language)
     material_types = models.ManyToManyField(CourseMaterialType)
     license = AutoCreateForeignKey(License, null=True, respect_all_fields=True)
@@ -307,6 +309,21 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     @property
     def alignment_categories(self):
         return self.alignment_tags.values_list("tag__category__id", flat=True).order_by().distinct()
+
+    @property
+    def indexed_grade_sublevels(self):
+        grade_sublevels = set(self.grade_sublevels.all())
+        for grade in self.grades.all():
+            if grade.grade_sublevel:
+                grade_sublevels.add(grade.grade_sublevel)
+        return sorted(grade_sublevels, key=lambda x: x.id)
+
+    @property
+    def indexed_grade_levels(self):
+        grade_levels = set(self.grade_levels.all())
+        for sublevel in self.indexed_grade_sublevels:
+            grade_levels.add(sublevel.grade_level)
+        return sorted(grade_levels, key=lambda x: x.id)
 
     @property
     def saved_in_folders(self):

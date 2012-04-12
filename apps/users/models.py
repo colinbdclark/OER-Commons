@@ -160,19 +160,14 @@ class Profile(models.Model):
                                       crop="center")
             return thumbnail.url
         elif self.user.email:
-            try:
-                default = "http://%s%s" % (Site.objects.get_current().domain, settings.DEFAULT_AVATAR)
-                url = "%s/%s.jpg?%s" % (settings.GRAVATAR_BASE,
-                                        hashlib.md5(self.user.email).hexdigest(),
-                                        urllib.urlencode({
-                                            'size': str(settings.AVATAR_SIZE),
-                                            'rating': "g",
-                                            'default': default,
-                                        }))
-            except:
-                import traceback
-                print traceback.format_exc()
-                raise
+            default = "http://%s%s" % (Site.objects.get_current().domain, settings.DEFAULT_AVATAR)
+            url = "%s/%s.jpg?%s" % (settings.GRAVATAR_BASE,
+                                    hashlib.md5(self.user.email).hexdigest(),
+                                    urllib.urlencode({
+                                        'size': str(settings.AVATAR_SIZE),
+                                        'rating': "g",
+                                        'default': default,
+                                    }))
             return url
 
         return settings.DEFAULT_AVATAR

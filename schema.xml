@@ -121,6 +121,8 @@
 
     <field name="authors" type="text" indexed="true" stored="true" multiValued="true" />
     <field name="grade_levels" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="grade_sublevels" type="sint" indexed="true" stored="true" multiValued="true" />
+    <field name="grades" type="sint" indexed="true" stored="true" multiValued="true" />
     <field name="general_subjects" type="sint" indexed="true" stored="true" multiValued="true" />
     <field name="keywords" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="keywords_names" type="text" indexed="true" stored="true" multiValued="true" />
