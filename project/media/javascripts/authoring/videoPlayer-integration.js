@@ -24,7 +24,14 @@ var vp = vp || {};
                 onReady: function (videoPlayer) {
                     videoPlayer.container.append($(caption));
                     fluid.subtitleWidget(videoPlayer.container, {
-                        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html"
+                        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html",
+                        listeners: {
+                            onReady: {
+                                // Add AfA metadata for embedded videos
+                                listener: "afa.addAfAToEmbeddedVideo",
+                                args: [videoPlayer.container, "{subtitleWidget}"]
+                            }
+                        }
                     });
                 }
             } 
