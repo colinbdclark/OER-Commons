@@ -125,6 +125,14 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         that.options.mainWrap = mainWrap;
         that.options.widgetWrap = widgetWrap;
         that.options.videoWrap = videoWrap;
+
+        /**
+         * Public function to allow integrations to query the widget to determine
+         * whether or not the video is known to have any subtitles
+         */
+        that.hasSubtitles = function () {
+            return that.model.haveSubtitles;
+        };
     };
 
 
