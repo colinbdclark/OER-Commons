@@ -82,7 +82,7 @@ class Grade(models.Model):
     objects = GradeManager()
 
     def __unicode__(self):
-        return "%s (%s)" % (self.name, self.code)
+        return "%s" % self.name
 
     def natural_key(self):
         return self.code,
