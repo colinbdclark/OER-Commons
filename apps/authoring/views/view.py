@@ -67,6 +67,30 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
                 """ % url
                 embed.html(self.add_afa(content) + caption)
 
+        # Process the embed html5 video lins
+        for video in document.find("figure.html5Video"):
+            video = pq(video)
+            #noinspection PyCallingNonCallable
+            url = video.attr("data-url")
+            video.removeAttr("data-url")
+
+            contentType = video.attr("data-contenttype")
+            video.removeAttr("data-contenttype")
+
+            caption = video.attr("data-caption")
+            video.removeAttr("data-caption")
+
+            id = video.attr("id")
+            if id and url and contentType:
+                content = u"""
+                    <script type="text/javascript">
+                    $(document).ready(function () {
+                      vp.initVideoPlayer("#%s", "%s", "%s", "%s");
+                    });
+                    </script>
+                """ % (id, url, contentType, caption)
+                video.html(content)
+
         # Build references
         footnotes = pq("""<div id="footnotes"></div>""")
         for ref in document.find("a.reference"):

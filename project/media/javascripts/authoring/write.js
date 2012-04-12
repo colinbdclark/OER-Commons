@@ -1556,36 +1556,13 @@ WriteStep.prototype.initTable = function($table) {
   return $table;
 };
 
-WriteStep.prototype.initVideoPlayer = function (container, videoURL, contentType) {
-    var instance = [{
-      container: container,
-      options: {
-        video: {
-          sources: [
-            {
-              src: videoURL,
-              type: contentType
-            }
-          ]
-        },
-        templates: {
-            videoPlayer: {
-                forceCache: true,
-                href: "/media/javascripts/videoPlayer/html/videoPlayer_template.html"
-            }
-        }
-      }
-    }];
-
-    fluid.videoPlayer.makeEnhancedInstances(instance, uiOptions.relay);
-};
-
 WriteStep.prototype.ensureHTML5Video = function (editor) {
   $.each(this.$area.find(".html5Video"), function (index, video) {
     video = $(video);
     var url = video.data("url"),
-        contentType = video.data("contenttype");
-    editor.initVideoPlayer(video, url, contentType);
+        contentType = video.data("contenttype"),
+        caption = video.data("caption");
+    vp.initVideoPlayer(video, url, contentType, caption);
   });
 };
 
@@ -1868,21 +1845,21 @@ MediaDialog.VideoStep = function (dialog) {
     if (description !== "") {
       title += ": ";
     }
+    var $caption = $("<figcaption></figcaption>").text(description);
+    if (title) {
+        $caption.prepend($("<strong></strong>").text(title));
+      }
+
     var $figure;
     if ($step.data("contentType")) {  // embed a html5 video link
       $figure = $('<figure class="html5Video"></figure>').attr({
           "data-url": $step.data("url"),
-          "data-contenttype": $step.data("contentType")
-      }).append($caption);
+          "data-contenttype": $step.data("contentType"),
+          "data-caption": $caption[0].outerHTML
+      });
     } else {  // upload a youtube video
-      var $caption = $("<figcaption></figcaption>").text(description);
-      if (title) {
-        $caption.prepend($("<strong></strong>").text(title));
-      }
       $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
     }
-
-    editor.initFigure($figure);
 
     if (editor.$focusBlock) {
       $figure.insertAfter(editor.$focusBlock);
@@ -1892,11 +1869,12 @@ MediaDialog.VideoStep = function (dialog) {
 
     if ($step.data("contentType")) {  // embed a html5 video link
       // Use infusion video player
-      editor.initVideoPlayer($figure, $step.data("url"), $step.data("contentType"));
+      vp.initVideoPlayer($figure, $step.data("url"), $step.data("contentType"), $caption[0].outerHTML);
       // ToDo: add video caption
     } else {  // upload a youtube video
       editor.loadEmbed($figure);
     }
+    editor.initFigure($figure);
 
     editor.ensureTextInput();
     editor.updateDND();
