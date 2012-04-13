@@ -81,7 +81,7 @@ var afa = afa || {};
         name: "has-captions",
         type: "boolean",
         selector: ".captions",
-        summaryfunc: "afa.unknown"  // ToDo: needs an actual summary function eventually
+        summaryfunc: "afa.checkCaptions"  // ToDo: needs an actual summary function eventually
       },
       videoAudioAdapt: {
         name: "has-audio-description",
@@ -170,7 +170,7 @@ var afa = afa || {};
       green: "",
       yellow: {
           no: "Some images in this learning resource have no long descriptions.",
-          dontknow: "It is possible that some images in this learning resource have no alternative text."
+          dontknow: "It is possible that some images in this learning resource have no long descriptions."
       },
       red: "No images in this learning resource are associated with long descriptions.",
       grey: "Cannot determine if the images in this learning resource have extended descriptions."
@@ -192,6 +192,12 @@ var afa = afa || {};
     },
     captions: {
       heading: "Translations",
+      green: "All videos in this resource have captions or subtitles.",
+      yellow: {
+          no: "Some vidoes in this learning resource have no captions or subtitles.",
+          dontknow: "It is possible that some vidoes in this learning resource have no captions or subtitles."
+      },
+      red: "No videos in this learning resource are associated with long descriptions.",
       grey: "Cannot determine if the videos in this learning resource have captions."
     },
     videoAudioAdapt: {
@@ -291,7 +297,7 @@ var afa = afa || {};
    * and the absense (i.e. an empty string) as "false." Eventually, we should look at individual values
    */
   afa.checkDispTrans = function (itemName, itemProperty) {
-    var itemsThatQualify = $(".oer-container, figure.embed.video");
+    var itemsThatQualify = $(".oer-container, figure.embed.video, figure.html5Video");
     var total = itemsThatQualify.length;
     var haveProp = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "']").length;
     var yes = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
@@ -310,7 +316,7 @@ var afa = afa || {};
    * Check on "mouse-access" and "kbd-access"
    */
   afa.checkA11y = function (itemName, itemProperty) {
-    var itemsThatQualify = $(".oer-container, figure.embed.video");
+    var itemsThatQualify = $(".oer-container, figure.embed.video, figure.html5Video");
     var total = itemsThatQualify.length;
     var haveProp = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "']").length;
     var yes = itemsThatQualify.find("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
@@ -342,6 +348,22 @@ var afa = afa || {};
     };
   };
   
+  afa.checkCaptions = function (itemName, itemProperty) {
+    var videos = $("figure.embed.video, figure.html5Video");
+    var total = videos.length;
+    var haveProp = videos.find("meta[itemprop='" + itemProperty.name + "']").length;
+    var yes = videos.find("meta[itemprop='" + itemProperty.name + "'][content='true']").length;
+    var no = videos.find("meta[itemprop='" + itemProperty.name + "'][content='false']").length;
+    var dontknow = total - haveProp;
+
+    var level = (yes === 0 && no === 0 && total !== 0 ? "grey" : (yes === total || total === 0 ? "green" : (no === total ? "red" : "yellow")));
+
+    return {
+      level: level,
+      tooltipText: afa.buildTooltipContent(tooltipTextMapping[itemName], level, no, dontknow)
+    };
+  };
+
   /**
    * Check on "unknown" type
    * ToDo: This funciton is temporarily used for the AfA properties that the way to detect cannot be determined.
@@ -391,7 +413,7 @@ var afa = afa || {};
     });
 
     afa.updateMediaIconDisplay(".afa-images", $(".oer-container img:visible").length !== 0);
-    afa.updateMediaIconDisplay(".afa-video", $(".oer-container figure.embed.video").length !== 0);
+    afa.updateMediaIconDisplay(".afa-video", $(".oer-container figure.embed.video").length + $(".oer-container figure.html5Video").length !== 0);
   };
   
   afa.addAfAToBody = function () {
@@ -408,7 +430,7 @@ var afa = afa || {};
     container.prepend('<meta itemprop="hazard" content=""/>');
   }
   
-  afa.addAfAToEmbeddedVideo = function (figure) {
+  afa.addAfAToEmbeddedVideo = function (figure, subtitleWidget) {
       // NOTE: These values are valid for currently-supported embedded youtube videos only
       // TODO: These itemprop names should not be hard-coded
       figure.attr("itemscope", "");
@@ -417,6 +439,14 @@ var afa = afa || {};
     // TODO: The value of "is-display-transformable" should be an empty string for something that is
     // known to be non-tranformable, but in this iteration, we're treating it as a boolean
       figure.prepend('<meta itemprop="is-display-transformable" content="false"/>');
+      if (subtitleWidget) {
+          figure.prepend('<meta itemprop="has-captions" content="' + subtitleWidget.hasSubtitles() + '"/>');
+      }
+
+      // Dynamically re-summerize on AfA properties
+      // TODO: When this is done is inconsistent. For videos, it is done at the time metadata is
+      //       added; otherwise, it would happen too early
+      afa.summerizeAfA();
   };
 
   // TODO: Should this call be somewhere else? in the save process, maybe?

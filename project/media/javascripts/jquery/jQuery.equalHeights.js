@@ -21,7 +21,8 @@ $.fn.equalHeights = function() {
 	$(this).each(function(){
 		var currentTallest = 0;
 		$(this).children().each(function(i){
-			if ($(this).height() > currentTallest) { currentTallest = $(this).outerHeight(); }
+      var height = $(this).outerHeight();
+			if (height > currentTallest) { currentTallest = height; }
 		});
 		// for ie6, set height since min-height isn't supported
 		if ($.browser.msie && $.browser.version == 6.0) { $(this).children().css({'height': currentTallest}); }

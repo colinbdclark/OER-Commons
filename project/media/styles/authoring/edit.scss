@@ -4,6 +4,7 @@
 @import "_grades-widget.scss";
 @import "_toc.scss";
 @import "_afa-md.scss";
+@import "_videoPlayer.scss";
 
 .authoring-edit {
   #slider {
@@ -1415,6 +1416,7 @@
     list-style-type: none;
   }
 }
+
 
 /* High-contrast toolbar images */
 .fl-theme-uio-by #write-toolbar .undo,

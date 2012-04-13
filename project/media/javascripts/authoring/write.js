@@ -15,7 +15,7 @@ var WriteStep = function (tool) {
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
-  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "rangySelectionBoundary"];
+  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "rangySelectionBoundary", "html5Video"];
   for (var i = 1; i < 6; i++) {
     this.ALLOWED_CLASSES.push("text-color-" + i);
     this.ALLOWED_CLASSES.push("bg-color-" + i);
@@ -81,6 +81,7 @@ var WriteStep = function (tool) {
   this.shouldSaveState = true; // Flag to define if we should save current state in undo history
 
   this.$area.html(editor.cleanHTML(false));
+  this.ensureHTML5Video(editor);
   this.ensureTextInput();
 
   // Track when user presses and releases Ctrl or Cmd or Shift keys
@@ -322,9 +323,12 @@ WriteStep.prototype.cleanHTML = function (preSave) {
 
   // Remove the subtitle widget panel
   $document.find(".flc-subtitle-mainWrap").replaceWith(function () {
-    return $(this).find("figure.embed")[0];
+    return $(this).find("figure.embed")[0] || $(this).find("figure.html5Video")[0];
   });
-  
+
+  $document.find(".html5Video").children().remove();
+  $document.find(".html5Video").html("");
+
   // Remove non-safe elements (scripts, styles, forms, inputs)
   $document.find("script,style,form,input,textarea,button").remove();
 
@@ -380,6 +384,9 @@ WriteStep.prototype.cleanHTML = function (preSave) {
       return;
     }
     if ($figure.hasClass("embed") && $figure.data("url")) {
+      return;
+    }
+    if ($figure.hasClass("html5Video") && $figure.data("url")) {
       return;
     }
     if ($figure.hasClass("image") && $figure.find("img")) {
@@ -467,11 +474,15 @@ WriteStep.prototype.ensureTextInput = function () {
   }
   $area.find("figure:not(.inline)").each(function () {
     var $figure = $(this);
-    if (!$figure.prev().is("p,div")) {
-      $("<p><br></p>").data("auto", true).insertBefore($figure);
-    }
-    if (!$figure.next().is("p,div")) {
-      $("<p><br></p>").text(" ").data("auto", true).insertBefore($figure);
+
+    // If the figure is wrapped with universalSubtitle widget then we do not want to add any <p><br><p/>
+    if (!$figure.parent().is(".fl-subtitle-videoWrap")) {
+        if (!$figure.prev().is("p,div")) {
+          $("<p><br></p>").data("auto", true).insertBefore($figure);
+        }
+        if (!$figure.next().is("p,div")) {
+          $("<p><br></p>").text(" ").data("auto", true).insertBefore($figure);
+        }
     }
   });
   // Remove duplicate empty paragraphs
@@ -1008,7 +1019,7 @@ WriteStep.prototype.initLinks = function () {
   });
 
   this.$area.delegate("a", "click", function (e) {
-    if ($(this).is(".flc-subtitle-panel-language-link, .flc-subtitle-panel-menu-addSubtitle")) {
+    if ($(this).is(".flc-subtitle-panel-language-link, .flc-subtitle-panel-menu-addSubtitle, .flc-subtitle-panel-addSubtitle")) {
         return;
     }
     var $link = $(this);
@@ -1164,11 +1175,15 @@ WriteStep.prototype.loadEmbed = function ($figure) {
       var $caption = $figure.find("figcaption").detach();
       $figure.html(response.html).append($caption).fadeIn();
 
-      // Add AfA metadata for embedded videos
-      afa.addAfAToEmbeddedVideo($figure);
-
       fluid.subtitleWidget($figure, {
-        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html"
+        templateUrl: "/media/javascripts/infusion/components/subtitleWidget/html/SubtitlePanel_template.html",
+        listeners: {
+            onReady: {
+                // Add AfA metadata for embedded videos
+                listener: "afa.addAfAToEmbeddedVideo",
+                args: [$figure, "{subtitleWidget}"]
+            }
+        }
       });
     });
   }
@@ -1594,6 +1609,16 @@ WriteStep.prototype.initTable = function($table) {
   return $table;
 };
 
+WriteStep.prototype.ensureHTML5Video = function (editor) {
+  $.each(this.$area.find(".html5Video"), function (index, video) {
+    video = $(video);
+    var url = video.data("url"),
+        contentType = video.data("contenttype"),
+        caption = video.data("caption");
+    vp.initVideoPlayer(video, url, contentType, caption);
+  });
+};
+
 function MediaDialog(editor) {
   this.editor = editor;
   this.displayed = false;
@@ -1889,10 +1914,19 @@ MediaDialog.VideoStep = function (dialog) {
     }
     var $caption = $("<figcaption></figcaption>").text(description);
     if (title) {
-      $caption.prepend($("<strong></strong>").text(title));
-    }
+        $caption.prepend($("<strong></strong>").text(title));
+      }
 
-    var $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
+    var $figure;
+    if ($step.data("contentType")) {  // embed a html5 video link
+      $figure = $('<figure class="html5Video"></figure>').attr({
+          "data-url": $step.data("url"),
+          "data-contenttype": $step.data("contentType"),
+          "data-caption": $caption[0].outerHTML
+      });
+    } else {  // upload a youtube video
+      $figure = $('<figure>').addClass("embed video").attr("data-url", $step.data("url")).append($caption);
+    }
     if ($step.data("uploaded-video-id")) {
       $figure.attr("data-uploaded-video-id", $step.data("uploaded-video-id"));
     }
@@ -1902,14 +1936,19 @@ MediaDialog.VideoStep = function (dialog) {
     } else {
       editor.$area.append($figure);
     }
-    editor.loadEmbed($figure);  // AfA meta data is added
+
+    if ($step.data("contentType")) {  // embed a html5 video link
+      // Use infusion video player
+      vp.initVideoPlayer($figure, $step.data("url"), $step.data("contentType"), $caption[0].outerHTML);
+      // ToDo: add video caption
+    } else {  // upload a youtube video
+      editor.loadEmbed($figure);
+    }
     editor.initFigure($figure);
+
     editor.ensureTextInput();
     editor.updateDND();
     dialog.hide();
-    
-    // Dynamically update the AfA section as meta data is added in loadEmbed()
-    afa.summerizeAfA();
   });
 
   $step.find("input[type='text']").keydown(function(e) {
@@ -1924,6 +1963,7 @@ MediaDialog.VideoStep.prototype = new MediaDialog.Step();
 MediaDialog.VideoStep.prototype.constructor = MediaDialog.VideoStep;
 MediaDialog.VideoStep.prototype.prepare = function (data) {
   this.$step.data("url", data.url);
+  this.$step.data("contentType", data.contentType);
   if ("uploaded_video_id" in data) {
     this.$step.data("uploaded-video-id", data["uploaded_video_id"]);
   } else {
