@@ -326,8 +326,9 @@ WriteStep.prototype.cleanHTML = function (preSave) {
     return $(this).find("figure.embed")[0] || $(this).find("figure.html5Video")[0];
   });
 
-  $document.find(".html5Video").children().remove();
-  $document.find(".html5Video").html("");
+  var $html5Video = $document.find(".html5Video");
+  $html5Video.children().remove();
+  $html5Video.html("");
 
   // Remove non-safe elements (scripts, styles, forms, inputs)
   $document.find("script,style,form,input,textarea,button").remove();
