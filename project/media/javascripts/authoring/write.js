@@ -1963,6 +1963,7 @@ MediaDialog.VideoStep = function (dialog) {
 MediaDialog.VideoStep.prototype = new MediaDialog.Step();
 MediaDialog.VideoStep.prototype.constructor = MediaDialog.VideoStep;
 MediaDialog.VideoStep.prototype.prepare = function (data) {
+  this.$step.removeData();
   this.$step.data("url", data.url);
   this.$step.data("contentType", data.contentType);
   if ("uploaded_video_id" in data) {
