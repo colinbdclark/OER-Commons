@@ -295,9 +295,16 @@ ul.fl-videoPlayer-transcripts-languageList li {
     margin-bottom: -0.4em;
     position: relative;
 }
+.authored-content figure.html5Video .fl-videoPlayer-main .fl-videoPlayer-scrubberContainer {
+    margin-bottom: -0.4em;
+}
 .fl-videoPlayer-scrubberContainer * {
     margin: auto;
     display: inline-block;
+}
+
+.authored-content figure.html5Video .fl-videoPlayer-main .fl-videoPlayer-scrubber {
+    height: 1.2em;
 }
 
 .fl-videoPlayer-scrubber {
