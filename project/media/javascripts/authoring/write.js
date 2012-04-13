@@ -326,8 +326,9 @@ WriteStep.prototype.cleanHTML = function (preSave) {
     return $(this).find("figure.embed")[0] || $(this).find("figure.html5Video")[0];
   });
 
-  $document.find(".html5Video").children().remove();
-  $document.find(".html5Video").html("");
+  var $html5Video = $document.find(".html5Video");
+  $html5Video.children().remove();
+  $html5Video.html("");
 
   // Remove non-safe elements (scripts, styles, forms, inputs)
   $document.find("script,style,form,input,textarea,button").remove();
@@ -1962,6 +1963,7 @@ MediaDialog.VideoStep = function (dialog) {
 MediaDialog.VideoStep.prototype = new MediaDialog.Step();
 MediaDialog.VideoStep.prototype.constructor = MediaDialog.VideoStep;
 MediaDialog.VideoStep.prototype.prepare = function (data) {
+  this.$step.removeData();
   this.$step.data("url", data.url);
   this.$step.data("contentType", data.contentType);
   if ("uploaded_video_id" in data) {
