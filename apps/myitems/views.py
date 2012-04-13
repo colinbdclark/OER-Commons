@@ -240,6 +240,14 @@ class UserItem(object):
         self.item = item
         self.content_type = content_type
         self.user = user
+        self._rating = None
+
+
+    @property
+    def rating(self):
+        if self._rating is None:
+            self._rating = self.item.rating
+        return self._rating
 
 
     def folders(self):
@@ -261,16 +269,17 @@ class UserItem(object):
 
 
 class SubmittedUserItem(UserItem):
-    def relation_to_user(self):
-        if Evaluation.objects.filter(user=self.user,
-                                     content_type=self.content_type,
-                                     object_id=self.item.id,
-                                     confirmed=True).exists():
-            return 'evaluated'
-        elif self.item.creator == self.user:
-            return 'submitted'
-        else:
-            return 'saved'
+    def __init__(self, item, content_type, user):
+        super(SubmittedUserItem, self).__init__(item, content_type, user)
+        self.item_class = "submitted" if self.item.creator == self.user else "saved"
+        self.relation_to_user = (
+            "evaluated"
+            if Evaluation.objects.filter(user=self.user,
+                                         content_type=self.content_type,
+                                         object_id=self.item.id,
+                                         confirmed=True).exists()
+            else self.item_class
+        )
 
 
     @property
@@ -280,9 +289,7 @@ class SubmittedUserItem(UserItem):
 
 
 class CreatedUserItem(UserItem):
-    def relation_to_user(self):
-        return 'created'
-
+    item_class = relation_to_user = 'created'
 
     @property
     def date(self):
@@ -291,19 +298,20 @@ class CreatedUserItem(UserItem):
 
 
 class DraftUserItem(CreatedUserItem):
-    @property
-    def title(self):
+    def __init__(self, item, content_type, user):
+        super(SubmittedUserItem, self).__init__(item, content_type, user)
         title = []
         title_first = self.item.title or self.item.material.title
         if title_first:
             title.append(title_first)
-        title.append(
-            "Unpublished Changes"
-            if self.item.material.workflow_state == PUBLISHED_STATE
-            else "Draft"
-        )
+        if self.item.material.workflow_state == PUBLISHED_STATE:
+            title.append("Unpublished Changes")
+            self.item_class = "unpublished-changes"
+        else:
+            title.append("Draft")
+            self.item_class = "draft"
         title.append(localize(self.item.modified_timestamp or self.item.created_timestamp))
-        return " - ".join(title)
+        self.title = " - ".join(title)
 
 
     def get_absolute_url(self):

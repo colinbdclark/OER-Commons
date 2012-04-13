@@ -291,6 +291,35 @@ dl.user-info dt {
   margin-left: 10px;
   font-size: 11px;
 }
+.my-items-views .folder.to-delete .cancel:hover {
+  text-decoration: underline;
+}
+
+.myitems article .inline-confirmation-block {
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px 1px #616161;
+  padding: 10px 10px 11px 10px;
+}
+
+.myitems article .confirm {
+  color: white;
+  padding: 1px 3px;
+  background-color: #0B7BA9;
+}
+
+.myitems article .confirm:hover {
+  border-color: #FAAF3B;
+  background-color: #FFCC66;
+}
+
+.myitems article .cancel {
+  margin-left: 10px;
+  font-size: 11px;
+}
+.myitems article .cancel:hover {
+  text-decoration: underline;
+}
 
 .my-items-views a.hidden {
   display: none;

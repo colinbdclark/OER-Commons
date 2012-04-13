@@ -103,7 +103,7 @@ oer.myitems.init = function() {
         });
 
         $folderList.find("a.delete").inlineConfirmation({
-            confirm: "<a class='confirm rc3' href='#'>Confirm</a>",
+            confirm: "<a class='confirm rc3' href='#'>Delete</a>",
             cancel: "<a class='cancel' href='#'>Cancel</a>",
             confirmCallback: function(action) {
                 var $folder = action.parent();
@@ -161,40 +161,49 @@ oer.myitems.init = function() {
 
 
     var addItemDeleteConfirmation = function () {
-        $("article div.delete a.delete").inlineConfirmation({
-            confirmCallback: function(action) {
-                var $article = action.closest("article");
-                var $itemFolders = $article.find("ul.folder-list li");
-                var itemId = $article.attr("data-identifier");
-                var $numbers = $folderList.find("li.view.myitems span.number");
+        var classToLabel = {
+            "saved": "Remove from My Items",
+            "submitted": "Remove from OER Commons",
+            "created": "Delete Resource",
+            "unpublished-changes": "Discard Changes",
+            "draft": "Delete Resource",
+        };
+        var $articles = $("article");
+        for (var key in classToLabel) {
+            $articles.filter("."+key).inlineConfirmation({
+                selector: "a.delete",
+                confirm: "<a class='confirm rc3' href='#'>"+classToLabel[key]+"</a>",
+                cancel: "<a class='cancel' href='#'>Cancel</a>",
+                confirmCallback: function(action) {
+                    var $article = action.closest("article");
+                    var $itemFolders = $article.find("ul.folder-list li");
+                    var itemId = $article.attr("data-identifier");
+                    var $numbers = $folderList.find("li.view.myitems span.number");
 
-                if ($article.find("div.right.relation").text() === "SUBMITTED") {
-                    $numbers = $numbers.add($folderList.find("li.view.submitted span.number"));
-                }
-
-                var $folders = $folderList.children("li.folder");
-                for (var i = 0; i < $itemFolders.length-1; i++) {
-                    var itemFolderId = $itemFolders.eq(i).data("folder-id");
-                    for (var j = 0; j < $folders.length; j++) {
-                        var $folder = $folders.eq(j);
-                        if ($folder.data("folder-id") === itemFolderId) {
-                            $numbers = $numbers.add($folder.find("span.number"));
-                            break;
+                    var $folders = $folderList.children("li.folder");
+                    for (var i = 0; i < $itemFolders.length-1; i++) {
+                        var itemFolderId = $itemFolders.eq(i).data("folder-id");
+                        for (var j = 0; j < $folders.length; j++) {
+                            var $folder = $folders.eq(j);
+                            if ($folder.data("folder-id") === itemFolderId) {
+                                $numbers = $numbers.add($folder.find("span.number"));
+                                break;
+                            }
                         }
                     }
+                    $.post(deleteItemUrl, {item_id: itemId}, function(response) {
+                        if (response.status === "success") {
+                            $article.remove();
+                        } else {
+                            $article.show();
+                            oer.myitems._changeNumber($numbers, 1);
+                        }
+                    });
+                    $article.fadeOut();
+                    oer.myitems._changeNumber($numbers, -1);
                 }
-                $.post(deleteItemUrl, {item_id: itemId}, function(response) {
-                    if (response.status === "success") {
-                        $article.remove();
-                    } else {
-                        $article.show();
-                        oer.myitems._changeNumber($numbers, 1);
-                    }
-                });
-                $article.fadeOut();
-                oer.myitems._changeNumber($numbers, -1);
-            }
-        });
+            });
+        }
     };
 
     var itemFolderElement = function(params) {
