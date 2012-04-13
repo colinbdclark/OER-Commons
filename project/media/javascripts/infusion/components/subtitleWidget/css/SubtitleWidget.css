@@ -1,5 +1,5 @@
 .fl-subtitle-mainWrap {
-    display: table-cell;
+    display: table-row;
 }
 .fl-subtitle-panel-languages {
     position: absolute;
