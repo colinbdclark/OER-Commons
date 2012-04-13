@@ -83,12 +83,14 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             }]
         },
         repeatingSelectors: ["language"],
+        selectorsToIgnore: ["panel"],
         selectors: {
             menu: ".flc-subtitle-panel-menu",
             languages: ".flc-subtitle-panel-languages",
             language: ".flc-subtitle-panel-language",
             languageLink: ".flc-subtitle-panel-language-link",
-            addSubtitle: ".flc-subtitle-panel-addSubtitle"
+            addSubtitle: ".flc-subtitle-panel-addSubtitle",
+            panel: ".flc-subtitle-panel"
         },
         styles: {
             menu: "fl-subtitle-panel-menu",
@@ -103,7 +105,7 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             onHide: null
         },
         listeners: {
-            afterRender: "{fluid.subtitlePanel}.afterRenderHanlder",
+            afterRender: "{fluid.subtitlePanel}.afterRenderHandler",
             onShow: "{fluid.subtitlePanel}.show",
             onHide: "{fluid.subtitlePanel}.hide"
         },
@@ -142,8 +144,8 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             that.applier.requestChange(fluid.model.composeSegments("languages", index), lang);
         });
 
-        that.afterRenderHanlder = function () {
-            that.container.hover(function () {
+        that.afterRenderHandler = function () {
+            that.locate("panel").hover(function () {
                 that.events.onShow.fire();
             }, function () {
                 that.events.onHide.fire();
