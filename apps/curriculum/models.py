@@ -1,4 +1,4 @@
-from common.models import  Grade
+from common.models import Grade
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -104,7 +104,7 @@ class AlignmentTag(models.Model):
 
     @property
     def grade_name(self):
-        return "%s-%s Grades" % (self.grade.code, self.end_grade.code) if self.end_grade else unicode(self.grade)
+        return "Grades %s-%s" % (self.grade.code, self.end_grade.code) if self.end_grade else unicode(self.grade)
 
     def natural_key(self):
         end_grade_code = self.end_grade.code if self.end_grade else None
@@ -117,6 +117,12 @@ class AlignmentTag(models.Model):
     def get_absolute_url(self):
         return "materials:alignment_index", [], dict(alignment=self.full_code)
 
+    @property
+    def grades(self):
+        if self.end_grade:
+            return list(Grade.objects.filter(order__gte=self.grade.order, order__lte=self.end_grade.order))
+        return [self.grade]
+    
     class Meta:
         ordering = ("standard", "grade", "category", "code",)
         unique_together = ("grade", "category", "code")

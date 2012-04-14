@@ -3,7 +3,7 @@ var DescribeStep = function (tool) {
   var $step = this.$step = $("#step-describe");
 
   $step.find("ul.learning-goals-widget").learningGoalsWidget();
-  $step.find("div.grades-widget").gradesWidget();
+  $step.find("div.grades-and-sublevels-widget").gradesAndSubLevelsWidget();
 
   oer.autocomplete_list_widget.init();
 

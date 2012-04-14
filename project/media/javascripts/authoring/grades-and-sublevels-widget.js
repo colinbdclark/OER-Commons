@@ -1,7 +1,7 @@
 (function() {
   var PLUGIN_NAME, Widget;
 
-  PLUGIN_NAME = "gradesWidget";
+  PLUGIN_NAME = "gradesAndSubLevelsWidget";
 
   Widget = (function() {
 
@@ -12,6 +12,7 @@
       this.fieldName = this.widget.data("field-name");
       this.select = this.widget.find("select");
       this.list = this.widget.find("ul");
+      this.restrictOptions();
       this.select.change(function(e) {
         var val;
         val = _this.select.val();
@@ -29,7 +30,8 @@
     Widget.prototype.addItem = function(option) {
       var existing, li, name, value;
       value = option.attr("value");
-      name = option.text();
+      name = $.trim(option.text());
+      console.log(name);
       existing = this.list.find("input[value='" + value + "']");
       if (existing.length) {
         existing.closest("li", this.list).effect("bounce");
@@ -37,10 +39,32 @@
       }
       li = $("<li>\n  <span>" + name + "</span>\n  <input type=\"hidden\" name=\"" + this.fieldName + "\" value=\"" + value + "\">\n  <a href=\"#\" class=\"delete ui-icon ui-icon-close\">Delete</a>\n</li>");
       li.appendTo(this.list);
+      this.restrictOptions();
     };
 
     Widget.prototype.removeItem = function(li) {
       li.remove();
+      this.restrictOptions();
+    };
+
+    Widget.prototype.restrictOptions = function() {
+      var _this = this;
+      this.select.children("[disabled]").removeAttr("disabled");
+      this.list.children().each(function(i, li) {
+        var option, value;
+        li = $(li);
+        value = li.find("input").val();
+        option = _this.select.children("[value='" + value + "']").attr("disabled", "disabled");
+        if (value.match(/sublevel\.\d+/)) {
+          option.nextUntil("[value^='sublevel']").attr("disabled", "disabled").each(function(i, option) {
+            option = $(option);
+            value = option.attr("value");
+            _this.list.find("input[value='" + value + "']").each(function(i, input) {
+              $(input).closest("li", _this.list).remove();
+            });
+          });
+        }
+      });
     };
 
     return Widget;

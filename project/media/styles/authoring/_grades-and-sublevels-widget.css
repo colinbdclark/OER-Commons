@@ -1,0 +1,8 @@
+.grades-and-sublevels-widget ul {
+  list-style-type: none; }
+.grades-and-sublevels-widget li {
+  padding: 4px 0; }
+.grades-and-sublevels-widget a.delete {
+  display: inline-block;
+  position: relative;
+  top: -1px; }
