@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from autoslug.fields import AutoSlugField
+from common.models import Grade, GradeSubLevel, GradeLevel
 from core.fields import AutoCreateForeignKey
 from curriculum.models import TaggedMaterial
 from django.contrib.auth.models import User
@@ -280,3 +281,46 @@ class Material(models.Model, EvaluatedItemMixin):
     @property
     def indexed_alignment_categories(self):
         return self.alignment_tags.values_list("tag__category__id", flat=True).order_by().distinct()
+
+    @property
+    def all_grades(self):
+        grades = set(self.grades.all().values_list("id", flat=True))
+        for grade, grade_order, end_grade, end_grade_order in self.alignment_tags.values_list(
+            "tag__grade__id", "tag__grade__order",
+            "tag__end_grade__id", "tag__end_grade__order",
+        ).order_by().distinct():
+            if end_grade:
+                grades.update(set(Grade.objects.filter(order__gte=grade_order, order__lte=end_grade_order).values_list("id", flat=True)))
+            else:
+                grades.add(grade)
+        if self.grade_sublevels.exists():
+            grades.update(set(
+                Grade.objects.filter(grade_sublevel__id__in=self.grade_sublevels.all().values_list("id", flat=True)).values_list("id", flat=True)
+            ))
+        if self.grade_levels.exists():
+            grades.update(set(
+                Grade.objects.filter(grade_sublevel__grade_level__id__in=self.grade_levels.all().values_list("id", flat=True)).values_list("id", flat=True)
+            ))
+        if not grades:
+            return Grade.objects.none()
+        return Grade.objects.filter(id__in=grades)
+
+    @property
+    def all_grade_sublevels(self):
+        sublevels = set(self.grade_sublevels.all().values_list("id", flat=True))
+        if self.grade_levels.exists():
+            sublevels.update(set(
+                GradeSubLevel.objects.filter(grade_level__id__in=self.grade_levels.all().values_list("id", flat=True)).values_list("id", flat=True)
+            ))
+        sublevels.update(self.all_grades.exclude(grade_sublevel=None).values_list("grade_sublevel__id", flat=True))
+        if not sublevels:
+            return GradeSubLevel.objects.none()
+        return GradeSubLevel.objects.filter(id__in=sublevels)
+
+    @property
+    def all_grade_levels(self):
+        levels = set(self.grade_levels.all().values_list("id", flat=True))
+        levels.update(self.all_grade_sublevels.exclude(grade_level=None).values_list("grade_level__id", flat=True))
+        if not levels:
+            return GradeLevel.objects.none()
+        return GradeLevel.objects.filter(id__in=levels)

@@ -123,7 +123,7 @@
       </div>
     {% endif %}
     <dl>
-      {% if item.authors.all.count %}
+      {% if item.authors.all.exists %}
       <dt>Author:</dt>
       <dd>
         {% for author in item.authors.all %}
@@ -132,7 +132,7 @@
       </dd>
       {% endif %}
 
-      {% if item.general_subjects.all.count %}
+      {% if item.general_subjects.all.exists %}
       <dt>Subject:</dt>
       <dd>{{ item.general_subjects.all|join:", " }}</dd>
       {% endif %}
@@ -149,10 +149,12 @@
       </dd>
       {% endif %}
 
-      {% if item.grade_levels.all.count %}
-      <dt>Grade Level:</dt>
-      <dd>{{ item.grade_levels.all|join:", " }}</dd>
-      {% endif %}
+      {% with grade_levels=item.all_grade_levels %}
+        {% if grade_levels.exists %}
+        <dt>Grade Level:</dt>
+        <dd>{{ grade_levels|join:", " }}</dd>
+        {% endif %}
+      {% endwith %}
     </dl>
 
     <dl>
@@ -166,17 +168,17 @@
       <dd>{{ item.get_course_or_module_display }}</dd>
       {% endif %}
 
-      {% if item.languages.all.count %}
+      {% if item.languages.all.exists %}
       <dt>Languages:</dt>
       <dd>{{ item.languages.all|join:", " }}</dd>
       {% endif %}
 
-      {% if item.material_types.all.count %}
+      {% if item.material_types.all.exists %}
       <dt>Material Type:</dt>
       <dd>{{ item.material_types.all|join:", " }}</dd>
       {% endif %}
 
-      {% if item.media_formats.all.count %}
+      {% if item.media_formats.all.exists %}
       <dt>Media Format:</dt>
       <dd>{{ item.media_formats.all|join:", " }}</dd>
       {% endif %}
@@ -191,12 +193,12 @@
       <dd>{{ item.tech_requirements }}</dd>
       {% endif %}
 
-      {% if item.community_types.all.count %}
+      {% if item.community_types.all.exists %}
       <dt>Content Type:</dt>
       <dd>{{ item.community_types.all|join:", " }}</dd>
       {% endif %}
 
-      {% if item.community_topics.all.count %}
+      {% if item.community_topics.all.exists %}
       <dt>Content Topic:</dt>
       <dd>{{ item.community_topics.all|join:", " }}</dd>
       {% endif %}

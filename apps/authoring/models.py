@@ -322,50 +322,46 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
 
     @property
     def all_grades(self):
-        grades = set(self.grades.all())
+        grades = set(self.grades.all().values_list("id", flat=True))
         for grade, grade_order, end_grade, end_grade_order in self.alignment_tags.values_list(
             "tag__grade__id", "tag__grade__order",
             "tag__end_grade__id", "tag__end_grade__order",
         ).order_by().distinct():
             if end_grade:
-                grades.update(set(Grade.objects.filter(order__gte=grade_order, order__lte=end_grade_order)))
+                grades.update(set(Grade.objects.filter(order__gte=grade_order, order__lte=end_grade_order).values_list("id", flat=True)))
             else:
-                grades.add(Grade.objects.get(pk=grade))
+                grades.add(grade)
         if self.grade_sublevels.exists():
-            grades.update(set(Grade.objects.filter(grade_sublevel__in=self.grade_sublevels.all())))
+            grades.update(set(
+                Grade.objects.filter(grade_sublevel__id__in=self.grade_sublevels.all().values_list("id", flat=True)).values_list("id", flat=True)
+            ))
         if self.grade_levels.exists():
-            grades.update(set(Grade.objects.filter(grade_sublevel__grade__level__in=self.grade_levels.all())))
-        return grades
-    
+            grades.update(set(
+                Grade.objects.filter(grade_sublevel__grade_level__id__in=self.grade_levels.all().values_list("id", flat=True)).values_list("id", flat=True)
+            ))
+        if not grades:
+            return Grade.objects.none()
+        return Grade.objects.filter(id__in=grades)
+
     @property
     def all_grade_sublevels(self):
-        sublevels = set(self.grade_sublevels.all())
+        sublevels = set(self.grade_sublevels.all().values_list("id", flat=True))
         if self.grade_levels.exists():
-            sublevels.update(set(GradeSubLevel.objects.filter(grade__level__in=self.grade_levels.all())))
-        return sublevels 
-
+            sublevels.update(set(
+                GradeSubLevel.objects.filter(grade_level__id__in=self.grade_levels.all().values_list("id", flat=True)).values_list("id", flat=True)
+            ))
+        sublevels.update(self.all_grades.exclude(grade_sublevel=None).values_list("grade_sublevel__id", flat=True))
+        if not sublevels:
+            return GradeSubLevel.objects.none()
+        return GradeSubLevel.objects.filter(id__in=sublevels)
+    
     @property
     def all_grade_levels(self):
-        return set(self.grade_levels.all())
-    
-    @property
-    def indexed_grades(self):
-        return sorted(self.all_grades, key=lambda x: x.id)
-
-    @property
-    def indexed_grade_sublevels(self):
-        grade_sublevels = self.all_grade_sublevels
-        for grade in self.indexed_grades:
-            if grade.grade_sublevel:
-                grade_sublevels.add(grade.grade_sublevel)
-        return sorted(grade_sublevels, key=lambda x: x.id)
-    
-    @property
-    def indexed_grade_levels(self):
-        grade_levels = self.all_grade_levels
-        for sublevel in self.indexed_grade_sublevels:
-            grade_levels.add(sublevel.grade_level)
-        return sorted(grade_levels, key=lambda x: x.id)
+        levels = set(self.grade_levels.all().values_list("id", flat=True))
+        levels.update(self.all_grade_sublevels.exclude(grade_level=None).values_list("grade_level__id", flat=True))
+        if not levels:
+            return GradeLevel.objects.none()
+        return GradeLevel.objects.filter(id__in=levels)
 
 
 def upload_to(prefix):
