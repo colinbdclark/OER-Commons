@@ -293,31 +293,76 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
             confirmed=True).exists()
 
     @property
-    def alignment_standards(self):
+    def indexed_alignment_standards(self):
         return self.alignment_tags.values_list("tag__standard__id", flat=True).order_by().distinct()
 
     @property
-    def alignment_grades(self):
+    def indexed_alignment_grades(self):
         grades = []
         for grade, end_grade in self.alignment_tags.values_list("tag__grade__code", "tag__end_grade__code").order_by().distinct():
             grades.append("%s-%s" % (grade, end_grade) if grade else grade)
         return grades
 
     @property
-    def alignment_categories(self):
+    def indexed_alignment_categories(self):
         return self.alignment_tags.values_list("tag__category__id", flat=True).order_by().distinct()
 
     @property
+    def all_grades(self):
+        grades = set(self.grades.all())
+        for grade, grade_order, end_grade, end_grade_order in self.alignment_tags.values_list(
+            "tag__grade__id", "tag__grade__order",
+            "tag__end_grade__id", "tag__end__order",
+        ).order_by().distinct():
+            if end_grade:
+                grades.update(set(Grade.objects.filter(order__gte=grade_order, order__lte=end_grade_order)))
+            else:
+                grades.add(Grade.objects.get(pk=grade))
+        return grades
+
+    @property
+    def all_grades(self):
+        grades = set(self.grades.all())
+        for grade, grade_order, end_grade, end_grade_order in self.alignment_tags.values_list(
+            "tag__grade__id", "tag__grade__order",
+            "tag__end_grade__id", "tag__end_grade__order",
+        ).order_by().distinct():
+            if end_grade:
+                grades.update(set(Grade.objects.filter(order__gte=grade_order, order__lte=end_grade_order)))
+            else:
+                grades.add(Grade.objects.get(pk=grade))
+        if self.grade_sublevels.exists():
+            grades.update(set(Grade.objects.filter(grade_sublevel__in=self.grade_sublevels.all())))
+        if self.grade_levels.exists():
+            grades.update(set(Grade.objects.filter(grade_sublevel__grade__level__in=self.grade_levels.all())))
+        return grades
+    
+    @property
+    def all_grade_sublevels(self):
+        sublevels = set(self.grade_sublevels.all())
+        if self.grade_levels.exists():
+            sublevels.update(set(GradeSubLevel.objects.filter(grade__level__in=self.grade_levels.all())))
+        return sublevels 
+
+    @property
+    def all_grade_levels(self):
+        return set(self.grade_levels.all())
+    
+    @property
+    def indexed_grades(self):
+        return sorted(self.all_grades, key=lambda x: x.id)
+
+    @property
     def indexed_grade_sublevels(self):
-        grade_sublevels = set(self.grade_sublevels.all())
-        for grade in self.grades.all():
+        grade_sublevels = self.all_grade_sublevels
+        for grade in self.indexed_grades:
             if grade.grade_sublevel:
                 grade_sublevels.add(grade.grade_sublevel)
         return sorted(grade_sublevels, key=lambda x: x.id)
-
+    
     @property
     def indexed_grade_levels(self):
-        grade_levels = set(self.grade_levels.all())
+        grade_levels = self.all_grade_levels
         for sublevel in self.indexed_grade_sublevels:
             grade_levels.add(sublevel.grade_level)
         return sorted(grade_levels, key=lambda x: x.id)
