@@ -173,7 +173,7 @@ def list_grades(request, existing=False):
     grades = list(
         dict(
             id="%s-%s" % (start_code, end_code) if end_code else start_code,
-            name="%s-%s Grades" % (start_code, end_code) if end_code else start_name,
+            name="Grades %s-%s" % (start_code, end_code) if end_code else start_name,
         ) for start_code, start_order, start_name,
               end_code, end_order, end_name in grades)
 

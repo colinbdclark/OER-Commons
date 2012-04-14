@@ -17,84 +17,84 @@
     "pk": 3, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "1st Grade (ages 5-6)"
+      "title": "Grade 1 (ages 5-6)"
     }
   }, 
   {
     "pk": 4, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "2nd Grade (ages 6-7)"
+      "title": "Grade 2 (ages 6-7)"
     }
   }, 
   {
     "pk": 5, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "3rd Grade (ages 7-8)"
+      "title": "Grade 3 (ages 7-8)"
     }
   }, 
   {
     "pk": 6, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "4th Grade (ages 8-9)"
+      "title": "Grade 4 (ages 8-9)"
     }
   }, 
   {
     "pk": 7, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "5th Grade (ages 9-10)"
+      "title": "Grade 5 (ages 9-10)"
     }
   }, 
   {
     "pk": 8, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "6th Grade (ages 10-11)"
+      "title": "Grade 6 (ages 10-11)"
     }
   }, 
   {
     "pk": 9, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "7th Grade (ages 11-12)"
+      "title": "Grade 7 (ages 11-12)"
     }
   }, 
   {
     "pk": 10, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "8th Grade (ages 12-13)"
+      "title": "Grade 8 (ages 12-13)"
     }
   }, 
   {
     "pk": 11, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "9th Grade (ages 13-14)"
+      "title": "Grade 9 (ages 13-14)"
     }
   }, 
   {
     "pk": 12, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "10th Grade (ages 14-15)"
+      "title": "Grade 10 (ages 14-15)"
     }
   }, 
   {
     "pk": 13, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "11th Grade (ages 15-16)"
+      "title": "Grade 11 (ages 15-16)"
     }
   }, 
   {
     "pk": 14, 
     "model": "common.studentlevel", 
     "fields": {
-      "title": "12th Grade (ages 16-17)"
+      "title": "Grade 12 (ages 16-17)"
     }
   }, 
   {
@@ -279,7 +279,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "1", 
-      "name": "1st Grade", 
+      "name": "Grade 1", 
       "end_age": 7, 
       "start_age": 5, 
       "grade_sublevel": 2, 
@@ -291,7 +291,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "2", 
-      "name": "2nd Grade", 
+      "name": "Grade 2", 
       "end_age": 8, 
       "start_age": 6, 
       "grade_sublevel": 2, 
@@ -303,7 +303,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "3", 
-      "name": "3rd Grade", 
+      "name": "Grade 3", 
       "end_age": 9, 
       "start_age": 7, 
       "grade_sublevel": 3, 
@@ -315,7 +315,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "4", 
-      "name": "4th Grade", 
+      "name": "Grade 4", 
       "end_age": 10, 
       "start_age": 8, 
       "grade_sublevel": 3, 
@@ -327,7 +327,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "5", 
-      "name": "5th Grade", 
+      "name": "Grade 5", 
       "end_age": 11, 
       "start_age": 9, 
       "grade_sublevel": 3, 
@@ -339,7 +339,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "6", 
-      "name": "6th Grade", 
+      "name": "Grade 6", 
       "end_age": 12, 
       "start_age": 10, 
       "grade_sublevel": 4, 
@@ -351,7 +351,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "7", 
-      "name": "7th Grade", 
+      "name": "Grade 7", 
       "end_age": 13, 
       "start_age": 11, 
       "grade_sublevel": 4, 
@@ -363,7 +363,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "8", 
-      "name": "8th Grade", 
+      "name": "Grade 8", 
       "end_age": 14, 
       "start_age": 12, 
       "grade_sublevel": 4, 
@@ -375,7 +375,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "9", 
-      "name": "9th Grade", 
+      "name": "Grade 9", 
       "end_age": 16, 
       "start_age": 14, 
       "grade_sublevel": 5, 
@@ -387,7 +387,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "10", 
-      "name": "10th Grade", 
+      "name": "Grade 10", 
       "end_age": 17, 
       "start_age": 15, 
       "grade_sublevel": 5, 
@@ -399,7 +399,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "11", 
-      "name": "11th Grade", 
+      "name": "Grade 11", 
       "end_age": 18, 
       "start_age": 16, 
       "grade_sublevel": 5, 
@@ -411,7 +411,7 @@
     "model": "common.grade", 
     "fields": {
       "code": "12", 
-      "name": "12th Grade", 
+      "name": "Grade 12", 
       "end_age": 19, 
       "start_age": 17, 
       "grade_sublevel": 5, 

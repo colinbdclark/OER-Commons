@@ -1,7 +1,7 @@
 @import "_layout.scss";
 @import "_authored-content.scss";
 @import "_learning-goals-widget.scss";
-@import "_grades-widget.scss";
+@import "_grades-and-sublevels-widget.scss";
 @import "_toc.scss";
 @import "_afa-md.scss";
 @import "_videoPlayer.scss";
@@ -1315,8 +1315,10 @@
     input[type='text'] {
       width: 180px;
     }
-  }
+  }  
   #align-tag-description-ct {
+    max-height: 220px;
+    overflow-y: auto;
     position: absolute;
     bottom: 45px;
     left: 0;
@@ -1327,6 +1329,9 @@
     margin-left: 0;
     margin-bottom: 0;
     width: auto;
+  }
+  .alignment select {
+    max-width: 100%;
   }
   .alignment-tags-ct {
     margin-left: 30%;
