@@ -996,7 +996,8 @@ figure.html5Video .fl-videoPlayer-volumeControl {
 #step-write .column-left {
   padding-top: 30px;
   width: 250px;
-  float: left; }
+  float: left;
+  overflow-y: auto; }
 #step-write .column-main {
   float: none;
   margin-left: 270px;

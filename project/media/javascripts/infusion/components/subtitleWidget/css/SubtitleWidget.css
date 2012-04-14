@@ -1,5 +1,5 @@
 .fl-subtitle-mainWrap {
-    display: table-cell;
+    display: table-row;
 }
 .fl-subtitle-panel-languages {
     position: absolute;
@@ -8,7 +8,7 @@
     display: block;
     overflow: hidden;
 }
-.flc-subtitle-panel {
+.fl-subtitle-panel {
     float: left;
     font-family: "Myriad Pro",Helvetica,sans-serif;
 }

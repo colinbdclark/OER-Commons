@@ -70,8 +70,9 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
 
         # Process the embed html5 video lins
         for video in document.find("figure.html5Video"):
-#            pdb.set_trace()
             video = pq(video)
+            # This will fix the issue with self-closing tags in PyQuery
+            video.text(" ")
             #noinspection PyCallingNonCallable
             url = video.attr("data-url")
 
