@@ -1020,11 +1020,11 @@ WriteStep.prototype.initLinks = function () {
   });
 
   this.$area.delegate("a", "click", function (e) {
-    if ($(this).is(".flc-subtitle-panel-language-link, .flc-subtitle-panel-menu-addSubtitle, .flc-subtitle-panel-addSubtitle")) {
+    var $link = $(this);
+    if ($link.is(".flc-subtitle-panel-language-link, .flc-subtitle-panel-menu-addSubtitle, .flc-subtitle-panel-addSubtitle")) {
         return;
     }
-    var $link = $(this);
-    if ($link.closest("figure.download", editor.$area)) {
+    if ($link.closest("figure.download", editor.$area).length) {
       return;
     }
     if ($link.closest("tr.ui-column-controls,td.ui-row-controls", editor.$area).length) {
