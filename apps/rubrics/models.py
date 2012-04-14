@@ -35,11 +35,11 @@ class Evaluation(models.Model):
 
     user = models.ForeignKey(User)
 
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType, db_index=True)
+    object_id = models.PositiveIntegerField(db_index=True)
     content_object = GenericForeignKey()
 
-    confirmed = models.BooleanField(default=False)
+    confirmed = models.BooleanField(default=False, db_index=True)
 
     timestamp = models.DateTimeField(auto_now=True)
     ip = models.CharField(max_length=39, default=u"", blank=True)
@@ -160,17 +160,12 @@ class EvaluatedItemMixin(object):
                 models.Avg("score__value")
             )["score__value__avg"]
 
-        for rubric in Rubric.objects.all():
-            rubric_scores = RubricScore.objects.filter(
-                evaluation__content_type=content_type,
-                evaluation__object_id=self.pk,
-                evaluation__confirmed=True,
-                rubric=rubric,
-                )
-            if rubric_scores.exists():
-                scores[rubric.id] = rubric_scores.aggregate(
-                    models.Avg("score__value")
-                )["score__value__avg"]
+        rubric_scores = RubricScore.objects.filter(
+            evaluation__content_type=content_type,
+            evaluation__object_id=self.pk,
+            evaluation__confirmed=True,
+        ).values("rubric__id").annotate(average_score=models.Avg("score__value"))
+        scores.update(dict((r["rubric__id"], r["average_score"]) for r in rubric_scores))
         return scores
 
     @property
