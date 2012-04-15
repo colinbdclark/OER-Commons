@@ -1,6 +1,5 @@
-import sys
 from common.models import GradeLevel, Grade, GradeSubLevel, MediaFormat
-
+from core.search import reindex
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import MultipleObjectsReturned
@@ -16,6 +15,7 @@ from materials.models.common import CC_LICENSE_URL_RE, PUBLIC_DOMAIN_URL_RE, GNU
 from materials.models.material import IMPORTED_STATE
 from materials.views.validate_csv import ValidateCSVForm
 from utils.decorators import login_required
+import sys
 
 
 SIMPLE_FIELDS = [
@@ -167,6 +167,9 @@ class DataImport(TemplateView):
                     obj.url = data["URL"]
                     obj.workflow_state = IMPORTED_STATE
 
+                # Do not re-index the object until the transaction is finished
+                obj.skip_indexing = True
+
                 if check_for_unique_url and model.objects.filter(url=obj.url).exists():
                     self.validation_errors.append(
                         (row_index + 1, u"", u"URL '%s' is registered in database already." % obj.url)
@@ -314,6 +317,12 @@ class DataImport(TemplateView):
                 messages.success(request, u"Data appears to be valid. "
                     "It is not imported because 'Dry run' option is selected.")
             else:
+                transaction.commit()
+
+                for object in imported_objects:
+                    object.skip_indexing = False
+                    reindex(object)
+
                 transaction.commit()
                 messages.success(request, u"Data was imported successfully.")
 

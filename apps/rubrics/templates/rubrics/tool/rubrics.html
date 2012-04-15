@@ -26,22 +26,27 @@
       <section id="alignment" class="expanded{% if alignment_scored %} scored{% endif %}">
         <h1><a href="{% if toolbar_view_url %}{{ toolbar_view_url }}#evaluate:standard{% else %}#{% endif %}">Degree of Alignment to Standards</a></h1>
         <div class="body">
-          {% if not alignment_tags %}
-            <p>Please <a class="dashed" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">align resource</a> before evaluating alignment or <a href="#" class="dashed skip">skip as not applicable</a>.</p>
-          {% else %}
-            <div class="description">
+          <div class="description">
+            {% if not alignment_tags %}
+              <p>
+                <a href="http://www.youtube.com/watch?v=TKsLSBpKQx8" target="_blank" class="video-link">Rubric I</a>
+                Please <a class="dashed" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">align resource</a>
+                before evaluating alignment or <a href="#" class="dashed skip">skip as not applicable</a>.
+              </p>
+            {% else %}
               <p>Applies to objects that have suggested alignments to the Common
                 Core State Standards and is used to rate the degree of alignment.
                 The degree of alignment of both content and performance
                 expectations are considered. If appropriate, you may use the
                 rubric to rate any of the standards that have been aligned to the
                 object you are rating or align additional standards.</p>
+              <p>
                 <a href="http://www.youtube.com/watch?v=TKsLSBpKQx8" target="_blank" class="video-link">Rubric I</a>
-            </div>
-            <p><a class="dashed add-standard" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">Add an additional standard</a></p>
-          {% endif %}
+                <a class="dashed add-standard" href="{% url rubrics:evaluate_align content_type_id=content_type.id,object_id=object.id %}">Add an additional standard</a>
+              </p>
+            {% endif %}
+          </div>
           <div class="tags">
-
             {% for tag in alignment_tags %}
               <div class="tag-description{% if forloop.first %} selected{% endif %}" data-tag-id="{{ tag.id }}">
                 <div class="rc10">
