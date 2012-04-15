@@ -93,9 +93,12 @@
     .authored-content figure.video iframe, .authored-content figure.video object, .authored-content figure.video embed {
       margin: 0 auto; }
     .authored-content figure.video figcaption {
+      clear: both;
       font-style: italic; }
     .authored-content figure.video .unisubs-widget {
       margin: 0 auto; }
+      .authored-content figure.video .unisubs-widget span.unisubs-tabTextfinish {
+        height: 32px !important; }
   .authored-content .text-color-1 {
     color: #940163; }
   .authored-content .text-color-2 {
@@ -171,6 +174,15 @@
 .grades-and-sublevels-widget li {
   padding: 4px 0; }
 .grades-and-sublevels-widget a.delete {
+  display: inline-block;
+  position: relative;
+  top: -1px; }
+
+.material-types-widget ul {
+  list-style-type: none; }
+.material-types-widget li {
+  padding: 4px 0; }
+.material-types-widget a.delete {
   display: inline-block;
   position: relative;
   top: -1px; }
@@ -1366,9 +1378,7 @@ figure.html5Video .fl-videoPlayer-volumeControl {
 #step-describe .alignment select {
   max-width: 100%; }
 #step-describe .alignment-tags-ct {
-  margin-left: 30%;
-  margin-bottom: 1em;
-  padding-left: 40px; }
+  margin-bottom: 1em; }
 #step-describe #align-form-buttons {
   float: left; }
   #step-describe #align-form-buttons a.button {

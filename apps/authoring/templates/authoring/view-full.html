@@ -61,7 +61,7 @@
       <section>
         <a href="{{ object.get_absolute_url }}"><strong>"{{ object.title }}"</strong></a>
         {{ object.modified_timestamp|date:"Y" }}
-        by <a href="#">{{ material.author }}</a>
+        by <a href="#">{{ material.author.get_full_name|default:material.author }}</a>
         <br/>under <a href="{{ object.license.url }}">{{ object.license.name }}</a>
       </section>
 
@@ -75,7 +75,7 @@
       <article class="authored-content">
         <header>
           <h1>{{ object.title }}</h1>
-          Created <strong>{{ object.modified_timestamp|date }}</strong> by <a href="#">{{ material.author }}</a>
+          Created <strong>{{ object.modified_timestamp|date }}</strong> by <a href="#">{{ material.author.get_full_name|default:material.author }}</a>
         </header>
         {{ text }}
         <footer>

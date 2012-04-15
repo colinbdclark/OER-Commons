@@ -223,6 +223,26 @@ class GradesAndSubLevelsWidget(forms.Widget):
         return value
 
 
+class MaterialTypesWidget(forms.SelectMultiple):
+
+    def render(self, name, value, attrs=None, choices=()):
+        select = forms.Select().render(name+"_select", None, choices=((u"", u"Select a Material Type"),) + tuple(self.choices))
+        choices_dict = dict(self.choices)
+        value = value or []
+        existing = []
+        for v in value:
+            existing.append(mark_safe(u"""<li><span>%s</span> %s <a href="#" class="delete ui-icon ui-icon-close">Delete</a></li>""" % (
+                choices_dict[v],
+                forms.HiddenInput().render(name, v),
+            )))
+        return render_to_string(
+            "authoring/forms/material-types-widget.html", dict(
+            name=name,
+            existing=existing,
+            select=select,
+        ))
+
+
 class GradesAndSubLevelsField(forms.Field):
 
     widget = GradesAndSubLevelsWidget
@@ -256,7 +276,7 @@ class EditFormNoLicense(forms.ModelForm):
     grades = forms.ModelMultipleChoiceField(Grade.objects.all(), required=False)
     grades_and_sublevels = GradesAndSubLevelsField(label=u"Grade")
     languages = forms.ModelMultipleChoiceField(label=u"Language", queryset=Language.objects.all(), widget=SelectMultiple())
-    material_types = forms.ModelMultipleChoiceField(label=u"Material Type", queryset=CourseMaterialType.objects.all(), widget=SelectMultiple())
+    material_types = forms.ModelMultipleChoiceField(label=u"Material Type", queryset=CourseMaterialType.objects.all(), widget=MaterialTypesWidget())
     alignment_tags = forms.ModelMultipleChoiceField(
         AlignmentTag.objects.all(),
         widget=AlignmentTagsWidget(),

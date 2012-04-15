@@ -44,7 +44,7 @@
       <p>
         <em>{% domain %}{{ material.get_absolute_url }}</em>
       </p>
-      <p>Created <strong>{{ material.modified_timestamp|date }}</strong> <em>by {{ material.author }}</em></p>
+      <p>Created <strong>{{ material.modified_timestamp|date }}</strong> <em>by {{ material.author.get_full_name|default:material.author }}</em></p>
       <h2>SUMMARY:</h2>
       <p>{{ material.abstract }}</p>
       <h2>LEARNING GOALS:</h2>
