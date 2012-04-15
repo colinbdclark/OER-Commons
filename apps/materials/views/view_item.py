@@ -2,6 +2,7 @@ from annoying.functions import get_object_or_None
 from curriculum.models import AlignmentTag
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse, resolve
+from django.db import models
 from django.db.models import Avg
 from django.http import Http404, QueryDict, HttpRequest
 from django.shortcuts import get_object_or_404, redirect
@@ -70,7 +71,10 @@ class BaseViewItemMixin(object):
         Visit.objects.count(request, self.item)
 
         #noinspection PyUnresolvedReferences
-        return super(BaseViewItemMixin, self).get(request, *args, **kwargs)
+        response = super(BaseViewItemMixin, self).get(request, *args, **kwargs)
+        if "came_from_index" not in response.context_data:
+            response.delete_cookie("_i")
+        return response
 
 
     def get_context_data(self, **kwargs):
@@ -88,6 +92,7 @@ class BaseViewItemMixin(object):
 
         microsite = None
         came_from_index = False
+        item_found = False
 
         prev_item_url = u""
         next_item_url = u""
@@ -188,11 +193,12 @@ class BaseViewItemMixin(object):
                 index_url = index_path + serialize_query_string_params(query_string_params)
 
         data["microsite"] = microsite
-        data["came_from_index"] = came_from_index
-        data["index_url"] = index_url
-        data["prev_item_url"] = prev_item_url
-        data["next_item_url"] = next_item_url
-        if came_from_index:
+        
+        if item_found:
+            data["came_from_index"] = came_from_index
+            data["index_url"] = index_url
+            data["prev_item_url"] = prev_item_url
+            data["next_item_url"] = next_item_url
             data["index_cookie"] = request.COOKIES.get("_i")
 
 
@@ -323,26 +329,24 @@ class ViewItem(BaseViewItemMixin, TemplateView):
             evaluation__object_id=self.item.id,
         )
 
-        scores = item.evaluation_scores
+        scores = rubric_scores.values("rubric__id").annotate(
+            count=models.Count("evaluation__id"),
+            score=models.Avg("score__value"),
+        )
+        scores = dict((r["rubric__id"], (r["count"], r["score"])) for r in scores)
         for rubric_id, name in Rubric.objects.values_list("id", "name"):
             #noinspection PySimplifyBooleanCheck
-            score = None
+            count, score = scores.get(rubric_id, (0, None))
             score_class = "nr"
-            if rubric_id in scores:
-                score = scores[rubric_id]
-                if score is None:
-                    score_class = None
-                else:
-                    score_class = int(round(score))
+            if count and score is None:
+                score_class = None
+            if score is not None:
+                score_class = int(round(score))
             data["evaluation_scores"].append(dict(
                 name=name,
                 score=score,
                 score_class=score_class,
-                evaluations_number=rubric_scores.filter(
-                    rubric__id=rubric_id
-                ).exclude(score__value=None).values(
-                    "evaluation"
-                ).distinct().count()
+                evaluations_number=count,
             ))
 
         if hasattr(item, "get_view_full_url"):
@@ -355,14 +359,14 @@ class ViewItem(BaseViewItemMixin, TemplateView):
         data["comment_form"] = ReviewForm()
 
         for qs in (standard_scores, rubric_scores):
-            for score in qs.exclude(comment="").select_related():
+            for score in qs.exclude(comment="").select_related(depth=1):
                 comment = dict(
                     text=score.comment,
                     timestamp=score.evaluation.timestamp,
                     author=score.evaluation.user,
                 )
 
-                if isinstance(score, StandardAlignmentScore):
+                if qs.model == StandardAlignmentScore:
                     title = u"Degree of Alignment to %s" % score.alignment_tag.full_code
                 else:
                     title = score.rubric.name
@@ -373,7 +377,6 @@ class ViewItem(BaseViewItemMixin, TemplateView):
                     get_verbose_score_name(score.score.value),
                     score.score.get_value_display(),
                 )
-
                 comments.append(comment)
 
         for review in item.reviews.all():
