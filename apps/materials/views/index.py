@@ -1,4 +1,5 @@
 from annoying.decorators import JsonResponse
+from annoying.functions import get_object_or_None
 from autoslug.settings import slugify
 from common.models import GradeLevel
 from django.contrib import messages
@@ -14,7 +15,7 @@ from materials.models.common import GeneralSubject, Collection, \
 from materials.models.community import CommunityItem
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_id, get_slug_from_id, \
-    first_neighbours_last, get_name_from_slug, get_object
+    first_neighbours_last, get_name_from_slug
 from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
 from rubrics.models import Rubric
@@ -301,7 +302,7 @@ def populate_item_from_search_result(result):
     if item.get("topics"):
         topics = []
         for id in item["topics"]:
-            topic = get_object(Topic, pk=id)
+            topic = get_object_or_None(Topic, id=id)
             if not topic:
                 continue
             topics.append(topic)

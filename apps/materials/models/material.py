@@ -201,9 +201,7 @@ class Material(models.Model, EvaluatedItemMixin):
 
     def keyword_slugs(self, exclude_microsite_markers=True):
         if exclude_microsite_markers:
-            microsite_markers = set()
-            for microsite in Microsite.objects.all():
-                microsite_markers.update(microsite.keywords.values_list("slug", flat=True))
+            microsite_markers = set(Microsite.objects.values_list("keywords__slug", flat=True))
             keywords = set(self.keywords.exclude(slug__in=microsite_markers).values_list("slug", flat=True))
             keywords.update(self.tags.exclude(slug__in=microsite_markers).values_list("slug", flat=True))
         else:
@@ -213,9 +211,7 @@ class Material(models.Model, EvaluatedItemMixin):
 
     def keyword_names(self, exclude_microsite_markers=True):
         if exclude_microsite_markers:
-            microsite_markers = set()
-            for microsite in Microsite.objects.all():
-                microsite_markers.update(microsite.keywords.values_list("slug", flat=True))
+            microsite_markers = set(Microsite.objects.values_list("keywords__slug", flat=True))
             keywords = set(self.keywords.exclude(slug__in=microsite_markers).values_list("name", flat=True))
             keywords.update(self.tags.exclude(slug__in=microsite_markers).values_list("name", flat=True))
         else:
@@ -228,12 +224,12 @@ class Material(models.Model, EvaluatedItemMixin):
 
     def topics(self):
         microsites = self.microsites()
-        if not microsites.count():
+        if not microsites.exists():
             return []
         topics = set()
-        for microsite in self.microsites():
+        for microsite in microsites:
             topics_qs = microsite.topics.exclude(other=True).filter(keywords__slug__in=self.keyword_slugs())
-            if topics_qs.count():
+            if topics_qs.exists():
                 topics.update(topics_qs)
             else:
                 try:

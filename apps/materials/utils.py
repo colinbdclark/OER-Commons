@@ -46,28 +46,14 @@ def cleanup_keywords(keywords):
 
 
 @cached(60 * 60 * 24)
-def get_object(model, **kwargs):
-    """
-    Lookup a model instance by filter params and return its name. Use caching to reduce
-    the number of database queries. Return None if an object with given params
-    does not exist. This is used for objects which are not supposed to change,
-    e.g. vocabulary items.
-    """
-    result = model.objects.filter(**kwargs).select_related()
-    if not result.exists():
-        return None
-    return result[0]
-
-
-@cached(60 * 60 * 24)
 def get_name_from_id(model, id):
     """
     Lookup a model instance by id and return its name. Return None if an object
     with given id does not exist.
     """
-    object = get_object(model, pk=id)
-    if object:
-        return object.name
+    results = model.objects.filter(id=id).values_list("name", flat=True).order_by()
+    if results:
+        return results[0]
     return None
 
 
@@ -77,9 +63,9 @@ def get_slug_from_id(model, id):
     Lookup a model instance by id and return its slug. Return None if an object
     with given id does not exist.
     """
-    object = get_object(model, pk=id)
-    if object:
-        return object.slug
+    results = model.objects.filter(id=id).values_list("slug", flat=True).order_by()
+    if results:
+        return results[0]
     return None
 
 
@@ -89,9 +75,9 @@ def get_name_from_slug(model, slug):
     Lookup a model instance by slug and return its name. Return None if an object
     with given slug does not exist.
     """
-    object = get_object(model, slug=slug)
-    if object:
-        return object.name
+    results = model.objects.filter(slug=slug).values_list("name", flat=True).order_by()
+    if results:
+        return results[0]
     return None
 
 
