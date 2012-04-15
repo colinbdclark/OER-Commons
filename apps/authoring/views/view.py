@@ -62,6 +62,17 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
         # Remove <br> from headers
         document.find("h2 > br,h3 > br").remove()
 
+        # Open links in new tab
+        for link in document.find("a"):
+            link = pq(link)
+            if not link.attr("href").startswith("http"):
+                continue
+            if link.closest("figure.download"):
+                continue
+            if link.hasClass("download") or link.hasClass("reference"):
+                continue
+            link.attr("target", "_blank")
+
         # Build references
         footnotes = pq("""<div id="footnotes"></div>""")
         for ref in document.find("a.reference"):
