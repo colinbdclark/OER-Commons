@@ -4,6 +4,7 @@ var DescribeStep = function (tool) {
 
   $step.find("ul.learning-goals-widget").learningGoalsWidget();
   $step.find("div.grades-and-sublevels-widget").gradesAndSubLevelsWidget();
+  $step.find("div.material-types-widget").materialTypesWidget();
 
   oer.autocomplete_list_widget.init();
 

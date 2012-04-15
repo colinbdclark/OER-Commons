@@ -45,6 +45,18 @@
            </select>
         </div>
       </div>
+
+      <div class="alignment-tags-ct">
+        <div class="buttons" id="align-form-buttons">
+          <a href="#" class="button primary align disabled">Align</a>
+          <a href="#" class="button clear disabled">Clear</a>
+        </div>
+        <ul class="align-tags">
+          {{ form.alignment_tags }}
+        </ul>
+        <div class="clear"></div>
+      </div>
+
     </div>
 
     <div class="column-right">
@@ -64,16 +76,7 @@
 
     <div class="clear"></div>
 
-    <div class="alignment-tags-ct">
-    <div class="buttons" id="align-form-buttons">
-      <a href="#" class="button primary align disabled">Align</a>
-      <a href="#" class="button clear disabled">Clear</a>
-    </div>
-    <ul class="align-tags">
-      {{ form.alignment_tags }}
-    </ul>
-    <div class="clear"></div>
-  </div></div>
+  </div>
 
   </div>
 

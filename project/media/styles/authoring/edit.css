@@ -177,6 +177,15 @@
   position: relative;
   top: -1px; }
 
+.material-types-widget ul {
+  list-style-type: none; }
+.material-types-widget li {
+  padding: 4px 0; }
+.material-types-widget a.delete {
+  display: inline-block;
+  position: relative;
+  top: -1px; }
+
 #toc .header {
   margin-bottom: 0.5em;
   color: #069;
@@ -1147,9 +1156,7 @@
 #step-describe .alignment select {
   max-width: 100%; }
 #step-describe .alignment-tags-ct {
-  margin-left: 30%;
-  margin-bottom: 1em;
-  padding-left: 40px; }
+  margin-bottom: 1em; }
 #step-describe #align-form-buttons {
   float: left; }
   #step-describe #align-form-buttons a.button {
