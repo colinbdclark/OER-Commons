@@ -34,7 +34,7 @@
     {% if items %}
         <div class="materials-index {{ index_type }}">
             {% for item in items %}
-                <article class="item clearfix{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
+                <article class="item clearfix {{ item.item_class }}{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
                     {% if index_type == "pics" %}
                     {% thumbnail item.screenshot "185x125" crop="0px 0px" as im %}
                         <img class="thumb" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">

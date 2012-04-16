@@ -84,14 +84,17 @@ def myitems_save_button(context):
     else:
         raise ValueError(u"Save button for '%s' is not supported." % type(item))
 
+    created = False
     saved = False
     folders = []
     if request.user.is_authenticated():
-        saved = (creator == request.user) or SavedItem.objects.filter(
-            user=request.user,
-            content_type=content_type,
-            object_id=item.id
-        ).exists()
+        if creator == request.user:
+            created = True
+            saved = SavedItem.objects.filter(
+                user=request.user,
+                content_type=content_type,
+                object_id=item.id
+            ).exists()
         saved_in_folders = set(FolderItem.objects.filter(
             content_type=content_type,
             object_id=item.id,
@@ -110,6 +113,7 @@ def myitems_save_button(context):
         'folders': folders,
         'folder_create_form': FolderForm(),
         'saved': saved,
+        'created': created,
         'content_type': content_type.id,
         'object_id': item.id,
     }
