@@ -366,6 +366,7 @@ dl.user-info dt {
   border-width: 1px;
   border-color: #8CC63F;
   padding-bottom: 10px;
+  z-index: 10;
 }
 
 .myitems-save-button .my-items-views li {
