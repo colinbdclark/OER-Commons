@@ -76,7 +76,7 @@ class FolderCreate(View):
     def post(self, request, *args, **kwargs):
         _, created = Folder.objects.get_or_create(
             user=request.user,
-            name=request.POST["name"]
+            name=request.POST["folder_name"]
         )
         return { "status": "success" if created else "error" }
 
@@ -159,7 +159,7 @@ class FolderAddItem(View):
         else:
             assert False, type(material)
 
-        content_type = ContentType.objects.get(id=content_type)
+        content_type = ContentType.objects.get_for_id(content_type)
 
         if creator != request.user:
             SavedItem.objects.get_or_create(
@@ -299,7 +299,7 @@ class CreatedUserItem(UserItem):
 
 class DraftUserItem(CreatedUserItem):
     def __init__(self, item, content_type, user):
-        super(SubmittedUserItem, self).__init__(item, content_type, user)
+        super(CreatedUserItem, self).__init__(item, content_type, user)
         title = []
         title_first = self.item.title or self.item.material.title
         if title_first:

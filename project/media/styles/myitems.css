@@ -329,6 +329,15 @@ dl.user-info dt {
   position: relative;
 }
 
+.myitems-save-button a.hidden {
+  display: none;
+}
+
+.myitems-save-button .button-main,
+.myitems-save-button .my-items-views {
+  box-shadow: 1px 2px 2px 0px #CCCCCC;
+}
+
 .myitems-save-button .button-main a {
   color: #FFFFFF;
 }
@@ -355,14 +364,23 @@ dl.user-info dt {
   border: solid;
   border-top: none;
   border-width: 1px;
+  border-color: #8CC63F;
+  padding-bottom: 10px;
 }
 
-.myitems-save-button a.hidden {
-  display: none;
+.myitems-save-button .my-items-views li {
+  padding-left: 5px;
+}
+.myitems-save-button .folder:hover .folder-text {
+  text-decoration: underline;
 }
 
-.myitems-save-button .folder {
+.myitems-save-button .my-items-views .folder {
   cursor: pointer;
+}
+
+.my-items-views .folder.selected .folder-icon {
+  background-image: url('/media/images/myitems-folder-user-marked.png');
 }
 
 .myitems .pagination {

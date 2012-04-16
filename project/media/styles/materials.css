@@ -437,9 +437,14 @@
   margin-bottom: 10px;
 }
 
-.portlet.save a {
+.portlet.save .myitems-save-button .button-main {
   line-height: 35px;
   font-size: 18px;
+}
+
+.portlet.save .myitems-save-button .my-items-views li a {
+  line-height: 30px;
+  font-size: 14px;
 }
 
 .portlet.save .myitems-save-button .save-unsave-button {
@@ -453,7 +458,7 @@
   width: 248px;
 }
 .portlet.save .my-items-views .folder {
-  width: 245px;
+  width: 243px;
 }
 
 /* Browse All */

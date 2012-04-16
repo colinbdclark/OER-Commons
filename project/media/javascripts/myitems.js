@@ -48,11 +48,11 @@ oer.myitems.init_folder_form = function($folderList, template, additionalParams)
     $form.submit(function(e) {
         var folder;
         var params = {
-            'name': $folderInput.val(),
-        }
+            'folder_name': $folderInput.val(),
+        };
         $.extend(params, additionalParams);
 
-        $.post($form.attr("action"), getRequestParams($form), function(response) {
+        $.post($form.attr("action"), params, function(response) {
             if (response.status === "success") {
                 folder.setParams(response);
             } else {
@@ -426,7 +426,7 @@ oer.myitems.init_save_button = function() {
             }
         });
     });
-    $folderList.delegate(".folder a", "click", function(e) {
+    $folderList.delegate("li", "click", function(e) {
         e.preventDefault();
         e.stopPropagation();
     });
