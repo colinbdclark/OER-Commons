@@ -192,8 +192,9 @@ dl.user-info dt {
   right: 2px;
 }
 
-.myitems article div.relation {
+.myitems article .relation {
   margin-top: 20px;
+  text-transform: uppercase;
 }
 
 .myitems article .thumb {
