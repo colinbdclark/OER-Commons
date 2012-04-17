@@ -48,11 +48,11 @@ oer.myitems.init_folder_form = function($folderList, template, additionalParams)
     $form.submit(function(e) {
         var folder;
         var params = {
-            'name': $folderInput.val(),
-        }
+            'folder_name': $folderInput.val(),
+        };
         $.extend(params, additionalParams);
 
-        $.post($form.attr("action"), getRequestParams($form), function(response) {
+        $.post($form.attr("action"), params, function(response) {
             if (response.status === "success") {
                 folder.setParams(response);
             } else {
@@ -103,7 +103,7 @@ oer.myitems.init = function() {
         });
 
         $folderList.find("a.delete").inlineConfirmation({
-            confirm: "<a class='confirm rc3' href='#'>Confirm</a>",
+            confirm: "<a class='confirm rc3' href='#'>Delete</a>",
             cancel: "<a class='cancel' href='#'>Cancel</a>",
             confirmCallback: function(action) {
                 var $folder = action.parent();
@@ -161,40 +161,49 @@ oer.myitems.init = function() {
 
 
     var addItemDeleteConfirmation = function () {
-        $("article div.delete a.delete").inlineConfirmation({
-            confirmCallback: function(action) {
-                var $article = action.closest("article");
-                var $itemFolders = $article.find("ul.folder-list li");
-                var itemId = $article.attr("data-identifier");
-                var $numbers = $folderList.find("li.view.myitems span.number");
+        var classToLabel = {
+            "saved": "Remove from My Items",
+            "submitted": "Remove from OER Commons",
+            "created": "Delete Resource",
+            "unpublished-changes": "Discard Changes",
+            "draft": "Delete Resource",
+        };
+        var $articles = $("article");
+        for (var key in classToLabel) {
+            $articles.filter("."+key).inlineConfirmation({
+                selector: "a.delete",
+                confirm: "<a class='confirm rc3' href='#'>"+classToLabel[key]+"</a>",
+                cancel: "<a class='cancel' href='#'>Cancel</a>",
+                confirmCallback: function(action) {
+                    var $article = action.closest("article");
+                    var $itemFolders = $article.find("ul.folder-list li");
+                    var itemId = $article.attr("data-identifier");
+                    var $numbers = $folderList.find("li.view.myitems span.number");
 
-                if ($article.find("div.right.relation").text() === "SUBMITTED") {
-                    $numbers = $numbers.add($folderList.find("li.view.submitted span.number"));
-                }
-
-                var $folders = $folderList.children("li.folder");
-                for (var i = 0; i < $itemFolders.length-1; i++) {
-                    var itemFolderId = $itemFolders.eq(i).data("folder-id");
-                    for (var j = 0; j < $folders.length; j++) {
-                        var $folder = $folders.eq(j);
-                        if ($folder.data("folder-id") === itemFolderId) {
-                            $numbers = $numbers.add($folder.find("span.number"));
-                            break;
+                    var $folders = $folderList.children("li.folder");
+                    for (var i = 0; i < $itemFolders.length-1; i++) {
+                        var itemFolderId = $itemFolders.eq(i).data("folder-id");
+                        for (var j = 0; j < $folders.length; j++) {
+                            var $folder = $folders.eq(j);
+                            if ($folder.data("folder-id") === itemFolderId) {
+                                $numbers = $numbers.add($folder.find("span.number"));
+                                break;
+                            }
                         }
                     }
+                    $.post(deleteItemUrl, {item_id: itemId}, function(response) {
+                        if (response.status === "success") {
+                            $article.remove();
+                        } else {
+                            $article.show();
+                            oer.myitems._changeNumber($numbers, 1);
+                        }
+                    });
+                    $article.fadeOut();
+                    oer.myitems._changeNumber($numbers, -1);
                 }
-                $.post(deleteItemUrl, {item_id: itemId}, function(response) {
-                    if (response.status === "success") {
-                        $article.remove();
-                    } else {
-                        $article.show();
-                        oer.myitems._changeNumber($numbers, 1);
-                    }
-                });
-                $article.fadeOut();
-                oer.myitems._changeNumber($numbers, -1);
-            }
-        });
+            });
+        }
     };
 
     var itemFolderElement = function(params) {
@@ -330,38 +339,45 @@ oer.myitems.init_save_button = function() {
     var unsaveUrl = django_js_utils.urls.resolve('myitems:delete_item');
 
     var $saveUnsaveButton = $myitemsSaveButton.find(".save-unsave-button");
-    var $saveButton = $saveUnsaveButton.filter(".save");
-    var $unsaveButton = $saveUnsaveButton.filter(".unsave");
+    var $saveButton = $saveUnsaveButton.children(".save");
+    var $unsaveButton = $saveUnsaveButton.children(".unsave");
 
     $myitemsSaveButton.delegate(".save", "click", function(e) {
         e.preventDefault();
 
-        $saveButton.addClass("hidden");
-        $unsaveButton.removeClass("hidden");
-        $.post(saveUrl, { item_id: identifier }, function(response) {
-            if (response.status !== "success") {
-                $unsaveButton.addClass("hidden");
-                $saveButton.removeClass("hidden");
-            }
+        oer.login.check_login(function() {
+            $saveButton.addClass("hidden");
+            $unsaveButton.removeClass("hidden");
+            $.post(saveUrl, { identifier: identifier }, function(response) {
+                if (response.status !== "success") {
+                    $unsaveButton.addClass("hidden");
+                    $saveButton.removeClass("hidden");
+                }
+            });
         });
     });
 
-    $myitemsSaveButton.delegate(".unsave", "click", function(e) {
-        e.preventDefault();
-
-        $unsaveButton.addClass("hidden");
-        $saveButton.removeClass("hidden");
-        var $folders = $folderList.find(".folder.selected");
-        $folders.removeClass("selected");
-        oer.myitems._changeNumber($folders.find(".number"), -1);
-        $.post(unsaveUrl, { identifier: identifier }, function(response) {
-            if (response.status !== "success") {
-                $saveButton.addClass("hidden");
-                $unsaveButton.removeClass("hidden");
-                $folders.addClass("selected");
-                oer.myitems._changeNumber($folders.find(".number"), 1);
-            }
-        });
+    $(".myitems-save-button").inlineConfirmation({
+        selector: ".unsave",
+        confirmCallback: function(action) {
+            oer.login.check_login(function() {
+                $unsaveButton.addClass("hidden");
+                $saveButton.removeClass("hidden");
+                var $folders = $folderList.find(".folder.selected");
+                $folders.removeClass("selected");
+                oer.myitems._changeNumber($folders.find(".number"), -1);
+                $.post(unsaveUrl, { item_id: identifier }, function(response) {
+                    if (response.status !== "success") {
+                        $saveButton.addClass("hidden");
+                        $unsaveButton.removeClass("hidden");
+                        $folders.addClass("selected");
+                        oer.myitems._changeNumber($folders.find(".number"), 1);
+                    }
+                });
+            });
+        },
+        showFunc: function($element) { $element.removeClass("hidden") },
+        hideFunc: function($element) { $element.addClass("hidden") },
     });
 
 
@@ -410,16 +426,14 @@ oer.myitems.init_save_button = function() {
             }
         });
     });
-    $folderList.delegate(".folder a", "click", function(e) {
+    $folderList.delegate("li", "click", function(e) {
         e.preventDefault();
+        e.stopPropagation();
     });
     $myitemsSaveButton.find(".folder-list-button").click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         $folderList.slideToggle();
-    });
-    $myitemsSaveButton.click(function(e) {
-        e.stopPropagation();
     });
     $("body").click(function(e) {
         $folderList.slideUp();

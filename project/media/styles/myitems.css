@@ -291,6 +291,35 @@ dl.user-info dt {
   margin-left: 10px;
   font-size: 11px;
 }
+.my-items-views .folder.to-delete .cancel:hover {
+  text-decoration: underline;
+}
+
+.myitems article .inline-confirmation-block {
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px 1px #616161;
+  padding: 10px 10px 11px 10px;
+}
+
+.myitems article .confirm {
+  color: white;
+  padding: 1px 3px;
+  background-color: #0B7BA9;
+}
+
+.myitems article .confirm:hover {
+  border-color: #FAAF3B;
+  background-color: #FFCC66;
+}
+
+.myitems article .cancel {
+  margin-left: 10px;
+  font-size: 11px;
+}
+.myitems article .cancel:hover {
+  text-decoration: underline;
+}
 
 .my-items-views a.hidden {
   display: none;
@@ -300,15 +329,21 @@ dl.user-info dt {
   position: relative;
 }
 
-.myitems-save-button .save-unsave-button,
-.myitems-save-button .folder-list-button {
+.myitems-save-button a.hidden {
+  display: none;
+}
+
+.myitems-save-button .button-main,
+.myitems-save-button .my-items-views {
+  box-shadow: 1px 2px 2px 0px #CCCCCC;
+}
+
+.myitems-save-button .button-main a {
   color: #FFFFFF;
-  margin-bottom: 10px;
 }
 
 .myitems-save-button .save-unsave-button {
   background-color: #8CC63F;
-  float: left;
   padding-left: 10px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -329,14 +364,24 @@ dl.user-info dt {
   border: solid;
   border-top: none;
   border-width: 1px;
+  border-color: #8CC63F;
+  padding-bottom: 10px;
+  z-index: 10;
 }
 
-.myitems-save-button .save-unsave-button.hidden {
-  display: none;
+.myitems-save-button .my-items-views li {
+  padding-left: 5px;
+}
+.myitems-save-button .folder:hover .folder-text {
+  text-decoration: underline;
 }
 
-.myitems-save-button .folder {
+.myitems-save-button .my-items-views .folder {
   cursor: pointer;
+}
+
+.my-items-views .folder.selected .folder-icon {
+  background-image: url('/media/images/myitems-folder-user-marked.png');
 }
 
 .myitems .pagination {
@@ -440,4 +485,8 @@ dl.user-info dt {
 .with-profile-tabs footer {
   margin-top: 0;
   border: none;
+}
+
+.myitems-search {
+  float: right;
 }

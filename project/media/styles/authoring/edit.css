@@ -8,23 +8,20 @@
   .layout-columns a {
     text-decoration: none; }
 
-.column-left {
-  font-size: 0.9375em; }
-  .column-left section {
-    margin-bottom: 20px; }
-    .column-left section h2 {
-      font-size: 0.9375em;
-      font-weight: bold;
-      text-transform: uppercase;
-      text-shadow: 1px 1px 1px #fff;
-      color: #989898;
-      margin-bottom: 10px; }
-  .column-left li {
-    padding: 5px 0; }
-  .column-left ul {
-    margin-left: 1.5em; }
-  .column-left a {
-    text-decoration: none; }
+.column-left section {
+  margin-bottom: 20px; }
+  .column-left section h2 {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #fff;
+    color: #989898;
+    margin-bottom: 10px; }
+.column-left li {
+  padding: 5px 0; }
+.column-left ul {
+  margin-left: 1.5em; }
+.column-left a {
+  text-decoration: none; }
 
 .authored-content {
   padding: 20px;

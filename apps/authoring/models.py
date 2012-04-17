@@ -200,6 +200,11 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
         kwargs = dict(pk=self.pk)
         return "authoring:edit", [], kwargs
 
+    @models.permalink
+    def get_pdf_url(self):
+        kwargs = dict(pk=self.pk)
+        return "authoring:pdf", [], kwargs
+
     @property
     def creator(self):
         return self.author
