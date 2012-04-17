@@ -19,45 +19,34 @@
             <a rel="nofollow" class="login" href="{{ login_url }}">Log In</a>
           </li>
         {% endif %}
-        <li class="auth">
-          <span class="user-name">{% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name }}{% endif %}</span>
-        </li>
-        <li class="auth">
-          <a rel="nofollow" href="{% url users:profile %}">My Profile</a>
+        <li class="auth user dropdown">
+          Hello, <span class="user-name">{% if request.user.is_authenticated %}{{ request.user.get_full_name|default:request.user }}{% endif %}</span>
+          <b class="caret"></b>
+          <ul class="user-menu dropdown-menu">
+            <li><a href="{% url users:profile %}">Account Settings</a></li>
+          </ul>
         </li>
         <li class="auth">
           <a rel="nofollow" href="{% url users:logout %}">Logout</a>
         </li>
         <li>
-          <a href="{% url feedback %}">Feedback</a>
-        </li>
-        <li>
           <a href="{% url information %}">Help</a>
-        </li>
-        <li>
-          <a title="Preferences" class="button-preferences"
-             href="{% url preferences:preferences %}"> </a>
-        </li>
-        <li class="last">
-          <a title="Contribute Content" class="button-contribute"
-             href="{% url contribute %}">Contribute Content</a>
         </li>
       </ul>
       {% endspaceless %}
     </nav>
+    <div id="global-search-box">
+      <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
+        <input type="text" id="search-input" name="f.search" value="" class="text rc5" x-webkit-speech="x-webkit-speech" />
+        <input type="submit" value="Search" class="button rc5" />
+        <a href="{% url materials:advanced_search %}">Advanced Search</a>
+      </form>
+    </div>
   </div>
 </header>
 
 <div class="fl-clearfix global-tabs">
   <div class="fixed-width">
-    <div id="global-search-box">
-      <form action="{% if microsite %}{% url materials:search microsite=microsite.slug %}{% else %}{% url materials:search %}{% endif %}" method="get">
-        <input type="text" id="search-input" name="f.search" value="" class="text" x-webkit-speech="x-webkit-speech" placeholder="{% if microsite and microsite.slug == "green" %}Search Green OER{% else %}Enter Search{% endif %}" />
-        <input type="submit" value="Search" class="button" />
-        <input type="button" onclick="window.location='{% url materials:advanced_search %}'" value="Advanced Search" class="button" />
-      </form>
-    </div>
-
     {% navigation %}
   </div>
 </div>
