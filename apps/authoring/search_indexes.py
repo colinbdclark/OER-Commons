@@ -21,6 +21,8 @@ class AuthoredMaterialSearchIndex(MaterialSearchIndex):
     media_formats = VocabularyMultiValueField(model_attr="media_formats")
     languages = VocabularyMultiValueField(model_attr="languages")
     course_material_types = VocabularyMultiValueField(model_attr="material_types")
+    collection = IntegerField(model_attr="collection__id", null=True)
+    collection_name = CharField(model_attr="collection__name", weight=2.0, null=True)
 
 
 site.register(AuthoredMaterial, AuthoredMaterialSearchIndex)

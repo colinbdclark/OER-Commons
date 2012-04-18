@@ -11,7 +11,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from materials.models import Keyword, \
     GeneralSubject, License, CourseMaterialType
-from materials.models.common import Language
+from materials.models.common import Language, Collection
 from materials.models.material import TAGGED, REVIEWED, RATED, PUBLISHED_STATE, WORKFLOW_STATES, PRIVATE_STATE
 from materials.models.microsite import Microsite, Topic
 from myitems.models import FolderItem
@@ -29,6 +29,10 @@ import gdata.youtube.service
 import datetime
 import embedly
 import os
+
+
+COLLECTION_NAME = u"Open Author Resources"
+COLLECTION_SLUG = u"open-author-resources"
 
 
 class LearningGoal(models.Model):
@@ -78,6 +82,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     owners = models.ManyToManyField(User, related_name="+")
     author = models.ForeignKey(User, related_name="+")
 
+    collection = models.ForeignKey(Collection, null=True)
     media_formats = models.ManyToManyField(MediaFormat)
 
     is_new = models.BooleanField(default=True)
@@ -180,6 +185,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
             self.featured_on = datetime.datetime.now()
         if not self.featured:
             self.featured_on = None
+        self.collection = Collection.objects.get_or_create(name=COLLECTION_NAME, slug=COLLECTION_SLUG)[0]
 
         super(AuthoredMaterial, self).save(*args, **kwargs)
 
