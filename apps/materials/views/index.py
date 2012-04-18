@@ -1,5 +1,6 @@
 from annoying.decorators import JsonResponse
 from annoying.functions import get_object_or_None
+from authoring.models import AuthoredMaterial
 from autoslug.settings import slugify
 from common.models import GradeLevel
 from django.contrib import messages
@@ -407,7 +408,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
     query = SearchQuerySet().narrow("is_displayed:true")
 
-    models = [model] if model else [Course, Library, CommunityItem]
+    models = [model] if model else [Course, Library, CommunityItem, AuthoredMaterial]
     query = query.models(*models)
 
     path_filter = None

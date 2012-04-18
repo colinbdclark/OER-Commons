@@ -55,5 +55,4 @@ class Edit(EditMaterialViewMixin, UpdateView):
             messages.error(self.request, u"Please enter a title.")
         else:
             messages.error(self.request, u"Please correct the indicated errors.",)
-        print "!!!!", form._errors
         return super(Edit, self).form_invalid(form)

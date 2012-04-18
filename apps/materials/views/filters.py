@@ -487,7 +487,7 @@ class AuthoredContentFilter(BooleanFilter):
 
     def update_query(self, query, value):
         if value:
-            query = query.models(AuthoredMaterial)
+            query.query.models = set([AuthoredMaterial])
         return query
 
 
