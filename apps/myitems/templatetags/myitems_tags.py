@@ -90,11 +90,11 @@ def myitems_save_button(context):
     if request.user.is_authenticated():
         if creator == request.user:
             created = True
-            saved = SavedItem.objects.filter(
-                user=request.user,
-                content_type=content_type,
-                object_id=item.id
-            ).exists()
+        saved = SavedItem.objects.filter(
+            user=request.user,
+            content_type=content_type,
+            object_id=item.id
+        ).exists()
         saved_in_folders = set(FolderItem.objects.filter(
             content_type=content_type,
             object_id=item.id,
