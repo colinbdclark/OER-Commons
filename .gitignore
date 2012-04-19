@@ -28,6 +28,7 @@ project/media/django_extensions/
 project/media/upload/
 project/media/reports/
 project/media/harvester/
+project/media/sentry
 project/production.py
 project/development.py
 project/staging.py
