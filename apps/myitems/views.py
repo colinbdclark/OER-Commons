@@ -301,43 +301,6 @@ class DraftUserItem(CreatedUserItem):
 
 
 
-class SearchFilter(filters.SearchFilter):
-    def update_query(self, query, value):
-        all_words = list(value.all_words)
-        if not all_words:
-            all_words = list(set(
-                word
-                for phrase in value.exact_phrases
-                for word in phrase.split()
-                if word not in all_words
-            ))
-
-        if all_words or value.any_words:
-            sqs = reduce(or_, (
-                SQ(**{"%s__in" % field:self.escape((all_words + value.any_words))})
-                for field in self.weighted_fields
-            ))
-            query = query.filter(sqs)
-
-        for phrase in value.exact_phrases:
-            if " " not in phrase:
-                query = query.filter(text_exact=u'"%s"' % self.escape(phrase))
-            else:
-                query = query.filter(text_exact=self.escape(phrase))
-
-        for word in value.exclude_words:
-            query = query.exclude(text_exact=self.escape(word))
-
-        if value.any_words:
-            query = query.filter(text_exact__in=self.escape(value.any_words))
-
-        for word in all_words:
-            query = query.filter(text=self.escape(word))
-
-        return query
-
-
-
 class MyItemsView(TemplateView):
     template_name = 'myitems/myitems.html'
 
@@ -373,8 +336,7 @@ class MyItemsView(TemplateView):
         AuthoredMaterialDraft: DraftUserItem,
     }
 
-    search_filter = SearchFilter()
-    #search_filter = filters.FILTERS["search"]
+    search_filter = filters.FILTERS["search"]
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
