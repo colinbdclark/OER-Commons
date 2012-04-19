@@ -40,6 +40,7 @@ STATICFILES_MEDIA_DIRNAMES = (
 )
 STATICFILES_PREPEND_LABEL_APPS = (
     'django.contrib.admin',
+    'sentry',
 )
 
 ADMIN_MEDIA_ROOT = os.path.join(STATIC_ROOT, 'admin')
