@@ -136,5 +136,5 @@ def honeypot(request):
 
 class Contribute(OERViewMixin, TemplateView):
 
-    page_title = u"Contribute Resource to OER Commons"
+    page_title = u"Contribute Resources to OER Commons"
     template_name = "contribute.html"
