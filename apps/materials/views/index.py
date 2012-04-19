@@ -283,9 +283,9 @@ class IndexParams:
 def populate_item_from_search_result(result):
     item = result.get_stored_fields()
 
-    content_type = ContentType.objects.get(
-        app_label=result.app_label,
-        model=result.model_name
+    content_type = ContentType.objects.get_by_natural_key(
+        result.app_label,
+        result.model_name
     )
     item["identifier"] = "%s.%s" % (content_type.id, result.pk)
 
