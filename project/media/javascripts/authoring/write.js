@@ -1000,8 +1000,8 @@ WriteStep.prototype.initLinks = function () {
   });
 
   this.$area.delegate("a", "click", function (e) {
-    var $link = $(this);
-    if ($link.closest("figure.download", editor.$area)) {
+    var $link = $(e.currentTarget);
+    if ($link.closest("figure.download", editor.$area).length) {
       return;
     }
     if ($link.closest("tr.ui-column-controls,td.ui-row-controls", editor.$area).length) {

@@ -16,7 +16,9 @@ from ordereddict import OrderedDict
 from rubrics.models import get_rubric_choices
 from tags.models import Tag
 from utils.templatetags.utils import truncatechars
+from haystack.query import SQ
 import re
+from operator import or_
 
 
 class Filter(object):
@@ -443,8 +445,11 @@ class SearchFilter(Filter):
                         all_words.append(word)
 
         if all_words or value.any_words:
-            for field in self.weighted_fields:
-                query = query.filter_or(**{"%s__in" % field:self.escape((all_words + value.any_words))})
+            sqs = reduce(or_, (
+                SQ(**{"%s__in" % field:self.escape((all_words + value.any_words))})
+                for field in self.weighted_fields
+            ))
+            query = query.filter(sqs)
 
         for phrase in value.exact_phrases:
             if " " not in phrase:
@@ -487,7 +492,7 @@ class AuthoredContentFilter(BooleanFilter):
 
     def update_query(self, query, value):
         if value:
-            query = query.models(AuthoredMaterial)
+            query.query.models = set([AuthoredMaterial])
         return query
 
 

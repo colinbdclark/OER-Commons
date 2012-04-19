@@ -7,23 +7,20 @@
   .layout-columns a {
     text-decoration: none; }
 
-.column-left {
-  font-size: 0.9375em; }
-  .column-left section {
-    margin-bottom: 20px; }
-    .column-left section h2 {
-      font-size: 0.9375em;
-      font-weight: bold;
-      text-transform: uppercase;
-      text-shadow: 1px 1px 1px #fff;
-      color: #989898;
-      margin-bottom: 10px; }
-  .column-left li {
-    padding: 5px 0; }
-  .column-left ul {
-    margin-left: 1.5em; }
-  .column-left a {
-    text-decoration: none; }
+.column-left section {
+  margin-bottom: 20px; }
+  .column-left section h2 {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #fff;
+    color: #989898;
+    margin-bottom: 10px; }
+.column-left li {
+  padding: 5px 0; }
+.column-left ul {
+  margin-left: 1.5em; }
+.column-left a {
+  text-decoration: none; }
 
 .authored-content {
   padding: 20px;
@@ -92,9 +89,12 @@
     .authored-content figure.video iframe, .authored-content figure.video object, .authored-content figure.video embed {
       margin: 0 auto; }
     .authored-content figure.video figcaption {
+      clear: both;
       font-style: italic; }
     .authored-content figure.video .unisubs-widget {
       margin: 0 auto; }
+      .authored-content figure.video .unisubs-widget span.unisubs-tabTextfinish {
+        height: 32px !important; }
   .authored-content .text-color-1 {
     color: #940163; }
   .authored-content .text-color-2 {
@@ -164,6 +164,24 @@
     display: inline-block;
     position: relative;
     top: -1px; }
+
+.grades-and-sublevels-widget ul {
+  list-style-type: none; }
+.grades-and-sublevels-widget li {
+  padding: 4px 0; }
+.grades-and-sublevels-widget a.delete {
+  display: inline-block;
+  position: relative;
+  top: -1px; }
+
+.material-types-widget ul {
+  list-style-type: none; }
+.material-types-widget li {
+  padding: 4px 0; }
+.material-types-widget a.delete {
+  display: inline-block;
+  position: relative;
+  top: -1px; }
 
 #toc .header {
   margin-bottom: 0.5em;
@@ -1121,6 +1139,8 @@
 #step-describe #keywords-widget input[type='text'] {
   width: 180px; }
 #step-describe #align-tag-description-ct {
+  max-height: 220px;
+  overflow-y: auto;
   position: absolute;
   bottom: 45px;
   left: 0;
@@ -1130,10 +1150,10 @@
   margin-left: 0;
   margin-bottom: 0;
   width: auto; }
+#step-describe .alignment select {
+  max-width: 100%; }
 #step-describe .alignment-tags-ct {
-  margin-left: 30%;
-  margin-bottom: 1em;
-  padding-left: 40px; }
+  margin-bottom: 1em; }
 #step-describe #align-form-buttons {
   float: left; }
   #step-describe #align-form-buttons a.button {

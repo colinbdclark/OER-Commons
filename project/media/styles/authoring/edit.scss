@@ -1,6 +1,8 @@
 @import "_layout.scss";
 @import "_authored-content.scss";
 @import "_learning-goals-widget.scss";
+@import "_grades-and-sublevels-widget.scss";
+@import "_material-types-widget.scss";
 @import "_toc.scss";
 
 .authoring-edit {
@@ -1311,8 +1313,10 @@
     input[type='text'] {
       width: 180px;
     }
-  }
+  }  
   #align-tag-description-ct {
+    max-height: 220px;
+    overflow-y: auto;
     position: absolute;
     bottom: 45px;
     left: 0;
@@ -1324,10 +1328,11 @@
     margin-bottom: 0;
     width: auto;
   }
+  .alignment select {
+    max-width: 100%;
+  }
   .alignment-tags-ct {
-    margin-left: 30%;
     margin-bottom: 1em;
-    padding-left: 40px;
   }
   #align-form-buttons {
     float: left;

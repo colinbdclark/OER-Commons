@@ -1,24 +1,36 @@
 body {
-  font-family: "Times New Roman", serif;
-  font-size: 16px; }
+  font-family: "Times New Roman";
+  font-size: 16px;
+  color: #333; }
+
+img {
+  zoom: 80%; }
+
+a {
+  color: #3c96bd; }
 
 div, h1, h2, h3, h4, h5, h6, p, blockquote, pre, dl, ol, ul, table, figure {
+  margin-top: 0;
   margin-bottom: 1em; }
 
 ul, ol {
   list-style-position: inside; }
+  ul li, ol li {
+    margin: 0; }
 
 ul > ul, ol > ol, ul > ol, ul > ol {
   margin-left: 2em;
   margin-bottom: 0; }
 
 h2 {
+  line-height: 1.5;
   color: #690;
   border-bottom: 1px solid;
   font-size: 1.5625em;
   padding: 0; }
 
 h3 {
+  line-height: 1.5;
   color: #9c3;
   font-weight: bold;
   font-size: 1.125em; }
@@ -50,7 +62,8 @@ a.download {
   font-style: normal; }
 
 figcaption {
-  font-family: "Myriad Pro", Helvetica, sans-serif; }
+  display: block;
+  font-family: Arial; }
 
 figure.image {
   text-align: center; }
@@ -129,6 +142,45 @@ table {
     min-width: 30px;
     min-height: 20px; }
 
+#header {
+  font-family: Arial;
+  text-align: right;
+  color: #666; }
+
 #footer {
+  font-family: Arial;
   padding-top: 1em;
   border-top: 2px dashed #ccc; }
+
+.frontpage {
+  font-family: Arial; }
+  .frontpage h2 {
+    margin-bottom: 0.5em;
+    font-size: 1.1em;
+    color: #666;
+    font-weight: bold;
+    font-family: Arial;
+    -pdf-outline: false;
+    border: none; }
+    .frontpage h2.toc {
+      margin-bottom: 1em; }
+
+h1 {
+  line-height: 1.5;
+  margin-bottom: 0.5em;
+  font-size: 2em;
+  font-weight: normal;
+  -pdf-outline: false; }
+
+h2 {
+  -pdf-outline: true;
+  -pdf-outline-level: 0; }
+
+h3 {
+  -pdf-outline: true;
+  -pdf-outline-level: 1; }
+
+pdftoc.pdftoclevel0 {
+  margin: 0.5em 0; }
+pdftoc.pdftoclevel1 {
+  margin-left: 1em; }

@@ -1,6 +1,6 @@
 from annoying.functions import get_object_or_None
 from autoslug import AutoSlugField
-from common.models import GradeLevel, MediaFormat
+from common.models import GradeLevel, MediaFormat, GradeSubLevel, Grade
 from core.fields import AutoCreateForeignKey, AutoCreateManyToManyField
 from curriculum.models import TaggedMaterial
 from django.conf import settings
@@ -11,7 +11,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from materials.models import Keyword, \
     GeneralSubject, License, CourseMaterialType
-from materials.models.common import Language
+from materials.models.common import Language, Collection
 from materials.models.material import TAGGED, REVIEWED, RATED, PUBLISHED_STATE, WORKFLOW_STATES, PRIVATE_STATE
 from materials.models.microsite import Microsite, Topic
 from pyquery import PyQuery as pq
@@ -29,6 +29,10 @@ import gdata.youtube.service
 import datetime
 import embedly
 import os
+
+
+COLLECTION_NAME = u"Open Author Resources"
+COLLECTION_SLUG = u"open-author-resources"
 
 
 class LearningGoal(models.Model):
@@ -50,6 +54,8 @@ class AbstractAuthoredMaterial(models.Model):
     keywords = AutoCreateManyToManyField(Keyword)
     general_subjects = models.ManyToManyField(GeneralSubject)
     grade_levels = models.ManyToManyField(GradeLevel)
+    grade_sublevels = models.ManyToManyField(GradeSubLevel)
+    grades = models.ManyToManyField(Grade)
     languages = models.ManyToManyField(Language)
     material_types = models.ManyToManyField(CourseMaterialType)
     license = AutoCreateForeignKey(License, null=True, respect_all_fields=True)
@@ -76,6 +82,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     owners = models.ManyToManyField(User, related_name="+")
     author = models.ForeignKey(User, related_name="+")
 
+    collection = models.ForeignKey(Collection, null=True)
     media_formats = models.ManyToManyField(MediaFormat)
 
     is_new = models.BooleanField(default=True)
@@ -182,6 +189,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
             self.featured_on = datetime.datetime.now()
         if not self.featured:
             self.featured_on = None
+        self.collection = Collection.objects.get_or_create(name=COLLECTION_NAME, slug=COLLECTION_SLUG)[0]
 
         super(AuthoredMaterial, self).save(*args, **kwargs)
 
@@ -201,6 +209,11 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     def get_edit_url(self):
         kwargs = dict(pk=self.pk)
         return "authoring:edit", [], kwargs
+
+    @models.permalink
+    def get_pdf_url(self):
+        kwargs = dict(pk=self.pk)
+        return "authoring:pdf", [], kwargs
 
     @property
     def creator(self):
@@ -298,19 +311,75 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
             confirmed=True).exists()
 
     @property
-    def alignment_standards(self):
+    def indexed_alignment_standards(self):
         return self.alignment_tags.values_list("tag__standard__id", flat=True).order_by().distinct()
 
     @property
-    def alignment_grades(self):
+    def indexed_alignment_grades(self):
         grades = []
         for grade, end_grade in self.alignment_tags.values_list("tag__grade__code", "tag__end_grade__code").order_by().distinct():
             grades.append("%s-%s" % (grade, end_grade) if grade else grade)
         return grades
 
     @property
-    def alignment_categories(self):
+    def indexed_alignment_categories(self):
         return self.alignment_tags.values_list("tag__category__id", flat=True).order_by().distinct()
+
+    @property
+    def all_grades(self):
+        grades = set(self.grades.all())
+        for grade, grade_order, end_grade, end_grade_order in self.alignment_tags.values_list(
+            "tag__grade__id", "tag__grade__order",
+            "tag__end_grade__id", "tag__end__order",
+        ).order_by().distinct():
+            if end_grade:
+                grades.update(set(Grade.objects.filter(order__gte=grade_order, order__lte=end_grade_order)))
+            else:
+                grades.add(Grade.objects.get(pk=grade))
+        return grades
+
+    @property
+    def all_grades(self):
+        grades = set(self.grades.all().values_list("id", flat=True))
+        for grade, grade_order, end_grade, end_grade_order in self.alignment_tags.values_list(
+            "tag__grade__id", "tag__grade__order",
+            "tag__end_grade__id", "tag__end_grade__order",
+        ).order_by().distinct():
+            if end_grade:
+                grades.update(set(Grade.objects.filter(order__gte=grade_order, order__lte=end_grade_order).values_list("id", flat=True)))
+            else:
+                grades.add(grade)
+        if self.grade_sublevels.exists():
+            grades.update(set(
+                Grade.objects.filter(grade_sublevel__id__in=self.grade_sublevels.all().values_list("id", flat=True)).values_list("id", flat=True)
+            ))
+        if self.grade_levels.exists():
+            grades.update(set(
+                Grade.objects.filter(grade_sublevel__grade_level__id__in=self.grade_levels.all().values_list("id", flat=True)).values_list("id", flat=True)
+            ))
+        if not grades:
+            return Grade.objects.none()
+        return Grade.objects.filter(id__in=grades)
+
+    @property
+    def all_grade_sublevels(self):
+        sublevels = set(self.grade_sublevels.all().values_list("id", flat=True))
+        if self.grade_levels.exists():
+            sublevels.update(set(
+                GradeSubLevel.objects.filter(grade_level__id__in=self.grade_levels.all().values_list("id", flat=True)).values_list("id", flat=True)
+            ))
+        sublevels.update(self.all_grades.exclude(grade_sublevel=None).values_list("grade_sublevel__id", flat=True))
+        if not sublevels:
+            return GradeSubLevel.objects.none()
+        return GradeSubLevel.objects.filter(id__in=sublevels)
+    
+    @property
+    def all_grade_levels(self):
+        levels = set(self.grade_levels.all().values_list("id", flat=True))
+        levels.update(self.all_grade_sublevels.exclude(grade_level=None).values_list("grade_level__id", flat=True))
+        if not levels:
+            return GradeLevel.objects.none()
+        return GradeLevel.objects.filter(id__in=levels)
 
 
 def upload_to(prefix):

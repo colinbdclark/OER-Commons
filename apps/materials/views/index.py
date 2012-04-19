@@ -1,5 +1,8 @@
-import urllib
-
+from annoying.decorators import JsonResponse
+from annoying.functions import get_object_or_None
+from authoring.models import AuthoredMaterial
+from autoslug.settings import slugify
+from common.models import GradeLevel
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
@@ -8,22 +11,19 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
-
-from annoying.decorators import JsonResponse
-from autoslug.settings import slugify
-from common.models import GradeLevel
 from materials.models import Course, Library
 from materials.models.common import GeneralSubject, Collection, \
     Keyword, GeographicRelevance, Institution
 from materials.models.community import CommunityItem
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_id, get_slug_from_id, \
-    first_neighbours_last, get_name_from_slug, get_object
+    first_neighbours_last, get_name_from_slug
 from materials.views.csv_export import csv_export
 from materials.views.filters import FILTERS, VocabularyFilter, ChoicesFilter
 from rubrics.models import Rubric
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
+import urllib
 
 
 MAX_TOP_KEYWORDS = 25
@@ -306,7 +306,7 @@ def populate_item_from_search_result(result):
     if item.get("topics"):
         topics = []
         for id in item["topics"]:
-            topic = get_object(Topic, pk=id)
+            topic = get_object_or_None(Topic, id=id)
             if not topic:
                 continue
             topics.append(topic)
@@ -405,7 +405,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
     query = SearchQuerySet().narrow("is_displayed:true")
 
-    models = [model] if model else [Course, Library, CommunityItem]
+    models = [model] if model else [Course, Library, CommunityItem, AuthoredMaterial]
     query = query.models(*models)
 
     path_filter = None

@@ -69,7 +69,6 @@ class EvaluateViewMixin(object):
         model = self.content_type.model_class()
         self.object = get_object_or_404(model, id=int(object_id))
         self.enable_alignment_scores = Evaluation.enable_alignment_scores(self.object)
-        print self.enable_alignment_scores
         #noinspection PyUnresolvedReferences
         return super(EvaluateViewMixin, self).dispatch(request, *args, **kwargs)
 

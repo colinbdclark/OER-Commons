@@ -279,7 +279,7 @@ class Collection(models.Model):
     name = models.CharField(unique=True, max_length=300,
                             verbose_name=_(u"Name"))
     slug = AutoSlugField(unique=True, max_length=300, populate_from="name",
-                         verbose_name=_(u"Slug"),
+                         verbose_name=_(u"Slug"), always_update=True,
                          db_index=True)
 
     # Disable evaluation of alignment tags for items in this collection

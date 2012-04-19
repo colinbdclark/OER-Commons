@@ -132,36 +132,43 @@
       {% endif %}
     </div>
     <dl>
-      {% if item.authors.all.count %}
-      <dt>Author:</dt>
-      <dd>
-        {% for author in item.authors.all %}
-          <span itemprop="author">{{ author }}</span>{% if not forloop.last %},{% endif %}
-        {% endfor %}
-      </dd>
-      {% endif %}
 
-      {% if item.general_subjects.all.count %}
-      <dt>Subject:</dt>
-      <dd>{{ item.general_subjects.all|join:", " }}</dd>
-      {% endif %}
+      {% with authors=item.authors.all %}
+        {% if authors %}
+        <dt>Author:</dt>
+        <dd>
+          {% for author in authors %}
+            <span itemprop="author">{{ author }}</span>{% if not forloop.last %},{% endif %}
+          {% endfor %}
+        </dd>
+        {% endif %}
+      {% endwith %}
+
+      {% with general_subjects=item.general_subjects.all %}
+        {% if general_subjects %}
+        <dt>Subject:</dt>
+        <dd>{{ general_subjects|join:", " }}</dd>
+        {% endif %}
+      {% endwith %}
 
       {% if item.institution %}
-      <dt>Institution Name:</dt>
-      <dd>{{ item.institution.name }}</dd>
+        <dt>Institution Name:</dt>
+        <dd>{{ item.institution.name }}</dd>
       {% endif %}
 
       {% if item.collection %}
-      <dt>Collection:</dt>
-      <dd>
-        <a href="{% url materials:collection_index collection=item.collection.slug %}">{{ item.collection.name }}</a>
-      </dd>
+        <dt>Collection:</dt>
+        <dd>
+          <a href="{% url materials:collection_index collection=item.collection.slug %}">{{ item.collection.name }}</a>
+        </dd>
       {% endif %}
 
-      {% if item.grade_levels.all.count %}
-      <dt>Grade Level:</dt>
-      <dd>{{ item.grade_levels.all|join:", " }}</dd>
-      {% endif %}
+      {% with grade_levels=item.all_grade_levels %}
+        {% if grade_levels %}
+          <dt>Grade Level:</dt>
+          <dd>{{ grade_levels|join:", " }}</dd>
+        {% endif %}
+      {% endwith %}
     </dl>
 
     <dl>
@@ -171,44 +178,54 @@
 
     <dl>
       {% if item.course_or_module %}
-      <dt>Course Type:</dt>
-      <dd>{{ item.get_course_or_module_display }}</dd>
+        <dt>Course Type:</dt>
+        <dd>{{ item.get_course_or_module_display }}</dd>
       {% endif %}
 
-      {% if item.languages.all.count %}
-      <dt>Languages:</dt>
-      <dd>{{ item.languages.all|join:", " }}</dd>
-      {% endif %}
+      {% with languages=item.languages.all %}
+        {% if languages.count %}
+          <dt>Languages:</dt>
+          <dd>{{ languages|join:", " }}</dd>
+        {% endif %}
+      {% endwith %}
 
-      {% if item.material_types.all.count %}
-      <dt>Material Type:</dt>
-      <dd>{{ item.material_types.all|join:", " }}</dd>
-      {% endif %}
+      {% with material_types=item.material_types.all %}
+        {% if material_types %}
+          <dt>Material Type:</dt>
+          <dd>{{ material_types|join:", " }}</dd>
+        {% endif %}
+      {% endwith %}
 
-      {% if item.media_formats.all.count %}
-      <dt>Media Format:</dt>
-      <dd>{{ item.media_formats.all|join:", " }}</dd>
-      {% endif %}
+      {% with media_formats=item.media_formats.all %}
+        {% if media_formats %}
+          <dt>Media Format:</dt>
+          <dd>{{ media_formats|join:", " }}</dd>
+        {% endif %}
+      {% endwith %}
 
       {% if item.curriculum_standards %}
-      <dt>Curriculum Standards:</dt>
-      <dd>{{ item.curriculum_standards }}</dd>
+        <dt>Curriculum Standards:</dt>
+        <dd>{{ item.curriculum_standards }}</dd>
       {% endif %}
 
       {% if item.tech_requirements %}
-      <dt>Technical Requirements:</dt>
-      <dd>{{ item.tech_requirements }}</dd>
+        <dt>Technical Requirements:</dt>
+        <dd>{{ item.tech_requirements }}</dd>
       {% endif %}
 
-      {% if item.community_types.all.count %}
-      <dt>Content Type:</dt>
-      <dd>{{ item.community_types.all|join:", " }}</dd>
-      {% endif %}
+      {% with community_types=item.community_types.all %}
+        {% if community_types %}
+          <dt>Content Type:</dt>
+          <dd>{{ community_types|join:", " }}</dd>
+        {% endif %}
+      {% endwith %}
 
-      {% if item.community_topics.all.count %}
-      <dt>Content Topic:</dt>
-      <dd>{{ item.community_topics.all|join:", " }}</dd>
-      {% endif %}
+      {% with community_types=item.community_types.all %}
+        {% if community_types %}
+          <dt>Content Topic:</dt>
+          <dd>{{ community_topics|join:", " }}</dd>
+        {% endif %}
+      {% endwith %}
     </dl>
 
     <dl class="license">

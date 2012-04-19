@@ -102,10 +102,14 @@
       margin: 0 auto;
     }
     figcaption {
+      clear: both;
       font-style: italic;
     }
     .unisubs-widget {
       margin: 0 auto;
+      span.unisubs-tabTextfinish {
+        height: 32px !important;
+      }
     }
   }
 

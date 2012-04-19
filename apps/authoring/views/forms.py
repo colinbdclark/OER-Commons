@@ -1,5 +1,6 @@
+import re
 from authoring.models import AuthoredMaterialDraft
-from common.models import GradeLevel
+from common.models import Grade, GradeSubLevel
 from curriculum.models import AlignmentTag, TaggedMaterial
 from django import forms
 from django.contrib.contenttypes.models import ContentType
@@ -187,6 +188,81 @@ class AlignmentTagsWidget(forms.SelectMultiple):
         return mark_safe(u"\n".join(output))
 
 
+class GradesAndSubLevelsWidget(forms.Widget):
+
+    def render(self, name, value, attrs=None):
+        choices = [(u"", u"Select a Grade")]
+        for sublevel in GradeSubLevel.objects.all():
+            choices.append((u"sublevel.%s" % sublevel.pk, unicode(sublevel)))
+            for grade in sublevel.grade_set.all():
+                choices.append((u"grade.%s" % grade.pk, mark_safe(u"&nbsp;&nbsp;&nbsp;&nbsp;%s" % unicode(grade))))
+        value = value or []
+        select = forms.Select(choices=choices).render(name+"_select", None)
+        existing = []
+        choices_dict = dict(choices)
+        for v in value:
+            if isinstance(v, GradeSubLevel):
+                v = u"sublevel.%s" % v.pk
+            elif isinstance(v, Grade):
+                v = u"grade.%s" % v.pk
+            if not v or v not in choices_dict:
+                continue
+            existing.append(mark_safe(u"""<li><span>%s</span> %s <a href="#" class="delete ui-icon ui-icon-close">Delete</a></li>""" % (
+                choices_dict[v].replace(u"&nbsp;", ""),
+                forms.HiddenInput().render(name, v),
+            )))
+        return render_to_string(
+            "authoring/forms/grades-and-sublevels-widget.html", dict(
+            name=name,
+            existing=existing,
+            select=select,
+        ))
+
+    def value_from_datadict(self, data, files, name):
+        value = data.getlist(name)
+        return value
+
+
+class MaterialTypesWidget(forms.SelectMultiple):
+
+    def render(self, name, value, attrs=None, choices=()):
+        select = forms.Select().render(name+"_select", None, choices=((u"", u"Select a Material Type"),) + tuple(self.choices))
+        choices_dict = dict(self.choices)
+        value = value or []
+        existing = []
+        for v in value:
+            existing.append(mark_safe(u"""<li><span>%s</span> %s <a href="#" class="delete ui-icon ui-icon-close">Delete</a></li>""" % (
+                choices_dict[v],
+                forms.HiddenInput().render(name, v),
+            )))
+        return render_to_string(
+            "authoring/forms/material-types-widget.html", dict(
+            name=name,
+            existing=existing,
+            select=select,
+        ))
+
+
+class GradesAndSubLevelsField(forms.Field):
+
+    widget = GradesAndSubLevelsWidget
+
+    def to_python(self, value):
+        value = value or []
+        cleaned = []
+        for v in value:
+            m = re.match("(sublevel|grade)\.(\d+)", v)
+            if not m:
+                continue
+            type_, pk = m.groups()
+            model = GradeSubLevel if type_ == "sublevel" else Grade
+            try:
+                cleaned.append(model.objects.get(pk=pk))
+            except m.DoesNotExists:
+                raise forms.ValidationError(self.error_messages["invalid"])
+        return cleaned
+
+
 class EditFormNoLicense(forms.ModelForm):
 
     # TODO: clean up HTML from `text` field.
@@ -196,9 +272,11 @@ class EditFormNoLicense(forms.ModelForm):
     learning_goals = MultipleAutoCreateField("title", widget=LearningGoalsWidget())
     keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), required=False)
     general_subjects = ModelMultipleChoiceField(GeneralSubject.objects.all(), widget=SubjectsWidget())
-    grade_levels = forms.ModelMultipleChoiceField(label=u"Grade Level", queryset=GradeLevel.objects.all(), widget=SelectMultiple())
+    grade_sublevels = forms.ModelMultipleChoiceField(GradeSubLevel.objects.all(), required=False)
+    grades = forms.ModelMultipleChoiceField(Grade.objects.all(), required=False)
+    grades_and_sublevels = GradesAndSubLevelsField(label=u"Grade")
     languages = forms.ModelMultipleChoiceField(label=u"Language", queryset=Language.objects.all(), widget=SelectMultiple())
-    material_types = forms.ModelMultipleChoiceField(label=u"Material Type", queryset=CourseMaterialType.objects.all(), widget=SelectMultiple())
+    material_types = forms.ModelMultipleChoiceField(label=u"Material Type", queryset=CourseMaterialType.objects.all(), widget=MaterialTypesWidget())
     alignment_tags = forms.ModelMultipleChoiceField(
         AlignmentTag.objects.all(),
         widget=AlignmentTagsWidget(),
@@ -209,6 +287,7 @@ class EditFormNoLicense(forms.ModelForm):
         not_required = kwargs.pop("not_required", False)
         self.user = kwargs.pop("user")
         super(EditFormNoLicense, self).__init__(*args, **kwargs)
+        self.initial["grades_and_sublevels"] = self.initial["grade_sublevels"] + self.initial["grades"]
         self.content_type = ContentType.objects.get_for_model(self.instance)
         self.initial["alignment_tags"] = list(tagged.tag for tagged in TaggedMaterial.objects.filter(
             content_type=self.content_type,
@@ -219,9 +298,15 @@ class EditFormNoLicense(forms.ModelForm):
             for field in self.fields.values():
                 field.required = False
 
+    def clean(self):
+        cleaned_data = super(EditFormNoLicense, self).clean()
+        cleaned_data["grade_sublevels"] = [o for o in cleaned_data.get("grades_and_sublevels", []) if isinstance(o, GradeSubLevel)]
+        cleaned_data["grades"] = [o for o in cleaned_data.get("grades_and_sublevels", []) if isinstance(o, Grade)]
+        return cleaned_data
+
     class Meta:
         model = AuthoredMaterialDraft
-        fields = ["title", "text", "abstract", "learning_goals", "keywords", "general_subjects", "grade_levels", "languages", "material_types"]
+        fields = ["title", "text", "abstract", "learning_goals", "keywords", "general_subjects", "grade_sublevels", "grades", "grades_and_sublevels", "languages", "material_types"]
         widgets = dict(
             title=forms.HiddenInput(),
             text=forms.HiddenInput(),
