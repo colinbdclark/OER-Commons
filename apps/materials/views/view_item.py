@@ -201,6 +201,12 @@ class BaseViewItemMixin(object):
             data["next_item_url"] = next_item_url
             data["index_cookie"] = request.COOKIES.get("_i")
 
+        if request.user.is_authenticated():
+            data["saved"] = SavedItem.objects.filter(
+                content_type=content_type,
+                object_id=item.id,
+                user=request.user
+            ).exists()
 
         data["comment_url"] = reverse(
             "reviews:review",

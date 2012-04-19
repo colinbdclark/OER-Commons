@@ -51,19 +51,21 @@
                             {% if item.rating != None %}
                                 <li>{% stars item.identifier item.rating %}</li>
                             {% endif %}
-                            <li>
-                                <ul class="folder-list">
-                                    {% for folder in item.folders %}
-                                        <li class="rc2" data-folder-id="{{ folder.id }}">
-                                            <div class="folder-deco"></div>
-                                            {{ folder.name }} <a href="#" class="delete">×</a>
+                            {% if show_item_folders %}
+                                <li>
+                                    <ul class="folder-list">
+                                        {% for folder in item.folders %}
+                                            <li class="rc2" data-folder-id="{{ folder.id }}">
+                                                <div class="folder-deco"></div>
+                                                {{ folder.name }} <a href="#" class="delete">×</a>
+                                            </li>
+                                        {% endfor %}
+                                        <li class="rc2 last">
+                                            <div class="folder-deco"></div><a class="add" href="#">+</a>
                                         </li>
-                                    {% endfor %}
-                                    <li class="rc2 last">
-                                        <div class="folder-deco"></div><a class="add" href="#">+</a>
-                                    </li>
-                                </ul>
-                            </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
                     </div>
                     <div class="delete"><a href="#" class="delete">×</a></div>
                 </article>

@@ -28,6 +28,7 @@ project/media/django_extensions/
 project/media/upload/
 project/media/reports/
 project/media/harvester/
+project/media/sentry
 project/production.py
 project/development.py
 project/staging.py
@@ -38,6 +39,7 @@ apps/cssreload
 project/media/cssreload/
 project/media/SCSS_CACHE/
 project/media/authoring/
+project/media/django_js_utils/
 project/media/cache/
 .mr.developer.cfg
 src/

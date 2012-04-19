@@ -317,12 +317,19 @@ oer.myitems.index.init_action_panel = function() {
     $form.find("select[name='sort_by']").change(function() {
         $form.submit();
     });
+
+    var $searchInput = $(".myitems-search .search-input");
+
+    $form.submit(function(e) {
+        if ($searchInput.val()) {
+            $searchInput.clone(true).attr("type", "hidden").appendTo($form);
+        }
+    });
 };
 
 oer.myitems.index.init = function() {
 
     oer.myitems.index.init_action_panel();
-    oer.materials.index.init_actions_menus();
 
 };
 

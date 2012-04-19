@@ -381,7 +381,7 @@ dl.user-info dt {
   cursor: pointer;
 }
 
-.my-items-views .folder.selected .folder-icon {
+.myitems-save-button .my-items-views .folder.selected .folder-icon {
   background-image: url('/media/images/myitems-folder-user-marked.png');
 }
 
