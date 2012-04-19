@@ -592,7 +592,7 @@ class SubmittedItems(MyItemsView):
     def get_queryset(cls, user):
         queryset = SearchQuerySet()
         queryset = queryset.models(*cls.SUBMITTED_MODELS)
-        queryset = queryset.narrow(is_displayed=True)
+        queryset = queryset.narrow("is_displayed:true")
         queryset = queryset.filter(SQ(creator=user.id))
 
         return queryset
@@ -608,7 +608,7 @@ class PublishedItems(MyItemsView):
     def get_queryset(cls, user):
         queryset = SearchQuerySet()
         queryset = queryset.models(*cls.CREATED_MODELS)
-        queryset = queryset.narrow(is_displayed=True)
+        queryset = queryset.narrow("is_displayed:true")
         queryset = queryset.filter(SQ(creator=user.id))
 
         return queryset
