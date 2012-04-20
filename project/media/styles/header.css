@@ -76,12 +76,12 @@ body.authenticated header.global nav li.anon {
   .global-tabs ul {
     list-style-type: none;
     display: inline-block;
-    padding-right: 2px;
+    padding-right: 4px;
     background: url(../images/global-tabs-sep.png) 100% 0 no-repeat; }
   .global-tabs li {
     display: inline-block;
-    background: url(../images/global-tabs-sep.png) 0 0 no-repeat;
-    padding-left: 2px; }
+    background: url(../images/global-tabs-sep.png) 1px 0 no-repeat;
+    padding-left: 3px; }
     .global-tabs li a {
       display: block;
       padding: 0 1em;
