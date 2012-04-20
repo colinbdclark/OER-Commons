@@ -20,7 +20,7 @@
           </li>
         {% endif %}
         <li class="auth">
-          <span class="user-name">{% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name }}{% endif %}</span>
+          <span class="user-name">{% if request.user.is_authenticated %}{{ user.get_full_name|default:user.email|default:user }}{% endif %}</span>
         </li>
         <li class="auth">
           <a rel="nofollow" href="{% url users:profile %}">My Profile</a>
