@@ -473,6 +473,10 @@ dl.user-info dt {
   width: 16px;
 }
 
+.with-profile-tabs .profile-tabs nav li.selected.preferences a {
+  background: url("../images/preferences-icon.png") no-repeat scroll center center transparent;
+}
+
 .with-profile-tabs .layout-columns {
   border: solid;
   border-left: none;
