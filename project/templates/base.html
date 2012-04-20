@@ -2,6 +2,7 @@
 {% load compress %}
 {% load flatblock_tags %}
 {% load users_tags %}
+{% load getsatisfaction %}
 <html lang="{{ request.LANGUAGE_CODE }}" class="no-js">
   <head>
     <meta charset="utf-8"/>
@@ -17,7 +18,7 @@
     {% endif %}
   </head>
   <body class="{% block bodyclass %}{% endblock %}{% if microsite %} {{ microsite.slug }}{% endif %}{% if request.user.is_authenticated %} authenticated{% endif %}">
-    
+
     {% block global-notification %}
       {% if not hide_global_notifications %}
         {% if request.abtesting == "a" %}
@@ -32,7 +33,7 @@
 
     {% block promo %}
     {% endblock %}
-    
+
     {% if breadcrumbs %}
       <div class="breadcrumbs fixed-width">
         <a href="{% url frontpage %}">Home</a> &rarr;
@@ -53,7 +54,7 @@
     {% block above-content %}
       <div class="action-panel empty fixed-width"></div>
     {% endblock %}
-    
+
     <div class="layout-columns fixed-width clearfix" {% block content-itemscope-attrs %}{# this is a placeholder to insert microdata itemscope attribute on resource page #}{% endblock %}>
 
       <div class="column-left">
@@ -70,7 +71,7 @@
             {% confirmation_notification "status-message" %}
           {% endif %}
         {% endif %}
-  
+
         <div id="content" class="content {% block contentclass %}{% endblock %}">
           {% block content %}
           {% endblock %}
@@ -84,11 +85,11 @@
       </div>
 
     </div>
-    
+
     <form name="next-url" action="/" method="get">
       <input type="hidden" name="next" value="{{ request.get_full_path }}" />
     </form>
-    
+
     {% include "include/footer.html" %}
 
     </div>
@@ -98,13 +99,18 @@
     {% block extra-js %}{% endblock %}
     {% endcompress %}
 
+    {% if not hide_getsatisfaction %}
+      {% fastpass %}
+      {% include "getsatisfaction/tab.html" %}
+    {% endif %}
+
     {% if not debug %}
       {% flatblock "google-analytics" %}
       {% flatblock "chartbeat-tracker" %}
     {% endif %}
 
     {% block extra-footer %}
-    {% endblock %} 
+    {% endblock %}
 
   </body>
 </html>
