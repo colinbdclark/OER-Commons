@@ -30,9 +30,9 @@ def navigation(context):
             ['oer', 'browse', 'courses', 'libraries', 'advanced_search', 'search']
     tabs.append(tab)
 
-    tab = dict(title=u"My Items")
+    tab = dict(title=u"My OER")
     tab["url"] = reverse("myitems:myitems")
-    tab["selected"] = path_elements and path_elements[0] == "my"
+    tab["selected"] = view_name.startswith("myitems:") or view_name.startswith("users:profile") or view_name.startswith("preferences:")
     tab["class"] = "require-login"
     tabs.append(tab)
 
