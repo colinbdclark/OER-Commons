@@ -391,6 +391,7 @@ ul.tagit li {
   text-align: center;
 }
 
+.portlet h1.expanded,
 h1.expanded {
   border-bottom: dotted;
   border-width: 1px;
