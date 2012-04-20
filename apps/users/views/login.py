@@ -56,8 +56,7 @@ def login(request):
                 user = form.get_user()
                 auth_login(request, user)
                 return JsonResponse(dict(status="success",
-                                         user_name=u"%s %s" % (user.first_name,
-                                                               user.last_name)))
+                                         user_name=user.get_full_name() or user.email or unicode(user)))
             else:
                 errors = {}
                 for field_name, errors_list in form.errors.items():
