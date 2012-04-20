@@ -494,5 +494,13 @@ dl.user-info dt {
 }
 
 .myitems-search {
-  float: right;
+  text-align: right;
+}
+
+.myitems-search input {
+  margin: 2px 0;
+}
+
+.myitems-search input.search-input {
+  width: 200px;
 }

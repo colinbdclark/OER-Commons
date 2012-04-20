@@ -19,6 +19,16 @@
 
 {% block column-left %}
     {% myitems_views_portlet %}
+    
+    {% if search_url %}
+    <section class="portlet">
+        <form class="myitems-search" action="{{ search_url }}" method="get">
+            <input type="text" class="search-input" name="f.search"{% if search_value %} value="{{ search_value }}"{% endif %} class="text" placeholder="Search My Items" />
+            <input type="submit" class="button rc3" value="Search" />
+        </form>
+    </section>
+    {% endif %}
+    
     <section class="portlet saved-searches">
         <a href="{% url myitems:searches %}"{% if saved_search %} class="selected"{% endif %}>Saved Searches</a>
     </section>

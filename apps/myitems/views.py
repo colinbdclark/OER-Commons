@@ -459,6 +459,10 @@ class MyItemsView(TemplateView):
             self.SORT_BY_OPTIONS = self.__class__.SORT_BY_OPTIONS+({"value": u"search", "title": u"Relevance"},)
 
 
+    def get_search_url(self):
+        return self.request.path
+
+
     def get_context_data(self, *args, **kwargs):
         index_types = SortedDict([
             ("pics", {
@@ -529,6 +533,8 @@ class MyItemsView(TemplateView):
             'no_items_message': self.no_items_message,
             'page_title': self.name,
             'show_item_folders': self.show_item_folders,
+            'search_url': self.get_search_url(),
+            'search_value': self.search_value,
         }
 
 
@@ -630,6 +636,10 @@ class DraftItems(MyItemsView):
 
     def get_evaluations(self):
         pass
+
+
+    def get_search_url(self):
+        return None
 
 
     def get_folders(self):
