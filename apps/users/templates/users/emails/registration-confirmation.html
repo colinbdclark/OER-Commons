@@ -1,8 +1,8 @@
 <html>
 <body>
-<p>Welcome {{ user.first_name }} {{ user.last_name }},</p>
+<p>Welcome {{ user.get_full_name }},</p>
 <p>Thank you for joining OER Commons!</p>
-<p>Your user name is <strong>{{ user.username }}</strong></p>
+<p>Your user name is <strong>{{ user.email|default:user.username }}</strong></p>
 <p>Please visit the following link to
  activate your account and complete your registration.</p>
 <p><a href="{{ url }}?code={{ key }}">{{ url }}?code={{ key }}</a></p>
