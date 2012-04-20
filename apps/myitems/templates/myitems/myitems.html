@@ -53,12 +53,14 @@
             {% for item in items %}
                 <article class="item clearfix {{ item.item_class }}{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
                     {% if index_type == "pics" %}
-                    {% thumbnail item.screenshot "185x125" crop="0px 0px" as im %}
-                        <img class="thumb" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                    {% empty %}
-                        <img class="thumb" src="{{ STATIC_URL }}images/myitems-dummy-thumb.png" width="185" height="125">
-                    {% endthumbnail %}
-                    {% endif %}
+                    <a href="{{ item.get_absolute_url }}">
+                        {% thumbnail item.screenshot "185x125" crop="0px 0px" as im %}
+                            <img class="thumb" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                        {% empty %}
+                            <img class="thumb" src="{{ STATIC_URL }}images/myitems-dummy-thumb.png" width="185" height="125">
+                        {% endthumbnail %}
+                        {% endif %}
+                    </a>
                     <div class="right relation">{{ item.relation_to_user }}</div>
                     <div class="details">
                         <h1>
