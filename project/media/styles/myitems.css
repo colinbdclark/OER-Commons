@@ -517,3 +517,7 @@ dl.user-info dt {
 .myitems-search .search-results a.delete {
   float: right;
 }
+
+.myitems.with-profile-tabs .layout-columns {
+  padding: 60px 30px 20px 30px;
+}
