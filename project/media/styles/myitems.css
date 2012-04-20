@@ -493,7 +493,7 @@ dl.user-info dt {
   border: none;
 }
 
-.myitems-search {
+.myitems-search form {
   text-align: right;
 }
 
@@ -503,4 +503,17 @@ dl.user-info dt {
 
 .myitems-search input.search-input {
   width: 200px;
+}
+
+.myitems-search .search-results {
+  background-color: #DAE3E6;
+  border: solid 2px #D0D9DC;
+  font-size: 14px;
+  margin-top: 3px;
+  padding: 3px;
+  position: relative;
+}
+
+.myitems-search .search-results a.delete {
+  float: right;
 }

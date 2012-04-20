@@ -21,11 +21,18 @@
     {% myitems_views_portlet %}
     
     {% if search_url %}
-    <section class="portlet">
-        <form class="myitems-search" action="{{ search_url }}" method="get">
+    <section class="portlet myitems-search">
+        <form action="{{ search_url }}" method="get">
             <input type="text" class="search-input" name="f.search"{% if search_value %} value="{{ search_value }}"{% endif %} class="text" placeholder="Search My Items" />
             <input type="submit" class="button rc3" value="Search" />
         </form>
+        
+        {% if search_value %}
+            <div class="search-results">
+                <a href="{{ request.path }}" class="delete">×</a>
+                {{ pagination.total_items }} results for "{{ search_value }}"
+            </div>
+        {% endif %}
     </section>
     {% endif %}
     
