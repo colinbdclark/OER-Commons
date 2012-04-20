@@ -950,10 +950,18 @@
     .ui-move {
       top: 0;
       background-image: url(../../images/authoring/icon-move-image.png);
+      cursor: move;
     }
     .ui-delete {
-      top: 27px;
+      top: 25px;
+      border-top: 1px solid #fff;
+      -webkit-border-bottom-right-radius: 2px;
+      -moz-border-radius-bottomright: 2px;
+      border-bottom-right-radius: 2px;
       background-image: url(../../images/authoring/icon-delete-image.png);
+      &:hover {
+        background-color: #069;
+      }
     }
   }
 }
