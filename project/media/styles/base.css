@@ -391,3 +391,16 @@ ul.tagit li {
   text-align: center;
 }
 
+.portlet h1.expanded,
+h1.expanded {
+  border-bottom: dotted;
+  border-width: 1px;
+  border-color: #0B7BA8;
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  color: #1F4D64;
+}

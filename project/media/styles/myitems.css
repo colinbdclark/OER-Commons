@@ -467,10 +467,14 @@ dl.user-info dt {
 }
 
 .with-profile-tabs .profile-tabs nav li.preferences a {
-  background: url("../images/preferences-icon-black.png") no-repeat scroll center center transparent;
+  background: url("../images/preferences-icon-blue.png") no-repeat scroll center center transparent;
   display: inline-block;
   height: 16px;
   width: 16px;
+}
+
+.with-profile-tabs .profile-tabs nav li.selected.preferences a {
+  background: url("../images/preferences-icon.png") no-repeat scroll center center transparent;
 }
 
 .with-profile-tabs .layout-columns {
@@ -489,6 +493,31 @@ dl.user-info dt {
   border: none;
 }
 
-.myitems-search {
+.myitems-search form {
+  text-align: right;
+}
+
+.myitems-search input {
+  margin: 2px 0;
+}
+
+.myitems-search input.search-input {
+  width: 200px;
+}
+
+.myitems-search .search-results {
+  background-color: #DAE3E6;
+  border: solid 2px #D0D9DC;
+  font-size: 14px;
+  margin-top: 3px;
+  padding: 3px;
+  position: relative;
+}
+
+.myitems-search .search-results a.delete {
   float: right;
+}
+
+.myitems.with-profile-tabs .layout-columns {
+  padding: 60px 30px 20px 30px;
 }

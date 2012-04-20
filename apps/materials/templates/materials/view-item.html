@@ -305,8 +305,8 @@
     {% myitems_save_button %}
   </section>
 
-  <section class="portlet dotted">
-    <h1>Rate and Review</h1>
+  <section class="portlet">
+    <h1 class="expanded">Rate and Review</h1>
     {% stars item.identifier item.ratings.all %}
     {% if item.url and view_full_url %}
       <div>
@@ -369,8 +369,8 @@
 
   {% align_item_tags_portlet item %}
 
-  <section class="portlet addthis dotted">
-    <h1>Share</h1>
+  <section class="portlet addthis">
+    <h1 class="expanded">Share</h1>
       <div class="addthis_toolbox addthis_32x32_style addthis_default_style">
           <a class="addthis_button_facebook"></a>
           <a class="addthis_button_twitter"></a>
@@ -381,7 +381,7 @@
   </section>
 
   <section class="portlet item-tags">
-    <h1>Tags</h1>
+    <h1 class="expanded">Tags</h1>
     <p>Keywords, descriptive words, interested groups &amp; more</p>
     <ul>
       {% for tag in tags %}

@@ -1,10 +1,5 @@
 <div class="profile-tabs">
     <div class="fixed-width">
-        {% if search_url %}
-            <form class="myitems-search" action="{{ search_url }}" method="get">
-                <input type="text" class="search-input" name="f.search"{% if search_value %} value="{{ search_value }}"{% endif %} class="text" placeholder="Search My Items" />
-            </form>
-        {% endif %}
         <nav>
             <ul>
                 {% for tab in tabs %}

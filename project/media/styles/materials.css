@@ -21,7 +21,7 @@
   font-size: 14px;
 }
 
-.view-item h1 {
+.view-item #content h1 {
   margin-bottom: 15px;
   font-weight: bold;
   font-style: normal;
@@ -430,24 +430,6 @@ body.wide-right-column.view-item .layout-columns {
 
 .view-item .sheet {
   padding: 25px;
-}
-
-.view-item .resource-comments h1,
-.view-item .portlet h1 {
-  text-transform: uppercase;
-  font-size: 14px;
-  font-weight: normal;
-  color: #1F4D64;
-}
-
-.view-item .portlet h1 {
-  border-bottom: dotted;
-  border-width: 1px;
-  border-color: #0B7BA8;
-}
-
-.view-item .dotted {
-  background: none;
 }
 
 .view-item .thumb {

@@ -148,14 +148,7 @@ def profile_tabs(context):
             'classes': ' '.join(classes),
         })
 
-    search_url = (
-        (None if match.url_name == 'draft' else request.path)
-        if current_namespace == "myitems"
-        else reverse("myitems:myitems")
-    )
 
     return {
         'tabs': tabs,
-        'search_url': search_url,
-        'search_value': FILTERS["search"].extract_value(request),
     }
