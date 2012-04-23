@@ -432,7 +432,7 @@ class MyItemsView(TemplateView):
             )
             for model in self.SUBMITTED_MODELS
         ))
-        queryset_eval = Evaluation.objects.filter(user=self.user).filter(query)
+        queryset_eval = Evaluation.objects.filter(user=self.user, confirmed=True).filter(query)
         for content_type, object_id in queryset_eval.values_list('content_type', 'object_id'):
             self.evaluated_items[content_type].add(object_id)
 
