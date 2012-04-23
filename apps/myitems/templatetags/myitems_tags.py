@@ -5,26 +5,13 @@ from django.db.models.aggregates import Count
 from django.template import Library
 from django.contrib.contenttypes.models import ContentType
 
-from materials.utils import get_name_from_slug
 from materials.models import Material
-from materials.views.filters import FILTERS
 from authoring.models import AuthoredMaterial, AuthoredMaterialDraft
-from tags.models import Tag
-from tags.tags_utils import get_tag_cloud
 from saveditems.models import SavedItem
 from myitems.models import Folder, FolderItem
 from myitems.views import FolderForm, AllItems, SubmittedItems, PublishedItems, DraftItems
 
 register = Library()
-
-@register.inclusion_tag("myitems/include/my-tags-portlet.html", takes_context=True)
-def my_tags_portlet(context):
-    user = context["request"].user
-    tags = dict(Tag.objects.filter(user=user).values("slug").annotate(count=Count("slug")).values_list("slug", "count"))
-    tags = get_tag_cloud(tags, 3, 0, 1)
-    for tag in tags:
-        tag["name"] = get_name_from_slug(Tag, tag["slug"])
-    return dict(tags=tags)
 
 
 VIEWS = [
