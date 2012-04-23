@@ -538,14 +538,27 @@ class MyItemsView(TemplateView):
         }
 
 
+def _str_ct_from_model(model):
+    ct = ContentType.objects.get_for_model(model)
+    return '.'.join((ct.app_label, ct.model))
+
+
 
 class AllItems(MyItemsView):
     @classmethod
     def get_queryset(cls, user):
         queryset = SearchQuerySet()
         queryset = queryset.models(*cls.SUBMITTED_MODELS | cls.CREATED_MODELS)
-        queryset = queryset.narrow("is_displayed:true")
-        queryset = queryset.filter(SQ(creator=user.id) | SQ(saved_by=user.id))
+
+        submitted_query = (
+            reduce(or_, (SQ(django_ct=_str_ct_from_model(model)) for model in cls.SUBMITTED_MODELS))
+            & (SQ(creator=user.id) | SQ(saved_by=user.id))
+        )
+        created_query = (
+            reduce(or_, (SQ(django_ct=_str_ct_from_model(model)) for model in cls.CREATED_MODELS))
+            & SQ(creator=user.id, is_displayed=True)
+        )
+        queryset = queryset.filter(submitted_query | created_query)
 
         return queryset
 
@@ -560,8 +573,12 @@ class SubmittedItems(MyItemsView):
     def get_queryset(cls, user):
         queryset = SearchQuerySet()
         queryset = queryset.models(*cls.SUBMITTED_MODELS)
-        queryset = queryset.narrow("is_displayed:true")
-        queryset = queryset.filter(SQ(creator=user.id))
+
+        submitted_query = (
+            reduce(or_, (SQ(django_ct=_str_ct_from_model(model)) for model in cls.SUBMITTED_MODELS))
+            & SQ(creator=user.id)
+        )
+        queryset = queryset.filter(submitted_query)
 
         return queryset
 
