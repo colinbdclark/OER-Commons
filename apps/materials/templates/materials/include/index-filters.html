@@ -190,13 +190,28 @@
       {% endif %}
     {% endwith %}
 
-    {% with index_filters.authored_content as filter %}
-      <div class="dotted filter authored-content clearfix">
-        <label title="{{ filter.title }}" for="id_{{ filter.request_name }}">
-          <input type="checkbox" name="{{ filter.request_name }}" {% if filter.checked %}checked="checked"{% endif %}
-                 id="id_{{ filter.request_name }}" value="yes" />
-          {{ filter.title }}</label>
-      </div>
+    {% with index_filters.content_source as filter %}
+      {% if filter.options %}
+      <dl class="dotted filter collapsible clearfix">
+        <dt>
+           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+           <label for="{{ filter.name }}">
+             <input type="checkbox" name="{{ filter.name }}"
+                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ filter.title }}</label>
+        </dt>
+        {% for option in filter.options %}
+        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
+             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                    id="{{ option.input_id }}" value="{{ option.slug }}"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ option.name }} ({{ option.count }})</label>
+        </dd>
+        {% endfor %}
+      </dl>
+      {% endif %}
     {% endwith %}
 
   </form>

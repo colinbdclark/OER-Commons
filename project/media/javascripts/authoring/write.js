@@ -446,7 +446,6 @@ WriteStep.prototype.cleanHTML = function (preSave) {
       }
     });
   }
-  console.log($document.html());
   return $document.html();
 };
 
