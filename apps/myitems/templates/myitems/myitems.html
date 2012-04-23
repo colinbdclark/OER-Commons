@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 {% load myitems_tags %}
-{% load rating_tags %}
-{% load thumbnail %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -51,43 +49,7 @@
     {% if items %}
         <div class="materials-index {{ index_type }}">
             {% for item in items %}
-                <article class="item clearfix {{ item.item_class }}{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
-                    {% if index_type == "pics" %}
-                    <a href="{{ item.get_absolute_url }}">
-                        {% thumbnail item.screenshot "185x125" crop="0px 0px" as im %}
-                            <img class="thumb" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                        {% empty %}
-                            <img class="thumb" src="{{ STATIC_URL }}images/myitems-dummy-thumb.png" width="185" height="125">
-                        {% endthumbnail %}
-                        {% endif %}
-                    </a>
-                    <div class="right relation">{{ item.relation_to_user }}</div>
-                    <div class="details">
-                        <h1>
-                            <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
-                        </h1>
-                        <ul class="widgets">
-                            {% if item.rating != None %}
-                                <li>{% stars item.identifier item.rating %}</li>
-                            {% endif %}
-                            {% if show_item_folders %}
-                                <li>
-                                    <ul class="folder-list">
-                                        {% for folder in item.folders %}
-                                            <li class="rc2" data-folder-id="{{ folder.id }}">
-                                                <div class="folder-deco"></div>
-                                                {{ folder.name }} <a href="#" class="delete">×</a>
-                                            </li>
-                                        {% endfor %}
-                                        <li class="rc2 last">
-                                            <div class="folder-deco"></div><a class="add" href="#">+</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            {% endif %}
-                    </div>
-                    <div class="delete"><a href="#" class="delete">×</a></div>
-                </article>
+                {% include "myitems/include/index-material.html" %}
             {% endfor %}
 
             {% include "myitems/include/index-navigation.html" %}
