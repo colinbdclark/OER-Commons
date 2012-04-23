@@ -365,6 +365,8 @@ oer.myitems.init_save_button = function() {
     });
 
     $myitemsSaveButton.delegate(".unsave", "click", function(e) {
+        e.preventDefault();
+
         oer.login.check_login(function() {
             $unsaveButton.addClass("hidden");
             $saveButton.removeClass("hidden");
@@ -415,16 +417,18 @@ oer.myitems.init_save_button = function() {
         };
         var action_dict = action_dicts[action];
         modifyFolder(action_dict);
+        var not_saved = $unsaveButton.hasClass("hidden");
+        if (!action && not_saved) {
+            $saveButton.addClass("hidden");
+            $unsaveButton.removeClass("hidden")
+        }
         $.post(action_dict.url, params, function(response) {
-            if (response.status === "success") {
-                var $unsave = $myitemsSaveButton.find(".save-unsave-button.unsave");
-                if (!action && $unsave.hasClass("hidden")) {
-                    $myitemsSaveButton.find(".save-unsave-button.save").addClass("hidden");
-                    $unsave.removeClass("hidden")
-                }
-            }
-            else {
+            if (response.status !== "success") {
                 modifyFolder(action_dicts[!action]);
+                if (!action && not_saved) {
+                    $unsaveButton.addClass("hidden");
+                    $saveButton.removeClass("hidden")
+                }
             }
         });
     });
