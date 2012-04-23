@@ -112,6 +112,7 @@ BASIC_INDEX_FILTERS = (
   ("course_material_types", True,),
   ("media_formats", True,),
   ("cou_bucket", True),
+  ("content_source", False),
 )
 
 
@@ -186,13 +187,6 @@ def build_index_filters(visible_filters, facets, filter_values, path_filter,
         if len(filter_data["options"]) == len(values):
             filter_data["all_checked"] = True
         filters[filter_name] = filter_data
-
-    filter = FILTERS["authored_content"]
-    filters["authored_content"] = dict(
-        title=filter.title,
-        request_name=filter.request_name,
-        checked=filter_values.get("authored_content", False),
-    )
 
     return filters
 
@@ -352,11 +346,16 @@ def index(request, general_subjects=None, grade_levels=None,
           model=None, search=False, tags=None, subjects=None, format=None,
           topics=None, alignment=None, facet_fields=None):
 
-    if not facet_fields: facet_fields = ["general_subjects", "grade_levels",
-                                         "keywords",
-                                         "course_material_types",
-                                         "media_formats",
-                                         "cou_bucket", "indexed_topics"]
+    if not facet_fields: facet_fields = [
+       "general_subjects",
+       "grade_levels",
+       "keywords",
+       "course_material_types",
+       "media_formats",
+       "cou_bucket",
+       "indexed_topics",
+       "content_source"
+    ]
     if model:
         index_namespace = model.namespace
     else:
@@ -429,7 +428,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
     visible_filters = ["search", "general_subjects", "grade_levels",
                        "course_material_types", "media_formats",
-                       "cou_bucket", "authored_content"]
+                       "cou_bucket", "content_source"]
 
     if microsite:
         microsite = Microsite.objects.get(slug=microsite)

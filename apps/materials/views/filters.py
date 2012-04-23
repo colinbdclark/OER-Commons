@@ -9,7 +9,7 @@ from materials.models.common import Keyword, GeneralSubject,\
 from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import COURSE_OR_MODULE, CourseMaterialType
 from materials.models.library import LibraryMaterialType
-from materials.models.material import MEMBER_ACTIVITY_TYPES
+from materials.models.material import MEMBER_ACTIVITY_TYPES, Material
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_slug
 from ordereddict import OrderedDict
@@ -17,8 +17,8 @@ from rubrics.models import get_rubric_choices
 from tags.models import Tag
 from utils.templatetags.utils import truncatechars
 from haystack.query import SQ
-import re
 from operator import or_
+import re
 
 
 class Filter(object):
@@ -94,7 +94,7 @@ class ChoicesFilter(Filter):
 
     @property
     def available_values(self):
-        return set([option[0] for option in self.choices])
+        return set(option[0] for option in self.choices)
 
     def extract_value(self, request):
         value = request.REQUEST.getlist(self.request_name)
@@ -488,12 +488,10 @@ class RubricFilter(ChoicesFilter):
         return value
 
 
-class AuthoredContentFilter(BooleanFilter):
-
-    def update_query(self, query, value):
-        if value:
-            query.query.models = set([AuthoredMaterial])
-        return query
+CONTENT_SOURCES = (
+    (AuthoredMaterial.content_source, u"Open Author Resources"),
+    (Material.content_source, u"Content Provider Resources"),
+)
 
 
 FILTERS = OrderedDict([
@@ -521,6 +519,6 @@ FILTERS = OrderedDict([
     ("alignment_categories", AlignmentCategoryFilter("alignment_categories", "f.alignment_category")),
     ("alignment_cluster", AlignmentClusterFilter("alignment_tags", "f.cluster")),
     ("evaluated_rubrics", RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric")),
-    ("authored_content", AuthoredContentFilter(None, "authored", u"Open Author Resources")),
+    ("content_source", ChoicesFilter("content_source", "source", CONTENT_SOURCES, u"Content Source")),
     ("search", SearchFilter()),
 ])

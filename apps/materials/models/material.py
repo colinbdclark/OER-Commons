@@ -84,6 +84,7 @@ class Material(models.Model, EvaluatedItemMixin):
         self.__original_url = self.url
 
     namespace = None
+    content_source = u"submitted"
 
     title = models.CharField(max_length=500, verbose_name=_(u"Title"))
     slug = AutoSlugField(max_length=500, populate_from='title', unique=True,

@@ -62,6 +62,8 @@ class MaterialSearchIndex(SearchIndex, EvaluatedItemIndex):
     featured = BooleanField(model_attr="featured")
     featured_on = DateTimeField(model_attr="featured_on", null=True)
 
+    content_source = CharField(model_attr="content_source")
+
     member_activities = MultiValueField(model_attr="member_activities")
     rating = FloatField(model_attr="rating")
 

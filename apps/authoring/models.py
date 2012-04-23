@@ -76,6 +76,8 @@ class AuthoredMaterialDraft(AbstractAuthoredMaterial):
 
 class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
 
+    content_source = u"authored"
+
     slug = AutoSlugField(populate_from="title", always_update=True)
 
     owners = models.ManyToManyField(User, related_name="+")
