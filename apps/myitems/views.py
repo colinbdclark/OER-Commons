@@ -239,6 +239,8 @@ class ItemDelete(View):
 
 
 class UserItem(object):
+    dummy_thumb = 'myitems-dummy-thumb.png'
+
     def __init__(self, result, view):
         self.item = result.object
         self.content_type = ContentType.objects.get_for_model(result.model)
@@ -280,6 +282,8 @@ class CreatedUserItem(UserItem):
 
 
 class DraftUserItem(CreatedUserItem):
+    dummy_thumb = 'myitems-dummy-thumb-draft.png'
+
     def __init__(self, item, user):
         super(CreatedUserItem, self).__init__(item, user)
         title = []
@@ -288,9 +292,12 @@ class DraftUserItem(CreatedUserItem):
             title.append(title_first)
         if self.item.material.workflow_state == PUBLISHED_STATE:
             title.append("Unpublished Changes")
+            self.relation_to_user = "Unpublished Changes"
             self.item_class = "unpublished-changes"
+
         else:
             title.append("Draft")
+            self.relation_to_user = "Draft"
             self.item_class = "draft"
         title.append(localize(self.item.modified_timestamp or self.item.created_timestamp))
         self.title = " - ".join(title)

@@ -7,7 +7,7 @@
             {% thumbnail item.screenshot "185x125" crop="0px 0px" as im %}
                 <img class="thumb" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
             {% empty %}
-                <img class="thumb" src="{{ STATIC_URL }}images/myitems-dummy-thumb.png" width="185" height="125">
+                <img class="thumb" src="{{ STATIC_URL }}images/{{ item.dummy_thumb }}" width="185" height="125">
             {% endthumbnail %}
         </a>
     {% endif %}
