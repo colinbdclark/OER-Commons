@@ -68,12 +68,12 @@ dl.user-info dt {
 }
 
 
-.materials-index.saved .index-navigation.top {
+.myitems-materials-index.saved .index-navigation.top {
   margin-bottom: 5px;
   background: none;
 }
 
-.materials-index.saved p.hint {
+.myitems-materials-index.saved p.hint {
   margin-bottom: 15px;
   padding-bottom: 10px;
   line-height: 14px;
@@ -81,11 +81,11 @@ dl.user-info dt {
   font-size: 14px;
 }
 
-.materials-index.saved p.hint img {
+.myitems-materials-index.saved p.hint img {
   vertical-align: top;
 }
 
-.materials-index.saved.searches p.hint {
+.myitems-materials-index.saved.searches p.hint {
   margin-top: 10px;
 }
 
@@ -103,7 +103,7 @@ dl.user-info dt {
 }
 
 
-.myitems article .folder-list li {
+.myitems-materials-index article .folder-list li {
   display: inline-block;
   list-style-type: none;
   margin-left: 5px;
@@ -122,7 +122,7 @@ dl.user-info dt {
   vertical-align: bottom;
 }
 
-.myitems article .folder-list .folder-deco {
+.myitems-materials-index article .folder-list .folder-deco {
   vertical-align: top;
   display: inline-block;
   height: 2px;
@@ -139,38 +139,38 @@ dl.user-info dt {
 }
 
 
-.myitems article .folder-list li.last, 
-.myitems article .folder-list li.last .folder-deco {
+.myitems-materials-index article .folder-list li.last, 
+.myitems-materials-index article .folder-list li.last .folder-deco {
   border: dashed;
   border-color: #85BDD4;
   border-width: 1px;
   background-color: #FFFFFF;
 }
 
-.myitems article .folder-list li.last .add {
+.myitems-materials-index article .folder-list li.last .add {
   margin: 0 3px;
 }
 
-.myitems article .folder-list li.last .folder-deco {
+.myitems-materials-index article .folder-list li.last .folder-deco {
   border-bottom-color: #FFFFFF;
   border-bottom-width: 2px;
 }
 
-.myitems .folder-list li#folder-item-form {
+.myitems-materials-index .folder-list li#folder-item-form {
   padding: 0;
   background: none;
   border: none;
 }
 
-.myitems .folder-list li#folder-item-form input {
+.myitems-materials-index .folder-list li#folder-item-form input {
   margin-right: 5px;
 }
 
-.myitems article .widgets {
+.myitems-materials-index article .widgets {
   margin-top: 5px;
 }
 
-.myitems article .widgets > li {
+.myitems-materials-index article .widgets > li {
   display: inline-block;
   list-style-type: none;
   vertical-align: bottom;
@@ -178,31 +178,31 @@ dl.user-info dt {
   margin-right: 5px;
 }
 
-.myitems article .widgets li {
+.myitems-materials-index article .widgets li {
   margin-bottom: 0;
 }
 
-.myitems article {
+.myitems-materials-index article {
   position: relative;
 }
 
-.myitems article div.delete {
+.myitems-materials-index article div.delete {
   position: absolute;
   top: -2px;
   right: 2px;
 }
 
-.myitems article .relation {
+.myitems-materials-index article .relation {
   margin-top: 20px;
   font-size: 11px;
   text-transform: uppercase;
 }
 
-.myitems article .thumb {
+.myitems-materials-index article .thumb {
   float: left;
 }
 
-.myitems .pics article .details {
+.myitems-materials-index.pics article .details {
   margin-left: 195px;
 }
 
@@ -240,7 +240,7 @@ dl.user-info dt {
   margin-left: 0;
 }
 
-.myitems .materials-index {
+.myitems-materials-index {
   margin-top: 10px;
 }
 

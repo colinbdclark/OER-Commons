@@ -47,7 +47,7 @@
     {% include "myitems/include/index-action-panel.html" %}
 
     {% if items %}
-        <div class="materials-index {{ index_type }}">
+        <div class="materials-index myitems-materials-index {{ index_type }}">
             {% for item in items %}
                 {% include "myitems/include/index-material.html" %}
             {% endfor %}
