@@ -31,7 +31,6 @@
       var existing, li, name, value;
       value = option.attr("value");
       name = $.trim(option.text());
-      console.log(name);
       existing = this.list.find("input[value='" + value + "']");
       if (existing.length) {
         existing.closest("li", this.list).effect("bounce");

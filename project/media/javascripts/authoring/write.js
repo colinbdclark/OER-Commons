@@ -142,6 +142,10 @@ var WriteStep = function (tool) {
   this.$area.find("figure.embed").each(function () {
     editor.loadEmbed($(this));
   });
+  this.$area.find("figure.image").each(function () {
+    editor.initImage($(this));
+  });
+  this.initImageControls();
 
   this.initDND();
 
@@ -446,7 +450,9 @@ WriteStep.prototype.cleanHTML = function (preSave) {
   });
 
   if (preSave) {
-    // TODO: remove interface elements here
+    $document.find("[class^='ui-wrap-']").replaceWith(function () {
+      return $(this).contents();
+    });
     $document.find("[class^='ui-']").remove();
     $document.find("[contenteditable]").removeAttr("contenteditable");
     $document.find("p,div").each(function () {
@@ -1030,6 +1036,9 @@ WriteStep.prototype.initLinks = function () {
     if ($link.closest("tr.ui-column-controls,td.ui-row-controls", editor.$area).length) {
       return;
     }
+    if ($link.is("[class^='ui-']")) {
+      return;
+    }
     e.preventDefault();
     if ($link.is(".download,.reference")) {
       return;
@@ -1151,8 +1160,32 @@ WriteStep.prototype.updateDND = function () {
   this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline):not(.table),table span.move"));
 };
 
+WriteStep.prototype.initImage = function($figure) {
+  var $image = $figure.find("img");
+  if (!$image.parent().is("span.ui-wrap-image")) {
+    $image.wrap($('<span class="ui-wrap-image"></span>'));
+    var $wrapper = $image.parent();
+    $('<a href="#" class="ui-move"></a>').appendTo($wrapper);
+    $('<a href="#" class="ui-delete"></a>').appendTo($wrapper);
+  }
+};
+
+WriteStep.prototype.initImageControls = function() {
+  var editor = this;
+  this.$area.delegate("figure.image a.ui-move", "click", function(e) {
+    e.preventDefault();
+  });
+  this.$area.delegate("figure.image a.ui-delete", "click", function(e) {
+    e.preventDefault();
+    editor.saveState();
+    var $figure = $(e.currentTarget).closest("figure.image", editor.$area);
+    $figure.remove();
+    // TODO: remove image from server.
+  });
+};
+
 //WriteStep.prototype.initImageResize = function($img) {
-//  $img.load(function() {
+//  $img.load(function()
 //    $(this).resizable({
 //      aspectRatio: true,
 //      autoHide: true,
@@ -1861,6 +1894,7 @@ MediaDialog.ImageStep = function (dialog) {
       editor.$area.append($figure);
     }
     editor.initFigure($figure);
+    editor.initImage($figure);
     editor.ensureTextInput();
     editor.updateDND();
     dialog.hide();

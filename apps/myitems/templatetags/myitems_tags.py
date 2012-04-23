@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from materials.utils import get_name_from_slug
 from materials.models import Material
+from materials.views.filters import FILTERS
 from authoring.models import AuthoredMaterial, AuthoredMaterialDraft
 from tags.models import Tag
 from tags.tags_utils import get_tag_cloud
@@ -90,6 +91,7 @@ def myitems_save_button(context):
     if request.user.is_authenticated():
         if creator == request.user:
             created = True
+        else:
             saved = SavedItem.objects.filter(
                 user=request.user,
                 content_type=content_type,
@@ -130,10 +132,12 @@ PROFILE_TABS = [
 def profile_tabs(context):
     request = context["request"]
     tabs = []
+    match = resolve(request.path)
+    current_namespace = match.namespace
     for namespace, url_name, tab_name, tab_class in PROFILE_TABS:
         url = reverse("%s:%s" % (namespace, url_name))
         classes = []
-        if resolve(request.path).namespace == namespace:
+        if current_namespace == namespace:
             classes.append("selected")
         if tab_class:
             classes.append(tab_class)
@@ -143,6 +147,7 @@ def profile_tabs(context):
             'name': tab_name,
             'classes': ' '.join(classes),
         })
+
 
     return {
         'tabs': tabs,

@@ -28,7 +28,6 @@ class Widget
   addItem: (option)->
     value = option.attr("value")
     name = $.trim(option.text())
-    console.log(name)
     existing = @list.find("input[value='#{value}']")
     if existing.length
       existing.closest("li", @list).effect("bounce")

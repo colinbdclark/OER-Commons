@@ -208,7 +208,7 @@ class GradesAndSubLevelsWidget(forms.Widget):
             if not v or v not in choices_dict:
                 continue
             existing.append(mark_safe(u"""<li><span>%s</span> %s <a href="#" class="delete ui-icon ui-icon-close">Delete</a></li>""" % (
-                choices_dict[v].strip(u"&nbsp;"),
+                choices_dict[v].replace(u"&nbsp;", ""),
                 forms.HiddenInput().render(name, v),
             )))
         return render_to_string(

@@ -1,5 +1,6 @@
 from collections import defaultdict
-from operator import attrgetter
+from operator import or_, attrgetter
+from itertools import groupby
 import datetime
 import urllib
 
@@ -14,9 +15,11 @@ from django.utils.datastructures import SortedDict
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from haystack.query import SQ, SearchQuerySet
 
 from materials.views.index import IndexParams, Pagination
 from materials.models import CommunityItem, Course, Library, PUBLISHED_STATE, Material
+from materials.views import filters
 from authoring.models import AuthoredMaterial, AuthoredMaterialDraft
 from savedsearches.models import SavedSearch
 from utils.decorators import login_required
@@ -236,31 +239,13 @@ class ItemDelete(View):
 
 
 class UserItem(object):
-    def __init__(self, item, content_type, user):
-        self.item = item
-        self.content_type = content_type
-        self.user = user
-        self._rating = None
-
-
-    @property
-    def rating(self):
-        if self._rating is None:
-            self._rating = self.item.rating
-        return self._rating
-
-
-    def folders(self):
-        return (x.folder for x in FolderItem.objects.filter(
-                content_type=self.content_type,
-                object_id=self.item.id,
-                folder__user=self.user,
-            )
-        )
-
-
-    def identifier(self):
-        return '%s.%s' % (self.content_type.id, self.item.id)
+    def __init__(self, result, view):
+        self.item = result.object
+        self.content_type = ContentType.objects.get_for_model(result.model)
+        self.user = view.user
+        self.rating = result.rating
+        self.identifier = '%s.%s' % (self.content_type.id, self.item.id)
+        self.folders = view.folders[self.content_type][self.item.id]
 
 
     def __getattr__(self, name):
@@ -269,15 +254,12 @@ class UserItem(object):
 
 
 class SubmittedUserItem(UserItem):
-    def __init__(self, item, content_type, user):
-        super(SubmittedUserItem, self).__init__(item, content_type, user)
-        self.item_class = "submitted" if self.item.creator == self.user else "saved"
+    def __init__(self, result, view):
+        super(SubmittedUserItem, self).__init__(result, view)
+        self.item_class = "submitted" if result.creator == self.user.id else "saved"
         self.relation_to_user = (
             "evaluated"
-            if Evaluation.objects.filter(user=self.user,
-                                         content_type=self.content_type,
-                                         object_id=self.item.id,
-                                         confirmed=True).exists()
+            if result.pk in view.evaluated_items[self.content_type.id]
             else self.item_class
         )
 
@@ -298,8 +280,8 @@ class CreatedUserItem(UserItem):
 
 
 class DraftUserItem(CreatedUserItem):
-    def __init__(self, item, content_type, user):
-        super(CreatedUserItem, self).__init__(item, content_type, user)
+    def __init__(self, item, user):
+        super(CreatedUserItem, self).__init__(item, user)
         title = []
         title_first = self.item.title or self.item.material.title
         if title_first:
@@ -326,6 +308,8 @@ class MyItemsView(TemplateView):
     name = "All"
     no_items_message = "You have not any item yet."
 
+    show_item_folders = True
+
     SORT_BY_OPTIONS = (
         {"value": u"title", "title": u"Title"},
         {"value": u"rating", "title": u"Rating"},
@@ -344,45 +328,15 @@ class MyItemsView(TemplateView):
         AuthoredMaterial,
     ])
 
+    APP_LABEL_TO_WRAPPER = {
+        CommunityItem: SubmittedUserItem,
+        Course: SubmittedUserItem,
+        Library: SubmittedUserItem,
+        AuthoredMaterial: CreatedUserItem,
+        AuthoredMaterialDraft: DraftUserItem,
+    }
 
-    @staticmethod
-    def sort_by_title(items):
-        items.sort(key=attrgetter('title'))
-
-
-    @staticmethod
-    def sort_by_rating(items):
-        items.sort(key=lambda x: getattr(x, 'rating', 0), reverse=True)
-
-
-    @staticmethod
-    def sort_by_visits(items):
-        items.sort(key=attrgetter('visits'), reverse=True)
-
-
-    @staticmethod
-    def sort_by_date(items):
-        items.sort(key=attrgetter('date'), reverse=True)
-
-
-    def sort_by_save_date(self, items):
-        type_to_pks = defaultdict(list)
-        for item in items:
-            type_to_pks[item.content_type].append(item.pk)
-
-        d = {}
-        for content_type, pks in type_to_pks.iteritems():
-            d[content_type] = dict(SavedItem.objects.filter(
-                        user=self.request.user, content_type=content_type,
-                        object_id__in=pks).values_list('object_id', 'timestamp'))
-
-        items.sort(key=lambda x: d[x.content_type].get(x.pk, MINDATETIME), reverse=True)
-
-
-    @classmethod
-    def get_count(cls, user):
-        return sum(x[0].count() for x in cls.get_querysets(user))
-
+    search_filter = filters.FILTERS["search"]
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -394,6 +348,119 @@ class MyItemsView(TemplateView):
                 context, **response_kwargs)
         response.set_cookie("index_type", self.index_type)
         return response
+
+
+    @classmethod
+    def get_count(cls, user):
+        return cls.get_queryset(user).count()
+
+
+    def get_results(self):
+        batch_end = self.index_params.batch_start + self.index_params.batch_size
+        queryset = self.queryset
+
+        if self.index_params.sort_by == "save_date":
+            to_sort = defaultdict(dict)
+            to_not_sort = []
+            queryset = queryset.order_by("django_ct")
+            for model, g in groupby(queryset, attrgetter("model")):
+                if model in self.SUBMITTED_MODELS:
+                    ct = ContentType.objects.get_for_model(model).id
+                    for result in g:
+                        if result.creator == self.user:
+                            to_not_sort.append(result)
+                        else:
+                            to_sort[ct][int(result.pk)] = result
+                else:
+                    to_not_sort.extend(g)
+
+            results = []
+
+            to_sort_total_items = reduce(lambda x, y: x+len(y), to_sort.itervalues(), 0)
+            if self.index_params.batch_start < to_sort_total_items:
+                query = reduce(or_, (
+                    Q(
+                        content_type=ct,
+                        object_id__in=results.keys()
+                    )
+                    for ct, results in to_sort.iteritems()
+                ))
+                saved_items = SavedItem.objects.filter(user=self.user).filter(query).order_by("-timestamp")
+                end = min(self.index_params.batch_start+to_sort_total_items, batch_end)
+                results.extend(
+                    to_sort[ct][oid]
+                    for ct, oid in saved_items.values_list(
+                        "content_type", "object_id")[self.index_params.batch_start:end]
+                )
+            to_add = min(self.index_params.batch_size - len(results), len(to_not_sort))
+            results.extend(to_not_sort[:to_add])
+            model_to_pks = defaultdict(list)
+            for result in results:
+                model_to_pks[result.model].append(result.pk)
+
+            items_dict = dict(
+                (model,
+                    dict(
+                        (x.id, x)
+                        for x in model.objects.filter(id__in=pks)
+                    )
+                )
+                for model, pks in model_to_pks.iteritems()
+            )
+
+            for result in results:
+                result.object = items_dict[result.model][int(result.pk)]
+        else:
+            if self.index_params.query_order_by is not None:
+                queryset = queryset.order_by(self.index_params.query_order_by)
+            queryset = queryset.load_all()
+            results = queryset[self.index_params.batch_start:batch_end]
+            model_to_pks = defaultdict(list)
+            for x in results:
+                model_to_pks[x.model].append(x.pk)
+
+        self.results = results
+        self.model_to_pks = model_to_pks
+
+
+    def get_evaluations(self):
+        self.evaluated_items = defaultdict(set)
+        query = reduce(or_, (
+            Q(
+                content_type=ContentType.objects.get_for_model(model),
+                object_id__in=self.model_to_pks[model]
+            )
+            for model in self.SUBMITTED_MODELS
+        ))
+        queryset_eval = Evaluation.objects.filter(user=self.user).filter(query)
+        for content_type, object_id in queryset_eval.values_list('content_type', 'object_id'):
+            self.evaluated_items[content_type].add(object_id)
+
+
+    def get_folders(self):
+        self.folders = defaultdict(lambda: defaultdict(list))
+        query = reduce(or_, (
+            Q(
+                content_type=ContentType.objects.get_for_model(model),
+                object_id__in=self.model_to_pks[model]
+            )
+            for model in self.SUBMITTED_MODELS | self.CREATED_MODELS
+        ))
+        folder_items = FolderItem.objects.filter(folder__user=self.user
+            ).filter(query).select_related("folder", "content_type")
+        for fi in folder_items:
+            self.folders[fi.content_type][fi.object_id].append(fi.folder)
+
+
+    def narrow_by_search(self):
+        if self.search_value:
+            self.query_string_params = self.search_filter.update_query_string_params(self.query_string_params, self.search_value)
+            self.queryset = self.search_filter.update_query(self.queryset, self.search_value)
+            self.SORT_BY_OPTIONS = self.__class__.SORT_BY_OPTIONS+({"value": u"search", "title": u"Relevance"},)
+
+
+    def get_search_url(self):
+        return self.request.path
 
 
     def get_context_data(self, *args, **kwargs):
@@ -410,17 +477,25 @@ class MyItemsView(TemplateView):
             }),
         ])
 
+        user = self.request.user
+        self.user = user
+        self.query_string_params = {}
+        self.queryset = self.get_queryset(user)
+        self.search_value = self.search_filter.extract_value(self.request)
+        self.narrow_by_search()
+
+
         index_type = self.request.GET.get("index_type") or self.request.COOKIES.get("index_type")
         if index_type not in index_types:
             index_type = "pics"
         index_types[index_type]["selected"] = True
 
-        index_params = IndexParamsWithSaveDateSort(
-                self.request, SORT_BY_OPTIONS=self.SORT_BY_OPTIONS)
-        query_string_params = index_params.update_query_string_params({})
-
-        batch_end = index_params.batch_start + index_params.batch_size
-
+        self.index_params = IndexParamsWithSaveDateSort(
+            self.request,
+            SORT_BY_OPTIONS=self.SORT_BY_OPTIONS,
+            search_query=self.search_value
+        )
+        self.query_string_params = self.index_params.update_query_string_params(self.query_string_params)
 
         current_query_string_params = self.request.GET.copy()
         for index_type_name, index_type_dict in index_types.iteritems():
@@ -431,58 +506,48 @@ class MyItemsView(TemplateView):
 
         self.index_type = index_type
 
-        items = []
-        user = self.request.user
+        self.get_results()
+        self.get_evaluations()
+        self.get_folders()
 
-        querysets = self.get_querysets(user)
 
         items = [
-            wrapper(item, content_type, user)
-            for queryset, content_type, wrapper in self.get_querysets(user)
-            for item in queryset
+            self.APP_LABEL_TO_WRAPPER[result.model](result, self)
+            for result in self.results
         ]
-        getattr(self, 'sort_by_%s' % index_params.sort_by)(items)
-        items = items[index_params.batch_start:batch_end]
 
-        pagination = Pagination(self.request.path, query_string_params,
-                        index_params.batch_start,
-                        index_params.batch_size,
-                        sum(x[0].count() for x in querysets))
+
+        total_items = self.queryset.count()
+        pagination = Pagination(self.request.path, self.query_string_params,
+                        self.index_params.batch_start,
+                        self.index_params.batch_size,
+                        total_items)
 
         return {
             'pagination': pagination,
             'items': items,
-            'index_params': index_params,
+            'index_params': self.index_params,
             'hide_global_notifications': True,
             'index_types': index_types.values(),
             'index_type': index_type,
             'no_items_message': self.no_items_message,
             'page_title': self.name,
+            'show_item_folders': self.show_item_folders,
+            'search_url': self.get_search_url(),
+            'search_value': self.search_value,
         }
 
 
 
 class AllItems(MyItemsView):
     @classmethod
-    def get_querysets(cls, user):
-        querysets = []
+    def get_queryset(cls, user):
+        queryset = SearchQuerySet()
+        queryset = queryset.models(*cls.SUBMITTED_MODELS | cls.CREATED_MODELS)
+        queryset = queryset.narrow("is_displayed:true")
+        queryset = queryset.filter(SQ(creator=user.id) | SQ(saved_by=user.id))
 
-        for model in cls.SUBMITTED_MODELS:
-            content_type = ContentType.objects.get_for_model(model)
-            saved_items = SavedItem.objects.filter(
-                content_type=content_type, user=user)
-            saved_items_ids = saved_items.values_list('object_id', flat=True)
-            filter_query = Q(creator=user) | Q(id__in=saved_items_ids)
-            querysets.append((model.objects.filter(filter_query), content_type, SubmittedUserItem))
-
-        for model in cls.CREATED_MODELS:
-            content_type = ContentType.objects.get_for_model(model)
-            querysets.append((
-                model.objects.filter(author=user, workflow_state=PUBLISHED_STATE),
-                content_type, CreatedUserItem
-            ))
-
-        return querysets
+        return queryset
 
 
 
@@ -492,14 +557,13 @@ class SubmittedItems(MyItemsView):
     no_items_message = "You have not submitted any item yet."
 
     @classmethod
-    def get_querysets(cls, user):
-        querysets = []
+    def get_queryset(cls, user):
+        queryset = SearchQuerySet()
+        queryset = queryset.models(*cls.SUBMITTED_MODELS)
+        queryset = queryset.narrow("is_displayed:true")
+        queryset = queryset.filter(SQ(creator=user.id))
 
-        for model in cls.SUBMITTED_MODELS:
-            content_type = ContentType.objects.get_for_model(model)
-            querysets.append((model.objects.filter(Q(creator=user)), content_type, SubmittedUserItem))
-
-        return querysets
+        return queryset
 
 
 
@@ -509,17 +573,22 @@ class PublishedItems(MyItemsView):
     no_items_message = "You have not published any item yet."
 
     @classmethod
-    def get_querysets(cls, user):
-        querysets = []
+    def get_queryset(cls, user):
+        queryset = SearchQuerySet()
+        queryset = queryset.models(*cls.CREATED_MODELS)
+        queryset = queryset.narrow("is_displayed:true")
+        queryset = queryset.filter(SQ(creator=user.id))
 
-        for model in cls.CREATED_MODELS:
-            content_type = ContentType.objects.get_for_model(model)
-            querysets.append((
-                model.objects.filter(author=user, workflow_state=PUBLISHED_STATE),
-                content_type, CreatedUserItem
-            ))
+        return queryset
 
-        return querysets
+
+
+class ResultLike(object):
+    rating = None
+
+    def __init__(self, item, model):
+        self.object = item
+        self.model = model
 
 
 
@@ -527,47 +596,72 @@ class DraftItems(MyItemsView):
     slug = "draft"
     name = "Draft Items"
     no_items_message = "You have no draft items yet."
+    show_item_folders = False
 
     SORT_BY_OPTIONS = (
         {"value": u"title", "title": u"Title"},
+        {"value": u"date", "title": u"Date"},
     )
 
+    DRAFT_MODEL = AuthoredMaterialDraft
+
     @classmethod
-    def get_querysets(cls, user):
-        querysets = []
+    def get_queryset(cls, user):
+        return cls.DRAFT_MODEL.objects.filter(material__author=user
+                                                ).select_related("material")
 
-        for model in [AuthoredMaterialDraft]:
-            content_type = ContentType.objects.get_for_model(model)
-            querysets.append((
-                model.objects.filter(material__author=user),
-                content_type, DraftUserItem
-            ))
 
-        return querysets
+    @classmethod
+    def sort_by_title(cls, queryset):
+        return queryset.order_by("title")
+
+
+    @classmethod
+    def sort_by_date(cls, queryset):
+        return queryset.order_by("-modified_timestamp")
+
+
+    def get_results(self):
+        sort_by = self.index_params.sort_by
+        queryset = self.queryset
+        if sort_by:
+            queryset = getattr(self, "sort_by_%s" % sort_by)(queryset)
+        batch_end = self.index_params.batch_start+self.index_params.batch_size
+
+        self.results = [
+            ResultLike(item, self.DRAFT_MODEL)
+            for item in queryset[self.index_params.batch_start:batch_end]
+        ]
+
+
+    def get_evaluations(self):
+        pass
+
+
+    def get_search_url(self):
+        return None
+
+
+    def get_folders(self):
+        self.folders = defaultdict(lambda: defaultdict(list))
 
 
 
 class FolderItems(MyItemsView):
     no_items_message = u"You have not saved any item in this folder yet."
 
-    def get_querysets(self, user):
-        querysets = []
-        type_to_pks = defaultdict(list)
+    def get_queryset(self, user):
+        queryset = SearchQuerySet()
+        ct_to_pks = defaultdict(list)
         folder_items = FolderItem.objects.filter(folder=self.folder)
-        folder_items_pks = folder_items.values_list('content_type', 'object_id')
-        for content_type, pk in folder_items_pks:
-            type_to_pks[content_type].append(pk)
-
-        for content_type_pk, pks in type_to_pks.iteritems():
-            content_type = ContentType.objects.get(pk=content_type_pk)
-            model = content_type.model_class()
-            wrapper = SubmittedUserItem if model in self.SUBMITTED_MODELS else CreatedUserItem
-            querysets.append((
-                model.objects.filter(pk__in=pks),
-                content_type, wrapper
-            ))
-
-        return querysets
+        for ct, pk in folder_items.values_list('content_type', 'object_id'):
+            ct_to_pks[ContentType.objects.get_for_id(ct)].append(pk)
+        print ct_to_pks
+        query = reduce(or_,(
+            SQ(django_ct='.'.join((ct.app_label, ct.model)), django_id__in=pks)
+            for ct, pks in ct_to_pks.iteritems()
+        ))
+        return queryset.filter(query)
 
 
     def get_context_data(self, *args, **kwargs):

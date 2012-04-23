@@ -1,3 +1,4 @@
+from authoring.models import AuthoredMaterial
 from common.models import GradeLevel
 from django.core.urlresolvers import reverse
 from django.views.generic.simple import direct_to_template
@@ -40,7 +41,7 @@ def browse(request, microsite=None):
 
 def providers(request, microsite=None):
 
-    course_collections_facets = dict(get_facets_for_field("collection", Course, facet_limit=300, facet_mincount=10))
+    course_collections_facets = dict(get_facets_for_field("collection", (Course, AuthoredMaterial), facet_limit=300, facet_mincount=10))
     course_collections = list(Collection.objects.order_by("slug").values("id", "slug", "name"))
     for o in course_collections:
         o["count"] = course_collections_facets.get(unicode(o["id"]), 0)

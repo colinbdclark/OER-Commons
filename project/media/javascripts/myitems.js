@@ -317,12 +317,19 @@ oer.myitems.index.init_action_panel = function() {
     $form.find("select[name='sort_by']").change(function() {
         $form.submit();
     });
+
+    var $searchInput = $(".myitems-search .search-input");
+
+    $form.submit(function(e) {
+        if ($searchInput.val()) {
+            $searchInput.clone(true).attr("type", "hidden").appendTo($form);
+        }
+    });
 };
 
 oer.myitems.index.init = function() {
 
     oer.myitems.index.init_action_panel();
-    oer.materials.index.init_actions_menus();
 
 };
 
@@ -357,27 +364,22 @@ oer.myitems.init_save_button = function() {
         });
     });
 
-    $(".myitems-save-button").inlineConfirmation({
-        selector: ".unsave",
-        confirmCallback: function(action) {
-            oer.login.check_login(function() {
-                $unsaveButton.addClass("hidden");
-                $saveButton.removeClass("hidden");
-                var $folders = $folderList.find(".folder.selected");
-                $folders.removeClass("selected");
-                oer.myitems._changeNumber($folders.find(".number"), -1);
-                $.post(unsaveUrl, { item_id: identifier }, function(response) {
-                    if (response.status !== "success") {
-                        $saveButton.addClass("hidden");
-                        $unsaveButton.removeClass("hidden");
-                        $folders.addClass("selected");
-                        oer.myitems._changeNumber($folders.find(".number"), 1);
-                    }
-                });
+    $myitemsSaveButton.delegate(".unsave", "click", function(e) {
+        oer.login.check_login(function() {
+            $unsaveButton.addClass("hidden");
+            $saveButton.removeClass("hidden");
+            var $folders = $folderList.find(".folder.selected");
+            $folders.removeClass("selected");
+            oer.myitems._changeNumber($folders.find(".number"), -1);
+            $.post(unsaveUrl, { item_id: identifier }, function(response) {
+                if (response.status !== "success") {
+                    $saveButton.addClass("hidden");
+                    $unsaveButton.removeClass("hidden");
+                    $folders.addClass("selected");
+                    oer.myitems._changeNumber($folders.find(".number"), 1);
+                }
             });
-        },
-        showFunc: function($element) { $element.removeClass("hidden") },
-        hideFunc: function($element) { $element.addClass("hidden") },
+        });
     });
 
 

@@ -1,5 +1,5 @@
 $(function() {
-  oer.search_box.init();
+
   if (!Modernizr.input.placeholder) {
     $.each($("input[placeholder][id]"), function(i, input) {
       var $input = $(input);
@@ -9,6 +9,8 @@ $(function() {
       });
     });
   }
+
+  initGlobalHeader();
 
   oer.next_url.init();
   oer.login.init();

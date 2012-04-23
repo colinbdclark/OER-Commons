@@ -19,6 +19,23 @@
 
 {% block column-left %}
     {% myitems_views_portlet %}
+    
+    {% if search_url %}
+    <section class="portlet myitems-search">
+        <form action="{{ search_url }}" method="get">
+            <input type="text" class="search-input" name="f.search"{% if search_value %} value="{{ search_value }}"{% endif %} class="text" placeholder="Search My Items" />
+            <input type="submit" class="button rc3" value="Search" />
+        </form>
+        
+        {% if search_value %}
+            <div class="search-results">
+                <a href="{{ request.path }}" class="delete">×</a>
+                {{ pagination.total_items }} results for "{{ search_value }}"
+            </div>
+        {% endif %}
+    </section>
+    {% endif %}
+    
     <section class="portlet saved-searches">
         <a href="{% url myitems:searches %}"{% if saved_search %} class="selected"{% endif %}>Saved Searches</a>
     </section>
@@ -36,13 +53,15 @@
             {% for item in items %}
                 <article class="item clearfix {{ item.item_class }}{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
                     {% if index_type == "pics" %}
-                    {% thumbnail item.screenshot "185x125" crop="0px 0px" as im %}
-                        <img class="thumb" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                    {% empty %}
-                        <img class="thumb" src="{{ STATIC_URL }}images/myitems-dummy-thumb.png" width="185" height="125">
-                    {% endthumbnail %}
-                    {% endif %}
-                    <div class="right relation">{{ item.relation_to_user|upper }}</div>
+                    <a href="{{ item.get_absolute_url }}">
+                        {% thumbnail item.screenshot "185x125" crop="0px 0px" as im %}
+                            <img class="thumb" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                        {% empty %}
+                            <img class="thumb" src="{{ STATIC_URL }}images/myitems-dummy-thumb.png" width="185" height="125">
+                        {% endthumbnail %}
+                        {% endif %}
+                    </a>
+                    <div class="right relation">{{ item.relation_to_user }}</div>
                     <div class="details">
                         <h1>
                             <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
@@ -51,19 +70,21 @@
                             {% if item.rating != None %}
                                 <li>{% stars item.identifier item.rating %}</li>
                             {% endif %}
-                            <li>
-                                <ul class="folder-list">
-                                    {% for folder in item.folders %}
-                                        <li class="rc2" data-folder-id="{{ folder.id }}">
-                                            <div class="folder-deco"></div>
-                                            {{ folder.name }} <a href="#" class="delete">×</a>
+                            {% if show_item_folders %}
+                                <li>
+                                    <ul class="folder-list">
+                                        {% for folder in item.folders %}
+                                            <li class="rc2" data-folder-id="{{ folder.id }}">
+                                                <div class="folder-deco"></div>
+                                                {{ folder.name }} <a href="#" class="delete">×</a>
+                                            </li>
+                                        {% endfor %}
+                                        <li class="rc2 last">
+                                            <div class="folder-deco"></div><a class="add" href="#">+</a>
                                         </li>
-                                    {% endfor %}
-                                    <li class="rc2 last">
-                                        <div class="folder-deco"></div><a class="add" href="#">+</a>
-                                    </li>
-                                </ul>
-                            </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
                     </div>
                     <div class="delete"><a href="#" class="delete">×</a></div>
                 </article>

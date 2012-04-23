@@ -40,6 +40,7 @@ STATICFILES_MEDIA_DIRNAMES = (
 )
 STATICFILES_PREPEND_LABEL_APPS = (
     'django.contrib.admin',
+    'sentry',
     'django_js_utils',
 )
 
@@ -126,7 +127,6 @@ INSTALLED_APPS = (
     'getsatisfaction',
     'authoring',
     'project',
-    'django_js_utils',
 )
 
 TEMPLATE_LOADERS = (
@@ -206,7 +206,9 @@ def honeypot_verifier(value):
     # It must be positive and less than one hour.
     now = int(time.time())
     diff = now - value
-    return 0 <= diff <= 3600
+    if diff < 0 or diff > 3600:
+        return False
+    return True
 
 HONEYPOT_VERIFIER = honeypot_verifier
 
@@ -249,6 +251,3 @@ LOGGING = {
 LR_COMMAND = "%s -m LRSignature.cmd sign" % os.path.join(os.path.dirname(__file__), "..", "bin", "python-lr")
 
 PROFILING = False
-
-# For PDF generation
-FONTS_DIR = "/usr/share/fonts/truetype/msttcorefonts"

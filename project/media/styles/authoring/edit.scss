@@ -649,7 +649,7 @@
       border: 1px solid #ccc;
       border-bottom: none;
       background: #fff;
-      width: 9em;
+      width: 10em;
       display: none;
     }
     li {
@@ -935,6 +935,36 @@
     a.add-row {
       bottom: -8px;
       right: 7px;
+    }
+  }
+  .ui-wrap-image {
+    display: inline-block;
+    position: relative;
+    .ui-delete, .ui-move {
+      display: block;
+      position: absolute;
+      left: 0;
+      width: 25px;
+      height: 25px;
+      background-color: #7bbdda;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+    }
+    .ui-move {
+      top: 0;
+      background-image: url(../../images/authoring/icon-move-image.png);
+      cursor: move;
+    }
+    .ui-delete {
+      top: 25px;
+      border-top: 1px solid #fff;
+      -webkit-border-bottom-right-radius: 2px;
+      -moz-border-radius-bottomright: 2px;
+      border-bottom-right-radius: 2px;
+      background-image: url(../../images/authoring/icon-delete-image.png);
+      &:hover {
+        background-color: #069;
+      }
     }
   }
 }

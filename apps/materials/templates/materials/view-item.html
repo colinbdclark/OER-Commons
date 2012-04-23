@@ -38,7 +38,7 @@
 {% block content-itemscope-attrs %} itemscope="itemscope" itemtype="http://schema.org/ScholarlyArticle"{% endblock %}
 
 {% block content %}
-
+  <section class="sheet">
   {% if came_from_index %}
   <nav class="view-item-navigation" data-index-cookie="{{ index_cookie }}">
     {% if prev_item_url %}
@@ -88,6 +88,7 @@
     </ul>
     {% endspaceless %}
    </div>
+   </section>
 {% endif %}
 
 <article class="view-item item" data-content-type="{{ content_type.id }}" data-object-id="{{ item.id }}" id="{{ item.identifier }}">
@@ -104,26 +105,32 @@
     <h1 itemprop="name">
       {% if view_full_url %}
         <a {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}>
-          <img src="{{ STATIC_URL }}images/item-title-icon.png" alt="{{ item.title }}" /> {{ item.title|safe }}
+          {{ item.title|safe }}
         </a>
       {% else %}
-        <img src="{{ STATIC_URL }}images/item-title-icon.png" alt="{{ item.title }}" /> {{ item.title|safe }}
+        {{ item.title|safe }}
       {% endif %}
     </h1>
 
     <meta itemprop="url" content="{{ item.url }}" />
     <meta itemprop="keywords" content="{{ item.keyword_names|join:", " }}" />
 
-    {% if item.screenshot %}
-      <div class="left">
+    <div class="left">
+      <div class="thumb">
         {% thumbnail item.screenshot "300x250" crop="0px 0px" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% empty %}
+          <img class="thumb" src="{{ STATIC_URL }}images/myitems-dummy-thumb.png" width="185" height="125">
         {% endthumbnail %}
-        {% if item.license %}
-          {% cou_bucket item.license.bucket %}
+        {% if view_full_url %}
+           <a id="goto" {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}
+               class="button-blue-big rc5">View Resource</a>
         {% endif %}
       </div>
-    {% endif %}
+      {% if item.license %}
+        {% cou_bucket item.license.bucket %}
+      {% endif %}
+    </div>
     <dl>
 
       {% with authors=item.authors.all %}
@@ -242,18 +249,10 @@
       {% endif %}
     </dl>
   </div>
-
-  {% if view_full_url %}
-    <div class="align-right">
-      <a id="goto" {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}
-         class="button-blue-big rc5">Go to OER Item</a>
-    </div>
-  {% endif %}
-
 </article>
 
 <section class="resource-comments">
-  <h1>Comments:</h1>
+  <h1>Comments</h1>
   {% for comment in comments %}
     <article{% if comment.is_review and comment.author == request.user %} class="author rc5"{% endif %} itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
       {% if comment.title %}<h1>{{ comment.title }}</h1>{% endif %}
@@ -306,8 +305,8 @@
     {% myitems_save_button %}
   </section>
 
-  <section class="portlet dotted">
-    <h1>Rate and Review</h1>
+  <section class="portlet">
+    <h1 class="expanded">Rate and Review</h1>
     {% stars item.identifier item.ratings.all %}
     {% if item.url and view_full_url %}
       <div>
@@ -370,8 +369,8 @@
 
   {% align_item_tags_portlet item %}
 
-  <section class="portlet addthis dotted">
-    <h1>Share</h1>
+  <section class="portlet addthis">
+    <h1 class="expanded">Share</h1>
       <div class="addthis_toolbox addthis_32x32_style addthis_default_style">
           <a class="addthis_button_facebook"></a>
           <a class="addthis_button_twitter"></a>
@@ -382,7 +381,7 @@
   </section>
 
   <section class="portlet item-tags">
-    <h1>Tags</h1>
+    <h1 class="expanded">Tags</h1>
     <p>Keywords, descriptive words, interested groups &amp; more</p>
     <ul>
       {% for tag in tags %}

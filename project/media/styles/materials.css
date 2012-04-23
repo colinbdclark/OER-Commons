@@ -21,7 +21,7 @@
   font-size: 14px;
 }
 
-.view-item h1 {
+.view-item #content h1 {
   margin-bottom: 15px;
   font-weight: bold;
   font-style: normal;
@@ -413,6 +413,11 @@
   clear: left;
 }
 
+body.wide-right-column.view-item .layout-columns {
+  background: none;
+}
+
+
 .resource-comments {
   margin-top: 2em;
 }
@@ -423,14 +428,33 @@
   font-size: 18px;
 }
 
+.view-item .sheet {
+  padding: 25px;
+}
+
+.view-item .thumb {
+  position: relative;
+}
+
+.view-item #goto {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+}
+
 .view-item #comment-form textarea {
-  width: 660px;
+  width: 625px;
   height: 100px;
   resize: vertical;
 }
 
 .view-item #comment-form .buttons {
   text-align: right;
+}
+
+body.wide-right-column.view-item .column-main {
+  width: 690px;
+  padding: 0;
 }
 
 .portlet.save {
