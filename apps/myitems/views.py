@@ -680,12 +680,15 @@ class FolderItems(MyItemsView):
         folder_items = FolderItem.objects.filter(folder=self.folder)
         for ct, pk in folder_items.values_list('content_type', 'object_id'):
             ct_to_pks[ContentType.objects.get_for_id(ct)].append(pk)
-        print ct_to_pks
-        query = reduce(or_,(
-            SQ(django_ct='.'.join((ct.app_label, ct.model)), django_id__in=pks)
-            for ct, pks in ct_to_pks.iteritems()
-        ))
-        return queryset.filter(query)
+
+        if ct_to_pks:
+            query = reduce(or_,(
+                SQ(django_ct='.'.join((ct.app_label, ct.model)), django_id__in=pks)
+                for ct, pks in ct_to_pks.iteritems()
+            ))
+            return queryset.filter(query)
+        else:
+            return queryset.none()
 
 
     def get_context_data(self, *args, **kwargs):
