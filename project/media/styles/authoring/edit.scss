@@ -221,8 +221,17 @@
   padding: 0;
   color: #333;
   max-width: 25em;
-  &:hover {
-     background-color: #eee;
+  span {
+    display: inline-block;
+  }
+  span.outer {
+    padding-right: 15px;
+    background: url(../../images/authoring/asterisk.png) no-repeat 100% 0;
+  }
+  span.inner {
+    &:hover {
+       background-color: #eee;
+    }
   }
 }
 
@@ -230,7 +239,7 @@
   margin: 0 -3px;
   input {
     font-family: "Myriad Pro", Helvetica, sans-serif;
-    font-size: 1.875em;
+    font-size: 1em;
     margin: 0;
     padding: 0 1px;
     border: 1px solid #ccc;
