@@ -292,9 +292,8 @@ class DraftUserItem(CreatedUserItem):
             title.append(title_first)
         if self.item.material.workflow_state == PUBLISHED_STATE:
             title.append("Unpublished Changes")
-            self.relation_to_user = "Unpublished Changes"
+            self.relation_to_user = "Unpublished\nChanges"
             self.item_class = "unpublished-changes"
-
         else:
             title.append("Draft")
             self.relation_to_user = "Draft"
