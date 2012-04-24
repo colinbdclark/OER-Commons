@@ -21,6 +21,10 @@
   font-size: 14px;
 }
 
+.view-item .portlet {
+  margin-bottom: 20px;
+}
+
 .view-item #content h1 {
   margin-bottom: 15px;
   font-weight: bold;
@@ -45,7 +49,8 @@
   vertical-align: top;
 }
 
-.materials-index a, .view-item a {
+.materials-index a, 
+.view-item a {
   text-decoration: none;
 }
 
@@ -53,22 +58,26 @@
   color: #1F4D64;
 }
 
-.materials-index .details dl, .view-item .details dl {
+.materials-index .details dl, 
+.view-item .details dl {
   margin: 10px 0 0 0;
 }
 
-.materials-index .details dl a, .view-item .details dl a {
+.materials-index .details dl a, 
+.view-item .details dl a {
   font-weight: bold;
 }
 
-.materials-index .details dt, .view-item .details dt {
+.materials-index .details dt, 
+.view-item .details dt {
   float: left;
   margin-right: 4px;
   color: #616161;
   font-weight: bold;
 }
 
-.materials-index .details dd, .view-item .details dd {
+.materials-index .details dd, 
+.view-item .details dd {
   margin-bottom: 2px;
   margin-left: 0;
 }
@@ -82,11 +91,13 @@
   margin-left: 20px;
 }
 
-.materials-index .details dt.topics, .view-item .details dt.topics {
+.materials-index .details dt.topics, 
+.view-item .details dt.topics {
   line-height: 16px;
 }
 
-.materials-index .details dd.topics a, .view-item .details dd.topics a {
+.materials-index .details dd.topics a, 
+.view-item .details dd.topics a {
   display: inline-block;
   padding-left: 20px;
   line-height: 16px;
@@ -148,7 +159,8 @@
   display: none;
 }
 
-.materials-index .item .right, .view-item .right {
+.materials-index .item .right, 
+.view-item .right {
   float: right !important;
   margin-left: 10px;
 }
@@ -457,12 +469,8 @@ body.wide-right-column.view-item .column-main {
   padding: 0;
 }
 
-.portlet.save {
-  margin-bottom: 10px;
-}
-
 .portlet.save .myitems-save-button .button-main {
-  line-height: 35px;
+  line-height: 28px;
   font-size: 18px;
 }
 
@@ -478,7 +486,7 @@ body.wide-right-column.view-item .column-main {
   width: 40px;
 }
 .portlet.save .myitems-save-button .my-items-views {
-  top: 35px;
+  top: 28px;
   width: 248px;
 }
 .portlet.save .my-items-views .folder {
@@ -554,6 +562,14 @@ body.wide-right-column.view-item .column-main {
   margin: 7px 10px;
   list-style-type: none;
   font-size: 12px;
+}
+
+.magnifier-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url(../images/magnifier-icon-white.png) no-repeat 0 0;
+  vertical-align: middle;
 }
 
 .csv-icon {

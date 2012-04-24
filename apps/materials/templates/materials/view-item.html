@@ -88,7 +88,6 @@
     </ul>
     {% endspaceless %}
    </div>
-   </section>
 {% endif %}
 
 <article class="view-item item" data-content-type="{{ content_type.id }}" data-object-id="{{ item.id }}" id="{{ item.identifier }}">
@@ -117,14 +116,20 @@
 
     <div class="left">
       <div class="thumb">
-        {% thumbnail item.screenshot "300x250" crop="0px 0px" as im %}
-          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-        {% empty %}
-          <img class="thumb" src="{{ STATIC_URL }}images/myitems-dummy-thumb.png" width="185" height="125">
-        {% endthumbnail %}
+        {% if view_full_url %}
+          <a {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}>
+        {% endif %}
+            {% thumbnail item.screenshot "300x250" crop="0px 0px" as im %}
+              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            {% empty %}
+              <img class="thumb" src="{{ STATIC_URL }}images/dummy-thumb-big.png" width="303" height="253">
+            {% endthumbnail %}
+        {% if view_full_url %}
+          </a>
+        {% endif %}
         {% if view_full_url %}
            <a id="goto" {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}
-               class="button-blue-big rc5">View Resource</a>
+               class="button-blue-big gradient rc5"><i class="magnifier-icon"></i> View Resource</a>
         {% endif %}
       </div>
       {% if item.license %}
@@ -310,7 +315,7 @@
     {% stars item.identifier item.ratings.all %}
     {% if item.url and view_full_url %}
       <div>
-        <a href="{{ view_full_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
+        <a href="{{ view_full_url }}#evaluate" id="evaluate-btn" class="button-blue-big gradient rc5">Evaluate Resource</a>
         <a href="#evaluate-tooltip" rel="#evaluate-tooltip" class="tooltip"><small>What is this?</small></a>
         <div style="display: none" id="evaluate-tooltip">
             These seven rubrics will help users determine the degree of alignment of OER to
@@ -419,7 +424,6 @@
     </div>
 
   </section>
-
 {% endblock %}
 
 {% block extra-footer %}
