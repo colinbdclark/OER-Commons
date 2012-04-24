@@ -228,7 +228,7 @@ class MaterialTypesWidget(forms.SelectMultiple):
     def render(self, name, value, attrs=None, choices=()):
         select = forms.Select().render(name+"_select", None, choices=((u"", u"Select a Material Type"),) + tuple(self.choices))
         choices_dict = dict(self.choices)
-        value = value or []
+        value = map(int, value or [])
         existing = []
         for v in value:
             existing.append(mark_safe(u"""<li><span>%s</span> %s <a href="#" class="delete ui-icon ui-icon-close">Delete</a></li>""" % (
