@@ -361,14 +361,19 @@
   padding: 0;
   color: #333;
   max-width: 25em; }
-  #material-title:hover {
+  #material-title span {
+    display: inline-block; }
+  #material-title span.outer {
+    padding-right: 15px;
+    background: url(../../images/authoring/asterisk.png) no-repeat 100% 0; }
+  #material-title span.inner:hover {
     background-color: #eee; }
 
 .title-input {
   margin: 0 -3px; }
   .title-input input {
     font-family: "Myriad Pro", Helvetica, sans-serif;
-    font-size: 1.875em;
+    font-size: 1em;
     margin: 0;
     padding: 0 1px;
     border: 1px solid #ccc;

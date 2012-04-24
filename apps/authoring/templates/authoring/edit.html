@@ -34,7 +34,7 @@
         <a href="#step-submit" class="submit"></a>
       {% endif %}
     </div>
-    <h1 id="material-title">{% if form.title.value %}{{ form.title.value }}{% endif %}</h1>
+    <h1 id="material-title"><span class="outer"><span class="inner">{% if form.title.value %}{{ form.title.value }}{% endif %}</span></span></h1>
     {{ form.title }}
     <div class="actions">
       <a href="#save" class="save">Save</a>

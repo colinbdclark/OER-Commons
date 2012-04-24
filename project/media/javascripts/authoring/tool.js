@@ -159,7 +159,7 @@
       if (!this.hideSubmitStep) this.submitStep = new SubmitStep(this);
       this.title = $("#material-title");
       this.titleInput = $("#id_title");
-      this.title.editable(function(value) {
+      this.title.find("span.inner").editable(function(value) {
         _this.titleInput.val(value);
         return value;
       }, {
