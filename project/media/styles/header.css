@@ -67,7 +67,7 @@ body.authenticated header.global nav li.anon {
   height: 110px;
   position: absolute;
   top: 1em;
-  left: 3em;
+  left: 0;
   background: url(../images/logo.png) no-repeat; }
 
 .global-tabs {
@@ -86,6 +86,7 @@ body.authenticated header.global nav li.anon {
       display: block;
       padding: 0 1em;
       color: #616161;
+      height: 34px;
       line-height: 34px;
       text-decoration: none;
       font-size: 1.2em; }
@@ -93,15 +94,18 @@ body.authenticated header.global nav li.anon {
         background-color: rgba(255, 255, 255, 0.3); }
   .global-tabs .selected span {
     display: block;
-    background: url(../images/global-tabs-selected-bg.png) repeat-x; }
+    border-top: 2px solid #AED27D;
+    border-bottom: 2px solid #6B9335;
+    background-color: #8CC63F; }
   .global-tabs .selected a {
+    margin: -2px 0;
     color: #f5f5f5;
     text-shadow: 1px 1px 1px #666; }
 
 #global-search-box {
   position: absolute;
   bottom: 2.5em;
-  left: 248px; }
+  right: 0; }
   #global-search-box .text {
     vertical-align: middle;
     padding: 0 0.2em;
