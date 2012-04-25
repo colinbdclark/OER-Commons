@@ -139,7 +139,7 @@ class Tool
     @title = $("#material-title")
     @titleInput = $("#id_title")
 
-    @title.editable(
+    @title.find("span.inner").editable(
       (value)=>
         @titleInput.val(value)
         return value

@@ -11,6 +11,7 @@ from django.views.generic.base import View
 from django import forms
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin, ProcessFormView
+from pyquery import PyQuery as pq
 from sorl.thumbnail.shortcuts import get_thumbnail
 from utils.decorators import login_required
 import json
@@ -212,6 +213,12 @@ class LoadEmbed(View):
 
         if embed.type == "video":
             html = embed.html
+
+        document = pq("<div></div>").html(html)
+        for iframe in document.find("iframe[src^='http://www.youtube.com/embed']"):
+            iframe = pq(iframe)
+            iframe.attr("src", iframe.attr("src") + "&wmode=transparent")
+        html = document.html()
 
         return JsonResponse(dict(
             html=html,

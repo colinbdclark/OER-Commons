@@ -361,14 +361,19 @@
   padding: 0;
   color: #333;
   max-width: 25em; }
-  #material-title:hover {
+  #material-title span {
+    display: inline-block; }
+  #material-title span.outer {
+    padding-right: 15px;
+    background: url(../../images/authoring/asterisk.png) no-repeat 100% 0; }
+  #material-title span.inner:hover {
     background-color: #eee; }
 
 .title-input {
   margin: 0 -3px; }
   .title-input input {
     font-family: "Myriad Pro", Helvetica, sans-serif;
-    font-size: 1.875em;
+    font-size: 1em;
     margin: 0;
     padding: 0 1px;
     border: 1px solid #ccc;
@@ -636,7 +641,7 @@
     border: 1px solid #ccc;
     border-bottom: none;
     background: #fff;
-    width: 9em;
+    width: 10em;
     display: none; }
   #write-toolbar .text-style li {
     padding: 0;
@@ -852,6 +857,31 @@
     #editor-area table a.add-row {
       bottom: -8px;
       right: 7px; }
+  #editor-area .ui-wrap-image {
+    display: inline-block;
+    position: relative; }
+    #editor-area .ui-wrap-image .ui-delete, #editor-area .ui-wrap-image .ui-move {
+      display: block;
+      position: absolute;
+      left: 0;
+      width: 25px;
+      height: 25px;
+      background-color: #7bbdda;
+      background-repeat: no-repeat;
+      background-position: 50% 50%; }
+    #editor-area .ui-wrap-image .ui-move {
+      top: 0;
+      background-image: url(../../images/authoring/icon-move-image.png);
+      cursor: move; }
+    #editor-area .ui-wrap-image .ui-delete {
+      top: 25px;
+      border-top: 1px solid #fff;
+      -webkit-border-bottom-right-radius: 2px;
+      -moz-border-radius-bottomright: 2px;
+      border-bottom-right-radius: 2px;
+      background-image: url(../../images/authoring/icon-delete-image.png); }
+      #editor-area .ui-wrap-image .ui-delete:hover {
+        background-color: #069; }
 
 .popup-dialog {
   position: absolute;

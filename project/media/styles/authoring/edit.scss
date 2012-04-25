@@ -221,8 +221,17 @@
   padding: 0;
   color: #333;
   max-width: 25em;
-  &:hover {
-     background-color: #eee;
+  span {
+    display: inline-block;
+  }
+  span.outer {
+    padding-right: 15px;
+    background: url(../../images/authoring/asterisk.png) no-repeat 100% 0;
+  }
+  span.inner {
+    &:hover {
+       background-color: #eee;
+    }
   }
 }
 
@@ -230,7 +239,7 @@
   margin: 0 -3px;
   input {
     font-family: "Myriad Pro", Helvetica, sans-serif;
-    font-size: 1.875em;
+    font-size: 1em;
     margin: 0;
     padding: 0 1px;
     border: 1px solid #ccc;
@@ -647,7 +656,7 @@
       border: 1px solid #ccc;
       border-bottom: none;
       background: #fff;
-      width: 9em;
+      width: 10em;
       display: none;
     }
     li {
@@ -932,6 +941,36 @@
     a.add-row {
       bottom: -8px;
       right: 7px;
+    }
+  }
+  .ui-wrap-image {
+    display: inline-block;
+    position: relative;
+    .ui-delete, .ui-move {
+      display: block;
+      position: absolute;
+      left: 0;
+      width: 25px;
+      height: 25px;
+      background-color: #7bbdda;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+    }
+    .ui-move {
+      top: 0;
+      background-image: url(../../images/authoring/icon-move-image.png);
+      cursor: move;
+    }
+    .ui-delete {
+      top: 25px;
+      border-top: 1px solid #fff;
+      -webkit-border-bottom-right-radius: 2px;
+      -moz-border-radius-bottomright: 2px;
+      border-bottom-right-radius: 2px;
+      background-image: url(../../images/authoring/icon-delete-image.png);
+      &:hover {
+        background-color: #069;
+      }
     }
   }
 }
