@@ -1,29 +1,156 @@
 from annoying.decorators import ajax_request
 from django.contrib import messages
 from django.contrib.sites.models import Site
+from django.contrib.contenttypes.models import ContentType
 from django.core.mail.message import EmailMessage
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
 from django.shortcuts import redirect
+from django.db.models import Q
 from geo.models import CountryIPDiapason
 from sorl.thumbnail.shortcuts import delete
+from haystack.query import SearchQuerySet, SQ
 from users.models import Profile
 from users.views.forms import UserInfoForm, ChangePasswordForm, GeographyForm,\
     RolesForm, AboutMeForm, AvatarForm
 from utils.decorators import login_required
 from utils.shortcuts import ajax_form_success, ajax_form_error
+from authoring.models import AuthoredMaterial
+from materials.models.material import PUBLISHED_STATE
+from materials.models import CommunityItem, Course, Library
+from rubrics.models import Evaluation
+from saveditems.models import SavedItem
+from myitems.views import MaterialsIndex, django_ct_from_model
 import json
 import time
+from collections import defaultdict
+from operator import or_, attrgetter
+from itertools import chain
+import datetime
+
+
+SUBMITTED_MODELS = set([
+    CommunityItem,
+    Course,
+    Library,
+])
+
+CREATED_MODELS = set([
+    AuthoredMaterial,
+])
+
+ACTIVITY_ITEMS_COUNT = 6
+
+MINDATETIME = datetime.datetime(datetime.MINYEAR, 1, 1)
+
+
+def django_ct_from_id(id_):
+    ct = ContentType.objects.get_for_id(id_)
+    return '.'.join((ct.app_label, ct.model))
 
 
 @login_required
 def profile_view(request):
+    created_count = AuthoredMaterial.objects.filter(
+        author=request.user,
+        workflow_state=PUBLISHED_STATE,
+    ).count()
+
+    all_saved = defaultdict(list)
+    all_saved_queryset = SearchQuerySet().filter(saved_by=request.user.id).models(*SUBMITTED_MODELS)
+    for result in all_saved_queryset:
+        all_saved[(result.app_label, result.model_name)].append(result.pk)
+    all_saved_count = all_saved_queryset.count()
+    all_submitted_count = SearchQuerySet().filter(creator=request.user.id).models(*SUBMITTED_MODELS).count()
+
+    evaluated_queryset = Evaluation.objects.filter(user=request.user, confirmed=True)
+    queries = (
+        Q(
+            content_type=ContentType.objects.get_by_natural_key(*k).id,
+            object_id__in=ids
+        )
+        for k, ids in all_saved.iteritems()
+    )
+    query = reduce(or_, queries)
+    saved_evaluated_count = evaluated_queryset.filter(query).count()
+    evaluated_count = evaluated_queryset.count()
+
+    evaluations = Evaluation.objects.filter(
+        user=request.user,
+        confirmed=True
+    ).order_by("-timestamp").values_list('content_type', 'object_id', 'timestamp')[:ACTIVITY_ITEMS_COUNT]
+    saved_items = SavedItem.objects.filter(
+        user=request.user
+    ).order_by("-timestamp").values_list('content_type', 'object_id', 'timestamp')[:ACTIVITY_ITEMS_COUNT]
+
+    items_timestamp = defaultdict(dict)
+    for content_type, object_id, timestamp in chain(evaluations, saved_items):
+        ids = items_timestamp[content_type]
+        if object_id not in ids or ids[object_id] < timestamp:
+            ids[object_id] = timestamp
+
+    if items_timestamp:
+        items_timestamp = dict(
+            (django_ct_from_id(content_type), ids)
+            for content_type, ids in items_timestamp.iteritems()
+        )
+
+        query = reduce(or_,
+            (
+                SQ(
+                    django_ct=django_ct,
+                    django_id__in=list(ids)
+                )
+                for django_ct, ids in items_timestamp.iteritems()
+            )
+        )
+        results = list(SearchQuerySet().filter(query))
+        for result in results:
+            result.published_on = items_timestamp[result.content_type()][int(result.pk)]
+    else:
+        results = []
+
+    submitted_query = (
+        reduce(or_, (SQ(django_ct=django_ct_from_model(model)) for model in SUBMITTED_MODELS))
+        & SQ(creator=request.user.id)
+    )
+    created_query = (
+        reduce(or_, (SQ(django_ct=django_ct_from_model(model)) for model in CREATED_MODELS))
+        & SQ(creator=request.user.id, is_displayed=True)
+    )
+
+    results.extend(SearchQuerySet().filter(submitted_query | created_query).models(
+        *SUBMITTED_MODELS|CREATED_MODELS).order_by('-published_on')[:ACTIVITY_ITEMS_COUNT]
+    )
+
+    for result in results:
+        if not result.published_on:
+            result.published_on = MINDATETIME
+
+    results.sort(key=attrgetter('published_on'), reverse=True)
+    results = results[:ACTIVITY_ITEMS_COUNT]
+    model_to_pks = defaultdict(list)
+    for result in results:
+        model_to_pks[result.model].append(int(result.pk))
+
+
+    materials_index = MaterialsIndex(
+        results,
+        request.user,
+        model_to_pks,
+    )
+
     return direct_to_template(request, "users/profile.html", {
         'page_title': u"My Profile",
         'hide_global_notifications': True,
         'profile': Profile.objects.get_or_create(user=request.user)[0],
+        'created_count': created_count,
+        'evaluated_count': evaluated_count,
+        'saved_count': all_saved_count-saved_evaluated_count,
+        'submitted_count': all_submitted_count-(evaluated_count-saved_evaluated_count),
+        'items': materials_index.items,
+        'index_type': 'pics',
     })
 
 

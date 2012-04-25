@@ -20,7 +20,7 @@
             {% if item.rating != None %}
                 <li>{% stars item.identifier item.rating %}</li>
             {% endif %}
-            {% if show_item_folders %}
+            {% if item.folders != None %}
                 <li>
                     <ul class="folder-list">
                         {% for folder in item.folders %}
