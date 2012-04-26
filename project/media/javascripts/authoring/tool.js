@@ -159,6 +159,13 @@
       if (!this.hideSubmitStep) this.submitStep = new SubmitStep(this);
       this.title = $("#material-title");
       this.titleInput = $("#id_title");
+      this.offlineMessage = $("#offline-message");
+      this.checksum = this.form.find("input[name='checksum']");
+      this.checksumMessage = this.form.find("#checksum-message");
+      this.checksumMessage.find("a.force-save").click(function(e) {
+        e.preventDefault();
+        return _this.save(true);
+      });
       this.title.find("span.inner").editable(function(value) {
         _this.titleInput.val(value);
         return value;
@@ -198,18 +205,33 @@
         errorSlide = errors.first().closest("div.slide");
         this.slider.slideTo("#" + errorSlide.attr("id"), false);
       }
+      $(document).ajaxError(function(event, xhr, settings, error) {
+        if (!xhr.status) return _this.offlineMessage.removeClass("hide");
+      });
+      $(document).ajaxSuccess(function(event, xhr, settings, error) {
+        return _this.offlineMessage.addClass("hide");
+      });
       this.autosave();
     }
 
-    Tool.prototype.save = function() {
-      var _this = this;
+    Tool.prototype.save = function(force) {
+      var data,
+        _this = this;
+      if (force == null) force = false;
       this.writeStep.preSave();
       oer.status_message.clear();
-      $.post(this.form.attr("action"), this.form.serialize(), function(response) {
+      data = this.form.serialize();
+      if (force) data += "&force_save=yes";
+      $.post(this.form.attr("action"), data, function(response) {
         if (response.status === "success") {
-          return oer.status_message.success(response.message, true);
+          oer.status_message.success(response.message, true);
+          _this.checksum.val(response.checksum);
+          return _this.checksumMessage.addClass("hide");
         } else {
-          return oer.status_message.error(response.message, false);
+          oer.status_message.error(response.message, false);
+          if (response.reason === "checksum") {
+            return _this.checksumMessage.removeClass("hide");
+          }
         }
       });
     };

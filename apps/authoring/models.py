@@ -23,7 +23,8 @@ from saveditems.models import SavedItem
 from tags.models import Tag
 from utils.templatetags.utils import full_url
 from visitcounts.models import Visit
-
+import hashlib
+import json
 import gdata.youtube
 import gdata.youtube.service
 import datetime
@@ -69,6 +70,18 @@ class AuthoredMaterialDraft(AbstractAuthoredMaterial):
     material = models.OneToOneField("authoring.AuthoredMaterial", related_name="draft")
     created_timestamp = models.DateTimeField(auto_now_add=True)
     modified_timestamp = models.DateTimeField(auto_now=True)
+
+    @property
+    def checksum(self):
+        #noinspection PyUnresolvedReferences
+        data = [self.title, self.abstract, self.text, self.license.id]
+        for f in ("learning_goals", "keywords", "general_subjects",
+                  "grade_levels", "grade_sublevels", "grades", "languages",
+                  "material_types"):
+            data.append(getattr(self, f).values_list("id", flat=True))
+        m = hashlib.md5()
+        m.update(str(data))
+        return m.hexdigest()
 
     @models.permalink
     def get_absolute_url(self):
@@ -370,7 +383,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
         if not sublevels:
             return GradeSubLevel.objects.none()
         return GradeSubLevel.objects.filter(id__in=sublevels)
-    
+
     @property
     def all_grade_levels(self):
         levels = set(self.grade_levels.all().values_list("id", flat=True))
