@@ -30,13 +30,21 @@ class Edit(EditMaterialViewMixin, UpdateView):
         return data
 
     def form_valid(self, form):
+        force = self.request.POST.get("force_save")
+        if self.request.is_ajax() and not force and self.request.POST.get("checksum") != self.get_object().checksum:
+            return JsonResponse(dict(
+                status="error",
+                message=u"",
+                reason="checksum",
+            ))
         self.object = form.save()
         if "preview" in self.request.GET:
             return redirect(self.object.get_absolute_url())
         if self.request.is_ajax():
             return JsonResponse(dict(
                 status="success",
-                message=u"Saved."
+                message=u"Saved.",
+                checksum=self.object.checksum,
             ))
         material = AuthoredMaterial.publish_draft(self.object)
         return redirect(material.get_absolute_url())

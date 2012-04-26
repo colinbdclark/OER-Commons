@@ -140,6 +140,14 @@ class Tool
     @titleInput = $("#id_title")
     @offlineMessage = $("#offline-message")
 
+    @checksum = @form.find("input[name='checksum']")
+    @checksumMessage = @form.find("#checksum-message")
+    @checksumMessage.find("a.force-save").click((e)=>
+      e.preventDefault()
+      @save(true)
+    )
+
+
     @title.find("span.inner").editable(
       (value)=>
         @titleInput.val(value)
@@ -195,14 +203,21 @@ class Tool
 
     @autosave()
 
-  save:->
+  save: (force=false)->
     @writeStep.preSave()
     oer.status_message.clear()
-    $.post(@form.attr("action"), @form.serialize(), (response)=>
+    data = @form.serialize()
+    if force
+      data += "&force_save=yes"
+    $.post(@form.attr("action"), data, (response)=>
       if response.status == "success"
         oer.status_message.success(response.message, true)
+        @checksum.val(response.checksum)
+        @checksumMessage.addClass("hide")
       else
         oer.status_message.error(response.message, false)
+        if response.reason == "checksum"
+          @checksumMessage.removeClass("hide")
     )
     return
 

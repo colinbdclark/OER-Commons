@@ -17,6 +17,7 @@
 
 {% block layout %}
   <form action="{% url authoring:edit pk=object.material.pk %}" method="post" class="authoring-form">
+  <input type="hidden" name="checksum" value="{{ object.checksum }}">
   <div class="authoring-head fl-push">
     <a href="{% url frontpage %}" class="logo">OER Commons</a>
     <div id="user-menu">
@@ -44,6 +45,10 @@
     <div id="offline-message" class="global-warning hide"><div class="wrap">
       <p><strong>Connection with OER Common has been lost.</strong></p>
       <p>Please check your internet connection.</p>
+    </div></div>
+    <div id="checksum-message" class="global-warning hide"><div class="wrap">
+      <p><strong>It appears that this resource was changed by someone else.</strong></p>
+      <p>You can <a href="#" class="force-save">save your current version</a> (your changes will be saved) or <a href="{% url authoring:edit pk=object.material.pk %}">load the most recent version</a> (your changes will be lost).</p>
     </div></div>
     <div class="clear"></div>
   </div>
