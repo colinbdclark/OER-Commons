@@ -273,7 +273,8 @@ class SubmittedUserItem(UserItem):
 
 
 class CreatedUserItem(UserItem):
-    item_class = relation_to_user = 'created'
+    item_class = 'created'
+    relation_to_user = 'published'
 
     @property
     def date(self):
@@ -286,17 +287,11 @@ class DraftUserItem(CreatedUserItem):
 
     def __init__(self, item, user):
         super(CreatedUserItem, self).__init__(item, user)
-        title = []
-        title_first = self.item.title or self.item.material.title
-        if title_first:
-            title.append(title_first)
+        title = [self.item.title or self.item.material.title or "Untitled"]
         if self.item.material.workflow_state == PUBLISHED_STATE:
-            title.append("Unpublished Changes")
-            self.relation_to_user = "Unpublished Changes"
+            self.relation_to_user = "Unpublished\nChanges"
             self.item_class = "unpublished-changes"
-
         else:
-            title.append("Draft")
             self.relation_to_user = "Draft"
             self.item_class = "draft"
         title.append(localize(self.item.modified_timestamp or self.item.created_timestamp))

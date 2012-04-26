@@ -11,7 +11,7 @@
             {% endthumbnail %}
         </a>
     {% endif %}
-    <div class="right relation">{{ item.relation_to_user }}</div>
+    <div class="right relation">{{ item.relation_to_user|linebreaksbr }}</div>
     <div class="details">
         <h1>
             <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
