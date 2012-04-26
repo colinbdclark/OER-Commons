@@ -138,6 +138,7 @@ class Tool
 
     @title = $("#material-title")
     @titleInput = $("#id_title")
+    @offlineMessage = $("#offline-message")
 
     @title.find("span.inner").editable(
       (value)=>
@@ -182,6 +183,15 @@ class Tool
     if errors.length
       errorSlide = errors.first().closest("div.slide")
       @slider.slideTo("#" + errorSlide.attr("id"), false)
+
+    $(document).ajaxError((event, xhr, settings, error)=>
+      if not xhr.status
+        @offlineMessage.removeClass("hide")
+    )
+
+    $(document).ajaxSuccess((event, xhr, settings, error)=>
+      @offlineMessage.addClass("hide")
+    )
 
     @autosave()
 

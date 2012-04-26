@@ -79,6 +79,7 @@
 }
 
 .authoring-head {
+  position: relative;
   padding: 10px 30px;
   background-color: #fff;
   font-family: "Myriad Pro", Helvetica, sans-serif;
@@ -169,6 +170,30 @@
       }
     }
   }
+
+  .global-warning {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffcb51;
+    text-shadow: 1px 1px 1px #fff;
+    strong {
+      font-size: 1.5em;
+      font-weight: normal;
+    }
+    .wrap {
+      padding: 2em;
+      padding-left: 100px;
+    }
+  }
+
+  #offline-message {
+    background-image: url(../../images/authoring/icon-offline.png);
+    background-repeat: no-repeat;
+    background-position: 20px 17px;
+  }
+
 }
 
 .step-icons {

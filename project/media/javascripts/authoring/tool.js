@@ -159,6 +159,7 @@
       if (!this.hideSubmitStep) this.submitStep = new SubmitStep(this);
       this.title = $("#material-title");
       this.titleInput = $("#id_title");
+      this.offlineMessage = $("#offline-message");
       this.title.find("span.inner").editable(function(value) {
         _this.titleInput.val(value);
         return value;
@@ -198,6 +199,12 @@
         errorSlide = errors.first().closest("div.slide");
         this.slider.slideTo("#" + errorSlide.attr("id"), false);
       }
+      $(document).ajaxError(function(event, xhr, settings, error) {
+        if (!xhr.status) return _this.offlineMessage.removeClass("hide");
+      });
+      $(document).ajaxSuccess(function(event, xhr, settings, error) {
+        return _this.offlineMessage.addClass("hide");
+      });
       this.autosave();
     }
 
