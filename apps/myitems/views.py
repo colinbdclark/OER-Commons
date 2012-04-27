@@ -21,7 +21,6 @@ from materials.views.index import IndexParams, Pagination
 from materials.models import CommunityItem, Course, Library, PUBLISHED_STATE, Material
 from materials.views import filters
 from authoring.models import AuthoredMaterial, AuthoredMaterialDraft
-from savedsearches.models import SavedSearch
 from utils.decorators import login_required
 from annoying.decorators import ajax_request
 from core.search import reindex
@@ -51,22 +50,6 @@ class IndexParamsWithSaveDateSort(IndexParams):
         self.SORT_BY_OPTIONS = kwargs['SORT_BY_OPTIONS']
         del kwargs['SORT_BY_OPTIONS']
         IndexParams.__init__(self, *args, **kwargs)
-
-
-@login_required
-def searches(request):
-    items = list(SavedSearch.objects.filter(user=request.user))
-    for item in items:
-        item.unsave_item_url = reverse("savedsearches:unsave", kwargs=dict(id=item.id))
-
-
-    return direct_to_template(request, "myitems/searches.html",
-        {
-            'items': items,
-            'saved_search': True,
-            'hide_global_notifications': True,
-        }
-    )
 
 
 
