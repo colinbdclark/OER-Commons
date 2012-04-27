@@ -598,7 +598,7 @@ WriteStep.prototype.updateToolbarState = function () {
   var $focusNode = this.$focusNode;
   var $focusBlock = this.$focusBlock;
 
-  this.$toolbar.find(".active").removeClass("active");
+  this.$toolbar.find("a.active:not(.media)").removeClass("active");
   this.disableButton("indent");
   this.disableButton("outdent");
 
@@ -707,10 +707,17 @@ WriteStep.prototype.initTextStyleMenu = function () {
   $menu.find("a.select").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
-    $menu.toggleClass("active");
+    if ($menu.hasClass("active")) {
+      $menu.removeClass("active");
+      $menu.find("a[data-tooltip]").qtip("enable");
+    } else {
+      $menu.addClass("active");
+      $menu.find("a[data-tooltip]").qtip("hide").qtip("disable");
+    }
   });
   $(document).click(function () {
     $menu.removeClass("active");
+    $menu.find("a[data-tooltip]").qtip("enable");
   });
   $menu.delegate("ul a", "click", function (e) {
     e.preventDefault();
@@ -1049,6 +1056,7 @@ WriteStep.prototype.initColorButtons = function () {
     var $selector = $this.parent();
     if ($selector.hasClass("active")) {
       $selector.removeClass("active");
+      $selector.find("a[data-tooltip]").qtip("enable");
     } else {
       var $lis = $selector.find("li").removeClass("selected");
       if (editor.$focusNode) {
@@ -1064,6 +1072,7 @@ WriteStep.prototype.initColorButtons = function () {
         }
       }
       $selector.addClass("active");
+      $selector.find("a[data-tooltip]").qtip("hide").qtip("disable");
     }
   });
   $selectors.delegate("li", "mousedown", function (e) {
@@ -1110,6 +1119,7 @@ WriteStep.prototype.initColorButtons = function () {
 
   $(document).click(function () {
     $selectors.removeClass("active");
+    $selectors.find("a[data-tooltip]").qtip("enable");
   });
 };
 
@@ -1419,11 +1429,21 @@ WriteStep.prototype.enableRedo = function () {
 };
 
 WriteStep.prototype.disableButton = function (button) {
-  this.$toolbar.find("." + button).addClass("disabled");
+  button = this.$toolbar.find("." + button).addClass("disabled");
+  if (button.is("a[data-tooltip]")) {
+    button.qtip("disable");
+  } else {
+    button.find("a[data-tooltip]").qtip("hide").qtip("disable");
+  }
 };
 
 WriteStep.prototype.enableButton = function (button) {
-  this.$toolbar.find("." + button).removeClass("disabled");
+  button = this.$toolbar.find("." + button).removeClass("disabled");
+  if (button.is("a[data-tooltip]")) {
+    button.qtip("enable");
+  } else {
+    button.find("a[data-tooltip]").qtip("enable");
+  }
 };
 
 WriteStep.prototype.initTableButton = function() {
@@ -1440,11 +1460,13 @@ WriteStep.prototype.initTableButton = function() {
     e.preventDefault();
     if ($tableTool.hasClass("active")) {
       $tableTool.removeClass("active");
+      $tableTool.find("a[data-tooltip]").qtip("enable");
     } else {
       $cells.removeClass("active").removeClass("hover");
       $rowInput.val("");
       $colInput.val("");
       $tableTool.addClass("active");
+      $tableTool.find("a[data-tooltip]").qtip("hide").qtip("disable");
     }
   });
   function applyClassToCells(cls, row, col) {
@@ -1485,10 +1507,12 @@ WriteStep.prototype.initTableButton = function() {
   });
   $(document).click(function() {
     $tableTool.removeClass("active");
+    $tableTool.find("a[data-tooltip]").qtip("enable");
   });
   $tableTool.find("div.buttons a.cancel").click(function(e) {
     e.preventDefault();
     $tableTool.removeClass("active");
+    $tableTool.find("a[data-tooltip]").qtip("enable");
   });
   $tableTool.find("div.buttons a.add").click(function(e) {
     e.preventDefault();
@@ -1520,6 +1544,7 @@ WriteStep.prototype.initTableButton = function() {
     editor.updateDND();
     editor.focusOnNode($table.find("td").first());
     $tableTool.removeClass("active");
+    $tableTool.find("a[data-tooltip]").qtip("enable");
   });
 
   editor.$area.delegate("table a.remove", "click", function(e) {
@@ -1614,6 +1639,7 @@ function MediaDialog(editor) {
   this.displayed = false;
   this.$dialog = $("#media-dialog");
   this.$steps = this.$dialog.find("div.step");
+  this.$button = editor.$toolbar.find("a.media");
   var uploadProgress = new MediaDialog.UploadProgressStep(this);
   this.steps = {
     uploadProgress: uploadProgress,
@@ -1624,14 +1650,11 @@ function MediaDialog(editor) {
   };
 
   var dialog = this;
-  editor.$toolbar.find("a.media").click(function (e) {
-    var $button = $(e.target);
+  this.$button.click(function (e) {
     e.preventDefault();
     if (dialog.displayed) {
-      $button.removeClass("active");
       dialog.hide();
     } else {
-      $button.addClass("active");
       dialog.show();
     }
   });
@@ -1641,11 +1664,13 @@ MediaDialog.prototype.openStep = function (step, data) {
 };
 MediaDialog.prototype.show = function () {
   this.openStep("upload");
+  this.$button.addClass("active").qtip("hide").qtip("disable");
   this.$dialog.show();
   this.displayed = true;
   // TODO: insert placeholder here
 };
 MediaDialog.prototype.hide = function () {
+  this.$button.removeClass("active").qtip("enable");
   this.$dialog.hide();
   this.displayed = false;
   // TODO: remove placeholders here

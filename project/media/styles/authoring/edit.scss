@@ -1673,3 +1673,17 @@
     }
   }
 }
+
+.ui-tooltip-authoring {
+  .ui-tooltip-tip {
+    display: none;
+  }
+  .ui-tooltip-content {
+    padding: 0.3em;
+    border: none;
+    background-color: #ffcc33;
+    text-transform: lowercase;
+    text-align: center;
+    color: #333;
+  }
+}
