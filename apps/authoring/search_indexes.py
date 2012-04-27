@@ -10,6 +10,7 @@ class AuthoredMaterialSearchIndex(MaterialSearchIndex):
     creator = IntegerField(model_attr="author__id")
 
     abstract = CharField(model_attr="abstract", weight=2.0)
+    url = CharField(model_attr="url", stored=True, indexed=False)
 
     authors = AuthorsField(model_attr="authors", weight=1.0)
     keywords = MultiValueField(model_attr="keyword_slugs")
