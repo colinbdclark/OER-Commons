@@ -93,14 +93,6 @@
 
 <article class="view-item item" data-content-type="{{ content_type.id }}" data-object-id="{{ item.id }}" id="{{ item.identifier }}">
 
-  {% if not item.screenshot %}
-    <div class="right clear">
-      {% if item.license %}
-        {% cou_bucket item.license.bucket %}
-      {% endif %}
-  </div>
-  {% endif %}
-
   <div class="details">
     <h1 itemprop="name">
       {% if view_full_url %}
