@@ -551,6 +551,7 @@ class MyItemsView(TemplateView):
             'page_title': self.name,
             'search_url': self.get_search_url,
             'search_value': self.search_value,
+            'public': False,
         }
 
 

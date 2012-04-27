@@ -40,6 +40,18 @@ FACEBOOK_URL_RE = re.compile(r"^https?://(?:www.)?facebook.com/(?:profile\.php\?
 TWITTER_ID_RE = re.compile(r"^[a-zA-Z\d_]+$")
 TWITTER_URL_RE = re.compile(r"^https?://twitter.com/(#!/)?(?P<twitter_id>[a-zA-Z\d_]+)$")
 
+PRIVACY_CHOICES = (
+    (u"full", u"Allow other educators and OERCommons users to see what OER Items I have saved, rated, evaluated, or commented on, as well as my basic profile information."),
+    (u"basic", u"Allow other educators and OERCommons users to see just my profile information."),
+    (u"hide", u"Do not show any information to other users. \"Anonymous\" will be posted when I leave comments."),
+)
+
+
+# A list of all preferences: {field_name: (cookie_name, default_value), ...}
+# migrated from preferences app
+PREFERENCE_FIELDS = {
+    "show_toolbar": ("_pr_st", True),
+}
 
 class Role(models.Model):
 
@@ -67,6 +79,24 @@ class EducatorSubject(models.Model):
 class Profile(models.Model):
 
     user = models.OneToOneField(User)
+
+    @property
+    def name(self):
+        user = self.user
+        if user.first_name or user.last_name:
+            return (u"%s %s" % (user.first_name, user.last_name)).strip()
+        elif user.email:
+            return user.email
+        return user.username
+
+    @property
+    def public_name(self):
+        user = self.user
+        if not user.is_active:
+            return u"Account deleted"
+        if self.privacy in ("full", "basic"):
+            return self.name
+        return u"Anonymous"
 
     principal_id = models.CharField(max_length=20)
 
@@ -136,6 +166,10 @@ class Profile(models.Model):
 
     facebook_id = models.CharField(max_length=50, blank=True, null=True,
                                    validators=[validators.RegexValidator(FACEBOOK_ID_RE)])
+
+    privacy = models.CharField(max_length=10, default=u"full", choices=PRIVACY_CHOICES)
+
+    show_toolbar = models.BooleanField(blank=True, default=True)
 
     @property
     def facebook_url(self):

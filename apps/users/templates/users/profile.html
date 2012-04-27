@@ -13,10 +13,12 @@
   </script>
 {% endblock %}
 
-{% block bodyclass %}profile profile-view with-profile-tabs{% endblock %}
+{% block bodyclass %}profile profile-view{% if not public %} with-profile-tabs{% endif %}{% endblock %}
 
 {% block above-content %}
-    {% profile_tabs %}
+    {% if not public %}
+        {% profile_tabs %}
+    {% endif %}
 {% endblock %}
 
 {% block page-title %}{% endblock %}
@@ -25,14 +27,16 @@
   <section class="avatar">
     <div class="wrap">
       {{ profile.get_avatar_img }}
-      <span{% if profile.hide_avatar %} style="display: none;"{% endif %}><a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete</a></span>
     </div>
-    <a id="upload-avatar-btn" href="{% url users:profile_avatar_update %}" class="dashed">Change picture</a>
   </section>
   <section class="basic">
     <ul>
       <li class="name">
-        {{ request.user.first_name }} {{ request.user.last_name }}
+        {% if public %}
+            {{ profile.public_name }}
+        {% else %}
+            {{ profile.name }}
+        {% endif %}
       </li>
       {% if profile.country %}
         <li>
@@ -58,11 +62,13 @@
           {% endif %}
         </ul>
       {% else %}
-        <p><a href="{% url users:profile_about %}">Add a link to your website, Facebook, Twitter or Skype accounts</a></p>
+        {% if not public %}
+          <p><a href="{% url users:profile_about %}">Add a link to your website, Facebook, Twitter or Skype accounts</a></p>
+        {% endif %}
       {% endif %}
     </ul>
   </section>
-  
+
   <h1 class="expanded">About</h1>
 
   {% if profile.roles.exists %}
@@ -85,7 +91,7 @@
       </ul>
     </section>
   {% endif %}
-  
+
   {% if profile.educator_subjects.exists %}
     <section class="subjects">
       <h1>Subjects</h1>
@@ -103,10 +109,12 @@
       <p>{{ profile.about_me|linebreaksbr }}</p>
     </section>
   {% endif %}
-  
-  <div class="buttons">
-    <a href="{% url users:profile_edit %}" class="edit button-blue-big rc5">Edit Profile</a>
-  </div>
+
+  {% if not public %}
+    <div class="buttons">
+      <a href="{% url users:profile_edit %}" class="edit button-blue-big rc5">Edit Profile</a>
+    </div>
+  {% endif %}
 
 {% endblock %}
 

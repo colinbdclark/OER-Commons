@@ -432,3 +432,14 @@ oer.profile.init_about = function() {
     }
   });
 };
+
+
+oer.profile.init_privacy = function() {
+  $("a.delete").inlineConfirmation({
+    confirm: '<a href="#" class="dashed"><strong>Yes, delete</strong></a>',
+    cancel: '<a href="#" class="dashed">Cancel</a>',
+    confirmCallback: function ($button) {
+      $("form.delete-account").submit();
+    }
+  });
+};

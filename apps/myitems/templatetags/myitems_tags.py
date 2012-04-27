@@ -111,7 +111,7 @@ def myitems_save_button(context):
 PROFILE_TABS = [
     ("users", "profile", "Profile", None),
     ("myitems", "myitems", "My Items", None),
-    ("preferences", "preferences", "", "preferences"),
+    ("users", "profile_preferences", "", "preferences"),
 ]
 
 
@@ -120,11 +120,12 @@ def profile_tabs(context):
     request = context["request"]
     tabs = []
     match = resolve(request.path)
-    current_namespace = match.namespace
     for namespace, url_name, tab_name, tab_class in PROFILE_TABS:
         url = reverse("%s:%s" % (namespace, url_name))
         classes = []
-        if current_namespace == namespace:
+        if match.namespace == namespace and (namespace != "users" or
+            (match.url_name == url_name if url_name == "profile_preferences" else
+            match.url_name != "profile_preferences")):
             classes.append("selected")
         if tab_class:
             classes.append(tab_class)
