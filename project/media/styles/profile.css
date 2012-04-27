@@ -2,32 +2,38 @@
   background: none;
 }
 
-.profile-view .column-left,
+.profile-view .column-left {
+  width: 400px;
+}
 .profile-view .column-right {
-  width: 230px;
+  width: 0;
 }
 
 .profile-view .column-main {
-  width: 460px;
+  width: 540px;
+  padding-right: 0;
 }
 
-.profile-view #content ul {
-  margin: 0 0 1em;
+.profile-view .column-left ul {
+  margin: 0;
   padding: 0;
   list-style-type: none;
 }
 
-.profile-view #content ul li {
-  margin: 0 0 0.5em;
+.profile-view .column-left li {
+  margin: 0 0 0.25em;
   padding: 0;
+}
+
+.profile-view .column-left section {
+  margin-bottom: 1em;
 }
 
 .profile-view section.avatar,
 .profile-view section.basic,
-.profile-view section.roles,
-.profile-view section.levels {
+.profile-view section.levels,
+.profile-view section.subjects {
   display: inline-block;
-  margin-bottom: 2em;
   vertical-align: top;
 }
 
@@ -36,12 +42,15 @@
 }
 
 .profile-view section.basic {
-  width: 280px;
+  width: 230px;
 }
 
-.profile-view section.roles,
 .profile-view section.levels {
-  width: 220px;
+  width: 200px;
+}
+
+.profile-view section.roles ul li {
+  display: inline-block;
 }
 
 .profile-view section h1 {
@@ -93,16 +102,7 @@
   font-size: 2em;
 }
 
-.profile-view a.edit {
-  display: inline-block;
-  padding: 5px 0;
-  width: 160px;
-  background: #679801;
-  color: #fff;
-  text-align: center;
-  text-decoration: none;
-  font-size: 15px;
-}
+
 
 .profile-view .portlet.links {
   padding: 1em;
@@ -135,37 +135,81 @@
   text-decoration: underline;
 }
 
-.profile-view .portlet.links ul {
+.profile-view ul.social {
   margin: 1em 0 0;
   padding: 0;
   list-style-type: none;
 }
 
-.profile-view .portlet.links ul li {
-  margin: 0.5em 0;
+.profile-view ul.social li {
+  margin: 0.25em 0;
   padding: 0;
 }
 
-.profile-view .portlet.links ul li a {
+.profile-view ul.social li a {
   display: inline-block;
-  padding-left: 40px;
-  height: 32px;
+  padding-left: 28px;
+  height: 20px;
   background: no-repeat 0 50%;
   text-decoration: none;
-  line-height: 32px;
+  line-height: 20px;
 }
 
-.profile-view .portlet.links ul li a.facebook {
-  background-image: url(../images/icon-facebook.png);
+.profile-view .social a.facebook {
+  background-image: url(../images/icon-facebook-middle.png);
 }
 
-.profile-view .portlet.links ul li a.twitter {
-  background-image: url(../images/icon-twitter.png);
+.profile-view .social a.twitter {
+  background-image: url(../images/icon-twitter-middle.png);
 }
 
-.profile-view .portlet.links ul li a.skype {
-  background-image: url(../images/icon-skype.png);
+.profile-view .social a.skype {
+  background-image: url(../images/icon-skype-middle.png);
 }
+
+.profile-view .column-left .buttons {
+  text-align: right;
+}
+
+.profile-view .count-labels td {
+  text-align: center;
+}
+
+.profile-view .label-saved,
+.profile-view .label-submitted,
+.profile-view .label-evaluated,
+.profile-view .label-created {
+  display: inline-block;
+  padding: 2px 10px;
+  color: white;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: 3px;
+  margin: 4px;
+}
+
+.profile-view .label-submitted,
+.profile-view .label-created {
+  background-color: #50C5CC;
+  box-shadow:
+      0 0 0 2px white,
+      0 0 0 4px #50C5CC;
+}
+
+.profile-view .label-saved {
+  background-color: #FAAF3B;
+  box-shadow:
+      0 0 0 2px white,
+      0 0 0 4px #FAAF3B;
+}
+
+.profile-view .label-evaluated {
+  background-color: #93E42B;
+  box-shadow:
+      0 0 0 2px white,
+      0 0 0 4px #93E42B;
+}
+
 
 .profile-edit section {
   display: inline-block;

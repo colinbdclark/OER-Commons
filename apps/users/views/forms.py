@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from geo.models import Country, USState
 from users.backend import encrypt_password
 from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel, \
-    EducatorSubject, FACEBOOK_URL_RE, TWITTER_URL_RE
+    EducatorSubject, FACEBOOK_URL_RE, TWITTER_URL_RE, PRIVACY_CHOICES, PREFERENCE_FIELDS
 
 
 class UserInfoForm(forms.ModelForm):
@@ -204,3 +204,29 @@ class AboutMeForm(forms.ModelForm):
         model = Profile
         fields = ["about_me", "website_url", "facebook_id", "twitter_id",
                   "skype_id"]
+
+
+class PreferencesForm(forms.models.ModelForm):
+
+    success_message = u"You preferences were saved."
+    error_message = u"Please correct the indicated errors."
+
+    show_toolbar = forms.BooleanField(label=u"Show OER Commons toolbar when viewing resources.",
+                                      widget=forms.CheckboxInput(),
+                                      required=False)
+
+    class Meta:
+        model = Profile
+        fields = PREFERENCE_FIELDS.keys()
+
+
+class PrivacyForm(PreferencesForm):
+    privacy = forms.CharField(
+        widget=forms.RadioSelect(
+            choices=PRIVACY_CHOICES
+        ),
+        label=u"Privacy Settings",
+    )
+
+    class Meta(PreferencesForm.Meta):
+        fields = ["privacy"]+PreferencesForm.Meta.fields

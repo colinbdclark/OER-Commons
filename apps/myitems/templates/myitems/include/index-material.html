@@ -20,21 +20,23 @@
             {% if item.rating != None %}
                 <li>{% stars item.identifier item.rating %}</li>
             {% endif %}
-            {% if show_item_folders %}
+            {% if item.folders != None %}
                 <li>
                     <ul class="folder-list">
                         {% for folder in item.folders %}
                             <li class="rc2" data-folder-id="{{ folder.id }}">
                                 <div class="folder-deco"></div>
-                                {{ folder.name }} <a href="#" class="delete">×</a>
+                                    {{ folder.name }}{% if not public %} <a href="#" class="delete">×</a>{% endif %}
                             </li>
                         {% endfor %}
-                        <li class="rc2 last">
-                            <div class="folder-deco"></div><a class="add" href="#">+</a>
-                        </li>
+                        {% if not public %}
+                            <li class="rc2 last">
+                                <div class="folder-deco"></div><a class="add" href="#">+</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </li>
             {% endif %}
     </div>
-    <div class="delete"><a href="#" class="delete">×</a></div>
+    {% if not public %}<div class="delete"><a href="#" class="delete">×</a></div>{% endif %}
 </article>

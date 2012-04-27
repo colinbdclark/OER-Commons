@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load myitems_tags %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.profile.init_privacy();
+    });
+  </script>
+{% endblock %}
+
+{% block bodyclass %}preferences with-profile-tabs{% endblock %}
+
+{% block above-content %}
+    {% if request.user.is_authenticated %}{% profile_tabs %}{% endif %}
+{% endblock %}
+
+{% block page-title %}{% endblock %}
+
+{% block content %}
+    <form method="post" class="formatted preferences" name="preferences" action="{% url users:profile_preferences %}">
+
+      {% with form.privacy as field %}
+        {% include "include/form-field.html" %}
+      {% endwith %}
+
+      {% with form.show_toolbar as field %}
+        {% include "include/form-field-checkbox.html" %}
+      {% endwith %}
+      <div class="buttons">
+        <input type="submit" value="Save" />
+      </div>
+    </form>
+
+    {% if request.user.is_authenticated %}
+        <p><a href="#" class="delete">Please delete my account</a></p>
+        <form class="delete-account" method="post" action="{% url users:profile_delete %}">
+          {% csrf_token %}
+        </form>
+    {% endif %}
+
+{% endblock %}

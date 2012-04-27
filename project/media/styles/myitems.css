@@ -13,7 +13,9 @@ dl.user-info dt {
 }
 
 .myitems a.add,
-.myitems a.delete {
+.myitems a.delete,
+.myitems-materials-index a.add,
+.myitems-materials-index a.delete {
   display: inline-block;
   color: #707070;
   font-weight: bolder;
@@ -107,7 +109,7 @@ dl.user-info dt {
   display: inline-block;
   list-style-type: none;
   margin-left: 5px;
-  padding: 0px 4px;
+  padding: 0 6px 0 4px;
   margin-top: 6px;
   border-top-right-radius: 2px;
   border-bottom-left-radius: 2px;
@@ -298,29 +300,29 @@ dl.user-info dt {
   text-decoration: underline;
 }
 
-.myitems article .inline-confirmation-block {
+.myitems-materials-index article .inline-confirmation-block {
   background-color: white;
   border-radius: 3px;
   box-shadow: 1px 1px 3px 1px #616161;
   padding: 10px 10px 11px 10px;
 }
 
-.myitems article .confirm {
+.myitems-materials-index article .confirm {
   color: white;
   padding: 1px 3px;
   background-color: #0B7BA9;
 }
 
-.myitems article .confirm:hover {
+.myitems-materials-index article .confirm:hover {
   border-color: #FAAF3B;
   background-color: #FFCC66;
 }
 
-.myitems article .cancel {
+.myitems-materials-index .cancel {
   margin-left: 10px;
   font-size: 11px;
 }
-.myitems article .cancel:hover {
+.myitems-materials-index article .cancel:hover {
   text-decoration: underline;
 }
 
@@ -483,7 +485,7 @@ dl.user-info dt {
   border-left: none;
   border-width: 2px;
   border-color: #cccccc;
-  padding: 10px;
+  padding: 40px 30px 20px 30px;
   margin-top: -2px;
   margin-bottom: -2px;
   background: none;
@@ -517,8 +519,4 @@ dl.user-info dt {
 
 .myitems-search .search-results a.delete {
   float: right;
-}
-
-.myitems.with-profile-tabs .layout-columns {
-  padding: 60px 30px 20px 30px;
 }

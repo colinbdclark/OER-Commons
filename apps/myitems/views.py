@@ -34,6 +34,18 @@ from myitems.models import Folder, FolderItem
 MINDATETIME = datetime.datetime(datetime.MINYEAR, 1, 1)
 
 
+SUBMITTED_MODELS = set([
+    CommunityItem,
+    Course,
+    Library,
+])
+
+CREATED_MODELS = set([
+    AuthoredMaterial,
+])
+
+
+
 class IndexParamsWithSaveDateSort(IndexParams):
     def __init__(self, *args, **kwargs):
         self.SORT_BY_OPTIONS = kwargs['SORT_BY_OPTIONS']
@@ -63,13 +75,6 @@ class FolderForm(forms.ModelForm):
         model = Folder
         fields = ("name", )
         widgets = { "name": forms.TextInput(), }
-
-
-class FolderItemForm(forms.ModelForm):
-    class Meta:
-        model = FolderItem
-        fields = ("folder", )
-        widgets = { "folder": forms.TextInput(), }
 
 
 
@@ -244,10 +249,7 @@ class UserItem(object):
     def __init__(self, result, view):
         self.item = result.object
         self.content_type = ContentType.objects.get_for_model(result.model)
-        self.user = view.user
-        self.rating = result.rating
         self.identifier = '%s.%s' % (self.content_type.id, self.item.id)
-        self.folders = view.folders[self.content_type][self.item.id]
 
 
     def __getattr__(self, name):
@@ -255,51 +257,112 @@ class UserItem(object):
 
 
 
-class SubmittedUserItem(UserItem):
+class DisplayedItem(UserItem):
+    def __init__(self, result, view):
+        super(DisplayedItem, self).__init__(result, view)
+        self.rating = result.rating
+        self.folders = view.folders[self.content_type][self.item.id]
+
+
+
+class SubmittedUserItem(DisplayedItem):
     def __init__(self, result, view):
         super(SubmittedUserItem, self).__init__(result, view)
-        self.item_class = "submitted" if result.creator == self.user.id else "saved"
+        self.item_class = "submitted" if result.creator == view.user.id else "saved"
         self.relation_to_user = (
             "evaluated"
-            if result.pk in view.evaluated_items[self.content_type.id]
+            if int(result.pk) in view.evaluated_items[self.content_type.id]
             else self.item_class
         )
 
 
-    @property
-    def date(self):
-        return self.published_on or datetime.datetime(datetime.MINYEAR, 1, 1)
 
-
-
-class CreatedUserItem(UserItem):
+class CreatedUserItem(DisplayedItem):
     item_class = 'created'
     relation_to_user = 'published'
 
-    @property
-    def date(self):
-        return self.created_timestamp
 
 
-
-class DraftUserItem(CreatedUserItem):
+class DraftUserItem(UserItem):
     dummy_thumb = 'myitems-dummy-thumb-draft.png'
 
-    def __init__(self, item, user):
-        super(CreatedUserItem, self).__init__(item, user)
-        title = [self.item.title or self.item.material.title or "Untitled"]
+    rating = None
+    folders = None
+
+    def __init__(self, item, view):
+        super(DraftUserItem, self).__init__(item, view)
         if self.item.material.workflow_state == PUBLISHED_STATE:
             self.relation_to_user = "Unpublished\nChanges"
             self.item_class = "unpublished-changes"
         else:
             self.relation_to_user = "Draft"
             self.item_class = "draft"
-        title.append(localize(self.item.modified_timestamp or self.item.created_timestamp))
-        self.title = " - ".join(title)
+        self.title = " - ".join((
+            self.item.title or self.item.material.title or "Untitled",
+            localize(self.item.modified_timestamp or self.item.created_timestamp)
+        ))
 
 
     def get_absolute_url(self):
         return reverse("authoring:edit", kwargs=dict(pk=self.material.pk))
+
+
+
+class MaterialsIndex(object):
+    MODEL_TO_WRAPPER = {
+        CommunityItem: SubmittedUserItem,
+        Course: SubmittedUserItem,
+        Library: SubmittedUserItem,
+        AuthoredMaterial: CreatedUserItem,
+        AuthoredMaterialDraft: DraftUserItem,
+    }
+
+
+    def __init__(self, results, user, model_to_pks,
+                    get_folders=True, get_evaluations=True):
+        self.results = results
+        self.user = user
+        self.model_to_pks = model_to_pks
+
+        if get_folders:
+            self.get_folders()
+
+        if get_evaluations:
+            self.get_evaluations()
+
+        self.items = [
+            self.MODEL_TO_WRAPPER[result.model](result, self)
+            for result in self.results
+        ]
+
+
+    def get_evaluations(self):
+        self.evaluated_items = defaultdict(set)
+        query = reduce(or_, (
+            Q(
+                content_type=ContentType.objects.get_for_model(model),
+                object_id__in=self.model_to_pks[model]
+            )
+            for model in SUBMITTED_MODELS
+        ))
+        queryset_eval = Evaluation.objects.filter(user=self.user, confirmed=True).filter(query)
+        for content_type, object_id in queryset_eval.values_list('content_type', 'object_id'):
+            self.evaluated_items[content_type].add(object_id)
+
+
+    def get_folders(self):
+        self.folders = defaultdict(lambda: defaultdict(list))
+        query = reduce(or_, (
+            Q(
+                content_type=ContentType.objects.get_for_model(model),
+                object_id__in=self.model_to_pks[model]
+            )
+            for model in SUBMITTED_MODELS | CREATED_MODELS
+        ))
+        folder_items = FolderItem.objects.filter(folder__user=self.user
+            ).filter(query).select_related("folder", "content_type")
+        for fi in folder_items:
+            self.folders[fi.content_type][fi.object_id].append(fi.folder)
 
 
 
@@ -310,8 +373,6 @@ class MyItemsView(TemplateView):
     name = "All"
     no_items_message = "You have not any item yet."
 
-    show_item_folders = True
-
     SORT_BY_OPTIONS = (
         {"value": u"title", "title": u"Title"},
         {"value": u"rating", "title": u"Rating"},
@@ -320,25 +381,10 @@ class MyItemsView(TemplateView):
         {"value": u"save_date", "title": u"Save Date"},
     )
 
-    SUBMITTED_MODELS = set([
-        CommunityItem,
-        Course,
-        Library,
-    ])
-
-    CREATED_MODELS = set([
-        AuthoredMaterial,
-    ])
-
-    APP_LABEL_TO_WRAPPER = {
-        CommunityItem: SubmittedUserItem,
-        Course: SubmittedUserItem,
-        Library: SubmittedUserItem,
-        AuthoredMaterial: CreatedUserItem,
-        AuthoredMaterialDraft: DraftUserItem,
-    }
-
     search_filter = filters.FILTERS["search"]
+
+    get_folders = True
+    get_evaluations = True
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -366,7 +412,7 @@ class MyItemsView(TemplateView):
             to_not_sort = []
             queryset = queryset.order_by("django_ct")
             for model, g in groupby(queryset, attrgetter("model")):
-                if model in self.SUBMITTED_MODELS:
+                if model in SUBMITTED_MODELS:
                     ct = ContentType.objects.get_for_model(model).id
                     for result in g:
                         if result.creator == self.user:
@@ -425,35 +471,6 @@ class MyItemsView(TemplateView):
         self.model_to_pks = model_to_pks
 
 
-    def get_evaluations(self):
-        self.evaluated_items = defaultdict(set)
-        query = reduce(or_, (
-            Q(
-                content_type=ContentType.objects.get_for_model(model),
-                object_id__in=self.model_to_pks[model]
-            )
-            for model in self.SUBMITTED_MODELS
-        ))
-        queryset_eval = Evaluation.objects.filter(user=self.user, confirmed=True).filter(query)
-        for content_type, object_id in queryset_eval.values_list('content_type', 'object_id'):
-            self.evaluated_items[content_type].add(object_id)
-
-
-    def get_folders(self):
-        self.folders = defaultdict(lambda: defaultdict(list))
-        query = reduce(or_, (
-            Q(
-                content_type=ContentType.objects.get_for_model(model),
-                object_id__in=self.model_to_pks[model]
-            )
-            for model in self.SUBMITTED_MODELS | self.CREATED_MODELS
-        ))
-        folder_items = FolderItem.objects.filter(folder__user=self.user
-            ).filter(query).select_related("folder", "content_type")
-        for fi in folder_items:
-            self.folders[fi.content_type][fi.object_id].append(fi.folder)
-
-
     def narrow_by_search(self):
         if self.search_value:
             self.query_string_params = self.search_filter.update_query_string_params(self.query_string_params, self.search_value)
@@ -509,15 +526,13 @@ class MyItemsView(TemplateView):
         self.index_type = index_type
 
         self.get_results()
-        self.get_evaluations()
-        self.get_folders()
-
-
-        items = [
-            self.APP_LABEL_TO_WRAPPER[result.model](result, self)
-            for result in self.results
-        ]
-
+        materials_index = MaterialsIndex(
+            self.results,
+            user,
+            self.model_to_pks,
+            self.get_folders,
+            self.get_evaluations,
+        )
 
         total_items = self.queryset.count()
         pagination = Pagination(self.request.path, self.query_string_params,
@@ -527,20 +542,20 @@ class MyItemsView(TemplateView):
 
         return {
             'pagination': pagination,
-            'items': items,
+            'items': materials_index.items,
             'index_params': self.index_params,
             'hide_global_notifications': True,
             'index_types': index_types.values(),
             'index_type': index_type,
             'no_items_message': self.no_items_message,
             'page_title': self.name,
-            'show_item_folders': self.show_item_folders,
-            'search_url': self.get_search_url(),
+            'search_url': self.get_search_url,
             'search_value': self.search_value,
+            'public': False,
         }
 
 
-def _str_ct_from_model(model):
+def django_ct_from_model(model):
     ct = ContentType.objects.get_for_model(model)
     return '.'.join((ct.app_label, ct.model))
 
@@ -550,14 +565,14 @@ class AllItems(MyItemsView):
     @classmethod
     def get_queryset(cls, user):
         queryset = SearchQuerySet()
-        queryset = queryset.models(*cls.SUBMITTED_MODELS | cls.CREATED_MODELS)
+        queryset = queryset.models(*SUBMITTED_MODELS | CREATED_MODELS)
 
         submitted_query = (
-            reduce(or_, (SQ(django_ct=_str_ct_from_model(model)) for model in cls.SUBMITTED_MODELS))
+            reduce(or_, (SQ(django_ct=django_ct_from_model(model)) for model in SUBMITTED_MODELS))
             & (SQ(creator=user.id) | SQ(saved_by=user.id))
         )
         created_query = (
-            reduce(or_, (SQ(django_ct=_str_ct_from_model(model)) for model in cls.CREATED_MODELS))
+            reduce(or_, (SQ(django_ct=django_ct_from_model(model)) for model in CREATED_MODELS))
             & SQ(creator=user.id, is_displayed=True)
         )
         queryset = queryset.filter(submitted_query | created_query)
@@ -574,10 +589,10 @@ class SubmittedItems(MyItemsView):
     @classmethod
     def get_queryset(cls, user):
         queryset = SearchQuerySet()
-        queryset = queryset.models(*cls.SUBMITTED_MODELS)
+        queryset = queryset.models(*SUBMITTED_MODELS)
 
         submitted_query = (
-            reduce(or_, (SQ(django_ct=_str_ct_from_model(model)) for model in cls.SUBMITTED_MODELS))
+            reduce(or_, (SQ(django_ct=django_ct_from_model(model)) for model in SUBMITTED_MODELS))
             & SQ(creator=user.id)
         )
         queryset = queryset.filter(submitted_query)
@@ -594,7 +609,7 @@ class PublishedItems(MyItemsView):
     @classmethod
     def get_queryset(cls, user):
         queryset = SearchQuerySet()
-        queryset = queryset.models(*cls.CREATED_MODELS)
+        queryset = queryset.models(*CREATED_MODELS)
         queryset = queryset.narrow("is_displayed:true")
         queryset = queryset.filter(SQ(creator=user.id))
 
@@ -624,6 +639,11 @@ class DraftItems(MyItemsView):
 
     DRAFT_MODEL = AuthoredMaterialDraft
 
+    model_to_pks = None
+    get_folders = False
+    get_evaluations = False
+    get_search_url = None
+
     @classmethod
     def get_queryset(cls, user):
         return cls.DRAFT_MODEL.objects.filter(material__author=user
@@ -651,18 +671,6 @@ class DraftItems(MyItemsView):
             ResultLike(item, self.DRAFT_MODEL)
             for item in queryset[self.index_params.batch_start:batch_end]
         ]
-
-
-    def get_evaluations(self):
-        pass
-
-
-    def get_search_url(self):
-        return None
-
-
-    def get_folders(self):
-        self.folders = defaultdict(lambda: defaultdict(list))
 
 
 

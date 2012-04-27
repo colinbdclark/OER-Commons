@@ -9,7 +9,6 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from reviews.models import Review
 from utils.decorators import login_required
-from utils.templatetags.utils import username
 
 
 class ReviewForm(forms.ModelForm):
@@ -62,7 +61,7 @@ class ReviewView(View):
                 status="success",
                 message=u"Your comment was saved.",
                 text=linebreaksbr(review.text),
-                author=username(review.user),
+                author=review.user.get_profile().name,
             ))
 
         errors = {}
