@@ -211,6 +211,23 @@
       $(document).ajaxSuccess(function(event, xhr, settings, error) {
         return _this.offlineMessage.addClass("hide");
       });
+      $("a[data-tooltip]").qtip({
+        content: {
+          attr: "data-tooltip"
+        },
+        style: {
+          classes: "ui-tooltip-authoring",
+          tip: false
+        },
+        position: {
+          my: "top center",
+          at: "bottom center",
+          adjust: {
+            y: 5
+          }
+        }
+      });
+      $("a[data-tooltip]").filter(".disabled").qtip("disable");
       this.autosave();
     }
 

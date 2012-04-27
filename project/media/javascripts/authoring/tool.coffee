@@ -147,7 +147,6 @@ class Tool
       @save(true)
     )
 
-
     @title.find("span.inner").editable(
       (value)=>
         @titleInput.val(value)
@@ -200,6 +199,20 @@ class Tool
     $(document).ajaxSuccess((event, xhr, settings, error)=>
       @offlineMessage.addClass("hide")
     )
+
+    $("a[data-tooltip]").qtip(
+      content:
+        attr: "data-tooltip"
+      style:
+        classes: "ui-tooltip-authoring"
+        tip: false
+      position:
+        my: "top center"
+        at: "bottom center"
+        adjust:
+          y: 5
+    )
+    $("a[data-tooltip]").filter(".disabled").qtip("disable")
 
     @autosave()
 
