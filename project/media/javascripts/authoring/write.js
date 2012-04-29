@@ -1640,6 +1640,7 @@ function MediaDialog(editor) {
   this.$dialog = $("#media-dialog");
   this.$steps = this.$dialog.find("div.step");
   this.$button = editor.$toolbar.find("a.media");
+  this.$placeholder = $('<div class="ui-media-placeholder" contenteditable="false">Media will be placed here</div>');
   var uploadProgress = new MediaDialog.UploadProgressStep(this);
   this.steps = {
     uploadProgress: uploadProgress,
@@ -1667,13 +1668,18 @@ MediaDialog.prototype.show = function () {
   this.$button.addClass("active").qtip("hide").qtip("disable");
   this.$dialog.show();
   this.displayed = true;
-  // TODO: insert placeholder here
+  var $placeholder = this.$placeholder.detach();
+  if (this.editor.$focusBlock) {
+    $placeholder.insertAfter(this.editor.$focusBlock);
+  } else {
+    this.editor.$area.append($placeholder);
+  }
 };
 MediaDialog.prototype.hide = function () {
   this.$button.removeClass("active").qtip("enable");
   this.$dialog.hide();
   this.displayed = false;
-  // TODO: remove placeholders here
+  this.$placeholder.detach();
 };
 MediaDialog.prototype.handleUploadResponse = function (response) {
   var result = $.parseJSON(response);
@@ -1861,11 +1867,7 @@ MediaDialog.ImageStep = function (dialog) {
     }
 
     editor.saveState();
-    if (editor.$focusBlock) {
-      $figure.insertAfter(editor.$focusBlock);
-    } else {
-      editor.$area.append($figure);
-    }
+    $figure.insertAfter(dialog.$placeholder);
     editor.initFigure($figure);
     editor.initImage($figure);
     editor.ensureTextInput();
@@ -1927,11 +1929,7 @@ MediaDialog.VideoStep = function (dialog) {
       $figure.attr("data-uploaded-video-id", $step.data("uploaded-video-id"));
     }
 
-    if (editor.$focusBlock) {
-      $figure.insertAfter(editor.$focusBlock);
-    } else {
-      editor.$area.append($figure);
-    }
+    $figure.insertAfter(dialog.$placeholder);
     editor.loadEmbed($figure);
     editor.initFigure($figure);
     editor.ensureTextInput();
@@ -1969,7 +1967,6 @@ MediaDialog.DocumentStep = function (dialog) {
 
   var $step = this.$step = dialog.$steps.filter(".document");
   var $input = this.$input = $step.find("input:text");
-  var $selector = this.$selector = $step.find("input:radio");
 
   var editor = dialog.editor;
 
@@ -1977,7 +1974,6 @@ MediaDialog.DocumentStep = function (dialog) {
     e.preventDefault();
     oer.status_message.clear();
 
-    var type = $selector.val();
     var caption = $.trim($input.val());
     if (caption === "") {
       oer.status_message.error("Please enter the title of this document.");
@@ -1986,25 +1982,7 @@ MediaDialog.DocumentStep = function (dialog) {
     editor.saveState();
     var $figure = $("<figure></figure>").addClass("download").text("Download: ");
     $figure.append($('<a target="_blank"></a>').attr("href", $step.data("url")).append("<strong></strong>").text(caption));
-    if (type === "link") {
-      if (editor.$focusBlock && editor.range) {
-        if (this.$focusBlock.is("p")) {
-          editor.range.collapse(false);
-          editor.range.insertNode($figure.get(0));
-          editor.trackSelection();
-        } else {
-          $("<p></p>").append($figure).insertAfter(this.$focusBlock);
-        }
-      } else {
-        $("<p></p>").append($figure).appendTo(editor.$area);
-      }
-    } else {
-      if (editor.$focusBlock) {
-        $figure.insertAfter(editor.$focusBlock);
-      } else {
-        editor.$area.append($figure);
-      }
-    }
+    $figure.insertAfter(dialog.$placeholder);
     editor.initFigure($figure);
     editor.ensureTextInput();
     editor.updateDND();
@@ -2022,7 +2000,6 @@ MediaDialog.DocumentStep = function (dialog) {
 MediaDialog.DocumentStep.prototype = new MediaDialog.Step();
 MediaDialog.DocumentStep.prototype.constructor = MediaDialog.DocumentStep;
 MediaDialog.DocumentStep.prototype.prepare = function (data) {
-  this.$selector.val("button");
   this.$input.val(data.name);
   this.$step.data("url", data.url);
 };

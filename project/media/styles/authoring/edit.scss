@@ -1078,6 +1078,17 @@
   }
 }
 
+.ui-media-placeholder {
+  border: 2px dotted #ffcc33;
+  padding: 71px 15px 15px 15px;
+  background: url(../../images/authoring/media-placeholder-bg.png) 50% 20px no-repeat;
+  color: #ffcc33;
+  text-align: center;
+  font-family: "Myriad Pro", Helvetica, sans-serif;
+  text-transform: lowercase;
+  font-size: 1.5em;
+}
+
 #media-dialog {
   display: none;
   font-size: 1.0625em;
