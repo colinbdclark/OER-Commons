@@ -10,13 +10,19 @@
 
   {% include "include/header.html" %}
 
-  {% if request.user.is_staff or request.user == material.author %}
+  {% if request.user.is_staff or request.user.is_superuser or request.user == material.author %}
     {% spaceless %}
       <div id="toolbar">
         <div class="wrap">
           <a href="{% url authoring:edit pk=material.pk %}">Edit</a>
+          <a href="#" class="delete">Delete</a>
+          <div class="delete-confirmation hide">
+            <a href="#" class="confirm rc5">Delete Resource</a>
+            <a href="#" class="cancel">cancel</a>
+          </div>
         </div>
       </div>
+      <form method="post" id="delete-form" action="{% url authoring:delete pk=material.pk %}"></form>
     {% endspaceless %}
   {% endif %}
 
@@ -73,3 +79,31 @@
 {% endblock %}
 
 {% block footer %}{% endblock %}
+
+{% block extra-js %}
+  {% if request.user.is_staff or request.user.is_superuser or request.user == material.author %}
+    <script>
+      $(function() {
+        var $toolbar = $("#toolbar");
+        var $delete = $toolbar.find("a.delete");
+        var $confirmation = $toolbar.find("div.delete-confirmation");
+        var $confirm = $confirmation.find("a.confirm");
+        var $cancel = $confirmation.find("a.cancel");
+        $delete.click(function(e) {
+          e.preventDefault();
+          $(e.target).addClass("hide");
+          $confirmation.removeClass("hide");
+        });
+        $confirm.click(function(e) {
+          e.preventDefault();
+          $("#delete-form").submit();
+        });
+        $cancel.click(function(e) {
+          e.preventDefault();
+          $confirmation.addClass("hide");
+          $delete.removeClass("hide");
+        });
+      });
+    </script>
+  {% endif %}
+{% endblock %}

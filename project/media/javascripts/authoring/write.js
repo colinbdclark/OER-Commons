@@ -1750,7 +1750,7 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
   var $input = this.$input = $step.find("input:text");
   this.uploadProgress = uploadProgress;
 
-  $step.find("a.hide").click(function (e) {
+  $step.find("a.hide-dialog").click(function (e) {
     e.preventDefault();
     dialog.hide();
   });

@@ -52,7 +52,7 @@ hr.tall {
   clear: both;
 }
 
-.hidden {
+.hide, .hidden {
   display: none;
 }
 

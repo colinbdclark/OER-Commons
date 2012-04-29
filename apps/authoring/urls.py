@@ -1,4 +1,5 @@
 from authoring.models import AuthoredMaterial
+from authoring.views.delete import Delete
 from authoring.views.edit import Edit
 from authoring.views.media import MediaUpload, LoadEmbed
 from authoring.views.new import New
@@ -12,6 +13,7 @@ urlpatterns = patterns("",
     url(r"new$", New.as_view(), name="new"),
     url(r"edit/(?P<pk>\d+)$", Edit.as_view(), name="edit"),
     url(r"edit/(?P<pk>\d+)/upload$", MediaUpload.as_view(), name="upload"),
+    url(r"delete/(?P<pk>\d+)$", Delete.as_view(), name="delete"),
     url(r"load-embed$", LoadEmbed.as_view(), name="load-embed"),
     url(r"(?P<pk>\d+)(?:-(?P<slug>[^/]+))?$", ViewItem.as_view(model=AuthoredMaterial), name="view"),
     url(r"(?P<pk>\d+)(?:-(?P<slug>[^/]+))?/view$", ViewFullAuthoredMaterial.as_view(), name="view_full"),
