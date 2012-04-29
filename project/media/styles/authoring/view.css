@@ -176,9 +176,41 @@
     text-transform: uppercase;
     font-size: 1.25em;
     line-height: 2em;
-    text-decoration: none; }
+    text-decoration: none;
+    vertical-align: top; }
     .authoring-view #toolbar a:hover {
       background-color: #6cb8da; }
+  .authoring-view #toolbar a.delete {
+    width: 14px;
+    background-image: url(../../images/authoring/icon-delete.png);
+    background-repeat: no-repeat;
+    background-position: 50% 40%;
+    text-indent: -9999px; }
+  .authoring-view #toolbar .delete-confirmation {
+    display: inline-block;
+    border-right: 1px solid #2d73cb;
+    border-left: 1px solid #9ecfe6;
+    font-size: 1.25em;
+    height: 2em;
+    padding: 0 1em;
+    vertical-align: top; }
+    .authoring-view #toolbar .delete-confirmation a {
+      text-transform: none;
+      margin-top: 0.5em;
+      border: none;
+      padding: 0;
+      font-size: 0.8em;
+      line-height: 1.5em; }
+      .authoring-view #toolbar .delete-confirmation a.confirm {
+        position: relative;
+        top: -1px;
+        margin-right: 1em;
+        border: 1px solid #fff;
+        padding: 0 0.5em; }
+      .authoring-view #toolbar .delete-confirmation a.cancel:hover {
+        background-color: transparent; }
+  .authoring-view #toolbar .hide {
+    display: none; }
 .authoring-view .download-links {
   margin-right: 20px;
   padding: 1em 0;
