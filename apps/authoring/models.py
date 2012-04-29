@@ -119,6 +119,11 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
 
     http_status = 200
 
+    def __unicode__(self):
+        if self.title:
+            return self.title
+        return u"%s %s" % (self.__class__.__name__, unicode(self.id))
+
     @property
     def url(self):
         return full_url(self.get_view_full_url())
