@@ -90,6 +90,10 @@ oer.login.check_login = function(callback) {
 };
 
 oer.login.init = function() {
+  if ($("body").hasClass("disable-login-popup")) {
+    return;
+  }
+
   $("header.global a.login").click(function(e) {
     e.preventDefault();
     oer.login.show_popup();

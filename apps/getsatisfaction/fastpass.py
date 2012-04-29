@@ -2,7 +2,8 @@ import oauth
 import cgi
 
 class FastPass:
-  domain = "getsatisfaction.com"
+
+  domain = "community.oercommons.org"
   
   @staticmethod
   def url(key, secret, email, name, uid, isSecure=False, **additionalFields):

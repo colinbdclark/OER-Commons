@@ -48,7 +48,6 @@ class Login(TemplateView):
 
     def get(self, request, **kwargs):
         if not self.popup and request.user.is_authenticated():
-            print "!!!!!", self.popup, request.user.is_authenticated()
             return redirect("frontpage")
         self.form = LoginForm()
         return super(Login, self).get(request, **kwargs)
