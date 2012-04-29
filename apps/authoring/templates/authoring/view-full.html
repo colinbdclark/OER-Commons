@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load utils %}
 
 {% block bodyclass %}authoring-view{% if preview %} preview{% endif %}{% endblock %}
 
@@ -54,7 +55,7 @@
         </ul>
       </section>
 
-      <section>
+      <section >
         <a href="{{ object.get_absolute_url }}"><strong>"{{ object.title }}"</strong></a>
         {{ object.modified_timestamp|date:"Y" }}
         by <a href="#">{{ material.author.get_full_name|default:material.author }}</a>
@@ -64,7 +65,7 @@
     </div>
 
     <div class="column-main clearfix">
-      <article class="authored-content">
+      <article class="authored-content" data-evaluate-url="{% url rubrics:evaluate_intro %}?id={{ content_type.id }}.{{ material.id }}&from={{ request.path|full_url }}">
         <header>
           <h1>{{ object.title }}</h1>
           Created <strong>{{ object.modified_timestamp|date }}</strong> by <a href="#">{{ material.author.get_full_name|default:material.author }}</a>
@@ -103,6 +104,15 @@
           $confirmation.addClass("hide");
           $delete.removeClass("hide");
         });
+        var result = window.location.hash.match(/^#evaluate(?::(?:(standard|rubric\d+)))?$/);
+        var evaluateURL = $("article[data-evaluate-url]").data("evaluate-url");
+        if (result) {
+          if (result[1]) {
+            oer.evaluation_tool.open_tool(evaluateURL + "#" + result[1]);
+          } else {
+            oer.evaluation_tool.open_tool(evaluateURL);
+          }
+        }
       });
     </script>
   {% endif %}
