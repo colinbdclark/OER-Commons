@@ -405,6 +405,24 @@ ul.tagit li {
   text-align: center;
 }
 
+.button-minor {
+  display: inline-block;
+  background-image: -webkit-linear-gradient(top, white 0%, #C1DEE8 100%);
+  background-image: -moz-linear-gradient(top, white 0%, #C1DEE8 100%);
+  background-image: -o-linear-gradient(top, white 0%, #C1DEE8 100%);
+  background-image: -ms-linear-gradient(top, white 0%, #C1DEE8 100%);
+  background-image: linear-gradient(top, white 0%, #C1DEE8 100%);
+  border: 1px solid #C1DEE8;
+  font-size: 13px;
+  padding: 2px 5px;
+  color: #0B7BA9;
+  text-align: center;
+}
+
+.button-minor:hover {
+  background-image: none;
+}
+
 .portlet h1.expanded,
 h1.expanded {
   border-bottom: dotted;
