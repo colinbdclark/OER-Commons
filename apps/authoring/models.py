@@ -422,6 +422,13 @@ class Document(models.Model):
     file = models.FileField(upload_to=upload_to("documents"), max_length=500)
 
 
+class Audio(models.Model):
+
+    material = models.ForeignKey(AuthoredMaterial)
+
+    file = models.FileField(upload_to=upload_to("audio"), max_length=500)
+
+
 class Embed(models.Model):
 
     url = models.URLField(unique=True, db_index=True, max_length=200)

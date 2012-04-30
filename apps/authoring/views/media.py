@@ -1,6 +1,6 @@
 from annoying.decorators import JsonResponse
 from authoring.models import Image, Document, Embed, AuthoredMaterial, \
-    UploadedVideo
+    UploadedVideo, Audio
 from cache_utils.decorators import cached
 from django.core.files import File
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
@@ -27,6 +27,10 @@ IMAGE_CONTENT_TYPE_RE = re.compile(r"^image/(png|p?jpeg|gif)", re.I)
 MAX_IMAGE_SIZE = 10485760   # 10 MB
 
 IMAGE_FILENAME_RE = re.compile("^.+\.(?:png|gif|jpg|jpeg)$", re.I)
+
+
+AUDIO_CONTENT_TYPE_RE = re.compile(r"^audio/(mpeg)", re.I)
+MAX_AUDIO_SIZE = 10485760 * 2   # 20 MB
 
 
 class MediaUploadForm(forms.Form):
@@ -93,6 +97,9 @@ class MediaUploadForm(forms.Form):
                 file._size = content_length
                 self.cleaned_data["file"] = file
 
+            elif AUDIO_CONTENT_TYPE_RE.match(content_type):
+                self.media_type = "audio"
+
             else:
                 self.embed = Embed.get_for_url(url)
 
@@ -109,6 +116,11 @@ class MediaUploadForm(forms.Form):
                     )
                 ).to_python(file)
                 self.media_type = "image"
+
+            elif AUDIO_CONTENT_TYPE_RE.match(content_type):
+                if size > MAX_AUDIO_SIZE:
+                    raise forms.ValidationError(self.error_messages["large_audio"])
+                self.media_type = "audio"
 
             elif content_type in UploadedVideo.SUPPORTED_CONTENT_TYPES:
                 self.media_type = "video"
@@ -157,6 +169,20 @@ class MediaUpload(SingleObjectMixin, FormMixin, ProcessFormView):
                 id=image.id,
                 name=image.image.name.split(os.path.sep)[-1],
             )
+        elif form.media_type == "audio":
+            response = dict(
+                status="success",
+                type="audio",
+                name="",
+            )
+            if form.cleaned_data.get("file"):
+                audio = Audio(material=object, file=form.cleaned_data["file"])
+                audio.save()
+                response["url"] = audio.file.url
+                response["id"] = audio.id
+                response["name"] = audio.file.name.split(os.path.sep)[-1]
+            else:
+                response["url"] = form.cleaned_data["url"]
         elif form.embed and form.embed.type == "video":
             video = form.embed
             response = dict(
