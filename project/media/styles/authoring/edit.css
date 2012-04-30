@@ -77,6 +77,8 @@
       .authored-content figure.image figcaption strong {
         font-style: normal;
         color: #666; }
+      .authored-content figure.image figcaption em {
+        margin-left: 1em; }
   .authored-content figure.download {
     color: #0B7BA9;
     font-size: 110%;
@@ -879,12 +881,15 @@
     display: inline-block;
     position: relative; }
     #editor-area .ui-wrap-image figcaption {
+      margin-top: -4px;
+      padding: 5px 5px 0 5px;
       background-color: #f2f2f2;
-      line-height: 29px;
-      min-height: 29px;
+      line-height: 1.5;
+      min-height: 24px;
       text-align: left; }
       #editor-area .ui-wrap-image figcaption .ui-image-button {
-        float: left; }
+        float: left;
+        margin-top: -5px; }
     #editor-area .ui-wrap-image .ui-image-button {
       display: block;
       width: 28px;
@@ -906,6 +911,7 @@
       #editor-area .ui-wrap-image .ui-move:hover {
         background-position: 6px -49px; }
     #editor-area .ui-wrap-image .ui-delete {
+      margin-left: -5px;
       border: solid #ccc;
       border-width: 0 1px 1px 1px;
       background-position: -84px 6px; }

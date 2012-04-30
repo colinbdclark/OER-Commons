@@ -77,6 +77,8 @@
       .authored-content figure.image figcaption strong {
         font-style: normal;
         color: #666; }
+      .authored-content figure.image figcaption em {
+        margin-left: 1em; }
   .authored-content figure.download {
     color: #0B7BA9;
     font-size: 110%;
