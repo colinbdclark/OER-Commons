@@ -145,7 +145,7 @@
 
   Tool = (function() {
 
-    Tool.prototype.AUTOSAVE_INTERVAL = 30;
+    Tool.prototype.AUTOSAVE_INTERVAL = 5;
 
     function Tool(hideSubmitStep) {
       var actions, errorSlide, errors, previewBtn, saveBtn,
@@ -164,8 +164,9 @@
       this.checksumMessage = this.form.find("#checksum-message");
       this.checksumMessage.find("a.force-save").click(function(e) {
         e.preventDefault();
-        return _this.save(true);
+        return _this.save(false, true);
       });
+      this.savedData = null;
       this.title.find("span.inner").editable(function(value) {
         _this.titleInput.val(value);
         return value;
@@ -231,24 +232,29 @@
       this.autosave();
     }
 
-    Tool.prototype.save = function(force) {
-      var data,
+    Tool.prototype.save = function(autosave, force) {
+      var data, formData,
         _this = this;
+      if (autosave == null) autosave = false;
       if (force == null) force = false;
       this.writeStep.preSave();
       oer.status_message.clear();
       data = this.form.serialize();
+      formData = data.replace(/checksum=.+?&/g, "");
       if (force) data += "&force_save=yes";
+      if (autosave && formData === this.savedData) return;
       $.post(this.form.attr("action"), data, function(response) {
         if (response.status === "success") {
           oer.status_message.success(response.message, true);
           _this.checksum.val(response.checksum);
-          return _this.checksumMessage.addClass("hide");
+          _this.checksumMessage.addClass("hide");
+          return _this.savedData = formData;
         } else {
           oer.status_message.error(response.message, false);
           if (response.reason === "checksum") {
-            return _this.checksumMessage.removeClass("hide");
+            _this.checksumMessage.removeClass("hide");
           }
+          return _this.savedData = null;
         }
       });
     };
@@ -256,7 +262,7 @@
     Tool.prototype.autosave = function() {
       var _this = this;
       return setTimeout(function() {
-        _this.save();
+        _this.save(true);
         return _this.autosave();
       }, this.AUTOSAVE_INTERVAL * 1000);
     };
