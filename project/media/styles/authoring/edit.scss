@@ -971,30 +971,76 @@
   .ui-wrap-image {
     display: inline-block;
     position: relative;
-    .ui-delete, .ui-move {
+    figcaption {
+      background-color: #f2f2f2;
+      line-height: 29px;
+      min-height: 29px;
+      text-align: left;
+      .ui-image-button {
+        float: left;
+      }
+    }
+    .ui-image-button {
       display: block;
-      position: absolute;
-      left: 0;
-      width: 25px;
-      height: 25px;
-      background-color: #7bbdda;
+      width: 28px;
+      height: 28px;
+      background-color: #f2f2f2;
       background-repeat: no-repeat;
-      background-position: 50% 50%;
+      background-image: url(../../images/authoring/image-icons.png);
     }
     .ui-move {
+      position: absolute;
       top: 0;
-      background-image: url(../../images/authoring/icon-move-image.png);
+      left: 0;
+      border: solid #ccc;
+      border-width: 0 1px 1px 0;
+      -webkit-border-bottom-right-radius: 5px;
+      -moz-border-radius-bottomright: 5px;
+      border-bottom-right-radius: 5px;
+      background-position: -21px -49px;
       cursor: move;
+      &:hover {
+        background-position: 6px -49px;
+      }
     }
     .ui-delete {
-      top: 25px;
-      border-top: 1px solid #fff;
-      -webkit-border-bottom-right-radius: 2px;
-      -moz-border-radius-bottomright: 2px;
-      border-bottom-right-radius: 2px;
-      background-image: url(../../images/authoring/icon-delete-image.png);
+      border: solid #ccc;
+      border-width: 0 1px 1px 1px;
+      background-position: -84px 6px;
       &:hover {
-        background-color: #069;
+        background-position: -46px -48px;
+      }
+    }
+    .ui-left {
+      border-bottom: 1px solid #ccc;
+      background-position: -27px -21px;
+      &:hover {
+        background-color: #cacaca;
+      }
+      &.active {
+        background-position: 4px 6px;
+      }
+    }
+    .ui-center {
+      border-bottom: 1px solid #ccc;
+      background-position: -58px 6px;
+      &:hover {
+        background-color: #cacaca;
+      }
+      &.active {
+        background-position: -27px 6px;
+      }
+    }
+    .ui-right {
+      margin-right: 1em;
+      border: solid #ccc;
+      border-width: 0 1px 1px 0;
+      background-position: -58px -20px;
+      &:hover {
+        background-color: #cacaca;
+      }
+      &.active {
+        background-position: 4px -21px;
       }
     }
   }

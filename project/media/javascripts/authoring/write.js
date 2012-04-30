@@ -1149,11 +1149,23 @@ WriteStep.prototype.updateDND = function () {
 
 WriteStep.prototype.initImage = function($figure) {
   var $image = $figure.find("img");
+  var $caption = $figure.find("figcaption");
   if (!$image.parent().is("span.ui-wrap-image")) {
     $image.wrap($('<span class="ui-wrap-image"></span>'));
     var $wrapper = $image.parent();
-    $('<a href="#" class="ui-move"></a>').appendTo($wrapper);
-    $('<a href="#" class="ui-delete"></a>').appendTo($wrapper);
+    $caption.detach().appendTo($wrapper);
+    $('<a href="#" class="ui-move ui-image-button"></a>').appendTo($wrapper);
+    var $right = $('<a href="#" class="ui-right ui-image-button"></a>').prependTo($caption);
+    var $center = $('<a href="#" class="ui-center ui-image-button"></a>').prependTo($caption);
+    var $left = $('<a href="#" class="ui-left ui-image-button"></a>').prependTo($caption);
+    $('<a href="#" class="ui-delete ui-image-button"></a>').prependTo($caption);
+    if ($figure.hasClass("align-left")) {
+      $left.addClass("active");
+    } else if ($figure.hasClass("align-right")) {
+      $right.addClass("active");
+    } else {
+      $center.addClass("active");
+    }
   }
 };
 
@@ -1168,6 +1180,24 @@ WriteStep.prototype.initImageControls = function() {
     var $figure = $(e.currentTarget).closest("figure.image", editor.$area);
     $figure.remove();
     // TODO: remove image from server.
+  });
+  this.$area.delegate("figure.image a.ui-left,figure.image a.ui-center,figure.image a.ui-right", "click", function(e) {
+    e.preventDefault();
+    var $button = $(e.currentTarget);
+    if ($button.hasClass("active")) {
+      return;
+    }
+    editor.saveState();
+    var $figure = $(e.currentTarget).closest("figure.image", editor.$area);
+    if ($button.hasClass("ui-left")) {
+      $figure.removeClass("align-right").addClass("align-left");
+    } else if ($button.hasClass("ui-right")) {
+      $figure.removeClass("align-left").addClass("align-right");
+    } else {
+      $figure.removeClass("align-left").removeClass("align-right");
+    }
+    $figure.find("figcaption a.active").removeClass("active");
+    $button.addClass("active");
   });
 };
 

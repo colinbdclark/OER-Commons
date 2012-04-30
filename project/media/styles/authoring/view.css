@@ -66,10 +66,10 @@
     font-family: "Myriad Pro", Helvetica, sans-serif; }
   .authored-content figure.image {
     text-align: center; }
-    .authored-content figure.image.left {
+    .authored-content figure.image.align-left {
       float: left;
       margin-right: 10px; }
-    .authored-content figure.image.right {
+    .authored-content figure.image.align-right {
       float: right;
       margin-left: 10px; }
     .authored-content figure.image figcaption {
