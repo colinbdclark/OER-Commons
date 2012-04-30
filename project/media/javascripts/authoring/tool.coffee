@@ -125,7 +125,7 @@ class UserMenu
 
 class Tool
 
-  AUTOSAVE_INTERVAL: 30 # 30 seconds
+  AUTOSAVE_INTERVAL: 5 # 30 seconds
 
   constructor: (@hideSubmitStep)->
     @form = $("form.authoring-form")
@@ -144,8 +144,10 @@ class Tool
     @checksumMessage = @form.find("#checksum-message")
     @checksumMessage.find("a.force-save").click((e)=>
       e.preventDefault()
-      @save(true)
+      @save(false, true)
     )
+
+    @savedData = null
 
     @title.find("span.inner").editable(
       (value)=>
@@ -216,27 +218,34 @@ class Tool
 
     @autosave()
 
-  save: (force=false)->
+  save: (autosave=false,force=false)->
     @writeStep.preSave()
     oer.status_message.clear()
     data = @form.serialize()
+    formData = data.replace(/checksum=.+?&/g, "")
     if force
       data += "&force_save=yes"
+
+    if autosave and formData == @savedData
+      return
+
     $.post(@form.attr("action"), data, (response)=>
       if response.status == "success"
         oer.status_message.success(response.message, true)
         @checksum.val(response.checksum)
         @checksumMessage.addClass("hide")
+        @savedData = formData
       else
         oer.status_message.error(response.message, false)
         if response.reason == "checksum"
           @checksumMessage.removeClass("hide")
+        @savedData = null
     )
     return
 
   autosave:->
     setTimeout(=>
-      @save()
+      @save(true)
       @autosave()
     , @AUTOSAVE_INTERVAL * 1000)
 
