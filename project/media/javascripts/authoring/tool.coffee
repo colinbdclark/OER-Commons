@@ -220,7 +220,6 @@ class Tool
 
   save: (autosave=false,force=false)->
     @writeStep.preSave()
-    oer.status_message.clear()
     data = @form.serialize()
     formData = data.replace(/checksum=.+?&/g, "")
     if force
@@ -229,14 +228,19 @@ class Tool
     if autosave and formData == @savedData
       return
 
+    oer.status_message.clear()
+    oer.status_message.message("Saving...", "")
+
     $.post(@form.attr("action"), data, (response)=>
       if response.status == "success"
-        oer.status_message.success(response.message, true)
+        oer.status_message.clear()
+        oer.status_message.success("All changes saved")
         @checksum.val(response.checksum)
         @checksumMessage.addClass("hide")
         @savedData = formData
       else
-        oer.status_message.error(response.message, false)
+        oer.status_message.clear()
+        oer.status_message.error(response.message)
         if response.reason == "checksum"
           @checksumMessage.removeClass("hide")
         @savedData = null

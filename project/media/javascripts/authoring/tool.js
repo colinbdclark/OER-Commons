@@ -238,19 +238,22 @@
       if (autosave == null) autosave = false;
       if (force == null) force = false;
       this.writeStep.preSave();
-      oer.status_message.clear();
       data = this.form.serialize();
       formData = data.replace(/checksum=.+?&/g, "");
       if (force) data += "&force_save=yes";
       if (autosave && formData === this.savedData) return;
+      oer.status_message.clear();
+      oer.status_message.message("Saving...", "");
       $.post(this.form.attr("action"), data, function(response) {
         if (response.status === "success") {
-          oer.status_message.success(response.message, true);
+          oer.status_message.clear();
+          oer.status_message.success("All changes saved");
           _this.checksum.val(response.checksum);
           _this.checksumMessage.addClass("hide");
           return _this.savedData = formData;
         } else {
-          oer.status_message.error(response.message, false);
+          oer.status_message.clear();
+          oer.status_message.error(response.message);
           if (response.reason === "checksum") {
             _this.checksumMessage.removeClass("hide");
           }
