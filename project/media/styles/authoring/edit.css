@@ -66,10 +66,10 @@
     font-family: "Myriad Pro", Helvetica, sans-serif; }
   .authored-content figure.image {
     text-align: center; }
-    .authored-content figure.image.left {
+    .authored-content figure.image.align-left {
       float: left;
       margin-right: 10px; }
-    .authored-content figure.image.right {
+    .authored-content figure.image.align-right {
       float: right;
       margin-left: 10px; }
     .authored-content figure.image figcaption {
@@ -77,6 +77,8 @@
       .authored-content figure.image figcaption strong {
         font-style: normal;
         color: #666; }
+      .authored-content figure.image figcaption em {
+        margin-left: 1em; }
   .authored-content figure.download {
     color: #0B7BA9;
     font-size: 110%;
@@ -878,28 +880,66 @@
   #editor-area .ui-wrap-image {
     display: inline-block;
     position: relative; }
-    #editor-area .ui-wrap-image .ui-delete, #editor-area .ui-wrap-image .ui-move {
+    #editor-area .ui-wrap-image figcaption {
+      margin-top: -4px;
+      padding: 5px 5px 0 5px;
+      background-color: #f2f2f2;
+      line-height: 1.5;
+      min-height: 24px;
+      text-align: left; }
+      #editor-area .ui-wrap-image figcaption .ui-image-button {
+        float: left;
+        margin-top: -5px; }
+    #editor-area .ui-wrap-image .ui-image-button {
       display: block;
-      position: absolute;
-      left: 0;
-      width: 25px;
-      height: 25px;
-      background-color: #7bbdda;
+      width: 28px;
+      height: 28px;
+      background-color: #f2f2f2;
       background-repeat: no-repeat;
-      background-position: 50% 50%; }
+      background-image: url(../../images/authoring/image-icons.png); }
     #editor-area .ui-wrap-image .ui-move {
+      position: absolute;
       top: 0;
-      background-image: url(../../images/authoring/icon-move-image.png);
+      left: 0;
+      border: solid #ccc;
+      border-width: 0 1px 1px 0;
+      -webkit-border-bottom-right-radius: 5px;
+      -moz-border-radius-bottomright: 5px;
+      border-bottom-right-radius: 5px;
+      background-position: -21px -49px;
       cursor: move; }
+      #editor-area .ui-wrap-image .ui-move:hover {
+        background-position: 6px -49px; }
     #editor-area .ui-wrap-image .ui-delete {
-      top: 25px;
-      border-top: 1px solid #fff;
-      -webkit-border-bottom-right-radius: 2px;
-      -moz-border-radius-bottomright: 2px;
-      border-bottom-right-radius: 2px;
-      background-image: url(../../images/authoring/icon-delete-image.png); }
+      margin-left: -5px;
+      border: solid #ccc;
+      border-width: 0 1px 1px 1px;
+      background-position: -84px 6px; }
       #editor-area .ui-wrap-image .ui-delete:hover {
-        background-color: #069; }
+        background-position: -46px -48px; }
+    #editor-area .ui-wrap-image .ui-left {
+      border-bottom: 1px solid #ccc;
+      background-position: -27px -21px; }
+      #editor-area .ui-wrap-image .ui-left:hover {
+        background-color: #cacaca; }
+      #editor-area .ui-wrap-image .ui-left.active {
+        background-position: 4px 6px; }
+    #editor-area .ui-wrap-image .ui-center {
+      border-bottom: 1px solid #ccc;
+      background-position: -58px 6px; }
+      #editor-area .ui-wrap-image .ui-center:hover {
+        background-color: #cacaca; }
+      #editor-area .ui-wrap-image .ui-center.active {
+        background-position: -27px 6px; }
+    #editor-area .ui-wrap-image .ui-right {
+      margin-right: 1em;
+      border: solid #ccc;
+      border-width: 0 1px 1px 0;
+      background-position: -58px -20px; }
+      #editor-area .ui-wrap-image .ui-right:hover {
+        background-color: #cacaca; }
+      #editor-area .ui-wrap-image .ui-right.active {
+        background-position: 4px -21px; }
 
 .popup-dialog {
   position: absolute;

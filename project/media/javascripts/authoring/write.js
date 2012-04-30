@@ -15,7 +15,7 @@ var WriteStep = function (tool) {
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
-  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "rangySelectionBoundary"];
+  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "align-left", "align-right", "rangySelectionBoundary"];
   for (var i = 1; i < 6; i++) {
     this.ALLOWED_CLASSES.push("text-color-" + i);
     this.ALLOWED_CLASSES.push("bg-color-" + i);
@@ -1130,7 +1130,7 @@ WriteStep.prototype.initFigure = function ($figure) {
 WriteStep.prototype.initDND = function () {
   var editor = this;
   this.$area.sortable({
-    handle: this.$area.find("figure:not(.inline):not(.table),table span.move"),
+    handle: this.$area.find("figure.image img,figure.image a.ui-move,figure:not(.inline):not(.table):not(.image),table span.move"),
     distance: 15,
     containment: this.$area,
     cursor: "move",
@@ -1144,17 +1144,41 @@ WriteStep.prototype.initDND = function () {
 };
 
 WriteStep.prototype.updateDND = function () {
-  this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline):not(.table),table span.move"));
+  this.$area.sortable("option", "handle", this.$area.find("figure.image img,figure.image a.ui-move,figure:not(.inline):not(.table):not(.image),table span.move"));
 };
 
 WriteStep.prototype.initImage = function($figure) {
   var $image = $figure.find("img");
+  var $caption = $figure.find("figcaption");
   if (!$image.parent().is("span.ui-wrap-image")) {
     $image.wrap($('<span class="ui-wrap-image"></span>'));
     var $wrapper = $image.parent();
-    $('<a href="#" class="ui-move"></a>').appendTo($wrapper);
-    $('<a href="#" class="ui-delete"></a>').appendTo($wrapper);
+    if ($image.width()) {
+      $wrapper.css({
+        width: $image.width() + "px"
+      })
+    } else {
+      $image.load(function(e) {
+        $wrapper.css({
+          width: $(e.target).width() + "px"
+        })
+      });
+    }
+    $caption.detach().appendTo($wrapper);
+    $('<a href="#" class="ui-move ui-image-button"></a>').appendTo($wrapper);
+    var $right = $('<a href="#" class="ui-right ui-image-button"></a>').prependTo($caption);
+    var $center = $('<a href="#" class="ui-center ui-image-button"></a>').prependTo($caption);
+    var $left = $('<a href="#" class="ui-left ui-image-button"></a>').prependTo($caption);
+    $('<a href="#" class="ui-delete ui-image-button"></a>').prependTo($caption);
+    if ($figure.hasClass("align-left")) {
+      $left.addClass("active");
+    } else if ($figure.hasClass("align-right")) {
+      $right.addClass("active");
+    } else {
+      $center.addClass("active");
+    }
   }
+  $caption.find("strong,em").attr("contenteditable", "true");
 };
 
 WriteStep.prototype.initImageControls = function() {
@@ -1168,6 +1192,24 @@ WriteStep.prototype.initImageControls = function() {
     var $figure = $(e.currentTarget).closest("figure.image", editor.$area);
     $figure.remove();
     // TODO: remove image from server.
+  });
+  this.$area.delegate("figure.image a.ui-left,figure.image a.ui-center,figure.image a.ui-right", "click", function(e) {
+    e.preventDefault();
+    var $button = $(e.currentTarget);
+    if ($button.hasClass("active")) {
+      return;
+    }
+    editor.saveState();
+    var $figure = $(e.currentTarget).closest("figure.image", editor.$area);
+    if ($button.hasClass("ui-left")) {
+      $figure.removeClass("align-right").addClass("align-left");
+    } else if ($button.hasClass("ui-right")) {
+      $figure.removeClass("align-left").addClass("align-right");
+    } else {
+      $figure.removeClass("align-left").removeClass("align-right");
+    }
+    $figure.find("figcaption a.active").removeClass("active");
+    $button.addClass("active");
   });
 };
 
@@ -1851,18 +1893,12 @@ MediaDialog.ImageStep = function (dialog) {
     if (step.figureType == "download") {
       //noinspection JSUnusedAssignment
       $figure = $("<figure></figure>").addClass("download").append(
-              $("<a target='_blank'></a>").attr("href", step.originalURL).addClass("download").text("Download: ").append(
-                      $("<strong></strong>").text(title)
-              )
+        $("<a target='_blank'></a>").attr("href", step.originalURL).text("Download: ").append($("<strong></strong>").text(title))
       );
     } else {
-      if (description !== "") {
-        title += ": ";
-      }
-      var $caption = $("<figcaption></figcaption>").text(description);
-      if (title) {
-        $caption.prepend($("<strong></strong>").text(title));
-      }
+      var $caption = $("<figcaption></figcaption>");
+      $caption.append($("<strong></strong>").text(title));
+      $caption.append($("<em></em>").text(description));
       $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL).attr("alt", description)).append($caption);
     }
 

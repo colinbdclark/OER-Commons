@@ -69,11 +69,11 @@
 
   figure.image {
     text-align: center;
-    &.left {
+    &.align-left {
       float: left;
       margin-right: 10px;
     }
-    &.right {
+    &.align-right {
       float: right;
       margin-left: 10px;
     }
@@ -82,6 +82,9 @@
       strong {
         font-style: normal;
         color: #666;
+      }
+      em {
+        margin-left: 1em;
       }
     }
   }

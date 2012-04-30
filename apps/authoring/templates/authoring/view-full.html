@@ -71,6 +71,7 @@
           Created <strong>{{ object.modified_timestamp|date }}</strong> by <a href="#">{{ material.author.get_full_name|default:material.author }}</a>
         </header>
         {{ text }}
+        <div class="clear"></div>
         <footer>
           {{ footnotes }}
         </footer>
@@ -116,4 +117,24 @@
       });
     </script>
   {% endif %}
+  <script>
+    $(function() {
+      $("figure.image.align-left,figure.image.align-right").each(function(i, figure) {
+        var $figure = $(figure);
+        var $image = $figure.find("img");
+        if ($image.width()) {
+          $figure.css({
+            "width": $image.width() + "px"
+          })
+        } else {
+          $image.load(function(e) {
+            var $image = $(e.target);
+            $image.parent().css({
+              width: $image.width() + "px"
+            });
+          });
+        }
+      });
+    });
+  </script>
 {% endblock %}
