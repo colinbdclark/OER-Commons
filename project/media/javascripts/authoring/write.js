@@ -15,7 +15,7 @@ var WriteStep = function (tool) {
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
-  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "align-left", "align-right", "rangySelectionBoundary"];
+  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "audio", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "align-left", "align-right", "rangySelectionBoundary"];
   for (var i = 1; i < 6; i++) {
     this.ALLOWED_CLASSES.push("text-color-" + i);
     this.ALLOWED_CLASSES.push("bg-color-" + i);
@@ -145,6 +145,10 @@ var WriteStep = function (tool) {
     editor.initImage($(this));
   });
   this.initImageControls();
+
+  this.$area.find("figure.audio").each(function () {
+    editor.initAudio($(this));
+  });
 
   this.initDND();
 
@@ -384,7 +388,9 @@ WriteStep.prototype.cleanHTML = function (preSave) {
     if ($figure.hasClass("download") && $figure.find("a")) {
       return;
     }
-    // TODO: skip audio figures when they're available
+    if ($figure.hasClass("audio")) {
+      return;
+    }
 
     if ($.trim($figure.text()) === "") {
       // Remove empty figure
@@ -444,6 +450,11 @@ WriteStep.prototype.cleanHTML = function (preSave) {
       if ($.trim($this.text()) === "") {
         $this.remove();
       }
+    });
+    $document.find("figure.audio,figure.video").each(function() {
+      var $figure = $(this);
+      var caption = $figure.find("figcaption").html() || "";
+      $figure.html("<figcaption>" + caption + "</figcaption>");
     });
   }
   return $document.html();
@@ -1213,22 +1224,10 @@ WriteStep.prototype.initImageControls = function() {
   });
 };
 
-//WriteStep.prototype.initImageResize = function($img) {
-//  $img.load(function()
-//    $(this).resizable({
-//      aspectRatio: true,
-//      autoHide: true,
-//      maxWidth: 800,
-//      minWidth: 100,
-//      create: function() {
-//        $(this).css({
-//          "margin-left": "auto",
-//          "margin-right": "auto"
-//        });
-//      }
-//    });
-//  });
-//};
+WriteStep.prototype.initAudio = function($figure) {
+  $figure.find("figcaption").attr("contenteditable", "true");
+  new AudioPlayer($figure);
+};
 
 WriteStep.prototype.loadEmbed = function ($figure) {
   var url = $figure.data("url");
@@ -1413,10 +1412,11 @@ WriteStep.prototype.undo = function () {
   this.enableRedo();
   this.toc.update();
   this.updateReferences();
+  this.$area.find("figure.audio").each(function() {
+    this.initAudio($(this));
+  });
   this.trackSelection();
-
   this.updateDND();
-
 };
 
 WriteStep.prototype.redo = function () {
@@ -1444,10 +1444,11 @@ WriteStep.prototype.redo = function () {
   this.enableUndo();
   this.toc.update();
   this.updateReferences();
+  this.$area.find("figure.audio").each(function() {
+    this.initAudio($(this));
+  });
   this.trackSelection();
-
   this.updateDND();
-
 };
 
 WriteStep.prototype.disableUndo = function () {
@@ -1689,6 +1690,7 @@ function MediaDialog(editor) {
     upload: new MediaDialog.UploadStep(this, uploadProgress),
     image: new MediaDialog.ImageStep(this),
     video: new MediaDialog.VideoStep(this),
+    audio: new MediaDialog.AudioStep(this),
     document: new MediaDialog.DocumentStep(this)
   };
 
@@ -1734,6 +1736,8 @@ MediaDialog.prototype.handleUploadResponse = function (response) {
     this.openStep("document", result);
   } else if (result.type === "video") {
     this.openStep("video", result);
+  } else if (result.type === "audio") {
+    this.openStep("audio", result);
   } else {
     this.hide();
   }
@@ -1996,6 +2000,58 @@ MediaDialog.VideoStep.prototype.prepare = function (data) {
   $image.appendTo(this.$imageCt);
   this.$input.val(data.title);
   this.$textarea.val("");
+};
+
+MediaDialog.AudioStep = function (dialog) {
+  MediaDialog.Step.call(this, dialog);
+
+  var $step = this.$step = dialog.$steps.filter(".audio");
+  var $input = this.$input = $step.find("input:text");
+
+  var editor = dialog.editor;
+
+  $step.find("a.submit").click(function (e) {
+    e.preventDefault();
+    oer.status_message.clear();
+
+    var caption = $.trim($input.val());
+    if (caption === "") {
+      oer.status_message.error("Please enter the title of this audio file.");
+      return;
+    }
+    editor.saveState();
+    var $figure = $("<figure></figure>").addClass("audio");
+    $figure.attr("data-url", $step.data("url"));
+    if ($step.data("id")) {
+      $figure.attr("data-id", $step.data("id"));
+    }
+    $figure.append($("<figcaption></figcaption>").text(caption));
+    $figure.insertAfter(dialog.$placeholder);
+    editor.initFigure($figure);
+    editor.initAudio($figure);
+    editor.ensureTextInput();
+    editor.updateDND();
+    dialog.hide();
+  });
+
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
+  });
+};
+
+//noinspection JSCheckFunctionSignatures
+MediaDialog.AudioStep.prototype = new MediaDialog.Step();
+MediaDialog.AudioStep.prototype.constructor = MediaDialog.AudioStep;
+MediaDialog.AudioStep.prototype.prepare = function (data) {
+  this.$input.val(data.name);
+  this.$step.data("url", data.url);
+  if (data.id) {
+    this.$step.data("id", data.id);
+  } else {
+    this.$step.data("id", null);
+  }
 };
 
 MediaDialog.DocumentStep = function (dialog) {
