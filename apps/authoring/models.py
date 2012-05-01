@@ -74,7 +74,7 @@ class AuthoredMaterialDraft(AbstractAuthoredMaterial):
     @property
     def checksum(self):
         #noinspection PyUnresolvedReferences
-        data = [self.title, self.abstract, self.text, self.license.id]
+        data = [self.title, self.abstract, self.text, self.license.id if self.license else ""]
         for f in ("learning_goals", "keywords", "general_subjects",
                   "grade_levels", "grade_sublevels", "grades", "languages",
                   "material_types"):

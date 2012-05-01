@@ -207,7 +207,13 @@
         this.slider.slideTo("#" + errorSlide.attr("id"), false);
       }
       $(document).ajaxError(function(event, xhr, settings, error) {
-        if (!xhr.status) return _this.offlineMessage.removeClass("hide");
+        if (!xhr.status) {
+          return _this.offlineMessage.removeClass("hide");
+        } else {
+          _this.offlineMessage.addClass("hide");
+          oer.status_message.clear();
+          return oer.status_message.error("An error occured.");
+        }
       });
       $(document).ajaxSuccess(function(event, xhr, settings, error) {
         return _this.offlineMessage.addClass("hide");

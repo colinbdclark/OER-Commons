@@ -196,6 +196,10 @@ class Tool
     $(document).ajaxError((event, xhr, settings, error)=>
       if not xhr.status
         @offlineMessage.removeClass("hide")
+      else
+        @offlineMessage.addClass("hide")
+        oer.status_message.clear()
+        oer.status_message.error("An error occured.")
     )
 
     $(document).ajaxSuccess((event, xhr, settings, error)=>
