@@ -84,7 +84,6 @@ oer.materials.view_item.init_comment = function() {
           var $comment = $.tmpl("comment", response);
           $comment.insertBefore($form);
           rcorners($comment);
-          init_delete_buttons();
         }
       });
     }

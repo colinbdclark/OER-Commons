@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load users_tags %}
+{% load myitems_tags %}
 
 {% block extra-js %}
   <script type="text/javascript">
@@ -12,9 +13,13 @@
   </script>
 {% endblock %}
 
-{% block bodyclass %}no-columns profile-edit{% endblock %}
+{% block bodyclass %}no-columns profile-edit with-profile-tabs{% endblock %}
 
-{% block above-content %}{% endblock %}
+{% block above-content %}
+    {% profile_tabs %}
+{% endblock %}
+
+{% block page-title %}{% endblock %}
 
 {% block content %}
 
@@ -23,7 +28,7 @@
     <section class="avatar">
       <div class="wrap">
         {{ profile.get_avatar_img }}
-        <span{% if profile.hide_avatar %} style="display: none;"{% endif %}><a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete</a></span>
+        <span{% if profile.hide_avatar %} style="display: none;"{% endif %} class="rc5"><a id="delete-avatar-btn" href="{% url users:profile_avatar_delete %}" class="dashed">Delete</a></span>
       </div>
       <a id="upload-avatar-btn" href="{% url users:profile_avatar_update %}" class="dashed">Change picture</a>
     </section>

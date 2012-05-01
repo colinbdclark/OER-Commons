@@ -1,6 +1,6 @@
 <div class="action-panel materials fixed-width">
-  
-    <form method="get" action="{{ request.path }}">   
+
+    <form method="get" action="{{ request.path }}">
     <ul class="left">
       <li>
         Displaying <strong><span class="first-item-number">{{ pagination.first_item_number }}</span> - <span class="last-item-number">{{ pagination.last_item_number }}</span></strong> of <strong class="total-items">{{ pagination.total_items }}</strong> results
@@ -32,13 +32,10 @@
       <li>
         <a class="rss-icon" href="{{ feed_url }}" title="Subscribe">Subscribe</a>
       </li>
-      <li>
+      <li class="last">
         <a class="email-icon send-this" href="#" title="Send this search">Send this search</a>
       </li>
-      <li class="last">
-        <a href="#" class="save-search">Save this search</a>
-      </li>
     </ul>
-    
+
     </form>
 </div>

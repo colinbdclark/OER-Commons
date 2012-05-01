@@ -273,6 +273,20 @@ div.box h3 {
   font-size: 16px;
 }
 
+.button-blue-big.gradient {
+  background-image: none;
+  background-image: -webkit-linear-gradient(top, #00a4d8 0%, #0096d3 50%, #0071aa 100%);
+  background-image: -moz-linear-gradient(top, #00a4d8 0%, #0096d3 50%, #0071aa 100%);
+  background-image: -o-linear-gradient(top, #00a4d8 0%, #0096d3 50%, #0071aa 100%);
+  background-image: -ms-linear-gradient(top, #00a4d8 0%, #0096d3 50%, #0071aa 100%);
+  background-image: linear-gradient(top, #00a4d8 0%, #0096d3 50%, #0071aa 100%);
+}
+
+.button-blue-big.gradient:hover {
+  background-image: none;
+}
+
+
 .qtip {
   line-height: 1.3em;
   font-size: 13px;
@@ -391,3 +405,37 @@ ul.tagit li {
   text-align: center;
 }
 
+.button-minor {
+  display: inline-block;
+  background-image: -webkit-linear-gradient(top, white 0%, #C1DEE8 100%);
+  background-image: -moz-linear-gradient(top, white 0%, #C1DEE8 100%);
+  background-image: -o-linear-gradient(top, white 0%, #C1DEE8 100%);
+  background-image: -ms-linear-gradient(top, white 0%, #C1DEE8 100%);
+  background-image: linear-gradient(top, white 0%, #C1DEE8 100%);
+  border: 1px solid #C1DEE8;
+  font-size: 13px;
+  padding: 2px 5px;
+  color: #0B7BA9;
+  text-align: center;
+}
+
+.button-minor:hover {
+  background-color: white;
+  background-image: none;
+}
+
+input.button-minor {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.portlet h1.expanded,
+h1.expanded {
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  color: #1F4D64;
+}

@@ -85,15 +85,6 @@ def truncatechars(value, arg, ellipsis=u"..."):
     return value
 
 
-@register.filter
-def username(value):
-    if not isinstance(value, User):
-        return u""
-    if value.first_name or value.last_name:
-        return u"%s %s" % (value.first_name, value.last_name)
-    return unicode(value)
-
-
 @register.filter("romanize")
 def romanize_filter(value, args=None):
     """Change int or long into Roman Numeral all other types are passed out

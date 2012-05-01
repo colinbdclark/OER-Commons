@@ -1,0 +1,42 @@
+{% load rating_tags %}
+{% load thumbnail %}
+
+<article class="item clearfix {{ item.item_class }}{% if forloop.last %} last{% endif %}" data-identifier="{{ item.identifier }}">
+    {% if index_type == "pics" %}
+        <a href="{{ item.get_absolute_url }}">
+            {% thumbnail item.screenshot "185x125" crop="0px 0px" as im %}
+                <img class="thumb" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            {% empty %}
+                <img class="thumb" src="{{ STATIC_URL }}images/{{ item.dummy_thumb }}" width="185" height="125">
+            {% endthumbnail %}
+        </a>
+    {% endif %}
+    <div class="right relation">{{ item.relation_to_user|linebreaksbr }}</div>
+    <div class="details">
+        <h1>
+            <a class="item-link" href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
+        </h1>
+        <ul class="widgets">
+            {% if item.rating != None %}
+                <li>{% stars item.identifier item.rating %}</li>
+            {% endif %}
+            {% if item.folders != None %}
+                <li>
+                    <ul class="folder-list">
+                        {% for folder in item.folders %}
+                            <li class="rc2" data-folder-id="{{ folder.id }}">
+                                <div class="folder-deco"></div>
+                                    {{ folder.name }}{% if not public %} <a href="#" class="delete">×</a>{% endif %}
+                            </li>
+                        {% endfor %}
+                        {% if not public %}
+                            <li class="rc2 last">
+                                <div class="folder-deco"></div><a class="add" href="#">+</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            {% endif %}
+    </div>
+    {% if not public %}<div class="delete"><a href="#" class="delete">×</a></div>{% endif %}
+</article>

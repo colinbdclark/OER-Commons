@@ -12,31 +12,63 @@ dl.user-info dt {
   font-weight: bold;
 }
 
-.portlet.my-items-views ul {
-  margin: 0;
+.myitems a.add,
+.myitems a.delete,
+.myitems-materials-index a.add,
+.myitems-materials-index a.delete {
+  display: inline-block;
+  color: #707070;
+  font-weight: bolder;
+  line-height: 12px;
+  font-size: 20px;
+  height: 12px;
+  overflow: hidden;
+}
+
+
+.my-items-views {
+  margin: 0 3px 0 0;
   padding: 0;
   list-style-type: none;
   font-size: 14px;
 }
 
-.portlet.my-items-views li {
-  margin: 0 0 4px 0;
-}
-
-.portlet.my-items-views li.selected {
-  font-weight: bold;
-}
-
-.portlet.my-items-views a {
+.my-items-views a {
   text-decoration: none;
 }
 
-.materials-index.saved .index-navigation.top {
+.my-items-views li {
+  padding: 2px 0 2px 3px;
+  overflow: auto;
+  width: 100%;
+}
+
+.my-items-views .view a.folder-text {
+  color: #1F4D64;
+}
+
+
+.my-items-views li.selected {
+  background-color: #D5D5FF;
+}
+
+.myitems .portlet h1 {
+  color: #FFFFFF;
+  background-color: #1F4D64;
+  border-top-left-radius: 6px 6px;
+  border-top-right-radius: 6px 6px;
+  padding: 2px 6px 0 6px;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+
+.myitems-materials-index.saved .index-navigation.top {
   margin-bottom: 5px;
   background: none;
 }
 
-.materials-index.saved p.hint {
+.myitems-materials-index.saved p.hint {
   margin-bottom: 15px;
   padding-bottom: 10px;
   line-height: 14px;
@@ -44,14 +76,440 @@ dl.user-info dt {
   font-size: 14px;
 }
 
-.materials-index.saved p.hint img {
+.myitems-materials-index.saved p.hint img {
   vertical-align: top;
 }
 
-.materials-index.saved.searches p.hint {
+.myitems-materials-index.saved.searches p.hint {
   margin-top: 10px;
 }
 
 .unsave-confirmation {
   display: none;
+}
+
+#folder-create-button, #folder-create-submit {
+  font-style: italic;
+}
+
+
+.folder-create-form input {
+  display: none;
+}
+
+
+.myitems-materials-index article .folder-list li {
+  display: inline-block;
+  list-style-type: none;
+  margin-left: 5px;
+  padding: 0 6px 0 4px;
+  margin-top: 6px;
+  border-top-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  background-color: #85BDD4;
+  color: #FFFFFF;
+  border: solid;
+  border-color: #85BDD4;
+  border-width: 1px;
+  line-height: 24px;
+  height: 24px;
+  vertical-align: bottom;
+}
+
+.myitems-materials-index article .folder-list .folder-deco {
+  vertical-align: top;
+  display: inline-block;
+  height: 2px;
+  width: 10px;
+  margin-top: -4px;
+  margin-left: -5px;
+  margin-right: -6px;
+  background-color: #85BDD4;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border: solid;
+  border-color: #85BDD4;
+  border-width: 1px;
+}
+
+
+.myitems-materials-index article .folder-list li.last, 
+.myitems-materials-index article .folder-list li.last .folder-deco {
+  border: dashed;
+  border-color: #85BDD4;
+  border-width: 1px;
+  background-color: #FFFFFF;
+}
+
+.myitems-materials-index article .folder-list li.last .add {
+  margin: 0 3px;
+}
+
+.myitems-materials-index article .folder-list li.last .folder-deco {
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 2px;
+}
+
+.myitems-materials-index .folder-list li#folder-item-form {
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.myitems-materials-index .folder-list li#folder-item-form input {
+  margin-right: 5px;
+}
+
+.myitems-materials-index article .widgets {
+  margin-top: 5px;
+}
+
+.myitems-materials-index article .widgets > li {
+  display: inline-block;
+  list-style-type: none;
+  vertical-align: bottom;
+  margin-left: 0;
+  margin-right: 5px;
+}
+
+.myitems-materials-index article .widgets li {
+  margin-bottom: 0;
+}
+
+.myitems-materials-index article {
+  position: relative;
+}
+
+.myitems-materials-index article div.delete {
+  position: absolute;
+  top: -2px;
+  right: 2px;
+}
+
+.myitems-materials-index article .relation {
+  margin-top: 20px;
+  font-size: 11px;
+  text-transform: uppercase;
+  text-align: right;
+}
+
+.myitems-materials-index article .thumb {
+  float: left;
+}
+
+.myitems-materials-index.pics article .details {
+  margin-left: 195px;
+}
+
+
+.myitems .action-panel {
+  margin-top: 0;
+  background: none;
+  padding: 0;
+}
+
+.myitems .action-panel .view-selector {
+  float: right;
+  margin: 0;
+}
+
+.myitems .action-panel .view-selector li {
+  margin-left: 0;
+  margin-right: 5px;
+}
+
+.myitems .action-panel .view-selector li.last {
+  margin-right: 0;
+}
+
+.myitems .action-panel li {
+  background: none;
+  padding: 0;
+}
+
+.myitems .action-panel ul.left {
+  margin: 0;
+}
+
+.myitems .action-panel ul.left .first {
+  margin-left: 0;
+}
+
+.myitems-materials-index {
+  margin-top: 10px;
+}
+
+
+
+.my-items-views .folder-icon {
+  display: inline-block;
+  width: 21px;
+  height: 16px;
+  background-repeat: no-repeat;
+  vertical-align: text-bottom;
+}
+
+.my-items-views .view .folder-icon {
+  background-image: url('/media/images/myitems-folder-auto.png');
+}
+
+.my-items-views .folder .folder-icon {
+  background-image: url('/media/images/myitems-folder-user.png');
+}
+
+.my-items-views .last .folder-icon {
+  background-image: url('/media/images/myitems-folder-new.png');
+}
+
+
+.my-items-views .folder.to-delete .confirm,
+.my-items-views .folder.to-delete .cancel,
+.my-items-views .folder.to-delete .folder-text {
+  color: #616161;
+}
+
+.my-items-views .folder.to-delete .inline-confirmation-block {
+  display: block;
+  margin-top: 3px;
+}
+
+.my-items-views .folder.to-delete .confirm {
+  border: solid;
+  border-width: 1px;
+  padding: 1px 3px;
+  margin-left: 35px;
+}
+
+.my-items-views .folder.to-delete .confirm:hover {
+  color: #FAAF3B;
+}
+
+.my-items-views .folder.to-delete .cancel {
+  margin-left: 10px;
+  font-size: 11px;
+}
+.my-items-views .folder.to-delete .cancel:hover {
+  text-decoration: underline;
+}
+
+.myitems-materials-index article .inline-confirmation-block {
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px 1px #616161;
+  padding: 10px 10px 11px 10px;
+}
+
+.myitems-materials-index article .confirm {
+  color: white;
+  padding: 1px 3px;
+  background-color: #0B7BA9;
+}
+
+.myitems-materials-index article .confirm:hover {
+  border-color: #FAAF3B;
+  background-color: #FFCC66;
+}
+
+.myitems-materials-index .cancel {
+  margin-left: 10px;
+  font-size: 11px;
+}
+.myitems-materials-index article .cancel:hover {
+  text-decoration: underline;
+}
+
+.my-items-views a.hidden {
+  display: none;
+}
+
+.myitems-save-button {
+  position: relative;
+}
+
+.myitems-save-button a.hidden {
+  display: none;
+}
+
+.myitems-save-button .button-main,
+.myitems-save-button .my-items-views {
+  box-shadow: 1px 2px 2px 0px #CCCCCC;
+}
+
+.myitems-save-button .button-main a {
+  color: #FFFFFF;
+}
+
+.myitems-save-button .save-unsave-button {
+  background-color: #8CC63F;
+  padding-left: 10px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.myitems-save-button .folder-list-button {
+  background-color: #679801;
+  float: right;
+  text-align: center;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.myitems-save-button .my-items-views {
+  display: none;
+  position: absolute;
+  background-color: #FFF;
+  border: solid;
+  border-top: none;
+  border-width: 1px;
+  border-color: #8CC63F;
+  padding-bottom: 10px;
+  z-index: 10;
+}
+
+.myitems-save-button .my-items-views li {
+  padding-left: 5px;
+}
+.myitems-save-button .folder:hover .folder-text {
+  text-decoration: underline;
+}
+
+.myitems-save-button .my-items-views .folder {
+  cursor: pointer;
+}
+
+.myitems-save-button .my-items-views .folder.selected .folder-icon {
+  background-image: url('/media/images/myitems-folder-user-marked.png');
+}
+
+.myitems .pagination {
+  border-top: solid;
+  border-width: 2px;
+  border-color: #3F6B82;
+  padding-top: 5px;
+}
+
+.myitems .pagination .previous {
+  float: left;
+}
+
+.myitems .pagination .next {
+  float: right;
+}
+
+.myitems .pagination .pages {
+  width: 100%;
+  text-align: center;
+}
+
+.myitems .pagination .pages a {
+  color: #616161;
+}
+
+.myitems .pagination .pages strong {
+  color: #8CC63F;
+  font-size: 110%;
+}
+
+.myitems .pagination .text {
+  color: #616161;
+  text-decoration: underline;
+}
+
+.myitems .pagination .arrow {
+  font-weight: bolder;
+  color: #000;
+}
+
+.myitems .pagination .disabled .arrow, 
+.myitems .pagination .disabled .text { 
+  color: #DFDFDF;
+}
+
+.with-profile-tabs .profile-tabs nav {
+  border-bottom: solid;
+  border-width: 2px;
+  border-color: #cccccc;
+  margin-top: 5px;
+}
+
+.with-profile-tabs .profile-tabs nav a {
+  text-decoration: none;
+}
+
+.with-profile-tabs .profile-tabs ul {
+  margin-bottom: -2px;
+}
+
+.with-profile-tabs .profile-tabs nav li {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 20px;
+  height: 24px;
+  border: solid;
+  border-color: transparent;
+  border-width: 1px 2px 2px 1px;
+}
+
+.with-profile-tabs .profile-tabs nav li.selected {
+  border-color: #CCCCCC;
+  border-bottom-color: #FFF;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.with-profile-tabs .profile-tabs nav li.selected a {
+  color: #0b556f;
+}
+
+.with-profile-tabs .profile-tabs nav li.preferences a {
+  background: url("../images/preferences-icon-blue.png") no-repeat scroll center center transparent;
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+}
+
+.with-profile-tabs .profile-tabs nav li.selected.preferences a {
+  background: url("../images/preferences-icon.png") no-repeat scroll center center transparent;
+}
+
+.with-profile-tabs .layout-columns {
+  border: solid;
+  border-left: none;
+  border-width: 2px;
+  border-color: #cccccc;
+  padding: 40px 30px 20px 30px;
+  margin-top: -2px;
+  margin-bottom: -2px;
+  background: none;
+}
+
+.with-profile-tabs footer {
+  margin-top: 0;
+  border: none;
+}
+
+.myitems-search form {
+  text-align: right;
+}
+
+.myitems-search input {
+  margin: 2px 0;
+}
+
+.myitems-search input.search-input {
+  width: 200px;
+}
+
+.myitems-search .search-results {
+  background-color: #DAE3E6;
+  border: solid 2px #D0D9DC;
+  font-size: 14px;
+  margin-top: 3px;
+  padding: 3px;
+  position: relative;
+}
+
+.myitems-search .search-results a.delete {
+  float: right;
 }

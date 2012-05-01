@@ -1,5 +1,7 @@
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template import Library
+from django.utils.safestring import mark_safe
 from users import DAYS_TO_DELETE
 from users.models import RegistrationConfirmation
 import datetime
@@ -14,7 +16,7 @@ VIEWS = [
     ("users:profile_geography", u"Location"),
     ("users:profile_roles", u"Role"),
     ("users:profile_about", u"About Me"),
-    ("preferences:preferences", u"Settings"),
+    ("users:profile_preferences", u"Settings"),
 ]
 
 
@@ -73,3 +75,15 @@ def confirmation_notification(context):
         days_to_delete = 0
     resend_url = u"%s?%s" % (reverse("users:registration_resend"), urllib.urlencode(dict(email=user.email)))
     return dict(days_to_delete=days_to_delete, resend_url=resend_url)
+
+
+@register.simple_tag()
+def profile_link(user):
+    if not isinstance(user, User):
+        return u""
+    profile = user.get_profile()
+    name = profile.public_name
+    if profile.privacy in ("full", "basic"):
+        profile_url = reverse("users:profile_public", kwargs=dict(user_id=user.id))
+        return mark_safe("""<a href="%s">%s</a>""" % (profile_url, name))
+    return name

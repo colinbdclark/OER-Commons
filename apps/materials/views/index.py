@@ -4,6 +4,7 @@ from authoring.models import AuthoredMaterial
 from autoslug.settings import slugify
 from common.models import GradeLevel
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.template import RequestContext
@@ -276,9 +277,11 @@ class IndexParams:
 def populate_item_from_search_result(result):
     item = result.get_stored_fields()
 
-    item["identifier"] = "%s.%s.%s" % (result.app_label,
-                                       result.model_name,
-                                       result.pk)
+    content_type = ContentType.objects.get_by_natural_key(
+        result.app_label,
+        result.model_name
+    )
+    item["identifier"] = "%s.%s" % (content_type.id, result.pk)
 
     if item.get("collection"):
         collection_id = item["collection"]
@@ -312,12 +315,6 @@ def populate_item_from_search_result(result):
         item["view_url"] = reverse(
                            "materials:%s:view_item" % namespace,
                            kwargs=dict(slug=item["slug"]))
-        item["save_item_url"] = reverse(
-                               "materials:%s:save_item" % namespace,
-                               kwargs=dict(slug=item["slug"]))
-        item["unsave_item_url"] = reverse(
-                               "materials:%s:unsave_item" % namespace,
-                               kwargs=dict(slug=item["slug"]))
         item["add_tags_url"] = reverse("tags:add_tags", args=(
                                     result.app_label,
                                     result.model_name,

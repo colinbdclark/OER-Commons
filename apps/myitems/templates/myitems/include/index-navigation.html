@@ -1,0 +1,28 @@
+{% if pagination.pages|length > 1 %}
+<div class="pagination">
+    <div class="previous">
+      <a rel="prev"{% if pagination.prev_page_url %} href="{{ pagination.prev_page_url }}"{% else %} class="disabled"{% endif %}>
+        <span class="arrow">&lt;</span> <span class="text">Previous</span>
+      </a>
+    </div>
+
+    <div class="next">
+      <a rel="next"{% if pagination.next_page_url %} href="{{ pagination.next_page_url }}"{% else %} class="disabled"{% endif %}>
+        <span class="text">Next</span> <span class="arrow">&gt;</span>
+    </div>
+    
+    <div class="pages">
+      {% for page in pagination.pages %}
+        {% if page %}
+          {% if page.url %}
+            <a href="{{ page.url }}">{{ page.number }}</a>
+          {% else %}
+            <strong>{{ page.number }}</strong>
+          {% endif %}
+        {% else %}
+          …
+        {% endif %}
+      {% endfor %}
+    </div>
+</div>
+{% endif %}

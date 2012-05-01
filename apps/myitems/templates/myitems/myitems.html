@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load myitems_tags %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    $(function() {
+      oer.myitems.init();
+      oer.rating.init();
+    });
+  </script>
+{% endblock %}
+
+{% block page-title %}{% endblock %}
+{% block above-content %}
+    {% profile_tabs %}
+{% endblock %}
+
+{% block column-left %}
+    {% myitems_views_portlet %}
+
+    {% if search_url %}
+    <section class="portlet myitems-search">
+        <form action="{{ search_url }}" method="get">
+            <input type="text" class="search-input" name="f.search"{% if search_value %} value="{{ search_value }}"{% endif %} class="text" placeholder="Search My Items" />
+            <input type="submit" class="button-minor rc5" value="Search" />
+        </form>
+
+        {% if search_value %}
+            <div class="search-results">
+                <a href="{{ request.path }}" class="delete">×</a>
+                {{ pagination.total_items }} results for "{{ search_value }}"
+            </div>
+        {% endif %}
+    </section>
+    {% endif %}
+{% endblock %}
+
+{% block bodyclass %}no-right-column myitems with-profile-tabs{% endblock %}
+
+{% block column-right %}{% endblock %}
+
+{% block content %}
+    {% include "myitems/include/index-action-panel.html" %}
+
+    {% if items %}
+        <div class="materials-index myitems-materials-index {{ index_type }}">
+            {% for item in items %}
+                {% include "myitems/include/index-material.html" %}
+            {% endfor %}
+
+            {% include "myitems/include/index-navigation.html" %}
+        </div>
+
+    {% else %}
+        {% block no-items %}
+            {% if no_items_message %}<p class="clear">{{ no_items_message }}</p>{% endif %}
+        {% endblock %}
+    {% endif %}
+
+{% endblock %}

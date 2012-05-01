@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load rating_tags %}
-{% load savedsearches_tags %}
 {% load sendthis_tags %}
 {% load tags_tags %}
 {% load curriculum_tags %}
@@ -9,7 +8,6 @@
   <script type="text/javascript">
     $(function() {
       oer.materials.index.init();
-      oer.saved_search.init();
       oer.send_this.init();
       oer.rating.init();
     });
@@ -35,8 +33,7 @@
   <p class="no-items-match">No items match your search.</p>
   {% endif %}
   </div>
-  
-  {% save_search_form index_url index_title %}
+
   {% send_this_form index_url %}
 
   <div id="add-tags-dialog" style="display: none;">
@@ -46,7 +43,7 @@
   <div id="align-dialog" style="display: none;">
       {% align_form %}
   </div>
-  
+
 {% endblock %}
 
 {% block column-right %}
@@ -68,7 +65,7 @@
      {% endif %}
    </section>
    {% endif %}
-   
+
    {% include "include/portlets/cou.html" %}
-   
+
 {% endblock %}

@@ -8,6 +8,8 @@
 {% load curriculum_tags %}
 {% load utils %}
 {% load i18n %}
+{% load myitems_tags %}
+{% load users_tags %}
 
 {% block title %}{{ item.title }} | {{ block.super }}{% endblock %}
 
@@ -25,6 +27,7 @@
       {% endif %}
       $("section.portlet a.tooltip").qtip(TOPLEFTSIDE_TOOLTIP_OPTIONS);
       oer.align_form.init_tag_tooltip($("div.evaluation-results td.alignment-scores span"));
+      oer.myitems.init_save_button();
     });
   </script>
 {% endblock %}
@@ -36,7 +39,7 @@
 {% block content-itemscope-attrs %} itemscope="itemscope" itemtype="http://schema.org/ScholarlyArticle"{% endblock %}
 
 {% block content %}
-
+  <section class="sheet">
   {% if came_from_index %}
   <nav class="view-item-navigation" data-index-cookie="{{ index_cookie }}">
     {% if prev_item_url %}
@@ -90,38 +93,42 @@
 
 <article class="view-item item" data-content-type="{{ content_type.id }}" data-object-id="{{ item.id }}" id="{{ item.identifier }}">
 
-  {% if not item.screenshot %}
-    <div class="right clear">
-      {% if item.license %}
-        {% cou_bucket item.license.bucket %}
-      {% endif %}
-  </div>
-  {% endif %}
-
   <div class="details">
     <h1 itemprop="name">
       {% if view_full_url %}
         <a {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}>
-          <img src="{{ STATIC_URL }}images/item-title-icon.png" alt="{{ item.title }}" /> {{ item.title|safe }}
+          {{ item.title|safe }}
         </a>
       {% else %}
-        <img src="{{ STATIC_URL }}images/item-title-icon.png" alt="{{ item.title }}" /> {{ item.title|safe }}
+        {{ item.title|safe }}
       {% endif %}
     </h1>
 
     <meta itemprop="url" content="{{ item.url }}" />
     <meta itemprop="keywords" content="{{ item.keyword_names|join:", " }}" />
 
-    {% if item.screenshot %}
-      <div class="left">
-        {% thumbnail item.screenshot "300x250" crop="0px 0px" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-        {% endthumbnail %}
-        {% if item.license %}
-          {% cou_bucket item.license.bucket %}
+    <div class="left">
+      <div class="thumb">
+        {% if view_full_url %}
+          <a {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}>
+        {% endif %}
+            {% thumbnail item.screenshot "300x250" crop="0px 0px" as im %}
+              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            {% empty %}
+              <img class="thumb" src="{{ STATIC_URL }}images/dummy-thumb-big.png" width="303" height="253">
+            {% endthumbnail %}
+        {% if view_full_url %}
+          </a>
+        {% endif %}
+        {% if view_full_url %}
+           <a id="goto" {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}
+               class="button-blue-big gradient rc5"><i class="magnifier-icon"></i> View Resource</a>
         {% endif %}
       </div>
-    {% endif %}
+      {% if item.license %}
+        {% cou_bucket item.license.bucket %}
+      {% endif %}
+    </div>
     <dl>
 
       {% with authors=item.authors.all %}
@@ -240,18 +247,10 @@
       {% endif %}
     </dl>
   </div>
-
-  {% if view_full_url %}
-    <div class="align-right">
-      <a id="goto" {% if item.url and not request.preferences.show_toolbar %}href="{{ item.url }}" target="_blank"{% else %}href="{{ view_full_url }}"{% endif %}
-         class="button-blue-big rc5">Go to OER Item</a>
-    </div>
-  {% endif %}
-
 </article>
 
 <section class="resource-comments">
-  <h1>Comments:</h1>
+  <h1>Comments</h1>
   {% for comment in comments %}
     <article{% if comment.is_review and comment.author == request.user %} class="author rc5"{% endif %} itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
       {% if comment.title %}<h1>{{ comment.title }}</h1>{% endif %}
@@ -261,7 +260,7 @@
           <a href="#" class="edit"><span>Edit</span></a>
           <a href="#" class="delete"><span>Delete</span></a>
         {% endif %}
-        <span class="by" itemprop="author">- {{ comment.author|username }}</span>
+        <span class="by" itemprop="author">- {% profile_link comment.author %}</span>
       </footer>
     </article>
   {% endfor %}
@@ -277,7 +276,7 @@
       </div>
     {% endwith %}
     <div class="buttons">
-      <a href="#" class="button-blue-big rc5">Add Comment</a>
+      <a href="#" class="button-minor rc5">Add Comment</a>
     </div>
   </form>
 </section>
@@ -300,20 +299,16 @@
 {% endblock %}
 
 {% block column-right %}
-  <section class="portlet dotted save">
-    {% if saved %}
-      <a href="{{ unsave_url }}" class="require-login">Remove from My Items</a>
-    {% else %}
-      <a href="{{ save_url }}" class="require-login save">Add to My Items</a>
-    {% endif %}
+  <section class="portlet save">
+    {% myitems_save_button %}
   </section>
 
-  <section class="portlet dotted">
-    <h1>Rate and Review</h1>
+  <section class="portlet">
+    <h1 class="expanded">Rate and Review</h1>
     {% stars item.identifier item.ratings.all %}
     {% if item.url and view_full_url %}
       <div>
-        <a href="{{ view_full_url }}#evaluate" id="evaluate-btn" class="button-blue-big rc5">Evaluate Resource</a>
+        <a href="{{ view_full_url }}#evaluate" id="evaluate-btn" class="button-minor rc5">Evaluate Resource</a>
         <a href="#evaluate-tooltip" rel="#evaluate-tooltip" class="tooltip"><small>What is this?</small></a>
         <div style="display: none" id="evaluate-tooltip">
             These seven rubrics will help users determine the degree of alignment of OER to
@@ -372,8 +367,8 @@
 
   {% align_item_tags_portlet item %}
 
-  <section class="portlet addthis dotted">
-    <h1>Share</h1>
+  <section class="portlet addthis">
+    <h1 class="expanded">Share</h1>
       <div class="addthis_toolbox addthis_32x32_style addthis_default_style">
           <a class="addthis_button_facebook"></a>
           <a class="addthis_button_twitter"></a>
@@ -383,8 +378,8 @@
       <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=oercommons"></script>
   </section>
 
-  <section class="portlet item-tags">
-    <h1>Tags</h1>
+  <section class="portlet item-tags last">
+    <h1 class="expanded">Tags</h1>
     <p>Keywords, descriptive words, interested groups &amp; more</p>
     <ul>
       {% for tag in tags %}
@@ -422,7 +417,6 @@
     </div>
 
   </section>
-
 {% endblock %}
 
 {% block extra-footer %}

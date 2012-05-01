@@ -41,6 +41,7 @@ STATICFILES_MEDIA_DIRNAMES = (
 STATICFILES_PREPEND_LABEL_APPS = (
     'django.contrib.admin',
     'sentry',
+    'django_js_utils',
 )
 
 ADMIN_MEDIA_ROOT = os.path.join(STATIC_ROOT, 'admin')
@@ -54,7 +55,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'utils.middleware.BrowserDetectMiddleware',
-    'preferences.middleware.PreferencesMiddleware',
+    'users.middleware.PreferencesMiddleware',
     'depiction.middleware.ProfilerMiddleware',
     'abtesting.middleware.ABTestingMiddleware',
     'users.middleware.ConfirmationMiddleware',
@@ -107,7 +108,6 @@ INSTALLED_APPS = (
     'rating',
     'reviews',
     'saveditems',
-    'savedsearches',
     'myitems',
     'feedback',
     'information',
@@ -120,7 +120,6 @@ INSTALLED_APPS = (
     'harvester',
     'visitcounts',
     'newsletter',
-    'preferences',
     'rubrics',
     'rubrics.manage',
     'getsatisfaction',
@@ -250,6 +249,3 @@ LOGGING = {
 LR_COMMAND = "%s -m LRSignature.cmd sign" % os.path.join(os.path.dirname(__file__), "..", "bin", "python-lr")
 
 PROFILING = False
-
-# For PDF generation
-FONTS_DIR = "/usr/share/fonts/truetype/msttcorefonts"

@@ -32,7 +32,7 @@ def navigation(context):
 
     tab = dict(title=u"My OER")
     tab["url"] = reverse("myitems:myitems")
-    tab["selected"] = view_name.startswith("myitems:") or view_name.startswith("users:profile") or view_name.startswith("preferences:")
+    tab["selected"] = view_name.startswith("myitems:") or view_name.startswith("users:profile")
     tab["class"] = "require-login"
     tabs.append(tab)
 

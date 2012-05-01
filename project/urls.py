@@ -1,6 +1,5 @@
 from django.conf import settings
-from django.conf.urls.defaults import patterns, handler500, handler404, url, \
-    include
+from django.conf.urls.defaults import patterns, url, include
 from django.contrib import admin
 from oai.oer.oai_dc import OAIDublinCore
 from oai.oer.oai_oer2 import OAIOER2
@@ -43,19 +42,19 @@ urlpatterns = patterns('',
     url(r'', include('tags.urls', app_name=None, namespace="tags")),
     url(r'', include('rating.urls', app_name=None, namespace="rating")),
     url(r'', include('reviews.urls', app_name=None, namespace="reviews")),
-    url(r'', include('preferences.urls', app_name=None, namespace="preferences")),
     url(r'', include('curriculum.urls', app_name=None, namespace="curriculum")),
     url(r'', include('rubrics.urls', app_name=None, namespace="rubrics")),
     url(r'^authoring/', include('authoring.urls', app_name=None, namespace="authoring")),
     url(r'^rubrics/manage/', include('rubrics.manage.urls', app_name=None, namespace="rubrics_manage")),
     url(r'^my', include('myitems.urls', app_name=None, namespace="myitems")),
-    url(r'^savedsearches', include('savedsearches.urls', app_name=None, namespace="savedsearches")),
     url(r'^oauth/', include('oauth_provider.urls')),
     url(r'^sentry/', include('sentry.urls')),
     url(r'^mailchimp/', include('mailchimp.urls')),
     url(r'', include('stats.urls')),
     url(r'', include('newsletter.urls', app_name=None, namespace="newsletter")),
     url(r'', include('materials.urls', app_name=None, namespace="materials")),
+    url(r'^saveditems', include('saveditems.urls', app_name=None, namespace="saveditems")),
+    url(r'^jsurls.js$', 'django_js_utils.views.jsurls', name='jsurls'),
 )
 
 if settings.DEBUG:

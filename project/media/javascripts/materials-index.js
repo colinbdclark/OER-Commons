@@ -160,9 +160,12 @@ oer.materials.index.init_actions_menus = function() {
   $materials_index.delegate("dl.actions a.save-item", "click", function(e) {
     e.preventDefault();
     var $this = $(this);
+    var $article = $this.closest("article.item");
+    var identifier = $article.attr("data-identifier");
+    var url = django_js_utils.urls.resolve('saveditems:save_item');
     oer.login.check_login(function() {
-      $.post($this.attr("href"), function(data) {
-        oer.materials.index.item_message($this.closest("article.item"), data.message);
+      $.post(url, { identifier: identifier}, function(data) {
+        oer.materials.index.item_message($article, data.message);
       });
     });
     var $menu = $this.closest("dl.actions");

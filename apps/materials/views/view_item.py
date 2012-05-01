@@ -208,12 +208,6 @@ class BaseViewItemMixin(object):
                 user=request.user
             ).exists()
 
-        if hasattr(item, "namespace"):
-            data["save_url"] = reverse("materials:%s:save_item" % item.namespace,
-                           kwargs=dict(slug=item.slug))
-            data["unsave_url"] = reverse("materials:%s:unsave_item" % item.namespace,
-                           kwargs=dict(slug=item.slug))
-
         data["comment_url"] = reverse(
             "reviews:review",
             kwargs=dict(content_type_id=content_type.id, object_id=item.id)

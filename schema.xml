@@ -110,6 +110,8 @@
     <field name="reviewed_by" type="sint" indexed="true" stored="true" multiValued="true" />
     <field name="noted_by" type="sint" indexed="true" stored="true" multiValued="true" />
 
+    <field name="saved_in_folders" type="sint" indexed="true" stored="true" multiValued="true" />
+
     <field name="creator" type="sint" indexed="true" stored="true" multiValued="false" />
 
     <field name="license" type="string" indexed="true" stored="true" multiValued="false" />
