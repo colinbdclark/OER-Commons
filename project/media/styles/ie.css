@@ -40,3 +40,7 @@
 .evaluation-results .comment {
   top: -2px;
 }
+
+#content.contribute .sheet {
+  width: 37% !important;
+}

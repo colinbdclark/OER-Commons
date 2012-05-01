@@ -1,5 +1,7 @@
 from annoying.decorators import ajax_request
 from annoying.functions import get_object_or_None
+from common.models import GradeLevel
+from core.search import reindex
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -12,14 +14,13 @@ from django.template.defaultfilters import floatformat
 from django.utils.dateformat import format
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, View
-from materials.models import Course, Library, CommunityItem, GenericMaterial, GradeLevel, GeneralSubject
+from materials.models import Course, Library, CommunityItem, GenericMaterial, GeneralSubject
 from rubrics.models import StandardAlignmentScore, RubricScore, Rubric, \
     Evaluation, RubricScoreValue, get_verbose_score_name
 from users.views.login import LoginForm
 from operator import or_
 import datetime
 import calendar
-from core.search import reindex
 
 
 class Login(FormView):

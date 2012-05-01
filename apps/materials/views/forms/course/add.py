@@ -1,19 +1,21 @@
+from common.models import GradeLevel, MediaFormat
+from core.forms import AutoCreateField, MultipleAutoCreateInput, \
+    MultipleAutoCreateField, AutocompleteListWidget
 from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
-from materials.models.common import GeneralSubject, GradeLevel, MediaFormat, \
+from materials.models.common import GeneralSubject,\
     Language, GeographicRelevance, Keyword
 from materials.models.course import Course, CourseMaterialType, COURSE_OR_MODULE
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
-from materials.views.forms import AuthorsField, LICENSE_TYPES, CC_OLD_LICENSES, \
+from materials.views.forms import LICENSE_TYPES, CC_OLD_LICENSES, \
     LicenseTypeFieldRenderer, SubmissionFormBase, LanguagesField
-from materials.views.forms.course import InstitutionField, DerivedFields, \
-    PrePostRequisitesFields, CollectionField
+from materials.views.forms.course import DerivedFields, \
+    PrePostRequisitesFields
 from utils.decorators import login_required
-from utils.forms import AutocompleteListField
 
 
 class AddForm(SubmissionFormBase, ModelForm):
@@ -31,26 +33,33 @@ class AddForm(SubmissionFormBase, ModelForm):
                                widget=forms.Textarea(
                                attrs={"class": "text wide"}))
 
-    institution = InstitutionField(label=u"Institution:",
-                                  required=False,
-                                  widget=forms.TextInput(
-                                  attrs={"class": "text wide"}))
+    institution = AutoCreateField(
+        "name",
+        label=u"Institution:",
+        required=False,
+        widget=forms.TextInput(attrs={"class": "text wide"})
+    )
 
-    collection = CollectionField(label=u"Collection:",
-                                 required=False,
-                                 widget=forms.TextInput(
-                                 attrs={"class": "text wide"}))
+    collection = AutoCreateField(
+        "name",
+        label=u"Collection:",
+        required=False,
+        widget=forms.TextInput(attrs={"class": "text wide"})
+    )
 
-    authors = AuthorsField(label=u"Authors:", required=False,
-                           widget=forms.TextInput(
-                           attrs={"class": "text wide"}))
+    authors = MultipleAutoCreateField(
+        "name",
+        label=u"Authors:",
+        required=False,
+        widget=MultipleAutoCreateInput(attrs={"class": "text wide"})
+    )
 
     tech_requirements = forms.CharField(label=u"Notable Hard/Software:",
                                      required=False,
                                      widget=forms.Textarea(
                                      attrs={"class": "text wide"}))
 
-    keywords = AutocompleteListField(model=Keyword, label=u"Keywords")
+    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), label=u"Keywords")
 
     general_subjects = forms.ModelMultipleChoiceField(
                                 GeneralSubject.objects.all(),
@@ -124,7 +133,7 @@ class AddForm(SubmissionFormBase, ModelForm):
         model = Course
         fields = ["title", "url", "abstract", "institution", "collection",
                   "authors", "tech_requirements", "keywords", "general_subjects",
-                  "grade_levels", "material_types", "media_formats", 
+                  "grade_levels", "material_types", "media_formats",
                   "languages", "geographic_relevance",
                   "license_type", "license_cc", "license_cc_old",
                   "license_custom_url", "license_description",

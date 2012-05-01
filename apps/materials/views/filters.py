@@ -1,13 +1,15 @@
-from curriculum.models import TaggedMaterial, AlignmentTag, Standard, Grade,\
+from authoring.models import AuthoredMaterial
+from common.models import Grade, GradeLevel, MediaFormat
+from curriculum.models import TaggedMaterial, AlignmentTag, Standard,\
     LearningObjectiveCategory
 from django.http import Http404
-from materials.models.common import Keyword, GeneralSubject, GradeLevel, \
-    MediaFormat, Language, GeographicRelevance, Collection, COU_BUCKETS, \
+from materials.models.common import Keyword, GeneralSubject,\
+    Language, GeographicRelevance, Collection, COU_BUCKETS, \
     LICENSE_TYPES
 from materials.models.community import CommunityType, CommunityTopic
 from materials.models.course import COURSE_OR_MODULE, CourseMaterialType
 from materials.models.library import LibraryMaterialType
-from materials.models.material import MEMBER_ACTIVITY_TYPES
+from materials.models.material import MEMBER_ACTIVITY_TYPES, Material
 from materials.models.microsite import Microsite, Topic
 from materials.utils import get_name_from_slug
 from ordereddict import OrderedDict
@@ -15,8 +17,8 @@ from rubrics.models import get_rubric_choices
 from tags.models import Tag
 from utils.templatetags.utils import truncatechars
 from haystack.query import SQ
-import re
 from operator import or_
+import re
 
 
 class Filter(object):
@@ -92,7 +94,7 @@ class ChoicesFilter(Filter):
 
     @property
     def available_values(self):
-        return set([option[0] for option in self.choices])
+        return set(option[0] for option in self.choices)
 
     def extract_value(self, request):
         value = request.REQUEST.getlist(self.request_name)
@@ -317,14 +319,23 @@ class AlignmentStandardFilter(AlignmentFilter):
 
 class AlignmentGradeFilter(AlignmentStandardFilter):
 
+    def extract_value(self, request):
+        value = request.REQUEST.getlist(self.request_name)
+        if not value:
+            return None
+        return value
+
     @property
     def available_values(self):
-        return set(TaggedMaterial.objects.all().values_list("tag__grade__id", flat=True).order_by().distinct())
+        grades = set()
+        for grade, end_grade in TaggedMaterial.objects.all().values_list("tag__grade__code", "tag__end_grade__code").order_by().distinct():
+            grades.add("%s-%s" % (grade, end_grade) if end_grade else grade)
+        return grades
 
     def page_subtitle(self, value):
         if not isinstance(value, list):
             value = [value]
-        return ",".join([unicode(Grade.objects.get(id=id)) for id in value])
+        return ",".join([u"%s Grades" % code if "-" in code else unicode(Grade.objects.get(code=code)) for code in value])
 
 
 class AlignmentCategoryFilter(AlignmentStandardFilter):
@@ -477,6 +488,12 @@ class RubricFilter(ChoicesFilter):
         return value
 
 
+CONTENT_SOURCES = (
+    (AuthoredMaterial.content_source, u"Open Author Resources"),
+    (Material.content_source, u"Content Provider Resources"),
+)
+
+
 FILTERS = OrderedDict([
     ("general_subjects", VocabularyFilter("general_subjects", "f.general_subject", GeneralSubject, u"Subject Area")),
     ("grade_levels", VocabularyFilter("grade_levels", "f.edu_level", GradeLevel, u"Grade Level")),
@@ -502,6 +519,6 @@ FILTERS = OrderedDict([
     ("alignment_categories", AlignmentCategoryFilter("alignment_categories", "f.alignment_category")),
     ("alignment_cluster", AlignmentClusterFilter("alignment_tags", "f.cluster")),
     ("evaluated_rubrics", RubricFilter("evaluated_rubrics", "f.rubric", get_rubric_choices(), u"Rubric")),
+    ("content_source", ChoicesFilter("content_source", "source", CONTENT_SOURCES, u"Content Source")),
     ("search", SearchFilter()),
 ])
-

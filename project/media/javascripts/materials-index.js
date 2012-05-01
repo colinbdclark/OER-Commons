@@ -103,6 +103,12 @@ oer.materials.index.init_filters = function() {
     }
   });
 
+  $form.delegate("div.filter :checkbox", "click", function() {
+    if ($.support.pjax) {
+      $form.submit();
+    }
+  });
+
 };
 
 oer.materials.index.init_top_keywords = function() {

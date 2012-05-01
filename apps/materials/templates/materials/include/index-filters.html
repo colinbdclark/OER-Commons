@@ -10,14 +10,14 @@
     {% hidden_filters hidden_filters %}
 
     <h1 class="dotted">You searched for:</h1>
-    
+
     <div class="dotted search">
       <input type="text" class="text" name="f.search" value="{{ search_query }}" />
       <input type="submit" class="button" value="Search Within These Results" />
     </div>
-    
+
     <h1 class="dotted">Refine Your Search</h1>
-    
+
     {% with index_filters.general_subjects as filter %}
       {% if filter.options %}
       <dl class="dotted filter collapsible clearfix">
@@ -72,7 +72,7 @@
        <p><strong>Post-Secondary</strong>: University</p>
       </div>
       {% endif %}
-      
+
     {% endwith %}
 
     {% with index_filters.topics as filter %}
@@ -173,23 +173,47 @@
 
       <div style="display: none; " id="cou-tooltip">
        <p><strong>No Strings Attached</strong><br/>
-       No restrictions on your remixing, redistributing, or making derivative 
+       No restrictions on your remixing, redistributing, or making derivative
        works. Give credit to the author, as required.</p><br/>
        <p><strong>Remix and Share</strong><br/>
-       Your remixing, redistributing, or making derivatives works comes with 
+       Your remixing, redistributing, or making derivatives works comes with
        some restrictions, including how it is shared.</p><br/>
        <p><strong>Share Only</strong><br/>
-       Your redistributing comes with some restrictions. Do not remix or make 
+       Your redistributing comes with some restrictions. Do not remix or make
        derivative works.</p><br/>
        <p><strong>Read the Fine Print</strong><br/>
        Copyrighted materials, available under Fair Use and the TEACH Act for
-       US-based educators, or other custom arrangements. Go to the resource 
-       provider to see their individual restrictions.</p> 
-      </div>      
-      
+       US-based educators, or other custom arrangements. Go to the resource
+       provider to see their individual restrictions.</p>
+      </div>
+
+      {% endif %}
+    {% endwith %}
+
+    {% with index_filters.content_source as filter %}
+      {% if filter.options %}
+      <dl class="dotted filter collapsible clearfix">
+        <dt>
+           <a href="#" class="expand-button {% if filter.collapsed %}collapsed{% else %}expanded{% endif %}"></a>
+           <label for="{{ filter.name }}">
+             <input type="checkbox" name="{{ filter.name }}"
+                    id="{{ filter.name }}" value="yes" {% if filter.all_checked %}checked="checked"{% endif %}
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ filter.title }}</label>
+        </dt>
+        {% for option in filter.options %}
+        <dd class="{% if filter.collapsed %}collapsed{% else %}expanded{% endif %}">
+           <label title="{{ option.name }} ({{ option.count }})" for="{{ option.input_id }}">
+             <input type="checkbox" name="{{ filter.request_name }}" {% if option.checked %}checked="checked"{% endif %}
+                    id="{{ option.input_id }}" value="{{ option.slug }}"
+                    {% if filter.disabled %}disabled="disabled"{% endif %} />
+             {{ option.name }} ({{ option.count }})</label>
+        </dd>
+        {% endfor %}
+      </dl>
       {% endif %}
     {% endwith %}
 
   </form>
-  
+
 </section>

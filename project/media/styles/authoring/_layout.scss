@@ -1,0 +1,31 @@
+.layout-columns {
+  width: auto;
+  margin: 0;
+  padding: 30px;
+  background: none;
+  font-family: "Myriad Pro", Helvetica, sans-serif;
+  a {
+    text-decoration: none;
+  }
+}
+.column-left {
+  section {
+    margin-bottom: 20px;
+    h2 {
+      font-weight: bold;
+      text-transform: uppercase;
+      text-shadow: 1px 1px 1px #fff;
+      color: #989898;
+      margin-bottom: 10px;
+    }
+  }
+  li {
+    padding: 5px 0;
+  }
+  ul {
+    margin-left: 1.5em;
+  }
+  a {
+    text-decoration: none;
+  }
+}

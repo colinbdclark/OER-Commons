@@ -1,121 +1,433 @@
 [
   {
-    "pk": 1,
-    "model": "common.studentlevel",
+    "pk": 1, 
+    "model": "common.studentlevel", 
     "fields": {
       "title": "Pre-K (age 4 or younger)"
     }
-  },
+  }, 
   {
-    "pk": 2,
-    "model": "common.studentlevel",
+    "pk": 2, 
+    "model": "common.studentlevel", 
     "fields": {
       "title": "Kindergarten (ages 4-5)"
     }
-  },
+  }, 
   {
-    "pk": 3,
-    "model": "common.studentlevel",
+    "pk": 3, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "1st Grade (ages 5-6)"
+      "title": "Grade 1 (ages 5-6)"
     }
-  },
+  }, 
   {
-    "pk": 4,
-    "model": "common.studentlevel",
+    "pk": 4, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "2nd Grade (ages 6-7)"
+      "title": "Grade 2 (ages 6-7)"
     }
-  },
+  }, 
   {
-    "pk": 5,
-    "model": "common.studentlevel",
+    "pk": 5, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "3rd Grade (ages 7-8)"
+      "title": "Grade 3 (ages 7-8)"
     }
-  },
+  }, 
   {
-    "pk": 6,
-    "model": "common.studentlevel",
+    "pk": 6, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "4th Grade (ages 8-9)"
+      "title": "Grade 4 (ages 8-9)"
     }
-  },
+  }, 
   {
-    "pk": 7,
-    "model": "common.studentlevel",
+    "pk": 7, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "5th Grade (ages 9-10)"
+      "title": "Grade 5 (ages 9-10)"
     }
-  },
+  }, 
   {
-    "pk": 8,
-    "model": "common.studentlevel",
+    "pk": 8, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "6th Grade (ages 10-11)"
+      "title": "Grade 6 (ages 10-11)"
     }
-  },
+  }, 
   {
-    "pk": 9,
-    "model": "common.studentlevel",
+    "pk": 9, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "7th Grade (ages 11-12)"
+      "title": "Grade 7 (ages 11-12)"
     }
-  },
+  }, 
   {
-    "pk": 10,
-    "model": "common.studentlevel",
+    "pk": 10, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "8th Grade (ages 12-13)"
+      "title": "Grade 8 (ages 12-13)"
     }
-  },
+  }, 
   {
-    "pk": 11,
-    "model": "common.studentlevel",
+    "pk": 11, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "9th Grade (ages 13-14)"
+      "title": "Grade 9 (ages 13-14)"
     }
-  },
+  }, 
   {
-    "pk": 12,
-    "model": "common.studentlevel",
+    "pk": 12, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "10th Grade (ages 14-15)"
+      "title": "Grade 10 (ages 14-15)"
     }
-  },
+  }, 
   {
-    "pk": 13,
-    "model": "common.studentlevel",
+    "pk": 13, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "11th Grade (ages 15-16)"
+      "title": "Grade 11 (ages 15-16)"
     }
-  },
+  }, 
   {
-    "pk": 14,
-    "model": "common.studentlevel",
+    "pk": 14, 
+    "model": "common.studentlevel", 
     "fields": {
-      "title": "12th Grade (ages 16-17)"
+      "title": "Grade 12 (ages 16-17)"
     }
-  },
+  }, 
   {
-    "pk": 15,
-    "model": "common.studentlevel",
+    "pk": 15, 
+    "model": "common.studentlevel", 
     "fields": {
       "title": "College, Undergraduate"
     }
-  },
+  }, 
   {
-    "pk": 16,
-    "model": "common.studentlevel",
+    "pk": 16, 
+    "model": "common.studentlevel", 
     "fields": {
       "title": "College, Graduate"
     }
-  },
+  }, 
   {
-    "pk": 17,
-    "model": "common.studentlevel",
+    "pk": 17, 
+    "model": "common.studentlevel", 
     "fields": {
       "title": "Career Training / Vocational Education"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "common.gradelevel", 
+    "fields": {
+      "description": "includes Pre-K - Grade 6; Elementary; Lower Elementary; Upper Elementary", 
+      "name": "Primary", 
+      "slug": "primary"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "common.gradelevel", 
+    "fields": {
+      "description": "includes Grades 7 - 12; High School; Middle School; Jr. High School", 
+      "name": "Secondary", 
+      "slug": "secondary"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "common.gradelevel", 
+    "fields": {
+      "description": "includes all Higher Education; College, University, Graduate Levels; Professional Development; Training", 
+      "name": "Post-secondary", 
+      "slug": "post-secondary"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "common.gradesublevel", 
+    "fields": {
+      "grade_level": 1, 
+      "name": "Preschool", 
+      "slug": "preschool"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "common.gradesublevel", 
+    "fields": {
+      "grade_level": 1, 
+      "name": "Lower-Primary", 
+      "slug": "lower-primary"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "common.gradesublevel", 
+    "fields": {
+      "grade_level": 1, 
+      "name": "Upper-Primary", 
+      "slug": "upper-primary"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "common.gradesublevel", 
+    "fields": {
+      "grade_level": 2, 
+      "name": "Middle School", 
+      "slug": "middle-school"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "common.gradesublevel", 
+    "fields": {
+      "grade_level": 2, 
+      "name": "High School", 
+      "slug": "high-school"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "common.gradesublevel", 
+    "fields": {
+      "grade_level": 3, 
+      "name": "Community College - Lower Division", 
+      "slug": "community-college-lower-division"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "common.gradesublevel", 
+    "fields": {
+      "grade_level": 3, 
+      "name": "College - Upper Division", 
+      "slug": "college-upper-division"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "common.gradesublevel", 
+    "fields": {
+      "grade_level": 3, 
+      "name": "Graduate / Professional", 
+      "slug": "graduate-professional"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "common.gradesublevel", 
+    "fields": {
+      "grade_level": 3, 
+      "name": "Career / Technical", 
+      "slug": "career-technical"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "PK", 
+      "name": "Pre-kindergarten", 
+      "grade_sublevel": 1, 
+      "order": 1
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "K", 
+      "name": "Kindergarten", 
+      "grade_sublevel": 2, 
+      "order": 2
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "1", 
+      "name": "Grade 1", 
+      "grade_sublevel": 2, 
+      "order": 3
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "2", 
+      "name": "Grade 2", 
+      "grade_sublevel": 2, 
+      "order": 4
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "3", 
+      "name": "Grade 3", 
+      "grade_sublevel": 3, 
+      "order": 5
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "4", 
+      "name": "Grade 4", 
+      "grade_sublevel": 3, 
+      "order": 6
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "5", 
+      "name": "Grade 5", 
+      "grade_sublevel": 3, 
+      "order": 7
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "6", 
+      "name": "Grade 6", 
+      "grade_sublevel": 4, 
+      "order": 8
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "7", 
+      "name": "Grade 7", 
+      "grade_sublevel": 4, 
+      "order": 9
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "8", 
+      "name": "Grade 8", 
+      "grade_sublevel": 4, 
+      "order": 10
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "9", 
+      "name": "Grade 9", 
+      "grade_sublevel": 5, 
+      "order": 11
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "10", 
+      "name": "Grade 10", 
+      "grade_sublevel": 5, 
+      "order": 12
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "11", 
+      "name": "Grade 11", 
+      "grade_sublevel": 5, 
+      "order": 13
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "common.grade", 
+    "fields": {
+      "code": "12", 
+      "name": "Grade 12", 
+      "grade_sublevel": 5, 
+      "order": 14
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "common.mediaformat", 
+    "fields": {
+      "name": "Audio", 
+      "slug": "audio"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "common.mediaformat", 
+    "fields": {
+      "name": "Graphics/Photos", 
+      "slug": "graphics-photos"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "common.mediaformat", 
+    "fields": {
+      "name": "Mobile", 
+      "slug": "mobile"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "common.mediaformat", 
+    "fields": {
+      "name": "Other", 
+      "slug": "other"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "common.mediaformat", 
+    "fields": {
+      "name": "Text/HTML", 
+      "slug": "text-html"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "common.mediaformat", 
+    "fields": {
+      "name": "Downloadable docs", 
+      "slug": "downloadable-docs"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "common.mediaformat", 
+    "fields": {
+      "name": "Video", 
+      "slug": "video"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "common.mediaformat", 
+    "fields": {
+      "name": "Interactive", 
+      "slug": "interactive"
     }
   }
 ]

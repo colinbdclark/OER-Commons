@@ -317,9 +317,16 @@
   margin-left: 16px;
 }
 
-.index-filters .filter dt label, .advanced-search .filter dt label {
+.index-filters .filter dt label,
+.index-filters div.filter label,
+.advanced-search .filter dt label {
   color: #666;
   font-weight: bold;
+}
+
+.index-filters div.filter label input {
+  float: none;
+  display: inline-block;
 }
 
 .index-filters .filter dt label span {
@@ -822,27 +829,4 @@
 
 .no-items-match {
   font-size: 14px;
-}
-
-#content.contribute h2 {
-  color: #679801;
-  font-weight: normal;
-  font-size: 16px;
-}
-
-#content.contribute dt,
-#content.contribute dd {
-  margin-bottom: 1em;
-}
-
-#content.contribute dd,
-#content.contribute p {
-  margin-right: 1em;
-  margin-left: 1em;
-}
-
-#content.contribute p.footnote {
-  margin-right: 0;
-  margin-left: 0;
-  font-size: 12px;
 }

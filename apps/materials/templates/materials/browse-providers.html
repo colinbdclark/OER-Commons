@@ -31,7 +31,7 @@
           {% for item in course_collections %}
           <li>
             <span>({{ item.count }})</span>
-            <a href="{% url materials:courses:collection_index collection=item.slug %}">{{ item.name }}</a>
+            <a href="{% url materials:collection_index collection=item.slug %}">{{ item.name }}</a>
           </li>
           {% endfor %}
         </ul>
@@ -42,7 +42,7 @@
           {% for item in library_collections %}
           <li>
             <span>({{ item.count }})</span>
-            <a href="{% url materials:libraries:collection_index collection=item.slug %}">{{ item.name }}</a>
+            <a href="{% url materials:collection_index collection=item.slug %}">{{ item.name }}</a>
           </li>
           {% endfor %}
         </ul>

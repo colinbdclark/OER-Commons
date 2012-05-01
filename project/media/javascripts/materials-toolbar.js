@@ -15,7 +15,7 @@ oer.materials.toolbar.init = function() {
   var result = window.location.hash.match(/^#evaluate(?::(?:(standard|rubric\d+)))?$/);
   if (result) {
     if (result[1]) {
-      oer.evaluation_tool.open_tool($evaluate_btn.data("evaluate-url") + "#" + result[1]);
+      oer.evaluation_tool.open_tool($evaluate_btn.attr("href") + "#" + result[1]);
     } else {
       oer.evaluation_tool.open_tool($evaluate_btn.attr("href"));
     }

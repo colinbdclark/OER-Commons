@@ -1,18 +1,20 @@
+from common.models import GradeLevel
+from core.forms import MultipleAutoCreateInput, MultipleAutoCreateField, \
+    AutocompleteListWidget
 from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import ModelForm
 from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
-from materials.models.common import GeneralSubject, GradeLevel, Language, \
+from materials.models.common import GeneralSubject, Language, \
     GeographicRelevance, Keyword
 from materials.models.community import CommunityItem, CommunityType, \
     CommunityTopic
 from materials.models.material import PRIVATE_STATE, PUBLISHED_STATE
-from materials.views.forms import AuthorsField, LICENSE_TYPES, \
+from materials.views.forms import LICENSE_TYPES, \
     CC_OLD_LICENSES, LicenseTypeFieldRenderer, SubmissionFormBase, LanguagesField
 from utils.decorators import login_required
-from utils.forms import AutocompleteListField
 
 
 class AddForm(SubmissionFormBase, ModelForm):
@@ -37,16 +39,19 @@ class AddForm(SubmissionFormBase, ModelForm):
                                   attrs={"class": "text"},
                                   format="%m/%d/%Y"))
 
-    authors = AuthorsField(label=u"Authors:", required=False,
-                           widget=forms.TextInput(
-                           attrs={"class": "text wide"}))
+    authors = MultipleAutoCreateField(
+        "name",
+        label=u"Authors:",
+        required=False,
+        widget=MultipleAutoCreateInput(attrs={"class": "text wide"})
+    )
 
     tech_requirements = forms.CharField(label=u"Notable Hard/Software:",
                                      required=False,
                                      widget=forms.Textarea(
                                      attrs={"class": "text wide"}))
 
-    keywords = AutocompleteListField(model=Keyword, label=u"Keywords")
+    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"), label=u"Keywords")
 
     community_types = forms.ModelMultipleChoiceField(
                                 CommunityType.objects.all(),

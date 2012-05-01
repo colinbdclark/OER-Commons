@@ -160,10 +160,6 @@ form.content-submission .fields .required .label label {
   background: url(../images/asterisk-blue.gif) no-repeat 100% 0;
 }
 
-form.content-submission input.text {
-  background: #DDF0F6 url(../images/contribute-textinput-bg.png) repeat-x 0 0;
-}
-
 form.content-submission textarea {
   resize: none;
 }
@@ -203,7 +199,6 @@ form.content-submission table.item-description.fields .text.wide {
 
 form.content-submission #id_abstract {
   height: 80px;
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission #id_content_creation_date {
@@ -212,7 +207,6 @@ form.content-submission #id_content_creation_date {
 
 form.content-submission #id_tech_requirements {
   height: 33px;
-  background: #DDF0F6 url(../images/contribute-textinput-bg.png) repeat-x 0 0;
 }
 
 form.content-submission .keywords td {
@@ -222,10 +216,6 @@ form.content-submission .keywords td {
 
 form.content-submission .keywords td.label {
   padding: 0;
-}
-
-form.content-submission .keywords select, form.content-submission .keywords textarea {
-  background: #DAEDF4 url(../images/contribute-textarea-bg-big.png) repeat-x 0 0;
 }
 
 form.content-submission .keywords select {
@@ -284,7 +274,6 @@ form.content-submission .cou .text.wide {
 
 form.content-submission #id_license_description {
   height: 80px;
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission .cou .choose, form.content-submission .cou .change {
@@ -341,13 +330,11 @@ form.content-submission .derived-fields .text {
 
 form.content-submission #id_derived_description {
   height: 80px;
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission #id_curriculum_standards {
   width: 520px;
   height: 80px;
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission fieldset {
@@ -377,7 +364,6 @@ form.content-submission .prerequisites-fields .text, form.content-submission .po
 form.content-submission #id_rss_description {
   width: 520px;
   height: 80px;
-  background: #D7EBF4 url(../images/contribute-textarea-bg.png) repeat-x 0 0;
 }
 
 form.content-submission #id_rss_timestamp_0 {

@@ -1,3 +1,6 @@
+from common.models import GradeLevel, MediaFormat
+from core.forms import AutoCreateField, MultipleAutoCreateField, \
+    AutocompleteListWidget
 from curriculum.models import AlignmentTag
 from django import forms
 from django.conf import settings
@@ -14,12 +17,10 @@ from django.views.generic.simple import redirect_to
 from material import MaterialAdmin
 from materials.admin.course import AuthorsFormSet
 from materials.admin.fields import LicenseFields
-from materials.models.common import Author, GeneralSubject, GradeLevel, \
-    MediaFormat, Language, GeographicRelevance, Keyword
+from materials.models.common import Author, GeneralSubject,\
+    Language, GeographicRelevance, Keyword
 from materials.models.library import Library, LibraryMaterialType
 from materials.views.forms import RSSFields
-from materials.views.forms.course import InstitutionField, CollectionField
-from utils.forms import AutocompleteListField
 
 
 LIBRARY_ADD_FIELDS = ["creator", "title", "url", "abstract", "institution", "collection", "workflow_state",
@@ -48,8 +49,8 @@ class LibraryAddForm(forms.ModelForm, LicenseFields, RSSFields):
     url = forms.URLField(widget=forms.TextInput(attrs={"size": 150}))
     abstract = forms.CharField(widget=forms.Textarea(
                                              attrs={"rows": 10, "cols": 108}))
-    institution = InstitutionField(widget=forms.TextInput(attrs={"size": 70}))
-    collection = CollectionField(widget=forms.TextInput(attrs={"size": 70}))
+    institution = AutoCreateField("name", widget=forms.TextInput(attrs={"size": 70}))
+    collection = AutoCreateField("name", widget=forms.TextInput(attrs={"size": 70}))
     content_creation_date = forms.DateField(input_formats=["%m/%d/%Y"],
                                             widget=forms.DateInput(
                                               format="%m/%d/%Y"),
@@ -77,7 +78,7 @@ class LibraryAddForm(forms.ModelForm, LicenseFields, RSSFields):
                                 required=False,
                                 widget=forms.CheckboxSelectMultiple())
 
-    keywords = AutocompleteListField(model=Keyword)
+    keywords = MultipleAutoCreateField("name", widget=AutocompleteListWidget(Keyword, "name"))
 
     curriculum_standards = forms.CharField(required=False,
                                        widget=forms.Textarea(

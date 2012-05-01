@@ -1,4 +1,5 @@
-from common.models import StudentLevel
+from common.models import StudentLevel, GradeLevel
+from core.fields import AutoCreateManyToManyField
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -10,7 +11,6 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from geo.models import Country, USState
-from materials.models.common import GradeLevel, AutoCreateManyToManyField
 from sorl.thumbnail.shortcuts import get_thumbnail
 from users.backend import encrypt_password
 import hashlib
@@ -160,19 +160,14 @@ class Profile(models.Model):
                                       crop="center")
             return thumbnail.url
         elif self.user.email:
-            try:
-                default = "http://%s%s" % (Site.objects.get_current().domain, settings.DEFAULT_AVATAR)
-                url = "%s/%s.jpg?%s" % (settings.GRAVATAR_BASE,
-                                        hashlib.md5(self.user.email).hexdigest(),
-                                        urllib.urlencode({
-                                            'size': str(settings.AVATAR_SIZE),
-                                            'rating': "g",
-                                            'default': default,
-                                        }))
-            except:
-                import traceback
-                print traceback.format_exc()
-                raise
+            default = "http://%s%s" % (Site.objects.get_current().domain, settings.DEFAULT_AVATAR)
+            url = "%s/%s.jpg?%s" % (settings.GRAVATAR_BASE,
+                                    hashlib.md5(self.user.email).hexdigest(),
+                                    urllib.urlencode({
+                                        'size': str(settings.AVATAR_SIZE),
+                                        'rating': "g",
+                                        'default': default,
+                                    }))
             return url
 
         return settings.DEFAULT_AVATAR

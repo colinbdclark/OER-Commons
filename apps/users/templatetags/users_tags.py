@@ -33,7 +33,7 @@ PROFILE_NOTIFICATION_HIDE_COOKIE_NAME = "_hpn"
 
 
 @register.inclusion_tag("users/include/profile-notification.html", takes_context=True)
-def profile_notification(context, notification_class):
+def profile_notification(context):
     request = context["request"]
     user = request.user
 
@@ -52,12 +52,11 @@ def profile_notification(context, notification_class):
         return
 
     return dict(completeness=completeness, total_fields=total_fields,
-                cookie_name=PROFILE_NOTIFICATION_HIDE_COOKIE_NAME,
-                notification_class=notification_class)
+                cookie_name=PROFILE_NOTIFICATION_HIDE_COOKIE_NAME)
 
 
 @register.inclusion_tag("users/include/confirmation-notification.html", takes_context=True)
-def confirmation_notification(context, notification_class):
+def confirmation_notification(context):
     request = context["request"]
     user = request.user
 
@@ -73,5 +72,4 @@ def confirmation_notification(context, notification_class):
     if days_to_delete < 0:
         days_to_delete = 0
     resend_url = u"%s?%s" % (reverse("users:registration_resend"), urllib.urlencode(dict(email=user.email)))
-    return dict(days_to_delete=days_to_delete, resend_url=resend_url,
-                notification_class=notification_class)
+    return dict(days_to_delete=days_to_delete, resend_url=resend_url)

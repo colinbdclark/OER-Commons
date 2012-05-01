@@ -62,6 +62,8 @@ class MaterialSearchIndex(SearchIndex, EvaluatedItemIndex):
     featured = BooleanField(model_attr="featured")
     featured_on = DateTimeField(model_attr="featured_on", null=True)
 
+    content_source = CharField(model_attr="content_source")
+
     member_activities = MultiValueField(model_attr="member_activities")
     rating = FloatField(model_attr="rating")
 
@@ -72,8 +74,8 @@ class MaterialSearchIndex(SearchIndex, EvaluatedItemIndex):
 
     creator = IntegerField(model_attr="creator__id")
 
-    license = CharField(model_attr="license__type")
-    cou_bucket = CharField(model_attr="license__bucket")
+    license = CharField(model_attr="license__type", null=True)
+    cou_bucket = CharField(model_attr="license__bucket", null=True)
 
     microsites = VocabularyMultiValueField(model_attr="microsites")
     topics = VocabularyMultiValueField(model_attr="topics")
@@ -84,9 +86,9 @@ class MaterialSearchIndex(SearchIndex, EvaluatedItemIndex):
 
     visits = IntegerField(model_attr="visits")
 
-    alignment_standards = MultiValueField(model_attr="alignment_standards")
-    alignment_grades = MultiValueField(model_attr="alignment_grades")
-    alignment_categories = MultiValueField(model_attr="alignment_categories")
+    alignment_standards = MultiValueField(model_attr="indexed_alignment_standards")
+    alignment_grades = MultiValueField(model_attr="indexed_alignment_grades")
+    alignment_categories = MultiValueField(model_attr="indexed_alignment_categories")
     alignment_tags = AlignmentTagsField(model_attr="alignment_tags")
 
 
@@ -102,7 +104,7 @@ class CourseIndex(MaterialSearchIndex):
     institution = IntegerField(model_attr="institution__id", null=True)
     institution_name = CharField(model_attr="institution__name", null=True, weight=1.0)
     general_subjects = VocabularyMultiValueField(model_attr="general_subjects")
-    grade_levels = VocabularyMultiValueField(model_attr="grade_levels")
+    grade_levels = VocabularyMultiValueField(model_attr="all_grade_levels")
     course_material_types = VocabularyMultiValueField(model_attr="material_types")
     media_formats = VocabularyMultiValueField(model_attr="media_formats")
     languages = VocabularyMultiValueField(model_attr="languages")
@@ -123,7 +125,7 @@ class LibraryIndex(MaterialSearchIndex):
     institution = IntegerField(model_attr="institution__id", null=True)
     institution_name = CharField(model_attr="institution__name", weight=1.0, null=True)
     general_subjects = VocabularyMultiValueField(model_attr="general_subjects")
-    grade_levels = VocabularyMultiValueField(model_attr="grade_levels")
+    grade_levels = VocabularyMultiValueField(model_attr="all_grade_levels")
     library_material_types = VocabularyMultiValueField(model_attr="material_types")
     media_formats = VocabularyMultiValueField(model_attr="media_formats")
     languages = VocabularyMultiValueField(model_attr="languages")
@@ -138,7 +140,7 @@ class CommunityItemIndex(MaterialSearchIndex):
     keywords_names = MultiValueField(model_attr="keyword_names", weight=3.0)
     authors = AuthorsField(model_attr="authors", weight=1.0)
     general_subjects = VocabularyMultiValueField(model_attr="general_subjects")
-    grade_levels = VocabularyMultiValueField(model_attr="grade_levels")
+    grade_levels = VocabularyMultiValueField(model_attr="all_grade_levels")
     community_types = VocabularyMultiValueField(model_attr="community_types")
     community_topics = VocabularyMultiValueField(model_attr="community_topics")
     languages = VocabularyMultiValueField(model_attr="languages")

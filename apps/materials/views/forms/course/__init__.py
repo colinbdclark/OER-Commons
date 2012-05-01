@@ -1,40 +1,4 @@
-from django import forms
-from materials.models.common import Institution, Collection
 from materials.models.course import RelatedMaterial
-
-
-class InstitutionField(forms.CharField):
-
-    def prepare_value(self, value):
-        if not value:
-            return u""
-        if isinstance(value, basestring):
-            return value
-        if isinstance(value, int):
-            value = Institution.objects.get(id=value)
-        return value.name
-
-    def to_python(self, value):
-        if not value:
-            return None
-        return dict(name=value)
-
-
-class CollectionField(forms.CharField):
-
-    def prepare_value(self, value):
-        if not value:
-            return u""
-        if isinstance(value, basestring):
-            return value
-        if isinstance(value, int):
-            value = Collection.objects.get(id=value)
-        return value.name
-
-    def to_python(self, value):
-        if not value:
-            return None
-        return dict(name=value)
 
 
 class DerivedFields:

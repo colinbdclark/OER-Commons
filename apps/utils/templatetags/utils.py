@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site, RequestSite
@@ -112,3 +113,8 @@ def romanize_filter(value, args=None):
             return toRoman(value).lower()
     else:
         return value
+
+
+@register.simple_tag
+def file_contents(path):
+    return open(os.path.join(settings.STATIC_ROOT, path)).read()

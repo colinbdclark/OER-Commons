@@ -1,6 +1,6 @@
 oer.autocomplete_list_widget = {};
 
-$.template("autocomplete-list-widget-item", '<li><a href="#" class="delete">Delete</a> <span>${name}</span></li>');
+$.template("autocomplete-list-widget-item", '<li class="rc3"><a href="#" class="delete">Delete</a> <span>${name}</span></li>');
 
 oer.autocomplete_list_widget.init = function() {
 
@@ -33,9 +33,9 @@ oer.autocomplete_list_widget.init = function() {
       }
       values.push(value);
       $input.val(values.join(","));
-      $.tmpl("autocomplete-list-widget-item", {
+      rcorners($.tmpl("autocomplete-list-widget-item", {
         name: value
-      }).appendTo($items);
+      }).appendTo($items));
     }
 
     $add_input.autocomplete({
@@ -58,16 +58,6 @@ oer.autocomplete_list_widget.init = function() {
         }
         $add_input.autocomplete("close");
       }
-    });
-
-    $add_input.focusout(function() {
-      var value = $.trim($add_input.val());
-      if (value !== "") {
-        $.each(get_values($add_input), function(i, v) {
-          add_value(v);
-        });
-      }
-      $add_input.autocomplete("close");
     });
 
     $items.delegate("a.delete", "click", function(e) {

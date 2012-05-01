@@ -1,5 +1,5 @@
 from django.template import Library
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve
 
 
 register = Library()
@@ -11,9 +11,15 @@ def navigation(context):
     path_elements = [el for el in request.path.split("/") if el]
     tabs = []
     microsite = getattr(request, "microsite", None)
+    view_name = resolve(request.path).view_name
 
-    tab = {}
-    tab["title"] = u"Browse All"
+    tabs.append(dict(
+        title=u"Home",
+        url=reverse("frontpage"),
+        selected=view_name == "frontpage"
+    ))
+
+    tab = dict(title=u"Browse All")
     if microsite:
         tab["url"] = reverse("materials:browse", kwargs={"microsite": microsite})
         tab["selected"] = len(path_elements) > 1 and path_elements[1] in \
@@ -24,17 +30,16 @@ def navigation(context):
             ['oer', 'browse', 'courses', 'libraries', 'advanced_search', 'search']
     tabs.append(tab)
 
-    tab = {}
-    tab["title"] = u"OER Landscape"
-    tab["url"] = reverse("materials:community")
-    tab["selected"] = path_elements and path_elements[0] == "community"
-    tabs.append(tab)
-
-    tab = {}
-    tab["title"] = u"My Items"
+    tab = dict(title=u"My OER")
     tab["url"] = reverse("myitems:myitems")
-    tab["selected"] = path_elements and path_elements[0] == "my"
+    tab["selected"] = view_name.startswith("myitems:") or view_name.startswith("users:profile") or view_name.startswith("preferences:")
     tab["class"] = "require-login"
     tabs.append(tab)
+
+    tabs.append(dict(
+        title=u"Contribute",
+        url=reverse("contribute"),
+        selected=view_name == "contribute"
+    ))
 
     return dict(tabs=tabs)

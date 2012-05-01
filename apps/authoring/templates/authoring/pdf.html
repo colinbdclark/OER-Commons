@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% load utils %}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{{ material.title }}</title>
+    <style>
+      @page {
+        @frame logo {
+          -pdf-frame-content: logo;
+          top: 2cm;
+          margin-left: 2cm;
+          margin-right: 2cm;
+          height: 1.5cm;
+          width: 5cm;
+        }
+        @frame header {
+          -pdf-frame-content: header;
+          top: 2cm;
+          margin-left: 2cm;
+          margin-right: 2cm;
+          height: 1.5cm;
+        }
+        @frame {
+          margin: 2cm;
+          margin-top: 3.5cm;
+          margin-bottom: 3.5cm;
+        }
+        @frame footer {
+          -pdf-frame-content: footer;
+          bottom: 2cm;
+          margin-left: 2cm;
+          margin-right: 2cm;
+          height: 1.5cm;
+        }
+      }
+      {{ fonts }}
+      {% file_contents "styles/authoring/pdf.css" %}
+    </style>
+  </head>
+  <body>
+    <div class="frontpage">
+      <h1>{{ material.title }}</h1>
+      <p>
+        <em>{% domain %}{{ material.get_absolute_url }}</em>
+      </p>
+      <p>Created <strong>{{ material.modified_timestamp|date }}</strong> <em>by {{ material.author.get_full_name|default:material.author }}</em></p>
+      <h2>SUMMARY:</h2>
+      <p>{{ material.abstract }}</p>
+      <h2>LEARNING GOALS:</h2>
+      <ul>
+        {% for learning_goal in material.learning_goals.all %}
+          <li>{{ learning_goal }}</li>
+        {% endfor %}
+      </ul>
+      <h2 class="toc">TABLE OF CONTENTS:</h2>
+      <pdf:toc />
+    </div>
+    <pdf:nextpage />
+
+    {{ text }}
+    <div id="logo">
+      <img src="{{ STATIC_ROOT }}/images/authoring/logo.png" alt="OER Commons">
+    </div>
+    <div id="header">
+      <em>{% domain %}{{ material.get_absolute_url }}</em>
+    </div>
+    <div id="footer">
+      <strong>"{{ material.title }}”</strong>
+    </div>
+  </body>
+</html>

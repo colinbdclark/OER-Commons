@@ -1,3 +1,4 @@
+from common.models import GradeLevel, Grade, GradeSubLevel, MediaFormat
 from core.search import reindex
 from django.conf import settings
 from django.contrib import messages
@@ -7,9 +8,9 @@ from django.http import HttpResponseForbidden
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from geo.models import Country
-from materials.models import Course, Library, GeneralSubject, GradeLevel, \
+from materials.models import Course, Library, GeneralSubject,\
     Language, GeographicRelevance, CourseMaterialType, \
-    LibraryMaterialType, MediaFormat, License
+    LibraryMaterialType, License
 from materials.models.common import CC_LICENSE_URL_RE, PUBLIC_DOMAIN_URL_RE, GNU_FDL_URL_RE, PUBLIC_DOMAIN_NAME, GNU_FDL_NAME
 from materials.models.material import IMPORTED_STATE
 from materials.views.validate_csv import ValidateCSVForm
@@ -42,6 +43,8 @@ LIBRARY_SIMPLE_FIELDS = [
 M2M_FIELDS = [
     ("SUBJECT", "general_subjects", GeneralSubject, "slug"),
     ("LEVEL", "grade_levels", GradeLevel, "slug"),
+    ("SUBLEVEL", "grade_sublevels", GradeSubLevel, "slug"),
+    ("GRADE", "grades", Grade, "code"),
     ("LANGUAGE", "languages", Language, "slug"),
     ("IRR", "geographic_relevance", GeographicRelevance, "slug"),
     ("MEDIA_FORMATS", "media_formats", MediaFormat, "slug"),

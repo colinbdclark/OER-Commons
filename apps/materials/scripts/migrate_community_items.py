@@ -1,10 +1,11 @@
+from common.models import GradeLevel
 from dateutil.parser import parse
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections
 from django.db.utils import DatabaseError
 from geo.models import Country
-from materials.models.common import Author, License, GeneralSubject, GradeLevel, \
+from materials.models.common import Author, License, GeneralSubject,\
     Keyword, Language, GeographicRelevance
 from materials.models.community import CommunityItem, CommunityTopic, \
     CommunityType

@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load utils %}
+
+{% block bodyclass %}authoring-view{% if preview %} preview{% endif %}{% endblock %}
+
+{% block extra-css %}
+  <link rel="stylesheet" href="{{ STATIC_URL}}styles/authoring/view.css">
+{% endblock %}
+
+{% block layout %}
+
+  {% include "include/header.html" %}
+
+  {% if request.user.is_staff or request.user.is_superuser or request.user == material.author %}
+    {% spaceless %}
+      <div id="toolbar">
+        <div class="wrap">
+          <a href="{% url authoring:edit pk=material.pk %}">Edit</a>
+          <a href="#" class="delete">Delete</a>
+          <div class="delete-confirmation hide">
+            <a href="#" class="confirm rc5">Delete Resource</a>
+            <a href="#" class="cancel">cancel</a>
+          </div>
+        </div>
+      </div>
+      <form method="post" id="delete-form" action="{% url authoring:delete pk=material.pk %}"></form>
+    {% endspaceless %}
+  {% endif %}
+
+  <div class="layout-columns">
+
+    {% if not preview %}
+      <div class="download-links">
+        <a href="{{ object.get_pdf_url }}">download resource (PDF)</a>
+      </div>
+    {% endif %}
+
+    <div class="column-left">
+      <section id="toc">
+        <h2>Table of Contents</h2>
+        {{ toc }}
+      </section>
+
+      <section>
+        <h2>Summary</h2>
+        {{ object.abstract }}
+      </section>
+
+      <section>
+        <h2>Learning Goals</h2>
+        <ul>
+          {% for goal in object.learning_goals.all %}
+            <li>{{ goal }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section >
+        <a href="{{ object.get_absolute_url }}"><strong>"{{ object.title }}"</strong></a>
+        {{ object.modified_timestamp|date:"Y" }}
+        by <a href="#">{{ material.author.get_full_name|default:material.author }}</a>
+        <br/>under <a href="{{ object.license.url }}">{{ object.license.name }}</a>
+      </section>
+
+    </div>
+
+    <div class="column-main clearfix">
+      <article class="authored-content" data-evaluate-url="{% url rubrics:evaluate_intro %}?id={{ content_type.id }}.{{ material.id }}&from={{ request.path|full_url }}">
+        <header>
+          <h1>{{ object.title }}</h1>
+          Created <strong>{{ object.modified_timestamp|date }}</strong> by <a href="#">{{ material.author.get_full_name|default:material.author }}</a>
+        </header>
+        {{ text }}
+        <div class="clear"></div>
+        <footer>
+          {{ footnotes }}
+        </footer>
+      </article>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra-js %}
+  <script src="{{ STATIC_URL }}javascripts/jquery/jme/mm.full.min.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/audio.js"></script>
+  <script>
+    $(function() {
+      $("figure.image.align-left,figure.image.align-right").each(function(i, figure) {
+        var $figure = $(figure);
+        var $image = $figure.find("img");
+        if ($image.width()) {
+          $figure.css({
+            "width": $image.width() + "px"
+          })
+        } else {
+          $image.load(function(e) {
+            var $image = $(e.target);
+            $image.parent().css({
+              width: $image.width() + "px"
+            });
+          });
+        }
+      });
+      $("figure.audio").each(function(i, figure) {
+        new AudioPlayer($(figure));
+      });
+    });
+  </script>
+  {% if request.user.is_staff or request.user.is_superuser or request.user == material.author %}
+    <script>
+      $(function() {
+        var $toolbar = $("#toolbar");
+        var $delete = $toolbar.find("a.delete");
+        var $confirmation = $toolbar.find("div.delete-confirmation");
+        var $confirm = $confirmation.find("a.confirm");
+        var $cancel = $confirmation.find("a.cancel");
+        $delete.click(function(e) {
+          e.preventDefault();
+          $(e.target).addClass("hide");
+          $confirmation.removeClass("hide");
+        });
+        $confirm.click(function(e) {
+          e.preventDefault();
+          $("#delete-form").submit();
+        });
+        $cancel.click(function(e) {
+          e.preventDefault();
+          $confirmation.addClass("hide");
+          $delete.removeClass("hide");
+        });
+        var result = window.location.hash.match(/^#evaluate(?::(?:(standard|rubric\d+)))?$/);
+        var evaluateURL = $("article[data-evaluate-url]").data("evaluate-url");
+        if (result) {
+          if (result[1]) {
+            oer.evaluation_tool.open_tool(evaluateURL + "#" + result[1]);
+          } else {
+            oer.evaluation_tool.open_tool(evaluateURL);
+          }
+        }
+      });
+    </script>
+  {% endif %}
+{% endblock %}

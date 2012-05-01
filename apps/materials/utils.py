@@ -85,7 +85,10 @@ def get_facets_for_field(field, model=None, facet_limit=None, facet_mincount=Non
 
     query = SearchQuerySet()
     if model is not None:
-        query = query.models(model)
+        if isinstance(model, (tuple, list)):
+            query = query.models(*model)
+        else:
+            query = query.models(model)
     query = query.narrow("is_displayed:true")
     query = query.facet(field)
     if facet_limit:

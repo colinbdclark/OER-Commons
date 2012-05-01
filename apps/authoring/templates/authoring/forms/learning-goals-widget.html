@@ -1,0 +1,10 @@
+<ul class="learning-goals-widget">
+  {% for value, input in existing %}
+    <li class="existing">
+      <span>{{ value }}</span> {{ input }} <a href="#" class="delete ui-icon ui-icon-close">Delete</a>
+    </li>
+  {% endfor %}
+  <li class="new">
+    <span></span> {{ new }} <a href="#" class="delete ui-icon ui-icon-close">Delete</a>
+  </li>
+</ul>

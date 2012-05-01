@@ -1,10 +1,13 @@
+from __future__ import absolute_import
+
 from autoslug.fields import AutoSlugField
 from cache_utils.decorators import cached
+from core.fields import AutoCreateManyToManyField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import permalink
 from django.db.models.signals import post_save
-from materials.models.common import AutoCreateManyToManyField, Keyword
+from materials.models.common import  Keyword
 from materials.tasks import reindex_microsite_topic
 from mptt.models import MPTTModel
 
@@ -95,7 +98,7 @@ post_save.connect(topic_post_save_reindex, sender=Topic, dispatch_uid="topic_pos
 def get_topic_microsite_from_id(id):
     """
     Lookup a Topic instance by id and return its microsite slug.
-    Use caching to reduce the number of database queries. Return None if 
+    Use caching to reduce the number of database queries. Return None if
     an Topic with given id does not exist.
     """
     try:

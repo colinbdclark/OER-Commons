@@ -1,6 +1,8 @@
 from annoying.decorators import JsonResponse
 from annoying.functions import get_object_or_None
+from authoring.models import AuthoredMaterial
 from autoslug.settings import slugify
+from common.models import GradeLevel
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponsePermanentRedirect
@@ -8,7 +10,8 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.views.generic.simple import direct_to_template
 from haystack.query import SearchQuerySet
-from materials.models.common import GeneralSubject, GradeLevel, Collection, \
+from materials.models import Course, Library
+from materials.models.common import GeneralSubject, Collection, \
     Keyword, GeographicRelevance, Institution
 from materials.models.community import CommunityItem
 from materials.models.microsite import Microsite, Topic
@@ -109,6 +112,7 @@ BASIC_INDEX_FILTERS = (
   ("course_material_types", True,),
   ("media_formats", True,),
   ("cou_bucket", True),
+  ("content_source", False),
 )
 
 
@@ -305,9 +309,9 @@ def populate_item_from_search_result(result):
 
     namespace = getattr(model, "namespace", None)
     if namespace:
-        item["get_absolute_url"] = reverse(
-                               "materials:%s:view_item" % namespace,
-                               kwargs=dict(slug=item["slug"]))
+        item["view_url"] = reverse(
+                           "materials:%s:view_item" % namespace,
+                           kwargs=dict(slug=item["slug"]))
         item["save_item_url"] = reverse(
                                "materials:%s:save_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
@@ -319,7 +323,7 @@ def populate_item_from_search_result(result):
                                     result.model_name,
                                     result.pk,
                                 ))
-        item["toolbar_view_url"] = reverse(
+        item["view_full_url"] = reverse(
                                "materials:%s:toolbar_view_item" % namespace,
                                kwargs=dict(slug=item["slug"]))
         item["align_url"] = reverse("curriculum:align", args=(
@@ -328,7 +332,10 @@ def populate_item_from_search_result(result):
                                     result.pk,
                                 ))
     else:
-        item["get_absolute_url"] = result.object.get_absolute_url()
+        object = result.object
+        item["view_url"] = object.get_absolute_url()
+        if hasattr(object, "get_view_full_url"):
+            item["view_full_url"] = object.get_view_full_url()
     return item
 
 
@@ -339,11 +346,16 @@ def index(request, general_subjects=None, grade_levels=None,
           model=None, search=False, tags=None, subjects=None, format=None,
           topics=None, alignment=None, facet_fields=None):
 
-    if not facet_fields: facet_fields = ["general_subjects", "grade_levels",
-                                         "keywords",
-                                         "course_material_types",
-                                         "media_formats",
-                                         "cou_bucket", "indexed_topics"]
+    if not facet_fields: facet_fields = [
+       "general_subjects",
+       "grade_levels",
+       "keywords",
+       "course_material_types",
+       "media_formats",
+       "cou_bucket",
+       "indexed_topics",
+       "content_source"
+    ]
     if model:
         index_namespace = model.namespace
     else:
@@ -395,8 +407,8 @@ def index(request, general_subjects=None, grade_levels=None,
 
     query = SearchQuerySet().narrow("is_displayed:true")
 
-    if model:
-        query = query.models(model)
+    models = [model] if model else [Course, Library, CommunityItem, AuthoredMaterial]
+    query = query.models(*models)
 
     path_filter = None
 
@@ -416,7 +428,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
     visible_filters = ["search", "general_subjects", "grade_levels",
                        "course_material_types", "media_formats",
-                       "cou_bucket"]
+                       "cou_bucket", "content_source"]
 
     if microsite:
         microsite = Microsite.objects.get(slug=microsite)
@@ -437,7 +449,6 @@ def index(request, general_subjects=None, grade_levels=None,
                 hidden_filters[filter_.request_name] = value
             if filter_name == "search":
                 search_query = value
-
 
     if search:
         if not search_query:
@@ -490,6 +501,7 @@ def index(request, general_subjects=None, grade_levels=None,
 
     elif "evaluated_rubrics" in filter_values:
         rubric_id = filter_values["evaluated_rubrics"][0]
+        #noinspection PySimplifyBooleanCheck
         if rubric_id == 0:
             rubric_name = u"Degree of Alignment"
         else:
@@ -549,7 +561,7 @@ def index(request, general_subjects=None, grade_levels=None,
                                             path_filter,
                                             microsite)
 
-        all_keywords = query.count() and facets.get("keywords", []) or []
+        all_keywords = filter(lambda kw: kw[1], facets.get("keywords", [])) if query.count() else []
         if len(all_keywords) > MAX_TOP_KEYWORDS:
             top_keywords = get_tag_cloud(dict(all_keywords[:MAX_TOP_KEYWORDS]),
                                               3, 0, 0)

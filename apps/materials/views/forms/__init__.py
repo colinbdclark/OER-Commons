@@ -1,14 +1,11 @@
 from django import forms
-from django.forms.models import ModelForm, save_instance
+from django.forms.models import save_instance
 from django.forms.widgets import RadioFieldRenderer
-from django.utils.datastructures import MultiValueDict, MergeDict
 from django.utils.encoding import force_unicode
 from django.utils.safestring import mark_safe
-from materials.models.common import GeneralSubject, GradeLevel, License, \
+from materials.models.common import License, \
     PUBLIC_DOMAIN_URL, PUBLIC_DOMAIN_NAME, GNU_FDL_URL, GNU_FDL_NAME, \
-    CC_LICENSE_URL_RE, Author, Keyword
-from django.template.loader import render_to_string
-from django.core.urlresolvers import reverse
+    CC_LICENSE_URL_RE
 
 
 LICENSE_TYPES = (
@@ -41,35 +38,16 @@ CC_OLD_LICENSES = (
     (u"http://creativecommons.org/licenses/by-nc-nd/2.5/", u"Creative Commons Attribution-Noncommercial-No Derivative Works 2.5"),
 )
 
-class AuthorsField(forms.Field):
-
-    widget = forms.TextInput
-
-    def prepare_value(self, value):
-        if not value:
-            return u""
-        if isinstance(value, basestring):
-            return value
-        if isinstance(value, list):
-            value = Author.objects.filter(id__in=value)
-        return u", ".join(value.values_list("name", flat=True))
-
-    def to_python(self, value):
-        if value is None:
-            return []
-        values = sorted(set([v.strip() for v in value.split(u",") if v.strip()]))
-        return [{"name": v} for v in values]
-
 
 class LanguagesField(forms.ModelMultipleChoiceField):
 
     widget = forms.Select
-    
+
     def clean(self, value):
         if value and not isinstance(value, (list, tuple)):
             value = [value]
         return super(LanguagesField, self).clean(value)
-    
+
     def prepare_value(self, value):
         if hasattr(value, '__iter__'):
             if len(value):

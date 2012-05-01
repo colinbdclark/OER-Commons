@@ -29,7 +29,7 @@
               {% for score in tags %}
                 <tr>
                   <td{% if not forloop.last %} class="no-border"{% endif %}></td>
-                  <td class="first" width="10%">{{ score.name }}</td>
+                  <td class="first" width="25%">{{ score.name }}</td>
                   <td>{% spaceless %}
                     {% if score.user_score_class == "nr" %}
                       <span class="nr"></span>

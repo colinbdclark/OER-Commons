@@ -1,3 +1,4 @@
+from core.forms import MultipleAutoCreateField, AutocompleteListWidget
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -5,7 +6,6 @@ from geo.models import Country, USState
 from users.backend import encrypt_password
 from users.models import Profile, CONNECT_OPTIONS, Role, StudentLevel, \
     EducatorSubject, FACEBOOK_URL_RE, TWITTER_URL_RE
-from utils.forms import AutocompleteListField, AutocompleteListWidget
 
 
 class UserInfoForm(forms.ModelForm):
@@ -134,11 +134,12 @@ class RolesForm(forms.ModelForm):
                                      required=False,
                                      widget=forms.CheckboxSelectMultiple())
 
-    educator_subjects = AutocompleteListField(model=EducatorSubject,
-                                              autocomplete_field="title",
-                                              label=u"I teach my students the following subjects:",
-                                              widget=AutocompleteListWidget(new_item_label=u"Add subject"),
-                                              required=False)
+    educator_subjects = MultipleAutoCreateField(
+        "title",
+        label=u"I teach my students the following subjects:",
+        widget=AutocompleteListWidget(EducatorSubject, "title", new_item_label=u"Add subject"),
+        required=False
+    )
 
     def clean(self):
         cleaned_data = self.cleaned_data

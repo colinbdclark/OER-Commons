@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'django_coverage',
     'oembed',
     'gunicorn',
+    'core',
     'utils',
     'abtesting',
     'common',
@@ -123,6 +124,7 @@ INSTALLED_APPS = (
     'rubrics',
     'rubrics.manage',
     'getsatisfaction',
+    'authoring',
     'project',
 )
 
@@ -248,3 +250,6 @@ LOGGING = {
 LR_COMMAND = "%s -m LRSignature.cmd sign" % os.path.join(os.path.dirname(__file__), "..", "bin", "python-lr")
 
 PROFILING = False
+
+# For PDF generation
+FONTS_DIR = "/usr/share/fonts/truetype/msttcorefonts"
