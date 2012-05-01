@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     'rubrics.manage',
     'authoring',
     'project',
+    'django_js_utils',
 )
 
 TEMPLATE_LOADERS = (
