@@ -720,15 +720,15 @@ WriteStep.prototype.initTextStyleMenu = function () {
     e.stopPropagation();
     if ($menu.hasClass("active")) {
       $menu.removeClass("active");
-      $menu.find("a[data-tooltip]").qtip("enable");
+      $menu.find("a[data-tooltip]").qtip("disable", false);
     } else {
       $menu.addClass("active");
-      $menu.find("a[data-tooltip]").qtip("hide").qtip("disable");
+      $menu.find("a[data-tooltip]").qtip("hide").qtip("disable", true);
     }
   });
   $(document).click(function () {
     $menu.removeClass("active");
-    $menu.find("a[data-tooltip]").qtip("enable");
+    $menu.find("a[data-tooltip]").qtip("disable", false);
   });
   $menu.delegate("ul a", "click", function (e) {
     e.preventDefault();
@@ -1067,7 +1067,7 @@ WriteStep.prototype.initColorButtons = function () {
     var $selector = $this.parent();
     if ($selector.hasClass("active")) {
       $selector.removeClass("active");
-      $selector.find("a[data-tooltip]").qtip("enable");
+      $selector.find("a[data-tooltip]").qtip("disable", false);
     } else {
       var $lis = $selector.find("li").removeClass("selected");
       if (editor.$focusNode) {
@@ -1083,7 +1083,7 @@ WriteStep.prototype.initColorButtons = function () {
         }
       }
       $selector.addClass("active");
-      $selector.find("a[data-tooltip]").qtip("hide").qtip("disable");
+      $selector.find("a[data-tooltip]").qtip("hide").qtip("disable", true);
     }
   });
   $selectors.delegate("li", "mousedown", function (e) {
@@ -1130,7 +1130,7 @@ WriteStep.prototype.initColorButtons = function () {
 
   $(document).click(function () {
     $selectors.removeClass("active");
-    $selectors.find("a[data-tooltip]").qtip("enable");
+    $selectors.find("a[data-tooltip]").qtip("disable", false);
   });
 };
 
@@ -1474,18 +1474,18 @@ WriteStep.prototype.enableRedo = function () {
 WriteStep.prototype.disableButton = function (button) {
   button = this.$toolbar.find("." + button).addClass("disabled");
   if (button.is("a[data-tooltip]")) {
-    button.qtip("disable");
+    button.qtip("hide").qtip("disable", true);
   } else {
-    button.find("a[data-tooltip]").qtip("hide").qtip("disable");
+    button.find("a[data-tooltip]").qtip("hide").qtip("disable", true);
   }
 };
 
 WriteStep.prototype.enableButton = function (button) {
   button = this.$toolbar.find("." + button).removeClass("disabled");
   if (button.is("a[data-tooltip]")) {
-    button.qtip("enable");
+    button.qtip("disable", false);
   } else {
-    button.find("a[data-tooltip]").qtip("enable");
+    button.find("a[data-tooltip]").qtip("disable", false);
   }
 };
 
@@ -1503,13 +1503,13 @@ WriteStep.prototype.initTableButton = function() {
     e.preventDefault();
     if ($tableTool.hasClass("active")) {
       $tableTool.removeClass("active");
-      $tableTool.find("a[data-tooltip]").qtip("enable");
+      $tableTool.find("a[data-tooltip]").qtip("disable", false);
     } else {
       $cells.removeClass("active").removeClass("hover");
       $rowInput.val("");
       $colInput.val("");
       $tableTool.addClass("active");
-      $tableTool.find("a[data-tooltip]").qtip("hide").qtip("disable");
+      $tableTool.find("a[data-tooltip]").qtip("hide").qtip("disable", true);
     }
   });
   function applyClassToCells(cls, row, col) {
@@ -1550,12 +1550,12 @@ WriteStep.prototype.initTableButton = function() {
   });
   $(document).click(function() {
     $tableTool.removeClass("active");
-    $tableTool.find("a[data-tooltip]").qtip("enable");
+    $tableTool.find("a[data-tooltip]").qtip("disable", false);
   });
   $tableTool.find("div.buttons a.cancel").click(function(e) {
     e.preventDefault();
     $tableTool.removeClass("active");
-    $tableTool.find("a[data-tooltip]").qtip("enable");
+    $tableTool.find("a[data-tooltip]").qtip("disable", false);
   });
   $tableTool.find("div.buttons a.add").click(function(e) {
     e.preventDefault();
@@ -1587,7 +1587,7 @@ WriteStep.prototype.initTableButton = function() {
     editor.updateDND();
     editor.focusOnNode($table.find("td").first());
     $tableTool.removeClass("active");
-    $tableTool.find("a[data-tooltip]").qtip("enable");
+    $tableTool.find("a[data-tooltip]").qtip("disable", false);
   });
 
   editor.$area.delegate("table a.remove", "click", function(e) {
@@ -1709,7 +1709,7 @@ MediaDialog.prototype.openStep = function (step, data) {
 };
 MediaDialog.prototype.show = function () {
   this.openStep("upload");
-  this.$button.addClass("active").qtip("hide").qtip("disable");
+  this.$button.addClass("active").qtip("hide").qtip("disable", true);
   this.$dialog.show();
   this.displayed = true;
   var $placeholder = this.$placeholder.detach();
@@ -1720,7 +1720,7 @@ MediaDialog.prototype.show = function () {
   }
 };
 MediaDialog.prototype.hide = function () {
-  this.$button.removeClass("active").qtip("enable");
+  this.$button.removeClass("active").qtip("disable", false);
   this.$dialog.hide();
   this.displayed = false;
   this.$placeholder.detach();
