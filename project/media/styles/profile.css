@@ -58,6 +58,10 @@
   font-size: 1em;
 }
 
+.profile-view h1.expanded {
+  border-bottom: 1px dotted #0B7BA8;
+}
+
 .profile-view section.avatar .wrap,
 .profile-edit section.avatar .wrap {
   position: relative;
