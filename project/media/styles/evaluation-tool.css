@@ -89,6 +89,8 @@ body.evaluation-tool {
   display: none;
   padding: 0 10px 10px;
   background-color: #fff;
+  max-height: 640px;
+  overflow-y: auto;
 }
 
 .evaluation-tool .rubrics .intro .body {
@@ -521,7 +523,7 @@ body.evaluation-tool {
   margin-top: 1em;
   margin-bottom: 1em;
   max-height: 640px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
