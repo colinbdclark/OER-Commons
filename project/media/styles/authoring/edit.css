@@ -351,10 +351,12 @@
     .authoring-head #user-menu.opened ul {
       display: block; }
     .authoring-head #user-menu li {
-      padding: 7px 15px; }
+      padding: 0; }
       .authoring-head #user-menu li:hover {
         background-color: #eee; }
       .authoring-head #user-menu li a {
+        display: block;
+        padding: 7px 15px;
         color: #616161; }
   .authoring-head h1 {
     clear: left; }

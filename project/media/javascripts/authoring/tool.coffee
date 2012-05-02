@@ -147,6 +147,24 @@ class Tool
       @save(false, true)
     )
 
+    @deleteForm = $("#delete-draft-form")
+    @deleteConfirmation = @form.find("#delete-confirmation")
+    @deleteConfirmation.find("a.cancel").click((e)=>
+      e.preventDefault()
+      @deleteConfirmation.addClass("hide")
+    )
+    @deleteConfirmation.find("a.confirm").click((e)=>
+      e.preventDefault()
+      @deleteForm.submit()
+    )
+
+    @globalWarnings = $("div.global-warning")
+
+    $("#user-menu a.delete-draft").click((e)=>
+      @globalWarnings.not(@deleteConfirmation).addClass("hide")
+      @deleteConfirmation.removeClass("hide")
+    )
+
     @savedData = null
 
     @title.find("span.inner").editable(
@@ -195,6 +213,7 @@ class Tool
 
     $(document).ajaxError((event, xhr, settings, error)=>
       if not xhr.status
+        @globalWarnings.not(@offlineMessage).addClass("hide")
         @offlineMessage.removeClass("hide")
       else
         @offlineMessage.addClass("hide")
@@ -246,6 +265,7 @@ class Tool
         oer.status_message.clear()
         oer.status_message.error(response.message)
         if response.reason == "checksum"
+          @globalWarnings.not(@checksumMessage).addClass("hide")
           @checksumMessage.removeClass("hide")
         @savedData = null
     )

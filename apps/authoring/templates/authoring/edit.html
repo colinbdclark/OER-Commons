@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block layout %}
+  <form method="post" action="{% url authoring:delete-draft pk=object.pk %}" id="delete-draft-form"></form>
   <form action="{% url authoring:edit pk=object.material.pk %}" method="post" class="authoring-form">
   <input type="hidden" name="checksum" value="{{ object.checksum }}">
   <div class="authoring-head fl-push">
@@ -23,6 +24,7 @@
     <div id="user-menu">
       <a href="#" class="toggle">{{ request.user.get_full_name|default:request.user.email|default:request.user }}</a>
       <ul>
+        <li><a href="#" class="delete-draft">Delete Draft</a></li>
         <li><a href="{% url myitems:myitems %}">My Items</a></li>
         <li><a href="{% url authoring:new %}">New OER</a></li>
         <li><a href="{% url users:logout %}">Log Out</a></li>
@@ -49,6 +51,17 @@
     <div id="checksum-message" class="global-warning hide"><div class="wrap">
       <p><strong>It appears that this resource was changed by someone else.</strong></p>
       <p>You can <a href="#" class="force-save">save your current version</a> (your changes will be saved) or <a href="{% url authoring:edit pk=object.material.pk %}">load the most recent version</a> (your changes will be lost).</p>
+    </div></div>
+    <div id="delete-confirmation" class="global-warning hide"><div class="wrap">
+      <p><strong>
+        {% if object.material.is_new %}
+          You are about to delete this draft.
+        {% else %}
+          You are about to delete these unpublished changes.
+        {% endif %}
+        &nbsp;<a href="#" class="confirm">Delete</a>&nbsp;&nbsp;<a href="#" class="cancel">Cancel</a>
+      </strong></p>
+      <p>&nbsp;</p>
     </div></div>
     <div class="clear"></div>
   </div>
