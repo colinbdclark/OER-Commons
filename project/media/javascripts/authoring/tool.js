@@ -147,16 +147,16 @@
 
     Tool.prototype.AUTOSAVE_INTERVAL = 5;
 
-    function Tool(hideSubmitStep) {
+    function Tool(resubmit) {
       var actions, errorSlide, errors, previewBtn, saveBtn,
         _this = this;
-      this.hideSubmitStep = hideSubmitStep;
+      this.resubmit = resubmit;
       this.form = $("form.authoring-form");
       this.slider = new Slider();
       this.userMenu = new UserMenu();
       this.writeStep = new WriteStep(this);
       this.describeStep = new DescribeStep(this);
-      if (!this.hideSubmitStep) this.submitStep = new SubmitStep(this);
+      this.submitStep = new SubmitStep(this);
       this.title = $("#material-title");
       this.titleInput = $("#id_title");
       this.offlineMessage = $("#offline-message");
