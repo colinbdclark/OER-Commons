@@ -127,14 +127,13 @@ class Tool
 
   AUTOSAVE_INTERVAL: 5 # 30 seconds
 
-  constructor: (@hideSubmitStep)->
+  constructor: (@resubmit)->
     @form = $("form.authoring-form")
     @slider = new Slider()
     @userMenu = new UserMenu()
     @writeStep = new WriteStep(@)
     @describeStep = new DescribeStep(@)
-    if not @hideSubmitStep
-      @submitStep = new SubmitStep(@)
+    @submitStep = new SubmitStep(@)
 
     @title = $("#material-title")
     @titleInput = $("#id_title")

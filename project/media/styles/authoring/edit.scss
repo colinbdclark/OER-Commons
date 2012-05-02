@@ -238,6 +238,15 @@
     &.submit.active {
       background-position: -144px -144px;
     }
+    &.resubmit {
+      background-position: -216px 0;
+    }
+    &.resubmit:hover {
+      background-position: -216px -72px;
+    }
+    &.resubmit.active {
+      background-position: -216px -144px;
+    }
   }
 }
 
@@ -1517,7 +1526,7 @@
         vertical-align: top;
         text-transform: lowercase;
         color: #989696;
-        &.hidden {
+        &.hide {
           display: none;
         }
         .image {

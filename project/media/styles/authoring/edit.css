@@ -431,6 +431,12 @@
       background-position: -144px -72px; }
     .step-icons a.submit.active {
       background-position: -144px -144px; }
+    .step-icons a.resubmit {
+      background-position: -216px 0; }
+    .step-icons a.resubmit:hover {
+      background-position: -216px -72px; }
+    .step-icons a.resubmit.active {
+      background-position: -216px -144px; }
 
 #material-title {
   font-size: 1.875em;
@@ -1354,7 +1360,7 @@
       vertical-align: top;
       text-transform: lowercase;
       color: #989696; }
-      #step-submit .current-license .images .license.hidden {
+      #step-submit .current-license .images .license.hide {
         display: none; }
       #step-submit .current-license .images .license .image {
         width: 61px;

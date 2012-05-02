@@ -11,9 +11,9 @@ var SubmitStep = function (tool) {
   if (currentURL !== "" && currentName !== "") {
     $currentLicense.find("a").attr("href", currentURL).text(currentName).show();
     var license_classes = $licenseWidget.data("license-type").split("-");
-    $licenseImages.addClass("hidden");
+    $licenseImages.addClass("hide");
     $.each(license_classes, function(i, cls) {
-      $licenseImages.filter(".license-" + cls).removeClass("hidden");
+      $licenseImages.filter(".license-" + cls).removeClass("hide");
     });
   }
 
@@ -31,9 +31,9 @@ var SubmitStep = function (tool) {
         if (response.status === "success") {
           var url = response["url"];
           var name = response["name"];
-          $licenseImages.addClass("hidden");
+          $licenseImages.addClass("hide");
           $.each(response["license_classes"], function(i, cls) {
-            $licenseImages.filter(".license-" + cls).removeClass("hidden");
+            $licenseImages.filter(".license-" + cls).removeClass("hide");
           });
           $currentLicense.find("a").attr("href", url).text(name).show();
           $licenseWidget.find(":hidden[name$='_url']").val(url);
