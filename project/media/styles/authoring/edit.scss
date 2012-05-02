@@ -129,11 +129,13 @@
       display: block;
     }
     li {
-      padding: 7px 15px;
+      padding: 0;
       &:hover {
         background-color: #eee;
       }
       a {
+        display: block;
+        padding: 7px 15px;
         color: #616161;
       }
     }

@@ -166,6 +166,21 @@
         e.preventDefault();
         return _this.save(false, true);
       });
+      this.deleteForm = $("#delete-draft-form");
+      this.deleteConfirmation = this.form.find("#delete-confirmation");
+      this.deleteConfirmation.find("a.cancel").click(function(e) {
+        e.preventDefault();
+        return _this.deleteConfirmation.addClass("hide");
+      });
+      this.deleteConfirmation.find("a.confirm").click(function(e) {
+        e.preventDefault();
+        return _this.deleteForm.submit();
+      });
+      this.globalWarnings = $("div.global-warning");
+      $("#user-menu a.delete-draft").click(function(e) {
+        _this.globalWarnings.not(_this.deleteConfirmation).addClass("hide");
+        return _this.deleteConfirmation.removeClass("hide");
+      });
       this.savedData = null;
       this.title.find("span.inner").editable(function(value) {
         _this.titleInput.val(value);
@@ -208,6 +223,7 @@
       }
       $(document).ajaxError(function(event, xhr, settings, error) {
         if (!xhr.status) {
+          _this.globalWarnings.not(_this.offlineMessage).addClass("hide");
           return _this.offlineMessage.removeClass("hide");
         } else {
           _this.offlineMessage.addClass("hide");
@@ -261,6 +277,7 @@
           oer.status_message.clear();
           oer.status_message.error(response.message);
           if (response.reason === "checksum") {
+            _this.globalWarnings.not(_this.checksumMessage).addClass("hide");
             _this.checksumMessage.removeClass("hide");
           }
           return _this.savedData = null;
