@@ -22,7 +22,14 @@
 }
 
 .view-item .portlet {
-  margin-bottom: 25px;
+  padding-bottom: 25px;
+  margin-bottom: 20px;
+  border-bottom: 1px dotted #0B7BA8;
+}
+
+.view-item .portlet.last {
+  margin-bottom: 0;
+  border-bottom: none;
 }
 
 .view-item article h1 {
@@ -49,7 +56,7 @@
   vertical-align: top;
 }
 
-.materials-index a, 
+.materials-index a,
 .view-item a {
   text-decoration: none;
 }
@@ -58,17 +65,17 @@
   color: #1F4D64;
 }
 
-.materials-index .details dl, 
+.materials-index .details dl,
 .view-item .details dl {
   margin: 10px 0 0 0;
 }
 
-.materials-index .details dl a, 
+.materials-index .details dl a,
 .view-item .details dl a {
   font-weight: bold;
 }
 
-.materials-index .details dt, 
+.materials-index .details dt,
 .view-item .details dt {
   float: left;
   margin-right: 4px;
@@ -76,7 +83,7 @@
   font-weight: bold;
 }
 
-.materials-index .details dd, 
+.materials-index .details dd,
 .view-item .details dd {
   margin-bottom: 2px;
   margin-left: 0;
@@ -91,12 +98,12 @@
   margin-left: 20px;
 }
 
-.materials-index .details dt.topics, 
+.materials-index .details dt.topics,
 .view-item .details dt.topics {
   line-height: 16px;
 }
 
-.materials-index .details dd.topics a, 
+.materials-index .details dd.topics a,
 .view-item .details dd.topics a {
   display: inline-block;
   padding-left: 20px;
@@ -159,7 +166,7 @@
   display: none;
 }
 
-.materials-index .item .right, 
+.materials-index .item .right,
 .view-item .right {
   float: right !important;
   margin-left: 10px;
