@@ -96,6 +96,7 @@ INSTALLED_APPS = (
     'django_coverage',
     'oembed',
     'gunicorn',
+    'django_js_utils',
     'core',
     'utils',
     'abtesting',
@@ -124,7 +125,6 @@ INSTALLED_APPS = (
     'rubrics.manage',
     'authoring',
     'project',
-    'django_js_utils',
 )
 
 TEMPLATE_LOADERS = (
