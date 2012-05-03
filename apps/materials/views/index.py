@@ -214,9 +214,10 @@ class IndexParams:
         {"value": u"visits", "title": u"Visits"},
     )
 
-    def __init__(self, request, format="html", search_query=None):
+    def __init__(self, request, format="html", search_query=None,
+        default_sort_by="title"):
 
-        self.default_sort_by = search_query and "search" or "title"
+        self.default_sort_by = search_query and "search" or default_sort_by
         self.format = format
         self.search_query = search_query
         self.batch_start = 0
