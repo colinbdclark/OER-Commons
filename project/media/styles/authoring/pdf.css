@@ -148,10 +148,18 @@ table {
   color: #666;
   font-size: 10pt; }
 
+#logo {
+  text-align: right; }
+
+#footer-logo {
+  padding-top: 1em; }
+
 #footer {
+  color: #818386;
   font-family: Arial;
   padding-top: 1em;
-  border-top: 2px dashed #ccc; }
+  padding-left: 2.5cm;
+  border-top: 2px dotted #ccc; }
 
 .frontpage {
   font-family: Arial; }
