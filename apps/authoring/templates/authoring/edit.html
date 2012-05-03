@@ -47,8 +47,8 @@
       <p>Please check your internet connection.</p>
     </div></div>
     <div id="checksum-message" class="global-warning hide"><div class="wrap">
-      <p><strong>It appears that this resource was changed by someone else.</strong></p>
-      <p>You can <a href="#" class="force-save">save your current version</a> (your changes will be saved) or <a href="{% url authoring:edit pk=object.material.pk %}">load the most recent version</a> (your changes will be lost).</p>
+      <p><strong>This resource is being edited in multiple browser windows and there is a more recent version.</strong></p>
+      <p>You can <a href="#" class="force-save">save your current version</a> (your changes will be saved in this window) or <a href="{% url authoring:edit pk=object.material.pk %}">load the most recent version</a> (your changes will be lost in this window).</p>
     </div></div>
     <div id="delete-confirmation" class="global-warning hide"><div class="wrap">
       <p><strong>
