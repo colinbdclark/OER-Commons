@@ -22,8 +22,8 @@ from reviews.models import Review
 from reviews.views import ReviewForm
 from rubrics.models import Rubric, StandardAlignmentScore, RubricScore, \
     get_verbose_score_name
-from saveditems.models import SavedItem
 from visitcounts.models import Visit
+from authoring.models import AuthoredMaterial
 import re
 import urllib
 
@@ -193,20 +193,13 @@ class BaseViewItemMixin(object):
                 index_url = index_path + serialize_query_string_params(query_string_params)
 
         data["microsite"] = microsite
-        
+
         if item_found:
             data["came_from_index"] = came_from_index
             data["index_url"] = index_url
             data["prev_item_url"] = prev_item_url
             data["next_item_url"] = next_item_url
             data["index_cookie"] = request.COOKIES.get("_i")
-
-        if request.user.is_authenticated():
-            data["saved"] = SavedItem.objects.filter(
-                content_type=content_type,
-                object_id=item.id,
-                user=request.user
-            ).exists()
 
         data["comment_url"] = reverse(
             "reviews:review",
@@ -399,6 +392,9 @@ class ViewItem(BaseViewItemMixin, TemplateView):
 
         comments.sort(key=lambda x: x["timestamp"])
         data["comments"] = comments
+
+        if isinstance(item, AuthoredMaterial):
+            data["created_in_open_author"] = True
 
         return data
 
