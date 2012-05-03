@@ -79,6 +79,7 @@
 }
 
 .authoring-head {
+  position: relative;
   padding: 10px 30px;
   background-color: #fff;
   font-family: "Myriad Pro", Helvetica, sans-serif;
@@ -128,11 +129,13 @@
       display: block;
     }
     li {
-      padding: 7px 15px;
+      padding: 0;
       &:hover {
         background-color: #eee;
       }
       a {
+        display: block;
+        padding: 7px 15px;
         color: #616161;
       }
     }
@@ -169,6 +172,30 @@
       }
     }
   }
+
+  .global-warning {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffcb51;
+    text-shadow: 1px 1px 1px #fff;
+    strong {
+      font-size: 1.5em;
+      font-weight: normal;
+    }
+    .wrap {
+      padding: 2em;
+      padding-left: 100px;
+    }
+  }
+
+  #offline-message {
+    background-image: url(../../images/authoring/icon-offline.png);
+    background-repeat: no-repeat;
+    background-position: 20px 17px;
+  }
+
 }
 
 .step-icons {
@@ -210,6 +237,15 @@
     }
     &.submit.active {
       background-position: -144px -144px;
+    }
+    &.resubmit {
+      background-position: -216px 0;
+    }
+    &.resubmit:hover {
+      background-position: -216px -72px;
+    }
+    &.resubmit.active {
+      background-position: -216px -144px;
     }
   }
 }
@@ -946,30 +982,80 @@
   .ui-wrap-image {
     display: inline-block;
     position: relative;
-    .ui-delete, .ui-move {
+    figcaption {
+      margin-top: -4px;
+      padding: 5px 5px 0 5px;
+      background-color: #f2f2f2;
+      line-height: 1.5;
+      min-height: 24px;
+      text-align: left;
+      .ui-image-button {
+        float: left;
+        margin-top: -5px;
+      }
+    }
+    .ui-image-button {
       display: block;
-      position: absolute;
-      left: 0;
-      width: 25px;
-      height: 25px;
-      background-color: #7bbdda;
+      width: 28px;
+      height: 28px;
+      background-color: #f2f2f2;
       background-repeat: no-repeat;
-      background-position: 50% 50%;
+      background-image: url(../../images/authoring/image-icons.png);
     }
     .ui-move {
+      position: absolute;
       top: 0;
-      background-image: url(../../images/authoring/icon-move-image.png);
+      left: 0;
+      border: solid #ccc;
+      border-width: 0 1px 1px 0;
+      -webkit-border-bottom-right-radius: 5px;
+      -moz-border-radius-bottomright: 5px;
+      border-bottom-right-radius: 5px;
+      background-position: -21px -49px;
       cursor: move;
+      &:hover {
+        background-position: 6px -49px;
+      }
     }
     .ui-delete {
-      top: 25px;
-      border-top: 1px solid #fff;
-      -webkit-border-bottom-right-radius: 2px;
-      -moz-border-radius-bottomright: 2px;
-      border-bottom-right-radius: 2px;
-      background-image: url(../../images/authoring/icon-delete-image.png);
+      margin-left: -5px;
+      border: solid #ccc;
+      border-width: 0 1px 1px 1px;
+      background-position: -84px 6px;
       &:hover {
-        background-color: #069;
+        background-position: -46px -48px;
+      }
+    }
+    .ui-left {
+      border-bottom: 1px solid #ccc;
+      background-position: -27px -21px;
+      &:hover {
+        background-color: #cacaca;
+      }
+      &.active {
+        background-position: 4px 6px;
+      }
+    }
+    .ui-center {
+      border-bottom: 1px solid #ccc;
+      background-position: -58px 6px;
+      &:hover {
+        background-color: #cacaca;
+      }
+      &.active {
+        background-position: -27px 6px;
+      }
+    }
+    .ui-right {
+      margin-right: 1em;
+      border: solid #ccc;
+      border-width: 0 1px 1px 0;
+      background-position: -58px -20px;
+      &:hover {
+        background-color: #cacaca;
+      }
+      &.active {
+        background-position: 4px -21px;
       }
     }
   }
@@ -1053,6 +1139,17 @@
   }
 }
 
+.ui-media-placeholder {
+  border: 2px dotted #ffcc33;
+  padding: 71px 15px 15px 15px;
+  background: url(../../images/authoring/media-placeholder-bg.png) 50% 20px no-repeat;
+  color: #ffcc33;
+  text-align: center;
+  font-family: "Myriad Pro", Helvetica, sans-serif;
+  text-transform: lowercase;
+  font-size: 1.5em;
+}
+
 #media-dialog {
   display: none;
   font-size: 1.0625em;
@@ -1075,7 +1172,7 @@
     text-shadow: 1px 1px 0 #fff;
     background-color: #e6e6e6;
     position: relative;
-    a.hide {
+    a.hide-dialog {
       display: inline;
       position: absolute;
       right: 5px;
@@ -1429,7 +1526,7 @@
         vertical-align: top;
         text-transform: lowercase;
         color: #989696;
-        &.hidden {
+        &.hide {
           display: none;
         }
         .image {
@@ -1646,5 +1743,19 @@
       margin-left: 40px;
       font-weight: normal;
     }
+  }
+}
+
+.ui-tooltip-authoring {
+  .ui-tooltip-tip {
+    display: none;
+  }
+  .ui-tooltip-content {
+    padding: 0.3em;
+    border: none;
+    background-color: #ffcc33;
+    text-transform: lowercase;
+    text-align: center;
+    color: #333;
   }
 }

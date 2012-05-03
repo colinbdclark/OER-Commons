@@ -24,20 +24,32 @@ class Intro(TemplateView):
     template_name = "rubrics/tool/intro.html"
 
     def get(self, request, *args, **kwargs):
-        self.url = request.GET.get("url", u"").strip()
-        if not self.url:
-            return HttpResponseBadRequest()
 
-        for model in (Course, Library, CommunityItem, GenericMaterial):
-            self.object = get_object_or_None(model, url=self.url)
-            if self.object:
-                break
+        identifier = request.GET.get("id", u"").strip()
+        if identifier:
+            try:
+                content_type_id, object_id = map(int, identifier.split("."))
+            except (ValueError, TypeError):
+                return HttpResponseBadRequest()
+            content_type = get_object_or_404(ContentType, id=content_type_id)
+            model = content_type.model_class()
+            self.object = get_object_or_404(model, id=object_id)
+            self.url = self.object.url
+        else:
+            self.url = request.GET.get("url", u"").strip()
+            if not self.url:
+                return HttpResponseBadRequest()
 
-        if not self.object and self.request.user.is_authenticated():
-            self.object = GenericMaterial.objects.create(
-                url=self.url,
-                creator=self.request.user,
-            )
+            for model in (Course, Library, CommunityItem, GenericMaterial):
+                self.object = get_object_or_None(model, url=self.url)
+                if self.object:
+                    break
+
+            if not self.object and self.request.user.is_authenticated():
+                self.object = GenericMaterial.objects.create(
+                    url=self.url,
+                    creator=self.request.user,
+                )
 
         from_url = request.GET.get("from", u"").strip()
         if from_url:

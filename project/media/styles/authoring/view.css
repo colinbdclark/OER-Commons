@@ -65,11 +65,12 @@
   .authored-content figcaption {
     font-family: "Myriad Pro", Helvetica, sans-serif; }
   .authored-content figure.image {
-    text-align: center; }
-    .authored-content figure.image.left {
+    text-align: center;
+    min-width: 150px; }
+    .authored-content figure.image.align-left {
       float: left;
       margin-right: 10px; }
-    .authored-content figure.image.right {
+    .authored-content figure.image.align-right {
       float: right;
       margin-left: 10px; }
     .authored-content figure.image figcaption {
@@ -77,6 +78,8 @@
       .authored-content figure.image figcaption strong {
         font-style: normal;
         color: #666; }
+      .authored-content figure.image figcaption em {
+        margin-left: 1em; }
   .authored-content figure.download {
     color: #0B7BA9;
     font-size: 110%;
@@ -95,6 +98,61 @@
       margin: 0 auto; }
       .authored-content figure.video .unisubs-widget span.unisubs-tabTextfinish {
         height: 32px !important; }
+  .authored-content figure.audio {
+    text-align: center; }
+    .authored-content figure.audio .audio-player {
+      display: inline-block;
+      position: relative;
+      width: 300px;
+      height: 19px;
+      padding: 5px 10px;
+      background-color: #e6e6e6;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      border-radius: 5px; }
+      .authored-content figure.audio .audio-player div {
+        margin-bottom: 0; }
+      .authored-content figure.audio .audio-player .play-pause {
+        border: none;
+        position: absolute;
+        text-indent: -9999px;
+        width: 17px;
+        height: 19px;
+        background: url(../../images/authoring/play-button.png) no-repeat 50% 50%;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        -ms-box-shadow: none;
+        box-shadow: none; }
+      .authored-content figure.audio .audio-player .timeline-slider {
+        margin-left: 30px;
+        margin-top: 7px;
+        height: 5px;
+        border: none;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        -ms-border-radius: 0;
+        border-radius: 0;
+        background-color: #a6a6a6;
+        background-image: none;
+        -webkit-box-shadow: 1px 1px 1px #fff;
+        -moz-box-shadow: 1px 1px 1px #fff;
+        -ms-box-shadow: 1px 1px 1px #fff;
+        box-shadow: 1px 1px 1px #fff; }
+      .authored-content figure.audio .audio-player .ui-slider-handle {
+        background: url(../../images/authoring/audio-progress-slider.png) no-repeat 50% 50%;
+        height: 21px;
+        width: 20px;
+        border: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        -ms-box-shadow: none;
+        box-shadow: none;
+        top: -8px; }
+      .authored-content figure.audio .audio-player .progress {
+        width: 0;
+        height: 5px;
+        background-color: #fdbf2d; }
   .authored-content .text-color-1 {
     color: #940163; }
   .authored-content .text-color-2 {
@@ -176,9 +234,41 @@
     text-transform: uppercase;
     font-size: 1.25em;
     line-height: 2em;
-    text-decoration: none; }
+    text-decoration: none;
+    vertical-align: top; }
     .authoring-view #toolbar a:hover {
       background-color: #6cb8da; }
+  .authoring-view #toolbar a.delete {
+    width: 14px;
+    background-image: url(../../images/authoring/icon-delete.png);
+    background-repeat: no-repeat;
+    background-position: 50% 40%;
+    text-indent: -9999px; }
+  .authoring-view #toolbar .delete-confirmation {
+    display: inline-block;
+    border-right: 1px solid #2d73cb;
+    border-left: 1px solid #9ecfe6;
+    font-size: 1.25em;
+    height: 2em;
+    padding: 0 1em;
+    vertical-align: top; }
+    .authoring-view #toolbar .delete-confirmation a {
+      text-transform: none;
+      margin-top: 0.5em;
+      border: none;
+      padding: 0;
+      font-size: 0.8em;
+      line-height: 1.5em; }
+      .authoring-view #toolbar .delete-confirmation a.confirm {
+        position: relative;
+        top: -1px;
+        margin-right: 1em;
+        border: 1px solid #fff;
+        padding: 0 0.5em; }
+      .authoring-view #toolbar .delete-confirmation a.cancel:hover {
+        background-color: transparent; }
+  .authoring-view #toolbar .hide {
+    display: none; }
 .authoring-view .download-links {
   margin-right: 20px;
   padding: 1em 0;

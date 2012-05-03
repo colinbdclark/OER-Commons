@@ -15,7 +15,7 @@ var WriteStep = function (tool) {
 
   this.ALLOWED_TOP_LEVEL_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote,table,figure";
   this.TOP_LEVEL_TEXT_TAGS = "p,div,h1,h2,h3,h4,ul,ol,blockquote";
-  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "rangySelectionBoundary"];
+  this.ALLOWED_CLASSES = ["table", "embed", "image", "video", "audio", "document", "download", "reference", "button", "l1", "l2", "l3", "l4", "l5", "align-left", "align-right", "rangySelectionBoundary"];
   for (var i = 1; i < 6; i++) {
     this.ALLOWED_CLASSES.push("text-color-" + i);
     this.ALLOWED_CLASSES.push("bg-color-" + i);
@@ -145,6 +145,10 @@ var WriteStep = function (tool) {
     editor.initImage($(this));
   });
   this.initImageControls();
+
+  this.$area.find("figure.audio").each(function () {
+    editor.initAudio($(this));
+  });
 
   this.initDND();
 
@@ -384,7 +388,9 @@ WriteStep.prototype.cleanHTML = function (preSave) {
     if ($figure.hasClass("download") && $figure.find("a")) {
       return;
     }
-    // TODO: skip audio figures when they're available
+    if ($figure.hasClass("audio")) {
+      return;
+    }
 
     if ($.trim($figure.text()) === "") {
       // Remove empty figure
@@ -444,6 +450,11 @@ WriteStep.prototype.cleanHTML = function (preSave) {
       if ($.trim($this.text()) === "") {
         $this.remove();
       }
+    });
+    $document.find("figure.audio,figure.video").each(function() {
+      var $figure = $(this);
+      var caption = $figure.find("figcaption").html() || "";
+      $figure.html("<figcaption>" + caption + "</figcaption>");
     });
   }
   return $document.html();
@@ -598,7 +609,7 @@ WriteStep.prototype.updateToolbarState = function () {
   var $focusNode = this.$focusNode;
   var $focusBlock = this.$focusBlock;
 
-  this.$toolbar.find(".active").removeClass("active");
+  this.$toolbar.find("a.active:not(.media)").removeClass("active");
   this.disableButton("indent");
   this.disableButton("outdent");
 
@@ -707,10 +718,17 @@ WriteStep.prototype.initTextStyleMenu = function () {
   $menu.find("a.select").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
-    $menu.toggleClass("active");
+    if ($menu.hasClass("active")) {
+      $menu.removeClass("active");
+      $menu.find("a[data-tooltip]").qtip("disable", false);
+    } else {
+      $menu.addClass("active");
+      $menu.find("a[data-tooltip]").qtip("hide").qtip("disable", true);
+    }
   });
   $(document).click(function () {
     $menu.removeClass("active");
+    $menu.find("a[data-tooltip]").qtip("disable", false);
   });
   $menu.delegate("ul a", "click", function (e) {
     e.preventDefault();
@@ -1049,6 +1067,7 @@ WriteStep.prototype.initColorButtons = function () {
     var $selector = $this.parent();
     if ($selector.hasClass("active")) {
       $selector.removeClass("active");
+      $selector.find("a[data-tooltip]").qtip("disable", false);
     } else {
       var $lis = $selector.find("li").removeClass("selected");
       if (editor.$focusNode) {
@@ -1064,6 +1083,7 @@ WriteStep.prototype.initColorButtons = function () {
         }
       }
       $selector.addClass("active");
+      $selector.find("a[data-tooltip]").qtip("hide").qtip("disable", true);
     }
   });
   $selectors.delegate("li", "mousedown", function (e) {
@@ -1110,6 +1130,7 @@ WriteStep.prototype.initColorButtons = function () {
 
   $(document).click(function () {
     $selectors.removeClass("active");
+    $selectors.find("a[data-tooltip]").qtip("disable", false);
   });
 };
 
@@ -1120,7 +1141,7 @@ WriteStep.prototype.initFigure = function ($figure) {
 WriteStep.prototype.initDND = function () {
   var editor = this;
   this.$area.sortable({
-    handle: this.$area.find("figure:not(.inline):not(.table),table span.move"),
+    handle: this.$area.find("figure.image img,figure.image a.ui-move,figure:not(.inline):not(.table):not(.image),table span.move"),
     distance: 15,
     containment: this.$area,
     cursor: "move",
@@ -1134,17 +1155,41 @@ WriteStep.prototype.initDND = function () {
 };
 
 WriteStep.prototype.updateDND = function () {
-  this.$area.sortable("option", "handle", this.$area.find("figure:not(.inline):not(.table),table span.move"));
+  this.$area.sortable("option", "handle", this.$area.find("figure.image img,figure.image a.ui-move,figure:not(.inline):not(.table):not(.image),table span.move"));
 };
 
 WriteStep.prototype.initImage = function($figure) {
   var $image = $figure.find("img");
+  var $caption = $figure.find("figcaption");
   if (!$image.parent().is("span.ui-wrap-image")) {
     $image.wrap($('<span class="ui-wrap-image"></span>'));
     var $wrapper = $image.parent();
-    $('<a href="#" class="ui-move"></a>').appendTo($wrapper);
-    $('<a href="#" class="ui-delete"></a>').appendTo($wrapper);
+    if ($image.width()) {
+      $wrapper.css({
+        width: $image.width() + "px"
+      })
+    } else {
+      $image.load(function(e) {
+        $wrapper.css({
+          width: $(e.target).width() + "px"
+        })
+      });
+    }
+    $caption.detach().appendTo($wrapper);
+    $('<a href="#" class="ui-move ui-image-button"></a>').appendTo($wrapper);
+    var $right = $('<a href="#" class="ui-right ui-image-button"></a>').prependTo($caption);
+    var $center = $('<a href="#" class="ui-center ui-image-button"></a>').prependTo($caption);
+    var $left = $('<a href="#" class="ui-left ui-image-button"></a>').prependTo($caption);
+    $('<a href="#" class="ui-delete ui-image-button"></a>').prependTo($caption);
+    if ($figure.hasClass("align-left")) {
+      $left.addClass("active");
+    } else if ($figure.hasClass("align-right")) {
+      $right.addClass("active");
+    } else {
+      $center.addClass("active");
+    }
   }
+  $caption.find("strong,em").attr("contenteditable", "true");
 };
 
 WriteStep.prototype.initImageControls = function() {
@@ -1159,24 +1204,30 @@ WriteStep.prototype.initImageControls = function() {
     $figure.remove();
     // TODO: remove image from server.
   });
+  this.$area.delegate("figure.image a.ui-left,figure.image a.ui-center,figure.image a.ui-right", "click", function(e) {
+    e.preventDefault();
+    var $button = $(e.currentTarget);
+    if ($button.hasClass("active")) {
+      return;
+    }
+    editor.saveState();
+    var $figure = $(e.currentTarget).closest("figure.image", editor.$area);
+    if ($button.hasClass("ui-left")) {
+      $figure.removeClass("align-right").addClass("align-left");
+    } else if ($button.hasClass("ui-right")) {
+      $figure.removeClass("align-left").addClass("align-right");
+    } else {
+      $figure.removeClass("align-left").removeClass("align-right");
+    }
+    $figure.find("figcaption a.active").removeClass("active");
+    $button.addClass("active");
+  });
 };
 
-//WriteStep.prototype.initImageResize = function($img) {
-//  $img.load(function()
-//    $(this).resizable({
-//      aspectRatio: true,
-//      autoHide: true,
-//      maxWidth: 800,
-//      minWidth: 100,
-//      create: function() {
-//        $(this).css({
-//          "margin-left": "auto",
-//          "margin-right": "auto"
-//        });
-//      }
-//    });
-//  });
-//};
+WriteStep.prototype.initAudio = function($figure) {
+  $figure.find("figcaption").attr("contenteditable", "true");
+  new AudioPlayer($figure);
+};
 
 WriteStep.prototype.loadEmbed = function ($figure) {
   var url = $figure.data("url");
@@ -1361,10 +1412,11 @@ WriteStep.prototype.undo = function () {
   this.enableRedo();
   this.toc.update();
   this.updateReferences();
+  this.$area.find("figure.audio").each(function() {
+    this.initAudio($(this));
+  });
   this.trackSelection();
-
   this.updateDND();
-
 };
 
 WriteStep.prototype.redo = function () {
@@ -1392,10 +1444,11 @@ WriteStep.prototype.redo = function () {
   this.enableUndo();
   this.toc.update();
   this.updateReferences();
+  this.$area.find("figure.audio").each(function() {
+    this.initAudio($(this));
+  });
   this.trackSelection();
-
   this.updateDND();
-
 };
 
 WriteStep.prototype.disableUndo = function () {
@@ -1419,11 +1472,21 @@ WriteStep.prototype.enableRedo = function () {
 };
 
 WriteStep.prototype.disableButton = function (button) {
-  this.$toolbar.find("." + button).addClass("disabled");
+  button = this.$toolbar.find("." + button).addClass("disabled");
+  if (button.is("a[data-tooltip]")) {
+    button.qtip("hide").qtip("disable", true);
+  } else {
+    button.find("a[data-tooltip]").qtip("hide").qtip("disable", true);
+  }
 };
 
 WriteStep.prototype.enableButton = function (button) {
-  this.$toolbar.find("." + button).removeClass("disabled");
+  button = this.$toolbar.find("." + button).removeClass("disabled");
+  if (button.is("a[data-tooltip]")) {
+    button.qtip("disable", false);
+  } else {
+    button.find("a[data-tooltip]").qtip("disable", false);
+  }
 };
 
 WriteStep.prototype.initTableButton = function() {
@@ -1440,11 +1503,13 @@ WriteStep.prototype.initTableButton = function() {
     e.preventDefault();
     if ($tableTool.hasClass("active")) {
       $tableTool.removeClass("active");
+      $tableTool.find("a[data-tooltip]").qtip("disable", false);
     } else {
       $cells.removeClass("active").removeClass("hover");
       $rowInput.val("");
       $colInput.val("");
       $tableTool.addClass("active");
+      $tableTool.find("a[data-tooltip]").qtip("hide").qtip("disable", true);
     }
   });
   function applyClassToCells(cls, row, col) {
@@ -1485,10 +1550,12 @@ WriteStep.prototype.initTableButton = function() {
   });
   $(document).click(function() {
     $tableTool.removeClass("active");
+    $tableTool.find("a[data-tooltip]").qtip("disable", false);
   });
   $tableTool.find("div.buttons a.cancel").click(function(e) {
     e.preventDefault();
     $tableTool.removeClass("active");
+    $tableTool.find("a[data-tooltip]").qtip("disable", false);
   });
   $tableTool.find("div.buttons a.add").click(function(e) {
     e.preventDefault();
@@ -1520,6 +1587,7 @@ WriteStep.prototype.initTableButton = function() {
     editor.updateDND();
     editor.focusOnNode($table.find("td").first());
     $tableTool.removeClass("active");
+    $tableTool.find("a[data-tooltip]").qtip("disable", false);
   });
 
   editor.$area.delegate("table a.remove", "click", function(e) {
@@ -1614,24 +1682,24 @@ function MediaDialog(editor) {
   this.displayed = false;
   this.$dialog = $("#media-dialog");
   this.$steps = this.$dialog.find("div.step");
+  this.$button = editor.$toolbar.find("a.media");
+  this.$placeholder = $('<div class="ui-media-placeholder" contenteditable="false">Media will be placed here</div>');
   var uploadProgress = new MediaDialog.UploadProgressStep(this);
   this.steps = {
     uploadProgress: uploadProgress,
     upload: new MediaDialog.UploadStep(this, uploadProgress),
     image: new MediaDialog.ImageStep(this),
     video: new MediaDialog.VideoStep(this),
+    audio: new MediaDialog.AudioStep(this),
     document: new MediaDialog.DocumentStep(this)
   };
 
   var dialog = this;
-  editor.$toolbar.find("a.media").click(function (e) {
-    var $button = $(e.target);
+  this.$button.click(function (e) {
     e.preventDefault();
     if (dialog.displayed) {
-      $button.removeClass("active");
       dialog.hide();
     } else {
-      $button.addClass("active");
       dialog.show();
     }
   });
@@ -1641,14 +1709,21 @@ MediaDialog.prototype.openStep = function (step, data) {
 };
 MediaDialog.prototype.show = function () {
   this.openStep("upload");
+  this.$button.addClass("active").qtip("hide").qtip("disable", true);
   this.$dialog.show();
   this.displayed = true;
-  // TODO: insert placeholder here
+  var $placeholder = this.$placeholder.detach();
+  if (this.editor.$focusBlock) {
+    $placeholder.insertAfter(this.editor.$focusBlock);
+  } else {
+    this.editor.$area.append($placeholder);
+  }
 };
 MediaDialog.prototype.hide = function () {
+  this.$button.removeClass("active").qtip("disable", false);
   this.$dialog.hide();
   this.displayed = false;
-  // TODO: remove placeholders here
+  this.$placeholder.detach();
 };
 MediaDialog.prototype.handleUploadResponse = function (response) {
   var result = $.parseJSON(response);
@@ -1661,6 +1736,8 @@ MediaDialog.prototype.handleUploadResponse = function (response) {
     this.openStep("document", result);
   } else if (result.type === "video") {
     this.openStep("video", result);
+  } else if (result.type === "audio") {
+    this.openStep("audio", result);
   } else {
     this.hide();
   }
@@ -1719,7 +1796,7 @@ MediaDialog.UploadStep = function (dialog, uploadProgress) {
   var $input = this.$input = $step.find("input:text");
   this.uploadProgress = uploadProgress;
 
-  $step.find("a.hide").click(function (e) {
+  $step.find("a.hide-dialog").click(function (e) {
     e.preventDefault();
     dialog.hide();
   });
@@ -1820,27 +1897,17 @@ MediaDialog.ImageStep = function (dialog) {
     if (step.figureType == "download") {
       //noinspection JSUnusedAssignment
       $figure = $("<figure></figure>").addClass("download").append(
-              $("<a target='_blank'></a>").attr("href", step.originalURL).addClass("download").text("Download: ").append(
-                      $("<strong></strong>").text(title)
-              )
+        $("<a target='_blank'></a>").attr("href", step.originalURL).text("Download: ").append($("<strong></strong>").text(title))
       );
     } else {
-      if (description !== "") {
-        title += ": ";
-      }
-      var $caption = $("<figcaption></figcaption>").text(description);
-      if (title) {
-        $caption.prepend($("<strong></strong>").text(title));
-      }
+      var $caption = $("<figcaption></figcaption>");
+      $caption.append($("<strong></strong>").text(title));
+      $caption.append($("<em></em>").text(description));
       $figure = $("<figure></figure>").addClass("image").append($("<img>").attr("src", step.imageURL).attr("alt", description)).append($caption);
     }
 
     editor.saveState();
-    if (editor.$focusBlock) {
-      $figure.insertAfter(editor.$focusBlock);
-    } else {
-      editor.$area.append($figure);
-    }
+    $figure.insertAfter(dialog.$placeholder);
     editor.initFigure($figure);
     editor.initImage($figure);
     editor.ensureTextInput();
@@ -1902,11 +1969,7 @@ MediaDialog.VideoStep = function (dialog) {
       $figure.attr("data-uploaded-video-id", $step.data("uploaded-video-id"));
     }
 
-    if (editor.$focusBlock) {
-      $figure.insertAfter(editor.$focusBlock);
-    } else {
-      editor.$area.append($figure);
-    }
+    $figure.insertAfter(dialog.$placeholder);
     editor.loadEmbed($figure);
     editor.initFigure($figure);
     editor.ensureTextInput();
@@ -1939,12 +2002,11 @@ MediaDialog.VideoStep.prototype.prepare = function (data) {
   this.$textarea.val("");
 };
 
-MediaDialog.DocumentStep = function (dialog) {
+MediaDialog.AudioStep = function (dialog) {
   MediaDialog.Step.call(this, dialog);
 
-  var $step = this.$step = dialog.$steps.filter(".document");
+  var $step = this.$step = dialog.$steps.filter(".audio");
   var $input = this.$input = $step.find("input:text");
-  var $selector = this.$selector = $step.find("input:radio");
 
   var editor = dialog.editor;
 
@@ -1952,7 +2014,58 @@ MediaDialog.DocumentStep = function (dialog) {
     e.preventDefault();
     oer.status_message.clear();
 
-    var type = $selector.val();
+    var caption = $.trim($input.val());
+    if (caption === "") {
+      oer.status_message.error("Please enter the title of this audio file.");
+      return;
+    }
+    editor.saveState();
+    var $figure = $("<figure></figure>").addClass("audio");
+    $figure.attr("data-url", $step.data("url"));
+    if ($step.data("id")) {
+      $figure.attr("data-id", $step.data("id"));
+    }
+    $figure.append($("<figcaption></figcaption>").text(caption));
+    $figure.insertAfter(dialog.$placeholder);
+    editor.initFigure($figure);
+    editor.initAudio($figure);
+    editor.ensureTextInput();
+    editor.updateDND();
+    dialog.hide();
+  });
+
+  $step.find("input[type='text']").keydown(function(e) {
+    if (e.which === editor.ENTER) {
+      $step.find("a.submit").trigger("click");
+    }
+  });
+};
+
+//noinspection JSCheckFunctionSignatures
+MediaDialog.AudioStep.prototype = new MediaDialog.Step();
+MediaDialog.AudioStep.prototype.constructor = MediaDialog.AudioStep;
+MediaDialog.AudioStep.prototype.prepare = function (data) {
+  this.$input.val(data.name);
+  this.$step.data("url", data.url);
+  if (data.id) {
+    this.$step.data("id", data.id);
+  } else {
+    this.$step.data("id", null);
+  }
+};
+
+MediaDialog.DocumentStep = function (dialog) {
+  MediaDialog.Step.call(this, dialog);
+
+  var $step = this.$step = dialog.$steps.filter(".document");
+  var $input = this.$input = $step.find("input:text");
+
+  var editor = dialog.editor;
+
+  $step.find("a.submit").click(function (e) {
+    e.preventDefault();
+    oer.status_message.clear();
+
     var caption = $.trim($input.val());
     if (caption === "") {
       oer.status_message.error("Please enter the title of this document.");
@@ -1961,25 +2074,7 @@ MediaDialog.DocumentStep = function (dialog) {
     editor.saveState();
     var $figure = $("<figure></figure>").addClass("download").text("Download: ");
     $figure.append($('<a target="_blank"></a>').attr("href", $step.data("url")).append("<strong></strong>").text(caption));
-    if (type === "link") {
-      if (editor.$focusBlock && editor.range) {
-        if (this.$focusBlock.is("p")) {
-          editor.range.collapse(false);
-          editor.range.insertNode($figure.get(0));
-          editor.trackSelection();
-        } else {
-          $("<p></p>").append($figure).insertAfter(this.$focusBlock);
-        }
-      } else {
-        $("<p></p>").append($figure).appendTo(editor.$area);
-      }
-    } else {
-      if (editor.$focusBlock) {
-        $figure.insertAfter(editor.$focusBlock);
-      } else {
-        editor.$area.append($figure);
-      }
-    }
+    $figure.insertAfter(dialog.$placeholder);
     editor.initFigure($figure);
     editor.ensureTextInput();
     editor.updateDND();
@@ -1997,7 +2092,6 @@ MediaDialog.DocumentStep = function (dialog) {
 MediaDialog.DocumentStep.prototype = new MediaDialog.Step();
 MediaDialog.DocumentStep.prototype.constructor = MediaDialog.DocumentStep;
 MediaDialog.DocumentStep.prototype.prepare = function (data) {
-  this.$selector.val("button");
   this.$input.val(data.name);
   this.$step.data("url", data.url);
 };

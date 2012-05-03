@@ -16,12 +16,15 @@
 {% endblock %}
 
 {% block layout %}
+  <form method="post" action="{% url authoring:delete-draft pk=object.pk %}" id="delete-draft-form"></form>
   <form action="{% url authoring:edit pk=object.material.pk %}" method="post" class="authoring-form">
+  <input type="hidden" name="checksum" value="{{ object.checksum }}">
   <div class="authoring-head fl-push">
     <a href="{% url frontpage %}" class="logo">OER Commons</a>
     <div id="user-menu">
       <a href="#" class="toggle">{{ request.user.get_full_name|default:request.user.email|default:request.user }}</a>
       <ul>
+        <li><a href="#" class="delete-draft">Delete Draft</a></li>
         <li><a href="{% url myitems:myitems %}">My Items</a></li>
         <li><a href="{% url authoring:new %}">New OER</a></li>
         <li><a href="{% url users:logout %}">Log Out</a></li>
@@ -30,9 +33,7 @@
     <div class="step-icons">
       <a href="#step-write" class="write active"></a>
       <a href="#step-describe" class="describe"></a>
-      {% if not hide_submit_step %}
-        <a href="#step-submit" class="submit"></a>
-      {% endif %}
+      <a href="#step-submit" class="submit{% if resubmit %} resubmit{% endif %}"></a>
     </div>
     <h1 id="material-title"><span class="outer"><span class="inner">{% if form.title.value %}{{ form.title.value }}{% endif %}</span></span></h1>
     {{ form.title }}
@@ -41,6 +42,25 @@
       <a href="#preview" class="preview">Preview</a>
     </div>
     {% include "include/status-messages.html" %}
+    <div id="offline-message" class="global-warning hide"><div class="wrap">
+      <p><strong>Connection with OER Common has been lost.</strong></p>
+      <p>Please check your internet connection.</p>
+    </div></div>
+    <div id="checksum-message" class="global-warning hide"><div class="wrap">
+      <p><strong>This resource is being edited in multiple browser windows and there is a more recent version.</strong></p>
+      <p>You can <a href="#" class="force-save">save your current version</a> (your changes will be saved in this window) or <a href="{% url authoring:edit pk=object.material.pk %}">load the most recent version</a> (your changes will be lost in this window).</p>
+    </div></div>
+    <div id="delete-confirmation" class="global-warning hide"><div class="wrap">
+      <p><strong>
+        {% if object.material.is_new %}
+          You are about to delete this draft.
+        {% else %}
+          You are about to delete these unpublished changes.
+        {% endif %}
+        &nbsp;<a href="#" class="confirm">Delete</a>&nbsp;&nbsp;<a href="#" class="cancel">Cancel</a>
+      </strong></p>
+      <p>&nbsp;</p>
+    </div></div>
     <div class="clear"></div>
   </div>
 
@@ -51,11 +71,9 @@
     <div class="slide" id="step-describe">
       {% include "authoring/include/describe.html" %}
     </div>
-    {% if not hide_submit_step %}
-      <div class="slide" id="step-submit">
-        {% include "authoring/include/submit.html" %}
-      </div>
-    {% endif %}
+    <div class="slide" id="step-submit">
+      {% include "authoring/include/submit.html" %}
+    </div>
   </div>
 
   </form>
@@ -110,16 +128,18 @@
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.iframe-transport.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.fileupload.js"></script>
   <script src="{{ STATIC_URL }}javascripts/jquery/jquery.linkify.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/jquery/jme/mm.full.min.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/learning-goals-widget.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/grades-and-sublevels-widget.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/material-types-widget.js"></script>
+  <script src="{{ STATIC_URL }}javascripts/authoring/audio.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/write.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/describe.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/submit.js"></script>
   <script src="{{ STATIC_URL }}javascripts/authoring/tool.js"></script>
   <script>
     $(function(e) {
-      new AuthoringTool({% if hide_submit_step %}true{% else %}false{% endif %});
+      new AuthoringTool({% if resubmit %}true{% else %}false{% endif %});
     });
   </script>
 {% endblock %}

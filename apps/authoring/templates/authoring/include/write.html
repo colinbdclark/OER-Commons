@@ -1,10 +1,10 @@
 {% spaceless %}
   <div class="toolbar" id="write-toolbar">
-    <a class="toolbar-button undo disabled" href="#undo">Undo</a>
-    <a class="toolbar-button redo disabled" href="#redo">Redo</a>
+    <a class="toolbar-button undo disabled" href="#undo" data-tooltip="Undo">Undo</a>
+    <a class="toolbar-button redo disabled" href="#redo" data-tooltip="Redo">Redo</a>
     <span class="sep"></span>
     <div class="text-style">
-      <a href="#" class="select"><span>Text style...</span></a>
+      <a href="#" class="select" data-tooltip="Text style"><span>Text style...</span></a>
       <ul>
         <li><a href="#header" class="header"><span>Header</span></a></li>
         <li><a href="#sub-header" class="sub-header"><span>Sub-header</span></a></li>
@@ -12,13 +12,13 @@
         <li><a href="#quote" class="quote"><span>Long Quote</span></a></li>
       </ul>
     </div>
-    <a class="toolbar-button bullet-list" href="#bullet-list">Bullet list</a>
-    <a class="toolbar-button number-list" href="#number-list">Number list</a>
-    <a class="toolbar-button indent" href="#indent">Increase indent</a>
-    <a class="toolbar-button outdent" href="#outdent">Decrease indent</a>
+    <a class="toolbar-button bullet-list" href="#bullet-list" data-tooltip="Bulleted list">Bulleted list</a>
+    <a class="toolbar-button number-list" href="#number-list" data-tooltip="Numbered list">Numbered list</a>
+    <a class="toolbar-button indent" href="#indent" data-tooltip="Increase indent">Increase indent</a>
+    <a class="toolbar-button outdent" href="#outdent" data-tooltip="Decrease indent">Decrease indent</a>
     <span class="sep"></span>
     <div class="table-tool">
-      <a class="toolbar-button table" href="#table">Insert table</a>
+      <a class="toolbar-button table" href="#table" data-tooltip="Table">Insert table</a>
       <div class="grid">
         <table>
           <tbody>
@@ -42,12 +42,12 @@
       </div>
     </div>
     <span class="sep"></span>
-    <a class="toolbar-button bold" href="#bold">Bold</a>
-    <a class="toolbar-button italic" href="#italic">Italic</a>
-    <a class="toolbar-button underline" href="#underline">Underline</a>
+    <a class="toolbar-button bold" href="#bold" data-tooltip="Bold">Bold</a>
+    <a class="toolbar-button italic" href="#italic" data-tooltip="Italicize">Italicize</a>
+    <a class="toolbar-button underline" href="#underline" data-tooltip="Underline">Underline</a>
     <span class="sep"></span>
     <div class="color-selector">
-      <a class="toolbar-button text-color" href="#text-color">Change text color</a>
+      <a class="toolbar-button text-color" href="#text-color" data-tooltip="Color text">Color text</a>
       <ul class="text">
         {% for i in 12345|make_list %}
           <li class="text-color-{{ i }}"></li>
@@ -56,7 +56,7 @@
       </ul>
     </div>
     <div class="color-selector">
-      <a class="toolbar-button bg-color" href="#bg-color">Change background color</a>
+      <a class="toolbar-button bg-color" href="#bg-color" data-tooltip="Highlight color">Highlight color</a>
       <ul class="bg">
         {% for i in 12345|make_list %}
           <li class="bg-color-{{ i }}"></li>
@@ -65,11 +65,11 @@
       </ul>
     </div>
     <span class="sep"></span>
-    <a class="toolbar-button link" href="#link">Insert link</a>
+    <a class="toolbar-button link" href="#link" data-tooltip="Link">link</a>
     <span class="sep"></span>
-    <a class="toolbar-button media" href="#media">Media</a>
+    <a class="toolbar-button media" href="#media" data-tooltip="Insert media">Insert media</a>
     <span class="sep"></span>
-    <a class="toolbar-button reference" href="#reference">Insert reference</a>
+    <a class="toolbar-button reference" href="#reference" data-tooltip="Reference">Reference</a>
     <div class="clear"></div>
 
   </div>
@@ -88,7 +88,7 @@
 
     <div id="media-dialog">
       <div class="step upload" data-url="{% url authoring:upload pk=object.material.pk %}">
-        <div class="head">I have permission to upload this item: <a href="#hide" class="hide">hide</a></div>
+        <div class="head">I have permission to upload this item: <a href="#hide" class="hide-dialog">hide</a></div>
         <div class="body">
           <div class="left">
             <div class="drop-zone">
@@ -141,6 +141,18 @@
           </div>
           <div class="right">
             <input type="text" name="document_name" placeholder="Give this attachment/document a name">
+            <a href="#submit" class="submit">submit</a>
+          </div>
+        </div>
+      </div>
+      <div class="step audio">
+        <div class="head">&nbsp;</div>
+        <div class="body">
+          <div class="left">
+
+          </div>
+          <div class="right">
+            <input type="text" name="audio_name" placeholder="Audio title">
             <a href="#submit" class="submit">submit</a>
           </div>
         </div>

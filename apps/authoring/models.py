@@ -23,7 +23,8 @@ from myitems.models import FolderItem
 from tags.models import Tag
 from utils.templatetags.utils import full_url
 from visitcounts.models import Visit
-
+import hashlib
+import json
 import gdata.youtube
 import gdata.youtube.service
 import datetime
@@ -70,6 +71,18 @@ class AuthoredMaterialDraft(AbstractAuthoredMaterial):
     created_timestamp = models.DateTimeField(auto_now_add=True)
     modified_timestamp = models.DateTimeField(auto_now=True)
 
+    @property
+    def checksum(self):
+        #noinspection PyUnresolvedReferences
+        data = [self.title, self.abstract, self.text, self.license.id if self.license else ""]
+        for f in ("learning_goals", "keywords", "general_subjects",
+                  "grade_levels", "grade_sublevels", "grades", "languages",
+                  "material_types"):
+            data.append(getattr(self, f).values_list("id", flat=True))
+        m = hashlib.md5()
+        m.update(str(data))
+        return m.hexdigest()
+
     @models.permalink
     def get_absolute_url(self):
         return "authoring:preview", [], dict(pk=self.material.pk)
@@ -112,6 +125,11 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     screenshot = models.ImageField(null=True, blank=True, upload_to="upload/materials/screenshots")
 
     http_status = 200
+
+    def __unicode__(self):
+        if self.title:
+            return self.title
+        return u"%s %s" % (self.__class__.__name__, unicode(self.id))
 
     @property
     def url(self):
@@ -374,7 +392,7 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
         if not sublevels:
             return GradeSubLevel.objects.none()
         return GradeSubLevel.objects.filter(id__in=sublevels)
-    
+
     @property
     def all_grade_levels(self):
         levels = set(self.grade_levels.all().values_list("id", flat=True))
@@ -402,6 +420,13 @@ class Document(models.Model):
     material = models.ForeignKey(AuthoredMaterial)
 
     file = models.FileField(upload_to=upload_to("documents"), max_length=500)
+
+
+class Audio(models.Model):
+
+    material = models.ForeignKey(AuthoredMaterial)
+
+    file = models.FileField(upload_to=upload_to("audio"), max_length=500)
 
 
 class Embed(models.Model):

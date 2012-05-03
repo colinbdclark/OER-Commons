@@ -125,19 +125,46 @@ class UserMenu
 
 class Tool
 
-  AUTOSAVE_INTERVAL: 30 # 30 seconds
+  AUTOSAVE_INTERVAL: 5 # 30 seconds
 
-  constructor: (@hideSubmitStep)->
+  constructor: (@resubmit)->
     @form = $("form.authoring-form")
     @slider = new Slider()
     @userMenu = new UserMenu()
     @writeStep = new WriteStep(@)
     @describeStep = new DescribeStep(@)
-    if not @hideSubmitStep
-      @submitStep = new SubmitStep(@)
+    @submitStep = new SubmitStep(@)
 
     @title = $("#material-title")
     @titleInput = $("#id_title")
+    @offlineMessage = $("#offline-message")
+
+    @checksum = @form.find("input[name='checksum']")
+    @checksumMessage = @form.find("#checksum-message")
+    @checksumMessage.find("a.force-save").click((e)=>
+      e.preventDefault()
+      @save(false, true)
+    )
+
+    @deleteForm = $("#delete-draft-form")
+    @deleteConfirmation = @form.find("#delete-confirmation")
+    @deleteConfirmation.find("a.cancel").click((e)=>
+      e.preventDefault()
+      @deleteConfirmation.addClass("hide")
+    )
+    @deleteConfirmation.find("a.confirm").click((e)=>
+      e.preventDefault()
+      @deleteForm.submit()
+    )
+
+    @globalWarnings = $("div.global-warning")
+
+    $("#user-menu a.delete-draft").click((e)=>
+      @globalWarnings.not(@deleteConfirmation).addClass("hide")
+      @deleteConfirmation.removeClass("hide")
+    )
+
+    @savedData = null
 
     @title.find("span.inner").editable(
       (value)=>
@@ -183,22 +210,69 @@ class Tool
       errorSlide = errors.first().closest("div.slide")
       @slider.slideTo("#" + errorSlide.attr("id"), false)
 
+    $(document).ajaxError((event, xhr, settings, error)=>
+      if not xhr.status
+        @globalWarnings.not(@offlineMessage).addClass("hide")
+        @offlineMessage.removeClass("hide")
+      else
+        @offlineMessage.addClass("hide")
+        oer.status_message.clear()
+        oer.status_message.error("An error occured.")
+    )
+
+    $(document).ajaxSuccess((event, xhr, settings, error)=>
+      @offlineMessage.addClass("hide")
+    )
+
+    $("a[data-tooltip]").qtip(
+      content:
+        attr: "data-tooltip"
+      style:
+        classes: "ui-tooltip-authoring"
+        tip: false
+      position:
+        my: "top center"
+        at: "bottom center"
+        adjust:
+          y: 5
+    )
+    $("a[data-tooltip]").filter(".disabled").qtip("disable")
+
     @autosave()
 
-  save:->
+  save: (autosave=false,force=false)->
     @writeStep.preSave()
+    data = @form.serialize()
+    formData = data.replace(/checksum=.+?&/g, "")
+    if force
+      data += "&force_save=yes"
+
+    if autosave and formData == @savedData
+      return
+
     oer.status_message.clear()
-    $.post(@form.attr("action"), @form.serialize(), (response)=>
+    oer.status_message.message("Saving...", "")
+
+    $.post(@form.attr("action"), data, (response)=>
       if response.status == "success"
-        oer.status_message.success(response.message, true)
+        oer.status_message.clear()
+        oer.status_message.success("All changes saved")
+        @checksum.val(response.checksum)
+        @checksumMessage.addClass("hide")
+        @savedData = formData
       else
-        oer.status_message.error(response.message, false)
+        oer.status_message.clear()
+        oer.status_message.error(response.message)
+        if response.reason == "checksum"
+          @globalWarnings.not(@checksumMessage).addClass("hide")
+          @checksumMessage.removeClass("hide")
+        @savedData = null
     )
     return
 
   autosave:->
     setTimeout(=>
-      @save()
+      @save(true)
       @autosave()
     , @AUTOSAVE_INTERVAL * 1000)
 

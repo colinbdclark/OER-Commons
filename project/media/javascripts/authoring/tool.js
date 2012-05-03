@@ -145,20 +145,43 @@
 
   Tool = (function() {
 
-    Tool.prototype.AUTOSAVE_INTERVAL = 30;
+    Tool.prototype.AUTOSAVE_INTERVAL = 5;
 
-    function Tool(hideSubmitStep) {
+    function Tool(resubmit) {
       var actions, errorSlide, errors, previewBtn, saveBtn,
         _this = this;
-      this.hideSubmitStep = hideSubmitStep;
+      this.resubmit = resubmit;
       this.form = $("form.authoring-form");
       this.slider = new Slider();
       this.userMenu = new UserMenu();
       this.writeStep = new WriteStep(this);
       this.describeStep = new DescribeStep(this);
-      if (!this.hideSubmitStep) this.submitStep = new SubmitStep(this);
+      this.submitStep = new SubmitStep(this);
       this.title = $("#material-title");
       this.titleInput = $("#id_title");
+      this.offlineMessage = $("#offline-message");
+      this.checksum = this.form.find("input[name='checksum']");
+      this.checksumMessage = this.form.find("#checksum-message");
+      this.checksumMessage.find("a.force-save").click(function(e) {
+        e.preventDefault();
+        return _this.save(false, true);
+      });
+      this.deleteForm = $("#delete-draft-form");
+      this.deleteConfirmation = this.form.find("#delete-confirmation");
+      this.deleteConfirmation.find("a.cancel").click(function(e) {
+        e.preventDefault();
+        return _this.deleteConfirmation.addClass("hide");
+      });
+      this.deleteConfirmation.find("a.confirm").click(function(e) {
+        e.preventDefault();
+        return _this.deleteForm.submit();
+      });
+      this.globalWarnings = $("div.global-warning");
+      $("#user-menu a.delete-draft").click(function(e) {
+        _this.globalWarnings.not(_this.deleteConfirmation).addClass("hide");
+        return _this.deleteConfirmation.removeClass("hide");
+      });
+      this.savedData = null;
       this.title.find("span.inner").editable(function(value) {
         _this.titleInput.val(value);
         return value;
@@ -198,18 +221,66 @@
         errorSlide = errors.first().closest("div.slide");
         this.slider.slideTo("#" + errorSlide.attr("id"), false);
       }
+      $(document).ajaxError(function(event, xhr, settings, error) {
+        if (!xhr.status) {
+          _this.globalWarnings.not(_this.offlineMessage).addClass("hide");
+          return _this.offlineMessage.removeClass("hide");
+        } else {
+          _this.offlineMessage.addClass("hide");
+          oer.status_message.clear();
+          return oer.status_message.error("An error occured.");
+        }
+      });
+      $(document).ajaxSuccess(function(event, xhr, settings, error) {
+        return _this.offlineMessage.addClass("hide");
+      });
+      $("a[data-tooltip]").qtip({
+        content: {
+          attr: "data-tooltip"
+        },
+        style: {
+          classes: "ui-tooltip-authoring",
+          tip: false
+        },
+        position: {
+          my: "top center",
+          at: "bottom center",
+          adjust: {
+            y: 5
+          }
+        }
+      });
+      $("a[data-tooltip]").filter(".disabled").qtip("disable");
       this.autosave();
     }
 
-    Tool.prototype.save = function() {
-      var _this = this;
+    Tool.prototype.save = function(autosave, force) {
+      var data, formData,
+        _this = this;
+      if (autosave == null) autosave = false;
+      if (force == null) force = false;
       this.writeStep.preSave();
+      data = this.form.serialize();
+      formData = data.replace(/checksum=.+?&/g, "");
+      if (force) data += "&force_save=yes";
+      if (autosave && formData === this.savedData) return;
       oer.status_message.clear();
-      $.post(this.form.attr("action"), this.form.serialize(), function(response) {
+      oer.status_message.message("Saving...", "");
+      $.post(this.form.attr("action"), data, function(response) {
         if (response.status === "success") {
-          return oer.status_message.success(response.message, true);
+          oer.status_message.clear();
+          oer.status_message.success("All changes saved");
+          _this.checksum.val(response.checksum);
+          _this.checksumMessage.addClass("hide");
+          return _this.savedData = formData;
         } else {
-          return oer.status_message.error(response.message, false);
+          oer.status_message.clear();
+          oer.status_message.error(response.message);
+          if (response.reason === "checksum") {
+            _this.globalWarnings.not(_this.checksumMessage).addClass("hide");
+            _this.checksumMessage.removeClass("hide");
+          }
+          return _this.savedData = null;
         }
       });
     };
@@ -217,7 +288,7 @@
     Tool.prototype.autosave = function() {
       var _this = this;
       return setTimeout(function() {
-        _this.save();
+        _this.save(true);
         return _this.autosave();
       }, this.AUTOSAVE_INTERVAL * 1000);
     };

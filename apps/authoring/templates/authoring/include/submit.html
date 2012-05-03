@@ -1,4 +1,10 @@
-<div class="toolbar help">Select a copyright license to define how others can use your work:</div>
+<div class="toolbar help">
+  {% if resubmit %}
+    Copyright license cannot be changed after a resource is published.
+  {% else %}
+    Select a copyright license to define how others can use your work:
+  {% endif %}
+</div>
 
 <div class="layout-columns">
 
@@ -20,19 +26,19 @@
       <div class="current-license">
         <h3>Current License</h3>
         <div class="images">
-          <div class="license license-by hidden">
+          <div class="license license-by hide">
             <div class="image"></div>
             Attribution
           </div>
-          <div class="license license-nc hidden">
+          <div class="license license-nc hide">
             <div class="image"></div>
             Non-Commercial
           </div>
-          <div class="license license-sa hidden">
+          <div class="license license-sa hide">
             <div class="image"></div>
             Share-Alike
           </div>
-          <div class="license license-nd hidden">
+          <div class="license license-nd hide">
             <div class="image"></div>
             No Derivative<br>Works
           </div>
@@ -44,7 +50,7 @@
   {% spaceless %}
   <div class="slider-buttons">
     <a href="#step-describe" class="prev"><span class="icon"></span></a>
-    <a href="#" class="next publish"><span class="wrap"><strong>Publish</strong></span><span class="icon"></span></a>
+    <a href="#" class="next publish"><span class="wrap"><strong>{% if resubmit %}Publish Changes{% else %}Publish{% endif %}</strong></span><span class="icon"></span></a>
   </div>
   {% endspaceless %}
 </div>

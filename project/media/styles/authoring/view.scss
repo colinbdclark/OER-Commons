@@ -25,9 +25,49 @@
       font-size: 1.25em;
       line-height: 2em;
       text-decoration: none;
+      vertical-align: top;
       &:hover {
         background-color: #6cb8da;
       }
+    }
+    a.delete {
+      width: 14px;
+      background-image: url(../../images/authoring/icon-delete.png);
+      background-repeat: no-repeat;
+      background-position: 50% 40%;
+      text-indent: -9999px;
+    }
+    .delete-confirmation {
+      display: inline-block;
+      border-right: 1px solid #2d73cb;
+      border-left: 1px solid #9ecfe6;
+      font-size: 1.25em;
+      height: 2em;
+      padding: 0 1em;
+      vertical-align: top;
+      a {
+        text-transform: none;
+        margin-top: 0.5em;
+        border: none;
+        padding: 0;
+        font-size: 0.8em;
+        line-height: 1.5em;
+        &.confirm {
+          position: relative;
+          top: -1px;
+          margin-right: 1em;
+          border: 1px solid #fff;
+          padding: 0 0.5em;
+        }
+        &.cancel {
+          &:hover {
+            background-color: transparent;
+          }
+        }
+      }
+    }
+    .hide {
+      display: none;
     }
   }
   .download-links {

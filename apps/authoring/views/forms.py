@@ -70,6 +70,8 @@ class SubjectsWidget(forms.CheckboxSelectMultiple):
 
 class LicenseWidget(forms.Widget):
 
+    readonly = False
+
     DERIVATIVES_CHOICES = (
         (u"y", "Yes, allow"),
         (u"sa", "Yes, allow as long as others share alike"),
@@ -112,12 +114,12 @@ class LicenseWidget(forms.Widget):
                 cc_type=cc_type,
                 name_widget=forms.HiddenInput().render("%s_name" % name, license_name),
                 url_widget=forms.HiddenInput().render("%s_url" % name, license_url),
-                derivatives_widget=forms.RadioSelect().render(
+                derivatives_widget=forms.RadioSelect(attrs={"disabled": "disabled"} if self.readonly else None).render(
                     "%s_derivatives" % name,
                     derivatives,
                     choices=self.DERIVATIVES_CHOICES,
                 ),
-                commercial_widget=forms.RadioSelect().render(
+                commercial_widget=forms.RadioSelect(attrs={"disabled": "disabled"} if self.readonly else None).render(
                     "%s_commercial" % name,
                     commercial,
                     choices=self.COMMERCIAL_CHOICES,
@@ -263,7 +265,7 @@ class GradesAndSubLevelsField(forms.Field):
         return cleaned
 
 
-class EditFormNoLicense(forms.ModelForm):
+class EditForm(forms.ModelForm):
 
     # TODO: clean up HTML from `text` field.
     # using lxml clean. Remove all styles, Keep only allowed classes,
@@ -282,11 +284,12 @@ class EditFormNoLicense(forms.ModelForm):
         widget=AlignmentTagsWidget(),
         required=False
     )
+    license = LicenseField()
 
     def __init__(self, *args, **kwargs):
         not_required = kwargs.pop("not_required", False)
         self.user = kwargs.pop("user")
-        super(EditFormNoLicense, self).__init__(*args, **kwargs)
+        super(EditForm, self).__init__(*args, **kwargs)
         self.initial["grades_and_sublevels"] = self.initial["grade_sublevels"] + self.initial["grades"]
         self.content_type = ContentType.objects.get_for_model(self.instance)
         self.initial["alignment_tags"] = list(tagged.tag for tagged in TaggedMaterial.objects.filter(
@@ -299,14 +302,14 @@ class EditFormNoLicense(forms.ModelForm):
                 field.required = False
 
     def clean(self):
-        cleaned_data = super(EditFormNoLicense, self).clean()
+        cleaned_data = super(EditForm, self).clean()
         cleaned_data["grade_sublevels"] = [o for o in cleaned_data.get("grades_and_sublevels", []) if isinstance(o, GradeSubLevel)]
         cleaned_data["grades"] = [o for o in cleaned_data.get("grades_and_sublevels", []) if isinstance(o, Grade)]
         return cleaned_data
 
     class Meta:
         model = AuthoredMaterialDraft
-        fields = ["title", "text", "abstract", "learning_goals", "keywords", "general_subjects", "grade_sublevels", "grades", "grades_and_sublevels", "languages", "material_types"]
+        fields = ["title", "text", "abstract", "learning_goals", "keywords", "general_subjects", "grade_sublevels", "grades", "grades_and_sublevels", "languages", "material_types", "license"]
         widgets = dict(
             title=forms.HiddenInput(),
             text=forms.HiddenInput(),
@@ -316,7 +319,7 @@ class EditFormNoLicense(forms.ModelForm):
         )
 
     def save(self, commit=True):
-        instance = super(EditFormNoLicense, self).save(commit)
+        instance = super(EditForm, self).save(commit)
         existing = set(tagged.tag for tagged in TaggedMaterial.objects.filter(
             content_type=self.content_type,
             object_id=instance.id,
@@ -340,9 +343,11 @@ class EditFormNoLicense(forms.ModelForm):
         return instance
 
 
-class EditForm(EditFormNoLicense):
+class ResubmitForm(EditForm):
 
-    license = LicenseField()
+    def __init__(self, *args, **kwargs):
+        super(ResubmitForm, self).__init__(*args, **kwargs)
+        self.fields["license"].widget.readonly = True
 
-    class Meta(EditFormNoLicense.Meta):
-        fields = EditFormNoLicense.Meta.fields +  ["license"]
+    def clean_license(self):
+        return self.instance.license

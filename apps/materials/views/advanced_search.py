@@ -8,6 +8,7 @@ from rubrics.models import get_rubric_choices
 ADVANCED_SEARCH_FILTERS = (
    ("general_subjects", False),
    ("grade_levels", False),
+   ("content_source", False),
    ("cou_bucket", False),
    ("languages", False),
    ("course_material_types", False),

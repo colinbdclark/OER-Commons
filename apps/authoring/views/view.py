@@ -1,4 +1,5 @@
 from authoring.views import MaterialViewMixin
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.html import urlize
@@ -112,5 +113,6 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
         data["text"], data["footnotes"], data["toc"] = ViewFullAuthoredMaterial.prepare_content(self.object.text)
         data["preview"] = self.preview
         data["material"] = self.object.material if self.preview else self.object
+        data["content_type"] = ContentType.objects.get_for_model(data["material"])
         return data
 
