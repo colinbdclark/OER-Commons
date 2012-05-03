@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     'preferences',
     'rubrics',
     'rubrics.manage',
+    'getsatisfaction',
     'authoring',
     'project',
 )
