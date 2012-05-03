@@ -420,14 +420,17 @@ ul.tagit li {
 }
 
 .button-minor:hover {
+  background-color: white;
   background-image: none;
+}
+
+input.button-minor {
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 
 .portlet h1.expanded,
 h1.expanded {
-  border-bottom: dotted;
-  border-width: 1px;
-  border-color: #0B7BA8;
   margin-bottom: 4px;
   padding-bottom: 2px;
   text-transform: uppercase;

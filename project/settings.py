@@ -96,6 +96,7 @@ INSTALLED_APPS = (
     'django_coverage',
     'oembed',
     'gunicorn',
+    'django_js_utils',
     'core',
     'utils',
     'abtesting',
