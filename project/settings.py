@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     'newsletter',
     'rubrics',
     'rubrics.manage',
+    'getsatisfaction',
     'authoring',
     'project',
 )

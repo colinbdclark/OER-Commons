@@ -1,10 +1,12 @@
 from django.conf.urls.defaults import patterns, url
+from users.views.login import Login
 
 from users.views.profile import DeleteAccount
 
 
 urlpatterns = patterns('users.views',
-    url(r"^login/?$", "login.login", name="login"),
+    url(r"^login/?$", Login.as_view(), name="login"),
+    url(r"^login-popup/?$", Login.as_view(popup=True), name="login_popup"),
     url(r"^login/form$", "login.render_login_form", name="login_form"),
     url(r"^logout/?$", "login.logout", name="logout"),
     url(r"^registration/?$", "registration.registration", name="registration"),

@@ -13,6 +13,8 @@
 
 {% block above-content %}{% endblock %}
 
+{% block bodyclass %}disable-login-popup{% endblock %}
+
 {% block content %}
   <noscript>
   <div class="status-message">Make sure you have Javascript enabled in your browser.
@@ -37,5 +39,5 @@
   </form>
 
   {% flatblock "registration-tracking-step-1" %}
-  
+
 {% endblock %}
