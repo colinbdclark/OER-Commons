@@ -41,8 +41,8 @@ TWITTER_ID_RE = re.compile(r"^[a-zA-Z\d_]+$")
 TWITTER_URL_RE = re.compile(r"^https?://twitter.com/(#!/)?(?P<twitter_id>[a-zA-Z\d_]+)$")
 
 PRIVACY_CHOICES = (
-    (u"full", u"Allow other educators and OERCommons users to see what OER Items I have saved, rated, evaluated, or commented on, as well as my basic profile information."),
-    (u"basic", u"Allow other educators and OERCommons users to see just my profile information."),
+    (u"full", u"Allow other educators and OER Commons users to see what OER Items I have saved, rated, evaluated, or commented on, as well as my basic profile information."),
+    (u"basic", u"Allow other educators and OER Commons users to see just my profile information."),
     (u"hide", u"Do not show any information to other users. \"Anonymous\" will be posted when I leave comments."),
 )
 
