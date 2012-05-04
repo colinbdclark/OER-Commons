@@ -127,14 +127,13 @@ class Tool
 
   AUTOSAVE_INTERVAL: 5 # 30 seconds
 
-  constructor: (@hideSubmitStep)->
+  constructor: (@resubmit)->
     @form = $("form.authoring-form")
     @slider = new Slider()
     @userMenu = new UserMenu()
     @writeStep = new WriteStep(@)
     @describeStep = new DescribeStep(@)
-    if not @hideSubmitStep
-      @submitStep = new SubmitStep(@)
+    @submitStep = new SubmitStep(@)
 
     @title = $("#material-title")
     @titleInput = $("#id_title")
@@ -145,6 +144,24 @@ class Tool
     @checksumMessage.find("a.force-save").click((e)=>
       e.preventDefault()
       @save(false, true)
+    )
+
+    @deleteForm = $("#delete-draft-form")
+    @deleteConfirmation = @form.find("#delete-confirmation")
+    @deleteConfirmation.find("a.cancel").click((e)=>
+      e.preventDefault()
+      @deleteConfirmation.addClass("hide")
+    )
+    @deleteConfirmation.find("a.confirm").click((e)=>
+      e.preventDefault()
+      @deleteForm.submit()
+    )
+
+    @globalWarnings = $("div.global-warning")
+
+    $("#user-menu a.delete-draft").click((e)=>
+      @globalWarnings.not(@deleteConfirmation).addClass("hide")
+      @deleteConfirmation.removeClass("hide")
     )
 
     @savedData = null
@@ -195,6 +212,7 @@ class Tool
 
     $(document).ajaxError((event, xhr, settings, error)=>
       if not xhr.status
+        @globalWarnings.not(@offlineMessage).addClass("hide")
         @offlineMessage.removeClass("hide")
       else
         @offlineMessage.addClass("hide")
@@ -246,6 +264,7 @@ class Tool
         oer.status_message.clear()
         oer.status_message.error(response.message)
         if response.reason == "checksum"
+          @globalWarnings.not(@checksumMessage).addClass("hide")
           @checksumMessage.removeClass("hide")
         @savedData = null
     )

@@ -147,16 +147,16 @@
 
     Tool.prototype.AUTOSAVE_INTERVAL = 5;
 
-    function Tool(hideSubmitStep) {
+    function Tool(resubmit) {
       var actions, errorSlide, errors, previewBtn, saveBtn,
         _this = this;
-      this.hideSubmitStep = hideSubmitStep;
+      this.resubmit = resubmit;
       this.form = $("form.authoring-form");
       this.slider = new Slider();
       this.userMenu = new UserMenu();
       this.writeStep = new WriteStep(this);
       this.describeStep = new DescribeStep(this);
-      if (!this.hideSubmitStep) this.submitStep = new SubmitStep(this);
+      this.submitStep = new SubmitStep(this);
       this.title = $("#material-title");
       this.titleInput = $("#id_title");
       this.offlineMessage = $("#offline-message");
@@ -165,6 +165,21 @@
       this.checksumMessage.find("a.force-save").click(function(e) {
         e.preventDefault();
         return _this.save(false, true);
+      });
+      this.deleteForm = $("#delete-draft-form");
+      this.deleteConfirmation = this.form.find("#delete-confirmation");
+      this.deleteConfirmation.find("a.cancel").click(function(e) {
+        e.preventDefault();
+        return _this.deleteConfirmation.addClass("hide");
+      });
+      this.deleteConfirmation.find("a.confirm").click(function(e) {
+        e.preventDefault();
+        return _this.deleteForm.submit();
+      });
+      this.globalWarnings = $("div.global-warning");
+      $("#user-menu a.delete-draft").click(function(e) {
+        _this.globalWarnings.not(_this.deleteConfirmation).addClass("hide");
+        return _this.deleteConfirmation.removeClass("hide");
       });
       this.savedData = null;
       this.title.find("span.inner").editable(function(value) {
@@ -208,6 +223,7 @@
       }
       $(document).ajaxError(function(event, xhr, settings, error) {
         if (!xhr.status) {
+          _this.globalWarnings.not(_this.offlineMessage).addClass("hide");
           return _this.offlineMessage.removeClass("hide");
         } else {
           _this.offlineMessage.addClass("hide");
@@ -261,6 +277,7 @@
           oer.status_message.clear();
           oer.status_message.error(response.message);
           if (response.reason === "checksum") {
+            _this.globalWarnings.not(_this.checksumMessage).addClass("hide");
             _this.checksumMessage.removeClass("hide");
           }
           return _this.savedData = null;

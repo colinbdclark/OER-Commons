@@ -65,7 +65,8 @@
   .authored-content figcaption {
     font-family: "Myriad Pro", Helvetica, sans-serif; }
   .authored-content figure.image {
-    text-align: center; }
+    text-align: center;
+    min-width: 150px; }
     .authored-content figure.image.align-left {
       float: left;
       margin-right: 10px; }
@@ -350,10 +351,12 @@
     .authoring-head #user-menu.opened ul {
       display: block; }
     .authoring-head #user-menu li {
-      padding: 7px 15px; }
+      padding: 0; }
       .authoring-head #user-menu li:hover {
         background-color: #eee; }
       .authoring-head #user-menu li a {
+        display: block;
+        padding: 7px 15px;
         color: #616161; }
   .authoring-head h1 {
     clear: left; }
@@ -428,6 +431,12 @@
       background-position: -144px -72px; }
     .step-icons a.submit.active {
       background-position: -144px -144px; }
+    .step-icons a.resubmit {
+      background-position: -216px 0; }
+    .step-icons a.resubmit:hover {
+      background-position: -216px -72px; }
+    .step-icons a.resubmit.active {
+      background-position: -216px -144px; }
 
 #material-title {
   font-size: 1.875em;
@@ -1351,7 +1360,7 @@
       vertical-align: top;
       text-transform: lowercase;
       color: #989696; }
-      #step-submit .current-license .images .license.hidden {
+      #step-submit .current-license .images .license.hide {
         display: none; }
       #step-submit .current-license .images .license .image {
         width: 61px;

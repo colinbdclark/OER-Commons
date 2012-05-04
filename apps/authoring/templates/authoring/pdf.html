@@ -8,30 +8,29 @@
       @page {
         @frame logo {
           -pdf-frame-content: logo;
-          top: 2cm;
           margin-left: 2cm;
           margin-right: 2cm;
-          height: 1.5cm;
-          width: 5cm;
-        }
-        @frame header {
-          -pdf-frame-content: header;
-          top: 2cm;
-          margin-left: 2cm;
-          margin-right: 2cm;
-          height: 1.5cm;
+          margin-top: 1cm;
+          height: 1cm;
         }
         @frame {
           margin: 2cm;
-          margin-top: 3.5cm;
-          margin-bottom: 3.5cm;
+          margin-top: 2cm;
+          margin-bottom: 4cm;
+        }
+        @frame footerLogo {
+          -pdf-frame-content: footer-logo;
+          bottom: 1cm;
+          margin-left: 2cm;
+          width: 2cm;
+          height: 2.5cm;
         }
         @frame footer {
           -pdf-frame-content: footer;
-          bottom: 2cm;
+          bottom: 1cm;
           margin-left: 2cm;
           margin-right: 2cm;
-          height: 1.5cm;
+          height: 2.5cm;
         }
       }
       {{ fonts }}
@@ -42,9 +41,11 @@
     <div class="frontpage">
       <h1>{{ material.title }}</h1>
       <p>
-        <em>{% domain %}{{ material.get_absolute_url }}</em>
+        <em>{% domain %}{{ material.get_absolute_url }}</em><br>
+        Created <strong>{{ material.modified_timestamp|date }}</strong> <em>by {{ material.author.get_full_name|default:material.author }}</em><br>
+        {{ material.grades_levels.all|chain:material.grade_sublevels.all|chain:material.grades.all|join:", "  }}<br>
+        {{ material.general_subjects.all|join:", " }}
       </p>
-      <p>Created <strong>{{ material.modified_timestamp|date }}</strong> <em>by {{ material.author.get_full_name|default:material.author }}</em></p>
       <h2>SUMMARY:</h2>
       <p>{{ material.abstract }}</p>
       <h2>LEARNING GOALS:</h2>
@@ -57,16 +58,17 @@
       <pdf:toc />
     </div>
     <pdf:nextpage />
-
     {{ text }}
     <div id="logo">
-      <img src="{{ STATIC_ROOT }}/images/authoring/logo.png" alt="OER Commons">
+      <img src="{{ STATIC_ROOT }}/images/authoring/open-author-logo-small.png" alt="OER Commons">
     </div>
-    <div id="header">
-      <em>{% domain %}{{ material.get_absolute_url }}</em>
+    <div id="footer-logo">
+      <img src="{{ STATIC_ROOT }}/images/authoring/oer-logo-gray.png" alt="OER Commons">
     </div>
     <div id="footer">
-      <strong>"{{ material.title }}”</strong>
+      <strong>"{{ material.title }}”</strong> <em>by {{ material.author.get_full_name|default:material.author }}</em>
+      under a {{ material.license }}<br>
+      <em>{% domain %}{{ material.get_absolute_url }}</em>
     </div>
   </body>
 </html>

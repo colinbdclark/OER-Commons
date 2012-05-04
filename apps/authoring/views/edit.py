@@ -1,7 +1,7 @@
 from annoying.decorators import JsonResponse
 from authoring.models import AuthoredMaterial
 from authoring.views import EditMaterialViewMixin
-from authoring.views.forms import EditForm, EditFormNoLicense
+from authoring.views.forms import EditForm, ResubmitForm
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic import UpdateView
@@ -14,7 +14,7 @@ class Edit(EditMaterialViewMixin, UpdateView):
 
     def get_form_class(self):
         if self.object.material.workflow_state == PUBLISHED_STATE and self.object.material.license:
-            return EditFormNoLicense
+            return ResubmitForm
         return EditForm
 
     def get_form_kwargs(self):
@@ -26,7 +26,7 @@ class Edit(EditMaterialViewMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         data = super(Edit, self).get_context_data(**kwargs)
-        data["hide_submit_step"] = self.object.material.workflow_state == PUBLISHED_STATE and self.object.material.license
+        data["resubmit"] = self.object.material.workflow_state == PUBLISHED_STATE and self.object.material.license
         return data
 
     def form_valid(self, form):
