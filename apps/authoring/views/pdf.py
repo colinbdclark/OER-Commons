@@ -50,5 +50,5 @@ class AsPdf(ViewFullAuthoredMaterial):
         result = StringIO.StringIO()
         pdf = pisaDocument(StringIO.StringIO(html.encode("utf-8")), result, show_error_as_pdf=True, encoding="UTF-8")
         response = HttpResponse(result.getvalue(), mimetype='application/pdf')
-#        response["Content-Disposition"] = "attachment; filename=%s.pdf" % self.object.title.encode("utf-8")
+        response["Content-Disposition"] = "filename=%s.pdf" % self.object.title.encode("utf-8")
         return response

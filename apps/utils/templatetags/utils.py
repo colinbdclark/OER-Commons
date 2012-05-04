@@ -1,3 +1,4 @@
+from itertools import chain
 import os
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -118,3 +119,8 @@ def romanize_filter(value, args=None):
 @register.simple_tag
 def file_contents(path):
     return open(os.path.join(settings.STATIC_ROOT, path)).read()
+
+
+@register.filter("chain")
+def chain_filter(iterable1, iterable2):
+    return chain(iterable1, iterable2)
