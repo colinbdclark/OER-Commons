@@ -466,6 +466,7 @@ WriteStep.prototype.preSave = function () {
 
 // Ensure that we always have a text block at the end of editor area
 // We also need to insert empty paragraphs around all figures
+// Make sure we have a text block after headers
 WriteStep.prototype.ensureTextInput = function () {
   var $area = this.$area;
   if (!$area.children().last().is(this.TOP_LEVEL_TEXT_TAGS)) {
@@ -474,13 +475,25 @@ WriteStep.prototype.ensureTextInput = function () {
       this.focusOnNode($p);
     }
   }
+  if ($area.children().length > 1) {
+    var $first = $area.children().first();
+    if ($first.data("auto") && $.trim($first.text()) == "") {
+      $first.remove();
+    }
+  }
   $area.find("figure:not(.inline)").each(function () {
     var $figure = $(this);
     if (!$figure.prev().is("p,div")) {
       $("<p><br></p>").data("auto", true).insertBefore($figure);
     }
     if (!$figure.next().is("p,div")) {
-      $("<p><br></p>").text(" ").data("auto", true).insertBefore($figure);
+      $("<p><br></p>").data("auto", true).insertAfter($figure);
+    }
+  });
+  $area.find("h1,h2,h3,h4").each(function () {
+    var $header = $(this);
+    if (!$header.next().is("p,div,ul,ol,blockquote")) {
+      $("<p><br></p>").data("auto", true).insertAfter($header);
     }
   });
   // Remove duplicate empty paragraphs
@@ -2148,7 +2161,9 @@ function TableOfContents(editor) {
     var $header = toc.createHeader($areaHeader);
     $header.insertBefore($new);
     $header.find("div.text").focus();
+    editor.ensureTextInput();
     toc.updateLevels();
+    toc.updateNewLinks();
   });
 
   $toc.delegate("div.header a.delete", "click", function(e) {
