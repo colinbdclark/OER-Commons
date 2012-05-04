@@ -28,33 +28,23 @@
     font-size: 1em;
     font-weight: bold;
     letter-spacing: 0.1em; }
-  #content.contribute .sample {
-    margin: 0 auto 1em auto;
-    width: 300px;
-    height: 170px;
-    background: url(../images/authoring-sample.png) no-repeat;
-    -webkit-box-shadow: inset 0 0 7px #999;
-    -moz-box-shadow: inset 0 0 7px #999;
-    -ms-box-shadow: inset 0 0 7px #999;
-    box-shadow: inset 0 0 7px #999; }
+  #content.contribute p img {
+    vertical-align: middle; }
   #content.contribute .bookmarklet {
     margin: 0 auto 1em auto;
-    padding: 1.3em;
-    width: 300px;
-    height: 170px;
+    padding: 1.9em 1.3em 0 1.3em;
+    width: 301px;
+    height: 179px;
     box-sizing: border-box;
-    background: url(../images/contribute-bookmarklet-bg.png);
-    color: #666;
-    -webkit-box-shadow: inset 0 0 7px #999;
-    -moz-box-shadow: inset 0 0 7px #999;
-    -ms-box-shadow: inset 0 0 7px #999;
-    box-shadow: inset 0 0 7px #999; }
+    background: url(../images/contribute/bookmarklet-bg.png);
+    color: #666; }
     #content.contribute .bookmarklet p {
       margin-bottom: 1.3em; }
   #content.contribute .help {
     margin-bottom: 0;
     text-align: justify;
-    font-size: 0.929em; }
+    font-size: 0.929em;
+    line-height: 1.5em; }
   #content.contribute .button-green {
     margin: 1em 0; }
   #content.contribute .share-buttons {
