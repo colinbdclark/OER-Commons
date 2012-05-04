@@ -149,6 +149,14 @@
   background: url(../images/read-the-fine-print.png) no-repeat 0 50%;
 }
 
+.view-item i.open-author {
+  margin-top: 10px;
+  display: inline-block;
+  width: 116px;
+  height: 30px;
+  background: url(../images/open-author-logo.png) no-repeat 0 50%;
+}
+
 .materials-index .details .message {
   padding: 2px 5px;
   border: 1px solid #A88743;
@@ -183,6 +191,8 @@
 
 .view-item .cou-bucket {
   margin-left: 5px;
+  vertical-align: bottom;
+  display: inline-block;
 }
 
 .view-item .add-this {

@@ -8,7 +8,6 @@ from django import forms
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views.generic import View, TemplateView
-from django.views.generic.simple import direct_to_template
 from django.utils.decorators import method_decorator
 from django.utils.formats import localize
 from django.utils.datastructures import SortedDict
@@ -492,10 +491,12 @@ class MyItemsView(TemplateView):
             index_type = "pics"
         index_types[index_type]["selected"] = True
 
+        default_sort_by = getattr(self, "default_sort_by", None)
         self.index_params = IndexParamsWithSaveDateSort(
             self.request,
             SORT_BY_OPTIONS=self.SORT_BY_OPTIONS,
-            search_query=self.search_value
+            search_query=self.search_value,
+            **({"default_sort_by": default_sort_by} if default_sort_by else {})
         )
         self.query_string_params = self.index_params.update_query_string_params(self.query_string_params)
 
@@ -619,6 +620,8 @@ class DraftItems(MyItemsView):
         {"value": u"title", "title": u"Title"},
         {"value": u"date", "title": u"Date"},
     )
+
+    default_sort_by = "date"
 
     DRAFT_MODEL = AuthoredMaterialDraft
 
