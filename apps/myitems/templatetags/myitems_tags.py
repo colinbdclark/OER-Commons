@@ -67,17 +67,17 @@ def myitems_save_button(context):
         creator = item.creator
     elif isinstance(item, AuthoredMaterial):
         creator = item.author
-    elif isinstance(item, AuthoredMaterialDraft):
-        creator = item.material.author
     else:
         raise ValueError(u"Save button for '%s' is not supported." % type(item))
 
     created = False
     saved = False
+    auto_folder = None
     folders = []
     if request.user.is_authenticated():
         if creator == request.user:
             created = True
+            auto_folder = "Submitted" if isinstance(item, Material) else "Published"
         else:
             saved = SavedItem.objects.filter(
                 user=request.user,
@@ -98,6 +98,8 @@ def myitems_save_button(context):
                 "saved": f.id in saved_in_folders,
             })
 
+    folder_number = len(saved_in_folders)+(auto_folder is not None)
+
     return {
         'folders': folders,
         'folder_create_form': FolderForm(),
@@ -105,6 +107,15 @@ def myitems_save_button(context):
         'created': created,
         'content_type': content_type.id,
         'object_id': item.id,
+        'auto_folder': auto_folder,
+        'folder_number': folder_number,
+        'folder_list_label': (
+            "Select a folder" if folder_number == 0
+            else (
+                    auto_folder or (f["title"] for f in folders if f["saved"]).next() if folder_number == 1
+                    else "%d folders" % folder_number
+            )
+        ),
     }
 
 

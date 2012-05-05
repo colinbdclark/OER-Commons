@@ -496,14 +496,19 @@ body.wide-right-column.view-item .column-main {
   font-size: 14px;
 }
 
-.portlet.save .myitems-save-button .save-unsave-button {
-  width: 200px;
+.portlet.save .myitems-save-button .save-unsave-button .button-green {
+  width: 60px;
 }
 .portlet.save .myitems-save-button .folder-list-button {
   width: 40px;
 }
+
+.portlet.save .myitems-save-button .item-folder {
+  width: 142px;
+}
+
 .portlet.save .myitems-save-button .my-items-views {
-  top: 28px;
+  top: 34px;
   width: 248px;
 }
 .portlet.save .my-items-views .folder {

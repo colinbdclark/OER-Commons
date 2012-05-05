@@ -134,7 +134,7 @@ dl.user-info dt {
 }
 
 
-.myitems-materials-index article .folder-list li.last, 
+.myitems-materials-index article .folder-list li.last,
 .myitems-materials-index article .folder-list li.last .folder-deco {
   border: dashed;
   border-color: #85BDD4;
@@ -336,23 +336,57 @@ dl.user-info dt {
   box-shadow: 1px 2px 2px 0px #CCCCCC;
 }
 
+.myitems-save-button .button-main {
+  background-color: #598E00;
+  padding: 2px;
+}
+
 .myitems-save-button .button-main a {
   color: #FFFFFF;
 }
 
-.myitems-save-button .save-unsave-button {
-  background-color: #8CC63F;
-  padding-left: 10px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+.myitems-save-button .save-unsave-button,
+.myitems-save-button .folder-list {
+  display: inline-block;
+  vertical-align: middle;
 }
 
-.myitems-save-button .folder-list-button {
-  background-color: #679801;
-  float: right;
+.myitems-save-button .folder-list {
+  cursor: pointer;
+}
+
+.myitems-save-button .save-unsave-button .button-green {
+  padding: 0;
+  font-size: 16px;
+  padding: 0;
+}
+
+.myitems-save-button .save-unsave-button .unsave,
+.myitems-save-button .save-unsave-button .created {
+  background-color: #8CC63F;
+  box-shadow: inset 1px 1px 15px rgba(0, 0, 0, .3);
+  border-color: #577B27;
+}
+
+.myitems-save-button a.folder-list-button {
+  display: inline-block;
+  color: #666666;
+  background-color: #E7E7E7;
   text-align: center;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+
+.myitems-save-button .item-folder {
+  display: inline-block;
+  height: 28px;
+  margin-left: 2px;
+  font-size: 16px;
+  background-color: white;
+  vertical-align: bottom;
+  text-align: center;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .myitems-save-button .my-items-views {
@@ -421,8 +455,8 @@ dl.user-info dt {
   color: #000;
 }
 
-.myitems .pagination .disabled .arrow, 
-.myitems .pagination .disabled .text { 
+.myitems .pagination .disabled .arrow,
+.myitems .pagination .disabled .text {
   color: #DFDFDF;
 }
 
