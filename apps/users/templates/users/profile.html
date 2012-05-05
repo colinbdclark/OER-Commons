@@ -61,10 +61,6 @@
             <li><a class="skype" href="skype:{{ profile.skype_id }}?call">{{ profile.skype_id }}</a></li>
           {% endif %}
         </ul>
-      {% else %}
-        {% if not public %}
-          <p><a href="{% url users:profile_about %}">Add a link to your website, Facebook, Twitter or Skype accounts</a></p>
-        {% endif %}
       {% endif %}
     </ul>
   </section>
@@ -112,7 +108,7 @@
 
   {% if not public %}
     <div class="buttons">
-      <a href="{% url users:profile_edit %}" class="edit button-blue-big rc5">Edit Profile</a>
+      <a href="{% url users:profile_edit %}" class="edit button-minor rc5">Edit Profile</a>
     </div>
   {% endif %}
 
@@ -125,7 +121,7 @@
         <td><div class="label-saved">{{ saved_count }} Saved</div></td>
         <td><div class="label-submitted">{{ submitted_count }} Submitted</div></td>
         <td><div class="label-evaluated">{{ evaluated_count }} Evaluated</div></td>
-        <td><div class="label-created">{{ created_count }} Created</div></td>
+        <td><div class="label-created">{{ created_count }} Published</div></td>
     </tr>
 </table>
 

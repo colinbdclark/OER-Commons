@@ -59,7 +59,8 @@
 }
 
 .profile-view h1.expanded {
-  border-bottom: 1px dotted #0B7BA8;
+  padding-top: 15px;
+  border-top: 1px dotted #0B7BA8;
 }
 
 .profile-view section.avatar .wrap,
