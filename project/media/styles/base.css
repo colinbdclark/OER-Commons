@@ -394,6 +394,16 @@ ul.tagit li {
   background-image: none;
 }
 
+.button-green.unpressable:hover {
+  background-color: #85c334;
+  background-image: #6ab617;
+  background-image: -webkit-linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+  background-image: -moz-linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+  background-image: -o-linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+  background-image: -ms-linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+  background-image: linear-gradient(top, #74ba17 0%, #81c12d 50%, #4aa600 100%);
+}
+
 .button-orange {
   display: inline-block;
   padding: 0.3em 1em;

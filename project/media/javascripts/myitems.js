@@ -349,7 +349,27 @@ oer.myitems.init_save_button = function() {
     var $saveButton = $saveUnsaveButton.children(".save");
     var $unsaveButton = $saveUnsaveButton.children(".unsave");
 
-    $myitemsSaveButton.delegate(".save", "click", function(e) {
+    var $itemFolderWidget = $myitemsSaveButton.find(".folder-list");
+    var $itemFolder = $itemFolderWidget.find(".item-folder");
+
+    $saveButton.add($unsaveButton).add($itemFolderWidget).qtip({
+        content: {
+          attr: "data-tooltip"
+        },
+        style: {
+          classes: "ui-tooltip-authoring",
+          tip: false
+        },
+        position: {
+          my: "top center",
+          at: "bottom center",
+          adjust: {
+            y: 5
+          }
+        }
+      });
+
+    $saveButton.click(function(e) {
         e.preventDefault();
 
         oer.login.check_login(function() {
@@ -364,7 +384,7 @@ oer.myitems.init_save_button = function() {
         });
     });
 
-    $myitemsSaveButton.delegate(".unsave", "click", function(e) {
+    $unsaveButton.click(function(e) {
         e.preventDefault();
 
         oer.login.check_login(function() {
@@ -373,12 +393,18 @@ oer.myitems.init_save_button = function() {
             var $folders = $folderList.find(".folder.selected");
             $folders.removeClass("selected");
             oer.myitems._changeNumber($folders.find(".number"), -1);
+            var oldText = $itemFolder.text();
+            var foldersNumber = $myitemsSaveButton.attr("data-folders-number");
+            $itemFolder.text("Select a folder");
+            $myitemsSaveButton.attr("data-folders-number", 0);
             $.post(unsaveUrl, { item_id: identifier }, function(response) {
                 if (response.status !== "success") {
                     $saveButton.addClass("hidden");
                     $unsaveButton.removeClass("hidden");
                     $folders.addClass("selected");
                     oer.myitems._changeNumber($folders.find(".number"), 1);
+                    $itemFolder.text(oldText);
+                    $myitemsSaveButton.attr("data-folders-number", foldersNumber);
                 }
             });
         });
@@ -403,12 +429,12 @@ oer.myitems.init_save_button = function() {
             true: {
                 url: deleteItemFolderUrl,
                 delta: -1,
-                func: function() { $this.removeClass("selected") },
+                func: function() { $this.removeClass("selected"); },
             },
             false: {
                 url: addItemUrl,
                 delta: 1,
-                func: function() { $this.addClass("selected") },
+                func: function() { $this.addClass("selected"); },
             },
         }
         var modifyFolder = function(action_dict) {
@@ -422,6 +448,21 @@ oer.myitems.init_save_button = function() {
             $saveButton.addClass("hidden");
             $unsaveButton.removeClass("hidden")
         }
+
+        var foldersNumber = $myitemsSaveButton.attr("data-folders-number")-0+action_dict.delta;
+        $myitemsSaveButton.attr("data-folders-number", foldersNumber);
+        var oldText = $itemFolder.text();
+        if (foldersNumber) {
+            if (foldersNumber === 1) {
+                $itemFolder.text($myitemsSaveButton.data("auto-folder") || $folderList.find(".selected .name").text());
+            }
+            else {
+                $itemFolder.text(foldersNumber+" folders");
+            }
+        } else {
+            $itemFolder.text("Select a folder");
+        }
+
         $.post(action_dict.url, params, function(response) {
             if (response.status !== "success") {
                 modifyFolder(action_dicts[!action]);
@@ -429,6 +470,8 @@ oer.myitems.init_save_button = function() {
                     $unsaveButton.addClass("hidden");
                     $saveButton.removeClass("hidden")
                 }
+                $itemFolder.text(oldText);
+                $myitemsSaveButton.attr("data-folders-number", foldersNumber+action_dicts[!action].delta);
             }
         });
     });
@@ -436,7 +479,7 @@ oer.myitems.init_save_button = function() {
         e.preventDefault();
         e.stopPropagation();
     });
-    $myitemsSaveButton.find(".folder-list-button").click(function(e) {
+    $itemFolderWidget.click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         $folderList.slideToggle();
