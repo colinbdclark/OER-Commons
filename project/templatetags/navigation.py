@@ -1,5 +1,5 @@
 from django.template import Library
-from django.core.urlresolvers import reverse, resolve
+from django.core.urlresolvers import reverse, resolve, Resolver404
 
 
 register = Library()
@@ -11,7 +11,10 @@ def navigation(context):
     path_elements = [el for el in request.path.split("/") if el]
     tabs = []
     microsite = getattr(request, "microsite", None)
-    view_name = resolve(request.path).view_name
+    try:
+        view_name = resolve(request.path).view_name
+    except Resolver404:
+        view_name = ""
 
     tabs.append(dict(
         title=u"Home",

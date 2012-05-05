@@ -46,10 +46,12 @@
   display: none;
 }
 
-.portlet.save .save-unsave-button .rocon-tr,
-.portlet.save .save-unsave-button .rocon-br,
-.portlet.save .folder-list-button .rocon-tl,
-.portlet.save .folder-list-button .rocon-bl {
+.myitems-save-button .save-unsave-button .rocon-tr,
+.myitems-save-button .save-unsave-button .rocon-br,
+.myitems-save-button .folder-list-button .rocon-tl,
+.myitems-save-button .folder-list-button .rocon-bl,
+.myitems-save-button .item-folder .rocon-tr
+.myitems-save-button .item-folder .rocon-br {
   display: none;
 }
 
