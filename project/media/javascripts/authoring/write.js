@@ -1247,7 +1247,7 @@ WriteStep.prototype.loadEmbed = function ($figure) {
   $figure.hide();
   if (url) {
     $.post(this.$area.data("load-embed-url"), {url: url}, function (response) {
-      var $caption = $figure.find("figcaption").detach();
+      var $caption = $figure.find("figcaption").detach().attr("contenteditable", "true");
       $figure.html(response.html).append($caption).fadeIn();
     });
   }
@@ -2004,8 +2004,10 @@ MediaDialog.VideoStep.prototype.prepare = function (data) {
   this.$step.data("url", data.url);
   if ("uploaded_video_id" in data) {
     this.$step.data("uploaded-video-id", data["uploaded_video_id"]);
+    this.$step.find("p.uploaded-help").show();
   } else {
     this.$step.data("uploaded-video-id", null);
+    this.$step.find("p.uploaded-help").hide();
   }
   this.$imageCt.empty();
   //noinspection JSUnresolvedVariable

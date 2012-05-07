@@ -1251,6 +1251,10 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box; }
+  #media-dialog .step.video .uploaded-help {
+    margin-top: 1em;
+    font-size: 0.8em;
+    color: #999; }
 
 #step-describe .layout-columns {
   padding-top: 30px; }
