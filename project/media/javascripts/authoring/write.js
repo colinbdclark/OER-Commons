@@ -1177,14 +1177,16 @@ WriteStep.prototype.initImage = function($figure) {
   if (!$image.parent().is("span.ui-wrap-image")) {
     $image.wrap($('<span class="ui-wrap-image"></span>'));
     var $wrapper = $image.parent();
-    if ($image.width()) {
+    var width = $image.width();
+    if (width) {
       $wrapper.css({
-        width: $image.width() + "px"
+        width: width < 150 ? 150 : width + "px"
       })
     } else {
       $image.load(function(e) {
+        width = $(e.target).width();
         $wrapper.css({
-          width: $(e.target).width() + "px"
+          width: width < 150 ? 150 : width + "px"
         })
       });
     }
