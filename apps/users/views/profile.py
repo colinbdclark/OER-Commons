@@ -86,10 +86,14 @@ def profile_view(request, user_id=None):
     for result in all_saved_queryset:
         all_saved[(result.app_label, result.model_name)].append(result.pk)
     all_saved_count = all_saved_queryset.count()
-    all_submitted_count = SearchQuerySet().filter(creator=user.id).models(*SUBMITTED_MODELS).count()
+
+    all_submitted = defaultdict(list)
+    all_submitted_queryset = SearchQuerySet().filter(creator=user.id).models(*SUBMITTED_MODELS)
+    for result in all_submitted_queryset:
+        all_submitted[(result.app_label, result.model_name)].append(result.pk)
+    all_submitted_count = all_submitted_queryset.count()
 
     evaluated_queryset = Evaluation.objects.filter(user=user, confirmed=True)
-    evaluated_count = evaluated_queryset.count()
     if all_saved:
         queries = (
             Q(
@@ -102,6 +106,18 @@ def profile_view(request, user_id=None):
         saved_evaluated_count = evaluated_queryset.filter(query).count()
     else:
         saved_evaluated_count = 0
+    if all_submitted:
+        queries = (
+            Q(
+                content_type=ContentType.objects.get_by_natural_key(*k).id,
+                object_id__in=ids
+            )
+            for k, ids in all_submitted.iteritems()
+        )
+        query = reduce(or_, queries)
+        submitted_evaluated_count = evaluated_queryset.filter(query).count()
+    else:
+        submitted_evaluated_count = 0
 
     if show_activity:
         evaluations = Evaluation.objects.filter(
@@ -176,9 +192,9 @@ def profile_view(request, user_id=None):
         'profile': profile,
         'public': public,
         'created_count': created_count,
-        'evaluated_count': evaluated_count,
+        'evaluated_count': saved_evaluated_count+submitted_evaluated_count,
         'saved_count': all_saved_count-saved_evaluated_count,
-        'submitted_count': all_submitted_count-(evaluated_count-saved_evaluated_count),
+        'submitted_count': all_submitted_count-submitted_evaluated_count,
         'items': items,
         'index_type': 'pics',
     })
