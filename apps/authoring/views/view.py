@@ -39,7 +39,7 @@ class ViewFullAuthoredMaterial(MaterialViewMixin, BaseDetailView, TemplateView):
         return qs
 
     @classmethod
-    def prepare_content(cls, text):
+    def prepare_content(cls, text, preview=False):
         document = pq("<div></div>").html(text)
         for embed in document.find("figure.embed"):
             embed = pq(embed)

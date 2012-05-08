@@ -24,7 +24,9 @@
         left: "0px"
       });
       this.current = 0;
+      this.editorAreaWrapper = $("#editor-area-wrapper");
       this.editorArea = $("#editor-area");
+      this.footnotes = $("#footnotes");
       this.desribeArea = $("#step-describe div.columns-wrapper");
       this.updateSizes();
       $(window).resize(function() {
@@ -62,8 +64,11 @@
       this.slider.css({
         left: "-" + (this.current * this.width) + "px"
       });
+      this.editorAreaWrapper.css({
+        height: this.height - 140 + "px"
+      });
       this.editorArea.css({
-        height: this.height - 180 + "px"
+        minHeight: this.editorAreaWrapper.innerHeight() - this.footnotes.outerHeight() - 40 + "px"
       });
       this.desribeArea.css({
         height: this.height - 125 + "px"

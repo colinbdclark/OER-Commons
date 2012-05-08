@@ -228,17 +228,26 @@
       min-height: 20px;
     }
   }
+  .remixed-from {
+    margin: 10px 0 0 0;
+    padding: 10px;
+    background-color: #f2f2f2;
+    font-family: "Myriad Pro", Helvetica, sans-serif;
+    font-size: 0.8125em;
+  }
 }
 
 #footnotes {
-  padding: 1px;
   background-color: #fff;
   font-family: "Myriad Pro", Helvetica, sans-serif;
   font-size: 0.8125em;
   div.footnote {
-    margin: 10px;
+    margin: 0 0 10px 0;
     padding: 10px;
     background-color: #f2f2f2;
+    &:last-child {
+      margin-bottom: 0;
+    }
     a.ref {
       float: left;
     }
@@ -247,3 +256,4 @@
     }
   }
 }
+
