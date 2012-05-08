@@ -347,19 +347,6 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
 
     @property
     def all_grades(self):
-        grades = set(self.grades.all())
-        for grade, grade_order, end_grade, end_grade_order in self.alignment_tags.values_list(
-            "tag__grade__id", "tag__grade__order",
-            "tag__end_grade__id", "tag__end__order",
-        ).order_by().distinct():
-            if end_grade:
-                grades.update(set(Grade.objects.filter(order__gte=grade_order, order__lte=end_grade_order)))
-            else:
-                grades.add(Grade.objects.get(pk=grade))
-        return grades
-
-    @property
-    def all_grades(self):
         grades = set(self.grades.all().values_list("id", flat=True))
         for grade, grade_order, end_grade, end_grade_order in self.alignment_tags.values_list(
             "tag__grade__id", "tag__grade__order",
