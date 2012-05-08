@@ -24,7 +24,6 @@ from tags.models import Tag
 from utils.templatetags.utils import full_url
 from visitcounts.models import Visit
 import hashlib
-import json
 import gdata.youtube
 import gdata.youtube.service
 import datetime
@@ -93,6 +92,8 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     content_source = u"authored"
 
     slug = AutoSlugField(populate_from="title", always_update=True)
+
+    copy_of = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL)
 
     owners = models.ManyToManyField(User, related_name="+")
     author = models.ForeignKey(User, related_name="+")
@@ -202,6 +203,45 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
         draft.delete()
         return material
 
+    def make_copy(self, author):
+
+        if author == self.author:
+            return None
+
+        material = AuthoredMaterial()
+
+        for field in AbstractAuthoredMaterial._meta.fields:
+            setattr(material, field.name, getattr(self, field.name))
+
+        material.id = None
+        material.is_new = False
+        material.copy_of = self
+        material.author = author
+        material.collection = self.collection
+
+        material.save()
+
+        for m2m in AbstractAuthoredMaterial._meta.many_to_many:
+            setattr(material, m2m.name, list(getattr(self, m2m.name).all()))
+
+        material.media_formats = list(self.media_formats.all())
+
+        # Copy alignment tags
+        content_type = ContentType.objects.get_for_model(material)
+        for tagged in TaggedMaterial.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            user=self.author,
+        ):
+            TaggedMaterial.objects.create(
+                content_type=content_type,
+                object_id=material.id,
+                user=material.author,
+                tag=tagged.tag,
+            )
+
+        return material
+
     def save(self, *args, **kwargs):
         if self.workflow_state == PUBLISHED_STATE and not self.published_on:
             self.published_on = datetime.datetime.now()
@@ -234,6 +274,11 @@ class AuthoredMaterial(AbstractAuthoredMaterial, EvaluatedItemMixin):
     def get_pdf_url(self):
         kwargs = dict(pk=self.pk)
         return "authoring:pdf", [], kwargs
+
+    @models.permalink
+    def get_copy_url(self):
+        kwargs = dict(pk=self.pk)
+        return "authoring:copy", [], kwargs
 
     @property
     def creator(self):

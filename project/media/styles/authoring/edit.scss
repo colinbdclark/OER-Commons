@@ -906,12 +906,18 @@
   }
 }
 
+#editor-area-wrapper {
+  overflow-y: auto;
+  background-color: #fff;
+  #footnotes {
+    padding: 10px;
+  }
+}
+
 #editor-area {
   &:focus {
     outline: none;
   }
-  overflow-y: auto;
-
   table {
     background-color: #fff;
     .ui-column-controls td {

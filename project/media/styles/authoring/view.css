@@ -187,16 +187,23 @@
       padding: 10px;
       min-width: 30px;
       min-height: 20px; }
+  .authored-content .remixed-from {
+    margin: 10px 0 0 0;
+    padding: 10px;
+    background-color: #f2f2f2;
+    font-family: "Myriad Pro", Helvetica, sans-serif;
+    font-size: 0.8125em; }
 
 #footnotes {
-  padding: 1px;
   background-color: #fff;
   font-family: "Myriad Pro", Helvetica, sans-serif;
   font-size: 0.8125em; }
   #footnotes div.footnote {
-    margin: 10px;
+    margin: 0 0 10px 0;
     padding: 10px;
     background-color: #f2f2f2; }
+    #footnotes div.footnote:last-child {
+      margin-bottom: 0; }
     #footnotes div.footnote a.ref {
       float: left; }
     #footnotes div.footnote div {
@@ -269,19 +276,24 @@
         background-color: transparent; }
   .authoring-view #toolbar .hide {
     display: none; }
-.authoring-view .download-links {
+.authoring-view .resource-links {
   margin-right: 20px;
-  padding: 1em 0;
+  padding: 0.8em 0;
   text-align: right; }
-  .authoring-view .download-links a {
+  .authoring-view .resource-links a {
     display: inline-block;
+    margin-left: 1em;
     padding-left: 40px;
-    line-height: 1.385;
-    background: url(../../images/authoring/icon-download-print.png) no-repeat 0 50%;
+    padding-top: 2px;
+    line-height: 1.5;
     color: #666;
     text-decoration: none; }
-    .authoring-view .download-links a:hover {
+    .authoring-view .resource-links a:hover {
       text-decoration: underline; }
+    .authoring-view .resource-links a.copy {
+      background: url(../../images/authoring/icon-make-copy.png) no-repeat 0 50%; }
+    .authoring-view .resource-links a.pdf {
+      background: url(../../images/authoring/icon-download-print.png) no-repeat 0 50%; }
 .authoring-view .layout-columns {
   padding-top: 0;
   padding-left: 0;
@@ -321,8 +333,10 @@
   .authoring-view .authored-content table {
     border: solid #ccc;
     border-width: 1px 0 0 1px; }
-.authoring-view #footnotes {
+.authoring-view footer {
   margin: 0 -20px -20px -20px; }
+.authoring-view #footnotes {
+  margin: 0; }
   .authoring-view #footnotes .footnote {
     margin: 10px 0 0 0; }
     .authoring-view #footnotes .footnote div {

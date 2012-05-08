@@ -187,16 +187,23 @@
       padding: 10px;
       min-width: 30px;
       min-height: 20px; }
+  .authored-content .remixed-from {
+    margin: 10px 0 0 0;
+    padding: 10px;
+    background-color: #f2f2f2;
+    font-family: "Myriad Pro", Helvetica, sans-serif;
+    font-size: 0.8125em; }
 
 #footnotes {
-  padding: 1px;
   background-color: #fff;
   font-family: "Myriad Pro", Helvetica, sans-serif;
   font-size: 0.8125em; }
   #footnotes div.footnote {
-    margin: 10px;
+    margin: 0 0 10px 0;
     padding: 10px;
     background-color: #f2f2f2; }
+    #footnotes div.footnote:last-child {
+      margin-bottom: 0; }
     #footnotes div.footnote a.ref {
       float: left; }
     #footnotes div.footnote div {
@@ -882,128 +889,132 @@
 #step-write #id_text {
   display: none; }
 
-#editor-area {
-  overflow-y: auto; }
-  #editor-area:focus {
-    outline: none; }
-  #editor-area table {
-    background-color: #fff; }
-    #editor-area table .ui-column-controls td {
+#editor-area-wrapper {
+  overflow-y: auto;
+  background-color: #fff; }
+  #editor-area-wrapper #footnotes {
+    padding: 10px; }
+
+#editor-area:focus {
+  outline: none; }
+#editor-area table {
+  background-color: #fff; }
+  #editor-area table .ui-column-controls td {
+    position: relative;
+    height: 16px;
+    min-height: 16px;
+    padding: 0 0 8px 0;
+    border-right: none;
+    text-align: center;
+    vertical-align: top; }
+    #editor-area table .ui-column-controls td a.remove {
       position: relative;
-      height: 16px;
-      min-height: 16px;
-      padding: 0 0 8px 0;
-      border-right: none;
-      text-align: center;
-      vertical-align: top; }
-      #editor-area table .ui-column-controls td a.remove {
-        position: relative;
-        top: 6px; }
-    #editor-area table .ui-column-controls td.first {
-      border-bottom: none; }
-      #editor-area table .ui-column-controls td.first .move {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 17px;
-        height: 17px;
-        background: url(../../images/authoring/icon-move-blue.png) no-repeat;
-        cursor: move; }
-    #editor-area table .ui-row-controls {
-      position: relative;
-      width: 16px;
-      min-width: 16px;
-      padding: 0 8px 0 0;
-      border-bottom: none;
-      text-align: right;
-      vertical-align: middle; }
-    #editor-area table a.remove {
-      font-weight: bold;
-      font-size: 1em;
-      line-height: 16px;
-      text-decoration: none;
-      color: #b6b6b6; }
-      #editor-area table a.remove:hover {
-        color: #ffc24a; }
-    #editor-area table a.add {
+      top: 6px; }
+  #editor-area table .ui-column-controls td.first {
+    border-bottom: none; }
+    #editor-area table .ui-column-controls td.first .move {
       display: block;
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      background: url(../../images/authoring/icon-table-add.png) -16px 0 no-repeat;
-      z-index: 2; }
-      #editor-area table a.add:hover {
-        background-position: 0 0; }
-    #editor-area table a.add-column {
-      bottom: 7px;
-      right: -8px; }
-    #editor-area table a.add-row {
-      bottom: -8px;
-      right: 7px; }
-  #editor-area .ui-wrap-image {
-    display: inline-block;
-    position: relative; }
-    #editor-area .ui-wrap-image figcaption {
-      margin-top: -4px;
-      padding: 5px 5px 0 5px;
-      background-color: #f2f2f2;
-      line-height: 1.5;
-      min-height: 24px;
-      text-align: left; }
-      #editor-area .ui-wrap-image figcaption .ui-image-button {
-        float: left;
-        margin-top: -5px; }
-    #editor-area .ui-wrap-image .ui-image-button {
-      display: block;
-      width: 28px;
-      height: 28px;
-      background-color: #f2f2f2;
-      background-repeat: no-repeat;
-      background-image: url(../../images/authoring/image-icons.png); }
-    #editor-area .ui-wrap-image .ui-move {
       position: absolute;
       top: 0;
       left: 0;
-      border: solid #ccc;
-      border-width: 0 1px 1px 0;
-      -webkit-border-bottom-right-radius: 5px;
-      -moz-border-radius-bottomright: 5px;
-      border-bottom-right-radius: 5px;
-      background-position: -21px -49px;
+      width: 17px;
+      height: 17px;
+      background: url(../../images/authoring/icon-move-blue.png) no-repeat;
       cursor: move; }
-      #editor-area .ui-wrap-image .ui-move:hover {
-        background-position: 6px -49px; }
-    #editor-area .ui-wrap-image .ui-delete {
-      margin-left: -5px;
-      border: solid #ccc;
-      border-width: 0 1px 1px 1px;
-      background-position: -84px 6px; }
-      #editor-area .ui-wrap-image .ui-delete:hover {
-        background-position: -46px -48px; }
-    #editor-area .ui-wrap-image .ui-left {
-      border-bottom: 1px solid #ccc;
-      background-position: -27px -21px; }
-      #editor-area .ui-wrap-image .ui-left:hover {
-        background-color: #cacaca; }
-      #editor-area .ui-wrap-image .ui-left.active {
-        background-position: 4px 6px; }
-    #editor-area .ui-wrap-image .ui-center {
-      border-bottom: 1px solid #ccc;
-      background-position: -58px 6px; }
-      #editor-area .ui-wrap-image .ui-center:hover {
-        background-color: #cacaca; }
-      #editor-area .ui-wrap-image .ui-center.active {
-        background-position: -27px 6px; }
-    #editor-area .ui-wrap-image .ui-right {
-      margin-right: 1em;
-      border: solid #ccc;
-      border-width: 0 1px 1px 0;
-      background-position: -58px -20px; }
-      #editor-area .ui-wrap-image .ui-right:hover {
-        background-color: #cacaca; }
-      #editor-area .ui-wrap-image .ui-right.active {
-        background-position: 4px -21px; }
+  #editor-area table .ui-row-controls {
+    position: relative;
+    width: 16px;
+    min-width: 16px;
+    padding: 0 8px 0 0;
+    border-bottom: none;
+    text-align: right;
+    vertical-align: middle; }
+  #editor-area table a.remove {
+    font-weight: bold;
+    font-size: 1em;
+    line-height: 16px;
+    text-decoration: none;
+    color: #b6b6b6; }
+    #editor-area table a.remove:hover {
+      color: #ffc24a; }
+  #editor-area table a.add {
+    display: block;
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: url(../../images/authoring/icon-table-add.png) -16px 0 no-repeat;
+    z-index: 2; }
+    #editor-area table a.add:hover {
+      background-position: 0 0; }
+  #editor-area table a.add-column {
+    bottom: 7px;
+    right: -8px; }
+  #editor-area table a.add-row {
+    bottom: -8px;
+    right: 7px; }
+#editor-area .ui-wrap-image {
+  display: inline-block;
+  position: relative; }
+  #editor-area .ui-wrap-image figcaption {
+    margin-top: -4px;
+    padding: 5px 5px 0 5px;
+    background-color: #f2f2f2;
+    line-height: 1.5;
+    min-height: 24px;
+    text-align: left; }
+    #editor-area .ui-wrap-image figcaption .ui-image-button {
+      float: left;
+      margin-top: -5px; }
+  #editor-area .ui-wrap-image .ui-image-button {
+    display: block;
+    width: 28px;
+    height: 28px;
+    background-color: #f2f2f2;
+    background-repeat: no-repeat;
+    background-image: url(../../images/authoring/image-icons.png); }
+  #editor-area .ui-wrap-image .ui-move {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: solid #ccc;
+    border-width: 0 1px 1px 0;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-bottom-right-radius: 5px;
+    background-position: -21px -49px;
+    cursor: move; }
+    #editor-area .ui-wrap-image .ui-move:hover {
+      background-position: 6px -49px; }
+  #editor-area .ui-wrap-image .ui-delete {
+    margin-left: -5px;
+    border: solid #ccc;
+    border-width: 0 1px 1px 1px;
+    background-position: -84px 6px; }
+    #editor-area .ui-wrap-image .ui-delete:hover {
+      background-position: -46px -48px; }
+  #editor-area .ui-wrap-image .ui-left {
+    border-bottom: 1px solid #ccc;
+    background-position: -27px -21px; }
+    #editor-area .ui-wrap-image .ui-left:hover {
+      background-color: #cacaca; }
+    #editor-area .ui-wrap-image .ui-left.active {
+      background-position: 4px 6px; }
+  #editor-area .ui-wrap-image .ui-center {
+    border-bottom: 1px solid #ccc;
+    background-position: -58px 6px; }
+    #editor-area .ui-wrap-image .ui-center:hover {
+      background-color: #cacaca; }
+    #editor-area .ui-wrap-image .ui-center.active {
+      background-position: -27px 6px; }
+  #editor-area .ui-wrap-image .ui-right {
+    margin-right: 1em;
+    border: solid #ccc;
+    border-width: 0 1px 1px 0;
+    background-position: -58px -20px; }
+    #editor-area .ui-wrap-image .ui-right:hover {
+      background-color: #cacaca; }
+    #editor-area .ui-wrap-image .ui-right.active {
+      background-position: 4px -21px; }
 
 .popup-dialog {
   position: absolute;

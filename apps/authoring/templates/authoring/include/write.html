@@ -170,11 +170,13 @@
       </div>
     </div>
 
-    <div id="editor-area" class="authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
-      {{ object.text|safe }}
+    <div id="editor-area-wrapper">
+      <div id="editor-area" class="authored-content" contenteditable="true" data-load-embed-url="{% url authoring:load-embed %}">
+        {{ object.text|safe }}
+      </div>
+      <div id="footnotes"></div>
     </div>
-    <div class="preview authored-content hidden"></div>
-    <div id="footnotes"></div>
+
     {{ form.text }}
 
   </div>

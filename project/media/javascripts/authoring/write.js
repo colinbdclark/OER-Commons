@@ -1383,6 +1383,7 @@ WriteStep.prototype.updateReferences = function () {
     $footnote.data("reference", $this);
     $footnotes.append($footnote);
   });
+  this.tool.slider.updateSizes();
 };
 
 WriteStep.prototype.removeSelectionMarkers = function () {

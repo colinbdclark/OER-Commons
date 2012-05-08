@@ -30,8 +30,14 @@
   <div class="layout-columns">
 
     {% if not preview %}
-      <div class="download-links">
-        <a href="{{ object.get_pdf_url }}">download resource (PDF)</a>
+      {% if request.user.is_authenticated and request.user != object.author %}
+        <form action="{{ object.get_copy_url }}" method="post" id="copy-form"></form>
+      {% endif %}
+      <div class="resource-links">
+        {% if request.user.is_authenticated and request.user != object.author %}
+          <a class="copy" href="#">make a copy</a>
+        {% endif %}
+        <a class="pdf" href="{{ object.get_pdf_url }}">download resource (PDF)</a>
       </div>
     {% endif %}
 
@@ -58,7 +64,7 @@
       <section >
         <a href="{{ object.get_absolute_url }}"><strong>"{{ object.title }}"</strong></a>
         {{ object.modified_timestamp|date:"Y" }}
-        by <a href="#">{{ material.author.get_full_name|default:material.author }}</a>
+        by <a href="{% url users:profile_public user_id=material.author.id %}">{{ material.author.get_full_name|default:material.author }}</a>
         <br/>under <a href="{{ object.license.url }}">{{ object.license.name }}</a>
       </section>
 
@@ -68,12 +74,19 @@
       <article class="authored-content" data-evaluate-url="{% url rubrics:evaluate_intro %}?id={{ content_type.id }}.{{ material.id }}&from={{ request.path|full_url }}">
         <header>
           <h1>{{ object.title }}</h1>
-          Created <strong>{{ object.modified_timestamp|date }}</strong> by <a href="#">{{ material.author.get_full_name|default:material.author }}</a>
+          Created <strong>{{ object.modified_timestamp|date }}</strong> by <a href="{% url users:profile_public user_id=material.author.id %}">{{ material.author.get_full_name|default:material.author }}</a>
         </header>
         {{ text }}
         <div class="clear"></div>
         <footer>
           {{ footnotes }}
+          {% with original=material.copy_of %}
+            {% if not preview and original %}
+              <div class="remixed-from">
+                Remixed from <a href="{{ original.get_absolute_url }}">"{{ original }}"</a> by <a href="{% url users:profile_public user_id=material.author.id %}">{{ original.author.get_full_name|default:original.author }}</a></a>
+              </div>
+            {% endif %}
+          {% endwith %}
         </footer>
       </article>
     </div>
@@ -139,6 +152,16 @@
             oer.evaluation_tool.open_tool(evaluateURL);
           }
         }
+      });
+    </script>
+  {% endif %}
+  {% if request.user.is_authenticated and request.user != object.author %}
+    <script>
+      $(function() {
+        $("div.resource-links a.copy").click(function(e) {
+          e.preventDefault();
+          $("#copy-form").submit();
+        });
       });
     </script>
   {% endif %}

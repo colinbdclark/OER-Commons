@@ -19,11 +19,13 @@ class Slider
       left: "0px"
     )
     @current = 0
+    @editorAreaWrapper = $("#editor-area-wrapper")
     @editorArea = $("#editor-area")
+    @footnotes = $("#footnotes")
     @desribeArea = $("#step-describe div.columns-wrapper")
-    @.updateSizes()
+    @updateSizes()
     $(window).resize(=>
-      @.updateSizes()
+      @updateSizes()
     )
     @buttons = $("div.authoring-head div.step-icons a")
     @buttons.click((e)=>
@@ -37,7 +39,7 @@ class Slider
 
   updateSizes: ->
     doc = $(document)
-    viewport = @.viewport()
+    viewport = @viewport()
     @width = viewport.width
     @height = viewport.height - @slider.offset().top
     @slider.css(
@@ -55,8 +57,11 @@ class Slider
     @slider.css(
       left: "-" + (@current * @width) + "px"
     )
+    @editorAreaWrapper.css(
+      height: @height - 140 + "px"
+    )
     @editorArea.css(
-      height: @height - 180 + "px"
+      minHeight: @editorAreaWrapper.innerHeight() - @footnotes.outerHeight() - 40 + "px"
     )
     @desribeArea.css(
       height: @height - 125 + "px"
@@ -182,7 +187,7 @@ class Tool
     saveBtn = actions.filter(".save")
     saveBtn.click((e)=>
       e.preventDefault()
-      @.save()
+      @save()
       return
     )
 
@@ -199,7 +204,7 @@ class Tool
       e.preventDefault()
       btn = $(e.currentTarget)
       if btn.hasClass("publish")
-        @.publish()
+        @publish()
       else
         @slider.slideTo(btn.attr("href"))
       return

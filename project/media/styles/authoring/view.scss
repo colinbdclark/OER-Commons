@@ -70,19 +70,26 @@
       display: none;
     }
   }
-  .download-links {
+  .resource-links {
     margin-right: 20px;
-    padding: 1em 0;
+    padding: 0.8em 0;
     text-align: right;
     a {
       display: inline-block;
+      margin-left: 1em;
       padding-left: 40px;
-      line-height: 1.385;
-      background: url(../../images/authoring/icon-download-print.png) no-repeat 0 50%;
+      padding-top: 2px;
+      line-height: 1.5;
       color: #666;
       text-decoration: none;
       &:hover {
         text-decoration: underline;
+      }
+      &.copy {
+        background: url(../../images/authoring/icon-make-copy.png) no-repeat 0 50%;
+      }
+      &.pdf {
+        background: url(../../images/authoring/icon-download-print.png) no-repeat 0 50%;
       }
     }
   }
@@ -135,8 +142,11 @@
       border-width: 1px 0 0 1px;
     }
   }
-  #footnotes {
+  footer {
     margin: 0 -20px -20px -20px;
+  }
+  #footnotes {
+    margin: 0;
     .footnote {
       margin: 10px 0 0 0;
       div {
